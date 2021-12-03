@@ -1,0 +1,95 @@
+#!/bin/bash
+#
+# Usage: Copy this file to your repository's .git/hooks directory. Name it
+# "pre-push" and set the executable bit.
+#
+# This hook aborts git push when the log message of any commits to be pushed
+# starts with "WIP" (work in progress) or "stash", if the remote ref begins
+# with "refs/for/". This prevents incomplete/unwanted commits from being
+# pushed to Gerrit instances.
+#
+# When pushing to Gerrit, this hook also runs a Gradle build similar to
+# Gerrit's presubmit, to help catch errors locally and reduce churn on CLs.
+#
+# Remaining comments are copied from .git/hooks/pre-push.sample.
+#
+# An example hook script to verify what is about to be pushed. Called by "git
+# push" after it has checked the remote status, but before anything has been
+# pushed. If this script exits with a non-zero status nothing will be pushed.
+#
+# This hook is called with the following parameters:
+#
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+# If pushing without using a named remote those arguments will be equal.
+#
+# Information about the commits which are being pushed is supplied as lines to
+# the standard input in the form:
+#
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+
+remote="$1"
+url="$2"
+
+z40=0000000000000000000000000000000000000000
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  # Handle delete
+  if [[ "$local_sha" = "$z40" ]]; then
+    echo "$local_ref, $remote_ref"
+    :
+  # Move along if we don't match refs/for/
+  elif [[ ! "$remote_ref" =~ ^refs/for/.+ ]]; then
+    echo "$local_ref, $remote_ref"
+    :
+  else
+    echo "$local_ref, $local_sha, $remote_ref, $remote_sha"
+    if [[ "$remote_sha" = "$z40" ]]; then
+      # New branch, examine all commits
+      branchname="${remote_ref#refs/for/}"
+
+      if [[ "$branchname" =~ % ]]; then
+        # Gerrit allows various push-options by appending them to the remote
+        # using "%<option>=<string>[,<option>=<string>...]". Strip this off.
+        # TODO: '%' is a valid character in branch names, so this could mangle
+        # the branch name. We should find a way to workaround that.
+        echo "NOTE: stripping Gerrit push-options beginning at '%'"
+        branchname=${branchname%%\%*}
+      fi
+
+      if git check-ref-format --allow-onelevel "$branchname"; then
+        range="${remote}/${branchname}..$local_sha"
+      fi
+
+      if [[ -z "$range" ]]; then
+        range="$local_sha"
+      fi
+    else
+      # Update to existing branch, examine new commits
+      range="$remote_sha..$local_sha"
+    fi
+
+    echo "Examining $range"
+
+    # Check for WIP/stash commit
+    commit=`git rev-list -n 1 -i --grep '^WIP' --grep '^stash' "$range"`
+    if [[ -n "$commit" ]]; then
+      echo >&2 "Found WIP/stash commit in $local_ref, not pushing ($commit)"
+      exit 1
+    fi
+
+    # At least one ref is going to Gerrit, so we should run additional checks
+    run_checks=true
+  fi
+done
+
+if [[ -n "$run_checks" ]]; then
+  # pre-push usually executes in the repository root, but just to be safe...
+  cd "$(git rev-parse --show-toplevel)"
+  ./gradlew build
+  exit $?
+fi
+
+exit 0
