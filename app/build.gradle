@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import com.google.samples.apps.nowinandroid.buildsrc.Versions
-import com.google.samples.apps.nowinandroid.buildsrc.Libs
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
 
 android {
-    compileSdk Versions.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         applicationId "com.google.samples.apps.nowinandroid"
-        minSdk Versions.minSdk
-        targetSdk Versions.targetSdk
-        versionCode Versions.versionCodeBase
-        versionName Versions.versionName
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+        versionCode 1
+        versionName "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -47,6 +43,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -56,7 +53,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
     }
     packagingOptions {
         resources {
@@ -66,38 +63,42 @@ android {
 }
 
 dependencies {
-    implementation Libs.Coroutines.android
+    coreLibraryDesugaring libs.android.desugarJdkLibs
 
-    implementation Libs.AndroidX.Activity.activityCompose
-    implementation Libs.AndroidX.coreKtx
-    implementation Libs.AndroidX.appcompat
-    implementation Libs.AndroidX.Lifecycle.viewModelCompose
-    implementation Libs.AndroidX.Navigation.fragment
-    implementation Libs.AndroidX.Navigation.uiKtx
-    implementation Libs.material3
+    implementation libs.kotlinx.coroutines.android
 
-    implementation Libs.AndroidX.Compose.layout
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.lifecycle.viewModelCompose
+    implementation libs.androidx.navigation.fragment
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.material3
+
+    implementation libs.accompanist.insets
+
+    implementation libs.androidx.compose.foundation.layout
     // TODO (M3): Remove this dependency when all components are available
-    implementation Libs.AndroidX.Compose.material
-    implementation Libs.AndroidX.Compose.Material3.material3
-    implementation Libs.AndroidX.Compose.tooling
-    implementation Libs.AndroidX.Compose.uiUtil
-    implementation Libs.AndroidX.Compose.runtime
-    implementation Libs.AndroidX.Compose.runtimeLivedata
+    implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.material3
+    implementation libs.androidx.compose.ui.tooling
+    implementation libs.androidx.compose.ui.util
+    implementation libs.androidx.compose.runtime
+    implementation libs.androidx.compose.runtime.livedata
 
-    debugImplementation Libs.AndroidX.Compose.uiTestManifest
+    debugImplementation libs.androidx.compose.ui.testManifest
 
-    androidTestImplementation Libs.junit
-    androidTestImplementation Libs.AndroidX.Test.core
-    androidTestImplementation Libs.AndroidX.Test.espressoCore
-    androidTestImplementation Libs.AndroidX.Test.rules
-    androidTestImplementation Libs.AndroidX.Test.Ext.junit
-    androidTestImplementation Libs.AndroidX.Compose.uiTest
+    androidTestImplementation libs.junit4
+    androidTestImplementation libs.androidx.test.core
+    androidTestImplementation libs.androidx.test.espresso.core
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.compose.ui.test
 
     // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {
-            force Libs.junit
+            force libs.junit4
         }
     }
 }

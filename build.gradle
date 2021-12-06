@@ -16,10 +16,13 @@
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-import com.google.samples.apps.nowinandroid.buildsrc.Libs
-import com.google.samples.apps.nowinandroid.buildsrc.Versions
-
 buildscript {
+
+    ext.buildConfig = [
+            'compileSdk': 31,
+            'minSdk'    : 21,
+            'targetSdk' : 31,
+    ]
 
     repositories {
         google()
@@ -27,13 +30,13 @@ buildscript {
     }
 
     dependencies {
-        classpath Libs.androidGradlePlugin
-        classpath Libs.Kotlin.gradlePlugin
+        classpath(libs.android.gradlePlugin)
+        classpath(libs.kotlin.gradlePlugin)
     }
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.0.0'
+    alias(libs.plugins.spotless)
 }
 
 subprojects {
@@ -44,7 +47,7 @@ subprojects {
             target '**/*.kt'
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
-            ktlint(Versions.ktlint).userData([android: "true"])
+            ktlint(libs.versions.ktlint.get()).userData([android: "true"])
             licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
     }
