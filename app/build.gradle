@@ -60,6 +60,11 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -87,6 +92,10 @@ dependencies {
     implementation libs.androidx.compose.runtime.livedata
 
     debugImplementation libs.androidx.compose.ui.testManifest
+
+    testImplementation libs.junit4
+    testImplementation libs.mockk
+    testImplementation libs.androidx.test.core
 
     androidTestImplementation libs.junit4
     androidTestImplementation libs.androidx.test.core
