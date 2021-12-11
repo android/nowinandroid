@@ -17,7 +17,10 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlinx-serialization'
+    id 'jacoco'
 }
+
+def jacocoTestReport = tasks.create("jacocoTestReport")
 
 android {
     compileSdk buildConfig.compileSdk
@@ -66,6 +69,42 @@ android {
             includeAndroidResources = true
         }
     }
+    androidComponents {
+        def coverageExclusions = [
+                // Android
+                "**/R.class",
+                "**/R\$*.class",
+                "**/BuildConfig.*",
+                "**/Manifest*.*"
+        ]
+
+        onVariants(
+                selector().all(),
+                { variant ->
+                    def testTaskName = "test${variant.name.capitalize()}UnitTest"
+
+                    def reportTask = tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport) {
+                        dependsOn(testTaskName)
+
+                        reports {
+                            xml.required.set(true)
+                            html.required.set(true)
+                        }
+
+                        classDirectories.setFrom(
+                                fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
+                                    exclude(coverageExclusions)
+                                }
+                        )
+
+                        sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+                        executionData.setFrom(file("$buildDir/jacoco/${testTaskName}.exec"))
+                    }
+
+                    jacocoTestReport.dependsOn(reportTask)
+                }
+        )
+    }
 }
 
 dependencies {
@@ -113,5 +152,22 @@ dependencies {
         resolutionStrategy {
             force libs.junit4
         }
+    }
+}
+
+jacoco {
+    toolVersion libs.versions.jacoco.get()
+}
+
+tasks.withType(Test) {
+    jacoco {
+        // Required for JaCoCo + Robolectric
+        // https://github.com/robolectric/robolectric/issues/2230
+        // TODO: Consider removing if not we don't add Robolectric
+        setIncludeNoLocationClasses(true)
+
+        // Required for JDK 11+ with the above
+        // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
+        excludes = ["jdk.internal.*"]
     }
 }
