@@ -1,26 +1,78 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.samples.apps.nowinandroid.data.news.fake
+
+import com.google.samples.apps.nowinandroid.data.news.NewsResource
+import com.google.samples.apps.nowinandroid.data.news.VideoInfo
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+
+object FakeDataSource {
+    val sampleResource = NewsResource(
+        episode = 52,
+        title = "Thanks for helping us reach 1M YouTube Subscribers",
+        content = "Thank you everyone for following the Now in Android series and everything the Android Developers YouTube channel has to offer. During the Android Developer Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to thank you all.",
+        url = "https://youtu.be/-fJ6poHQrjM",
+        authorName = "",
+        publishDate = LocalDateTime(
+            year = 2021,
+            monthNumber = 11,
+            dayOfMonth = 9,
+            hour = 0,
+            minute = 0,
+            second = 0,
+            nanosecond = 0
+        ).toInstant(TimeZone.UTC),
+        type = "Video \uD83D\uDCFA",
+        topics = listOf(
+            "Headlines",
+        ),
+        alternateVideo = VideoInfo(
+            url = "",
+            startTimestamp = 0,
+            endTimestamp = 0
+        )
+    )
+
+    val data = """
 {
   "resources": [
     {
       "episode": 52,
-      "title": "We hit 1M YouTube subscribers",
+      "title": "Thanks for helping us reach 1M YouTube Subscribers",
       "content": "Thank you everyone for following the Now in Android series and everything the Android Developers YouTube channel has to offer. During the Android Developer Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to thank you all.",
       "URL": "https://youtu.be/-fJ6poHQrjM",
       "authorName": "",
       "publishDate": "2021-11-09T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        ""
+        "Headlines"
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Transformations and customisations in the Paging Library",
-      "content": "In this third episode of the Paging MAD Skills series, TJ shows different operations that can be performed with Paging. Transformations like inserting separators, when to create a new pager, and customisation options for consuming PagingData.",
+      "title": "Transformations and customisations in the Paging Library",
+      "content": "A demonstration of different operations that can be performed with Paging. Transformations like inserting separators, when to create a new pager, and customisation options for consuming PagingData.",
       "URL": "https://youtu.be/ZARz0pjm5YM",
       "authorName": "TJ",
       "publishDate": "2021-11-01T00:00:00.000Z",
@@ -31,14 +83,14 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Community tip on Paging",
-      "content": "In this fourth episode of the Paging MAD Skills series, Erik Zuo from the Android community shares a Paging tip.",
+      "title": "Community tip on Paging",
+      "content": "Tips for using the Paging library from the developer community",
       "URL": "https://youtu.be/r5JgIyS3t3s",
       "authorName": "",
       "publishDate": "2021-11-08T00:00:00.000Z",
@@ -49,13 +101,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Paging Q&A",
+      "title": "Paging Q&A",
       "content": "In this live session, TJ and Dustin answered your questions in the usual live Q&A format.",
       "URL": "https://youtu.be/8i6vrlbIVCc",
       "authorName": "",
@@ -67,13 +119,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Gradle series kicks off",
+      "title": "Gradle series kicks off",
       "content": "Murat introduces the Gradle series and everything you'll learn in it.",
       "URL": "https://youtu.be/mk0XBWenod8",
       "authorName": "Murat",
@@ -85,13 +137,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Intro to Gradle and AGP",
+      "title": "Intro to Gradle and AGP",
       "content": "In the first episode of the Gradle MAD Skills series, Murat explains how the Android build system works, and how to configure your build.",
       "URL": "https://youtu.be/GjPS4xDMmQY",
       "authorName": "Murat",
@@ -103,13 +155,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: How to write a Gradle plugin",
+      "title": "How to write a Gradle plugin",
       "content": "In this second episode of the Gradle MAD Skills series, Murat explains how to write your own custom Gradle plugin.",
       "URL": "https://youtu.be/LPzBVtwGxlo",
       "authorName": "Murat",
@@ -121,13 +173,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "MAD Skills: Take your Gradle plugin to the next step",
+      "title": "Take your Gradle plugin to the next step",
       "content": "This third and last episode of the Gradle MAD Skills series teaches you how to get access to various build artifacts using the new Artifact API.",
       "URL": "https://youtu.be/SB4QlngQQW0",
       "authorName": "Murat",
@@ -139,13 +191,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "AndroidX: AppCompat, Activity, and Fragment to support multiple back stacks",
+      "title": "AppCompat, Activity, and Fragment to support multiple back stacks",
       "content": "The 1.4.0 release of these libraries brings stable support for multiple back stacks.",
       "URL": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.4.0",
       "authorName": "",
@@ -157,13 +209,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "AndroidX: Emoji2 adds support for modern emojis",
+      "title": "Emoji2 adds support for modern emojis",
       "content": "The 1.0 stable release of Emoji2 allows you to use modern emojis in your app.",
       "URL": "https://developer.android.com/jetpack/androidx/releases/emoji2#1.0.0",
       "authorName": "",
@@ -175,13 +227,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "AndroidX: Lifecycle introduces lifecycle-aware coroutine APIs",
+      "title": "Lifecycle introduces lifecycle-aware coroutine APIs",
       "content": "The new 2.4 release of Lifecycle introduces repeatOnLifecycle and flowWithLifecycle.",
       "URL": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.4.0",
       "authorName": "",
@@ -193,13 +245,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "AndroidX: Paging release brings changes to LoadState",
+      "title": "Paging release brings changes to LoadState",
       "content": "The new 3.1 release of Paging changes the behavior of LoadState.",
       "URL": "https://developer.android.com/jetpack/androidx/releases/paging#3.1.0",
       "authorName": "",
@@ -211,13 +263,13 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
       "episode": 52,
-      "title": "AndroidX: Wear tiles released as 1.0 stable",
+      "title": "Wear tiles released as 1.0 stable",
       "content": "The library that you use to build custom tiles for Wear OS devices is now stable.",
       "URL": "https://developer.android.com/jetpack/androidx/releases/wear-tiles#1.0.0",
       "authorName": "",
@@ -229,8 +281,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -247,8 +299,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -265,8 +317,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -283,8 +335,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -300,8 +352,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -317,8 +369,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -334,8 +386,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -352,8 +404,8 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -372,8 +424,279 @@
       ],
       "alternateVideo": {
         "URL": "",
-        "startTimestamp": "",
-        "endTimestamp": ""
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Building apps which are private by design",
+      "content": "Sara N-Marandi, product manager, and Yacine Rezgui, developer relations engineer, provided guidelines and best practices on how to build apps that are private by design, covered new privacy features in Android 12 and previewed upcoming Android concepts.",
+      "URL": "https://youtu.be/hBVwr2ErQCw",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Privacy",
+        "Security"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Memory Safety Tools",
+      "content": "Serban Constantinescu, product manager, talked about the Memory Safety Tools that became available starting in Android 11 and have continued to evolve in Android 12. These tools can help address memory bugs and improve the quality and security of your application.",
+      "URL": "https://youtu.be/JqLcTFpXreg",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Security",
+        "Debugging",
+        "App quality"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Increasing User Transparency with Privacy Dashboard",
+      "content": "Android is ever evolving in its quest to protect users’ privacy. In Android 12, the platform increases transparency by introducing Privacy Dashboard, which gives users a simple and clear timeline view of the apps that have accessed location, microphone and camera within the past 24 hours. ",
+      "URL": "https://medium.com/androiddevelopers/increasing-user-transparency-with-privacy-dashboard-23064f2d7ff6",
+      "authorName": "Meghan Mehta",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Article 📚",
+      "topics": [
+        "Privacy"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "The most unusual and interesting security issues addressed last year",
+      "content": "Lilian Young, software engineer, presented a selection of the most unusual, intricate, and interesting security issues addressed in the last year. Developers and researchers are able to contribute to the security of the Android platform by submitting to the Android Vulnerability Rewards Program.",
+      "URL": "https://medium.com/androiddevelopers/now-in-android-50-ads-special-9934422f8dd1",
+      "authorName": "Lilian Young",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Article 📚",
+      "topics": [
+        "Security"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "New Data Safety section in the Play Console",
+      "content": "The new Data safety section will give you a simple way to showcase your app’s overall safety. It gives you a place to give users deeper insight into your app’s privacy and security practices, and explain the data your app may collect and why — all before users install.",
+      "URL": "https://youtu.be/J7TM0Yy0aTQ",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Play Console",
+        "Privacy",
+        "Security"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Building Android UIs for any screen size",
+      "content": "Clara Bayarri, engineering manager and Daniel Jacobson, product manager, talked about the state of the ecosystem, focusing on new design guidance, APIs, and tools to help you make the most of your UI on different screen sizes.",
+      "URL": "https://youtu.be/ir3LztqbeRI",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Large Screens"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "What's new for large screens & foldables",
+      "content": "Emilie Roberts, Chrome OS developer advocate and Andrii Kulian, Android software engineer, introduced new features focused specifically on making apps look great on large screens, foldables, and Chrome OS. ",
+      "URL": "https://youtu.be/6-925K3hMHU",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Large Screens",
+        "Foldables",
+        "Chrome OS",
+        "UI"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Enable great input support for all devices",
+      "content": "Users expect seamless experiences when using keyboards, mice, and stylus. Emilie Roberts taught us how to handle common keyboard and mouse input events and how to get started with more advanced support like keyboard shortcuts, low-latency styluses, MIDI, and more.",
+      "URL": "https://youtu.be/piLEZYTc_4g",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "UI"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Best practices for video apps on foldable devices",
+      "content": "Francesco Romano, developer advocate, and Will Chan, product manager at Zoom explored new user experiences made possible by the foldable form factor, focusing on video conferencing and media applications. ",
+      "URL": "https://youtu.be/DBAek_P0nEw",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "UI",
+        "Media",
+        "Foldables",
+        "Camera"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Design beautiful apps on foldables and large screens",
+      "content": "Liam Spradlin, design advocate, and Jonathan Koren, developer relations engineer, talked about how to design and test Android applications that look and feel great across device types and screen sizes, from tablets to foldables to Chrome OS.",
+      "URL": "https://youtu.be/DJeJIJKOUbI",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "UI",
+        "Material Design",
+        "Foldables",
+        "Large Screens"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "12L and new Android APIs and tools for large screens",
+      "content": "Dave Burke, vice president of engineering, wrote a post covering the developer preview of 12L, an upcoming feature drop that makes Android 12 even better on large screens. ",
+      "URL": "https://android-developers.googleblog.com/2021/10/12L-preview-large-screens.html",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Article 📚",
+      "topics": [
+        "Platform",
+        "Large Screens",
+        "Android releases"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "New features in ML Kit: Text Recognition V2 & Pose Detections",
+      "content": "Zongmin Sun, software engineer, and Valentin Bazarevsky, MediaPipe Engineer, talked about Text Recognition V2 & Pose Detection, recently-released features in ML Kit. ",
+      "URL": "https://youtu.be/9EKQ0UC04S8",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Machine learning"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "How to retain users with Android backup and restore",
+      "content": "In this talk, Martin Millmore, engineering manager, and Ruslan Tkhakokhov, software engineer, explored the benefits of transferring users’ data to a new device, using Backup and Restore to achieve that in a simple and secure way.",
+      "URL": "https://youtu.be/bg2drEhz1_s",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Platform"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Compatibility changes in Android 12",
+      "content": "Developer relations engineers Kseniia Shumelchyk and Slava Panasenko talked about new Android 12 features and changes. They shared tools and techniques to ensure that apps are compatible with the next Android release and users can take advantage of new features, along with app developer success stories.",
+      "URL": "https://youtu.be/fCMJmV6nqGo",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "Platform"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 50,
+      "title": "Building great experiences for Novice Internet Users",
+      "content": "Learn the principles to help craft great experiences for the novice Internet user segment from Mrinal Sharma, UX manager, and Amrit Sanjeev, developer relations engineer. They highlight the gap between nascent and tech savvy user segments and suggest strategies in areas to improve the overall user experience. Factors like low functional literacy, being multilingual by default, being less digitally confident, and having no prior internet experience requires that we rethink the way we build apps for these users.",
+      "URL": "https://youtu.be/Sf_TauUY4LE",
+      "authorName": "",
+      "publishDate": "2021-10-26T23:00:00.000Z",
+      "type": "Video 📺",
+      "topics": [
+        "UX"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
       }
     },
     {
@@ -694,6 +1017,24 @@
       }
     },
     {
+      "episode": 49,
+      "title": "Wear OS Jetpack libraries now in stable",
+      "content": "The Wear OS Jetpack libraries are now in stable.",
+      "URL": "https://android-developers.googleblog.com/2021/09/wear-os-jetpack-libraries-now-in-stable.html",
+      "authorName": "Jeremy Walker",
+      "publishDate": "2021-09-14T23:00:00.000Z",
+      "type": "Article 📚",
+      "topics": [
+        "Jetpack",
+        "Wear"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
       "episode": 48,
       "title": "Android Dev Summit returns on October 27-28, 2021! 📆",
       "content": "Join us October 27–28 for Android Dev Summit 2021! The show kicks off at 10 AM PST on October 27 with The Android Show: a technical keynote where you’ll hear all the latest developer news and updates. From there, we have over 30 sessions on a range of technical Android development topics, and we’ll be answering your #AskAndroid questions live.",
@@ -762,80 +1103,8 @@
       }
     },
     {
-      "episode": 49,
-      "title": "Wear OS Jetpack libraries now in stable",
-      "content": "The Wear OS Jetpack libraries are now in stable.",
-      "URL": "https://android-developers.googleblog.com/2021/09/wear-os-jetpack-libraries-now-in-stable.html",
-      "authorName": "Jeremy Walker",
-      "publishDate": "2021-09-14T23:00:00.000Z",
-      "type": "Article 📚",
-      "topics": [
-        "Jetpack",
-        "Wear"
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
-    },
-    {
-      "episode": 45,
-      "title": "DataStore released into stable",
-      "content": "Datastore was released, providing a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.",
-      "URL": "https://developer.android.com/jetpack/androidx/releases/datastore#1.0.0",
-      "authorName": "",
-      "publishDate": "2021-08-03T23:00:00.000Z",
-      "type": "Jetpack release 🚀",
-      "topics": [
-        "Data storage",
-        "DataStore"
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
-    },
-    {
-      "episode": 42,
-      "title": "DataStore reached release candidate status",
-      "content": "Jetpack Compose and DataStore have now reached release candidate status meaning the 1.0 stable releases are right around the corner!",
-      "URL": "https://developer.android.com/topic/libraries/architecture/datastore",
-      "authorName": "",
-      "publishDate": "2021-06-29T23:00:00.000Z",
-      "type": "Jetpack release 🚀",
-      "topics": [
-        "DataStore",
-        "Data storage"
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
-    },
-    {
-      "episode": 42,
-      "title": "Scope Storage Myths",
-      "content": "Apps will be required to update their targetSdkVersion to API 30 in the second half of the year. That means your app will be required to work with Scoped Storage. In this blog post, Nicole Borrelli busts some Scope storage myths in a Q&A format.",
-      "URL": "https://medium.com/androiddevelopers/scope-storage-myths-ca6a97d7ff37",
-      "authorName": "Nicole Borrelli",
-      "publishDate": "2021-06-27T23:00:00.000Z",
-      "type": "Article 📚",
-      "topics": [
-        "Data storage",
-        "Scoped Storage"
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
-    },
-    {
       "episode": 47,
-      "title": "Mad Skills: Hilt under the hood",
+      "title": "Hilt under the hood",
       "content": "This episode dives into how the Hilt annotation processors generate code, and how the Hilt Gradle plugin works behind the scenes to improve the overall experience when using Hilt with Gradle.",
       "URL": "https://medium.com/androiddevelopers/mad-skills-series-hilt-under-the-hood-9d89ee227059",
       "authorName": "Brad Corso",
@@ -843,7 +1112,7 @@
       "type": "Article 📚",
       "topics": [
         "Hilt",
-        "Mad Skills"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -853,7 +1122,7 @@
     },
     {
       "episode": 47,
-      "title": "Mad Skills: Hilt extensions",
+      "title": "Hilt extensions",
       "content": "This episode explains how to write your own Hilt Extensions. Hilt Extensions allow you to extend Hilt support to new libraries. Extensions can be created for common patterns in projects, to support non-standard member injection, mirroring bindings, and more.",
       "URL": "https://medium.com/androiddevelopers/hilt-extensions-in-the-mad-skills-series-f2ed6fcba5fe",
       "authorName": "Daniel Santiago",
@@ -861,7 +1130,7 @@
       "type": "Article 📚",
       "topics": [
         "Hilt",
-        "Mad Skills"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -871,7 +1140,7 @@
     },
     {
       "episode": 47,
-      "title": "Mad Skills: Migrating from Dagger to Hilt",
+      "title": "Migrating from Dagger to Hilt",
       "content": "While you will eventually want to migrate all your existing Dagger modules over to Hilt’s built in components, you can start by migrating application-wide components to Hilt’s singleton component. This episode explains how.",
       "URL": "https://www.youtube.com/watch?v=Xt1_3Nq4lD0&t=15s",
       "authorName": "Marcelo Hernandez",
@@ -879,7 +1148,7 @@
       "type": "Video 📺",
       "topics": [
         "Hilt",
-        "Mad Skills"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -897,7 +1166,7 @@
       "type": "Article 📚",
       "topics": [
         "Large Screen",
-        "MAD",
+        "MAD Skills",
         "Material Design"
       ],
       "alternateVideo": {
@@ -946,7 +1215,7 @@
       "content": "Want even more accessibility? You are in luck, check out this entire new learning pathway aimed at teaching you how to make your app more accessible.",
       "URL": "https://developer.android.com/courses/pathways/make-your-android-app-accessible",
       "authorName": "",
-      "publishDate": "",
+      "publishDate": "2021-08-31T23:00:00.000Z",
       "type": "",
       "topics": [
         "Accessibility"
@@ -984,7 +1253,7 @@
       "type": "Podcast 🎙",
       "topics": [
         "Android Studio",
-        "Jetpack Compose"
+        "Compose"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1010,6 +1279,24 @@
       }
     },
     {
+      "episode": 45,
+      "title": "DataStore released into stable",
+      "content": "Datastore was released, providing a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.",
+      "URL": "https://developer.android.com/jetpack/androidx/releases/datastore#1.0.0",
+      "authorName": "",
+      "publishDate": "2021-08-03T23:00:00.000Z",
+      "type": "Jetpack release 🚀",
+      "topics": [
+        "Data storage",
+        "DataStore"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
       "episode": 44,
       "title": "Jetpack Compose 1.0 stable is released",
       "content": "Jetpack Compose, Android’s modern, native UI toolkit is now stable and ready for you to adopt in production. It interoperates with your existing app, integrates with existing Jetpack libraries, implements Material Design with straightforward theming, supports lists with Lazy components using minimal boilerplate, and has a powerful, extensible animation system.",
@@ -1018,7 +1305,7 @@
       "publishDate": "2021-07-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "Jetpack Compose"
+        "Compose"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1036,7 +1323,7 @@
       "type": "Article 📚",
       "topics": [
         "Android Studio",
-        "Jetpack Compose"
+        "Compose"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1053,7 +1340,7 @@
       "publishDate": "2021-07-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "Google Play"
+        "Play Console"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1063,8 +1350,8 @@
     },
     {
       "episode": 44,
-      "title": "MAD Skills: Performance",
-      "content": "The MAD Skills series continues with more technical content about modern Android development.\nThis week continues Performance, which covers how to use both system tracing and sampling profiling to debug performance issues in apps.\nCarmen has released two more episodes. The first episode dives deeper into system trace profiling within Android Studio with a detailed walkthrough of app startup performance.",
+      "title": "Identify performance bottlenecks using system trace",
+      "content": "System trace profiling within Android Studio with a detailed walkthrough of app startup performance.",
       "URL": "https://www.youtube.com/watch?v=aUrqx9AnDUg",
       "authorName": "Carmen Jackson",
       "publishDate": "2021-07-25T23:00:00.000Z",
@@ -1081,15 +1368,50 @@
     },
     {
       "episode": 44,
-      "title": "ADB Podcast Episode 171",
+      "title": "Testing in Compose",
       "content": "ADB released episode #171, part of our continuing series on Jetpack Compose. In this episode, Nick and Romain are joined by Filip Pavlis, Jelle Fresen & Jose Alcérreca to talk about Testing in Compose. They discuss how Compose’s testing APIs were developed hand-in-hand with the UI toolkit, making them more deterministic and opening up new possibilities like manipulating time. They go on to discuss the semantics tree, interop testing, screenshot testing and the possibilities for host-side testing.",
       "URL": "https://adbackstage.libsyn.com/episode-171-compose-testing",
       "authorName": "Android Developers Backstage",
-      "publishDate": "",
+      "publishDate": "2021-08-31T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "Jetpack Compose",
+        "Compose",
         "Testing"
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 42,
+      "title": "DataStore reached release candidate status",
+      "content": "Jetpack Compose and DataStore have now reached release candidate status meaning the 1.0 stable releases are right around the corner!",
+      "URL": "https://developer.android.com/topic/libraries/architecture/datastore",
+      "authorName": "",
+      "publishDate": "2021-06-29T23:00:00.000Z",
+      "type": "Jetpack release 🚀",
+      "topics": [
+        ""
+      ],
+      "alternateVideo": {
+        "URL": "",
+        "startTimestamp": 0,
+        "endTimestamp": 0
+      }
+    },
+    {
+      "episode": 42,
+      "title": "Scope Storage Myths",
+      "content": "Apps will be required to update their targetSdkVersion to API 30 in the second half of the year. That means your app will be required to work with Scoped Storage. In this blog post, Nicole Borrelli busts some Scope storage myths in a Q&A format.",
+      "URL": "https://medium.com/androiddevelopers/scope-storage-myths-ca6a97d7ff37",
+      "authorName": "Nicole Borrelli",
+      "publishDate": "2021-06-27T23:00:00.000Z",
+      "type": "Article 📚",
+      "topics": [
+        "Data storage",
+        "Scoped Storage"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1134,7 +1456,7 @@
     },
     {
       "episode": 41,
-      "title": "Mad Skills: Navigation with Multiple back stacks",
+      "title": "Navigation with Multiple back stacks",
       "content": "As part of the rercommended Material pattern for bottom-navigation, the Jetpack Navigation librar y makes it easy to implement navigation with multiple back-stacks",
       "URL": "https://medium.com/androiddevelopers/navigation-multiple-back-stacks-6c67ba41952f",
       "authorName": "Murat Yener",
@@ -1142,7 +1464,7 @@
       "type": "Article 📚",
       "topics": [
         "Navigation",
-        "Mad Skills"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1152,7 +1474,7 @@
     },
     {
       "episode": 41,
-      "title": "Mad Skills: Navigation in Feature Modules",
+      "title": "Navigation in Feature Modules",
       "content": "Feature modules delivered with Play Feature delivery at not downloadedd at install time, but only when the app requestss them. Learn how to use the dynamic features navigation library to include the graph from the feature module.",
       "URL": "https://medium.com/androiddevelopers/navigation-in-feature-modules-322ac3d79334",
       "authorName": "Murat Yener",
@@ -1160,7 +1482,7 @@
       "type": "Article 📚",
       "topics": [
         "Navigation",
-        "Mad Skills"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1178,7 +1500,7 @@
       "type": "Article 📚",
       "topics": [
         "Android releases",
-        "MAD"
+        "MAD Skills"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1264,7 +1586,7 @@
       "publishDate": "2021-05-25T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "Andriod releases"
+        "Android releases"
       ],
       "alternateVideo": {
         "URL": "",
@@ -1281,7 +1603,7 @@
       "publishDate": "2021-06-09T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "Coroutine",
+        "Coroutines",
         "Hilt"
       ],
       "alternateVideo": {
@@ -1342,4 +1664,6 @@
       }
     }
   ]
+}
+""".trimIndent()
 }

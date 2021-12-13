@@ -16,6 +16,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -71,6 +72,8 @@ dependencies {
     coreLibraryDesugaring libs.android.desugarJdkLibs
 
     implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.datetime
+    implementation libs.kotlinx.serialization.json
 
     implementation libs.androidx.activity.compose
     implementation libs.androidx.core.ktx
@@ -96,6 +99,7 @@ dependencies {
     testImplementation libs.junit4
     testImplementation libs.mockk
     testImplementation libs.androidx.test.core
+    testImplementation libs.kotlinx.coroutines.test
 
     androidTestImplementation libs.junit4
     androidTestImplementation libs.androidx.test.core

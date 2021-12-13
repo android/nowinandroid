@@ -32,6 +32,7 @@ buildscript {
     dependencies {
         classpath(libs.android.gradlePlugin)
         classpath(libs.kotlin.gradlePlugin)
+        classpath(libs.kotlin.serializationPlugin)
     }
 }
 
@@ -47,6 +48,7 @@ subprojects {
             target '**/*.kt'
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
+            targetExclude("$rootDir/app/src/main/java/com/google/samples/apps/nowinandroid/data/news/fake/FakeData.kt")
             ktlint(libs.versions.ktlint.get()).userData([android: "true"])
             licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
