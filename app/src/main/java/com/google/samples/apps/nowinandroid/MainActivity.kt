@@ -19,36 +19,17 @@ package com.google.samples.apps.nowinandroid
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.samples.apps.nowinandroid.ui.theme.NowInAndroidTheme
+import androidx.core.view.WindowCompat
+import com.google.samples.apps.nowinandroid.ui.NiaApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            NowInAndroidTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+        // Turn off the decor fitting system windows, which allows us to handle insets,
+        // including IME animations
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    NowInAndroidTheme {
-        Greeting("Android")
+        setContent { NiaApp() }
     }
 }
