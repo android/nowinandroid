@@ -25,7 +25,19 @@ if [[ -n "$GRADLE_DEBUG" ]]; then
   GRADLE_FLAGS=( --debug --stacktrace )
 fi
 
+# Install the build tools and accept all licenses
+export ANDROID_HOME=/opt/android-sdk/current
+echo "Installing build-tools..."
+echo y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;30.0.3" > /dev/null
+echo y | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
+
 cd $KOKORO_ARTIFACTS_DIR/git/nowinandroid
+
+# The build needs Java 11, set it as the default Java version.
+sudo update-java-alternatives --set java-1.11.0-openjdk-amd64
+
+# Also clear JAVA_HOME variable so java -version is used instead
+export JAVA_HOME=
 
 ./gradlew "${GRADLE_FLAGS[@]}" build
 
