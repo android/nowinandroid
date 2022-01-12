@@ -16,8 +16,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'kotlinx-serialization'
     id 'jacoco'
+    id 'dagger.hilt.android.plugin'
 }
 
 def jacocoTestReport = tasks.create("jacocoTestReport")
@@ -132,6 +134,9 @@ dependencies {
     implementation libs.androidx.compose.ui.util
     implementation libs.androidx.compose.runtime
     implementation libs.androidx.compose.runtime.livedata
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 
     debugImplementation libs.androidx.compose.ui.testManifest
 
