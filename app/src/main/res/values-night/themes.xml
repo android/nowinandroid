@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2021 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +13,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.NowInAndroid" parent="@android:style/Theme.Material">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <!-- Customize your theme here. -->
+<resources>
+
+    <!-- Our dark theme -->
+    <style name="Theme.Nia" parent="Platform.Theme.Nia">
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>
     </style>
+
 </resources>

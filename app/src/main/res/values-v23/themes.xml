@@ -14,9 +14,9 @@
   ~ limitations under the License.
 -->
 <resources>
-    <string name="app_name">Now in Android</string>
-    <string name="for_you">For you</string>
-    <string name="episodes">Episodes</string>
-    <string name="saved">Saved</string>
-    <string name="topics">Topics</string>
+
+    <style name="Platform.Theme.Nia" parent="Theme.Material3.DayNight">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+    </style>
 </resources>

@@ -118,8 +118,7 @@ dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
     implementation libs.androidx.lifecycle.viewModelCompose
-    implementation libs.androidx.navigation.fragment
-    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.navigation.compose
     implementation libs.material3
 
     implementation libs.accompanist.insets
@@ -127,6 +126,7 @@ dependencies {
     implementation libs.androidx.compose.foundation.layout
     // TODO (M3): Remove this dependency when all components are available
     implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.material.iconsExtended
     implementation libs.androidx.compose.material3
     implementation libs.androidx.compose.ui.tooling
     implementation libs.androidx.compose.ui.util
@@ -140,10 +140,8 @@ dependencies {
     testImplementation libs.androidx.test.core
     testImplementation libs.kotlinx.coroutines.test
 
-    androidTestImplementation libs.junit4
-    androidTestImplementation libs.androidx.test.core
     androidTestImplementation libs.androidx.test.espresso.core
-    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.runner
     androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.androidx.compose.ui.test
 
