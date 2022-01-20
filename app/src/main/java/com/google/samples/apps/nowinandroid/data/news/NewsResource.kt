@@ -32,16 +32,16 @@ import kotlinx.serialization.encoding.Encoder
  */
 @Serializable
 data class NewsResource(
-    val episode: Int,
+    val id: Int,
+    val episodeId: Int,
     val title: String,
     val content: String,
-    @SerialName("URL")
     val url: String,
-    val authorName: String,
+    val authors: List<Int>,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
     val type: String,
-    val topics: List<String>,
+    val topics: List<Int>,
     val alternateVideo: VideoInfo?
 )
 

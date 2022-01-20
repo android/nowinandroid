@@ -16,29 +16,35 @@
 
 package com.google.samples.apps.nowinandroid.data.news.fake
 
+import com.google.samples.apps.nowinandroid.data.news.NewsRepository
 import com.google.samples.apps.nowinandroid.data.news.NewsResource
-import com.google.samples.apps.nowinandroid.data.news.NewsResourceRepository
-import kotlinx.coroutines.CoroutineDispatcher
+import com.google.samples.apps.nowinandroid.di.NiaDispatchers
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 /**
- * [NewsResourceRepository] implementation that provides static news resources to aid development
+ * [NewsRepository] implementation that provides static news resources to aid development
  */
 
-class FakeNewsResourceRepository(
-    private val ioDispatcher: CoroutineDispatcher
-) : NewsResourceRepository {
-    private val deserializer = Json { ignoreUnknownKeys = true }
-
-    override fun monitor(): Flow<List<NewsResource>> = flow {
-        emit(deserializer.decodeFromString<ResourceData>(FakeDataSource.data).resources)
+class FakeNewsRepository @Inject constructor(
+    private val dispatchers: NiaDispatchers,
+    private val networkJson: Json
+) : NewsRepository {
+    override fun getNewsResourcesStream(): Flow<List<NewsResource>> = flow {
+        emit(networkJson.decodeFromString<ResourceData>(FakeDataSource.data).resources)
     }
-        .flowOn(ioDispatcher)
+        .flowOn(dispatchers.IO)
+
+    override fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>> =
+        getNewsResourcesStream().map { newsResources ->
+            newsResources.filter { it.topics.intersect(filterTopicIds.toSet()).isNotEmpty() }
+        }
 }
 
 /**

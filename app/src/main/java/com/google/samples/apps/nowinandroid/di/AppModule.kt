@@ -16,10 +16,57 @@
 
 package com.google.samples.apps.nowinandroid.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
+import com.google.samples.apps.nowinandroid.data.UserPreferences
+import com.google.samples.apps.nowinandroid.data.UserPreferencesSerializer
+import com.google.samples.apps.nowinandroid.data.news.NewsRepository
+import com.google.samples.apps.nowinandroid.data.news.TopicsRepository
+import com.google.samples.apps.nowinandroid.data.news.fake.FakeNewsRepository
+import com.google.samples.apps.nowinandroid.data.news.fake.FakeTopicsRepository
+import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import kotlinx.serialization.json.Json
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule
+interface AppModule {
+
+    @Binds
+    fun bindsTopicRepository(fakeTopicsRepository: FakeTopicsRepository): TopicsRepository
+
+    @Binds
+    fun bindsNewsResourceRepository(
+        fakeNewsRepository: FakeNewsRepository
+    ): NewsRepository
+
+    @Binds
+    fun bindsNiaDispatchers(defaultNiaDispatchers: DefaultNiaDispatchers): NiaDispatchers
+
+    companion object {
+        @Provides
+        @Singleton
+        fun providesUserPreferencesDataStore(
+            @ApplicationContext context: Context,
+            userPreferencesSerializer: UserPreferencesSerializer
+        ): DataStore<UserPreferences> =
+            DataStoreFactory.create(
+                serializer = userPreferencesSerializer
+            ) {
+                context.dataStoreFile("user_preferences.pb")
+            }
+
+        @Provides
+        @Singleton
+        fun providesNetworkJson(): Json = Json {
+            ignoreUnknownKeys = true
+        }
+    }
+}

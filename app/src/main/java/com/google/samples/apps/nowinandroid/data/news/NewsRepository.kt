@@ -21,9 +21,14 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Data layer implementation for [NewsResource]
  */
-interface NewsResourceRepository {
+interface NewsRepository {
     /**
-     * Fetches available news resources
+     * Returns available news resources as a stream.
      */
-    fun monitor(): Flow<List<NewsResource>>
+    fun getNewsResourcesStream(): Flow<List<NewsResource>>
+
+    /**
+     * Returns available news resources as a stream filtered by the topic.
+     */
+    fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>>
 }

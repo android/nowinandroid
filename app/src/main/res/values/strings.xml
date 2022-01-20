@@ -19,4 +19,6 @@
     <string name="episodes">Episodes</string>
     <string name="saved">Saved</string>
     <string name="topics">Topics</string>
+    <string name="done">Done</string>
+    <string name="for_you_loading">Loading for you…</string>
 </resources>
