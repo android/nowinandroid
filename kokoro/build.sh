@@ -20,6 +20,9 @@ set -e
 # Display commands to stderr.
 set -x
 
+deviceIds=${1:-'Nexus5,Pixel2,Pixel3'}
+osVersionIds=${2:-'23,27,30'}
+
 GRADLE_FLAGS=()
 if [[ -n "$GRADLE_DEBUG" ]]; then
   GRADLE_FLAGS=( --debug --stacktrace )
@@ -41,4 +44,32 @@ export JAVA_HOME=
 
 ./gradlew "${GRADLE_FLAGS[@]}" build
 
+# For Firebase Test Lab
+./gradlew app:assembleAndroidTest
+./gradlew app:assembleDebug
+
+MAX_RETRY=3
+run_firebase_test_lab() {
+  ## Retry can be done by passing the --num-flaky-test-attempts to gcloud, but gcloud SDK in the
+  ## kokoro server doesn't support it yet.
+
+  set +e # To not exit on an error to retry flaky tests
+  local counter=0
+  local result=1
+  while [ $result != 0 -a $counter -lt $MAX_RETRY ]; do
+    gcloud firebase test android run \
+      --type instrumentation \
+      --app  app/build/outputs/apk/debug/app-debug.apk \
+      --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+      --device-ids $deviceIds \
+      --os-version-ids $osVersionIds \
+      --locales en \
+      --timeout 60
+    result=$? ;
+    let counter=counter+1
+  done
+  return $result
+}
+
+run_firebase_test_lab
 exit $?
