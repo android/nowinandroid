@@ -16,28 +16,32 @@
 
 package com.google.samples.apps.nowinandroid.data.news.fake
 
+import com.google.samples.apps.nowinandroid.di.DefaultNiaDispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Test
 
-class FakeNewsResourceRepositoryTest {
+class FakeNewsRepositoryTest {
 
-    private lateinit var subject: FakeNewsResourceRepository
+    private lateinit var subject: FakeNewsRepository
 
     @Before
     fun setup() {
-        subject = FakeNewsResourceRepository(
-            ioDispatcher = TestCoroutineDispatcher()
+        subject = FakeNewsRepository(
+            // TODO: Create test-specific NiaDispatchers
+            dispatchers = DefaultNiaDispatchers(),
+            networkJson = Json { ignoreUnknownKeys = true }
         )
     }
 
-    @org.junit.Test
-    fun testDeserializationOfNewsResources() = runBlocking {
+    @Test
+    fun testDeserializationOfNewsResources() = runTest {
         assertEquals(
             FakeDataSource.sampleResource,
-            subject.monitor().first().first()
+            subject.getNewsResourcesStream().first().first()
         )
     }
 }
