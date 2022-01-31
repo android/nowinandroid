@@ -27,6 +27,6 @@ set -x
 # a10         | Samsung A10   | API 29 | Phone
 # redfin      | Pixel 5e      | API 30 | Phone
 # oriole      | Pixel 6       | API 31 | Phone
-bash build.sh "hammerhead,walleye,gts4lltevzw,a10,redfin,oriole" "23,27,28,29,30,31"
+bash $KOKORO_ARTIFACTS_DIR/git/nowinandroid/kokoro/build.sh "hammerhead,walleye,gts4lltevzw,a10,redfin,oriole" "23,27,28,29,30,31"
 
 exit $?
