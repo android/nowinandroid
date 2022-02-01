@@ -21,6 +21,8 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -82,19 +84,19 @@ class ForYouScreenTest {
         composeTestRule
             .onNodeWithText("HEADLINES")
             .assertIsDisplayed()
-            // .assertIsOff()
+            .assertIsOff()
             .assertHasClickAction()
 
         composeTestRule
             .onNodeWithText("UI")
             .assertIsDisplayed()
-            // .assertIsOff()
+            .assertIsOff()
             .assertHasClickAction()
 
         composeTestRule
             .onNodeWithText("TOOLS")
             .assertIsDisplayed()
-            // .assertIsOff()
+            .assertIsOff()
             .assertHasClickAction()
 
         composeTestRule
@@ -136,19 +138,19 @@ class ForYouScreenTest {
         composeTestRule
             .onNodeWithText("HEADLINES")
             .assertIsDisplayed()
-            // .assertIsOff()
+            .assertIsOff()
             .assertHasClickAction()
 
         composeTestRule
             .onNodeWithText("UI")
             .assertIsDisplayed()
-            // .assertIsOn()
+            .assertIsOn()
             .assertHasClickAction()
 
         composeTestRule
             .onNodeWithText("TOOLS")
             .assertIsDisplayed()
-            // .assertIsOff()
+            .assertIsOff()
             .assertHasClickAction()
 
         composeTestRule

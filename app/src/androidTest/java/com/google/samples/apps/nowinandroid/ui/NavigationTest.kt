@@ -16,128 +16,160 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
+import com.google.samples.apps.nowinandroid.R
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.
  */
+@HiltAndroidTest
 class NavigationTest {
 
     /**
-     * Use the primary activity to initialize the app normally.
-     *
-     * TODO: Bind fakes as needed to the Dagger graph to allow for easier testing
+     * Manages the components' state and is used to perform injection on your test
      */
-    @get:Rule
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    /**
+     * Use the primary activity to initialize the app normally.
+     */
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    /**
+     * Create a temporary folder used to create a Data Store file. This guarantees that
+     * the file is removed in between each test, preventing a crash.
+     */
+    @BindValue @get:Rule(order = 2)
+    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+
+    // The strings used for matching in these tests
+    private lateinit var done: String
+    private lateinit var navigateUp: String
+    private lateinit var forYouLoading: String
+    private lateinit var forYou: String
+    private lateinit var episodes: String
+    private lateinit var saved: String
+    private lateinit var topics: String
+
+    @Before
+    fun setup() {
+        composeTestRule.activity.apply {
+            done = getString(R.string.done)
+            navigateUp = getString(R.string.navigate_up)
+            forYouLoading = getString(R.string.for_you_loading)
+            forYou = getString(R.string.for_you)
+            episodes = getString(R.string.episodes)
+            saved = getString(R.string.saved)
+            topics = getString(R.string.following)
+        }
+    }
+
     @Test
-    fun firstScreenIsForYou() {
-        composeTestRule.forYouDestinationTopMatcher()
-            .assertExists("Could not find FOR YOU text on first screen after app open")
+    fun firstScreen_isForYou() {
+        composeTestRule.apply {
+            // WAIT for initial content to be shown
+            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
+            // VERIFY first topic is displayed
+            onNodeWithText("HEADLINES").assertExists()
+        }
     }
 
     // TODO: implement tests related to navigation & resetting of destinations (b/213307564)
+    // Restoring content should be tested with another tab than the For You one, as that will
+    // still succeed even when restoring state is turned off.
     /**
-     * As per guidelines:
-     *
-     * When you select a navigation bar item (one that’s not currently selected), the app navigates
-     * to that destination’s screen.
-     *
-     * Any prior user interactions and temporary screen states are reset, such as scroll position,
-     * tab selection, and inline search.
-     *
-     * This default behavior can be overridden when needed to improve the user experience. For
-     * example, an Android app that requires frequent switching between sections can preserve each
-     * section’s state.
+     * When navigating between the different top level destinations, we should restore the state
+     * of previously visited destinations.
      */
-//    @Test
-//    fun navigateToUnselectedTabResetsContent1() {
-//        // GIVEN the user was previously on the Following destination
-//        composeTestRule.followingDestinationTopMatcher().performClick()
-//        // and scrolled down
-//        [IMPLEMENT] Match the root scrollable container and scroll down to an item below the fold
-//        composeTestRule.followingDestinationTopMatcher()
-//            .assertDoesNotExist() // verify we scrolled beyond the top
-//        // and then navigated back to the For You destination
-//        composeTestRule.forYouDestinationTopMatcher().performClick()
-//        // WHEN the user presses the Topic navigation bar item
-//        composeTestRule.followingDestinationTopMatcher().performClick()
-//        // THEN the Following destination shows at the top.
-//        composeTestRule.followingDestinationTopMatcher()
-//            .assertExists("Screen did not correctly reset to the top after re-navigating to it")
-//    }
+    @Test
+    fun navigationBar_navigateToPreviouslySelectedTab_restoresContent() {
+        composeTestRule.apply {
+            // WAIT for initial content to be shown
+            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
+            // GIVEN the user follows a topic
+            onNodeWithText("HEADLINES").performClick()
+            // WHEN the user navigates to the Topics destination
+            onNodeWithText(topics).performClick()
+            // AND the user navigates to the For You destination
+            onNodeWithText(forYou).performClick()
+            // THEN the state of the For You destination is restored
+            onNodeWithText("HEADLINES").assertIsOn()
+        }
+    }
+
+    /**
+     * When reselecting a tab, it should show that tab's start destination and restore its state.
+     */
+    @Test
+    fun navigationBar_reselectTab_keepsState() {
+        composeTestRule.apply {
+            // WAIT for initial content to be shown
+            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
+            // GIVEN the user follows a topic
+            onNodeWithText("HEADLINES").performClick()
+            // WHEN the user taps the For You navigation bar item
+            onNodeWithText(forYou).performClick()
+            // THEN the state of the For You destination is restored
+            onNodeWithText("HEADLINES").assertIsOn()
+        }
+    }
 
 //    @Test
-//    fun navigateToUnselectedTabResetsContent2() {
-//        // GIVEN the user was previously on the Following destination
-//        composeTestRule.followingDestinationTopMatcher().performClick()
-//        // and navigated to the Topic detail destination
-//        [IMPLEMENT] Navigate to topic detail destination
-//        composeTestRule.followingDestinationTopMatcher()
-//            .assertDoesNotExist() // verify we are not on Following overview destination any more
-//        // and then navigated back to the For You destination
-//        composeTestRule.forYouDestinationTopMatcher().performClick()
-//        // WHEN the user presses the Topic navigation bar item
-//        composeTestRule.followingDestinationTopMatcher().performClick()
-//        // THEN the Following destination shows at the top.
-//        composeTestRule.followingDestinationTopMatcher()
-//            .assertExists("Screen did not correctly reset to the top after re-navigating to it")
-//    }
-
-//    @Test
-//    fun reselectingTabResetsContent1() {
-//        // GIVEN the user is on the For You destination
-//        // and has scrolled down
-//        // WHEN the user taps the For You navigation bar item
-//        // THEN the For You destination shows at the top of the destination
-//    }
-
-//    @Test
-//    fun reselectingTabResetsContent2() {
-//        // GIVEN the user is on the Following destination
+//    fun navigationBar_reselectTab_resetsToStartDestination() {
+//        // GIVEN the user is on the Topics destination and scrolls
 //        // and navigates to the Topic Detail destination
-//        // WHEN the user taps the Following navigation bar item
-//        // THEN the Following destination shows at the top of the destination
+//        // WHEN the user taps the Topics navigation bar item
+//        // THEN the Topics destination shows in the same scrolled state
 //    }
 
     /*
      * Top level destinations should never show an up affordance.
      */
     @Test
-    fun topLevelDestinationsDoNotShowUpArrow() {
-        // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
-        composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Episodes").performClick()
-        composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Saved").performClick()
-        composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Following").performClick()
-        composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
+    fun topLevelDestinations_doNotShowUpArrow() {
+        composeTestRule.apply {
+            // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+            onNodeWithText(episodes).performClick()
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+            onNodeWithText(topics).performClick()
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+        }
     }
 
     /*
      * There should always be at most one instance of a top-level destination at the same time.
      */
     @Test(expected = NoActivityResumedException::class)
-    fun backFromHomeDestinationQuitsApp() {
-        // GIVEN the user navigates to the Episodes destination
-        composeTestRule.onNodeWithText("Episodes").performClick()
-        // and then navigates to the For you destination
-        composeTestRule.onNodeWithText("For you").performClick()
-        // WHEN the user uses the system button/gesture to go back
-        Espresso.pressBack()
-        // THEN the app quits
+    fun homeDestination_back_quitsApp() {
+        composeTestRule.apply {
+            // GIVEN the user navigates to the Episodes destination
+            onNodeWithText(episodes).performClick()
+            // and then navigates to the For you destination
+            onNodeWithText(forYou).performClick()
+            // WHEN the user uses the system button/gesture to go back
+            Espresso.pressBack()
+            // THEN the app quits
+        }
     }
 
     /*
@@ -145,26 +177,18 @@ class NavigationTest {
      * to the "For you" destination, no matter which destinations you visited in between.
      */
     @Test
-    fun backFromDestinationReturnsToForYou() {
-        // GIVEN the user navigated to the Episodes destination
-        composeTestRule.onNodeWithText("Episodes").performClick()
-        // and then navigated to the Following destination
-        composeTestRule.onNodeWithText("Following").performClick()
-        // WHEN the user uses the system button/gesture to go back,
-        Espresso.pressBack()
-        // THEN the app shows the For You destination
-        composeTestRule.forYouDestinationTopMatcher().assertExists()
+    fun navigationBar_backFromAnyDestination_returnsToForYou() {
+        composeTestRule.apply {
+            // WAIT for initial content to be shown
+            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
+            // GIVEN the user navigated to the Episodes destination
+            onNodeWithText(episodes).performClick()
+            // and then navigated to the Topics destination
+            onNodeWithText(topics).performClick()
+            // WHEN the user uses the system button/gesture to go back,
+            Espresso.pressBack()
+            // THEN the app shows the For You destination
+            onNodeWithText("HEADLINES").assertExists()
+        }
     }
-
-    /*
-     * Matches an element at the top of the For You destination. Should be updated when the
-     * destination is implemented.
-     */
-    private fun ComposeTestRule.forYouDestinationTopMatcher() = onNodeWithTag("FOR YOU")
-
-    /*
-     * Matches an element at the top of the Following destination. Should be updated when the
-     * destination is implemented.
-     */
-    private fun ComposeTestRule.followingDestinationTopMatcher() = onNodeWithText("FOLLOWING")
 }

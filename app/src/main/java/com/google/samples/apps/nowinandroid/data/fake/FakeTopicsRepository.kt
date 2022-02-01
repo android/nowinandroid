@@ -28,6 +28,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+/**
+ * Fake implementation of the [TopicsRepository] that retrieves the topics from a JSON String, and
+ * uses a local DataStore instance to save and retrieve followed topic ids.
+ *
+ * This allows us to run the app with fake data, without needing an internet connection or working
+ * backend.
+ */
 class FakeTopicsRepository @Inject constructor(
     private val dispatchers: NiaDispatchers,
     private val networkJson: Json,

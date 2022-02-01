@@ -20,6 +20,7 @@
     <string name="saved">Saved</string>
     <string name="done">Done</string>
     <string name="for_you_loading">Loading for you…</string>
+    <string name="navigate_up">Navigate up</string>
 
     <!-- NewsResource Card -->
     <string name="bookmark">Bookmark</string>

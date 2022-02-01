@@ -25,9 +25,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.json.Json
 
 /**
- * [NewsRepository] implementation that provides static news resources to aid development
+ * Fake implementation of the [NewsRepository] that retrieves the news resources from a JSON String.
+ *
+ * This allows us to run the app with fake data, without needing an internet connection or working
+ * backend.
  */
-
 class FakeNewsRepository @Inject constructor(
     private val dispatchers: NiaDispatchers,
     private val networkJson: Json

@@ -27,7 +27,7 @@ object FakeDataSource {
     val sampleTopic = NetworkTopic(
         id = 0,
         name = "Headlines",
-        description = "",
+        description = "At vero eos et accusamus et iusto odio dignissimos ducimus qui.",
     )
     val sampleResource = NetworkNewsResource(
         id = 1,
