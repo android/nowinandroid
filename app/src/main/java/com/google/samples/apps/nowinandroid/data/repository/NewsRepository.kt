@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-// Use version catalogs for managing dependencies
-// https://docs.gradle.org/current/userguide/platforms.html
-enableFeaturePreview("VERSION_CATALOGS")
+package com.google.samples.apps.nowinandroid.data.repository
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+import com.google.samples.apps.nowinandroid.data.model.NewsResource
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Data layer implementation for [NewsResource]
+ */
+interface NewsRepository {
+    /**
+     * Returns available news resources as a stream.
+     */
+    fun getNewsResourcesStream(): Flow<List<NewsResource>>
+
+    /**
+     * Returns available news resources as a stream filtered by the topic.
+     */
+    fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>>
 }
-rootProject.name = "nowinandroid"
-include ':app'

@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-// Use version catalogs for managing dependencies
-// https://docs.gradle.org/current/userguide/platforms.html
-enableFeaturePreview("VERSION_CATALOGS")
+package com.google.samples.apps.nowinandroid.data.local.entities
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-rootProject.name = "nowinandroid"
-include ':app'
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+
+/**
+ * Defines a topic a user may follow.
+ * It has a many to many relationship with [NewsResourceEntity]
+ */
+@Entity(
+    tableName = "topics",
+    indices = [
+        Index(value = ["name"], unique = true)
+    ]
+)
+data class TopicEntity(
+    @PrimaryKey
+    val id: Int,
+    val name: String,
+    val description: String,
+)

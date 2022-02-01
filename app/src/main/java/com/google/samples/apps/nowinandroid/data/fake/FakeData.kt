@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news.fake
+package com.google.samples.apps.nowinandroid.data.fake
 
-import com.google.samples.apps.nowinandroid.data.news.NewsResource
-import com.google.samples.apps.nowinandroid.data.news.VideoInfo
+import com.google.samples.apps.nowinandroid.data.network.NetworkNewsResource
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.intellij.lang.annotations.Language
 
 object FakeDataSource {
-    val sampleResource = NewsResource(
+    val sampleResource = NetworkNewsResource(
         id = 1,
         episodeId = 52,
         title = "Thanks for helping us reach 1M YouTube Subscribers",
@@ -42,11 +41,6 @@ object FakeDataSource {
         ).toInstant(TimeZone.UTC),
         type = "Video \uD83D\uDCFA",
         topics = listOf(0),
-        alternateVideo = VideoInfo(
-            url = "",
-            startTimestamp = 0,
-            endTimestamp = 0
-        )
     )
 
     @Language("JSON")
@@ -165,12 +159,7 @@ object FakeDataSource {
       "topics": [
         0
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 2,
@@ -185,12 +174,7 @@ object FakeDataSource {
       ],
       "authors": [
         0
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 3,
@@ -203,12 +187,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 4,
@@ -221,12 +200,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 5,
@@ -241,12 +215,7 @@ object FakeDataSource {
       ],
       "authors": [
         1
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 6,
@@ -261,12 +230,7 @@ object FakeDataSource {
       ],
       "authors": [
         1
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 7,
@@ -281,12 +245,7 @@ object FakeDataSource {
       ],
       "authors": [
         1
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 8,
@@ -301,12 +260,7 @@ object FakeDataSource {
       ],
       "authors": [
         1
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 9,
@@ -320,12 +274,7 @@ object FakeDataSource {
         6,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 10,
@@ -339,12 +288,7 @@ object FakeDataSource {
         6,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 11,
@@ -358,12 +302,7 @@ object FakeDataSource {
         6,
         14
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 12,
@@ -377,12 +316,7 @@ object FakeDataSource {
         6,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 13,
@@ -396,12 +330,7 @@ object FakeDataSource {
         6,
         18
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 14,
@@ -417,12 +346,7 @@ object FakeDataSource {
       ],
       "authors": [
         2
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 15,
@@ -438,12 +362,7 @@ object FakeDataSource {
       ],
       "authors": [
         3
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 16,
@@ -459,12 +378,7 @@ object FakeDataSource {
       ],
       "authors": [
         4
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 17,
@@ -477,12 +391,7 @@ object FakeDataSource {
       "topics": [
         3
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 18,
@@ -497,12 +406,7 @@ object FakeDataSource {
       ],
       "authors": [
         5
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 19,
@@ -517,12 +421,7 @@ object FakeDataSource {
       ],
       "authors": [
         5
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 20,
@@ -538,12 +437,7 @@ object FakeDataSource {
       ],
       "authors": [
         6
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 21,
@@ -560,12 +454,7 @@ object FakeDataSource {
       ],
       "authors": [
         7
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 22,
@@ -578,12 +467,7 @@ object FakeDataSource {
       "topics": [
         10
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 23,
@@ -596,12 +480,7 @@ object FakeDataSource {
       "topics": [
         10
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 24,
@@ -616,12 +495,7 @@ object FakeDataSource {
       ],
       "authors": [
         8
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 25,
@@ -636,12 +510,7 @@ object FakeDataSource {
       ],
       "authors": [
         9
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 26,
@@ -655,12 +524,7 @@ object FakeDataSource {
         10,
         11
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 27,
@@ -673,12 +537,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 28,
@@ -691,12 +550,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 29,
@@ -709,12 +563,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 30,
@@ -728,12 +577,7 @@ object FakeDataSource {
         1,
         4
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 31,
@@ -746,12 +590,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 32,
@@ -765,12 +604,7 @@ object FakeDataSource {
         1,
         13
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 33,
@@ -784,12 +618,7 @@ object FakeDataSource {
         6,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 34,
@@ -802,12 +631,7 @@ object FakeDataSource {
       "topics": [
         13
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 35,
@@ -820,12 +644,7 @@ object FakeDataSource {
       "topics": [
         13
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 36,
@@ -838,12 +657,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 37,
@@ -858,12 +672,7 @@ object FakeDataSource {
       ],
       "authors": [
         10
-      ],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 82,
-        "endTimestamp": 97
-      }
+      ]
     },
     {
       "id": 38,
@@ -876,12 +685,7 @@ object FakeDataSource {
       "topics": [
         14
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 97,
-        "endTimestamp": 121
-      }
+      "authors": []
     },
     {
       "id": 39,
@@ -894,12 +698,7 @@ object FakeDataSource {
       "topics": [
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 193,
-        "endTimestamp": 206
-      }
+      "authors": []
     },
     {
       "id": 40,
@@ -913,12 +712,7 @@ object FakeDataSource {
         12,
         5
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 206,
-        "endTimestamp": 220
-      }
+      "authors": []
     },
     {
       "id": 41,
@@ -931,12 +725,7 @@ object FakeDataSource {
       "topics": [
         9
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 42,
@@ -949,12 +738,7 @@ object FakeDataSource {
       "topics": [
         9
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 43,
@@ -968,12 +752,7 @@ object FakeDataSource {
         9,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 44,
@@ -987,12 +766,7 @@ object FakeDataSource {
         9,
         1
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 45,
@@ -1005,12 +779,7 @@ object FakeDataSource {
       "topics": [
         9
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 46,
@@ -1026,12 +795,7 @@ object FakeDataSource {
       ],
       "authors": [
         0
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 47,
@@ -1047,12 +811,7 @@ object FakeDataSource {
       ],
       "authors": [
         11
-      ],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 49,
-        "endTimestamp": 82
-      }
+      ]
     },
     {
       "id": 48,
@@ -1067,12 +826,7 @@ object FakeDataSource {
       ],
       "authors": [
         7
-      ],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 233,
-        "endTimestamp": 287
-      }
+      ]
     },
     {
       "id": 49,
@@ -1087,12 +841,7 @@ object FakeDataSource {
       ],
       "authors": [
         5
-      ],
-      "alternateVideo": {
-        "URL": "https://storage.googleapis.com/now-in-android/NIA049.mp4",
-        "startTimestamp": 136,
-        "endTimestamp": 193
-      }
+      ]
     },
     {
       "id": 50,
@@ -1107,12 +856,7 @@ object FakeDataSource {
       ],
       "authors": [
         12
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 51,
@@ -1128,12 +872,7 @@ object FakeDataSource {
       ],
       "authors": [
         6
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 52,
@@ -1148,12 +887,7 @@ object FakeDataSource {
       ],
       "authors": [
         0
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 53,
@@ -1168,12 +902,7 @@ object FakeDataSource {
       ],
       "authors": [
         13
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 54,
@@ -1188,12 +917,7 @@ object FakeDataSource {
       ],
       "authors": [
         14
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 55,
@@ -1209,12 +933,7 @@ object FakeDataSource {
       ],
       "authors": [
         6
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 56,
@@ -1227,12 +946,7 @@ object FakeDataSource {
       "topics": [
         0
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 57,
@@ -1247,12 +961,7 @@ object FakeDataSource {
       ],
       "authors": [
         15
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 58,
@@ -1267,12 +976,7 @@ object FakeDataSource {
       ],
       "authors": [
         16
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 59,
@@ -1287,12 +991,7 @@ object FakeDataSource {
       ],
       "authors": [
         17
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 60,
@@ -1307,12 +1006,7 @@ object FakeDataSource {
       ],
       "authors": [
         18
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 61,
@@ -1327,12 +1021,7 @@ object FakeDataSource {
       ],
       "authors": [
         19
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 62,
@@ -1347,12 +1036,7 @@ object FakeDataSource {
       ],
       "authors": [
         20
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 63,
@@ -1367,12 +1051,7 @@ object FakeDataSource {
       ],
       "authors": [
         21
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 64,
@@ -1387,12 +1066,7 @@ object FakeDataSource {
       ],
       "authors": [
         5
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 65,
@@ -1407,12 +1081,7 @@ object FakeDataSource {
       ],
       "authors": [
         22
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 66,
@@ -1425,12 +1094,7 @@ object FakeDataSource {
       "topics": [
         15
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 67,
@@ -1443,12 +1107,7 @@ object FakeDataSource {
       "topics": [
         6
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 68,
@@ -1464,12 +1123,7 @@ object FakeDataSource {
       ],
       "authors": [
         23
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 69,
@@ -1484,12 +1138,7 @@ object FakeDataSource {
       ],
       "authors": [
         7
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 70,
@@ -1502,12 +1151,7 @@ object FakeDataSource {
       "topics": [
         7
       ],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 71,
@@ -1522,12 +1166,7 @@ object FakeDataSource {
       ],
       "authors": [
         24
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 72,
@@ -1543,12 +1182,7 @@ object FakeDataSource {
       ],
       "authors": [
         25
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 73,
@@ -1563,12 +1197,7 @@ object FakeDataSource {
       ],
       "authors": [
         11
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 74,
@@ -1584,12 +1213,7 @@ object FakeDataSource {
       ],
       "authors": [
         26
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 75,
@@ -1605,12 +1229,7 @@ object FakeDataSource {
       ],
       "authors": [
         27
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 76,
@@ -1621,12 +1240,7 @@ object FakeDataSource {
       "publishDate": "2021-06-29T23:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [],
-      "authors": [],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      "authors": []
     },
     {
       "id": 77,
@@ -1642,12 +1256,7 @@ object FakeDataSource {
       ],
       "authors": [
         28
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 78,
@@ -1662,12 +1271,7 @@ object FakeDataSource {
       ],
       "authors": [
         15
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 79,
@@ -1683,12 +1287,7 @@ object FakeDataSource {
       ],
       "authors": [
         29
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 80,
@@ -1703,12 +1302,7 @@ object FakeDataSource {
       ],
       "authors": [
         10
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 81,
@@ -1723,12 +1317,7 @@ object FakeDataSource {
       ],
       "authors": [
         10
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 82,
@@ -1743,12 +1332,7 @@ object FakeDataSource {
       ],
       "authors": [
         30
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 83,
@@ -1763,12 +1347,7 @@ object FakeDataSource {
       ],
       "authors": [
         7
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 84,
@@ -1783,12 +1362,7 @@ object FakeDataSource {
       ],
       "authors": [
         31
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 85,
@@ -1803,12 +1377,7 @@ object FakeDataSource {
       ],
       "authors": [
         32
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 86,
@@ -1824,12 +1393,7 @@ object FakeDataSource {
       ],
       "authors": [
         33
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 87,
@@ -1844,12 +1408,7 @@ object FakeDataSource {
       ],
       "authors": [
         8
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 88,
@@ -1864,12 +1423,7 @@ object FakeDataSource {
       ],
       "authors": [
         34
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 89,
@@ -1884,12 +1438,7 @@ object FakeDataSource {
       ],
       "authors": [
         7
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 90,
@@ -1904,12 +1453,7 @@ object FakeDataSource {
       ],
       "authors": [
         23
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     },
     {
       "id": 91,
@@ -1924,12 +1468,7 @@ object FakeDataSource {
       ],
       "authors": [
         35
-      ],
-      "alternateVideo": {
-        "URL": "",
-        "startTimestamp": 0,
-        "endTimestamp": 0
-      }
+      ]
     }
   ]
 }

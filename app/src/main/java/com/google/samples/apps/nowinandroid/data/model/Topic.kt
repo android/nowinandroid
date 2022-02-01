@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news
-
-import kotlinx.coroutines.flow.Flow
+package com.google.samples.apps.nowinandroid.data.model
 
 /**
- * Data layer implementation for [NewsResource]
+ * External data layer representation of a NiA Topic
  */
-interface NewsRepository {
-    /**
-     * Returns available news resources as a stream.
-     */
-    fun getNewsResourcesStream(): Flow<List<NewsResource>>
-
-    /**
-     * Returns available news resources as a stream filtered by the topic.
-     */
-    fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>>
-}
+data class Topic(
+    val id: Int,
+    val name: String,
+    val description: String
+)

@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-// Use version catalogs for managing dependencies
-// https://docs.gradle.org/current/userguide/platforms.html
-enableFeaturePreview("VERSION_CATALOGS")
+package com.google.samples.apps.nowinandroid.data.repository
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+import com.google.samples.apps.nowinandroid.data.model.Topic
+import kotlinx.coroutines.flow.Flow
+
+interface TopicsRepository {
+    /**
+     * Gets the available topics as a stream
+     */
+    fun getTopicsStream(): Flow<List<Topic>>
+
+    /**
+     * Sets the user's currently followed topics
+     */
+    suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>)
+
+    /**
+     * Returns the users currently followed topics
+     */
+    fun getFollowedTopicIdsStream(): Flow<Set<Int>>
 }
-rootProject.name = "nowinandroid"
-include ':app'

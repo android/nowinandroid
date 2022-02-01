@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid.ui.foryou
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.google.samples.apps.nowinandroid.data.news.Topic
+import com.google.samples.apps.nowinandroid.data.model.Topic
 import com.google.samples.apps.nowinandroid.testutil.TestDispatcherRule
 import com.google.samples.apps.nowinandroid.testutil.TestNewsRepository
 import com.google.samples.apps.nowinandroid.testutil.TestTopicsRepository

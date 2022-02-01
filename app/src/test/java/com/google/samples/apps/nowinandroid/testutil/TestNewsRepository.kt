@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.testutil
 
-import com.google.samples.apps.nowinandroid.data.news.NewsRepository
-import com.google.samples.apps.nowinandroid.data.news.NewsResource
+import com.google.samples.apps.nowinandroid.data.model.NewsResource
+import com.google.samples.apps.nowinandroid.data.repository.NewsRepository
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.data.news.NewsResource
-import com.google.samples.apps.nowinandroid.data.news.Topic
+import com.google.samples.apps.nowinandroid.data.model.NewsResource
+import com.google.samples.apps.nowinandroid.data.model.Topic
 
 @Composable
 fun ForYouRoute(

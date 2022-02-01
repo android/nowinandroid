@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news.fake
+package com.google.samples.apps.nowinandroid.data.fake
 
 import com.google.samples.apps.nowinandroid.di.DefaultNiaDispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Test
 
 class FakeNewsRepositoryTest {
 
@@ -34,14 +30,6 @@ class FakeNewsRepositoryTest {
             // TODO: Create test-specific NiaDispatchers
             dispatchers = DefaultNiaDispatchers(),
             networkJson = Json { ignoreUnknownKeys = true }
-        )
-    }
-
-    @Test
-    fun testDeserializationOfNewsResources() = runTest {
-        assertEquals(
-            FakeDataSource.sampleResource,
-            subject.getNewsResourcesStream().first().first()
         )
     }
 }

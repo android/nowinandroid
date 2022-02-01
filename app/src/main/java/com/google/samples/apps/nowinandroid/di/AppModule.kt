@@ -22,10 +22,12 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.google.samples.apps.nowinandroid.data.UserPreferences
 import com.google.samples.apps.nowinandroid.data.UserPreferencesSerializer
-import com.google.samples.apps.nowinandroid.data.news.NewsRepository
-import com.google.samples.apps.nowinandroid.data.news.TopicsRepository
-import com.google.samples.apps.nowinandroid.data.news.fake.FakeNewsRepository
-import com.google.samples.apps.nowinandroid.data.news.fake.FakeTopicsRepository
+import com.google.samples.apps.nowinandroid.data.fake.FakeNewsRepository
+import com.google.samples.apps.nowinandroid.data.fake.FakeNiANetwork
+import com.google.samples.apps.nowinandroid.data.fake.FakeTopicsRepository
+import com.google.samples.apps.nowinandroid.data.network.NiANetwork
+import com.google.samples.apps.nowinandroid.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.data.repository.TopicsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -38,6 +40,11 @@ import kotlinx.serialization.json.Json
 @Module
 @InstallIn(SingletonComponent::class)
 interface AppModule {
+
+    @Binds
+    fun bindsNiANetwork(
+        fakeNiANetwork: FakeNiANetwork
+    ): NiANetwork
 
     @Binds
     fun bindsTopicRepository(fakeTopicsRepository: FakeTopicsRepository): TopicsRepository

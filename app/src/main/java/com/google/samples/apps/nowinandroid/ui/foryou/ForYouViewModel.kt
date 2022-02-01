@@ -22,10 +22,10 @@ import androidx.compose.runtime.snapshots.Snapshot.Companion.withMutableSnapshot
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.data.news.NewsRepository
-import com.google.samples.apps.nowinandroid.data.news.NewsResource
-import com.google.samples.apps.nowinandroid.data.news.Topic
-import com.google.samples.apps.nowinandroid.data.news.TopicsRepository
+import com.google.samples.apps.nowinandroid.data.model.NewsResource
+import com.google.samples.apps.nowinandroid.data.model.Topic
+import com.google.samples.apps.nowinandroid.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.ui.saveable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

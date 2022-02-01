@@ -21,6 +21,7 @@ plugins {
     id 'jacoco'
     id 'dagger.hilt.android.plugin'
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.ksp)
 }
 
 def jacocoTestReport = tasks.create("jacocoTestReport")
@@ -160,6 +161,9 @@ dependencies {
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler
+
+    implementation libs.room.runtime
+    ksp libs.room.compiler
 
     implementation libs.protobuf.kotlin.lite
 

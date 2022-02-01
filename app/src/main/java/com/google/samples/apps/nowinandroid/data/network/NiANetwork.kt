@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news
+package com.google.samples.apps.nowinandroid.data.network
 
-import kotlinx.coroutines.flow.Flow
-
-interface TopicsRepository {
-    /**
-     * Gets the available topics as a stream
-     */
-    fun getTopicsStream(): Flow<List<Topic>>
-
-    /**
-     * Sets the user's currently followed topics
-     */
-    suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>)
-
-    /**
-     * Returns the users currently followed topics
-     */
-    fun getFollowedTopicIdsStream(): Flow<Set<Int>>
+/**
+ * Interface representing network calls to the NIA backend
+ */
+interface NiANetwork {
+    suspend fun getNewsResources(): List<NetworkNewsResource>
 }

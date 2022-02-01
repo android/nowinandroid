@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news
+package com.google.samples.apps.nowinandroid.data.network
 
+import com.google.samples.apps.nowinandroid.data.local.entities.TopicEntity
 import kotlinx.serialization.Serializable
 
+/**
+ * Network representation of [TopicEntity]
+ */
 @Serializable
-data class Topic(
+data class NetworkTopic(
     val id: Int,
-    val name: String,
-    val description: String
+    val name: String = "",
+    val description: String = "",
+)
+
+fun NetworkTopic.asEntity() = TopicEntity(
+    id = id,
+    name = name,
+    description = description
 )

@@ -30,11 +30,11 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.data.news.NewsResource
+import com.google.samples.apps.nowinandroid.data.model.NewsResource
 import com.google.samples.apps.nowinandroid.ui.theme.NiaTheme
 
 /**
- * [com.google.samples.apps.nowinandroid.data.news.NewsResource] card used on the following screens:
+ * [com.google.samples.apps.nowinandroid.data.model.NewsResource] card used on the following screens:
  * For You, Episodes, Saved
  */
 

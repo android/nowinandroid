@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.news.fake
+package com.google.samples.apps.nowinandroid.data.fake
 
 import com.google.samples.apps.nowinandroid.data.NiaPreferences
-import com.google.samples.apps.nowinandroid.data.news.Topic
-import com.google.samples.apps.nowinandroid.data.news.TopicsRepository
+import com.google.samples.apps.nowinandroid.data.model.Topic
+import com.google.samples.apps.nowinandroid.data.network.NetworkTopic
+import com.google.samples.apps.nowinandroid.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.di.NiaDispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +34,15 @@ class FakeTopicsRepository @Inject constructor(
     private val niaPreferences: NiaPreferences
 ) : TopicsRepository {
     override fun getTopicsStream(): Flow<List<Topic>> = flow<List<Topic>> {
-        emit(networkJson.decodeFromString(FakeDataSource.topicsData))
+        emit(
+            networkJson.decodeFromString<List<NetworkTopic>>(FakeDataSource.topicsData).map {
+                Topic(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description
+                )
+            }
+        )
     }
         .flowOn(dispatchers.IO)
 

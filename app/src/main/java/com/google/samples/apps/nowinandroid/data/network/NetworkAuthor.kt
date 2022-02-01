@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-// Use version catalogs for managing dependencies
-// https://docs.gradle.org/current/userguide/platforms.html
-enableFeaturePreview("VERSION_CATALOGS")
+package com.google.samples.apps.nowinandroid.data.network
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-rootProject.name = "nowinandroid"
-include ':app'
+import com.google.samples.apps.nowinandroid.data.local.entities.AuthorEntity
+import kotlinx.serialization.Serializable
+
+/**
+ * Network representation of [AuthorEntity]
+ */
+@Serializable
+data class NetworkAuthor(
+    val id: Int,
+    val name: String,
+    val imageUrl: String,
+)
+
+fun NetworkAuthor.asEntity() = AuthorEntity(
+    id = id,
+    name = name,
+    imageUrl = imageUrl
+)
