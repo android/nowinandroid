@@ -1,0 +1,154 @@
+/*
+ * Copyright 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.samples.apps.nowinandroid.ui.following
+
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.data.model.Topic
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+/**
+ * UI test for checking the correct behaviour of the Following screen;
+ * Verifies that, when a specific UiState is set, the corresponding
+ * composables and details are shown
+ */
+class FollowingScreenTest {
+
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    private lateinit var followingLoading: String
+    private lateinit var followingErrorHeader: String
+    private lateinit var followingTopicCardIcon: String
+    private lateinit var followingTopicCardFollowButton: String
+    private lateinit var followingTopicCardUnfollowButton: String
+
+    @Before
+    fun setup() {
+        composeTestRule.activity.apply {
+            followingLoading = getString(R.string.following_loading)
+            followingErrorHeader = getString(R.string.following_error_header)
+            followingTopicCardIcon = getString(R.string.following_topic_card_icon_content_desc)
+            followingTopicCardFollowButton =
+                getString(R.string.following_topic_card_follow_button_content_desc)
+            followingTopicCardUnfollowButton =
+                getString(R.string.following_topic_card_unfollow_button_content_desc)
+        }
+    }
+
+    @Test
+    fun niaLoadingIndicator_whenScreenIsLoading_showLoading() {
+        composeTestRule.setContent {
+            FollowingScreen(
+                uiState = FollowingUiState.Loading,
+                followTopic = { _, _ -> },
+                navigateToTopic = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(followingLoading)
+            .assertExists()
+    }
+
+    @Test
+    fun followingWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
+        composeTestRule.setContent {
+            FollowingScreen(
+                uiState = FollowingUiState.Topics(topics = testTopics),
+                followTopic = { _, _ -> },
+                navigateToTopic = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(TOPIC_1_NAME)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(TOPIC_2_NAME)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(TOPIC_3_NAME)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText(TOPIC_DESC)
+            .assertCountEquals(testTopics.count())
+
+        composeTestRule
+            .onAllNodesWithContentDescription(followingTopicCardIcon)
+            .assertCountEquals(testTopics.count())
+
+        composeTestRule
+            .onAllNodesWithContentDescription(followingTopicCardFollowButton)
+            .assertCountEquals(numberOfUnfollowedTopics)
+
+        composeTestRule
+            .onAllNodesWithContentDescription(followingTopicCardUnfollowButton)
+            .assertCountEquals(testTopics.filter { it.followed }.size)
+    }
+
+    @Test
+    fun followingError_whenErrorOccurs_thenShowEmptyErrorScreen() {
+        composeTestRule.setContent {
+            FollowingScreen(
+                uiState = FollowingUiState.Error,
+                followTopic = { _, _ -> },
+                navigateToTopic = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(followingErrorHeader)
+            .assertIsDisplayed()
+    }
+}
+
+private const val TOPIC_1_NAME = "Headlines"
+private const val TOPIC_2_NAME = "UI"
+private const val TOPIC_3_NAME = "Tools"
+private const val TOPIC_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
+
+private val testTopics = listOf(
+    Topic(
+        id = 0,
+        name = TOPIC_1_NAME,
+        description = TOPIC_DESC,
+        followed = true
+    ),
+    Topic(
+        id = 1,
+        name = TOPIC_2_NAME,
+        description = TOPIC_DESC
+    ),
+    Topic(
+        id = 2,
+        name = TOPIC_3_NAME,
+        description = TOPIC_DESC
+    )
+)
+
+private val numberOfUnfollowedTopics = testTopics.filter { !it.followed }.size

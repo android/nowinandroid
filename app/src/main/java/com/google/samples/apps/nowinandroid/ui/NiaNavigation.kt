@@ -27,7 +27,8 @@ object NiaDestinations {
     const val FOR_YOU_ROUTE = "for_you"
     const val EPISODES_ROUTE = "episodes"
     const val SAVED_ROUTE = "saved"
-    const val TOPICS_ROUTE = "topics"
+    const val FOLLOWING_ROUTE = "following"
+    const val TOPIC_ROUTE = "topic"
 }
 
 /**
