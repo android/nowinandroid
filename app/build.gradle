@@ -147,7 +147,6 @@ dependencies {
     implementation libs.material3
 
     implementation libs.accompanist.flowlayout
-    implementation libs.accompanist.insets
 
     implementation libs.androidx.compose.foundation.layout
     // TODO (M3): Remove this dependency when all components are available
