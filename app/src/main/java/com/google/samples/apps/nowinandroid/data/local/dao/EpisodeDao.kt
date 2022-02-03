@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.data.network
+package com.google.samples.apps.nowinandroid.data.local.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import com.google.samples.apps.nowinandroid.data.local.entities.EpisodeEntity
+import com.google.samples.apps.nowinandroid.data.model.Episode
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface representing network calls to the NIA backend
+ * DAO for [EpisodeEntity] and [Episode] access
  */
-interface NiANetwork {
-    suspend fun getTopics(): List<NetworkTopic>
+@Dao
+interface EpisodeDao {
+    @Query(value = "SELECT * FROM episodes")
+    fun getEpisodesStream(): Flow<List<Episode>>
 
-    suspend fun getNewsResources(): List<NetworkNewsResource>
+    @Insert
+    suspend fun saveEpisodeEntities(entities: List<EpisodeEntity>)
 }

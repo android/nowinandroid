@@ -36,9 +36,13 @@ data class Episode(
     )
     val newsResources: List<NewsResourceEntity>,
     @Relation(
-        parentColumn = "episode_id",
-        entityColumn = "author_id",
-        associateBy = Junction(EpisodeAuthorCrossRef::class)
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            value = EpisodeAuthorCrossRef::class,
+            parentColumn = "episode_id",
+            entityColumn = "author_id",
+        )
     )
     val authors: List<AuthorEntity>
 )
