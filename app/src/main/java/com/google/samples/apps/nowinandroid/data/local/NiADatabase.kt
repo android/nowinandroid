@@ -19,6 +19,10 @@ package com.google.samples.apps.nowinandroid.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.google.samples.apps.nowinandroid.data.local.dao.AuthorDao
+import com.google.samples.apps.nowinandroid.data.local.dao.EpisodeDao
+import com.google.samples.apps.nowinandroid.data.local.dao.NewsResourceDao
+import com.google.samples.apps.nowinandroid.data.local.dao.TopicDao
 import com.google.samples.apps.nowinandroid.data.local.entities.AuthorEntity
 import com.google.samples.apps.nowinandroid.data.local.entities.EpisodeAuthorCrossRef
 import com.google.samples.apps.nowinandroid.data.local.entities.EpisodeEntity
@@ -29,7 +33,6 @@ import com.google.samples.apps.nowinandroid.data.local.entities.TopicEntity
 import com.google.samples.apps.nowinandroid.data.local.utilities.InstantConverter
 import com.google.samples.apps.nowinandroid.data.local.utilities.NewsResourceTypeConverter
 
-// TODO: ADD DAOs
 @Database(
     entities = [
         AuthorEntity::class,
@@ -46,4 +49,9 @@ import com.google.samples.apps.nowinandroid.data.local.utilities.NewsResourceTyp
     InstantConverter::class,
     NewsResourceTypeConverter::class,
 )
-abstract class NiADatabase : RoomDatabase()
+abstract class NiADatabase : RoomDatabase() {
+    abstract fun topicDao(): TopicDao
+    abstract fun authorDao(): AuthorDao
+    abstract fun episodeDao(): EpisodeDao
+    abstract fun newsResourceDao(): NewsResourceDao
+}
