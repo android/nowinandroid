@@ -28,16 +28,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DatabaseModule {
-    companion object {
-        @Provides
-        @Singleton
-        fun providesNiADatabase(
-            @ApplicationContext context: Context,
-        ): NiADatabase = Room.databaseBuilder(
-            context,
-            NiADatabase::class.java,
-            "nia-database"
-        ).build()
-    }
+object DatabaseModule {
+    @Provides
+    @Singleton
+    fun providesNiADatabase(
+        @ApplicationContext context: Context,
+    ): NiADatabase = Room.databaseBuilder(
+        context,
+        NiADatabase::class.java,
+        "nia-database"
+    ).build()
 }

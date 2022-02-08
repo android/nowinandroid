@@ -28,26 +28,24 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DaosModule {
-    companion object {
-        @Provides
-        fun providesAuthorDao(
-            database: NiADatabase,
-        ): AuthorDao = database.authorDao()
+object DaosModule {
+    @Provides
+    fun providesAuthorDao(
+        database: NiADatabase,
+    ): AuthorDao = database.authorDao()
 
-        @Provides
-        fun providesTopicsDao(
-            database: NiADatabase,
-        ): TopicDao = database.topicDao()
+    @Provides
+    fun providesTopicsDao(
+        database: NiADatabase,
+    ): TopicDao = database.topicDao()
 
-        @Provides
-        fun providesEpisodeDao(
-            database: NiADatabase,
-        ): EpisodeDao = database.episodeDao()
+    @Provides
+    fun providesEpisodeDao(
+        database: NiADatabase,
+    ): EpisodeDao = database.episodeDao()
 
-        @Provides
-        fun providesNewsResourceDao(
-            database: NiADatabase,
-        ): NewsResourceDao = database.newsResourceDao()
-    }
+    @Provides
+    fun providesNewsResourceDao(
+        database: NiADatabase,
+    ): NewsResourceDao = database.newsResourceDao()
 }
