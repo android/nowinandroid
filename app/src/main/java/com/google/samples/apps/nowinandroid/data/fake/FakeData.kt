@@ -55,97 +55,97 @@ object FakeDataSource {
   {
     "id": 0,
     "name": "Headlines",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 1,
     "name": "UI",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 2,
     "name": "Testing",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 3,
     "name": "Performance",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 4,
     "name": "Camera & Media",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 5,
     "name": "Android Studio",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 6,
     "name": "New APIs & Libraries",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 7,
     "name": "Data Storage",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 8,
     "name": "Kotlin",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 9,
     "name": "Compose",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 10,
     "name": "Privacy & Security",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 11,
     "name": "Publishing & Distribution",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 12,
     "name": "Tools",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 13,
     "name": "Platform & Releases",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 14,
     "name": "Architecture",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 15,
     "name": "Accessibility",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 16,
     "name": "Android Auto",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 17,
     "name": "Games",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   },
   {
     "id": 18,
     "name": "Wear OS",
-    "description": ""
+    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
   }
 ]
 """.trimIndent()

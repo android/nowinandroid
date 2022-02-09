@@ -18,11 +18,18 @@
     <string name="for_you">For you</string>
     <string name="episodes">Episodes</string>
     <string name="saved">Saved</string>
-    <string name="topics">Topics</string>
     <string name="done">Done</string>
     <string name="for_you_loading">Loading for you…</string>
 
     <!-- NewsResource Card -->
     <string name="bookmark">Bookmark</string>
     <string name="unbookmark">Unbookmark</string>
+
+    <!-- Following-->
+    <string name="following">Following</string>
+    <string name="following_loading">Loading topics</string>
+    <string name="following_error_header">"Error loading topics"</string>
+    <string name="following_topic_card_icon_content_desc">Topic icon</string>
+    <string name="following_topic_card_follow_button_content_desc">Follow Topic button</string>
+    <string name="following_topic_card_unfollow_button_content_desc">Unfollow Topic button</string>
 </resources>

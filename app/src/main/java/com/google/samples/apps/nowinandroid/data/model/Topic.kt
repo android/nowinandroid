@@ -22,5 +22,6 @@ package com.google.samples.apps.nowinandroid.data.model
 data class Topic(
     val id: Int,
     val name: String,
-    val description: String
+    val description: String,
+    val followed: Boolean = false
 )

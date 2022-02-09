@@ -25,12 +25,13 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Bookmarks
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Grid3x3
 import androidx.compose.material.icons.filled.Upcoming
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Bookmarks
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Grid3x3
 import androidx.compose.material.icons.outlined.Upcoming
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -91,25 +93,29 @@ private fun NiABottomBar(
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
     Surface(color = MaterialTheme.colorScheme.surface) {
-        NavigationBar(
-            modifier = Modifier.navigationBarsPadding().captionBarPadding(),
-            tonalElevation = 0.dp
-        ) {
-            TOP_LEVEL_DESTINATIONS.forEach { dst ->
-                val selected = currentRoute == dst.route
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = {
-                        navigationActions.navigateToTopLevelDestination(dst.route)
-                    },
-                    icon = {
-                        Icon(
-                            if (selected) dst.selectedIcon else dst.unselectedIcon,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text(stringResource(dst.iconTextId)) }
-                )
+        CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
+            NavigationBar(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .captionBarPadding(),
+                tonalElevation = 0.dp
+            ) {
+                TOP_LEVEL_DESTINATIONS.forEach { dst ->
+                    val selected = currentRoute == dst.route
+                    NavigationBarItem(
+                        selected = selected,
+                        onClick = {
+                            navigationActions.navigateToTopLevelDestination(dst.route)
+                        },
+                        icon = {
+                            Icon(
+                                if (selected) dst.selectedIcon else dst.unselectedIcon,
+                                contentDescription = null
+                            )
+                        },
+                        label = { Text(stringResource(dst.iconTextId)) }
+                    )
+                }
             }
         }
     }
@@ -142,11 +148,11 @@ private sealed class Destination(
         iconTextId = R.string.saved
     )
 
-    object Topics : Destination(
-        route = NiaDestinations.TOPICS_ROUTE,
-        selectedIcon = Icons.Filled.Favorite,
-        unselectedIcon = Icons.Outlined.FavoriteBorder,
-        iconTextId = R.string.topics
+    object Following : Destination(
+        route = NiaDestinations.FOLLOWING_ROUTE,
+        selectedIcon = Icons.Filled.Grid3x3,
+        unselectedIcon = Icons.Outlined.Grid3x3,
+        iconTextId = R.string.following
     )
 }
 
@@ -154,5 +160,5 @@ private val TOP_LEVEL_DESTINATIONS = listOf(
     Destination.ForYou,
     Destination.Episodes,
     Destination.Saved,
-    Destination.Topics
+    Destination.Following
 )

@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.samples.apps.nowinandroid.ui.following.FollowingRoute
 import com.google.samples.apps.nowinandroid.ui.foryou.ForYouRoute
 
 /**
@@ -52,8 +53,17 @@ fun NiaNavGraph(
         composable(NiaDestinations.SAVED_ROUTE) {
             Text("SAVED", modifier)
         }
-        composable(NiaDestinations.TOPICS_ROUTE) {
-            Text("TOPICS", modifier)
+        composable(NiaDestinations.FOLLOWING_ROUTE) {
+            FollowingRoute(
+                navigateToTopic = { navController.navigate(NiaDestinations.TOPIC_ROUTE) },
+                modifier = modifier.testTag(NiaDestinations.FOLLOWING_ROUTE),
+            )
+        }
+        composable(NiaDestinations.TOPIC_ROUTE) {
+            Text(
+                text = "Topic",
+                modifier = modifier
+            )
         }
     }
 }

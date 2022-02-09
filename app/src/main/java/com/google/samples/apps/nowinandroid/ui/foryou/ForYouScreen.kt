@@ -24,21 +24,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +41,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.data.model.NewsResource
 import com.google.samples.apps.nowinandroid.data.model.Topic
+import com.google.samples.apps.nowinandroid.ui.NiaLoadingIndicator
 
 @Composable
 fun ForYouRoute(
@@ -72,15 +68,9 @@ fun ForYouScreen(
     Box(modifier = modifier.fillMaxSize()) {
         when (uiState) {
             ForYouFeedUiState.Loading -> {
-                val forYouLoading = stringResource(id = R.string.for_you_loading)
-
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .semantics {
-                            contentDescription = forYouLoading
-                        },
-                    color = MaterialTheme.colorScheme.primary
+                NiaLoadingIndicator(
+                    modifier = modifier,
+                    contentDesc = stringResource(id = R.string.for_you_loading),
                 )
             }
             is ForYouFeedUiState.PopulatedFeed -> {

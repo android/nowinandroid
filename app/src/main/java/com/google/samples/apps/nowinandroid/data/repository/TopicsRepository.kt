@@ -31,6 +31,11 @@ interface TopicsRepository {
     suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>)
 
     /**
+     * Toggles the user's newly followed/unfollowed topic
+     */
+    suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean)
+
+    /**
      * Returns the users currently followed topics
      */
     fun getFollowedTopicIdsStream(): Flow<Set<Int>>

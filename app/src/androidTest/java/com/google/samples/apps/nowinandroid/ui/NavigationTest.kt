@@ -63,35 +63,35 @@ class NavigationTest {
      */
 //    @Test
 //    fun navigateToUnselectedTabResetsContent1() {
-//        // GIVEN the user was previously on the Topics destination
-//        composeTestRule.topicsDestinationTopMatcher().performClick()
+//        // GIVEN the user was previously on the Following destination
+//        composeTestRule.followingDestinationTopMatcher().performClick()
 //        // and scrolled down
 //        [IMPLEMENT] Match the root scrollable container and scroll down to an item below the fold
-//        composeTestRule.topicsDestinationTopMatcher()
+//        composeTestRule.followingDestinationTopMatcher()
 //            .assertDoesNotExist() // verify we scrolled beyond the top
 //        // and then navigated back to the For You destination
 //        composeTestRule.forYouDestinationTopMatcher().performClick()
 //        // WHEN the user presses the Topic navigation bar item
-//        composeTestRule.topicsDestinationTopMatcher().performClick()
-//        // THEN the Topics destination shows at the top.
-//        composeTestRule.topicsDestinationTopMatcher()
+//        composeTestRule.followingDestinationTopMatcher().performClick()
+//        // THEN the Following destination shows at the top.
+//        composeTestRule.followingDestinationTopMatcher()
 //            .assertExists("Screen did not correctly reset to the top after re-navigating to it")
 //    }
 
 //    @Test
 //    fun navigateToUnselectedTabResetsContent2() {
-//        // GIVEN the user was previously on the Topics destination
-//        composeTestRule.topicsDestinationTopMatcher().performClick()
+//        // GIVEN the user was previously on the Following destination
+//        composeTestRule.followingDestinationTopMatcher().performClick()
 //        // and navigated to the Topic detail destination
 //        [IMPLEMENT] Navigate to topic detail destination
-//        composeTestRule.topicsDestinationTopMatcher()
-//            .assertDoesNotExist() // verify we are not on topics overview destination any more
+//        composeTestRule.followingDestinationTopMatcher()
+//            .assertDoesNotExist() // verify we are not on Following overview destination any more
 //        // and then navigated back to the For You destination
 //        composeTestRule.forYouDestinationTopMatcher().performClick()
 //        // WHEN the user presses the Topic navigation bar item
-//        composeTestRule.topicsDestinationTopMatcher().performClick()
-//        // THEN the Topics destination shows at the top.
-//        composeTestRule.topicsDestinationTopMatcher()
+//        composeTestRule.followingDestinationTopMatcher().performClick()
+//        // THEN the Following destination shows at the top.
+//        composeTestRule.followingDestinationTopMatcher()
 //            .assertExists("Screen did not correctly reset to the top after re-navigating to it")
 //    }
 
@@ -105,10 +105,10 @@ class NavigationTest {
 
 //    @Test
 //    fun reselectingTabResetsContent2() {
-//        // GIVEN the user is on the Topics destination
+//        // GIVEN the user is on the Following destination
 //        // and navigates to the Topic Detail destination
-//        // WHEN the user taps the Topics navigation bar item
-//        // THEN the Topics destination shows at the top of the destination
+//        // WHEN the user taps the Following navigation bar item
+//        // THEN the Following destination shows at the top of the destination
 //    }
 
     /*
@@ -122,7 +122,7 @@ class NavigationTest {
         composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
         composeTestRule.onNodeWithText("Saved").performClick()
         composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Topics").performClick()
+        composeTestRule.onNodeWithText("Following").performClick()
         composeTestRule.onNodeWithContentDescription("Navigate up").assertDoesNotExist()
     }
 
@@ -148,8 +148,8 @@ class NavigationTest {
     fun backFromDestinationReturnsToForYou() {
         // GIVEN the user navigated to the Episodes destination
         composeTestRule.onNodeWithText("Episodes").performClick()
-        // and then navigated to the Topics destination
-        composeTestRule.onNodeWithText("Topics").performClick()
+        // and then navigated to the Following destination
+        composeTestRule.onNodeWithText("Following").performClick()
         // WHEN the user uses the system button/gesture to go back,
         Espresso.pressBack()
         // THEN the app shows the For You destination
@@ -163,8 +163,8 @@ class NavigationTest {
     private fun ComposeTestRule.forYouDestinationTopMatcher() = onNodeWithTag("FOR YOU")
 
     /*
-     * Matches an element at the top of the Topics destination. Should be updated when the
+     * Matches an element at the top of the Following destination. Should be updated when the
      * destination is implemented.
      */
-    private fun ComposeTestRule.topicsDestinationTopMatcher() = onNodeWithText("TOPICS")
+    private fun ComposeTestRule.followingDestinationTopMatcher() = onNodeWithText("FOLLOWING")
 }
