@@ -16,27 +16,82 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.data.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.data.model.NewsResource
+import com.google.samples.apps.nowinandroid.data.network.NetworkAuthor
+import com.google.samples.apps.nowinandroid.data.network.NetworkEpisode
+import com.google.samples.apps.nowinandroid.data.network.NetworkTopic
+import com.google.samples.apps.nowinandroid.data.network.asEntity
 import com.google.samples.apps.nowinandroid.ui.theme.NiaTheme
 
 /**
- * [com.google.samples.apps.nowinandroid.data.model.NewsResource] card used on the following screens:
- * For You, Episodes, Saved
+ * [NewsResource] card used on the following screens: For You, Episodes, Saved
  */
+
+@Composable
+fun NewsResourceCardExpanded(
+    newsResource: NewsResource,
+    isBookmarked: Boolean,
+    onToggleBookmark: () -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Row {
+            NewsResourceTitle(newsResource.entity.title, modifier = Modifier.fillMaxWidth((.8f)))
+            Spacer(modifier = Modifier.weight(1f))
+            BookmarkButton(isBookmarked, onToggleBookmark)
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        NewsResourceShortDescription(newsResource.entity.content)
+    }
+}
+
+@Composable
+fun NewsResourceHeaderImage(
+    newsResource: NewsResource
+) {
+    TODO()
+}
+
+@Composable
+fun NewsResourceAuthors(
+    newsResource: NewsResource
+) {
+    TODO()
+}
+
+@Composable
+fun NewsResourceTitle(
+    newsResourceTitle: String,
+    modifier: Modifier = Modifier
+) {
+    Text(newsResourceTitle, style = MaterialTheme.typography.h4, modifier = modifier)
+}
 
 @Composable
 fun BookmarkButton(
@@ -64,27 +119,6 @@ fun BookmarkButton(
 }
 
 @Composable
-fun NewsResourceAuthors(
-    newsResource: NewsResource
-) {
-    TODO()
-}
-
-@Composable
-fun NewsResourceHeaderImage(
-    newsResource: NewsResource
-) {
-    TODO()
-}
-
-@Composable
-fun NewsResourceTitle(
-    newsResource: NewsResource
-) {
-    TODO()
-}
-
-@Composable
 fun NewsResourceDate(
     newsResource: NewsResource
 ) {
@@ -100,20 +134,15 @@ fun NewsResourceLink(
 
 @Composable
 fun NewsResourceShortDescription(
-    newsResource: NewsResource
+    newsResourceShortDescription: String
 ) {
-    TODO()
+    Text(newsResourceShortDescription, style = MaterialTheme.typography.body1)
 }
 
 @Composable
 fun NewsResourceTopics(
     newsResource: NewsResource
 ) {
-    TODO()
-}
-
-@Composable
-fun NewsResourceCardExpanded() {
     TODO()
 }
 
@@ -137,13 +166,43 @@ fun BookmarkButtonBookmarkedPreview() {
     }
 }
 
-@Preview("Expanded resource card")
-@Preview("Expanded resource card (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun ExpandedNewsResourcePreview() {
+fun ExpandedNewsResourcePreview(
+    @PreviewParameter(NewsResourcePreviewParameterProvider::class) newsResource: NewsResource
+) {
     NiaTheme {
         Surface {
-            NewsResourceCardExpanded()
+            NewsResourceCardExpanded(newsResource, true, {})
         }
     }
+}
+
+class NewsResourcePreviewParameterProvider : PreviewParameterProvider<NewsResource> {
+    override val values = sequenceOf(
+        NewsResource(
+            FakeDataSource.sampleResource.asEntity(),
+            NetworkEpisode(
+                id = 1,
+                name = "Now in Android 40",
+                alternateVideo = null,
+                alternateAudio = null,
+                publishDate = FakeDataSource.sampleResource.publishDate
+            ).asEntity(),
+            listOf(
+                NetworkAuthor(
+                    id = 1,
+                    name = "Android",
+                    imageUrl = ""
+                )
+                    .asEntity()
+            ),
+            listOf(
+                NetworkTopic(
+                    id = 3,
+                    name = "Performance",
+                    description = ""
+                ).asEntity()
+            )
+        )
+    )
 }
