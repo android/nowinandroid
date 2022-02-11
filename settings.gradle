@@ -29,3 +29,14 @@ dependencyResolutionManagement {
 }
 rootProject.name = "nowinandroid"
 include ':app'
+include ':core-common'
+include ':core-model'
+include ':core-domain'
+include ':core-testing'
+include ':core-ui'
+include ':feature-following'
+include ':feature-foryou'
+include ':core-database'
+include ':core-datastore'
+include ':core-network'
+include ':core-datastore-test'

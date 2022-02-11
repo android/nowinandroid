@@ -17,11 +17,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlinx-serialization'
     id 'jacoco'
     id 'dagger.hilt.android.plugin'
-    alias(libs.plugins.protobuf)
-    alias(libs.plugins.ksp)
 }
 
 def jacocoTestReport = tasks.create("jacocoTestReport")
@@ -37,7 +34,7 @@ android {
         versionName "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
-        testInstrumentationRunner "com.google.samples.apps.nowinandroid.NiaTestRunner"
+        testInstrumentationRunner "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -112,81 +109,34 @@ android {
     }
 }
 
-// Setup protobuf configuration, generating lite Java and Kotlin classes
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get()
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option "lite"
-                }
-                kotlin {
-                    option "lite"
-                }
-            }
-        }
-    }
-}
-
 dependencies {
-    coreLibraryDesugaring libs.android.desugarJdkLibs
+    implementation project(':feature-following')
+    implementation project(':feature-foryou')
 
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.kotlinx.datetime
-    implementation libs.kotlinx.serialization.json
+    implementation project(':core-ui')
+
+    androidTestImplementation project(':core-testing')
+    implementation project(':core-datastore-test')
+
+    coreLibraryDesugaring libs.android.desugarJdkLibs
 
     implementation libs.androidx.activity.compose
     implementation libs.androidx.core.ktx
-    implementation libs.androidx.dataStore
     implementation libs.androidx.appcompat
     implementation libs.androidx.hilt.navigation.compose
-    implementation libs.androidx.lifecycle.viewModelCompose
     implementation libs.androidx.navigation.compose
     implementation libs.material3
 
-    implementation libs.accompanist.flowlayout
-
-    implementation libs.androidx.compose.foundation.layout
-    // TODO (M3): Remove this dependency when all components are available
-    implementation libs.androidx.compose.material
-    implementation libs.androidx.compose.material.iconsExtended
-    implementation libs.androidx.compose.material3
-    implementation libs.androidx.compose.ui.tooling
-    implementation libs.androidx.compose.ui.util
-    implementation libs.androidx.compose.runtime
-    implementation libs.androidx.compose.runtime.livedata
-
     implementation libs.hilt.android
     kapt libs.hilt.compiler
-
-    implementation libs.room.runtime
-    implementation libs.room.ktx
-    ksp libs.room.compiler
-
-    implementation libs.protobuf.kotlin.lite
-
-    debugImplementation libs.androidx.compose.ui.testManifest
-
-    testImplementation libs.junit4
-    testImplementation libs.mockk
-    testImplementation libs.androidx.test.core
-    testImplementation libs.kotlinx.coroutines.test
-    testImplementation libs.turbine
-
-    androidTestImplementation libs.androidx.test.espresso.core
-    androidTestImplementation libs.androidx.test.runner
-    androidTestImplementation libs.androidx.test.rules
-    androidTestImplementation libs.androidx.compose.ui.test
-    androidTestImplementation libs.hilt.android.testing
     kaptAndroidTest libs.hilt.compiler
 
     // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {
             force libs.junit4
+            // Temporary workaround for https://issuetracker.google.com/174733673
+            force 'org.objenesis:objenesis:2.6'
         }
     }
 }

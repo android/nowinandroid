@@ -51,7 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.ui.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

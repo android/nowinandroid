@@ -23,8 +23,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.samples.apps.nowinandroid.ui.following.FollowingRoute
-import com.google.samples.apps.nowinandroid.ui.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.following.FollowingRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
