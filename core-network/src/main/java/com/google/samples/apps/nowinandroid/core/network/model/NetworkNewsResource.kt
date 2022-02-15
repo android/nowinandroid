@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.network
+package com.google.samples.apps.nowinandroid.core.network.model
 
-import com.google.samples.apps.nowinandroid.core.model.entities.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import com.google.samples.apps.nowinandroid.core.network.model.util.InstantSerializer
+import com.google.samples.apps.nowinandroid.core.network.model.util.NewsResourceTypeSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 /**
- * Network representation of [NewsResourceEntity] when fetched from /networkresources
+ * Network representation of [NewsResource] when fetched from /newsresources
  */
 @Serializable
 data class NetworkNewsResource(
@@ -32,13 +35,14 @@ data class NetworkNewsResource(
     val url: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
-    val type: String,
+    @Serializable(NewsResourceTypeSerializer::class)
+    val type: NewsResourceType,
     val authors: List<Int> = listOf(),
     val topics: List<Int> = listOf(),
 )
 
 /**
- * Network representation of [NewsResourceEntity] when fetched from /networkresources{id}
+ * Network representation of [NewsResource] when fetched from /newsresources/{id}
  */
 @Serializable
 data class NetworkNewsResourceExpanded(
@@ -49,27 +53,8 @@ data class NetworkNewsResourceExpanded(
     val url: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
-    val type: String,
+    @Serializable(NewsResourceTypeSerializer::class)
+    val type: NewsResourceType,
     val authors: List<NetworkAuthor> = listOf(),
     val topics: List<NetworkTopic> = listOf(),
-)
-
-fun NetworkNewsResource.asEntity() = NewsResourceEntity(
-    id = id,
-    episodeId = episodeId,
-    title = title,
-    content = content,
-    url = url,
-    publishDate = publishDate,
-    type = type,
-)
-
-fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
-    id = id,
-    episodeId = episodeId,
-    title = title,
-    content = content,
-    url = url,
-    publishDate = publishDate,
-    type = type,
 )

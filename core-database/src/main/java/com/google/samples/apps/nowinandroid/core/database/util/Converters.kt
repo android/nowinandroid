@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.database.util
 
 import androidx.room.TypeConverter
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import com.google.samples.apps.nowinandroid.core.model.data.asNewsResourceType
 import kotlinx.datetime.Instant
 
 class InstantConverter {
@@ -36,10 +37,5 @@ class NewsResourceTypeConverter {
         value?.let(NewsResourceType::name)
 
     @TypeConverter
-    fun stringToNewsResourceType(name: String?): NewsResourceType = when (name) {
-        null -> NewsResourceType.Unknown
-        else -> NewsResourceType.values()
-            .firstOrNull { type -> type.name == name }
-            ?: NewsResourceType.Unknown
-    }
+    fun stringToNewsResourceType(name: String?): NewsResourceType = name.asNewsResourceType()
 }

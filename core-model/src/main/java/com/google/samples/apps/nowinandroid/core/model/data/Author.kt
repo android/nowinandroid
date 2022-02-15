@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.network
-
-import com.google.samples.apps.nowinandroid.core.model.entities.TopicEntity
-import kotlinx.serialization.Serializable
+package com.google.samples.apps.nowinandroid.core.model.data
 
 /**
- * Network representation of [TopicEntity]
+ * External data layer representation of an NiA Author
  */
-@Serializable
-data class NetworkTopic(
+data class Author(
     val id: Int,
-    val name: String = "",
-    val description: String = "",
-    val followed: Boolean = false,
-)
-
-fun NetworkTopic.asEntity() = TopicEntity(
-    id = id,
-    name = name,
-    description = description,
-    followed = followed
+    val name: String,
+    val imageUrl: String,
 )

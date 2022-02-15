@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.entities
+package com.google.samples.apps.nowinandroid.core.network.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import kotlinx.serialization.Serializable
 
 /**
- * Defines an author for either an [EpisodeEntity] or [NewsResourceEntity].
- * It has a many to many relationship with both entities
+ * Network representation of [Topic]
  */
-@Entity(
-    tableName = "authors",
-    indices = [
-        Index(value = ["name"], unique = true)
-    ],
-)
-data class AuthorEntity(
-    @PrimaryKey
+@Serializable
+data class NetworkTopic(
     val id: Int,
-    val name: String,
-    @ColumnInfo(name = "image_url")
-    val imageUrl: String,
+    val name: String = "",
+    val description: String = "",
+    val followed: Boolean = false,
 )

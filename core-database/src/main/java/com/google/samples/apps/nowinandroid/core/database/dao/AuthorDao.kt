@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.google.samples.apps.nowinandroid.core.model.entities.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import kotlinx.coroutines.flow.Flow
 
 /**

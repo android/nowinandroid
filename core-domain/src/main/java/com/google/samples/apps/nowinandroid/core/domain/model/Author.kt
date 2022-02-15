@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.network
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-import com.google.samples.apps.nowinandroid.core.model.entities.AuthorEntity
-import kotlinx.serialization.Serializable
-
-/**
- * Network representation of [AuthorEntity]
- */
-@Serializable
-data class NetworkAuthor(
-    val id: Int,
-    val name: String,
-    val imageUrl: String,
-)
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 
 fun NetworkAuthor.asEntity() = AuthorEntity(
     id = id,
