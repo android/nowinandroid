@@ -24,7 +24,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url "https://androidx.dev/snapshots/builds/8143371/artifacts/repository" }
     }
 }
 rootProject.name = "nowinandroid"
