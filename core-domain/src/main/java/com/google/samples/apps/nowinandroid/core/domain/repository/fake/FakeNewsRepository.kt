@@ -16,14 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 /**
@@ -38,10 +45,25 @@ class FakeNewsRepository @Inject constructor(
 ) : NewsRepository {
 
     override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
-        flowOf(emptyList())
+        flow {
+            emit(
+                networkJson.decodeFromString<List<NetworkNewsResource>>(FakeDataSource.data)
+                    .map(NetworkNewsResource::asEntity)
+                    .map(NewsResourceEntity::asExternalModel)
+            )
+        }
+            .flowOn(ioDispatcher)
 
     override fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>> =
-        flowOf(emptyList())
+        flow {
+            emit(
+                networkJson.decodeFromString<List<NetworkNewsResource>>(FakeDataSource.data)
+                    .filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
+                    .map(NetworkNewsResource::asEntity)
+                    .map(NewsResourceEntity::asExternalModel)
+            )
+        }
+            .flowOn(ioDispatcher)
 
     override suspend fun sync() = true
 }

@@ -192,7 +192,6 @@ private val newsResource = NewsResource(
             id = 1,
             name = "Name",
             description = "Description",
-            followed = false
         )
     )
 )

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
-import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-
-fun NetworkTopic.asEntity() = TopicEntity(
-    id = id,
-    name = name,
-    description = description,
+/**
+ * A [topic] with the additional information for whether or not it is followed.
+ */
+data class FollowableTopic(
+    val topic: Topic,
+    val isFollowed: Boolean
 )
