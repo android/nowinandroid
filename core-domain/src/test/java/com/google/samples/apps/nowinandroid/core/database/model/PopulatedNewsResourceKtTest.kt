@@ -56,7 +56,6 @@ class PopulatedNewsResourceKtTest {
                     id = 3,
                     name = "name",
                     description = "description",
-                    followed = true,
                 )
             ),
         )
@@ -83,7 +82,6 @@ class PopulatedNewsResourceKtTest {
                         id = 3,
                         name = "name",
                         description = "description",
-                        followed = true,
                     )
                 )
             ),

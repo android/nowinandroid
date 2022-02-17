@@ -26,6 +26,7 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +41,8 @@ class ForYouScreenTest {
             ForYouScreen(
                 uiState = ForYouFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {}
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
             )
         }
 
@@ -56,27 +58,37 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             ForYouScreen(
                 uiState = ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                    selectedTopics = listOf(
-                        Topic(
-                            id = 0,
-                            name = "Headlines",
-                            description = ""
-                        ) to false,
-                        Topic(
-                            id = 1,
-                            name = "UI",
-                            description = ""
-                        ) to false,
-                        Topic(
-                            id = 2,
-                            name = "Tools",
-                            description = ""
-                        ) to false
+                    topics = listOf(
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 0,
+                                name = "Headlines",
+                                description = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 1,
+                                name = "UI",
+                                description = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 2,
+                                name = "Tools",
+                                description = "",
+                            ),
+                            isFollowed = false
+                        ),
                     ),
                     feed = emptyList()
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {}
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
             )
         }
 
@@ -110,27 +122,37 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             ForYouScreen(
                 uiState = ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                    selectedTopics = listOf(
-                        Topic(
-                            id = 0,
-                            name = "Headlines",
-                            description = ""
-                        ) to false,
-                        Topic(
-                            id = 1,
-                            name = "UI",
-                            description = ""
-                        ) to true,
-                        Topic(
-                            id = 2,
-                            name = "Tools",
-                            description = ""
-                        ) to false
+                    topics = listOf(
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 0,
+                                name = "Headlines",
+                                description = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 1,
+                                name = "UI",
+                                description = ""
+                            ),
+                            isFollowed = true
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = 2,
+                                name = "Tools",
+                                description = "",
+                            ),
+                            isFollowed = false
+                        ),
                     ),
                     feed = emptyList()
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {}
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
             )
         }
 

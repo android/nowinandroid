@@ -24,8 +24,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.feature.foryou.util.saveable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -51,7 +52,7 @@ class ForYouViewModel @Inject constructor(
                 FollowedTopicsState.None
             } else {
                 FollowedTopicsState.FollowedTopics(
-                    topics = followedTopics
+                    topicIds = followedTopics
                 )
             }
         }
@@ -60,6 +61,16 @@ class ForYouViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = FollowedTopicsState.Unknown
         )
+
+    /**
+     * TODO: Temporary saving of news resources persisted through process death with a
+     *       [SavedStateHandle].
+     *
+     * This should be persisted to disk instead.
+     */
+    private var savedNewsResources by savedStateHandle.saveable {
+        mutableStateOf<Set<Int>>(emptySet())
+    }
 
     /**
      * The in-progress set of topics to be selected, persisted through process death with a
@@ -73,15 +84,26 @@ class ForYouViewModel @Inject constructor(
         followedTopicsStateFlow,
         topicsRepository.getTopicsStream(),
         snapshotFlow { inProgressTopicSelection },
-    ) { followedTopicsUserState, availableTopics, inProgressTopicSelection ->
+        snapshotFlow { savedNewsResources }
+    ) { followedTopicsUserState, availableTopics, inProgressTopicSelection, savedNewsResources ->
+
+        fun mapToSaveableFeed(feed: List<NewsResource>): List<SaveableNewsResource> =
+            feed.map { newsResource ->
+                SaveableNewsResource(
+                    newsResource = newsResource,
+                    isSaved = savedNewsResources.contains(newsResource.id)
+                )
+            }
+
         when (followedTopicsUserState) {
             // If we don't know the current selection state, just emit loading.
             FollowedTopicsState.Unknown -> flowOf<ForYouFeedUiState>(ForYouFeedUiState.Loading)
             // If the user has followed topics, use those followed topics to populate the feed
             is FollowedTopicsState.FollowedTopics -> {
                 newsRepository.getNewsResourcesStream(
-                    filterTopicIds = followedTopicsUserState.topics
+                    filterTopicIds = followedTopicsUserState.topicIds
                 )
+                    .map(::mapToSaveableFeed)
                     .map { feed ->
                         ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
                             feed = feed
@@ -94,10 +116,14 @@ class ForYouViewModel @Inject constructor(
                 newsRepository.getNewsResourcesStream(
                     filterTopicIds = inProgressTopicSelection
                 )
+                    .map(::mapToSaveableFeed)
                     .map { feed ->
                         ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                            selectedTopics = availableTopics.map { topic ->
-                                topic to (topic.id in inProgressTopicSelection)
+                            topics = availableTopics.map { topic ->
+                                FollowableTopic(
+                                    topic = topic,
+                                    isFollowed = topic.id in inProgressTopicSelection
+                                )
                             },
                             feed = feed
                         )
@@ -127,6 +153,17 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
+    fun updateNewsResourceSaved(newsResourceId: Int, isChecked: Boolean) {
+        withMutableSnapshot {
+            savedNewsResources =
+                if (isChecked) {
+                    savedNewsResources + newsResourceId
+                } else {
+                    savedNewsResources - newsResourceId
+                }
+        }
+    }
+
     fun saveFollowedTopics() {
         if (inProgressTopicSelection.isEmpty()) return
 
@@ -152,10 +189,10 @@ private sealed interface FollowedTopicsState {
     object None : FollowedTopicsState
 
     /**
-     * The user has followed the given (non-empty) set of [topics].
+     * The user has followed the given (non-empty) set of [topicIds].
      */
     data class FollowedTopics(
-        val topics: Set<Int>,
+        val topicIds: Set<Int>,
     ) : FollowedTopicsState
 }
 
@@ -177,23 +214,23 @@ sealed interface ForYouFeedUiState {
         /**
          * The list of news resources contained in this [PopulatedFeed].
          */
-        val feed: List<NewsResource>
+        val feed: List<SaveableNewsResource>
 
         /**
          * The feed, along with a list of topics that can be selected.
          */
         data class FeedWithTopicSelection(
-            val selectedTopics: List<Pair<Topic, Boolean>>,
-            override val feed: List<NewsResource>
+            val topics: List<FollowableTopic>,
+            override val feed: List<SaveableNewsResource>
         ) : PopulatedFeed {
-            val canSaveSelectedTopics: Boolean = selectedTopics.any { it.second }
+            val canSaveSelectedTopics: Boolean = topics.any { it.isFollowed }
         }
 
         /**
          * Just the feed.
          */
         data class FeedWithoutTopicSelection(
-            override val feed: List<NewsResource>
+            override val feed: List<SaveableNewsResource>
         ) : PopulatedFeed
     }
 }

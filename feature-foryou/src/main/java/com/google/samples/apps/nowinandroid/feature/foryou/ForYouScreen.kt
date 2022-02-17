@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -39,8 +40,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
+import kotlinx.datetime.Instant
 
 @Composable
 fun ForYouRoute(
@@ -53,7 +60,8 @@ fun ForYouRoute(
         modifier = modifier,
         uiState = uiState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
-        saveFollowedTopics = viewModel::saveFollowedTopics
+        saveFollowedTopics = viewModel::saveFollowedTopics,
+        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved
     )
 }
 
@@ -62,6 +70,7 @@ fun ForYouScreen(
     uiState: ForYouFeedUiState,
     onTopicCheckedChanged: (Int, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
+    onNewsResourcesCheckedChanged: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -81,9 +90,15 @@ fun ForYouScreen(
                         is ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection -> Unit
                     }
 
-//                    items(uiState.feed) { _: NewsResource ->
-//                        // TODO: News item
-//                    }
+                    items(uiState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
+                        NewsResourceCardExpanded(
+                            newsResource = newsResource,
+                            isBookmarked = isBookmarked,
+                            onToggleBookmark = {
+                                onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -104,7 +119,7 @@ private fun LazyListScope.TopicSelection(
             crossAxisSpacing = 8.dp,
             modifier = Modifier.padding(horizontal = 40.dp)
         ) {
-            uiState.selectedTopics.forEach { (topic, isSelected) ->
+            uiState.topics.forEach { (topic, isSelected) ->
                 key(topic.id) {
                     // TODO: Add toggleable semantics
                     OutlinedButton(
@@ -149,7 +164,8 @@ fun ForYouScreenLoading() {
     ForYouScreen(
         uiState = ForYouFeedUiState.Loading,
         onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {}
+        saveFollowedTopics = {},
+        onNewsResourcesCheckedChanged = { _, _ -> }
     )
 }
 
@@ -158,27 +174,104 @@ fun ForYouScreenLoading() {
 fun ForYouScreenTopicSelection() {
     ForYouScreen(
         uiState = ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-            selectedTopics = listOf(
-                Topic(
-                    id = 0,
-                    name = "Headlines",
-                    description = ""
-                ) to false,
-                Topic(
-                    id = 1,
-                    name = "UI",
-                    description = ""
-                ) to true,
-                Topic(
-                    id = 2,
-                    name = "Tools",
-                    description = ""
-                ) to false
+            topics = listOf(
+                FollowableTopic(
+                    topic = Topic(
+                        id = 0,
+                        name = "Headlines",
+                        description = ""
+                    ),
+                    isFollowed = false
+                ),
+                FollowableTopic(
+                    topic = Topic(
+                        id = 1,
+                        name = "UI",
+                        description = ""
+                    ),
+                    isFollowed = false
+                ),
+                FollowableTopic(
+                    topic = Topic(
+                        id = 2,
+                        name = "Tools",
+                        description = "",
+                    ),
+                    isFollowed = false
+                ),
             ),
-            feed = emptyList()
+            feed = listOf(
+                SaveableNewsResource(
+                    newsResource = NewsResource(
+                        id = 1,
+                        episodeId = 52,
+                        title = "Thanks for helping us reach 1M YouTube Subscribers",
+                        content = "Thank you everyone for following the Now in Android series " +
+                            "and everything the Android Developers YouTube channel has to offer. " +
+                            "During the Android Developer Summit, our YouTube channel reached 1 " +
+                            "million subscribers! Here’s a small video to thank you all.",
+                        url = "https://youtu.be/-fJ6poHQrjM",
+                        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
+                        type = Video,
+                        topics = listOf(
+                            Topic(
+                                id = 0,
+                                name = "Headlines",
+                                description = ""
+                            )
+                        ),
+                        authors = emptyList()
+                    ),
+                    isSaved = false
+                ),
+                SaveableNewsResource(
+                    newsResource = NewsResource(
+                        id = 2,
+                        episodeId = 52,
+                        title = "Transformations and customisations in the Paging Library",
+                        content = "A demonstration of different operations that can be performed " +
+                            "with Paging. Transformations like inserting separators, when to " +
+                            "create a new pager, and customisation options for consuming " +
+                            "PagingData.",
+                        url = "https://youtu.be/ZARz0pjm5YM",
+                        publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
+                        type = Video,
+                        topics = listOf(
+                            Topic(
+                                id = 1,
+                                name = "UI",
+                                description = ""
+                            ),
+                        ),
+                        authors = emptyList()
+                    ),
+                    isSaved = false
+                ),
+                SaveableNewsResource(
+                    newsResource = NewsResource(
+                        id = 3,
+                        episodeId = 52,
+                        title = "Community tip on Paging",
+                        content = "Tips for using the Paging library from the developer community",
+                        url = "https://youtu.be/r5JgIyS3t3s",
+                        publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
+                        type = Video,
+                        topics = listOf(
+                            Topic(
+                                id = 1,
+                                name = "UI",
+                                description = ""
+                            ),
+                        ),
+                        authors = emptyList()
+                    ),
+                    isSaved = false
+                ),
+            )
         ),
         onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {}
+        saveFollowedTopics = {},
+        onNewsResourcesCheckedChanged = { _, _ -> }
     )
 }
 
@@ -190,6 +283,7 @@ fun PopulatedFeed() {
             feed = emptyList()
         ),
         onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {}
+        saveFollowedTopics = {},
+        onNewsResourcesCheckedChanged = { _, _ -> }
     )
 }

@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.following
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -39,10 +40,10 @@ class FollowingViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val followedTopicIdsStream = topicsRepository.getFollowedTopicIdsStream()
-        .catch { FollowingState.Error }
-        .map { followedTopics ->
+        .map<Set<Int>, FollowingState> { followedTopics ->
             FollowingState.Topics(topics = followedTopics)
         }
+        .catch { emit(FollowingState.Error) }
 
     val uiState: StateFlow<FollowingUiState> = combine(
         followedTopicIdsStream,
@@ -70,15 +71,14 @@ class FollowingViewModel @Inject constructor(
     private fun mapFollowedAndUnfollowedTopics(topics: List<Topic>): Flow<FollowingUiState.Topics> =
         topicsRepository.getFollowedTopicIdsStream().map { followedTopicIds ->
             FollowingUiState.Topics(
-                topics =
-                topics.map {
-                    Topic(
-                        it.id,
-                        it.name,
-                        it.description,
-                        followedTopicIds.contains(it.id)
-                    )
-                }.sortedBy { it.name }
+                topics = topics
+                    .map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = topic.id in followedTopicIds,
+                        )
+                    }
+                    .sortedBy { it.topic.name }
             )
         }
 }
@@ -90,6 +90,6 @@ private sealed interface FollowingState {
 
 sealed interface FollowingUiState {
     object Loading : FollowingUiState
-    data class Topics(val topics: List<Topic>) : FollowingUiState
+    data class Topics(val topics: List<FollowableTopic>) : FollowingUiState
     object Error : FollowingUiState
 }

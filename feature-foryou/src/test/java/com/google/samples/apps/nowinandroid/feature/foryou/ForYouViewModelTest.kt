@@ -18,11 +18,16 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -91,26 +96,35 @@ class ForYouViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
-                newsRepository.sendNewsResources(emptyList())
+                newsRepository.sendNewsResources(sampleNewsResources)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                        selectedTopics = listOf(
-                            Topic(
-                                id = 0,
-                                name = "Headlines",
-                                description = ""
-                            ) to false,
-                            Topic(
-                                id = 1,
-                                name = "UI",
-                                description = ""
-                            ) to false,
-                            Topic(
-                                id = 2,
-                                name = "Tools",
-                                description = "",
-                            ) to false
+                        topics = listOf(
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 0,
+                                    name = "Headlines",
+                                    description = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 1,
+                                    name = "UI",
+                                    description = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 2,
+                                    name = "Tools",
+                                    description = "",
+                                ),
+                                isFollowed = false
+                            ),
                         ),
                         feed = emptyList()
                     ),
@@ -127,11 +141,16 @@ class ForYouViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(setOf(0, 1))
-                newsRepository.sendNewsResources(emptyList())
+                newsRepository.sendNewsResources(sampleNewsResources)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = emptyList()
+                        feed = sampleNewsResources.map {
+                            SaveableNewsResource(
+                                newsResource = it,
+                                isSaved = false
+                            )
+                        }
                     ),
                     awaitItem()
                 )
@@ -146,31 +165,49 @@ class ForYouViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
-                newsRepository.sendNewsResources(emptyList())
+                newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
                 viewModel.updateTopicSelection(1, isChecked = true)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                        selectedTopics = listOf(
-                            Topic(
-                                id = 0,
-                                name = "Headlines",
-                                description = ""
-                            ) to false,
-                            Topic(
-                                id = 1,
-                                name = "UI",
-                                description = ""
-                            ) to true,
-                            Topic(
-                                id = 2,
-                                name = "Tools",
-                                description = ""
-                            ) to false
+                        topics = listOf(
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 0,
+                                    name = "Headlines",
+                                    description = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 1,
+                                    name = "UI",
+                                    description = ""
+                                ),
+                                isFollowed = true
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 2,
+                                    name = "Tools",
+                                    description = "",
+                                ),
+                                isFollowed = false
+                            )
                         ),
-                        feed = emptyList()
+                        feed = listOf(
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[1],
+                                isSaved = false
+                            ),
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[2],
+                                isSaved = false
+                            )
+                        )
                     ),
                     awaitItem()
                 )
@@ -185,7 +222,7 @@ class ForYouViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
-                newsRepository.sendNewsResources(emptyList())
+                newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
                 viewModel.updateTopicSelection(1, isChecked = true)
@@ -195,22 +232,31 @@ class ForYouViewModelTest {
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
-                        selectedTopics = listOf(
-                            Topic(
-                                id = 0,
-                                name = "Headlines",
-                                description = ""
-                            ) to false,
-                            Topic(
-                                id = 1,
-                                name = "UI",
-                                description = ""
-                            ) to false,
-                            Topic(
-                                id = 2,
-                                name = "Tools",
-                                description = ""
-                            ) to false
+                        topics = listOf(
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 0,
+                                    name = "Headlines",
+                                    description = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 1,
+                                    name = "UI",
+                                    description = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 2,
+                                    name = "Tools",
+                                    description = "",
+                                ),
+                                isFollowed = false
+                            )
                         ),
                         feed = emptyList()
                     ),
@@ -227,7 +273,7 @@ class ForYouViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
-                newsRepository.sendNewsResources(emptyList())
+                newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
                 viewModel.updateTopicSelection(1, isChecked = true)
@@ -237,11 +283,49 @@ class ForYouViewModelTest {
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = emptyList()
+                        feed = listOf(
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[1],
+                                isSaved = false
+                            ),
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[2],
+                                isSaved = false
+                            )
+                        )
                     ),
                     awaitItem()
                 )
                 assertEquals(setOf(1), topicsRepository.getCurrentFollowedTopics())
+                cancel()
+            }
+    }
+
+    @Test
+    fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
+        viewModel.uiState
+            .test {
+                awaitItem()
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(setOf(1))
+                newsRepository.sendNewsResources(sampleNewsResources)
+                viewModel.updateNewsResourceSaved(2, true)
+
+                assertEquals(
+                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
+                        feed = listOf(
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[1],
+                                isSaved = true
+                            ),
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[2],
+                                isSaved = false
+                            )
+                        )
+                    ),
+                    awaitItem()
+                )
                 cancel()
             }
     }
@@ -263,4 +347,63 @@ private val sampleTopics = listOf(
         name = "Tools",
         description = ""
     )
+)
+
+private val sampleNewsResources = listOf(
+    NewsResource(
+        id = 1,
+        episodeId = 52,
+        title = "Thanks for helping us reach 1M YouTube Subscribers",
+        content = "Thank you everyone for following the Now in Android series and everything the " +
+            "Android Developers YouTube channel has to offer. During the Android Developer " +
+            "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
+            "thank you all.",
+        url = "https://youtu.be/-fJ6poHQrjM",
+        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
+        type = Video,
+        topics = listOf(
+            Topic(
+                id = 0,
+                name = "Headlines",
+                description = ""
+            )
+        ),
+        authors = emptyList()
+    ),
+    NewsResource(
+        id = 2,
+        episodeId = 52,
+        title = "Transformations and customisations in the Paging Library",
+        content = "A demonstration of different operations that can be performed with Paging. " +
+            "Transformations like inserting separators, when to create a new pager, and " +
+            "customisation options for consuming PagingData.",
+        url = "https://youtu.be/ZARz0pjm5YM",
+        publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
+        type = Video,
+        topics = listOf(
+            Topic(
+                id = 1,
+                name = "UI",
+                description = ""
+            ),
+        ),
+        authors = emptyList()
+    ),
+    NewsResource(
+        id = 3,
+        episodeId = 52,
+        title = "Community tip on Paging",
+        content = "Tips for using the Paging library from the developer community",
+        url = "https://youtu.be/r5JgIyS3t3s",
+        publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
+        type = Video,
+        topics = listOf(
+            Topic(
+                id = 1,
+                name = "UI",
+                description = ""
+            ),
+        ),
+        authors = emptyList()
+    ),
 )

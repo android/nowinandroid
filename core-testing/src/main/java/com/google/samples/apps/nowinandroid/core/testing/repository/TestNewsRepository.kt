@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,7 +38,7 @@ class TestNewsRepository : NewsRepository {
         filterTopicIds: Set<Int>
     ): Flow<List<NewsResource>> =
         getNewsResourcesStream().map { newsResources ->
-            newsResources.filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
+            newsResources.filter { it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty() }
         }
 
     /**

@@ -24,7 +24,6 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -42,14 +41,6 @@ class FakeNiANetwork @Inject constructor(
 
     override suspend fun getNewsResources(): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString<ResourceData>(FakeDataSource.data).resources
+            networkJson.decodeFromString(FakeDataSource.data)
         }
 }
-
-/**
- * Representation of resources as fetched from [FakeDataSource]
- */
-@Serializable
-private data class ResourceData(
-    val resources: List<NetworkNewsResource>
-)
