@@ -18,9 +18,9 @@ package com.google.samples.apps.nowinandroid.core.domain.repository
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkTopic
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

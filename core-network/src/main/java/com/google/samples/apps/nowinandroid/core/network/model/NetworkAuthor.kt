@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.entities
+package com.google.samples.apps.nowinandroid.core.network.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import kotlinx.datetime.Instant
+import com.google.samples.apps.nowinandroid.core.model.data.Author
+import kotlinx.serialization.Serializable
 
 /**
- * Defines an NiA episode.
- * It is a parent in a 1 to many relationship with [NewsResourceEntity]
+ * Network representation of [Author]
  */
-@Entity(
-    tableName = "episodes",
-)
-data class EpisodeEntity(
-    @PrimaryKey
+@Serializable
+data class NetworkAuthor(
     val id: Int,
     val name: String,
-    @ColumnInfo(name = "publish_date")
-    val publishDate: Instant,
-    @ColumnInfo(name = "alternate_video")
-    val alternateVideo: String?,
-    @ColumnInfo(name = "alternate_audio")
-    val alternateAudio: String?,
+    val imageUrl: String,
 )

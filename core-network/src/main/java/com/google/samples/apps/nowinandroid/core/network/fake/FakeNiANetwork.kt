@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkNewsResource
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkTopic
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable

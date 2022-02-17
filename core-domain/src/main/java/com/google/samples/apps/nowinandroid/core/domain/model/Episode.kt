@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database.dao
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
-import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
-import com.google.samples.apps.nowinandroid.core.model.data.Episode
-import kotlinx.coroutines.flow.Flow
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkEpisode
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkEpisodeExpanded
 
-/**
- * DAO for [EpisodeEntity] and [Episode] access
- */
-@Dao
-interface EpisodeDao {
-    @Query(value = "SELECT * FROM episodes")
-    fun getEpisodesStream(): Flow<List<PopulatedEpisode>>
+fun NetworkEpisode.asEntity() = EpisodeEntity(
+    id = id,
+    name = name,
+    publishDate = publishDate,
+    alternateVideo = alternateVideo,
+    alternateAudio = alternateAudio,
+)
 
-    @Insert
-    suspend fun saveEpisodeEntities(entities: List<EpisodeEntity>)
-}
+fun NetworkEpisodeExpanded.asEntity() = EpisodeEntity(
+    id = id,
+    name = name,
+    publishDate = publishDate,
+    alternateVideo = alternateVideo,
+    alternateAudio = alternateAudio,
+)

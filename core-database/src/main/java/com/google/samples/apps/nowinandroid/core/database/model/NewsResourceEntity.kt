@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.entities
+package com.google.samples.apps.nowinandroid.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import kotlinx.datetime.Instant
 
 /**
- * Cross reference for many to many relationship between [EpisodeEntity] and [AuthorEntity]
+ * Defines an NiA news resource.
+ * It is the child in a 1 to many relationship with [EpisodeEntity]
  */
 @Entity(
-    tableName = "episodes_authors",
-    primaryKeys = ["episode_id", "author_id"],
+    tableName = "news_resources",
     foreignKeys = [
         ForeignKey(
             entity = EpisodeEntity::class,
@@ -33,17 +37,29 @@ import androidx.room.ForeignKey
             childColumns = ["episode_id"],
             onDelete = ForeignKey.CASCADE
         ),
-        ForeignKey(
-            entity = AuthorEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["author_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
     ]
 )
-data class EpisodeAuthorCrossRef(
+data class NewsResourceEntity(
+    @PrimaryKey
+    val id: Int,
     @ColumnInfo(name = "episode_id")
     val episodeId: Int,
-    @ColumnInfo(name = "author_id")
-    val authorId: Long,
+    val title: String,
+    val content: String,
+    val url: String,
+    @ColumnInfo(name = "publish_date")
+    val publishDate: Instant,
+    val type: NewsResourceType,
+)
+
+fun NewsResourceEntity.asExternalModel() = NewsResource(
+    id = id,
+    episodeId = episodeId,
+    title = title,
+    content = content,
+    url = url,
+    publishDate = publishDate,
+    type = type,
+    authors = listOf(),
+    topics = listOf()
 )

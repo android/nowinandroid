@@ -109,7 +109,7 @@ class ForYouViewModelTest {
                             Topic(
                                 id = 2,
                                 name = "Tools",
-                                description = ""
+                                description = "",
                             ) to false
                         ),
                         feed = emptyList()

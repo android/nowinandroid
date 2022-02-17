@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 
-/**
- * Interface representing network calls to the NIA backend
- */
-interface NiANetwork {
-    suspend fun getTopics(): List<NetworkTopic>
-
-    suspend fun getNewsResources(): List<NetworkNewsResource>
-}
+fun NetworkTopic.asEntity() = TopicEntity(
+    id = id,
+    name = name,
+    description = description,
+    followed = followed
+)

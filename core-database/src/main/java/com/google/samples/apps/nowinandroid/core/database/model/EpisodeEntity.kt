@@ -14,21 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.data
+package com.google.samples.apps.nowinandroid.core.database.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.datetime.Instant
 
 /**
- * External data layer representation of a fully populated NiA news resource
+ * Defines an NiA episode.
+ * It is a parent in a 1 to many relationship with [NewsResourceEntity]
  */
-data class NewsResource(
+@Entity(
+    tableName = "episodes",
+)
+data class EpisodeEntity(
+    @PrimaryKey
     val id: Int,
-    val episodeId: Int,
-    val title: String,
-    val content: String,
-    val url: String,
+    val name: String,
+    @ColumnInfo(name = "publish_date")
     val publishDate: Instant,
-    val type: NewsResourceType,
-    val authors: List<Author>,
-    val topics: List<Topic>
+    @ColumnInfo(name = "alternate_video")
+    val alternateVideo: String?,
+    @ColumnInfo(name = "alternate_audio")
+    val alternateAudio: String?,
 )

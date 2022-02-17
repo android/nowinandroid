@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.network
+package com.google.samples.apps.nowinandroid.core.network.model
 
-import androidx.room.PrimaryKey
-import com.google.samples.apps.nowinandroid.core.model.entities.EpisodeEntity
+import com.google.samples.apps.nowinandroid.core.model.data.Episode
+import com.google.samples.apps.nowinandroid.core.network.model.util.InstantSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 /**
- * Network representation of [EpisodeEntity] when fetched from /networkepisodes
+ * Network representation of [Episode] when fetched from /episodes
  */
 @Serializable
 data class NetworkEpisode(
-    @PrimaryKey
     val id: Int,
     val name: String,
     @Serializable(InstantSerializer::class)
@@ -38,11 +37,10 @@ data class NetworkEpisode(
 )
 
 /**
- * Network representation of [EpisodeEntity] when fetched from /networkepisodes{id}
+ * Network representation of [Episode] when fetched from /episodes/{id}
  */
 @Serializable
 data class NetworkEpisodeExpanded(
-    @PrimaryKey
     val id: Int,
     val name: String,
     @Serializable(InstantSerializer::class)
@@ -51,20 +49,4 @@ data class NetworkEpisodeExpanded(
     val alternateAudio: String,
     val newsResources: List<NetworkNewsResource> = listOf(),
     val authors: List<NetworkAuthor> = listOf(),
-)
-
-fun NetworkEpisode.asEntity() = EpisodeEntity(
-    id = id,
-    name = name,
-    publishDate = publishDate,
-    alternateVideo = alternateVideo,
-    alternateAudio = alternateAudio,
-)
-
-fun NetworkEpisodeExpanded.asEntity() = EpisodeEntity(
-    id = id,
-    name = name,
-    publishDate = publishDate,
-    alternateVideo = alternateVideo,
-    alternateAudio = alternateAudio,
 )

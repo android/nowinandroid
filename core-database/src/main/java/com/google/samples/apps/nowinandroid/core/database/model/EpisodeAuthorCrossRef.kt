@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.entities
+package com.google.samples.apps.nowinandroid.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
 /**
- * Cross reference for many to many relationship between [NewsResourceEntity] and [TopicEntity]
+ * Cross reference for many to many relationship between [EpisodeEntity] and [AuthorEntity]
  */
 @Entity(
-    tableName = "news_resources_topics",
-    primaryKeys = ["news_resource_id", "topic_id"],
+    tableName = "episodes_authors",
+    primaryKeys = ["episode_id", "author_id"],
     foreignKeys = [
         ForeignKey(
-            entity = NewsResourceEntity::class,
+            entity = EpisodeEntity::class,
             parentColumns = ["id"],
-            childColumns = ["news_resource_id"],
+            childColumns = ["episode_id"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = TopicEntity::class,
+            entity = AuthorEntity::class,
             parentColumns = ["id"],
-            childColumns = ["topic_id"],
+            childColumns = ["author_id"],
             onDelete = ForeignKey.CASCADE
         ),
     ]
 )
-data class NewsResourceTopicCrossRef(
-    @ColumnInfo(name = "news_resource_id")
-    val newsResourceId: Int,
-    @ColumnInfo(name = "topic_id")
-    val topicId: Int,
+data class EpisodeAuthorCrossRef(
+    @ColumnInfo(name = "episode_id")
+    val episodeId: Int,
+    @ColumnInfo(name = "author_id")
+    val authorId: Long,
 )

@@ -37,11 +37,10 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.entities.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.EpisodeEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.NewsResourceEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.TopicEntity
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import kotlinx.datetime.Instant
 
@@ -59,12 +58,12 @@ fun NewsResourceCardExpanded(
         modifier = Modifier.padding(16.dp)
     ) {
         Row {
-            NewsResourceTitle(newsResource.entity.title, modifier = Modifier.fillMaxWidth((.8f)))
+            NewsResourceTitle(newsResource.title, modifier = Modifier.fillMaxWidth((.8f)))
             Spacer(modifier = Modifier.weight(1f))
             BookmarkButton(isBookmarked, onToggleBookmark)
         }
         Spacer(modifier = Modifier.height(12.dp))
-        NewsResourceShortDescription(newsResource.entity.content)
+        NewsResourceShortDescription(newsResource.content)
     }
 }
 
@@ -174,31 +173,22 @@ fun ExpandedNewsResourcePreview() {
 }
 
 private val newsResource = NewsResource(
-    NewsResourceEntity(
-        id = 1,
-        episodeId = 1,
-        title = "Title",
-        content = "Content",
-        url = "url",
-        publishDate = Instant.DISTANT_FUTURE,
-        type = "type",
-    ),
-    EpisodeEntity(
-        id = 1,
-        name = "Title",
-        publishDate = Instant.DISTANT_FUTURE,
-        alternateVideo = "alternateVideo",
-        alternateAudio = "alternateAudio",
-    ),
-    listOf(
-        AuthorEntity(
+    id = 1,
+    episodeId = 1,
+    title = "Title",
+    content = "Content",
+    url = "url",
+    publishDate = Instant.DISTANT_FUTURE,
+    type = Article,
+    authors = listOf(
+        Author(
             id = 1,
             name = "Name",
             imageUrl = "imageUrl"
         )
     ),
-    listOf(
-        TopicEntity(
+    topics = listOf(
+        Topic(
             id = 1,
             name = "Name",
             description = "Description",

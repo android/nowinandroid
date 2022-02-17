@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkAuthor
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkEpisode
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkEpisodeExpanded
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkNewsResource
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkNewsResourceExpanded
-import com.google.samples.apps.nowinandroid.core.model.network.NetworkTopic
-import com.google.samples.apps.nowinandroid.core.model.network.asEntity
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkEpisode
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkEpisodeExpanded
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -60,15 +59,16 @@ class NetworkEntityKtTest {
 
     @Test
     fun network_news_resource_can_be_mapped_to_news_resource_entity() {
-        val networkModel = NetworkNewsResource(
-            id = 0,
-            episodeId = 2,
-            title = "title",
-            content = "content",
-            url = "url",
-            publishDate = Instant.fromEpochMilliseconds(1),
-            type = NewsResourceType.Article.displayText,
-        )
+        val networkModel =
+            NetworkNewsResource(
+                id = 0,
+                episodeId = 2,
+                title = "title",
+                content = "content",
+                url = "url",
+                publishDate = Instant.fromEpochMilliseconds(1),
+                type = Article,
+            )
         val entity = networkModel.asEntity()
 
         assertEquals(0, entity.id)
@@ -77,17 +77,18 @@ class NetworkEntityKtTest {
         assertEquals("content", entity.content)
         assertEquals("url", entity.url)
         assertEquals(Instant.fromEpochMilliseconds(1), entity.publishDate)
-        assertEquals(NewsResourceType.Article.displayText, entity.type)
+        assertEquals(Article, entity.type)
 
-        val expandedNetworkModel = NetworkNewsResourceExpanded(
-            id = 0,
-            episodeId = 2,
-            title = "title",
-            content = "content",
-            url = "url",
-            publishDate = Instant.fromEpochMilliseconds(1),
-            type = NewsResourceType.Article.displayText,
-        )
+        val expandedNetworkModel =
+            NetworkNewsResourceExpanded(
+                id = 0,
+                episodeId = 2,
+                title = "title",
+                content = "content",
+                url = "url",
+                publishDate = Instant.fromEpochMilliseconds(1),
+                type = Article,
+            )
 
         val entityFromExpanded = expandedNetworkModel.asEntity()
 
@@ -97,7 +98,7 @@ class NetworkEntityKtTest {
         assertEquals("content", entityFromExpanded.content)
         assertEquals("url", entityFromExpanded.url)
         assertEquals(Instant.fromEpochMilliseconds(1), entityFromExpanded.publishDate)
-        assertEquals(NewsResourceType.Article.displayText, entityFromExpanded.type)
+        assertEquals(Article, entityFromExpanded.type)
     }
 
     @Test
@@ -117,13 +118,14 @@ class NetworkEntityKtTest {
         assertEquals("alternateAudio", entity.alternateAudio)
         assertEquals(Instant.fromEpochMilliseconds(1), entity.publishDate)
 
-        val expandedNetworkModel = NetworkEpisodeExpanded(
-            id = 0,
-            name = "name",
-            publishDate = Instant.fromEpochMilliseconds(1),
-            alternateVideo = "alternateVideo",
-            alternateAudio = "alternateAudio",
-        )
+        val expandedNetworkModel =
+            NetworkEpisodeExpanded(
+                id = 0,
+                name = "name",
+                publishDate = Instant.fromEpochMilliseconds(1),
+                alternateVideo = "alternateVideo",
+                alternateAudio = "alternateAudio",
+            )
 
         val entityFromExpanded = expandedNetworkModel.asEntity()
 

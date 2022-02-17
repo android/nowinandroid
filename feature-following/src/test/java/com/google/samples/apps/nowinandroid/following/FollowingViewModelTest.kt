@@ -145,6 +145,7 @@ private val testOutputTopics = listOf(
     Topic(
         id = 2,
         name = TOPIC_3_NAME,
-        description = TOPIC_DESC
+        description = TOPIC_DESC,
+        followed = false,
     )
 )

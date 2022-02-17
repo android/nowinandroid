@@ -23,15 +23,15 @@ import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.database.model.EpisodeAuthorCrossRef
+import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.util.InstantConverter
 import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeConverter
-import com.google.samples.apps.nowinandroid.core.model.entities.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.EpisodeAuthorCrossRef
-import com.google.samples.apps.nowinandroid.core.model.entities.EpisodeEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.NewsResourceAuthorCrossRef
-import com.google.samples.apps.nowinandroid.core.model.entities.NewsResourceEntity
-import com.google.samples.apps.nowinandroid.core.model.entities.NewsResourceTopicCrossRef
-import com.google.samples.apps.nowinandroid.core.model.entities.TopicEntity
 
 @Database(
     entities = [

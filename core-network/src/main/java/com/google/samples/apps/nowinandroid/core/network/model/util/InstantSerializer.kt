@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.network
+package com.google.samples.apps.nowinandroid.core.network.model.util
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant

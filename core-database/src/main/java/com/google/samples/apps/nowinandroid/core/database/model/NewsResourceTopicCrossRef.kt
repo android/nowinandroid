@@ -14,38 +14,36 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.entities
+package com.google.samples.apps.nowinandroid.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import kotlinx.datetime.Instant
 
 /**
- * Defines an NiA news resource.
- * It is the child in a 1 to many relationship with [EpisodeEntity]
+ * Cross reference for many to many relationship between [NewsResourceEntity] and [TopicEntity]
  */
 @Entity(
-    tableName = "news_resources",
+    tableName = "news_resources_topics",
+    primaryKeys = ["news_resource_id", "topic_id"],
     foreignKeys = [
         ForeignKey(
-            entity = EpisodeEntity::class,
+            entity = NewsResourceEntity::class,
             parentColumns = ["id"],
-            childColumns = ["episode_id"],
+            childColumns = ["news_resource_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = TopicEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["topic_id"],
             onDelete = ForeignKey.CASCADE
         ),
     ]
 )
-data class NewsResourceEntity(
-    @PrimaryKey
-    val id: Int,
-    @ColumnInfo(name = "episode_id")
-    val episodeId: Int,
-    val title: String,
-    val content: String,
-    val url: String,
-    @ColumnInfo(name = "publish_date")
-    val publishDate: Instant,
-    val type: String,
+data class NewsResourceTopicCrossRef(
+    @ColumnInfo(name = "news_resource_id")
+    val newsResourceId: Int,
+    @ColumnInfo(name = "topic_id")
+    val topicId: Int,
 )
