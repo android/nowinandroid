@@ -34,8 +34,9 @@ class InstantConverter {
 class NewsResourceTypeConverter {
     @TypeConverter
     fun newsResourceTypeToString(value: NewsResourceType?): String? =
-        value?.let(NewsResourceType::name)
+        value?.let(NewsResourceType::serializedName)
 
     @TypeConverter
-    fun stringToNewsResourceType(name: String?): NewsResourceType = name.asNewsResourceType()
+    fun stringToNewsResourceType(serializedName: String?): NewsResourceType =
+        serializedName.asNewsResourceType()
 }
