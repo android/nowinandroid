@@ -45,6 +45,12 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        benchmark {
+            initWith buildTypes.release
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            proguardFiles 'benchmark-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -128,6 +134,7 @@ dependencies {
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.window.manager
     implementation libs.material3
+    implementation libs.androidx.profileinstaller
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler

@@ -36,5 +36,6 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent { NiaApp(rememberSizeClass()) }
+        reportFullyDrawn()
     }
 }
