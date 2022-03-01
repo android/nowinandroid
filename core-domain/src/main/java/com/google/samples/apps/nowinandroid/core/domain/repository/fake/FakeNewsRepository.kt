@@ -18,8 +18,10 @@ package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.json.Json
@@ -31,7 +33,7 @@ import kotlinx.serialization.json.Json
  * backend.
  */
 class FakeNewsRepository @Inject constructor(
-    private val dispatchers: NiaDispatchers,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json
 ) : NewsRepository {
 
