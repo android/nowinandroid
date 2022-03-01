@@ -19,10 +19,12 @@ package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -37,7 +39,7 @@ import kotlinx.serialization.json.Json
  * backend.
  */
 class FakeTopicsRepository @Inject constructor(
-    private val dispatchers: NiaDispatchers,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
     private val niaPreferences: NiaPreferences
 ) : TopicsRepository {
@@ -52,7 +54,7 @@ class FakeTopicsRepository @Inject constructor(
             }
         )
     }
-        .flowOn(dispatchers.IO)
+        .flowOn(ioDispatcher)
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) =
         niaPreferences.setFollowedTopicIds(followedTopicIds)

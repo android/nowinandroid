@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
-import com.google.samples.apps.nowinandroid.core.network.DefaultNiaDispatchers
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
@@ -27,17 +27,18 @@ class FakeNiANetworkTest {
 
     private lateinit var subject: FakeNiANetwork
 
+    private val testDispatcher = StandardTestDispatcher()
+
     @Before
     fun setUp() {
         subject = com.google.samples.apps.nowinandroid.core.network.fake.FakeNiANetwork(
-            // TODO: Create test-specific NiaDispatchers
-            dispatchers = DefaultNiaDispatchers(),
+            ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true }
         )
     }
 
     @Test
-    fun testDeserializationOfTopics() = runTest {
+    fun testDeserializationOfTopics() = runTest(testDispatcher) {
         assertEquals(
             FakeDataSource.sampleTopic,
             subject.getTopics().first()
@@ -45,7 +46,7 @@ class FakeNiANetworkTest {
     }
 
     @Test
-    fun testDeserializationOfNewsResources() = runTest {
+    fun testDeserializationOfNewsResources() = runTest(testDispatcher) {
         assertEquals(
             FakeDataSource.sampleResource,
             subject.getNewsResources().first()

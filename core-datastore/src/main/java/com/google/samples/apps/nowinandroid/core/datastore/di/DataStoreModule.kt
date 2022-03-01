@@ -22,12 +22,17 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferencesSerializer
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,10 +42,12 @@ object DataStoreModule {
     @Singleton
     fun providesUserPreferencesDataStore(
         @ApplicationContext context: Context,
+        @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         userPreferencesSerializer: UserPreferencesSerializer
     ): DataStore<UserPreferences> =
         DataStoreFactory.create(
-            serializer = userPreferencesSerializer
+            serializer = userPreferencesSerializer,
+            scope = CoroutineScope(ioDispatcher + SupervisorJob())
         ) {
             context.dataStoreFile("user_preferences.pb")
         }

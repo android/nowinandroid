@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network
+package com.google.samples.apps.nowinandroid.core.network.di
 
-import javax.inject.Inject
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainCoroutineDispatcher
 
-interface NiaDispatchers {
-    val IO: CoroutineDispatcher
-
-    val Default: CoroutineDispatcher
-
-    val Main: MainCoroutineDispatcher
-
-    val Unconfined: CoroutineDispatcher
-}
-
-class DefaultNiaDispatchers @Inject constructor() : NiaDispatchers {
-    override val IO: CoroutineDispatcher = Dispatchers.IO
-    override val Default: CoroutineDispatcher = Dispatchers.Default
-    override val Main: MainCoroutineDispatcher = Dispatchers.Main
-    override val Unconfined: CoroutineDispatcher = Dispatchers.Unconfined
+@Module
+@InstallIn(SingletonComponent::class)
+object DispatchersModule {
+    @Provides
+    @Dispatcher(IO)
+    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

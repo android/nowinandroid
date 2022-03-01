@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.repository
+package com.google.samples.apps.nowinandroid.core.network
 
-import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeNewsRepository
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.serialization.json.Json
-import org.junit.Before
+import javax.inject.Qualifier
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
-class FakeNewsRepositoryTest {
+@Qualifier
+@Retention(RUNTIME)
+annotation class Dispatcher(val niaDispatcher: NiaDispatchers)
 
-    private lateinit var subject: FakeNewsRepository
-
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setup() {
-        subject = FakeNewsRepository(
-            ioDispatcher = testDispatcher,
-            networkJson = Json { ignoreUnknownKeys = true }
-        )
-    }
+enum class NiaDispatchers {
+    IO
 }

@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.repository
+package com.google.samples.apps.nowinandroid.core.testing.di
 
-import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeNewsRepository
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.serialization.json.Json
-import org.junit.Before
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 
-class FakeNewsRepositoryTest {
-
-    private lateinit var subject: FakeNewsRepository
-
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setup() {
-        subject = FakeNewsRepository(
-            ioDispatcher = testDispatcher,
-            networkJson = Json { ignoreUnknownKeys = true }
-        )
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+object TestDispatcherModule {
+    @Provides
+    @Singleton
+    fun providesTestDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
 }

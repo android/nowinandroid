@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.ui.test.assertIsOn
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -84,8 +83,6 @@ class NavigationTest {
     @Test
     fun firstScreen_isForYou() {
         composeTestRule.apply {
-            // WAIT for initial content to be shown
-            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
             // VERIFY first topic is displayed
             onNodeWithText("HEADLINES").assertExists()
         }
@@ -101,8 +98,6 @@ class NavigationTest {
     @Test
     fun navigationBar_navigateToPreviouslySelectedTab_restoresContent() {
         composeTestRule.apply {
-            // WAIT for initial content to be shown
-            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
             // GIVEN the user follows a topic
             onNodeWithText("HEADLINES").performClick()
             // WHEN the user navigates to the Topics destination
@@ -120,8 +115,6 @@ class NavigationTest {
     @Test
     fun navigationBar_reselectTab_keepsState() {
         composeTestRule.apply {
-            // WAIT for initial content to be shown
-            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
             // GIVEN the user follows a topic
             onNodeWithText("HEADLINES").performClick()
             // WHEN the user taps the For You navigation bar item
@@ -179,8 +172,6 @@ class NavigationTest {
     @Test
     fun navigationBar_backFromAnyDestination_returnsToForYou() {
         composeTestRule.apply {
-            // WAIT for initial content to be shown
-            waitUntil { onAllNodes(hasText("HEADLINES")).fetchSemanticsNodes().isNotEmpty() }
             // GIVEN the user navigated to the Episodes destination
             onNodeWithText(episodes).performClick()
             // and then navigated to the Topics destination

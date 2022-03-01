@@ -16,11 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -30,16 +32,16 @@ import kotlinx.serialization.json.Json
  * [NiANetwork] implementation that provides static news resources to aid development
  */
 class FakeNiANetwork @Inject constructor(
-    private val dispatchers: NiaDispatchers,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json
 ) : NiANetwork {
     override suspend fun getTopics(): List<NetworkTopic> =
-        withContext(dispatchers.IO) {
+        withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.topicsData)
         }
 
     override suspend fun getNewsResources(): List<NetworkNewsResource> =
-        withContext(dispatchers.IO) {
+        withContext(ioDispatcher) {
             networkJson.decodeFromString<ResourceData>(FakeDataSource.data).resources
         }
 }
