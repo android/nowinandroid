@@ -63,4 +63,6 @@ class TestTopicsRepository : TopicsRepository {
      * A test-only API to allow querying the current followed topics.
      */
     fun getCurrentFollowedTopics(): Set<Int>? = _followedTopicIds.replayCache.firstOrNull()
+
+    override suspend fun sync(): Boolean = true
 }

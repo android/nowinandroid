@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.repository
+package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
+import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
 import javax.inject.Inject
@@ -39,4 +40,6 @@ class FakeNewsRepository @Inject constructor(
 
     override fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>> =
         flowOf(emptyList())
+
+    override suspend fun sync() = true
 }

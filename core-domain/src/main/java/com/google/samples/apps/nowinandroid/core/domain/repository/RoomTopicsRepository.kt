@@ -16,42 +16,33 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
+import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.flow.map
 
 /**
- * Fake implementation of the [TopicsRepository] that retrieves the topics from a JSON String, and
- * uses a local DataStore instance to save and retrieve followed topic ids.
- *
- * This allows us to run the app with fake data, without needing an internet connection or working
- * backend.
+ * Room database backed implementation of the [TopicsRepository].
  */
-class FakeTopicsRepository @Inject constructor(
+class RoomTopicsRepository @Inject constructor(
     private val dispatchers: NiaDispatchers,
-    private val networkJson: Json,
+    private val topicDao: TopicDao,
+    private val network: NiANetwork,
     private val niaPreferences: NiaPreferences
 ) : TopicsRepository {
-    override fun getTopicsStream(): Flow<List<Topic>> = flow<List<Topic>> {
-        emit(
-            networkJson.decodeFromString<List<NetworkTopic>>(FakeDataSource.topicsData).map {
-                Topic(
-                    id = it.id,
-                    name = it.name,
-                    description = it.description
-                )
-            }
-        )
-    }
-        .flowOn(dispatchers.IO)
+
+    override fun getTopicsStream(): Flow<List<Topic>> =
+        topicDao.getTopicEntitiesStream()
+            .map { it.map(TopicEntity::asExternalModel) }
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) =
         niaPreferences.setFollowedTopicIds(followedTopicIds)
@@ -60,4 +51,16 @@ class FakeTopicsRepository @Inject constructor(
         niaPreferences.toggleFollowedTopicId(followedTopicId, followed)
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
+
+    override suspend fun sync(): Boolean = try {
+        topicDao.saveTopics(
+            network.getTopics()
+                .map(NetworkTopic::asEntity)
+        )
+        true
+    } catch (cancellationException: CancellationException) {
+        throw cancellationException
+    } catch (exception: Exception) {
+        false
+    }
 }

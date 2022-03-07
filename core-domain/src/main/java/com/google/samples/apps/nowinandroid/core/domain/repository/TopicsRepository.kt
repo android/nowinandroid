@@ -39,4 +39,10 @@ interface TopicsRepository {
      * Returns the users currently followed topics
      */
     fun getFollowedTopicIdsStream(): Flow<Set<Int>>
+
+    /**
+     * Synchronizes the local database in backing the repository with the network.
+     * Returns if the sync was successful or not.
+     */
+    suspend fun sync(): Boolean
 }
