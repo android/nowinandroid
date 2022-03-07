@@ -195,7 +195,6 @@ private sealed class Destination(
 
 private val TOP_LEVEL_DESTINATIONS = listOf(
     Destination.ForYou,
-    Destination.Episodes,
-    Destination.Saved,
+    // TODO: Add destinations here, see b/226359180.
     Destination.Following
 )
