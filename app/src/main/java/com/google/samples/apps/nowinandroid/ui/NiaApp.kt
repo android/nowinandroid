@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.captionBarPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -32,11 +33,15 @@ import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Grid3x3
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.window.SizeClass
+import androidx.compose.material.window.WidthSizeClass
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -56,7 +61,7 @@ import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NiaApp() {
+fun NiaApp(windowSizeClass: SizeClass) {
     NiaTheme {
         val navController = rememberNavController()
         val navigationActions = remember(navController) {
@@ -70,18 +75,49 @@ fun NiaApp() {
         Scaffold(
             modifier = Modifier,
             bottomBar = {
-                // TODO: Only show on small screens
-                NiABottomBar(navigationActions, currentRoute)
-            },
-        ) { padding ->
-            Surface(Modifier.fillMaxSize()) {
-                NiaNavGraph(
-                    navController = navController,
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(padding)
+                if (windowSizeClass.width == WidthSizeClass.Compact) NiABottomBar(
+                    navigationActions = navigationActions,
+                    currentRoute = currentRoute
                 )
             }
+        ) { padding ->
+            Surface(Modifier.fillMaxSize().statusBarsPadding()) {
+                Row {
+                    if (windowSizeClass.width != WidthSizeClass.Compact) {
+                        NiANavRail(
+                            navigationActions = navigationActions,
+                            currentRoute = currentRoute
+                        )
+                    }
+                    NiaNavGraph(
+                        navController = navController,
+                        modifier = Modifier.padding(padding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NiANavRail(
+    navigationActions: NiaNavigationActions,
+    currentRoute: String
+) {
+    NavigationRail {
+        TOP_LEVEL_DESTINATIONS.forEach { destination ->
+            val selected = currentRoute == destination.route
+            NavigationRailItem(
+                selected = selected,
+                onClick = { navigationActions.navigateToTopLevelDestination(destination.route) },
+                icon = {
+                    Icon(
+                        if (selected) destination.selectedIcon else destination.unselectedIcon,
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(destination.iconTextId)) }
+            )
         }
     }
 }

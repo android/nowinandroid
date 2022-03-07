@@ -27,6 +27,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://androidx.dev/snapshots/builds/8273139/artifacts/repository' }
     }
 
     dependencies {
