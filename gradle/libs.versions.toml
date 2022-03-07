@@ -5,6 +5,7 @@ androidGradlePlugin = "7.0.3"
 androidxActivity = "1.4.0"
 androidxAppCompat = "1.3.0"
 androidxCompose = "1.2.0-alpha03"
+androidxMaterialWindow = "1.2.0-SNAPSHOT"
 androidxComposeMaterial3 = "1.0.0-alpha03"
 androidxCore = "1.7.0"
 androidxDataStore = "1.0.0"
@@ -12,6 +13,7 @@ androidxEspresso = "3.3.0"
 androidxHiltNavigationCompose = "1.0.0-rc01"
 androidxLifecycle = "2.4.0"
 androidxNavigation = "2.4.0-rc01"
+androidxWindowManager = "1.0.0"
 androidxTest = "1.4.0"
 androidxTestExt = "1.1.2"
 hilt = "2.41"
@@ -42,6 +44,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "androidxCompose" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "androidxCompose" }
+androidx-compose-material-window = {group = "androidx.compose.material", name = "material-window", version.ref="androidxMaterialWindow"}
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidxCompose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxCompose" }
@@ -56,6 +59,7 @@ androidx-dataStore = { group = "androidx.datastore", name = "datastore", version
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+androidx-window-manager = {module = "androidx.window:window", version.ref = "androidxWindowManager"}
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTest" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
