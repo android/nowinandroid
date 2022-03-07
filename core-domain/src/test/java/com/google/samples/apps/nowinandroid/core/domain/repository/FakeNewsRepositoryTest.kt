@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
+import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.network.DefaultNiaDispatchers
 import kotlinx.serialization.json.Json
 import org.junit.Before

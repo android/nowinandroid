@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.di
 
-import com.google.samples.apps.nowinandroid.core.domain.repository.FakeNewsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeNewsRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeTopicsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
