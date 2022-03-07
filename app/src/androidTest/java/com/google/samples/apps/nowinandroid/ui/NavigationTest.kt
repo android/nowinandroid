@@ -142,10 +142,7 @@ class NavigationTest {
         composeTestRule.apply {
             // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
-            onNodeWithText(episodes).performClick()
-            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
-            onNodeWithText(saved).performClick()
-            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+            // TODO: Add top level destinations here, see b/226357686.
             onNodeWithText(topics).performClick()
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
         }
@@ -157,8 +154,8 @@ class NavigationTest {
     @Test(expected = NoActivityResumedException::class)
     fun homeDestination_back_quitsApp() {
         composeTestRule.apply {
-            // GIVEN the user navigates to the Episodes destination
-            onNodeWithText(episodes).performClick()
+            // GIVEN the user navigates to the Topics destination
+            onNodeWithText(topics).performClick()
             // and then navigates to the For you destination
             onNodeWithText(forYou).performClick()
             // WHEN the user uses the system button/gesture to go back
@@ -174,10 +171,9 @@ class NavigationTest {
     @Test
     fun navigationBar_backFromAnyDestination_returnsToForYou() {
         composeTestRule.apply {
-            // GIVEN the user navigated to the Episodes destination
-            onNodeWithText(episodes).performClick()
-            // and then navigated to the Topics destination
+            // GIVEN the user navigated to the Topics destination
             onNodeWithText(topics).performClick()
+            // TODO: Add another destination here to increase test coverage, see b/226357686.
             // WHEN the user uses the system button/gesture to go back,
             Espresso.pressBack()
             // THEN the app shows the For You destination
