@@ -1,0 +1,100 @@
+/*
+ * Copyright 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.samples.apps.nowinandroid.core.domain.testdoubles
+
+import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
+import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Instant
+
+val filteredTopicIds = setOf(1)
+val nonPresentTopicIds = setOf(2)
+
+/**
+ * Test double for [NewsResourceDao]
+ */
+class TestNewsResourceDao : NewsResourceDao {
+
+    private var entities = listOf(
+        NewsResourceEntity(
+            id = 1,
+            episodeId = 0,
+            title = "news",
+            content = "Hilt",
+            url = "url",
+            headerImageUrl = "headerImageUrl",
+            type = Video,
+            publishDate = Instant.fromEpochMilliseconds(1),
+        )
+    )
+
+    internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
+
+    override fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>> =
+        flowOf(entities.map(NewsResourceEntity::asPopulatedNewsResource))
+
+    override fun getNewsResourcesStream(
+        filterTopicIds: Set<Int>
+    ): Flow<List<PopulatedNewsResource>> =
+        getNewsResourcesStream()
+            .map { resources ->
+                resources.filter { resource ->
+                    resource.topics.any { it.id in filterTopicIds }
+                }
+            }
+
+    override suspend fun saveNewsResourceEntities(entities: List<NewsResourceEntity>) {
+        this.entities = entities
+    }
+
+    override suspend fun saveTopicCrossRefEntities(entities: List<NewsResourceTopicCrossRef>) {
+        topicCrossReferences = entities
+    }
+}
+
+private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource(
+    entity = this,
+    episode = EpisodeEntity(
+        id = this.episodeId,
+        name = "episode 4",
+        publishDate = Instant.fromEpochMilliseconds(2),
+        alternateAudio = "audio",
+        alternateVideo = "video",
+    ),
+    authors = listOf(
+        AuthorEntity(
+            id = 2,
+            name = "name",
+            imageUrl = "imageUrl"
+        )
+    ),
+    topics = listOf(
+        TopicEntity(
+            id = filteredTopicIds.random(),
+            name = "name",
+            description = "description",
+        )
+    ),
+)

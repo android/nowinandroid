@@ -17,10 +17,17 @@
 package com.google.samples.apps.nowinandroid
 
 import android.app.Application
+import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import dagger.hilt.android.HiltAndroidApp
 
 /**
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiAApp : Application()
+class NiAApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        // Initialize Sync; the system responsible for keeping data in the app up to date.
+        Sync.initialize(context = this)
+    }
+}

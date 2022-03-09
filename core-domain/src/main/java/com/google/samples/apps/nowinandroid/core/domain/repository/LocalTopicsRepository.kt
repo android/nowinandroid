@@ -21,20 +21,18 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
+import com.google.samples.apps.nowinandroid.core.domain.suspendRunCatching
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
  * Room database backed implementation of the [TopicsRepository].
  */
-class RoomTopicsRepository @Inject constructor(
-    private val dispatchers: NiaDispatchers,
+class LocalTopicsRepository @Inject constructor(
     private val topicDao: TopicDao,
     private val network: NiANetwork,
     private val niaPreferences: NiaPreferences
@@ -52,15 +50,10 @@ class RoomTopicsRepository @Inject constructor(
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
-    override suspend fun sync(): Boolean = try {
+    override suspend fun sync(): Boolean = suspendRunCatching {
+        val networkTopics = network.getTopics()
         topicDao.saveTopics(
-            network.getTopics()
-                .map(NetworkTopic::asEntity)
+            networkTopics.map(NetworkTopic::asEntity)
         )
-        true
-    } catch (cancellationException: CancellationException) {
-        throw cancellationException
-    } catch (exception: Exception) {
-        false
-    }
+    }.isSuccess
 }

@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.Flow
@@ -38,6 +39,7 @@ interface TopicDao {
     )
     fun getTopicEntitiesStream(ids: Set<Int>): Flow<List<TopicEntity>>
 
-    @Insert
+    // TODO: Perform a proper upsert. See: b/226916817
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveTopics(entities: List<TopicEntity>)
 }

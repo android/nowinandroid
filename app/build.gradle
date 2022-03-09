@@ -121,8 +121,11 @@ dependencies {
 
     implementation project(':core-ui')
 
+    implementation project(':sync')
+
     androidTestImplementation project(':core-testing')
     androidTestImplementation project(':core-datastore-test')
+    androidTestImplementation project(':core-domain-test')
 
     coreLibraryDesugaring libs.android.desugarJdkLibs
 

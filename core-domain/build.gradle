@@ -45,6 +45,7 @@ dependencies {
     implementation project(':core-network')
 
     testImplementation project(':core-testing')
+    testImplementation project(':core-datastore-test')
 
     implementation libs.kotlinx.datetime
     implementation libs.kotlinx.coroutines.android

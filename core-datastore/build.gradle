@@ -63,7 +63,7 @@ dependencies {
 
     implementation libs.kotlinx.coroutines.android
 
-    implementation libs.androidx.dataStore
+    implementation libs.androidx.dataStore.core
     implementation(libs.protobuf.kotlin.lite) {
         // TODO: https://github.com/protocolbuffers/protobuf/issues/9517
         exclude group: "org.jetbrains.kotlin", module: "kotlin-test"

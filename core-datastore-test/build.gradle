@@ -39,10 +39,10 @@ android {
 }
 
 dependencies {
-    implementation project(':core-datastore')
+    api project(':core-datastore')
     implementation project(':core-testing')
 
-    implementation libs.androidx.dataStore
+    api libs.androidx.dataStore.core
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler

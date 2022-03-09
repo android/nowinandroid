@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
@@ -32,6 +33,7 @@ interface EpisodeDao {
     @Query(value = "SELECT * FROM episodes")
     fun getEpisodesStream(): Flow<List<PopulatedEpisode>>
 
-    @Insert
+    // TODO: Perform a proper upsert. See: b/226916817
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveEpisodeEntities(entities: List<EpisodeEntity>)
 }
