@@ -21,6 +21,7 @@ import androidx.datastore.core.DataStore
 import java.io.IOException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 
@@ -65,4 +66,19 @@ class NiaPreferences @Inject constructor(
             true
         }
         .map { it.followedTopicIdsList.toSet() }
+
+    suspend fun hasRunFirstTimeSync() = userPreferences.data
+        .map { it.hasRunFirstTimeSync }.firstOrNull() ?: false
+
+    suspend fun markFirstTimeSyncDone() {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    hasRunFirstTimeSync = true
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 }

@@ -34,12 +34,12 @@ class FakeNiANetwork @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json
 ) : NiANetwork {
-    override suspend fun getTopics(): List<NetworkTopic> =
+    override suspend fun getTopics(itemsPerPage: Int): List<NetworkTopic> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.topicsData)
         }
 
-    override suspend fun getNewsResources(): List<NetworkNewsResource> =
+    override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.data)
         }

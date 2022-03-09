@@ -40,11 +40,14 @@ object TestDataStoreModule {
     fun providesUserPreferencesDataStore(
         userPreferencesSerializer: UserPreferencesSerializer,
         tmpFolder: TemporaryFolder
-    ): DataStore<UserPreferences> {
-        return DataStoreFactory.create(
-            serializer = userPreferencesSerializer,
-        ) {
-            tmpFolder.newFile("user_preferences_test.pb")
-        }
-    }
+    ): DataStore<UserPreferences> =
+        tmpFolder.testUserPreferencesDataStore(userPreferencesSerializer)
+}
+
+fun TemporaryFolder.testUserPreferencesDataStore(
+    userPreferencesSerializer: UserPreferencesSerializer = UserPreferencesSerializer()
+) = DataStoreFactory.create(
+    serializer = userPreferencesSerializer,
+) {
+    newFile("user_preferences_test.pb")
 }

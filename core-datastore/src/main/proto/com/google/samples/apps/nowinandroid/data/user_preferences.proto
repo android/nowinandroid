@@ -21,4 +21,5 @@ option java_multiple_files = true;
 
 message UserPreferences {
     repeated int32 followed_topic_ids = 1;
+    bool has_run_first_time_sync = 2;
 }

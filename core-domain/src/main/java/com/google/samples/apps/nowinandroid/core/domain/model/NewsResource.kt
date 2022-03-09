@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.domain.model
 
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 
@@ -41,3 +42,12 @@ fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
     publishDate = publishDate,
     type = type,
 )
+
+fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> =
+    topics.map { topicId ->
+        NewsResourceTopicCrossRef(
+            newsResourceId = id,
+            topicId = topicId
+
+        )
+    }
