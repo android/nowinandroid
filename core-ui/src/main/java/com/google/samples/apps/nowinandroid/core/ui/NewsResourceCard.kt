@@ -37,11 +37,17 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -54,7 +60,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
 
 /**
  * [NewsResource] card used on the following screens: For You, Episodes, Saved
@@ -89,6 +98,8 @@ fun NewsResourceCardExpanded(
             Spacer(modifier = Modifier.weight(1f))
             BookmarkButton(isBookmarked, onToggleBookmark)
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        NewsResourceDate(newsResource.publishDate)
         Spacer(modifier = Modifier.height(12.dp))
         NewsResourceShortDescription(newsResource.content)
     }
@@ -182,10 +193,30 @@ fun BookmarkButton(
 }
 
 @Composable
+private fun dateFormatted(publishDate: Instant): String {
+    var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
+
+    val context = LocalContext.current
+
+    DisposableEffect(context) {
+        val receiver = TimeZoneBroadcastReceiver(
+            onTimeZoneChanged = { zoneId = ZoneId.systemDefault() }
+        )
+        receiver.register(context)
+        onDispose {
+            receiver.unregister(context)
+        }
+    }
+
+    return DateTimeFormatter.ofPattern("MMM d, yyyy")
+        .withZone(zoneId).format(publishDate.toJavaInstant())
+}
+
+@Composable
 fun NewsResourceDate(
-    newsResource: NewsResource
+    publishDate: Instant
 ) {
-    TODO()
+    Text(dateFormatted(publishDate), style = MaterialTheme.typography.body2)
 }
 
 @Composable
