@@ -14,6 +14,7 @@ androidxLifecycle = "2.4.0"
 androidxNavigation = "2.4.0-rc01"
 androidxTest = "1.4.0"
 androidxTestExt = "1.1.2"
+coil = "2.0.0-rc01"
 hilt = "2.41"
 jacoco = "0.8.7"
 junit4 = "4.13"
@@ -60,6 +61,8 @@ androidx-test-core = { group = "androidx.test", name = "core", version.ref = "an
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil"}
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
