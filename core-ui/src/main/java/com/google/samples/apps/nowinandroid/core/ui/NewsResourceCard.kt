@@ -22,6 +22,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
@@ -31,12 +34,18 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.ConfigurationCompat
+import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
@@ -58,6 +67,10 @@ fun NewsResourceCardExpanded(
         modifier = Modifier.padding(16.dp)
     ) {
         Row {
+            NewsResourceAuthors(newsResource.authors)
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row {
             NewsResourceTitle(newsResource.title, modifier = Modifier.fillMaxWidth((.8f)))
             Spacer(modifier = Modifier.weight(1f))
             BookmarkButton(isBookmarked, onToggleBookmark)
@@ -76,9 +89,27 @@ fun NewsResourceHeaderImage(
 
 @Composable
 fun NewsResourceAuthors(
-    newsResource: NewsResource
+    authors: List<Author>
 ) {
-    TODO()
+    if (authors.isNotEmpty()) {
+        // Only display first author for now
+        val author = authors[0]
+        val authorNameFormatted =
+            author.name.uppercase(ConfigurationCompat.getLocales(LocalConfiguration.current).get(0))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(24.dp),
+                contentScale = ContentScale.Crop,
+                model = author.imageUrl,
+                contentDescription = null // decorative image
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(authorNameFormatted, style = MaterialTheme.typography.body2)
+        }
+    }
 }
 
 @Composable
@@ -184,7 +215,7 @@ private val newsResource = NewsResource(
         Author(
             id = 1,
             name = "Name",
-            imageUrl = "imageUrl"
+            imageUrl = "https://source.unsplash.com/Yc5sL-ejk6U"
         )
     ),
     topics = listOf(
