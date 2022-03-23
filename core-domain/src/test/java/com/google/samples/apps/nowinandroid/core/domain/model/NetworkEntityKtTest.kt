@@ -66,6 +66,7 @@ class NetworkEntityKtTest {
                 title = "title",
                 content = "content",
                 url = "url",
+                headerImageUrl = "headerImageUrl",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 type = Article,
             )
@@ -76,6 +77,7 @@ class NetworkEntityKtTest {
         assertEquals("title", entity.title)
         assertEquals("content", entity.content)
         assertEquals("url", entity.url)
+        assertEquals("headerImageUrl", entity.headerImageUrl)
         assertEquals(Instant.fromEpochMilliseconds(1), entity.publishDate)
         assertEquals(Article, entity.type)
 
@@ -86,6 +88,7 @@ class NetworkEntityKtTest {
                 title = "title",
                 content = "content",
                 url = "url",
+                headerImageUrl = "headerImageUrl",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 type = Article,
             )
@@ -97,6 +100,7 @@ class NetworkEntityKtTest {
         assertEquals("title", entityFromExpanded.title)
         assertEquals("content", entityFromExpanded.content)
         assertEquals("url", entityFromExpanded.url)
+        assertEquals("headerImageUrl", entityFromExpanded.headerImageUrl)
         assertEquals(Instant.fromEpochMilliseconds(1), entityFromExpanded.publishDate)
         assertEquals(Article, entityFromExpanded.type)
     }

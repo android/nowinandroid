@@ -42,6 +42,7 @@ class PopulatedEpisodeKtTest {
                     title = "news",
                     content = "Hilt",
                     url = "url",
+                    headerImageUrl = "headerImageUrl",
                     type = Video,
                     publishDate = Instant.fromEpochMilliseconds(1),
                 )
@@ -70,6 +71,7 @@ class PopulatedEpisodeKtTest {
                         title = "news",
                         content = "Hilt",
                         url = "url",
+                        headerImageUrl = "headerImageUrl",
                         type = Video,
                         publishDate = Instant.fromEpochMilliseconds(1),
                         authors = listOf(),

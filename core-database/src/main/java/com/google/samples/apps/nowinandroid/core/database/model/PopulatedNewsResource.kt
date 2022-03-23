@@ -60,6 +60,7 @@ fun PopulatedNewsResource.asExternalModel() = NewsResource(
     title = entity.title,
     content = entity.content,
     url = entity.url,
+    headerImageUrl = entity.headerImageUrl,
     publishDate = entity.publishDate,
     type = entity.type,
     authors = authors.map(AuthorEntity::asExternalModel),

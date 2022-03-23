@@ -359,6 +359,7 @@ private val sampleNewsResources = listOf(
             "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
             "thank you all.",
         url = "https://youtu.be/-fJ6poHQrjM",
+        headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
         topics = listOf(
@@ -378,6 +379,7 @@ private val sampleNewsResources = listOf(
             "Transformations like inserting separators, when to create a new pager, and " +
             "customisation options for consuming PagingData.",
         url = "https://youtu.be/ZARz0pjm5YM",
+        headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
         topics = listOf(
@@ -395,6 +397,7 @@ private val sampleNewsResources = listOf(
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",
         url = "https://youtu.be/r5JgIyS3t3s",
+        headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
         type = Video,
         topics = listOf(
