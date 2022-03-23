@@ -68,6 +68,12 @@ fun NewsResourceCardExpanded(
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
+        if (!newsResource.headerImageUrl.isNullOrEmpty()) {
+            Row {
+                NewsResourceHeaderImage(newsResource.headerImageUrl)
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
         Row {
             NewsResourceAuthors(newsResource.authors)
         }
@@ -84,9 +90,17 @@ fun NewsResourceCardExpanded(
 
 @Composable
 fun NewsResourceHeaderImage(
-    newsResource: NewsResource
+    headerImageUrl: String?
 ) {
-    TODO()
+    AsyncImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp),
+        contentScale = ContentScale.Crop,
+        model = headerImageUrl,
+        // TODO b/226661685: Investigate using alt text of  image to populate content description
+        contentDescription = null // decorative image
+    )
 }
 
 @Composable
