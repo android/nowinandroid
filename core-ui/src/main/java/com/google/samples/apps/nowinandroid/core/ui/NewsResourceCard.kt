@@ -209,6 +209,7 @@ private val newsResource = NewsResource(
     title = "Title",
     content = "Content",
     url = "url",
+    headerImageUrl = "https://i.ytimg.com/vi/WL9h46CymlU/maxresdefault.jpg",
     publishDate = Instant.DISTANT_FUTURE,
     type = Article,
     authors = listOf(

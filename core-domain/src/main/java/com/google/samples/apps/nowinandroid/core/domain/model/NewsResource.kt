@@ -26,6 +26,7 @@ fun NetworkNewsResource.asEntity() = NewsResourceEntity(
     title = title,
     content = content,
     url = url,
+    headerImageUrl = headerImageUrl,
     publishDate = publishDate,
     type = type,
 )
@@ -36,6 +37,7 @@ fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
     title = title,
     content = content,
     url = url,
+    headerImageUrl = headerImageUrl,
     publishDate = publishDate,
     type = type,
 )

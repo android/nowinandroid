@@ -33,6 +33,7 @@ data class NetworkNewsResource(
     val title: String,
     val content: String,
     val url: String,
+    val headerImageUrl: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
     @Serializable(NewsResourceTypeSerializer::class)
@@ -51,6 +52,7 @@ data class NetworkNewsResourceExpanded(
     val title: String,
     val content: String,
     val url: String,
+    val headerImageUrl: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
     @Serializable(NewsResourceTypeSerializer::class)
