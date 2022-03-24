@@ -48,6 +48,11 @@ dependencies {
     implementation libs.coil.kt.compose
     implementation libs.kotlinx.datetime
 
+    // TODO : Remove these dependencies when b/225193889 is fixed
+        // These dependencies are currently necessary to render Compose previews
+    debugImplementation "androidx.savedstate:savedstate-ktx:1.1.0"
+    debugImplementation libs.androidx.lifecycle.viewModelCompose
+
     api libs.androidx.compose.foundation.layout
     // TODO (M3): Remove this dependency when all components are available
     api libs.androidx.compose.material
