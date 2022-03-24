@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Surface
@@ -97,15 +99,29 @@ fun NewsResourceAuthors(
         val authorNameFormatted =
             author.name.uppercase(ConfigurationCompat.getLocales(LocalConfiguration.current).get(0))
 
+        val authorImageUrl = author.imageUrl
+
+        val authorImageModifier = Modifier
+            .clip(CircleShape)
+            .size(24.dp)
+
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(24.dp),
-                contentScale = ContentScale.Crop,
-                model = author.imageUrl,
-                contentDescription = null // decorative image
-            )
+            if (authorImageUrl.isNotEmpty()) {
+                AsyncImage(
+                    modifier = authorImageModifier,
+                    contentScale = ContentScale.Crop,
+                    model = authorImageUrl,
+                    contentDescription = null // decorative image
+                )
+            } else {
+                Icon(
+                    modifier = authorImageModifier
+                        .background(MaterialTheme.colors.background)
+                        .padding(4.dp),
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = null // decorative image
+                )
+            }
             Spacer(modifier = Modifier.width(8.dp))
             Text(authorNameFormatted, style = MaterialTheme.typography.body2)
         }
@@ -216,7 +232,7 @@ private val newsResource = NewsResource(
         Author(
             id = 1,
             name = "Name",
-            imageUrl = "https://source.unsplash.com/Yc5sL-ejk6U"
+            imageUrl = ""
         )
     ),
     topics = listOf(
