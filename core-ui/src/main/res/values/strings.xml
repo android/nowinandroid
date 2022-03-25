@@ -16,4 +16,6 @@
 <resources>
     <string name="bookmark">Bookmark</string>
     <string name="unbookmark">Unbookmark</string>
+
+    <string name="card_tap_action">Open Resource Link</string>
 </resources>

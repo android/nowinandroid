@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,10 +64,15 @@ import kotlinx.datetime.Instant
 fun NewsResourceCardExpanded(
     newsResource: NewsResource,
     isBookmarked: Boolean,
-    onToggleBookmark: () -> Unit
+    onToggleBookmark: () -> Unit,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(16.dp)
+            .clickable(
+                onClickLabel = stringResource(R.string.card_tap_action),
+                onClick = { onClick() }
+            )
     ) {
         if (!newsResource.headerImageUrl.isNullOrEmpty()) {
             Row {
@@ -228,7 +234,7 @@ fun BookmarkButtonBookmarkedPreview() {
 fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
-            NewsResourceCardExpanded(newsResource, true, {})
+            NewsResourceCardExpanded(newsResource, true, {}, {})
         }
     }
 }

@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,10 +36,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -91,12 +95,19 @@ fun ForYouScreen(
                     }
 
                     items(uiState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
+                        val launchResourceIntent =
+                            Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
+                        val context = LocalContext.current
+
                         NewsResourceCardExpanded(
                             newsResource = newsResource,
                             isBookmarked = isBookmarked,
                             onToggleBookmark = {
                                 onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
-                            }
+                            },
+                            onClick = {
+                                startActivity(context, launchResourceIntent, null)
+                            },
                         )
                     }
                 }
