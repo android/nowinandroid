@@ -20,4 +20,6 @@
     <string name="done">Done</string>
     <string name="for_you_loading">Loading for you…</string>
     <string name="navigate_up">Navigate up</string>
+    <string name="onboarding_guidance_title">What are you interested in?</string>
+    <string name="onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
 </resources>

@@ -18,32 +18,40 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.grid.GridCells.Fixed
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -51,6 +59,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection
 import kotlinx.datetime.Instant
 
 @Composable
@@ -59,7 +73,6 @@ fun ForYouRoute(
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
     ForYouScreen(
         modifier = modifier,
         uiState = uiState,
@@ -77,95 +90,146 @@ fun ForYouScreen(
     onNewsResourcesCheckedChanged: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize()
+    ) {
         when (uiState) {
-            ForYouFeedUiState.Loading -> {
-                NiaLoadingIndicator(
-                    modifier = modifier,
-                    contentDesc = stringResource(id = R.string.for_you_loading),
-                )
+            is ForYouFeedUiState.Loading -> {
+                item {
+                    NiaLoadingIndicator(
+                        modifier = modifier,
+                        contentDesc = stringResource(id = R.string.for_you_loading),
+                    )
+                }
             }
-            is ForYouFeedUiState.PopulatedFeed -> {
-                LazyColumn {
-                    when (uiState) {
-                        is ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection -> {
-                            TopicSelection(uiState, onTopicCheckedChanged, saveFollowedTopics)
+            is PopulatedFeed -> {
+                when (uiState) {
+                    is FeedWithTopicSelection -> {
+                        item {
+                            TopicSelection(uiState, onTopicCheckedChanged)
                         }
-                        is ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection -> Unit
+                        item {
+                            // Done button
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = saveFollowedTopics,
+                                    enabled = uiState.canSaveSelectedTopics,
+                                    modifier = Modifier
+                                        .padding(horizontal = 40.dp)
+                                        .width(364.dp)
+                                ) {
+                                    Text(text = stringResource(R.string.done))
+                                }
+                            }
+                        }
                     }
+                    is FeedWithoutTopicSelection -> Unit
+                }
 
-                    items(uiState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
-                        val launchResourceIntent =
-                            Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
-                        val context = LocalContext.current
+                items(uiState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
+                    val launchResourceIntent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
+                    val context = LocalContext.current
 
-                        NewsResourceCardExpanded(
-                            newsResource = newsResource,
-                            isBookmarked = isBookmarked,
-                            onToggleBookmark = {
-                                onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
-                            },
-                            onClick = {
-                                startActivity(context, launchResourceIntent, null)
-                            },
-                        )
-                    }
+                    NewsResourceCardExpanded(
+                        newsResource = newsResource,
+                        isBookmarked = isBookmarked,
+                        onClick = { startActivity(context, launchResourceIntent, null) },
+                        onToggleBookmark = {
+                            onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
+                        }
+                    )
                 }
             }
         }
     }
 }
 
-/**
- * The topic selection items
- */
-private fun LazyListScope.TopicSelection(
-    uiState: ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection,
-    onTopicCheckedChanged: (Int, Boolean) -> Unit,
-    saveFollowedTopics: () -> Unit
+@Composable
+private fun TopicSelection(
+    uiState: ForYouFeedUiState,
+    onTopicCheckedChanged: (Int, Boolean) -> Unit
 ) {
-    item {
-        FlowRow(
-            mainAxisSpacing = 8.dp,
-            crossAxisSpacing = 8.dp,
-            modifier = Modifier.padding(horizontal = 40.dp)
+    Column(Modifier.padding(top = 24.dp)) {
+
+        Text(
+            text = stringResource(R.string.onboarding_guidance_title),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            style = NiaTypography.titleMedium
+        )
+
+        Text(
+            text = stringResource(R.string.onboarding_guidance_subtitle),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+            textAlign = TextAlign.Center,
+            style = NiaTypography.bodyMedium
+        )
+
+        LazyHorizontalGrid(
+            rows = Fixed(3),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .height(192.dp)
+                .padding(top = 24.dp, bottom = 24.dp)
+                .fillMaxWidth()
         ) {
-            uiState.topics.forEach { (topic, isSelected) ->
-                key(topic.id) {
-                    // TODO: Add toggleable semantics
-                    OutlinedButton(
-                        onClick = {
-                            onTopicCheckedChanged(topic.id, !isSelected)
-                        },
-                        shape = RoundedCornerShape(50),
-                        colors = if (isSelected) {
-                            ButtonDefaults.buttonColors()
-                        } else {
-                            ButtonDefaults.outlinedButtonColors()
-                        },
-                        modifier = Modifier.toggleable(
-                            value = isSelected, role = Role.Button, onValueChange = {}
-                        )
-                    ) {
-                        Text(
-                            text = topic.name.uppercase(),
-                        )
-                    }
-                }
+            val state: FeedWithTopicSelection = uiState as FeedWithTopicSelection
+            items(state.topics) {
+                SingleTopicButton(
+                    name = it.topic.name,
+                    topicId = it.topic.id,
+                    isSelected = it.isFollowed,
+                    onClick = onTopicCheckedChanged
+                )
             }
         }
     }
+}
 
-    item {
-        Button(
-            onClick = saveFollowedTopics,
-            enabled = uiState.canSaveSelectedTopics,
-            modifier = Modifier
-                .padding(horizontal = 40.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = stringResource(R.string.done))
-        }
+@Composable
+private fun SingleTopicButton(
+    name: String,
+    topicId: Int,
+    isSelected: Boolean,
+    onClick: (Int, Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .width(264.dp)
+            .height(56.dp)
+            .padding(start = 12.dp, end = 8.dp)
+            .background(
+                MaterialTheme.colors.surface,
+                shape = RoundedCornerShape(corner = CornerSize(8.dp))
+            )
+            .clickable(onClick = { onClick(topicId, !isSelected) }),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = name,
+            style = NiaTypography.titleSmall,
+            modifier = Modifier.padding(12.dp),
+            color = MaterialTheme.colors.onSurface
+
+        )
+        NiaToggleButton(
+            checked = isSelected,
+            modifier = Modifier.align(alignment = Alignment.CenterEnd),
+            onCheckedChange = { checked -> onClick(topicId, !isSelected) },
+            icon = {
+                Icon(imageVector = NiaIcons.Add, contentDescription = name)
+            },
+            checkedIcon = {
+                Icon(imageVector = NiaIcons.Check, contentDescription = name)
+            }
+        )
     }
 }
 
@@ -184,7 +248,7 @@ fun ForYouScreenLoading() {
 @Composable
 fun ForYouScreenTopicSelection() {
     ForYouScreen(
-        uiState = ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
+        uiState = FeedWithTopicSelection(
             topics = listOf(
                 FollowableTopic(
                     topic = Topic(
@@ -311,7 +375,7 @@ fun ForYouScreenTopicSelection() {
 @Composable
 fun PopulatedFeed() {
     ForYouScreen(
-        uiState = ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
+        uiState = FeedWithoutTopicSelection(
             feed = emptyList()
         ),
         onTopicCheckedChanged = { _, _ -> },
