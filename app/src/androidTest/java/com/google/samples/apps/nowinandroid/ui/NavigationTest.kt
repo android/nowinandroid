@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.material.window.ExperimentalMaterialWindowApi
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -68,6 +69,7 @@ class NavigationTest {
     private lateinit var episodes: String
     private lateinit var saved: String
     private lateinit var topics: String
+    private lateinit var sampleTopic: String
 
     @Before
     fun setup() {
@@ -79,14 +81,15 @@ class NavigationTest {
             episodes = getString(R.string.episodes)
             saved = getString(R.string.saved)
             topics = getString(R.string.following)
+            sampleTopic = "Headlines"
         }
     }
 
     @Test
     fun firstScreen_isForYou() {
         composeTestRule.apply {
-            // VERIFY first topic is displayed
-            onNodeWithText("HEADLINES").assertExists()
+            // VERIFY for you is selected
+            onNodeWithText(forYou).assertIsSelected()
         }
     }
 
@@ -101,13 +104,13 @@ class NavigationTest {
     fun navigationBar_navigateToPreviouslySelectedTab_restoresContent() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText("HEADLINES").performClick()
+            onNodeWithText(sampleTopic).performClick()
             // WHEN the user navigates to the Topics destination
             onNodeWithText(topics).performClick()
             // AND the user navigates to the For You destination
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
-            onNodeWithText("HEADLINES").assertIsOn()
+            onNodeWithContentDescription(sampleTopic).assertIsOn()
         }
     }
 
@@ -118,11 +121,11 @@ class NavigationTest {
     fun navigationBar_reselectTab_keepsState() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText("HEADLINES").performClick()
+            onNodeWithText(sampleTopic).performClick()
             // WHEN the user taps the For You navigation bar item
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
-            onNodeWithText("HEADLINES").assertIsOn()
+            onNodeWithContentDescription(sampleTopic).assertIsOn()
         }
     }
 
@@ -177,7 +180,7 @@ class NavigationTest {
             // WHEN the user uses the system button/gesture to go back,
             Espresso.pressBack()
             // THEN the app shows the For You destination
-            onNodeWithText("HEADLINES").assertExists()
+            onNodeWithText(forYou).assertExists()
         }
     }
 }
