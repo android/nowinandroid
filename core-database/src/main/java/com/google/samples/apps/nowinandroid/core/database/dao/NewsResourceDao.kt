@@ -33,21 +33,21 @@ import kotlinx.coroutines.flow.Flow
 interface NewsResourceDao {
     @Query(
         value = """
-    SELECT * FROM news_resources
-    ORDER BY publish_date
+            SELECT * FROM news_resources
+            ORDER BY publish_date DESC
     """
     )
     fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>>
 
     @Query(
         value = """
-        SELECT * FROM news_resources
-        WHERE id in
-        (
-            SELECT news_resource_id FROM news_resources_topics
-            WHERE topic_id IN (:filterTopicIds)
-        )
-        ORDER BY publish_date
+            SELECT * FROM news_resources
+            WHERE id in
+            (
+                SELECT news_resource_id FROM news_resources_topics
+                WHERE topic_id IN (:filterTopicIds)
+            )
+            ORDER BY publish_date DESC
     """
     )
     fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<PopulatedNewsResource>>
