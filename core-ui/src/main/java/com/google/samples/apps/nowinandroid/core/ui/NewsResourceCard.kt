@@ -96,7 +96,8 @@ fun NewsResourceCardExpanded(
         Row {
             NewsResourceTitle(newsResource.title, modifier = Modifier.fillMaxWidth((.8f)))
             Spacer(modifier = Modifier.weight(1f))
-            BookmarkButton(isBookmarked, onToggleBookmark)
+            // TODO: Implement functionality to 'bookmark' a resource b/227246491
+//            BookmarkButton(isBookmarked, onToggleBookmark)
         }
         Spacer(modifier = Modifier.height(12.dp))
         NewsResourceDate(newsResource.publishDate)
