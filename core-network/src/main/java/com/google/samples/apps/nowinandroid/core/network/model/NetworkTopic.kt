@@ -26,6 +26,9 @@ import kotlinx.serialization.Serializable
 data class NetworkTopic(
     val id: Int,
     val name: String = "",
-    val description: String = "",
+    val shortDescription: String = "",
+    val longDescription: String = "",
+    val url: String = "",
+    val imageUrl: String = "",
     val followed: Boolean = false,
 )

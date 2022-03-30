@@ -98,7 +98,7 @@ class FollowingScreenTest {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(TOPIC_DESC)
+            .onAllNodesWithText(TOPIC_SHORT_DESC)
             .assertCountEquals(testTopics.count())
 
         composeTestRule
@@ -133,14 +133,20 @@ class FollowingScreenTest {
 private const val TOPIC_1_NAME = "Headlines"
 private const val TOPIC_2_NAME = "UI"
 private const val TOPIC_3_NAME = "Tools"
-private const val TOPIC_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
+private const val TOPIC_SHORT_DESC = "At vero eos et accusamus."
+private const val TOPIC_LONG_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus."
+private const val TOPIC_URL = "URL"
+private const val TOPIC_IMAGE_URL = "Image URL"
 
 private val testTopics = listOf(
     FollowableTopic(
         Topic(
             id = 0,
             name = TOPIC_1_NAME,
-            description = TOPIC_DESC,
+            shortDescription = TOPIC_SHORT_DESC,
+            longDescription = TOPIC_LONG_DESC,
+            url = TOPIC_URL,
+            imageUrl = TOPIC_IMAGE_URL,
         ),
         isFollowed = true
     ),
@@ -148,7 +154,10 @@ private val testTopics = listOf(
         Topic(
             id = 1,
             name = TOPIC_2_NAME,
-            description = TOPIC_DESC
+            shortDescription = TOPIC_SHORT_DESC,
+            longDescription = TOPIC_LONG_DESC,
+            url = TOPIC_URL,
+            imageUrl = TOPIC_IMAGE_URL,
         ),
         isFollowed = false
     ),
@@ -156,7 +165,10 @@ private val testTopics = listOf(
         Topic(
             id = 2,
             name = TOPIC_3_NAME,
-            description = TOPIC_DESC
+            shortDescription = TOPIC_SHORT_DESC,
+            longDescription = TOPIC_LONG_DESC,
+            url = TOPIC_URL,
+            imageUrl = TOPIC_IMAGE_URL,
         ),
         isFollowed = false
     )

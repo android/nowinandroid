@@ -190,7 +190,10 @@ fun ForYouScreenTopicSelection() {
                     topic = Topic(
                         id = 0,
                         name = "Headlines",
-                        description = ""
+                        shortDescription = "",
+                        longDescription = "",
+                        url = "",
+                        imageUrl = ""
                     ),
                     isFollowed = false
                 ),
@@ -198,7 +201,10 @@ fun ForYouScreenTopicSelection() {
                     topic = Topic(
                         id = 1,
                         name = "UI",
-                        description = ""
+                        shortDescription = "",
+                        longDescription = "",
+                        url = "",
+                        imageUrl = ""
                     ),
                     isFollowed = false
                 ),
@@ -206,7 +212,10 @@ fun ForYouScreenTopicSelection() {
                     topic = Topic(
                         id = 2,
                         name = "Tools",
-                        description = "",
+                        shortDescription = "",
+                        longDescription = "",
+                        url = "",
+                        imageUrl = ""
                     ),
                     isFollowed = false
                 ),
@@ -229,7 +238,10 @@ fun ForYouScreenTopicSelection() {
                             Topic(
                                 id = 0,
                                 name = "Headlines",
-                                description = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
                             )
                         ),
                         authors = emptyList()
@@ -253,7 +265,10 @@ fun ForYouScreenTopicSelection() {
                             Topic(
                                 id = 1,
                                 name = "UI",
-                                description = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
                             ),
                         ),
                         authors = emptyList()
@@ -274,7 +289,10 @@ fun ForYouScreenTopicSelection() {
                             Topic(
                                 id = 1,
                                 name = "UI",
-                                description = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
                             ),
                         ),
                         authors = emptyList()

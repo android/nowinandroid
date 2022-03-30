@@ -94,7 +94,10 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
         TopicEntity(
             id = filteredTopicIds.random(),
             name = "name",
-            description = "description",
+            shortDescription = "short description",
+            longDescription = "long description",
+            url = "URL",
+            imageUrl = "image URL",
         )
     ),
 )

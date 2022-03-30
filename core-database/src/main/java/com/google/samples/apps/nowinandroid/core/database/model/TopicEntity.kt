@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.database.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -35,11 +36,20 @@ data class TopicEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    val description: String,
+    val shortDescription: String,
+    @ColumnInfo(defaultValue = "")
+    val longDescription: String,
+    @ColumnInfo(defaultValue = "")
+    val url: String,
+    @ColumnInfo(defaultValue = "")
+    val imageUrl: String,
 )
 
 fun TopicEntity.asExternalModel() = Topic(
     id = id,
     name = name,
-    description = description,
+    shortDescription = shortDescription,
+    longDescription = longDescription,
+    url = url,
+    imageUrl = imageUrl,
 )

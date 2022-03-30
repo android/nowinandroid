@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
@@ -140,16 +141,17 @@ fun FollowingTopicCard(
     ) {
         TopicIcon(
             modifier = Modifier.padding(end = 24.dp),
+            topicImageUrl = followableTopic.topic.imageUrl,
             onClick = onTopicClick
         )
         Column(
             Modifier
-                .wrapContentSize(Alignment.Center)
+                .wrapContentSize(Alignment.CenterStart)
                 .weight(1f)
                 .clickable { onTopicClick() }
         ) {
             TopicTitle(topicName = followableTopic.topic.name)
-            TopicDescription(topicDescription = followableTopic.topic.description)
+            TopicDescription(topicDescription = followableTopic.topic.shortDescription)
         }
         FollowButton(
             topicId = followableTopic.topic.id,
@@ -176,23 +178,35 @@ fun TopicDescription(topicDescription: String) {
     Text(
         text = topicDescription,
         style = MaterialTheme.typography.body2,
-        modifier = Modifier.wrapContentSize(Alignment.Center)
+        modifier = Modifier.wrapContentSize(Alignment.CenterStart)
     )
 }
 
 @Composable
 fun TopicIcon(
     modifier: Modifier = Modifier,
+    topicImageUrl: String,
     onClick: () -> Unit
 ) {
-    Icon(
-        imageVector = Icons.Filled.Android,
-        tint = Color.Magenta,
-        contentDescription = stringResource(id = R.string.following_topic_card_icon_content_desc),
-        modifier = modifier
-            .size(64.dp)
-            .clickable { onClick() }
-    )
+
+    val iconModifier = modifier.size(64.dp)
+        .clickable { onClick() }
+    val contentDescription = stringResource(id = R.string.following_topic_card_icon_content_desc)
+
+    if (topicImageUrl.isEmpty()) {
+        Icon(
+            imageVector = Icons.Filled.Android,
+            tint = Color.Magenta,
+            contentDescription = contentDescription,
+            modifier = iconModifier
+        )
+    } else {
+        AsyncImage(
+            model = topicImageUrl,
+            contentDescription = contentDescription,
+            modifier = iconModifier
+        )
+    }
 }
 
 @Composable
@@ -249,7 +263,10 @@ fun TopicCardPreview() {
                     Topic(
                         id = 0,
                         name = "Compose",
-                        description = "Description"
+                        shortDescription = "Short description",
+                        longDescription = "Long description",
+                        url = "URL",
+                        imageUrl = "imageUrl"
                     ),
                     isFollowed = false
                 ),
