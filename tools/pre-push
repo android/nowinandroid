@@ -88,7 +88,7 @@ done
 if [[ -n "$run_checks" ]]; then
   # pre-push usually executes in the repository root, but just to be safe...
   cd "$(git rev-parse --show-toplevel)"
-  ./gradlew build
+  ./gradlew check
   exit $?
 fi
 
