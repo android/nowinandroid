@@ -31,7 +31,10 @@ class TestTopicDao : TopicDao {
         TopicEntity(
             id = 1,
             name = "Topic",
-            description = "A topic",
+            shortDescription = "short description",
+            longDescription = "long description",
+            url = "URL",
+            imageUrl = "image URL",
         )
     )
 

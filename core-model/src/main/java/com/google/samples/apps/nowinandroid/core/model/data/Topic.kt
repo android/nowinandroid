@@ -22,5 +22,8 @@ package com.google.samples.apps.nowinandroid.core.model.data
 data class Topic(
     val id: Int,
     val name: String,
-    val description: String,
+    val shortDescription: String,
+    val longDescription: String,
+    val url: String,
+    val imageUrl: String,
 )

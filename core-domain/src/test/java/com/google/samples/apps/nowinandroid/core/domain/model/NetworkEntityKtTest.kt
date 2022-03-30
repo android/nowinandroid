@@ -48,13 +48,19 @@ class NetworkEntityKtTest {
         val networkModel = NetworkTopic(
             id = 0,
             name = "Test",
-            description = "something"
+            shortDescription = "short description",
+            longDescription = "long description",
+            url = "URL",
+            imageUrl = "image URL",
         )
         val entity = networkModel.asEntity()
 
         assertEquals(0, entity.id)
         assertEquals("Test", entity.name)
-        assertEquals("something", entity.description)
+        assertEquals("short description", entity.shortDescription)
+        assertEquals("long description", entity.longDescription)
+        assertEquals("URL", entity.url)
+        assertEquals("image URL", entity.imageUrl)
     }
 
     @Test

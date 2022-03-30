@@ -139,6 +139,9 @@ dependencies {
     implementation libs.material3
     implementation libs.androidx.profileinstaller
 
+    implementation libs.coil.kt
+    implementation libs.coil.kt.svg
+
     implementation libs.hilt.android
     kapt libs.hilt.compiler
     kaptAndroidTest libs.hilt.compiler

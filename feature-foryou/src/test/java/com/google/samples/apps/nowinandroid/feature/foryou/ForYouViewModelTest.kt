@@ -105,7 +105,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 0,
                                     name = "Headlines",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -113,7 +116,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 1,
                                     name = "UI",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -121,7 +127,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 2,
                                     name = "Tools",
-                                    description = "",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -177,7 +186,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 0,
                                     name = "Headlines",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -185,7 +197,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 1,
                                     name = "UI",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = true
                             ),
@@ -193,7 +208,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 2,
                                     name = "Tools",
-                                    description = "",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             )
@@ -237,7 +255,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 0,
                                     name = "Headlines",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -245,7 +266,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 1,
                                     name = "UI",
-                                    description = ""
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             ),
@@ -253,7 +277,10 @@ class ForYouViewModelTest {
                                 topic = Topic(
                                     id = 2,
                                     name = "Tools",
-                                    description = "",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
                                 ),
                                 isFollowed = false
                             )
@@ -335,17 +362,26 @@ private val sampleTopics = listOf(
     Topic(
         id = 0,
         name = "Headlines",
-        description = ""
+        shortDescription = "",
+        longDescription = "long description",
+        url = "URL",
+        imageUrl = "image URL",
     ),
     Topic(
         id = 1,
         name = "UI",
-        description = ""
+        shortDescription = "",
+        longDescription = "long description",
+        url = "URL",
+        imageUrl = "image URL",
     ),
     Topic(
         id = 2,
         name = "Tools",
-        description = ""
+        shortDescription = "",
+        longDescription = "long description",
+        url = "URL",
+        imageUrl = "image URL",
     )
 )
 
@@ -366,7 +402,10 @@ private val sampleNewsResources = listOf(
             Topic(
                 id = 0,
                 name = "Headlines",
-                description = ""
+                shortDescription = "",
+                longDescription = "long description",
+                url = "URL",
+                imageUrl = "image URL",
             )
         ),
         authors = emptyList()
@@ -386,7 +425,10 @@ private val sampleNewsResources = listOf(
             Topic(
                 id = 1,
                 name = "UI",
-                description = ""
+                shortDescription = "",
+                longDescription = "long description",
+                url = "URL",
+                imageUrl = "image URL",
             ),
         ),
         authors = emptyList()
@@ -404,7 +446,10 @@ private val sampleNewsResources = listOf(
             Topic(
                 id = 1,
                 name = "UI",
-                description = ""
+                shortDescription = "",
+                longDescription = "long description",
+                url = "URL",
+                imageUrl = "image URL",
             ),
         ),
         authors = emptyList()

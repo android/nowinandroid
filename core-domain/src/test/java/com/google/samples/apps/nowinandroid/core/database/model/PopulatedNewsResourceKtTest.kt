@@ -56,7 +56,10 @@ class PopulatedNewsResourceKtTest {
                 TopicEntity(
                     id = 3,
                     name = "name",
-                    description = "description",
+                    shortDescription = "short description",
+                    longDescription = "long description",
+                    url = "URL",
+                    imageUrl = "image URL",
                 )
             ),
         )
@@ -83,7 +86,10 @@ class PopulatedNewsResourceKtTest {
                     Topic(
                         id = 3,
                         name = "name",
-                        description = "description",
+                        shortDescription = "short description",
+                        longDescription = "long description",
+                        url = "URL",
+                        imageUrl = "image URL",
                     )
                 )
             ),

@@ -49,7 +49,10 @@ class FakeTopicsRepository @Inject constructor(
                 Topic(
                     id = it.id,
                     name = it.name,
-                    description = it.description
+                    shortDescription = it.shortDescription,
+                    longDescription = it.longDescription,
+                    url = it.url,
+                    imageUrl = it.imageUrl
                 )
             }
         )

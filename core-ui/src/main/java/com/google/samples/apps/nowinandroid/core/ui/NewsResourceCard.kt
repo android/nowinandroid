@@ -291,7 +291,10 @@ private val newsResource = NewsResource(
         Topic(
             id = 1,
             name = "Name",
-            description = "Description",
+            shortDescription = "Short description",
+            longDescription = "Long description",
+            url = "URL",
+            imageUrl = "image URL"
         )
     )
 )

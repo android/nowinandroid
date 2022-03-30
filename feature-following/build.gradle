@@ -52,6 +52,9 @@ dependencies {
     testImplementation project(':core-testing')
     androidTestImplementation project(':core-testing')
 
+    implementation libs.coil.kt
+    implementation libs.coil.kt.compose
+
     implementation libs.kotlinx.coroutines.android
 
     implementation libs.androidx.hilt.navigation.compose

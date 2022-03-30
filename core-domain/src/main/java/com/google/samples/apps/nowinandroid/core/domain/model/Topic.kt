@@ -22,5 +22,8 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 fun NetworkTopic.asEntity() = TopicEntity(
     id = id,
     name = name,
-    description = description,
+    shortDescription = shortDescription,
+    longDescription = longDescription,
+    url = url,
+    imageUrl = imageUrl
 )

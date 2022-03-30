@@ -26,9 +26,12 @@ import org.intellij.lang.annotations.Language
 
 object FakeDataSource {
     val sampleTopic = NetworkTopic(
-        id = 0,
-        name = "Headlines",
-        description = "At vero eos et accusamus et iusto odio dignissimos ducimus qui.",
+        id = 1,
+        name =  "UI",
+        shortDescription = "Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
+        longDescription =  "Learn how to optimize your app's user interface - everything that users can see and interact with. Stay up to date on tocpis such as Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets, and many more!",
+        url = "url",
+        imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=5d1d25a8-db1b-4cf1-9706-82ba0d133bf9"
     )
     val sampleResource = NetworkNewsResource(
         id = 1,
@@ -54,101 +57,166 @@ object FakeDataSource {
     @Language("JSON")
     val topicsData = """
 [
-  {
-    "id": 0,
-    "name": "Headlines",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 1,
-    "name": "UI",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 2,
-    "name": "Testing",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 3,
-    "name": "Performance",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 4,
-    "name": "Camera & Media",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 5,
-    "name": "Android Studio",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 6,
-    "name": "New APIs & Libraries",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 7,
-    "name": "Data Storage",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 8,
-    "name": "Kotlin",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 9,
-    "name": "Compose",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 10,
-    "name": "Privacy & Security",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 11,
-    "name": "Publishing & Distribution",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 12,
-    "name": "Tools",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 13,
-    "name": "Platform & Releases",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 14,
-    "name": "Architecture",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 15,
-    "name": "Accessibility",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 16,
-    "name": "Android Auto",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 17,
-    "name": "Games",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  },
-  {
-    "id": 18,
-    "name": "Wear OS",
-    "description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-  }
+    {
+      "id": "1",
+      "name": "UI",
+      "shortDescription": "Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
+      "longDescription": "Learn how to optimize your app's user interface - everything that users can see and interact with. Stay up to date on tocpis such as Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets, and many more!",
+      "url": "url",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=5d1d25a8-db1b-4cf1-9706-82ba0d133bf9"
+    },
+    {
+      "id": "0",
+      "name": "Headlines",
+      "shortDescription": "News we want everyone to see",
+      "longDescription": "Stay up to date with the latest events and announcements from Android!",
+      "url": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "2",
+      "name": "Testing",
+      "shortDescription": "CI, Espresso, TestLab, etc",
+      "longDescription": "Testing is an integral part of the app development process. By running tests against your app consistently, you can verify your app's correctness, functional behavior, and usability before you release it publicly. Stay up to date on the latest tricks in CI, Espresso, and Firebase TestLab.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Testing.svg?alt=media&token=0d11b0b9-3eee-438e-8f64-b420ba6d445c"
+    },
+    {
+      "id": "3",
+      "name": "Performance",
+      "shortDescription": "Optimization, profiling",
+      "longDescription": "Topics here will try to optimize your app perfoamnce by profiling and identifying areas in which your app makes inefficient use of resources such as the CPU, memory, graphics, network, or the device battery.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Performance.svg?alt=media&token=2becab75-8ba0-4af8-8f46-1aee1b299463"
+    },
+    {
+      "id": "4",
+      "name": "Camera & Media",
+      "shortDescription": "",
+      "longDescription": "Learn about Android's robust APIs for playing and recording media, help add video, audio, and photo capabilities to your app!",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Camera%20%26%20Media.svg?alt=media&token=1c4efeec-88fa-4777-b50b-fb79e5cdfef9"
+    },
+    {
+      "id": "5",
+      "name": "Android Studio",
+      "shortDescription": "",
+      "longDescription": "Android Studio is the official integrated development environment (IDE) for Android development. It provides the fastest tools for building apps on every type of Android device.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Android%20Studio.svg?alt=media&token=b946fbef-5a27-49e6-8f58-12d89d6b6512"
+    },
+    {
+      "id": "6",
+      "name": "New APIs & Libraries",
+      "shortDescription": "New Jetpack libraries",
+      "longDescription": "Stay up to date with the latest new APIs & libraires",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_New%20APIs%20%26%20Libraries.svg?alt=media&token=317397c4-a173-435b-9a07-2ca35b7beaf6"
+    },
+    {
+      "id": "7",
+      "name": "Data Storage",
+      "shortDescription": "Room, Data Store",
+      "longDescription": "Android uses a file system that's similar to disk-based file systems on other platforms. The system provides several options for you to save your app data: App-specific storage, shared storage, preferences, and databases - learn about Room and Data Store!",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Data%20Storage.svg?alt=media&token=1dcddccc-b088-45a4-a23d-d874bd047eab"
+    },
+    {
+      "id": "8",
+      "name": "Kotlin",
+      "shortDescription": "",
+      "longDescription": "Kotlin is a modern statically typed programming language used by over 60% of professional Android developers that helps boost productivity, developer satisfaction, and code safety.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Kotlin.svg?alt=media&token=e0bc5290-3670-4abb-b6a3-abf47327c332"
+    },
+    {
+      "id": "9",
+      "name": "Compose",
+      "shortDescription": "",
+      "longDescription": "Jetpack Compose is Android’s modern toolkit for building native UI. It simplifies and accelerates UI development on Android. Quickly bring your app to life with less code, powerful tools, and intuitive Kotlin APIs.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Compose.svg?alt=media&token=c7cee979-5062-49a9-a653-6fb10530d59d"
+    },
+    {
+      "id": "10",
+      "name": "Privacy & Security",
+      "shortDescription": "Privacy, Security",
+      "longDescription": "Learn about best practices and resources to help developers design and implement safe, secure, and private apps.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Privacy%20%26%20Security.svg?alt=media&token=48cb3487-32f9-40fc-bf62-c488973150fc"
+    },
+    {
+      "id": "11",
+      "name": "Publishing & Distribution",
+      "shortDescription": "Google Play",
+      "longDescription": "Learn about Google Play publish and distrubution system to make your Android applications available to users.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Publishing%20%26%20Distribution.svg?alt=media&token=e65d36cb-4050-4f56-be9f-34c599d38805"
+    },
+    {
+      "id": "12",
+      "name": "Tools",
+      "shortDescription": "Gradle, Memory Safety, Debugging",
+      "longDescription": "Android Studio, Compose tooling, APK Analyzer, Fast emulator, Intelligent code editor, Flexible build system, Realtime profilers, Gradle, Memory Safety, Debugging",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Tools.svg?alt=media&token=4df6167c-06ef-4fdd-9f7b-94a5d7f3376b"
+    },
+    {
+      "id": "13",
+      "name": "Platform & Releases",
+      "shortDescription": "Android 12, Android 13, etc",
+      "longDescription": "Stay up to date with the latest Android releases and features!",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Platform%20%26%20Releases.svg?alt=media&token=57779dd8-3b19-4e58-9959-25ff4aeef5a2"
+    },
+    {
+      "id": "14",
+      "name": "Architecture",
+      "shortDescription": "Lifecycle, Dependency Injection, WorkManager",
+      "longDescription": "Lifecycle, Dependency Injection, WorkManager",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Architecture.svg?alt=media&token=8f946cb6-2efa-462f-94b9-fb5112bcee48"
+    },
+    {
+      "id": "15",
+      "name": "Accessibility",
+      "shortDescription": "",
+      "longDescription": "Accessibility is an important part of any app. Whether you're developing a new app or improving an existing one, consider the accessibility of your app's components.\n\nBy integrating accessibility features and services, you can improve your app's usability, particularly for users with disabilities.",
+      "url": "",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Accessibility.svg?alt=media&token=6333941e-eeaf-4ab5-bec7-19920cc81d97"
+    },
+    {
+      "id": "16",
+      "name": "Android Auto",
+      "shortDescription": "",
+      "longDescription": "Lean about how to build apps that help users connect on the road through Android Automotive OS and Android Auto",
+      "url": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "17",
+      "name": "Android TV",
+      "shortDescription": "",
+      "longDescription": "Learn about how to build a great user experience for your TV app: create immersive content on the big screen and for a remote control",
+      "url": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "18",
+      "name": "Games",
+      "shortDescription": "",
+      "longDescription": "Learn about new tools and best practices to support your game app development and game performance.",
+      "url": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "19",
+      "name": "Wear OS",
+      "shortDescription": "",
+      "longDescription": "Learn about new tools and best practices to support your Wear OS development and watch performance.",
+      "url": "",
+      "imageUrl": ""
+    }
 ]
 """.trimIndent()
 

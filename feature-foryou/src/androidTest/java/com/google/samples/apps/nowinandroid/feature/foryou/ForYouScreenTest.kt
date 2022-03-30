@@ -63,7 +63,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 0,
                                 name = "Headlines",
-                                description = ""
+                                shortDescription = ""
                             ),
                             isFollowed = false
                         ),
@@ -71,7 +71,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 1,
                                 name = "UI",
-                                description = ""
+                                shortDescription = ""
                             ),
                             isFollowed = false
                         ),
@@ -79,7 +79,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 2,
                                 name = "Tools",
-                                description = "",
+                                shortDescription = "",
                             ),
                             isFollowed = false
                         ),
@@ -127,7 +127,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 0,
                                 name = "Headlines",
-                                description = ""
+                                shortDescription = ""
                             ),
                             isFollowed = false
                         ),
@@ -135,7 +135,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 1,
                                 name = "UI",
-                                description = ""
+                                shortDescription = ""
                             ),
                             isFollowed = true
                         ),
@@ -143,7 +143,7 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 2,
                                 name = "Tools",
-                                description = "",
+                                shortDescription = "",
                             ),
                             isFollowed = false
                         ),
