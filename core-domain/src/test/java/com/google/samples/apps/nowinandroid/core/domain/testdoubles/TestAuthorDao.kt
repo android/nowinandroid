@@ -16,44 +16,36 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.testdoubles
 
-import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
-import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
+import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 
 /**
- * Test double for [TopicDao]
+ * Test double for [AuthorDao]
  */
-class TestTopicDao : TopicDao {
+class TestAuthorDao : AuthorDao {
 
     private var entitiesStateFlow = MutableStateFlow(
         listOf(
-            TopicEntity(
+            AuthorEntity(
                 id = 1,
                 name = "Topic",
-                shortDescription = "short description",
-                longDescription = "long description",
-                url = "URL",
-                imageUrl = "image URL",
+                imageUrl = "imageUrl",
             )
         )
     )
 
-    override fun getTopicEntitiesStream(): Flow<List<TopicEntity>> =
+    override fun getAuthorEntitiesStream(): Flow<List<AuthorEntity>> =
         entitiesStateFlow
 
-    override fun getTopicEntitiesStream(ids: Set<Int>): Flow<List<TopicEntity>> =
-        getTopicEntitiesStream()
-            .map { topics -> topics.filter { it.id in ids } }
-
-    override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
-        entitiesStateFlow.value = topicEntities
+    override suspend fun insertOrIgnoreAuthors(authorEntities: List<AuthorEntity>): List<Long> {
+        entitiesStateFlow.value = authorEntities
         // Assume no conflicts on insert
-        return topicEntities.map { it.id.toLong() }
+        return authorEntities.map { it.id.toLong() }
     }
 
-    override suspend fun updateTopics(entities: List<TopicEntity>) {
+    override suspend fun updateAuthors(entities: List<AuthorEntity>) {
         throw NotImplementedError("Unused in tests")
     }
 }

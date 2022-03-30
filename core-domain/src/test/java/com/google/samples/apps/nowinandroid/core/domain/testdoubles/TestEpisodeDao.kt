@@ -20,7 +20,8 @@ import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 
 /**
@@ -28,21 +29,31 @@ import kotlinx.datetime.Instant
  */
 class TestEpisodeDao : EpisodeDao {
 
-    private var entities = listOf(
-        EpisodeEntity(
-            id = 1,
-            name = "Topic",
-            publishDate = Instant.fromEpochMilliseconds(0),
-            alternateVideo = null,
-            alternateAudio = null,
+    private var entitiesStateFlow = MutableStateFlow(
+        listOf(
+            EpisodeEntity(
+                id = 1,
+                name = "Episode",
+                publishDate = Instant.fromEpochMilliseconds(0),
+                alternateVideo = null,
+                alternateAudio = null,
+            )
         )
     )
 
     override fun getEpisodesStream(): Flow<List<PopulatedEpisode>> =
-        flowOf(entities.map(EpisodeEntity::asPopulatedEpisode))
+        entitiesStateFlow.map {
+            it.map(EpisodeEntity::asPopulatedEpisode)
+        }
 
-    override suspend fun saveEpisodeEntities(entities: List<EpisodeEntity>) {
-        this.entities = entities
+    override suspend fun insertOrIgnoreEpisodes(episodeEntities: List<EpisodeEntity>): List<Long> {
+        entitiesStateFlow.value = episodeEntities
+        // Assume no conflicts on insert
+        return episodeEntities.map { it.id.toLong() }
+    }
+
+    override suspend fun updateEpisodes(entities: List<EpisodeEntity>) {
+        throw NotImplementedError("Unused in tests")
     }
 }
 

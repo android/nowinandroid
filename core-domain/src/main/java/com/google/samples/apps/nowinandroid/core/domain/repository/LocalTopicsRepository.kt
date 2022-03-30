@@ -50,10 +50,11 @@ class LocalTopicsRepository @Inject constructor(
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
+    // TODO: Pass change list for incremental sync. See b/227206738
     override suspend fun sync(): Boolean = suspendRunCatching {
         val networkTopics = network.getTopics()
-        topicDao.saveTopics(
-            networkTopics.map(NetworkTopic::asEntity)
+        topicDao.upsertTopics(
+            entities = networkTopics.map(NetworkTopic::asEntity)
         )
     }.isSuccess
 }

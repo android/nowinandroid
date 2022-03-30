@@ -16,17 +16,24 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.database.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
+import com.google.samples.apps.nowinandroid.core.domain.model.authorCrossReferences
+import com.google.samples.apps.nowinandroid.core.domain.model.authorEntityShells
+import com.google.samples.apps.nowinandroid.core.domain.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.domain.model.topicCrossReferences
+import com.google.samples.apps.nowinandroid.core.domain.model.topicEntityShells
+import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestAuthorDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestEpisodeDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNewsResourceDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNiaNetwork
+import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestTopicDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.filteredTopicIds
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.nonPresentTopicIds
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -45,18 +52,26 @@ class LocalNewsRepositoryTest {
 
     private lateinit var episodeDao: TestEpisodeDao
 
+    private lateinit var authorDao: TestAuthorDao
+
+    private lateinit var topicDao: TestTopicDao
+
     private lateinit var network: TestNiaNetwork
 
     @Before
     fun setup() {
         newsResourceDao = TestNewsResourceDao()
         episodeDao = TestEpisodeDao()
+        authorDao = TestAuthorDao()
+        topicDao = TestTopicDao()
         network = TestNiaNetwork()
 
         subject = LocalNewsRepository(
             newsResourceDao = newsResourceDao,
             episodeDao = episodeDao,
-            network = network
+            authorDao = authorDao,
+            topicDao = topicDao,
+            network = network,
         )
     }
 
@@ -110,14 +125,43 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
+    fun localNewsRepository_sync_saves_shell_topic_entities() =
+        runTest {
+            subject.sync()
+
+            assertEquals(
+                network.getNewsResources()
+                    .map(NetworkNewsResource::topicEntityShells)
+                    .flatten()
+                    .distinctBy(TopicEntity::id),
+                topicDao.getTopicEntitiesStream()
+                    .first()
+            )
+        }
+
+    @Test
+    fun localNewsRepository_sync_saves_shell_author_entities() =
+        runTest {
+            subject.sync()
+
+            assertEquals(
+                network.getNewsResources()
+                    .map(NetworkNewsResource::authorEntityShells)
+                    .flatten()
+                    .distinctBy(AuthorEntity::id),
+                authorDao.getAuthorEntitiesStream()
+                    .first()
+            )
+        }
+
+    @Test
     fun localNewsRepository_sync_saves_shell_episode_entities() =
         runTest {
             subject.sync()
 
             assertEquals(
                 network.getNewsResources()
-                    .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::episodeEntityShell)
+                    .map(NetworkNewsResource::episodeEntityShell)
                     .distinctBy(EpisodeEntity::id),
                 episodeDao.getEpisodesStream()
                     .first()
@@ -136,6 +180,20 @@ class LocalNewsRepositoryTest {
                     .distinct()
                     .flatten(),
                 newsResourceDao.topicCrossReferences
+            )
+        }
+
+    @Test
+    fun localNewsRepository_sync_saves_author_cross_references() =
+        runTest {
+            subject.sync()
+
+            assertEquals(
+                network.getNewsResources()
+                    .map(NetworkNewsResource::authorCrossReferences)
+                    .distinct()
+                    .flatten(),
+                newsResourceDao.authorCrossReferences
             )
         }
 }

@@ -45,5 +45,5 @@ data class NewsResourceAuthorCrossRef(
     @ColumnInfo(name = "news_resource_id")
     val newsResourceId: Int,
     @ColumnInfo(name = "author_id")
-    val authorId: Long,
+    val authorId: Int,
 )

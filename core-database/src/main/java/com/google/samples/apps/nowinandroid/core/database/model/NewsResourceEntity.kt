@@ -66,15 +66,3 @@ fun NewsResourceEntity.asExternalModel() = NewsResource(
     authors = listOf(),
     topics = listOf()
 )
-
-/**
- * A shell [EpisodeEntity] to fulfill the foreign key constraint when inserting
- * a [NewsResourceEntity] into the DB
- */
-fun NewsResourceEntity.episodeEntityShell() = EpisodeEntity(
-    id = episodeId,
-    name = "",
-    publishDate = Instant.fromEpochMilliseconds(0),
-    alternateVideo = null,
-    alternateAudio = null,
-)
