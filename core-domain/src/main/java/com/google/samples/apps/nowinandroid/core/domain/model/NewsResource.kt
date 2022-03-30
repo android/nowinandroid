@@ -16,8 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.model
 
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 
@@ -43,11 +47,59 @@ fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
     type = type,
 )
 
+/**
+ * A shell [EpisodeEntity] to fulfill the foreign key constraint when inserting
+ * a [NewsResourceEntity] into the DB
+ */
+fun NetworkNewsResource.episodeEntityShell() = EpisodeEntity(
+    id = episodeId,
+    name = "",
+    publishDate = publishDate,
+    alternateVideo = null,
+    alternateAudio = null,
+)
+
+/**
+ * A shell [AuthorEntity] to fulfill the foreign key constraint when inserting
+ * a [NewsResourceEntity] into the DB
+ */
+fun NetworkNewsResource.authorEntityShells() =
+    authors.map { authorId ->
+        AuthorEntity(
+            id = authorId,
+            name = "",
+            imageUrl = "",
+        )
+    }
+
+/**
+ * A shell [TopicEntity] to fulfill the foreign key constraint when inserting
+ * a [NewsResourceEntity] into the DB
+ */
+fun NetworkNewsResource.topicEntityShells() =
+    topics.map { topicId ->
+        TopicEntity(
+            id = topicId,
+            name = "",
+            url = "",
+            imageUrl = "",
+            shortDescription = "",
+            longDescription = "",
+        )
+    }
+
 fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> =
     topics.map { topicId ->
         NewsResourceTopicCrossRef(
             newsResourceId = id,
             topicId = topicId
+        )
+    }
 
+fun NetworkNewsResource.authorCrossReferences(): List<NewsResourceAuthorCrossRef> =
+    authors.map { authorId ->
+        NewsResourceAuthorCrossRef(
+            newsResourceId = id,
+            authorId = authorId
         )
     }

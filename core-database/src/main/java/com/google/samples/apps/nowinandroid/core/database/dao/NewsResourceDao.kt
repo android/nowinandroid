@@ -20,6 +20,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
@@ -52,11 +55,35 @@ interface NewsResourceDao {
     )
     fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<PopulatedNewsResource>>
 
-    // TODO: Perform a proper upsert. See: b/226916817
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveNewsResourceEntities(entities: List<NewsResourceEntity>)
+    /**
+     * Inserts [entities] into the db if they don't exist, and ignores those that do
+     */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long>
 
-    // TODO: Perform a proper upsert. See: b/226916817
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveTopicCrossRefEntities(entities: List<NewsResourceTopicCrossRef>)
+    /**
+     * Updates [entities] in the db that match the primary key, and no-ops if they don't
+     */
+    @Update
+    suspend fun updateNewsResources(entities: List<NewsResourceEntity>)
+
+    /**
+     * Inserts or updates [newsResourceEntities] in the db under the specified primary keys
+     */
+    @Transaction
+    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) = upsert(
+        items = newsResourceEntities,
+        insertMany = ::insertOrIgnoreNewsResources,
+        updateMany = ::updateNewsResources
+    )
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnoreTopicCrossRefEntities(
+        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>
+    )
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnoreAuthorCrossRefEntities(
+        newsResourceAuthorCrossReferences: List<NewsResourceAuthorCrossRef>
+    )
 }

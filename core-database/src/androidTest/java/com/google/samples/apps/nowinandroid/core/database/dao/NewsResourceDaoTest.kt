@@ -20,11 +20,11 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.samples.apps.nowinandroid.core.database.NiADatabase
+import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.database.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -76,10 +76,10 @@ class NewsResourceDaoTest {
             .map(NewsResourceEntity::episodeEntityShell)
             .distinct()
 
-        episodeDao.saveEpisodeEntities(
+        episodeDao.insertOrIgnoreEpisodes(
             episodeEntityShells
         )
-        newsResourceDao.saveNewsResourceEntities(
+        newsResourceDao.upsertNewsResources(
             newsResourceEntities
         )
 
@@ -134,16 +134,16 @@ class NewsResourceDaoTest {
             )
         }
 
-        topicDao.saveTopics(
-            topicEntities
+        topicDao.insertOrIgnoreTopics(
+            topicEntities = topicEntities
         )
-        episodeDao.saveEpisodeEntities(
-            episodeEntityShells
+        episodeDao.insertOrIgnoreEpisodes(
+            episodeEntities = episodeEntityShells
         )
-        newsResourceDao.saveNewsResourceEntities(
+        newsResourceDao.upsertNewsResources(
             newsResourceEntities
         )
-        newsResourceDao.saveTopicCrossRefEntities(
+        newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
             newsResourceTopicCrossRefEntities
         )
 
@@ -181,4 +181,12 @@ private fun testNewsResource(
     headerImageUrl = "",
     publishDate = Instant.fromEpochMilliseconds(millisSinceEpoch),
     type = NewsResourceType.DAC,
+)
+
+private fun NewsResourceEntity.episodeEntityShell() = EpisodeEntity(
+    id = episodeId,
+    name = "",
+    publishDate = Instant.fromEpochMilliseconds(0),
+    alternateVideo = null,
+    alternateAudio = null,
 )

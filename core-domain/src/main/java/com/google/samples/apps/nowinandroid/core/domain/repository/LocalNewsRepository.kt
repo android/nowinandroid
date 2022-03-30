@@ -16,15 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
+import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
-import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.database.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
+import com.google.samples.apps.nowinandroid.core.domain.model.authorCrossReferences
+import com.google.samples.apps.nowinandroid.core.domain.model.authorEntityShells
+import com.google.samples.apps.nowinandroid.core.domain.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.domain.model.topicCrossReferences
+import com.google.samples.apps.nowinandroid.core.domain.model.topicEntityShells
 import com.google.samples.apps.nowinandroid.core.domain.suspendRunCatching
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
@@ -39,6 +45,8 @@ import kotlinx.coroutines.flow.map
 class LocalNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val episodeDao: EpisodeDao,
+    private val authorDao: AuthorDao,
+    private val topicDao: TopicDao,
     private val network: NiANetwork,
 ) : NewsRepository {
 
@@ -50,35 +58,44 @@ class LocalNewsRepository @Inject constructor(
         newsResourceDao.getNewsResourcesStream(filterTopicIds = filterTopicIds)
             .map { it.map(PopulatedNewsResource::asExternalModel) }
 
+    // TODO: Pass change list for incremental sync. See b/227206738
     override suspend fun sync() = suspendRunCatching {
         val networkNewsResources = network.getNewsResources()
 
-        val newsResourceEntities = networkNewsResources
-            .map(NetworkNewsResource::asEntity)
-
-        val episodeEntityShells = newsResourceEntities
-            .map(NewsResourceEntity::episodeEntityShell)
-            .distinctBy(EpisodeEntity::id)
-
-        val topicCrossReferences = networkNewsResources
-            .map(NetworkNewsResource::topicCrossReferences)
-            .distinct()
-            .flatten()
-
         // Order of invocation matters to satisfy id and foreign key constraints!
 
-        // TODO: Create a separate method for saving shells with proper conflict resolution
-        //  See: b/226919874
-        episodeDao.saveEpisodeEntities(
-            episodeEntityShells
+        topicDao.insertOrIgnoreTopics(
+            topicEntities = networkNewsResources
+                .map(NetworkNewsResource::topicEntityShells)
+                .flatten()
+                .distinctBy(TopicEntity::id)
         )
-        newsResourceDao.saveNewsResourceEntities(
-            newsResourceEntities
+        authorDao.insertOrIgnoreAuthors(
+            authorEntities = networkNewsResources
+                .map(NetworkNewsResource::authorEntityShells)
+                .flatten()
+                .distinctBy(AuthorEntity::id)
         )
-        newsResourceDao.saveTopicCrossRefEntities(
-            topicCrossReferences
+        episodeDao.insertOrIgnoreEpisodes(
+            episodeEntities = networkNewsResources
+                .map(NetworkNewsResource::episodeEntityShell)
+                .distinctBy(EpisodeEntity::id)
         )
-
-        // TODO: Save author as well
+        newsResourceDao.upsertNewsResources(
+            newsResourceEntities = networkNewsResources
+                .map(NetworkNewsResource::asEntity)
+        )
+        newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
+            newsResourceTopicCrossReferences = networkNewsResources
+                .map(NetworkNewsResource::topicCrossReferences)
+                .distinct()
+                .flatten()
+        )
+        newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(
+            newsResourceAuthorCrossReferences = networkNewsResources
+                .map(NetworkNewsResource::authorCrossReferences)
+                .distinct()
+                .flatten()
+        )
     }.isSuccess
 }

@@ -20,6 +20,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -39,7 +41,25 @@ interface TopicDao {
     )
     fun getTopicEntitiesStream(ids: Set<Int>): Flow<List<TopicEntity>>
 
-    // TODO: Perform a proper upsert. See: b/226916817
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveTopics(entities: List<TopicEntity>)
+    /**
+     * Inserts [topicEntities] into the db if they don't exist, and ignores those that do
+     */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long>
+
+    /**
+     * Updates [entities] in the db that match the primary key, and no-ops if they don't
+     */
+    @Update
+    suspend fun updateTopics(entities: List<TopicEntity>)
+
+    /**
+     * Inserts or updates [entities] in the db under the specified primary keys
+     */
+    @Transaction
+    suspend fun upsertTopics(entities: List<TopicEntity>) = upsert(
+        items = entities,
+        insertMany = ::insertOrIgnoreTopics,
+        updateMany = ::updateTopics
+    )
 }

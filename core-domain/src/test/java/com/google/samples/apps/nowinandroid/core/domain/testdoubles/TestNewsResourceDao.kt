@@ -19,13 +19,14 @@ package com.google.samples.apps.nowinandroid.core.domain.testdoubles
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 
@@ -37,23 +38,29 @@ val nonPresentTopicIds = setOf(2)
  */
 class TestNewsResourceDao : NewsResourceDao {
 
-    private var entities = listOf(
-        NewsResourceEntity(
-            id = 1,
-            episodeId = 0,
-            title = "news",
-            content = "Hilt",
-            url = "url",
-            headerImageUrl = "headerImageUrl",
-            type = Video,
-            publishDate = Instant.fromEpochMilliseconds(1),
+    private var entitiesStateFlow = MutableStateFlow(
+        listOf(
+            NewsResourceEntity(
+                id = 1,
+                episodeId = 0,
+                title = "news",
+                content = "Hilt",
+                url = "url",
+                headerImageUrl = "headerImageUrl",
+                type = Video,
+                publishDate = Instant.fromEpochMilliseconds(1),
+            )
         )
     )
 
     internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
 
+    internal var authorCrossReferences: List<NewsResourceAuthorCrossRef> = listOf()
+
     override fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>> =
-        flowOf(entities.map(NewsResourceEntity::asPopulatedNewsResource))
+        entitiesStateFlow.map {
+            it.map(NewsResourceEntity::asPopulatedNewsResource)
+        }
 
     override fun getNewsResourcesStream(
         filterTopicIds: Set<Int>
@@ -65,12 +72,28 @@ class TestNewsResourceDao : NewsResourceDao {
                 }
             }
 
-    override suspend fun saveNewsResourceEntities(entities: List<NewsResourceEntity>) {
-        this.entities = entities
+    override suspend fun insertOrIgnoreNewsResources(
+        entities: List<NewsResourceEntity>
+    ): List<Long> {
+        entitiesStateFlow.value = entities
+        // Assume no conflicts on insert
+        return entities.map { it.id.toLong() }
     }
 
-    override suspend fun saveTopicCrossRefEntities(entities: List<NewsResourceTopicCrossRef>) {
-        topicCrossReferences = entities
+    override suspend fun updateNewsResources(entities: List<NewsResourceEntity>) {
+        throw NotImplementedError("Unused in tests")
+    }
+
+    override suspend fun insertOrIgnoreTopicCrossRefEntities(
+        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>
+    ) {
+        topicCrossReferences = newsResourceTopicCrossReferences
+    }
+
+    override suspend fun insertOrIgnoreAuthorCrossRefEntities(
+        newsResourceAuthorCrossReferences: List<NewsResourceAuthorCrossRef>
+    ) {
+        authorCrossReferences = newsResourceAuthorCrossReferences
     }
 }
 
