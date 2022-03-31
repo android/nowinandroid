@@ -22,7 +22,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -51,7 +51,8 @@ class ForYouScreenTest {
     fun circularProgressIndicator_whenScreenIsLoading_exists() {
         composeTestRule.setContent {
             ForYouScreen(
-                uiState = ForYouFeedUiState.Loading,
+                interestsSelectionState = ForYouInterestsSelectionState.Loading,
+                feedState = ForYouFeedState.Loading,
                 onAuthorCheckedChanged = { _, _ -> },
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -70,7 +71,7 @@ class ForYouScreenTest {
     fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
         composeTestRule.setContent {
             ForYouScreen(
-                uiState = ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
+                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
@@ -127,7 +128,9 @@ class ForYouScreenTest {
                             ),
                             isFollowed = false
                         ),
-                    ),
+                    )
+                ),
+                feedState = ForYouFeedState.Success(
                     feed = emptyList()
                 ),
                 onAuthorCheckedChanged = { _, _ -> },
@@ -169,7 +172,7 @@ class ForYouScreenTest {
     fun topicSelector_whenSomeTopicsSelected_showsTopicChipsAndEnabledDoneButton() {
         composeTestRule.setContent {
             ForYouScreen(
-                uiState = ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
+                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
@@ -227,6 +230,8 @@ class ForYouScreenTest {
                             isFollowed = false
                         ),
                     ),
+                ),
+                feedState = ForYouFeedState.Success(
                     feed = emptyList()
                 ),
                 onAuthorCheckedChanged = { _, _ -> },
@@ -274,7 +279,114 @@ class ForYouScreenTest {
     fun topicSelector_whenSomeAuthorsSelected_showsTopicChipsAndEnabledDoneButton() {
         composeTestRule.setContent {
             ForYouScreen(
-                uiState = ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
+                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    topics = listOf(
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "0",
+                                name = "Headlines",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "1",
+                                name = "UI",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = true
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "2",
+                                name = "Tools",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = false
+                        ),
+                    ),
+                    authors = listOf(
+                        FollowableAuthor(
+                            author = Author(
+                                id = "0",
+                                name = "Android Dev",
+                                imageUrl = "",
+                                twitter = "",
+                                mediumPage = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableAuthor(
+                            author = Author(
+                                id = "1",
+                                name = "Android Dev 2",
+                                imageUrl = "",
+                                twitter = "",
+                                mediumPage = ""
+                            ),
+                            isFollowed = false
+                        ),
+                    ),
+                ),
+                feedState = ForYouFeedState.Success(
+                    feed = emptyList()
+                ),
+                onAuthorCheckedChanged = { _, _ -> },
+                onTopicCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Headlines")
+            .assertIsDisplayed()
+            .assertHasClickAction()
+
+        composeTestRule
+            .onNodeWithText("UI")
+            .assertIsDisplayed()
+            .assertHasClickAction()
+
+        composeTestRule
+            .onNodeWithText("Tools")
+            .assertIsDisplayed()
+            .assertHasClickAction()
+
+        composeTestRule
+            .onNodeWithText("Android Dev")
+            .assertIsDisplayed()
+            .assertIsOff()
+            .assertHasClickAction()
+
+        // Scroll until the Done button is visible
+        composeTestRule
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+            .performScrollToNode(doneButtonMatcher)
+
+        composeTestRule
+            .onNode(doneButtonMatcher)
+            .assertIsDisplayed()
+            .assertIsEnabled()
+            .assertHasClickAction()
+    }
+
+    @Test
+    fun feed_whenInterestsSelectedAndLoading_showsLoadingIndicator() {
+        composeTestRule.setContent {
+            ForYouScreen(
+                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
@@ -332,8 +444,8 @@ class ForYouScreenTest {
                             isFollowed = false
                         ),
                     ),
-                    feed = emptyList()
                 ),
+                feedState = ForYouFeedState.Loading,
                 onAuthorCheckedChanged = { _, _ -> },
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -341,43 +453,20 @@ class ForYouScreenTest {
             )
         }
 
-        composeTestRule
-            .onNodeWithText("Headlines")
-            .assertIsDisplayed()
-            .assertHasClickAction()
-
-        composeTestRule
-            .onNodeWithText("UI")
-            .assertIsDisplayed()
-            .assertHasClickAction()
-
-        composeTestRule
-            .onNodeWithText("Tools")
-            .assertIsDisplayed()
-            .assertHasClickAction()
-
-        composeTestRule
-            .onNodeWithText("Android Dev")
-            .assertIsDisplayed()
-            .assertIsOn()
-            .assertHasClickAction()
-
-        composeTestRule
-            .onNodeWithText("Android Dev 2")
-            .assertIsDisplayed()
-            .assertIsOff()
-            .assertHasClickAction()
-
-        // Scroll until the Done button is visible
+        // Scroll until the loading indicator is visible
         composeTestRule
             .onAllNodes(hasScrollToNodeAction())
             .onFirst()
-            .performScrollToNode(doneButtonMatcher)
+            .performScrollToNode(
+                hasContentDescription(
+                    composeTestRule.activity.resources.getString(R.string.for_you_loading)
+                )
+            )
 
         composeTestRule
-            .onNode(doneButtonMatcher)
-            .assertIsDisplayed()
-            .assertIsEnabled()
-            .assertHasClickAction()
+            .onNodeWithContentDescription(
+                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+            )
+            .assertExists()
     }
 }

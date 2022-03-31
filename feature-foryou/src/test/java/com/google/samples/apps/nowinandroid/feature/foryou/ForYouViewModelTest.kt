@@ -29,6 +29,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsR
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
@@ -55,10 +57,32 @@ class ForYouViewModelTest {
         )
     }
 
+    /**
+     * A pairing of [ForYouInterestsSelectionState] and [ForYouFeedState] for ease of testing
+     * state updates as a single flow.
+     */
+    private data class ForYouUiState(
+        val interestsSelectionState: ForYouInterestsSelectionState,
+        val feedState: ForYouFeedState,
+    )
+
+    private val ForYouViewModel.uiState get() =
+        combine(
+            interestsSelectionState,
+            feedState,
+            ::ForYouUiState
+        )
+
     @Test
     fun stateIsInitiallyLoading() = runTest {
         viewModel.uiState.test {
-            assertEquals(ForYouFeedUiState.Loading, awaitItem())
+            assertEquals(
+                ForYouUiState(
+                    ForYouInterestsSelectionState.Loading,
+                    ForYouFeedState.Loading
+                ),
+                awaitItem()
+            )
             cancel()
         }
     }
@@ -66,7 +90,13 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenFollowedTopicsAreLoading() = runTest {
         viewModel.uiState.test {
-            assertEquals(ForYouFeedUiState.Loading, awaitItem())
+            assertEquals(
+                ForYouUiState(
+                    ForYouInterestsSelectionState.Loading,
+                    ForYouFeedState.Loading
+                ),
+                awaitItem()
+            )
             topicsRepository.sendTopics(sampleTopics)
 
             cancel()
@@ -76,7 +106,13 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenFollowedAuthorsAreLoading() = runTest {
         viewModel.uiState.test {
-            assertEquals(ForYouFeedUiState.Loading, awaitItem())
+            assertEquals(
+                ForYouUiState(
+                    ForYouInterestsSelectionState.Loading,
+                    ForYouFeedState.Loading
+                ),
+                awaitItem()
+            )
             authorsRepository.sendAuthors(sampleAuthors)
 
             cancel()
@@ -86,7 +122,13 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenTopicsAreLoading() = runTest {
         viewModel.uiState.test {
-            assertEquals(ForYouFeedUiState.Loading, awaitItem())
+            assertEquals(
+                ForYouUiState(
+                    ForYouInterestsSelectionState.Loading,
+                    ForYouFeedState.Loading
+                ),
+                awaitItem()
+            )
             topicsRepository.setFollowedTopicIds(emptySet())
 
             cancel()
@@ -96,7 +138,13 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenAuthorsAreLoading() = runTest {
         viewModel.uiState.test {
-            assertEquals(ForYouFeedUiState.Loading, awaitItem())
+            assertEquals(
+                ForYouUiState(
+                    ForYouInterestsSelectionState.Loading,
+                    ForYouFeedState.Loading
+                ),
+                awaitItem()
+            )
             authorsRepository.setFollowedAuthorIds(emptySet())
 
             cancel()
@@ -104,31 +152,20 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsLoadingWhenNewsResourcesAreLoading() = runTest {
+    fun stateIsInterestsSelectionWhenNewsResourcesAreLoading() = runTest {
         viewModel.uiState.test {
-            awaitItem()
+            advanceUntilIdle()
+            expectMostRecentItem()
             topicsRepository.sendTopics(sampleTopics)
             topicsRepository.setFollowedTopicIds(emptySet())
             authorsRepository.sendAuthors(sampleAuthors)
             authorsRepository.setFollowedAuthorIds(emptySet())
 
-            cancel()
-        }
-    }
-
-    @Test
-    fun stateIsTopicSelectionAfterLoadingEmptyFollowedTopicsAnAuthors() = runTest {
-        viewModel.uiState
-            .test {
-                awaitItem()
-                topicsRepository.sendTopics(sampleTopics)
-                authorsRepository.sendAuthors(sampleAuthors)
-                topicsRepository.setFollowedTopicIds(emptySet())
-                authorsRepository.setFollowedAuthorIds(emptySet())
-                newsRepository.sendNewsResources(sampleNewsResources)
-
-                assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
+            advanceUntilIdle()
+            assertEquals(
+                ForYouUiState(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -196,7 +233,145 @@ class ForYouViewModelTest {
                                 isFollowed = false
                             )
                         ),
+                    ),
+                    feedState = ForYouFeedState.Success(
                         feed = emptyList()
+                    )
+                ),
+                expectMostRecentItem()
+            )
+
+            cancel()
+        }
+    }
+
+    @Test
+    fun stateIsInterestsSelectionAfterLoadingEmptyFollowedTopicsAndAuthors() = runTest {
+        viewModel.uiState
+            .test {
+                topicsRepository.sendTopics(sampleTopics)
+                authorsRepository.sendAuthors(sampleAuthors)
+                topicsRepository.setFollowedTopicIds(emptySet())
+                authorsRepository.setFollowedAuthorIds(emptySet())
+                newsRepository.sendNewsResources(sampleNewsResources)
+
+                advanceUntilIdle()
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                            ),
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
+                            ),
+                        ),
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList()
+                        )
+                    ),
+                    expectMostRecentItem()
+                )
+                cancel()
+            }
+    }
+
+    @Test
+    fun stateIsWithoutInterestsSelectionAfterLoadingFollowedTopics() = runTest {
+        viewModel.uiState
+            .test {
+                advanceUntilIdle()
+                expectMostRecentItem()
+                authorsRepository.sendAuthors(sampleAuthors)
+                authorsRepository.setFollowedAuthorIds(emptySet())
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
+
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Loading
+                    ),
+                    awaitItem()
+                )
+
+                newsRepository.sendNewsResources(sampleNewsResources)
+
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = sampleNewsResources.map {
+                                SaveableNewsResource(
+                                    newsResource = it,
+                                    isSaved = false
+                                )
+                            }
+                        )
                     ),
                     awaitItem()
                 )
@@ -205,50 +380,39 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsWithoutTopicSelectionAfterLoadingFollowedTopics() = runTest {
+    fun stateIsWithoutInterestsSelectionAfterLoadingFollowedAuthors() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
+                advanceUntilIdle()
+                expectMostRecentItem()
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(setOf("0", "1"))
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
-                newsRepository.sendNewsResources(sampleNewsResources)
+                topicsRepository.setFollowedTopicIds(emptySet())
 
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = sampleNewsResources.map {
-                            SaveableNewsResource(
-                                newsResource = it,
-                                isSaved = false
-                            )
-                        }
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Loading
                     ),
                     awaitItem()
                 )
-                cancel()
-            }
-    }
 
-    @Test
-    fun stateIsWithoutTopicSelectionAfterLoadingFollowedAuthors() = runTest {
-        viewModel.uiState
-            .test {
-                awaitItem()
-                authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf("0", "1"))
-                topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = sampleNewsResources.map {
-                            SaveableNewsResource(
-                                newsResource = it,
-                                isSaved = false
-                            )
-                        }
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = sampleNewsResources.map {
+                                SaveableNewsResource(
+                                    newsResource = it,
+                                    isSaved = false
+                                )
+                            }
+                        )
                     ),
                     awaitItem()
                 )
@@ -260,93 +424,253 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterSelectingTopic() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
 
-                awaitItem()
+                advanceUntilIdle()
+                expectMostRecentItem()
+
                 viewModel.updateTopicSelection("1", isChecked = true)
 
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = true
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList(),
+                        )
+                    ),
+                    awaitItem()
+                )
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[1],
-                                isSaved = false
+                        feedState = ForYouFeedState.Loading
+                    ),
+                    awaitItem()
+                )
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[2],
-                                isSaved = false
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
+                            ),
+                        ),
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[1],
+                                    isSaved = false
+                                ),
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[2],
+                                    isSaved = false
+                                )
                             )
                         )
                     ),
@@ -360,93 +684,253 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterSelectingAuthor() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
 
-                awaitItem()
+                advanceUntilIdle()
+                expectMostRecentItem()
+
                 viewModel.updateAuthorSelection("1", isChecked = true)
 
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList(),
+                        )
+                    ),
+                    awaitItem()
+                )
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = true
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[1],
-                                isSaved = false
+                        feedState = ForYouFeedState.Loading
+                    ),
+                    awaitItem()
+                )
+                assertEquals(
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[2],
-                                isSaved = false
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = true
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
+                            ),
+                        ),
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[1],
+                                    isSaved = false
+                                ),
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[2],
+                                    isSaved = false
+                                )
                             )
                         )
                     ),
@@ -460,91 +944,92 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterUnselectingTopic() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-
-                awaitItem()
                 viewModel.updateTopicSelection("1", isChecked = true)
-
-                awaitItem()
                 viewModel.updateTopicSelection("1", isChecked = false)
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
-                        ),
-                        feed = emptyList()
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList()
+                        )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 cancel()
             }
@@ -554,91 +1039,92 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterUnselectingAuthor() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-
-                awaitItem()
                 viewModel.updateAuthorSelection("1", isChecked = true)
-
-                awaitItem()
                 viewModel.updateAuthorSelection("1", isChecked = false)
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
-                                ),
-                                isFollowed = false
-                            )
                         ),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
-                        ),
-                        feed = emptyList()
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList()
+                        )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 cancel()
             }
@@ -648,35 +1134,37 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterSavingTopicsOnly() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
-
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-                awaitItem()
-
                 viewModel.updateTopicSelection("1", isChecked = true)
-                awaitItem()
+
+                advanceUntilIdle()
+                expectMostRecentItem()
 
                 viewModel.saveFollowedInterests()
-                awaitItem()
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[1],
-                                isSaved = false,
-                            ),
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[2],
-                                isSaved = false,
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[1],
+                                    isSaved = false,
+                                ),
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[2],
+                                    isSaved = false,
+                                )
                             )
                         )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
                 assertEquals(emptySet<Int>(), authorsRepository.getCurrentFollowedAuthors())
@@ -688,31 +1176,33 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterSavingAuthorsOnly() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
-
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-                awaitItem()
-
                 viewModel.updateAuthorSelection("0", isChecked = true)
-                awaitItem()
+
+                advanceUntilIdle()
+                expectMostRecentItem()
 
                 viewModel.saveFollowedInterests()
-                awaitItem()
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[0],
-                                isSaved = false
-                            ),
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[0],
+                                    isSaved = false
+                                ),
+                            )
                         )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 assertEquals(emptySet<Int>(), topicsRepository.getCurrentFollowedTopics())
                 assertEquals(setOf("0"), authorsRepository.getCurrentFollowedAuthors())
@@ -724,36 +1214,38 @@ class ForYouViewModelTest {
     fun topicSelectionUpdatesAfterSavingAuthorsAndTopics() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
-
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-                awaitItem()
-
                 viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.updateTopicSelection("1", isChecked = true)
-                awaitItem()
+
+                advanceUntilIdle()
+                expectMostRecentItem()
 
                 viewModel.saveFollowedInterests()
-                awaitItem()
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[1],
-                                isSaved = false
-                            ),
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[2],
-                                isSaved = false
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[1],
+                                    isSaved = false
+                                ),
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[2],
+                                    isSaved = false
+                                )
                             )
                         )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
                 assertEquals(setOf("1"), authorsRepository.getCurrentFollowedAuthors())
@@ -765,91 +1257,98 @@ class ForYouViewModelTest {
     fun topicSelectionIsResetAfterSavingTopicsAndRemovingThem() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-                awaitItem()
-
                 viewModel.updateTopicSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
-                awaitItem()
+
+                advanceUntilIdle()
+                expectMostRecentItem()
 
                 topicsRepository.setFollowedTopicIds(emptySet())
+
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
-                            ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             )
                         ),
-                        feed = emptyList(),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList()
                         )
                     ),
-                    awaitItem()
+
+                    expectMostRecentItem()
                 )
                 cancel()
             }
@@ -859,91 +1358,97 @@ class ForYouViewModelTest {
     fun authorSelectionIsResetAfterSavingAuthorsAndRemovingThem() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
                 authorsRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
-                awaitItem()
-
                 viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
-                awaitItem()
+
+                advanceUntilIdle()
+                expectMostRecentItem()
 
                 authorsRepository.setFollowedAuthorIds(emptySet())
+
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
-                        topics = listOf(
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "0",
-                                    name = "Headlines",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.WithInterestsSelection(
+                            topics = listOf(
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "0",
+                                        name = "Headlines",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "1",
+                                        name = "UI",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                ),
+                                FollowableTopic(
+                                    topic = Topic(
+                                        id = "2",
+                                        name = "Tools",
+                                        shortDescription = "",
+                                        longDescription = "long description",
+                                        url = "URL",
+                                        imageUrl = "image URL",
+                                    ),
+                                    isFollowed = false
+                                )
                             ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "1",
-                                    name = "UI",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                            authors = listOf(
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "0",
+                                        name = "Android Dev",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
-                            ),
-                            FollowableTopic(
-                                topic = Topic(
-                                    id = "2",
-                                    name = "Tools",
-                                    shortDescription = "",
-                                    longDescription = "long description",
-                                    url = "URL",
-                                    imageUrl = "image URL",
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "1",
+                                        name = "Android Dev 2",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
                                 ),
-                                isFollowed = false
+                                FollowableAuthor(
+                                    author = Author(
+                                        id = "2",
+                                        name = "Android Dev 3",
+                                        imageUrl = "",
+                                        twitter = "",
+                                        mediumPage = ""
+                                    ),
+                                    isFollowed = false
+                                )
                             )
                         ),
-                        feed = emptyList(),
-                        authors = listOf(
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "0",
-                                    name = "Android Dev",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "1",
-                                    name = "Android Dev 2",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            ),
-                            FollowableAuthor(
-                                author = Author(
-                                    id = "2",
-                                    name = "Android Dev 3",
-                                    imageUrl = "",
-                                    twitter = "",
-                                    mediumPage = ""
-                                ),
-                                isFollowed = false
-                            )
+                        feedState = ForYouFeedState.Success(
+                            feed = emptyList()
                         )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 cancel()
             }
@@ -953,7 +1458,6 @@ class ForYouViewModelTest {
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
         viewModel.uiState
             .test {
-                awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
                 topicsRepository.setFollowedTopicIds(setOf("1"))
                 authorsRepository.sendAuthors(sampleAuthors)
@@ -961,20 +1465,25 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateNewsResourceSaved("2", true)
 
+                advanceUntilIdle()
                 assertEquals(
-                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
-                        feed = listOf(
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[1],
-                                isSaved = true
-                            ),
-                            SaveableNewsResource(
-                                newsResource = sampleNewsResources[2],
-                                isSaved = false
+                    ForYouUiState(
+                        interestsSelectionState =
+                        ForYouInterestsSelectionState.NoInterestsSelection,
+                        feedState = ForYouFeedState.Success(
+                            feed = listOf(
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[1],
+                                    isSaved = true
+                                ),
+                                SaveableNewsResource(
+                                    newsResource = sampleNewsResources[2],
+                                    isSaved = false
+                                )
                             )
                         )
                     ),
-                    awaitItem()
+                    expectMostRecentItem()
                 )
                 cancel()
             }
