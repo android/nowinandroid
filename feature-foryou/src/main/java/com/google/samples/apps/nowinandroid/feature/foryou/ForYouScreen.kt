@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -76,9 +77,6 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection
 import kotlinx.datetime.Instant
 
 @Composable
@@ -86,10 +84,12 @@ fun ForYouRoute(
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val interestsSelectionState by viewModel.interestsSelectionState.collectAsState()
+    val feedState by viewModel.feedState.collectAsState()
     ForYouScreen(
         modifier = modifier,
-        uiState = uiState,
+        interestsSelectionState = interestsSelectionState,
+        feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onAuthorCheckedChanged = viewModel::updateAuthorSelection,
         saveFollowedTopics = viewModel::saveFollowedInterests,
@@ -99,7 +99,8 @@ fun ForYouRoute(
 
 @Composable
 fun ForYouScreen(
-    uiState: ForYouFeedUiState,
+    interestsSelectionState: ForYouInterestsSelectionState,
+    feedState: ForYouFeedState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -132,74 +133,91 @@ fun ForYouScreen(
                 )
             )
         }
-        when (uiState) {
-            is ForYouFeedUiState.Loading -> {
+
+        when (interestsSelectionState) {
+            ForYouInterestsSelectionState.Loading -> {
                 item {
                     LoadingWheel(
-                        modifier = modifier,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(),
                         contentDesc = stringResource(id = R.string.for_you_loading),
                     )
                 }
             }
-            is PopulatedFeed -> {
-                when (uiState) {
-                    is FeedWithInterestsSelection -> {
-                        item {
-                            Text(
-                                text = stringResource(R.string.onboarding_guidance_title),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 24.dp),
-                                style = NiaTypography.titleMedium
-                            )
-                        }
-                        item {
-                            Text(
-                                text = stringResource(R.string.onboarding_guidance_subtitle),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                                textAlign = TextAlign.Center,
-                                style = NiaTypography.bodyMedium
-                            )
-                        }
-                        item {
-                            AuthorsCarousel(
-                                authors = uiState.authors,
-                                onAuthorClick = onAuthorCheckedChanged,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        item {
-                            TopicSelection(
-                                uiState,
-                                onTopicCheckedChanged,
-                                Modifier.padding(bottom = 8.dp)
-                            )
-                        }
-                        item {
-                            // Done button
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = saveFollowedTopics,
-                                    enabled = uiState.canSaveInterests,
-                                    modifier = Modifier
-                                        .padding(horizontal = 40.dp)
-                                        .width(364.dp)
-                                ) {
-                                    Text(text = stringResource(R.string.done))
-                                }
-                            }
+            ForYouInterestsSelectionState.NoInterestsSelection -> Unit
+            is ForYouInterestsSelectionState.WithInterestsSelection -> {
+                item {
+                    Text(
+                        text = stringResource(R.string.onboarding_guidance_title),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        style = NiaTypography.titleMedium
+                    )
+                }
+                item {
+                    Text(
+                        text = stringResource(R.string.onboarding_guidance_subtitle),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                        textAlign = TextAlign.Center,
+                        style = NiaTypography.bodyMedium
+                    )
+                }
+                item {
+                    AuthorsCarousel(
+                        authors = interestsSelectionState.authors,
+                        onAuthorClick = onAuthorCheckedChanged,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+                item {
+                    TopicSelection(
+                        interestsSelectionState,
+                        onTopicCheckedChanged,
+                        Modifier.padding(bottom = 8.dp)
+                    )
+                }
+                item {
+                    // Done button
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = saveFollowedTopics,
+                            enabled = interestsSelectionState.canSaveInterests,
+                            modifier = Modifier
+                                .padding(horizontal = 40.dp)
+                                .width(364.dp)
+                        ) {
+                            Text(text = stringResource(R.string.done))
                         }
                     }
-                    is FeedWithoutTopicSelection -> Unit
                 }
+            }
+        }
 
-                items(uiState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
+        when (feedState) {
+            ForYouFeedState.Loading -> {
+                // Avoid showing a second loading wheel if we already are for the interests
+                // selection
+                if (interestsSelectionState !is ForYouInterestsSelectionState.Loading) {
+                    item {
+                        LoadingWheel(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize(),
+                            contentDesc = stringResource(id = R.string.for_you_loading),
+                        )
+                    }
+                }
+            }
+            is ForYouFeedState.Success -> {
+                items(feedState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
                     val launchResourceIntent =
                         Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
                     val context = LocalContext.current
@@ -231,7 +249,7 @@ fun ForYouScreen(
 
 @Composable
 private fun TopicSelection(
-    uiState: FeedWithInterestsSelection,
+    interestsSelectionState: ForYouInterestsSelectionState.WithInterestsSelection,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -253,7 +271,7 @@ private fun TopicSelection(
             .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
             .fillMaxWidth()
     ) {
-        items(uiState.topics) {
+        items(interestsSelectionState.topics) {
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
@@ -314,7 +332,8 @@ fun ForYouScreenLoading() {
     MaterialTheme {
         Surface {
             ForYouScreen(
-                uiState = ForYouFeedUiState.Loading,
+                interestsSelectionState = ForYouInterestsSelectionState.Loading,
+                feedState = ForYouFeedState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -328,7 +347,7 @@ fun ForYouScreenLoading() {
 @Composable
 fun ForYouScreenTopicSelection() {
     ForYouScreen(
-        uiState = FeedWithInterestsSelection(
+        interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
             topics = listOf(
                 FollowableTopic(
                     topic = Topic(
@@ -364,86 +383,6 @@ fun ForYouScreenTopicSelection() {
                     isFollowed = false
                 ),
             ),
-            feed = listOf(
-                SaveableNewsResource(
-                    newsResource = NewsResource(
-                        id = "1",
-                        episodeId = "52",
-                        title = "Thanks for helping us reach 1M YouTube Subscribers",
-                        content = "Thank you everyone for following the Now in Android series " +
-                            "and everything the Android Developers YouTube channel has to offer. " +
-                            "During the Android Developer Summit, our YouTube channel reached 1 " +
-                            "million subscribers! Here’s a small video to thank you all.",
-                        url = "https://youtu.be/-fJ6poHQrjM",
-                        headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-                        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-                        type = Video,
-                        topics = listOf(
-                            Topic(
-                                id = "0",
-                                name = "Headlines",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            )
-                        ),
-                        authors = emptyList()
-                    ),
-                    isSaved = false
-                ),
-                SaveableNewsResource(
-                    newsResource = NewsResource(
-                        id = "2",
-                        episodeId = "52",
-                        title = "Transformations and customisations in the Paging Library",
-                        content = "A demonstration of different operations that can be performed " +
-                            "with Paging. Transformations like inserting separators, when to " +
-                            "create a new pager, and customisation options for consuming " +
-                            "PagingData.",
-                        url = "https://youtu.be/ZARz0pjm5YM",
-                        headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
-                        publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-                        type = Video,
-                        topics = listOf(
-                            Topic(
-                                id = "1",
-                                name = "UI",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                        ),
-                        authors = emptyList()
-                    ),
-                    isSaved = false
-                ),
-                SaveableNewsResource(
-                    newsResource = NewsResource(
-                        id = "3",
-                        episodeId = "52",
-                        title = "Community tip on Paging",
-                        content = "Tips for using the Paging library from the developer community",
-                        url = "https://youtu.be/r5JgIyS3t3s",
-                        headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
-                        publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-                        type = Video,
-                        topics = listOf(
-                            Topic(
-                                id = "1",
-                                name = "UI",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                        ),
-                        authors = emptyList()
-                    ),
-                    isSaved = false
-                ),
-            ),
             authors = listOf(
                 FollowableAuthor(
                     author = Author(
@@ -475,7 +414,10 @@ fun ForYouScreenTopicSelection() {
                     ),
                     isFollowed = false
                 )
-            ),
+            )
+        ),
+        feedState = ForYouFeedState.Success(
+            feed = saveableNewsResource,
         ),
         onAuthorCheckedChanged = { _, _ -> },
         onTopicCheckedChanged = { _, _ -> },
@@ -490,8 +432,9 @@ fun PopulatedFeed() {
     MaterialTheme {
         Surface {
             ForYouScreen(
-                uiState = FeedWithoutTopicSelection(
-                    feed = emptyList()
+                interestsSelectionState = ForYouInterestsSelectionState.NoInterestsSelection,
+                feedState = ForYouFeedState.Success(
+                    feed = saveableNewsResource
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
@@ -501,3 +444,84 @@ fun PopulatedFeed() {
         }
     }
 }
+
+private val saveableNewsResource = listOf(
+    SaveableNewsResource(
+        newsResource = NewsResource(
+            id = "1",
+            episodeId = "52",
+            title = "Thanks for helping us reach 1M YouTube Subscribers",
+            content = "Thank you everyone for following the Now in Android series " +
+                "and everything the Android Developers YouTube channel has to offer. " +
+                "During the Android Developer Summit, our YouTube channel reached 1 " +
+                "million subscribers! Here’s a small video to thank you all.",
+            url = "https://youtu.be/-fJ6poHQrjM",
+            headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
+            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
+            type = Video,
+            topics = listOf(
+                Topic(
+                    id = "0",
+                    name = "Headlines",
+                    shortDescription = "",
+                    longDescription = "",
+                    url = "",
+                    imageUrl = ""
+                )
+            ),
+            authors = emptyList()
+        ),
+        isSaved = false
+    ),
+    SaveableNewsResource(
+        newsResource = NewsResource(
+            id = "2",
+            episodeId = "52",
+            title = "Transformations and customisations in the Paging Library",
+            content = "A demonstration of different operations that can be performed " +
+                "with Paging. Transformations like inserting separators, when to " +
+                "create a new pager, and customisation options for consuming " +
+                "PagingData.",
+            url = "https://youtu.be/ZARz0pjm5YM",
+            headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
+            publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
+            type = Video,
+            topics = listOf(
+                Topic(
+                    id = "1",
+                    name = "UI",
+                    shortDescription = "",
+                    longDescription = "",
+                    url = "",
+                    imageUrl = ""
+                ),
+            ),
+            authors = emptyList()
+        ),
+        isSaved = false
+    ),
+    SaveableNewsResource(
+        newsResource = NewsResource(
+            id = "3",
+            episodeId = "52",
+            title = "Community tip on Paging",
+            content = "Tips for using the Paging library from the developer community",
+            url = "https://youtu.be/r5JgIyS3t3s",
+            headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
+            publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
+            type = Video,
+            topics = listOf(
+                Topic(
+                    id = "1",
+                    name = "UI",
+                    shortDescription = "",
+                    longDescription = "",
+                    url = "",
+                    imageUrl = ""
+                ),
+            ),
+            authors = emptyList()
+        ),
+        isSaved = false
+    ),
+)
