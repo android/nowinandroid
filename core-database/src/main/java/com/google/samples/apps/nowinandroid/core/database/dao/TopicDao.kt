@@ -30,6 +30,14 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface TopicDao {
+    @Query(
+        value = """
+        SELECT * FROM topics
+        WHERE id = :topicId
+    """
+    )
+    fun getTopicEntity(topicId: Int): Flow<TopicEntity>
+
     @Query(value = "SELECT * FROM topics")
     fun getTopicEntitiesStream(): Flow<List<TopicEntity>>
 

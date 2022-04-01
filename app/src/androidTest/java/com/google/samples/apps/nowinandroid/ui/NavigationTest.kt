@@ -183,4 +183,21 @@ class NavigationTest {
             onNodeWithText(forYou).assertExists()
         }
     }
+
+    @Test
+    fun navigationBar_multipleBackStackFollowing() {
+        composeTestRule.apply {
+            onNodeWithText(topics).performClick()
+            onNodeWithText("Android Studio").performClick() // TODO: Grab string from fake data
+
+            // Switch tab
+            onNodeWithText(forYou).performClick()
+
+            // Come back to Following
+            onNodeWithText(topics).performClick()
+
+            // Verify we're not in the list of topics
+            onNodeWithText("Android Auto").assertDoesNotExist() // TODO: Grab string from fake data
+        }
+    }
 }

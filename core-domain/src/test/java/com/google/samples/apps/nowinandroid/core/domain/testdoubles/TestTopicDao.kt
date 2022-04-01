@@ -40,6 +40,10 @@ class TestTopicDao : TopicDao {
         )
     )
 
+    override fun getTopicEntity(topicId: Int): Flow<TopicEntity> {
+        throw NotImplementedError("Unused in tests")
+    }
+
     override fun getTopicEntitiesStream(): Flow<List<TopicEntity>> =
         entitiesStateFlow
 
