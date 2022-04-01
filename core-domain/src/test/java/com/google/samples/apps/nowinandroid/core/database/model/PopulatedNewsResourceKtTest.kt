@@ -49,7 +49,9 @@ class PopulatedNewsResourceKtTest {
                 AuthorEntity(
                     id = 2,
                     name = "name",
-                    imageUrl = "imageUrl"
+                    imageUrl = "imageUrl",
+                    twitter = "twitter",
+                    mediumPage = "mediumPage",
                 )
             ),
             topics = listOf(
@@ -79,7 +81,9 @@ class PopulatedNewsResourceKtTest {
                     Author(
                         id = 2,
                         name = "name",
-                        imageUrl = "imageUrl"
+                        imageUrl = "imageUrl",
+                        twitter = "twitter",
+                        mediumPage = "mediumPage",
                     )
                 ),
                 topics = listOf(

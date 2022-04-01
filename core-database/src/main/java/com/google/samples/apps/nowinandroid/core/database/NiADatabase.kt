@@ -44,11 +44,12 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
         NewsResourceTopicCrossRef::class,
         TopicEntity::class,
     ],
-    version = 4,
+    version = 5,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3, spec = DatabaseMigrations.Schema2to3::class),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
     ],
     exportSchema = true,
 )

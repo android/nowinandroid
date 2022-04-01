@@ -110,7 +110,9 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
         AuthorEntity(
             id = 2,
             name = "name",
-            imageUrl = "imageUrl"
+            imageUrl = "imageUrl",
+            twitter = "twitter",
+            mediumPage = "mediumPage",
         )
     ),
     topics = listOf(

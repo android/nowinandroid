@@ -27,9 +27,9 @@ import org.intellij.lang.annotations.Language
 object FakeDataSource {
     val sampleTopic = NetworkTopic(
         id = 1,
-        name =  "UI",
+        name = "UI",
         shortDescription = "Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
-        longDescription =  "Learn how to optimize your app's user interface - everything that users can see and interact with. Stay up to date on tocpis such as Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets, and many more!",
+        longDescription = "Learn how to optimize your app's user interface - everything that users can see and interact with. Stay up to date on tocpis such as Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets, and many more!",
         url = "url",
         imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=5d1d25a8-db1b-4cf1-9706-82ba0d133bf9"
     )
@@ -1637,5 +1637,473 @@ object FakeDataSource {
     ]
   }
 ]
+    """.trimIndent()
+
+    @Language("JSON")
+    val authors = """
+  [
+    {
+      "id": "1",
+      "name": "Márton Braun",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "2",
+      "name": "Greg Hartrell",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "3",
+      "name": "Simona Stojanovic",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "4",
+      "name": "Andrew Flynn",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "5",
+      "name": "Jon Boekenoogen",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "6",
+      "name": "Florina Muntenescu",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "7",
+      "name": "Lidia Gaymond",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "8",
+      "name": "Vicki Amin",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "9",
+      "name": "Marcel Pintó",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "10",
+      "name": "Krish Vitaldevara",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "11",
+      "name": "Gerry Fan",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "12",
+      "name": "Pietro Maggi",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "13",
+      "name": "Rohan Shah",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "14",
+      "name": "Dave Burke",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "15",
+      "name": "Meghan Mehta",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "16",
+      "name": "Anna Bernbaum",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "17",
+      "name": "Adarsh Fernando",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "18",
+      "name": "Madan Ankapura",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "19",
+      "name": "Kateryna Semenova",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "20",
+      "name": "Rahul Ravikumar",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "21",
+      "name": "Chris Craik",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "22",
+      "name": "Marcel Pintó Biescas",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "23",
+      "name": "Alex Vanyo",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "24",
+      "name": "Manuel Vicente Vivo",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "25",
+      "name": "Arjun Dayal",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "26",
+      "name": "Murat Yener",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "27",
+      "name": "Alex Saveau",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "28",
+      "name": "Paul Lammertsma",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "29",
+      "name": "Caren Chang",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "30",
+      "name": "Mayuri Khinvasara Khabya",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "31",
+      "name": "Romain Guy",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "32",
+      "name": "Chet Hasse",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "33",
+      "name": "Tor Norbye",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "34",
+      "name": "Nicole Laure",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "35",
+      "name": "Yigit Boyar",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "36",
+      "name": "Sean McQuillan",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "37",
+      "name": "Ben Weiss",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "38",
+      "name": "Chet Haase",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "39",
+      "name": "Carmen Jackson",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "40",
+      "name": "Manuel Vivo",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "41",
+      "name": "TJ Dahunsi",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "42",
+      "name": "Shailen Tuli",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "43",
+      "name": "Murat",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "44",
+      "name": "Kailiang Chen",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "45",
+      "name": "Meghan",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "46",
+      "name": "Jeremy Walker",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "47",
+      "name": "Don Turner",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "48",
+      "name": "Lilian Young",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "49",
+      "name": "Wenhung Teng",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "50",
+      "name": "Charcoal Chen",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "51",
+      "name": "Mike Yerou",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "52",
+      "name": "Peter Visontay",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "53",
+      "name": "Marcelo Hernandez",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "54",
+      "name": "Daniel Santiago",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "55",
+      "name": "Brad Corso",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "56",
+      "name": "Jonathan Koren",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "57",
+      "name": "Anna-Chiara Bellini",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "58",
+      "name": "Amanda Alexander",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "59",
+      "name": "Android Developers Backstage",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "60",
+      "name": "Nicole Borrelli",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "61",
+      "name": "Dan Saadati",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "62",
+      "name": "Nick Butcher",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "63",
+      "name": "Ian Lake",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "64",
+      "name": "Diana Wong",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "65",
+      "name": "Patricia Correa",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "66",
+      "name": "The Modern Android Development Team",
+      "mediumPage": "",
+      "twitter": "",
+      "imageUrl": ""
+    }
+  ]
     """.trimIndent()
 }

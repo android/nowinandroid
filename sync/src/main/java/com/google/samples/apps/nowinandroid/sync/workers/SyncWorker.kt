@@ -24,6 +24,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
+import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.sync.SyncRepository
@@ -32,6 +33,9 @@ import com.google.samples.apps.nowinandroid.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 /**
  * Syncs the data layer by delegating to the appropriate repository instances with
@@ -44,14 +48,21 @@ class SyncWorker @AssistedInject constructor(
     private val syncRepository: SyncRepository,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
+    private val authorsRepository: AuthorsRepository,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =
         appContext.syncForegroundInfo()
 
-    override suspend fun doWork(): Result =
-        // First sync the repositories
-        when (topicRepository.sync() && newsRepository.sync()) {
+    override suspend fun doWork(): Result = coroutineScope {
+        // First sync the repositories in parallel
+        val syncedSuccessfully = awaitAll(
+            async { topicRepository.sync() },
+            async { authorsRepository.sync() },
+            async { newsRepository.sync() },
+        ).all { it }
+
+        when (syncedSuccessfully) {
             // Sync ran successfully, notify the SyncRepository that sync has been run
             true -> {
                 syncRepository.notifyFirstTimeSyncRun()
@@ -59,6 +70,7 @@ class SyncWorker @AssistedInject constructor(
             }
             false -> Result.retry()
         }
+    }
 
     companion object {
         private const val SyncInterval = 1L

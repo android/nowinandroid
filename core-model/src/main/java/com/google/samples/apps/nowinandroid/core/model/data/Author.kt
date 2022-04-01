@@ -23,4 +23,6 @@ data class Author(
     val id: Int,
     val name: String,
     val imageUrl: String,
+    val twitter: String,
+    val mediumPage: String,
 )

@@ -51,7 +51,9 @@ class PopulatedEpisodeKtTest {
                 AuthorEntity(
                     id = 2,
                     name = "name",
-                    imageUrl = "imageUrl"
+                    imageUrl = "imageUrl",
+                    twitter = "twitter",
+                    mediumPage = "mediumPage",
                 )
             ),
         )
@@ -82,7 +84,9 @@ class PopulatedEpisodeKtTest {
                     Author(
                         id = 2,
                         name = "name",
-                        imageUrl = "imageUrl"
+                        imageUrl = "imageUrl",
+                        twitter = "twitter",
+                        mediumPage = "mediumPage",
                     )
                 ),
             ),

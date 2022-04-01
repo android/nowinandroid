@@ -284,7 +284,9 @@ private val newsResource = NewsResource(
         Author(
             id = 1,
             name = "Name",
-            imageUrl = ""
+            imageUrl = "",
+            twitter = "",
+            mediumPage = "",
         )
     ),
     topics = listOf(

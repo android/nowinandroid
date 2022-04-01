@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.model
+package com.google.samples.apps.nowinandroid.core.domain.repository
 
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import kotlinx.serialization.Serializable
+import kotlinx.coroutines.flow.Flow
 
-/**
- * Network representation of [Author]
- */
-@Serializable
-data class NetworkAuthor(
-    val id: Int,
-    val name: String,
-    val imageUrl: String,
-    val twitter: String,
-    val mediumPage: String,
-)
+interface AuthorsRepository {
+    /**
+     * Gets the available Authors as a stream
+     */
+    fun getAuthorsStream(): Flow<List<Author>>
+
+    /**
+     * Synchronizes the local database in backing the repository with the network.
+     * Returns if the sync was successful or not.
+     */
+    suspend fun sync(): Boolean
+}

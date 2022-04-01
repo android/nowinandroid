@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.domain.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.serialization.decodeFromString
@@ -32,6 +33,9 @@ class TestNiaNetwork : NiANetwork {
 
     override suspend fun getTopics(itemsPerPage: Int): List<NetworkTopic> =
         networkJson.decodeFromString(FakeDataSource.topicsData)
+
+    override suspend fun getAuthors(itemsPerPage: Int): List<NetworkAuthor> =
+        networkJson.decodeFromString(FakeDataSource.authors)
 
     override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
         networkJson.decodeFromString(FakeDataSource.data)
