@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network
 
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 
@@ -24,6 +25,8 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
  */
 interface NiANetwork {
     suspend fun getTopics(itemsPerPage: Int = 200): List<NetworkTopic>
+
+    suspend fun getAuthors(itemsPerPage: Int = 200): List<NetworkAuthor>
 
     suspend fun getNewsResources(itemsPerPage: Int = 200): List<NetworkNewsResource>
 }

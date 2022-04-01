@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.network.fake
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
@@ -42,5 +43,10 @@ class FakeNiANetwork @Inject constructor(
     override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.data)
+        }
+
+    override suspend fun getAuthors(itemsPerPage: Int): List<NetworkAuthor> =
+        withContext(ioDispatcher) {
+            networkJson.decodeFromString(FakeDataSource.authors)
         }
 }

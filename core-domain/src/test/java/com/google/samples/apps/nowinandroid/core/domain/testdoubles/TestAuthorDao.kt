@@ -32,6 +32,8 @@ class TestAuthorDao : AuthorDao {
                 id = 1,
                 name = "Topic",
                 imageUrl = "imageUrl",
+                twitter = "twitter",
+                mediumPage = "mediumPage",
             )
         )
     )

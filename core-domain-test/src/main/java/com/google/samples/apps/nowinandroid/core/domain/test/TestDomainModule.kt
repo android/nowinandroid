@@ -17,8 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.domain.test
 
 import com.google.samples.apps.nowinandroid.core.domain.di.DomainModule
+import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.fake.FakeTopicsRepository
 import dagger.Binds
@@ -36,6 +38,11 @@ interface TestDomainModule {
     fun bindsTopicRepository(
         fakeTopicsRepository: FakeTopicsRepository
     ): TopicsRepository
+
+    @Binds
+    fun bindsAuthorRepository(
+        fakeAuthorsRepository: FakeAuthorsRepository
+    ): AuthorsRepository
 
     @Binds
     fun bindsNewsResourceRepository(

@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.di
 
+import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.LocalAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.LocalNewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.LocalTopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
@@ -33,6 +35,11 @@ interface DomainModule {
     fun bindsTopicRepository(
         topicsRepository: LocalTopicsRepository
     ): TopicsRepository
+
+    @Binds
+    fun bindsAuthorsRepository(
+        authorsRepository: LocalAuthorsRepository
+    ): AuthorsRepository
 
     @Binds
     fun bindsNewsResourceRepository(

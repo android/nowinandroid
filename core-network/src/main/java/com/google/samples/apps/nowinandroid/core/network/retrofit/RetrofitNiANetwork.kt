@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -39,6 +40,11 @@ private interface RetrofitNiANetworkApi {
     suspend fun getTopics(
         @Query("pageSize") itemsPerPage: Int,
     ): NetworkResponse<List<NetworkTopic>>
+
+    @GET(value = "authors")
+    suspend fun getAuthors(
+        @Query("pageSize") itemsPerPage: Int,
+    ): NetworkResponse<List<NetworkAuthor>>
 
     @GET(value = "newsresources")
     suspend fun getNewsResources(
@@ -82,6 +88,9 @@ class RetrofitNiANetwork @Inject constructor(
 
     override suspend fun getTopics(itemsPerPage: Int): List<NetworkTopic> =
         networkApi.getTopics(itemsPerPage = itemsPerPage).data
+
+    override suspend fun getAuthors(itemsPerPage: Int): List<NetworkAuthor> =
+        networkApi.getAuthors(itemsPerPage = itemsPerPage).data
 
     override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
         networkApi.getNewsResources(itemsPerPage = itemsPerPage).data

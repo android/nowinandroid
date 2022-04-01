@@ -22,5 +22,7 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 fun NetworkAuthor.asEntity() = AuthorEntity(
     id = id,
     name = name,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
+    twitter = twitter,
+    mediumPage = mediumPage,
 )

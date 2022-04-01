@@ -34,7 +34,9 @@ class NetworkEntityKtTest {
         val networkModel = NetworkAuthor(
             id = 0,
             name = "Test",
-            imageUrl = "something"
+            imageUrl = "something",
+            twitter = "twitter",
+            mediumPage = "mediumPage",
         )
         val entity = networkModel.asEntity()
 
