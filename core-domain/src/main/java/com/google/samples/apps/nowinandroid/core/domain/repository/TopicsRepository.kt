@@ -26,6 +26,11 @@ interface TopicsRepository {
     fun getTopicsStream(): Flow<List<Topic>>
 
     /**
+     * Gets data for a specific topic
+     */
+    fun getTopic(id: Int): Flow<Topic>
+
+    /**
      * Sets the user's currently followed topics
      */
     suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>)

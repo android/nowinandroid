@@ -58,7 +58,7 @@ class LocalTopicsRepositoryTest {
         subject = LocalTopicsRepository(
             topicDao = topicDao,
             network = network,
-            niaPreferences = niaPreferences,
+            niaPreferences = niaPreferences
         )
     }
 

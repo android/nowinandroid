@@ -118,6 +118,7 @@ android {
 dependencies {
     implementation project(':feature-following')
     implementation project(':feature-foryou')
+    implementation project(':feature-topic')
 
     implementation project(':core-ui')
 
@@ -126,6 +127,7 @@ dependencies {
     androidTestImplementation project(':core-testing')
     androidTestImplementation project(':core-datastore-test')
     androidTestImplementation project(':core-domain-test')
+    androidTestImplementation project(':core-network')
 
     coreLibraryDesugaring libs.android.desugarJdkLibs
 

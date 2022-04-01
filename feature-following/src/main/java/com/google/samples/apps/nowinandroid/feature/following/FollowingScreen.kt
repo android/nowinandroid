@@ -55,7 +55,7 @@ import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 @Composable
 fun FollowingRoute(
     modifier: Modifier = Modifier,
-    navigateToTopic: () -> Unit,
+    navigateToTopic: (Int) -> Unit,
     viewModel: FollowingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -72,7 +72,7 @@ fun FollowingRoute(
 fun FollowingScreen(
     uiState: FollowingUiState,
     followTopic: (Int, Boolean) -> Unit,
-    navigateToTopic: () -> Unit,
+    navigateToTopic: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -89,7 +89,7 @@ fun FollowingScreen(
             is FollowingUiState.Topics ->
                 FollowingWithTopicsScreen(
                     uiState = uiState,
-                    onTopicClick = { navigateToTopic() },
+                    onTopicClick = navigateToTopic,
                     onFollowButtonClick = followTopic,
                 )
             is FollowingUiState.Error -> FollowingErrorScreen()
@@ -101,7 +101,7 @@ fun FollowingScreen(
 fun FollowingWithTopicsScreen(
     modifier: Modifier = Modifier,
     uiState: FollowingUiState.Topics,
-    onTopicClick: () -> Unit,
+    onTopicClick: (Int) -> Unit,
     onFollowButtonClick: (Int, Boolean) -> Unit
 ) {
     LazyColumn(
@@ -111,7 +111,7 @@ fun FollowingWithTopicsScreen(
             item {
                 FollowingTopicCard(
                     followableTopic = followableTopic,
-                    onTopicClick = onTopicClick,
+                    onTopicClick = { onTopicClick(followableTopic.topic.id) },
                     onFollowButtonClick = onFollowButtonClick
                 )
             }

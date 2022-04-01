@@ -61,21 +61,29 @@ class FollowingViewModelTest {
 
     @Test
     fun uiState_whenFollowingNewTopic_thenShowUpdatedTopics() = runTest {
+
+        val toggleTopicId = testOutputTopics[1].topic.id
         viewModel.uiState
             .test {
                 awaitItem()
                 topicsRepository.sendTopics(testInputTopics.map { it.topic })
                 topicsRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
 
-                awaitItem()
+                assertEquals(
+                    false,
+                    (awaitItem() as FollowingUiState.Topics)
+                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                )
+
                 viewModel.followTopic(
-                    followedTopicId = testInputTopics[1].topic.id,
-                    followed = true
+                    followedTopicId = toggleTopicId,
+                    true
                 )
 
                 assertEquals(
-                    FollowingUiState.Topics(topics = testOutputTopics),
-                    awaitItem()
+                    true,
+                    (awaitItem() as FollowingUiState.Topics)
+                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
                 )
                 cancel()
             }
@@ -83,6 +91,7 @@ class FollowingViewModelTest {
 
     @Test
     fun uiState_whenUnfollowingTopics_thenShowUpdatedTopics() = runTest {
+        val toggleTopicId = testOutputTopics[1].topic.id
         viewModel.uiState
             .test {
                 awaitItem()
@@ -91,17 +100,21 @@ class FollowingViewModelTest {
                     setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
                 )
 
-                awaitItem()
+                assertEquals(
+                    true,
+                    (awaitItem() as FollowingUiState.Topics)
+                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                )
+
                 viewModel.followTopic(
-                    followedTopicId = testOutputTopics[1].topic.id,
-                    followed = false
+                    followedTopicId = toggleTopicId,
+                    false
                 )
 
                 assertEquals(
-                    FollowingUiState.Topics(
-                        topics = testInputTopics
-                    ),
-                    awaitItem()
+                    false,
+                    (awaitItem() as FollowingUiState.Topics)
+                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
                 )
                 cancel()
             }

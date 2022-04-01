@@ -20,11 +20,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.following.FollowingRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinations
+import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs
+import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
+import com.google.samples.apps.nowinandroid.feature.topic.TopicScreens.TOPIC_SCREEN
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -52,17 +59,26 @@ fun NiaNavGraph(
         composable(NiaDestinations.SAVED_ROUTE) {
             Text("SAVED", modifier)
         }
-        composable(NiaDestinations.FOLLOWING_ROUTE) {
-            FollowingRoute(
-                navigateToTopic = { navController.navigate(NiaDestinations.TOPIC_ROUTE) },
-                modifier = modifier
-            )
-        }
-        composable(NiaDestinations.TOPIC_ROUTE) {
-            Text(
-                text = "Topic",
-                modifier = modifier
-            )
+        navigation(
+            startDestination = TopicDestinations.TOPICS_ROUTE,
+            route = NiaDestinations.FOLLOWING_ROUTE
+        ) {
+            composable(TopicDestinations.TOPICS_ROUTE) {
+                FollowingRoute(
+                    navigateToTopic = { navController.navigate("$TOPIC_SCREEN/$it") },
+                    modifier = modifier
+                )
+            }
+            composable(
+                TopicDestinations.TOPIC_ROUTE,
+                arguments = listOf(
+                    navArgument(TopicDestinationsArgs.TOPIC_ID_ARG) {
+                        type = NavType.IntType
+                    }
+                )
+            ) {
+                TopicRoute(onBackClick = { navController.popBackStack() })
+            }
         }
     }
 }

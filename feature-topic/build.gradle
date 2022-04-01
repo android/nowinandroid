@@ -17,6 +17,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -25,6 +26,8 @@ android {
     defaultConfig {
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
+
+        testInstrumentationRunner "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -33,32 +36,36 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
+    }
 }
 
 dependencies {
-    implementation project(':core-common')
-    implementation project(':core-domain')
     implementation project(':core-model')
+    implementation project(':core-ui')
+    implementation project(':core-domain')
+    implementation project(':core-common')
+
+    testImplementation project(':core-testing')
+    androidTestImplementation project(':core-testing')
+
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.datetime
+
+    implementation libs.androidx.hilt.navigation.compose
+    implementation libs.androidx.lifecycle.viewModelCompose
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler
 
-    api libs.junit4
-    api libs.mockk
-    api libs.androidx.test.core
-    api libs.kotlinx.coroutines.test
-    api libs.turbine
-
-    api libs.androidx.test.espresso.core
-    api libs.androidx.test.runner
-    api libs.androidx.test.rules
-    api libs.androidx.compose.ui.test
-    api libs.hilt.android.testing
-
-    debugApi libs.androidx.compose.ui.testManifest
-
+    // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {
+            force libs.junit4
             // Temporary workaround for https://issuetracker.google.com/174733673
             force 'org.objenesis:objenesis:2.6'
         }

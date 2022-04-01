@@ -53,6 +53,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.R
@@ -69,16 +71,17 @@ fun NiaApp(windowSizeClass: SizeClass) {
         }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute =
-            navBackStackEntry?.destination?.route ?: NiaDestinations.FOR_YOU_ROUTE
+        val currentDestination = navBackStackEntry?.destination
 
         Scaffold(
             modifier = Modifier,
             bottomBar = {
-                if (windowSizeClass.width == WidthSizeClass.Compact) NiABottomBar(
-                    navigationActions = navigationActions,
-                    currentRoute = currentRoute
-                )
+                if (windowSizeClass.width == WidthSizeClass.Compact) {
+                    NiABottomBar(
+                        navigationActions = navigationActions,
+                        currentDestination = currentDestination
+                    )
+                }
             }
         ) { padding ->
             Surface(Modifier.fillMaxSize().statusBarsPadding()) {
@@ -86,7 +89,7 @@ fun NiaApp(windowSizeClass: SizeClass) {
                     if (windowSizeClass.width != WidthSizeClass.Compact) {
                         NiANavRail(
                             navigationActions = navigationActions,
-                            currentRoute = currentRoute
+                            currentDestination = currentDestination
                         )
                     }
                     NiaNavGraph(
@@ -102,11 +105,12 @@ fun NiaApp(windowSizeClass: SizeClass) {
 @Composable
 private fun NiANavRail(
     navigationActions: NiaNavigationActions,
-    currentRoute: String
+    currentDestination: NavDestination?
 ) {
     NavigationRail {
         TOP_LEVEL_DESTINATIONS.forEach { destination ->
-            val selected = currentRoute == destination.route
+            val selected =
+                currentDestination?.hierarchy?.any { it.route == destination.route } == true
             NavigationRailItem(
                 selected = selected,
                 onClick = { navigationActions.navigateToTopLevelDestination(destination.route) },
@@ -125,7 +129,7 @@ private fun NiANavRail(
 @Composable
 private fun NiABottomBar(
     navigationActions: NiaNavigationActions,
-    currentRoute: String
+    currentDestination: NavDestination?
 ) {
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
@@ -137,20 +141,26 @@ private fun NiABottomBar(
                     .captionBarPadding(),
                 tonalElevation = 0.dp
             ) {
-                TOP_LEVEL_DESTINATIONS.forEach { dst ->
-                    val selected = currentRoute == dst.route
+
+                TOP_LEVEL_DESTINATIONS.forEach { destination ->
+                    val selected =
+                        currentDestination?.hierarchy?.any { it.route == destination.route } == true
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
-                            navigationActions.navigateToTopLevelDestination(dst.route)
+                            navigationActions.navigateToTopLevelDestination(destination.route)
                         },
                         icon = {
                             Icon(
-                                if (selected) dst.selectedIcon else dst.unselectedIcon,
+                                if (selected) {
+                                    destination.selectedIcon
+                                } else {
+                                    destination.unselectedIcon
+                                },
                                 contentDescription = null
                             )
                         },
-                        label = { Text(stringResource(dst.iconTextId)) }
+                        label = { Text(stringResource(destination.iconTextId)) }
                     )
                 }
             }
