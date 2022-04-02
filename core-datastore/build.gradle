@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "nowinandroid.android.library"
+    id "nowinandroid.android.library.jacoco"
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     alias(libs.plugins.protobuf)
-}
-
-android {
-    compileSdk buildConfig.compileSdk
-
-    defaultConfig {
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+    id 'nowinandroid.spotless'
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes

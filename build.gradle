@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
-
-    ext.buildConfig = [
-            'compileSdk': 31,
-            'minSdk'    : 21,
-            'targetSdk' : 31,
-    ]
-
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://androidx.dev/snapshots/builds/8273139/artifacts/repository' }
     }
 
     dependencies {
@@ -35,44 +25,5 @@ buildscript {
         classpath(libs.kotlin.gradlePlugin)
         classpath(libs.kotlin.serializationPlugin)
         classpath(libs.hilt.gradlePlugin)
-    }
-}
-
-plugins {
-    alias(libs.plugins.spotless)
-}
-
-subprojects {
-
-    apply plugin: 'com.diffplug.spotless'
-    spotless {
-        kotlin {
-            target '**/*.kt'
-            targetExclude("$buildDir/**/*.kt")
-            targetExclude('bin/**/*.kt')
-            targetExclude("$rootDir/core-network/src/main/java/com/google/samples/apps/nowinandroid/core/network/fake/FakeData.kt")
-            ktlint(libs.versions.ktlint.get()).userData([android: "true"])
-            licenseHeaderFile rootProject.file('spotless/copyright.kt')
-        }
-    }
-
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-        kotlinOptions {
-            // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
-
-            freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
-
-            // Enable experimental coroutines APIs, including Flow
-            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
-            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.FlowPreview'
-            freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
-
-            // Enable experimental kotlinx serialization APIs
-            freeCompilerArgs += '-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi'
-
-            // Set JVM target to 1.8
-            jvmTarget = "1.8"
-        }
     }
 }

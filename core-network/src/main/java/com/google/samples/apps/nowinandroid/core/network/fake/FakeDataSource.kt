@@ -24,6 +24,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.intellij.lang.annotations.Language
 
+/* ktlint-disable max-line-length */
+
 object FakeDataSource {
     val sampleTopic = NetworkTopic(
         id = 1,
@@ -218,7 +220,7 @@ object FakeDataSource {
       "imageUrl": ""
     }
 ]
-""".trimIndent()
+    """.trimIndent()
 
     @Language("JSON")
     val data = """
@@ -3158,3 +3160,5 @@ object FakeDataSource {
   ]
     """.trimIndent()
 }
+
+/* ktlint-enable max-line-length */

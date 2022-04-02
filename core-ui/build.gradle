@@ -14,37 +14,14 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-}
-
-android {
-    compileSdk buildConfig.compileSdk
-
-    defaultConfig {
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
-    }
+    id "nowinandroid.android.library"
+    id "nowinandroid.android.library.compose"
+    id "nowinandroid.android.library.jacoco"
+    id 'nowinandroid.spotless'
 }
 
 dependencies {
     implementation project(':core-model')
-
-    coreLibraryDesugaring libs.android.desugarJdkLibs
 
     implementation libs.androidx.core.ktx
     implementation libs.coil.kt

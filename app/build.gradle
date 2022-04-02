@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id 'nowinandroid.android.application'
+    id 'nowinandroid.android.application.compose'
+    id 'nowinandroid.android.application.jacoco'
     id 'kotlin-kapt'
     id 'jacoco'
     id 'dagger.hilt.android.plugin'
+    id 'nowinandroid.spotless'
 }
 
-def jacocoTestReport = tasks.create("jacocoTestReport")
-
 android {
-    compileSdk buildConfig.compileSdk
-
     defaultConfig {
         applicationId "com.google.samples.apps.nowinandroid"
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
         versionCode 1
         versionName "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
@@ -52,21 +48,6 @@ android {
             proguardFiles 'benchmark-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-        useIR = true
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
-    }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -76,42 +57,6 @@ android {
         unitTests {
             includeAndroidResources = true
         }
-    }
-    androidComponents {
-        def coverageExclusions = [
-                // Android
-                "**/R.class",
-                "**/R\$*.class",
-                "**/BuildConfig.*",
-                "**/Manifest*.*"
-        ]
-
-        onVariants(
-                selector().all(),
-                { variant ->
-                    def testTaskName = "test${variant.name.capitalize()}UnitTest"
-
-                    def reportTask = tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport) {
-                        dependsOn(testTaskName)
-
-                        reports {
-                            xml.required.set(true)
-                            html.required.set(true)
-                        }
-
-                        classDirectories.setFrom(
-                                fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
-                                    exclude(coverageExclusions)
-                                }
-                        )
-
-                        sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-                        executionData.setFrom(file("$buildDir/jacoco/${testTaskName}.exec"))
-                    }
-
-                    jacocoTestReport.dependsOn(reportTask)
-                }
-        )
     }
 }
 
@@ -128,8 +73,6 @@ dependencies {
     androidTestImplementation project(':core-datastore-test')
     androidTestImplementation project(':core-domain-test')
     androidTestImplementation project(':core-network')
-
-    coreLibraryDesugaring libs.android.desugarJdkLibs
 
     implementation libs.androidx.activity.compose
     implementation libs.androidx.appcompat
@@ -155,22 +98,5 @@ dependencies {
             // Temporary workaround for https://issuetracker.google.com/174733673
             force 'org.objenesis:objenesis:2.6'
         }
-    }
-}
-
-jacoco {
-    toolVersion libs.versions.jacoco.get()
-}
-
-tasks.withType(Test) {
-    jacoco {
-        // Required for JaCoCo + Robolectric
-        // https://github.com/robolectric/robolectric/issues/2230
-        // TODO: Consider removing if not we don't add Robolectric
-        setIncludeNoLocationClasses(true)
-
-        // Required for JDK 11+ with the above
-        // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
-        excludes = ["jdk.internal.*"]
     }
 }

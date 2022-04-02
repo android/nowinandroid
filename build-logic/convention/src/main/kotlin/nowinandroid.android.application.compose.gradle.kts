@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.google.samples.apps.nowinandroid.configureAndroidCompose
+
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+    id("com.android.application")
 }
 
-dependencies {
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+android {
+    configureAndroidCompose(this)
 }

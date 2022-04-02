@@ -14,33 +14,17 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "nowinandroid.android.library"
+    id "nowinandroid.android.library.compose"
+    id "nowinandroid.android.library.jacoco"
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'nowinandroid.spotless'
 }
 
 android {
-    compileSdk buildConfig.compileSdk
-
     defaultConfig {
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
-
         testInstrumentationRunner "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
     }
 }
 
