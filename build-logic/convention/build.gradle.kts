@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+    `kotlin-dsl`
+}
+
+group = "com.google.samples.apps.nowinandroid.buildlogic"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    implementation(libs.android.gradlePlugin)
+    implementation(libs.kotlin.gradlePlugin)
+    implementation(libs.spotless.gradlePlugin)
 }

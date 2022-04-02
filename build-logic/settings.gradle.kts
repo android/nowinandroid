@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
 
-dependencies {
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
-}
+include(":convention")

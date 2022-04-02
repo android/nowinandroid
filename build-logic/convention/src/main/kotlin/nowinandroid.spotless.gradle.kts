@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+    id("com.diffplug.spotless")
 }
 
-dependencies {
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("$buildDir/**/*.kt")
+        targetExclude("bin/**/*.kt")
+        ktlint(libs.findVersion("ktlint").get().toString()).userData(mapOf("android" to "true"))
+        licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+    }
 }
