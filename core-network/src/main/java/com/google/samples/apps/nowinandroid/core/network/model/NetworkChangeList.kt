@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-syntax = "proto3";
+package com.google.samples.apps.nowinandroid.core.network.model
 
-option java_package = "com.google.samples.apps.nowinandroid.core.datastore";
-option java_multiple_files = true;
+import kotlinx.serialization.Serializable
 
-message UserPreferences {
-    repeated int32 followed_topic_ids = 1;
-    bool has_run_first_time_sync = 2;
-    int32 topicChangeListVersion = 3;
-    int32 authorChangeListVersion = 4;
-    int32 episodeChangeListVersion = 5;
-    int32 newsResourceChangeListVersion = 6;
-}
+/**
+ * Network representation of a change list for a model
+ */
+@Serializable
+data class NetworkChangeList(
+    val id: Int,
+    val changeListVersion: Int,
+    val isDelete: Boolean,
+)

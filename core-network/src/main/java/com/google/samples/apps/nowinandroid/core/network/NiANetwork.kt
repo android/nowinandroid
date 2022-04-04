@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network
 
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 
@@ -24,9 +25,15 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
  * Interface representing network calls to the NIA backend
  */
 interface NiANetwork {
-    suspend fun getTopics(itemsPerPage: Int = 200): List<NetworkTopic>
+    suspend fun getTopics(ids: List<Int>? = null): List<NetworkTopic>
 
-    suspend fun getAuthors(itemsPerPage: Int = 200): List<NetworkAuthor>
+    suspend fun getAuthors(ids: List<Int>? = null): List<NetworkAuthor>
 
-    suspend fun getNewsResources(itemsPerPage: Int = 200): List<NetworkNewsResource>
+    suspend fun getNewsResources(ids: List<Int>? = null): List<NetworkNewsResource>
+
+    suspend fun getTopicChangeList(after: Int? = null): List<NetworkChangeList>
+
+    suspend fun getAuthorChangeList(after: Int? = null): List<NetworkChangeList>
+
+    suspend fun getNewsResourceChangeList(after: Int? = null): List<NetworkChangeList>
 }

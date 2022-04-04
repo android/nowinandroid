@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
@@ -35,18 +36,41 @@ class FakeNiANetwork @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json
 ) : NiANetwork {
-    override suspend fun getTopics(itemsPerPage: Int): List<NetworkTopic> =
+    override suspend fun getTopics(ids: List<Int>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.topicsData)
         }
 
-    override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
+    override suspend fun getNewsResources(ids: List<Int>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.data)
         }
 
-    override suspend fun getAuthors(itemsPerPage: Int): List<NetworkAuthor> =
+    override suspend fun getAuthors(ids: List<Int>?): List<NetworkAuthor> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.authors)
         }
+
+    override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
+        getTopics().mapToChangeList(NetworkTopic::id)
+
+    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
+        getAuthors().mapToChangeList(NetworkAuthor::id)
+
+    override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
+        getNewsResources().mapToChangeList(NetworkNewsResource::id)
+}
+
+/**
+ * Converts a list of [T] to change list of all the items in it where [idGetter] defines the
+ * [NetworkChangeList.id]
+ */
+private fun <T> List<T>.mapToChangeList(
+    idGetter: (T) -> Int
+) = mapIndexed { index, item ->
+    NetworkChangeList(
+        id = idGetter(item),
+        changeListVersion = index,
+        isDelete = false,
+    )
 }

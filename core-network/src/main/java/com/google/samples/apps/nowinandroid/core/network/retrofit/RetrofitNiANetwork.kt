@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.network.retrofit
 
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -38,18 +39,33 @@ import retrofit2.http.Query
 private interface RetrofitNiANetworkApi {
     @GET(value = "topics")
     suspend fun getTopics(
-        @Query("pageSize") itemsPerPage: Int,
+        @Query("id") ids: List<Int>?,
     ): NetworkResponse<List<NetworkTopic>>
 
     @GET(value = "authors")
     suspend fun getAuthors(
-        @Query("pageSize") itemsPerPage: Int,
+        @Query("id") ids: List<Int>?,
     ): NetworkResponse<List<NetworkAuthor>>
 
     @GET(value = "newsresources")
     suspend fun getNewsResources(
-        @Query("pageSize") itemsPerPage: Int,
+        @Query("id") ids: List<Int>?,
     ): NetworkResponse<List<NetworkNewsResource>>
+
+    @GET(value = "changelists/topics")
+    suspend fun getTopicChangeList(
+        @Query("after") after: Int?,
+    ): List<NetworkChangeList>
+
+    @GET(value = "changelists/authors")
+    suspend fun getAuthorsChangeList(
+        @Query("after") after: Int?,
+    ): List<NetworkChangeList>
+
+    @GET(value = "changelists/newsresources")
+    suspend fun getNewsResourcesChangeList(
+        @Query("after") after: Int?,
+    ): List<NetworkChangeList>
 }
 
 private const val NiABaseUrl = "https://staging-url.com/"
@@ -86,12 +102,21 @@ class RetrofitNiANetwork @Inject constructor(
         .build()
         .create(RetrofitNiANetworkApi::class.java)
 
-    override suspend fun getTopics(itemsPerPage: Int): List<NetworkTopic> =
-        networkApi.getTopics(itemsPerPage = itemsPerPage).data
+    override suspend fun getTopics(ids: List<Int>?): List<NetworkTopic> =
+        networkApi.getTopics(ids = ids).data
 
-    override suspend fun getAuthors(itemsPerPage: Int): List<NetworkAuthor> =
-        networkApi.getAuthors(itemsPerPage = itemsPerPage).data
+    override suspend fun getAuthors(ids: List<Int>?): List<NetworkAuthor> =
+        networkApi.getAuthors(ids = ids).data
 
-    override suspend fun getNewsResources(itemsPerPage: Int): List<NetworkNewsResource> =
-        networkApi.getNewsResources(itemsPerPage = itemsPerPage).data
+    override suspend fun getNewsResources(ids: List<Int>?): List<NetworkNewsResource> =
+        networkApi.getNewsResources(ids = ids).data
+
+    override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
+        networkApi.getTopicChangeList(after = after)
+
+    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
+        networkApi.getAuthorsChangeList(after = after)
+
+    override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
+        networkApi.getNewsResourcesChangeList(after = after)
 }

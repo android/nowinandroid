@@ -19,16 +19,19 @@ package com.google.samples.apps.nowinandroid.core.domain.repository
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestAuthorDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNiaNetwork
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 
 class LocalAuthorsRepositoryTest {
 
@@ -36,16 +39,25 @@ class LocalAuthorsRepositoryTest {
 
     private lateinit var authorDao: AuthorDao
 
-    private lateinit var network: NiANetwork
+    private lateinit var network: TestNiaNetwork
+
+    private lateinit var niaPreferences: NiaPreferences
+
+    @get:Rule
+    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     @Before
     fun setup() {
         authorDao = TestAuthorDao()
         network = TestNiaNetwork()
+        niaPreferences = NiaPreferences(
+            tmpFolder.testUserPreferencesDataStore()
+        )
 
         subject = LocalAuthorsRepository(
             authorDao = authorDao,
             network = network,
+            niaPreferences = niaPreferences,
         )
     }
 
@@ -75,6 +87,42 @@ class LocalAuthorsRepositoryTest {
             Assert.assertEquals(
                 network.map(AuthorEntity::id),
                 db.map(AuthorEntity::id)
+            )
+
+            // After sync version should be updated
+            Assert.assertEquals(
+                network.lastIndex,
+                niaPreferences.getChangeListVersions().authorVersion
+            )
+        }
+
+    @Test
+    fun localAuthorsRepository_incremental_sync_pulls_from_network() =
+        runTest {
+            // Set author version to 5
+            niaPreferences.updateChangeListVersion {
+                copy(authorVersion = 5)
+            }
+
+            subject.sync()
+
+            val network = network.getAuthors()
+                .map(NetworkAuthor::asEntity)
+                // Drop 5 to simulate the first 5 items being unchanged
+                .drop(5)
+
+            val db = authorDao.getAuthorEntitiesStream()
+                .first()
+
+            Assert.assertEquals(
+                network.map(AuthorEntity::id),
+                db.map(AuthorEntity::id)
+            )
+
+            // After sync version should be updated
+            Assert.assertEquals(
+                network.lastIndex + 5,
+                niaPreferences.getChangeListVersions().authorVersion
             )
         }
 }

@@ -19,9 +19,10 @@ package com.google.samples.apps.nowinandroid.core.domain.repository
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.changeListSync
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
-import com.google.samples.apps.nowinandroid.core.domain.suspendRunCatching
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.map
 class LocalTopicsRepository @Inject constructor(
     private val topicDao: TopicDao,
     private val network: NiANetwork,
-    private val niaPreferences: NiaPreferences
+    private val niaPreferences: NiaPreferences,
 ) : TopicsRepository {
 
     override fun getTopicsStream(): Flow<List<Topic>> =
@@ -53,11 +54,20 @@ class LocalTopicsRepository @Inject constructor(
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
-    // TODO: Pass change list for incremental sync. See b/227206738
-    override suspend fun sync(): Boolean = suspendRunCatching {
-        val networkTopics = network.getTopics()
-        topicDao.upsertTopics(
-            entities = networkTopics.map(NetworkTopic::asEntity)
-        )
-    }.isSuccess
+    override suspend fun sync(): Boolean = changeListSync(
+        niaPreferences = niaPreferences,
+        versionReader = ChangeListVersions::topicVersion,
+        changeListFetcher = { currentVersion ->
+            network.getTopicChangeList(after = currentVersion)
+        },
+        versionUpdater = { latestVersion ->
+            copy(topicVersion = latestVersion)
+        },
+        modelUpdater = { changedIds ->
+            val networkTopics = network.getTopics(ids = changedIds)
+            topicDao.upsertTopics(
+                entities = networkTopics.map(NetworkTopic::asEntity)
+            )
+        }
+    )
 }
