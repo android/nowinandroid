@@ -16,24 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.feature.following
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -48,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.ui.FollowButton
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
 import com.google.samples.apps.nowinandroid.core.ui.NiaToolbar
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
@@ -131,7 +126,7 @@ fun FollowingTopicCard(
     onFollowButtonClick: (Int, Boolean) -> Unit,
 ) {
     Row(
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
         modifier =
         Modifier.padding(
             start = 24.dp,
@@ -154,9 +149,16 @@ fun FollowingTopicCard(
             TopicDescription(topicDescription = followableTopic.topic.shortDescription)
         }
         FollowButton(
-            topicId = followableTopic.topic.id,
-            onClick = onFollowButtonClick,
-            isFollowed = followableTopic.isFollowed
+            following = followableTopic.isFollowed,
+            onFollowChange = { following ->
+                onFollowButtonClick(followableTopic.topic.id, following)
+            },
+            notFollowingContentDescription = stringResource(
+                id = R.string.following_topic_card_follow_button_content_desc
+            ),
+            followingContentDescription = stringResource(
+                id = R.string.following_topic_card_unfollow_button_content_desc
+            )
         )
     }
 }
@@ -205,50 +207,6 @@ fun TopicIcon(
             model = topicImageUrl,
             contentDescription = contentDescription,
             modifier = iconModifier
-        )
-    }
-}
-
-@Composable
-fun FollowButton(
-    topicId: Int,
-    isFollowed: Boolean,
-    onClick: (Int, Boolean) -> Unit,
-) {
-    IconToggleButton(
-        checked = isFollowed,
-        onCheckedChange = { onClick(topicId, !isFollowed) }
-    ) {
-        if (isFollowed) {
-            FollowedTopicIcon()
-        } else {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription =
-                stringResource(id = R.string.following_topic_card_follow_button_content_desc),
-                modifier = Modifier.size(14.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun FollowedTopicIcon() {
-    Box(
-        modifier = Modifier
-            .size(30.dp)
-            .background(
-                color = Color.Magenta.copy(alpha = 0.5f),
-                shape = CircleShape
-            )
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Done,
-            contentDescription =
-            stringResource(id = R.string.following_topic_card_unfollow_button_content_desc),
-            modifier = Modifier
-                .size(14.dp)
-                .align(Alignment.Center)
         )
     }
 }

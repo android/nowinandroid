@@ -26,6 +26,21 @@ interface AuthorsRepository {
     fun getAuthorsStream(): Flow<List<Author>>
 
     /**
+     * Sets the user's currently followed authors
+     */
+    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>)
+
+    /**
+     * Toggles the user's newly followed/unfollowed author
+     */
+    suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean)
+
+    /**
+     * Returns the users currently followed authors
+     */
+    fun getFollowedAuthorIdsStream(): Flow<Set<Int>>
+
+    /**
      * Synchronizes the local database in backing the repository with the network.
      * Returns if the sync was successful or not.
      */

@@ -36,8 +36,8 @@ import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestEpisodeD
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNewsResourceDao
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNiaNetwork
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestTopicDao
-import com.google.samples.apps.nowinandroid.core.domain.testdoubles.filteredTopicIds
-import com.google.samples.apps.nowinandroid.core.domain.testdoubles.nonPresentTopicIds
+import com.google.samples.apps.nowinandroid.core.domain.testdoubles.filteredInterestsIds
+import com.google.samples.apps.nowinandroid.core.domain.testdoubles.nonPresentInterestsIds
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import kotlinx.coroutines.flow.first
@@ -101,19 +101,49 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_news_resources_filtered_stream_is_backed_by_news_resource_dao() =
+    fun localNewsRepository_news_resources_topic_filtered_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesStream(filterTopicIds = filteredTopicIds)
+                newsResourceDao.getNewsResourcesForTopicsStream(filteredInterestsIds)
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResourcesStream(filterTopicIds = filteredTopicIds)
+                subject.getNewsResourcesStream(
+                    filterTopicIds = filteredInterestsIds,
+                    filterAuthorIds = emptySet()
+                )
                     .first()
             )
 
             assertEquals(
                 emptyList<NewsResource>(),
-                subject.getNewsResourcesStream(filterTopicIds = nonPresentTopicIds)
+                subject.getNewsResourcesStream(
+                    filterTopicIds = nonPresentInterestsIds,
+                    filterAuthorIds = emptySet()
+                )
+                    .first()
+            )
+        }
+
+    @Test
+    fun localNewsRepository_news_resources_author_filtered_stream_is_backed_by_news_resource_dao() =
+        runTest {
+            assertEquals(
+                newsResourceDao.getNewsResourcesForAuthorsStream(filteredInterestsIds)
+                    .first()
+                    .map(PopulatedNewsResource::asExternalModel),
+                subject.getNewsResourcesStream(
+                    filterTopicIds = emptySet(),
+                    filterAuthorIds = filteredInterestsIds
+                )
+                    .first()
+            )
+
+            assertEquals(
+                emptyList<NewsResource>(),
+                subject.getNewsResourcesStream(
+                    filterTopicIds = emptySet(),
+                    filterAuthorIds = nonPresentInterestsIds
+                )
                     .first()
             )
         }

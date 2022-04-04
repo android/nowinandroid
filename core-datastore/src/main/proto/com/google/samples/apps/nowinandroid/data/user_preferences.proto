@@ -26,4 +26,5 @@ message UserPreferences {
     int32 authorChangeListVersion = 4;
     int32 episodeChangeListVersion = 5;
     int32 newsResourceChangeListVersion = 6;
+    repeated int32 followed_author_ids = 7;
 }

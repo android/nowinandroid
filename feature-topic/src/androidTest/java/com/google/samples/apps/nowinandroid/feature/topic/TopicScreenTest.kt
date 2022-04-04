@@ -89,7 +89,6 @@ class TopicScreenTest {
 
     @Test
     fun news_whenTopicIsLoading_isNotShown() {
-        val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
                 topicState = TopicUiState.Loading,
@@ -133,10 +132,10 @@ private val testTopics = listOf(
         Topic(
             id = 0,
             name = TOPIC_1_NAME,
-            longDescription = TOPIC_DESC,
             shortDescription = "",
-            imageUrl = "",
-            url = ""
+            longDescription = TOPIC_DESC,
+            url = "",
+            imageUrl = ""
         ),
         isFollowed = true
     ),
@@ -144,10 +143,10 @@ private val testTopics = listOf(
         Topic(
             id = 1,
             name = TOPIC_2_NAME,
-            longDescription = TOPIC_DESC,
             shortDescription = "",
-            imageUrl = "",
-            url = ""
+            longDescription = TOPIC_DESC,
+            url = "",
+            imageUrl = ""
         ),
         isFollowed = false
     ),
@@ -155,16 +154,14 @@ private val testTopics = listOf(
         Topic(
             id = 2,
             name = TOPIC_3_NAME,
-            longDescription = TOPIC_DESC,
             shortDescription = "",
-            imageUrl = "",
-            url = ""
+            longDescription = TOPIC_DESC,
+            url = "",
+            imageUrl = ""
         ),
         isFollowed = false
     )
 )
-
-private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size
 
 private val sampleNewsResources = listOf(
     NewsResource(
@@ -184,9 +181,9 @@ private val sampleNewsResources = listOf(
                 id = 0,
                 name = "Headlines",
                 shortDescription = "",
-                longDescription = "",
-                imageUrl = "",
-                url = ""
+                longDescription = TOPIC_DESC,
+                url = "",
+                imageUrl = ""
             )
         ),
         authors = emptyList()

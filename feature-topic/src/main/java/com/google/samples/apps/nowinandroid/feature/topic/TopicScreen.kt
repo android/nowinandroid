@@ -70,7 +70,7 @@ fun TopicRoute(
 
 @VisibleForTesting
 @Composable
-fun TopicScreen(
+internal fun TopicScreen(
     topicState: TopicUiState,
     newsState: NewsUiState,
     onBackClick: () -> Unit,
