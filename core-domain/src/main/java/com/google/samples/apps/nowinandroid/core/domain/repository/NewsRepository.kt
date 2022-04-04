@@ -29,9 +29,12 @@ interface NewsRepository {
     fun getNewsResourcesStream(): Flow<List<NewsResource>>
 
     /**
-     * Returns available news resources as a stream filtered by the topic.
+     * Returns available news resources as a stream filtered by authors and topics.
      */
-    fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>>
+    fun getNewsResourcesStream(
+        filterAuthorIds: Set<Int>,
+        filterTopicIds: Set<Int>,
+    ): Flow<List<NewsResource>>
 
     /**
      * Synchronizes the local database in backing the repository with the network.

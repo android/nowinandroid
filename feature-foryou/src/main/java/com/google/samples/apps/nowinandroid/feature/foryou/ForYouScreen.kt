@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +36,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.samples.apps.nowinandroid.core.model.data.Author
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -65,7 +67,7 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection
 import kotlinx.datetime.Instant
 
@@ -79,7 +81,8 @@ fun ForYouRoute(
         modifier = modifier,
         uiState = uiState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
-        saveFollowedTopics = viewModel::saveFollowedTopics,
+        onAuthorCheckedChanged = viewModel::updateAuthorSelection,
+        saveFollowedTopics = viewModel::saveFollowedInterests,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved
     )
 }
@@ -88,6 +91,7 @@ fun ForYouRoute(
 fun ForYouScreen(
     uiState: ForYouFeedUiState,
     onTopicCheckedChanged: (Int, Boolean) -> Unit,
+    onAuthorCheckedChanged: (Int, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -106,9 +110,40 @@ fun ForYouScreen(
             }
             is PopulatedFeed -> {
                 when (uiState) {
-                    is FeedWithTopicSelection -> {
+                    is FeedWithInterestsSelection -> {
                         item {
-                            TopicSelection(uiState, onTopicCheckedChanged)
+                            Text(
+                                text = stringResource(R.string.onboarding_guidance_title),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 24.dp),
+                                style = NiaTypography.titleMedium
+                            )
+                        }
+                        item {
+                            Text(
+                                text = stringResource(R.string.onboarding_guidance_subtitle),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                                textAlign = TextAlign.Center,
+                                style = NiaTypography.bodyMedium
+                            )
+                        }
+                        item {
+                            AuthorsCarousel(
+                                authors = uiState.authors,
+                                onAuthorClick = onAuthorCheckedChanged,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                        item {
+                            TopicSelection(
+                                uiState,
+                                onTopicCheckedChanged,
+                                Modifier.padding(bottom = 8.dp)
+                            )
                         }
                         item {
                             // Done button
@@ -153,54 +188,35 @@ fun ForYouScreen(
 
 @Composable
 private fun TopicSelection(
-    uiState: ForYouFeedUiState,
-    onTopicCheckedChanged: (Int, Boolean) -> Unit
+    uiState: FeedWithInterestsSelection,
+    onTopicCheckedChanged: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(Modifier.padding(top = 24.dp)) {
-
-        Text(
-            text = stringResource(R.string.onboarding_guidance_title),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-            style = NiaTypography.titleMedium
-        )
-
-        Text(
-            text = stringResource(R.string.onboarding_guidance_subtitle),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-            textAlign = TextAlign.Center,
-            style = NiaTypography.bodyMedium
-        )
-
-        LazyHorizontalGrid(
-            rows = Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(24.dp),
-            modifier = Modifier
-                // LazyHorizontalGrid has to be constrained in height.
-                // However, we can't set a fixed height because the horizontal grid contains
-                // vertical text that can be rescaled.
-                // When the fontScale is at most 1, we know that the horizontal grid will be at most
-                // 240dp tall, so this is an upper bound for when the font scale is at most 1.
-                // When the fontScale is greater than 1, the height required by the text inside the
-                // horizontal grid will increase by at most the same factor, so 240sp is a valid
-                // upper bound for how much space we need in that case.
-                // The maximum of these two bounds is therefore a valid upper bound in all cases.
-                .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
-                .fillMaxWidth()
-        ) {
-            val state: FeedWithTopicSelection = uiState as FeedWithTopicSelection
-            items(state.topics) {
-                SingleTopicButton(
-                    name = it.topic.name,
-                    topicId = it.topic.id,
-                    isSelected = it.isFollowed,
-                    onClick = onTopicCheckedChanged
-                )
-            }
+    LazyHorizontalGrid(
+        rows = Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(24.dp),
+        modifier = modifier
+            // LazyHorizontalGrid has to be constrained in height.
+            // However, we can't set a fixed height because the horizontal grid contains
+            // vertical text that can be rescaled.
+            // When the fontScale is at most 1, we know that the horizontal grid will be at most
+            // 240dp tall, so this is an upper bound for when the font scale is at most 1.
+            // When the fontScale is greater than 1, the height required by the text inside the
+            // horizontal grid will increase by at most the same factor, so 240sp is a valid
+            // upper bound for how much space we need in that case.
+            // The maximum of these two bounds is therefore a valid upper bound in all cases.
+            .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
+            .fillMaxWidth()
+    ) {
+        items(uiState.topics) {
+            SingleTopicButton(
+                name = it.topic.name,
+                topicId = it.topic.id,
+                isSelected = it.isFollowed,
+                onClick = onTopicCheckedChanged
+            )
         }
     }
 }
@@ -230,7 +246,10 @@ private fun SingleTopicButton(
             Text(
                 text = name,
                 style = NiaTypography.titleSmall,
-                modifier = Modifier.padding(12.dp).weight(1f),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .weight(1f),
+                color = MaterialTheme.colorScheme.onSurface
             )
             NiaToggleButton(
                 checked = isSelected,
@@ -249,19 +268,24 @@ private fun SingleTopicButton(
 @Preview
 @Composable
 fun ForYouScreenLoading() {
-    ForYouScreen(
-        uiState = ForYouFeedUiState.Loading,
-        onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {},
-        onNewsResourcesCheckedChanged = { _, _ -> }
-    )
+    MaterialTheme {
+        Surface {
+            ForYouScreen(
+                uiState = ForYouFeedUiState.Loading,
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
 fun ForYouScreenTopicSelection() {
     ForYouScreen(
-        uiState = FeedWithTopicSelection(
+        uiState = FeedWithInterestsSelection(
             topics = listOf(
                 FollowableTopic(
                     topic = Topic(
@@ -376,8 +400,41 @@ fun ForYouScreenTopicSelection() {
                     ),
                     isSaved = false
                 ),
-            )
+            ),
+            authors = listOf(
+                FollowableAuthor(
+                    author = Author(
+                        id = 0,
+                        name = "Android Dev",
+                        imageUrl = "",
+                        twitter = "",
+                        mediumPage = ""
+                    ),
+                    isFollowed = false
+                ),
+                FollowableAuthor(
+                    author = Author(
+                        id = 1,
+                        name = "Android Dev 2",
+                        imageUrl = "",
+                        twitter = "",
+                        mediumPage = ""
+                    ),
+                    isFollowed = false
+                ),
+                FollowableAuthor(
+                    author = Author(
+                        id = 2,
+                        name = "Android Dev 3",
+                        imageUrl = "",
+                        twitter = "",
+                        mediumPage = ""
+                    ),
+                    isFollowed = false
+                )
+            ),
         ),
+        onAuthorCheckedChanged = { _, _ -> },
         onTopicCheckedChanged = { _, _ -> },
         saveFollowedTopics = {},
         onNewsResourcesCheckedChanged = { _, _ -> }
@@ -387,12 +444,17 @@ fun ForYouScreenTopicSelection() {
 @Preview
 @Composable
 fun PopulatedFeed() {
-    ForYouScreen(
-        uiState = FeedWithoutTopicSelection(
-            feed = emptyList()
-        ),
-        onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {},
-        onNewsResourcesCheckedChanged = { _, _ -> }
-    )
+    MaterialTheme {
+        Surface {
+            ForYouScreen(
+                uiState = FeedWithoutTopicSelection(
+                    feed = emptyList()
+                ),
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
 }

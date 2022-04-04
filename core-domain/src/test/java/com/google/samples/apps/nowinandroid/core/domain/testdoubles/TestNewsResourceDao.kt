@@ -30,8 +30,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 
-val filteredTopicIds = setOf(1)
-val nonPresentTopicIds = setOf(2)
+val filteredInterestsIds = setOf(1)
+val nonPresentInterestsIds = setOf(2)
 
 /**
  * Test double for [NewsResourceDao]
@@ -63,13 +63,31 @@ class TestNewsResourceDao : NewsResourceDao {
         }
 
     override fun getNewsResourcesStream(
+        filterAuthorIds: Set<Int>,
         filterTopicIds: Set<Int>
     ): Flow<List<PopulatedNewsResource>> =
         getNewsResourcesStream()
             .map { resources ->
                 resources.filter { resource ->
-                    resource.topics.any { it.id in filterTopicIds }
+                    resource.topics.any { it.id in filterTopicIds } ||
+                        resource.authors.any { it.id in filterAuthorIds }
                 }
+            }
+
+    override fun getNewsResourcesForTopicsStream(
+        filterTopicIds: Set<Int>
+    ): Flow<List<PopulatedNewsResource>> =
+        getNewsResourcesStream()
+            .map { resources ->
+                resources.filter { resource -> resource.topics.any { it.id in filterTopicIds } }
+            }
+
+    override fun getNewsResourcesForAuthorsStream(
+        filterAuthorIds: Set<Int>
+    ): Flow<List<PopulatedNewsResource>> =
+        getNewsResourcesStream()
+            .map { resources ->
+                resources.filter { resource -> resource.authors.any { it.id in filterAuthorIds } }
             }
 
     override suspend fun insertOrIgnoreNewsResources(
@@ -108,7 +126,7 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
     ),
     authors = listOf(
         AuthorEntity(
-            id = 2,
+            id = this.episodeId,
             name = "name",
             imageUrl = "imageUrl",
             twitter = "twitter",
@@ -117,7 +135,7 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
     ),
     topics = listOf(
         TopicEntity(
-            id = filteredTopicIds.random(),
+            id = filteredInterestsIds.random(),
             name = "name",
             shortDescription = "short description",
             longDescription = "long description",

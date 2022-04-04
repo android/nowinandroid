@@ -53,7 +53,7 @@ class TopicViewModel @Inject constructor(
 
     // Observe the News for this topic
     private val newsStream: Flow<Result<List<NewsResource>>> =
-        newsRepository.getNewsResourcesStream(setOf(topicId)).asResult()
+        newsRepository.getNewsResourcesStream(setOf(topicId), emptySet()).asResult()
 
     val uiState: StateFlow<TopicScreenUiState> =
         combine(

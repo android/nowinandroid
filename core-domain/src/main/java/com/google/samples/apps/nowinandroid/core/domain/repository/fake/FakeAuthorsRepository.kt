@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -31,16 +32,17 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 /**
- * Fake implementation of the [AuthorsRepository] that retrieves the Authors from a JSON String, and
- * uses a local DataStore instance to save and retrieve followed Author ids.
+ * Fake implementation of the [AuthorsRepository] that returns hardcoded authors.
  *
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
  */
 class FakeAuthorsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    private val niaPreferences: NiaPreferences,
     private val networkJson: Json,
 ) : AuthorsRepository {
+
     override fun getAuthorsStream(): Flow<List<Author>> = flow {
         emit(
             networkJson.decodeFromString<List<NetworkAuthor>>(FakeDataSource.authors).map {
@@ -55,6 +57,16 @@ class FakeAuthorsRepository @Inject constructor(
         )
     }
         .flowOn(ioDispatcher)
+
+    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) {
+        niaPreferences.setFollowedAuthorIds(followedAuthorIds)
+    }
+
+    override suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) {
+        niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
+    }
+
+    override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = niaPreferences.followedAuthorIds
 
     override suspend fun sync() = true
 }

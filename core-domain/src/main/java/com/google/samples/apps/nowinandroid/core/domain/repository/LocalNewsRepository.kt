@@ -57,9 +57,21 @@ class LocalNewsRepository @Inject constructor(
         newsResourceDao.getNewsResourcesStream()
             .map { it.map(PopulatedNewsResource::asExternalModel) }
 
-    override fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>> =
-        newsResourceDao.getNewsResourcesStream(filterTopicIds = filterTopicIds)
-            .map { it.map(PopulatedNewsResource::asExternalModel) }
+    override fun getNewsResourcesStream(
+        filterAuthorIds: Set<Int>,
+        filterTopicIds: Set<Int>
+    ): Flow<List<NewsResource>> = when {
+        filterAuthorIds.isEmpty() -> {
+            newsResourceDao.getNewsResourcesForTopicsStream(filterTopicIds)
+        }
+        filterTopicIds.isEmpty() -> {
+            newsResourceDao.getNewsResourcesForAuthorsStream(filterAuthorIds)
+        }
+        else -> {
+            newsResourceDao.getNewsResourcesStream(filterAuthorIds, filterTopicIds)
+        }
+    }
+        .map { it.map(PopulatedNewsResource::asExternalModel) }
 
     override suspend fun sync() = changeListSync(
         niaPreferences = niaPreferences,

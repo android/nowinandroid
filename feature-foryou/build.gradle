@@ -44,6 +44,9 @@ dependencies {
 
     implementation libs.accompanist.flowlayout
 
+    implementation libs.coil.kt
+    implementation libs.coil.kt.compose
+
     implementation libs.hilt.android
     kapt libs.hilt.compiler
 

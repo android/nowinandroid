@@ -22,8 +22,11 @@ import androidx.compose.runtime.snapshots.Snapshot.Companion.withMutableSnapshot
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.domain.combine
+import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
@@ -41,26 +44,31 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
+    private val authorsRepository: AuthorsRepository,
     private val topicsRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val followedTopicsStateFlow = topicsRepository.getFollowedTopicIdsStream()
-        .map { followedTopics ->
-            if (followedTopics.isEmpty()) {
-                FollowedTopicsState.None
+    private val followedInterestsStateFlow =
+        combine(
+            authorsRepository.getFollowedAuthorIdsStream(),
+            topicsRepository.getFollowedTopicIdsStream(),
+        ) { followedAuthors, followedTopics ->
+            if (followedAuthors.isEmpty() || followedTopics.isEmpty()) {
+                FollowedInterestsState.None
             } else {
-                FollowedTopicsState.FollowedTopics(
+                FollowedInterestsState.FollowedInterests(
+                    authorIds = followedAuthors,
                     topicIds = followedTopics
                 )
             }
         }
-        .stateIn(
-            viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = FollowedTopicsState.Unknown
-        )
+            .stateIn(
+                viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = FollowedInterestsState.Unknown
+            )
 
     /**
      * TODO: Temporary saving of news resources persisted through process death with a
@@ -80,12 +88,23 @@ class ForYouViewModel @Inject constructor(
         mutableStateOf<Set<Int>>(emptySet())
     }
 
+    /**
+     * The in-progress set of authors to be selected, persisted through process death with a
+     * [SavedStateHandle].
+     */
+    private var inProgressAuthorSelection by savedStateHandle.saveable {
+        mutableStateOf<Set<Int>>(emptySet())
+    }
+
     val uiState: StateFlow<ForYouFeedUiState> = combine(
-        followedTopicsStateFlow,
+        followedInterestsStateFlow,
         topicsRepository.getTopicsStream(),
         snapshotFlow { inProgressTopicSelection },
+        authorsRepository.getAuthorsStream(),
+        snapshotFlow { inProgressAuthorSelection },
         snapshotFlow { savedNewsResources }
-    ) { followedTopicsUserState, availableTopics, inProgressTopicSelection, savedNewsResources ->
+    ) { followedInterestsUserState, availableTopics, inProgressTopicSelection,
+        availableAuthors, inProgressAuthorSelection, savedNewsResources ->
 
         fun mapToSaveableFeed(feed: List<NewsResource>): List<SaveableNewsResource> =
             feed.map { newsResource ->
@@ -95,13 +114,14 @@ class ForYouViewModel @Inject constructor(
                 )
             }
 
-        when (followedTopicsUserState) {
+        when (followedInterestsUserState) {
             // If we don't know the current selection state, just emit loading.
-            FollowedTopicsState.Unknown -> flowOf<ForYouFeedUiState>(ForYouFeedUiState.Loading)
+            FollowedInterestsState.Unknown -> flowOf<ForYouFeedUiState>(ForYouFeedUiState.Loading)
             // If the user has followed topics, use those followed topics to populate the feed
-            is FollowedTopicsState.FollowedTopics -> {
+            is FollowedInterestsState.FollowedInterests -> {
                 newsRepository.getNewsResourcesStream(
-                    filterTopicIds = followedTopicsUserState.topicIds
+                    filterTopicIds = followedInterestsUserState.topicIds,
+                    filterAuthorIds = followedInterestsUserState.authorIds
                 )
                     .map(::mapToSaveableFeed)
                     .map { feed ->
@@ -112,17 +132,24 @@ class ForYouViewModel @Inject constructor(
             }
             // If the user hasn't followed topics yet, show the topic selection, as well as a
             // realtime populated feed based on those in-progress topic selections.
-            FollowedTopicsState.None -> {
+            FollowedInterestsState.None -> {
                 newsRepository.getNewsResourcesStream(
-                    filterTopicIds = inProgressTopicSelection
+                    filterTopicIds = inProgressTopicSelection,
+                    filterAuthorIds = inProgressAuthorSelection
                 )
                     .map(::mapToSaveableFeed)
                     .map { feed ->
-                        ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
+                        ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                             topics = availableTopics.map { topic ->
                                 FollowableTopic(
                                     topic = topic,
                                     isFollowed = topic.id in inProgressTopicSelection
+                                )
+                            },
+                            authors = availableAuthors.map { author ->
+                                FollowableAuthor(
+                                    author = author,
+                                    isFollowed = author.id in inProgressAuthorSelection
                                 )
                             },
                             feed = feed
@@ -153,6 +180,18 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
+    fun updateAuthorSelection(authorId: Int, isChecked: Boolean) {
+        withMutableSnapshot {
+            inProgressAuthorSelection =
+                // Update the in-progress selection based on whether the author id was checked
+                if (isChecked) {
+                    inProgressAuthorSelection + authorId
+                } else {
+                    inProgressAuthorSelection - authorId
+                }
+        }
+    }
+
     fun updateNewsResourceSaved(newsResourceId: Int, isChecked: Boolean) {
         withMutableSnapshot {
             savedNewsResources =
@@ -164,41 +203,48 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun saveFollowedTopics() {
-        if (inProgressTopicSelection.isEmpty()) return
-
-        viewModelScope.launch {
-            topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
-
-            // Clear out the in-progress selection after saving it
-            withMutableSnapshot {
-                inProgressTopicSelection = emptySet()
+    fun saveFollowedInterests() {
+        if (inProgressTopicSelection.isNotEmpty()) {
+            viewModelScope.launch {
+                topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
+                withMutableSnapshot {
+                    inProgressTopicSelection = emptySet()
+                }
+            }
+        }
+        if (inProgressAuthorSelection.isNotEmpty()) {
+            viewModelScope.launch {
+                authorsRepository.setFollowedAuthorIds(inProgressAuthorSelection)
+                withMutableSnapshot {
+                    inProgressAuthorSelection = emptySet()
+                }
             }
         }
     }
 }
 
 /**
- * A sealed hierarchy for the user's current followed topics state.
+ * A sealed hierarchy for the user's current followed interests state.
  */
-private sealed interface FollowedTopicsState {
+private sealed interface FollowedInterestsState {
 
     /**
      * The current state is unknown (hasn't loaded yet)
      */
-    object Unknown : FollowedTopicsState
+    object Unknown : FollowedInterestsState
 
     /**
-     * The user hasn't followed any topics yet.
+     * The user hasn't followed any interests yet.
      */
-    object None : FollowedTopicsState
+    object None : FollowedInterestsState
 
     /**
-     * The user has followed the given (non-empty) set of [topicIds].
+     * The user has followed the given (non-empty) set of [topicIds] or [authorIds].
      */
-    data class FollowedTopics(
+    data class FollowedInterests(
         val topicIds: Set<Int>,
-    ) : FollowedTopicsState
+        val authorIds: Set<Int>
+    ) : FollowedInterestsState
 }
 
 /**
@@ -222,13 +268,15 @@ sealed interface ForYouFeedUiState {
         val feed: List<SaveableNewsResource>
 
         /**
-         * The feed, along with a list of topics that can be selected.
+         * The feed, along with a list of interests that can be selected.
          */
-        data class FeedWithTopicSelection(
+        data class FeedWithInterestsSelection(
             val topics: List<FollowableTopic>,
+            val authors: List<FollowableAuthor>,
             override val feed: List<SaveableNewsResource>
         ) : PopulatedFeed {
-            val canSaveSelectedTopics: Boolean = topics.any { it.isFollowed }
+            val canSaveSelectedTopics: Boolean =
+                topics.any { it.isFollowed } || authors.any { it.isFollowed }
         }
 
         /**

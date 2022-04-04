@@ -43,6 +43,14 @@ class LocalAuthorsRepository @Inject constructor(
         authorDao.getAuthorEntitiesStream()
             .map { it.map(AuthorEntity::asExternalModel) }
 
+    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) =
+        niaPreferences.setFollowedAuthorIds(followedAuthorIds)
+
+    override suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) =
+        niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
+
+    override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = niaPreferences.followedAuthorIds
+
     override suspend fun sync(): Boolean = changeListSync(
         niaPreferences = niaPreferences,
         versionReader = ChangeListVersions::authorVersion,

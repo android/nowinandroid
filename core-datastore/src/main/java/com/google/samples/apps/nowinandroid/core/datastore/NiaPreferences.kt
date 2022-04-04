@@ -104,4 +104,43 @@ class NiaPreferences @Inject constructor(
             Log.e("NiaPreferences", "Failed to update user preferences", ioException)
         }
     }
+
+    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    this.followedAuthorIds.clear()
+                    this.followedAuthorIds.addAll(followedAuthorIds)
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
+
+    suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    val current =
+                        if (followed) {
+                            followedAuthorIds + followedAuthorId
+                        } else {
+                            followedAuthorIds - followedAuthorId
+                        }
+                    this.followedAuthorIds.clear()
+                    this.followedAuthorIds.addAll(current)
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
+
+    val followedAuthorIds: Flow<Set<Int>> = userPreferences.data
+        .retry {
+            Log.e("NiaPreferences", "Failed to read user preferences", it)
+            true
+        }
+        .map { it.followedAuthorIdsList.toSet() }
 }

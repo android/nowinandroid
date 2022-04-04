@@ -54,11 +54,17 @@ class FakeNewsRepository @Inject constructor(
         }
             .flowOn(ioDispatcher)
 
-    override fun getNewsResourcesStream(filterTopicIds: Set<Int>): Flow<List<NewsResource>> =
+    override fun getNewsResourcesStream(
+        filterAuthorIds: Set<Int>,
+        filterTopicIds: Set<Int>,
+    ): Flow<List<NewsResource>> =
         flow {
             emit(
                 networkJson.decodeFromString<List<NetworkNewsResource>>(FakeDataSource.data)
-                    .filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
+                    .filter {
+                        it.authors.intersect(filterAuthorIds).isNotEmpty() ||
+                            it.topics.intersect(filterTopicIds).isNotEmpty()
+                    }
                     .map(NetworkNewsResource::asEntity)
                     .map(NewsResourceEntity::asExternalModel)
             )
