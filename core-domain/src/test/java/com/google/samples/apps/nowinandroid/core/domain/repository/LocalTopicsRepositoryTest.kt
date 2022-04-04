@@ -100,6 +100,42 @@ class LocalTopicsRepositoryTest {
                 network.map(TopicEntity::id),
                 db.map(TopicEntity::id)
             )
+
+            // After sync version should be updated
+            Assert.assertEquals(
+                network.lastIndex,
+                niaPreferences.getChangeListVersions().topicVersion
+            )
+        }
+
+    @Test
+    fun localTopicsRepository_incremental_sync_pulls_from_network() =
+        runTest {
+            // Set topics version to 10
+            niaPreferences.updateChangeListVersion {
+                copy(topicVersion = 10)
+            }
+
+            subject.sync()
+
+            val network = network.getTopics()
+                .map(NetworkTopic::asEntity)
+                // Drop 10 to simulate the first 10 items being unchanged
+                .drop(10)
+
+            val db = topicDao.getTopicEntitiesStream()
+                .first()
+
+            Assert.assertEquals(
+                network.map(TopicEntity::id),
+                db.map(TopicEntity::id)
+            )
+
+            // After sync version should be updated
+            Assert.assertEquals(
+                network.lastIndex + 10,
+                niaPreferences.getChangeListVersions().topicVersion
+            )
         }
 
     @Test

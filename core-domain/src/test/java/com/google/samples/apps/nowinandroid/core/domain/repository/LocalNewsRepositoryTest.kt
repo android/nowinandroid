@@ -23,6 +23,8 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.domain.model.authorCrossReferences
 import com.google.samples.apps.nowinandroid.core.domain.model.authorEntityShells
@@ -42,7 +44,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 
 class LocalNewsRepositoryTest {
 
@@ -58,6 +62,11 @@ class LocalNewsRepositoryTest {
 
     private lateinit var network: TestNiaNetwork
 
+    private lateinit var niaPreferences: NiaPreferences
+
+    @get:Rule
+    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+
     @Before
     fun setup() {
         newsResourceDao = TestNewsResourceDao()
@@ -65,6 +74,9 @@ class LocalNewsRepositoryTest {
         authorDao = TestAuthorDao()
         topicDao = TestTopicDao()
         network = TestNiaNetwork()
+        niaPreferences = NiaPreferences(
+            tmpFolder.testUserPreferencesDataStore()
+        )
 
         subject = LocalNewsRepository(
             newsResourceDao = newsResourceDao,
@@ -72,6 +84,7 @@ class LocalNewsRepositoryTest {
             authorDao = authorDao,
             topicDao = topicDao,
             network = network,
+            niaPreferences = niaPreferences,
         )
     }
 
@@ -121,6 +134,44 @@ class LocalNewsRepositoryTest {
             assertEquals(
                 newsResourcesFromNetwork.map(NewsResource::id),
                 newsResourcesFromDb.map(NewsResource::id)
+            )
+
+            // After sync version should be updated
+            assertEquals(
+                newsResourcesFromNetwork.lastIndex,
+                niaPreferences.getChangeListVersions().newsResourceVersion
+            )
+        }
+
+    @Test
+    fun localNewsRepository_incremental_sync_pulls_from_network() =
+        runTest {
+            // Set news version to 7
+            niaPreferences.updateChangeListVersion {
+                copy(newsResourceVersion = 7)
+            }
+
+            subject.sync()
+
+            val newsResourcesFromNetwork = network.getNewsResources()
+                .map(NetworkNewsResource::asEntity)
+                .map(NewsResourceEntity::asExternalModel)
+                // Drop 7 to simulate the first 7 items being unchanged
+                .drop(7)
+
+            val newsResourcesFromDb = newsResourceDao.getNewsResourcesStream()
+                .first()
+                .map(PopulatedNewsResource::asExternalModel)
+
+            assertEquals(
+                newsResourcesFromNetwork.map(NewsResource::id),
+                newsResourcesFromDb.map(NewsResource::id)
+            )
+
+            // After sync version should be updated
+            assertEquals(
+                newsResourcesFromNetwork.lastIndex + 7,
+                niaPreferences.getChangeListVersions().newsResourceVersion
             )
         }
 

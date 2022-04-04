@@ -25,6 +25,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 
+data class ChangeListVersions(
+    val topicVersion: Int = -1,
+    val authorVersion: Int = -1,
+    val episodeVersion: Int = -1,
+    val newsResourceVersion: Int = -1,
+)
+
 class NiaPreferences @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
@@ -75,6 +82,44 @@ class NiaPreferences @Inject constructor(
             userPreferences.updateData {
                 it.copy {
                     hasRunFirstTimeSync = true
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
+
+    suspend fun getChangeListVersions() = userPreferences.data
+        .map {
+            ChangeListVersions(
+                topicVersion = it.topicChangeListVersion,
+                authorVersion = it.authorChangeListVersion,
+                episodeVersion = it.episodeChangeListVersion,
+                newsResourceVersion = it.newsResourceChangeListVersion,
+            )
+        }
+        .firstOrNull() ?: ChangeListVersions()
+
+    /**
+     * Update the [ChangeListVersions] using [update].
+     */
+    suspend fun updateChangeListVersion(update: ChangeListVersions.() -> ChangeListVersions) {
+        try {
+            userPreferences.updateData { currentPreferences ->
+                val updatedChangeListVersions = update(
+                    ChangeListVersions(
+                        topicVersion = currentPreferences.topicChangeListVersion,
+                        authorVersion = currentPreferences.authorChangeListVersion,
+                        episodeVersion = currentPreferences.episodeChangeListVersion,
+                        newsResourceVersion = currentPreferences.newsResourceChangeListVersion
+                    )
+                )
+
+                currentPreferences.copy {
+                    topicChangeListVersion = updatedChangeListVersions.topicVersion
+                    authorChangeListVersion = updatedChangeListVersions.authorVersion
+                    episodeChangeListVersion = updatedChangeListVersions.episodeVersion
+                    newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
                 }
             }
         } catch (ioException: IOException) {
