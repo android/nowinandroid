@@ -329,6 +329,69 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun topicSelectionIsResetAfterSavingTopicsAndRemovingThem() = runTest {
+        viewModel.uiState
+            .test {
+                awaitItem()
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(emptySet())
+                newsRepository.sendNewsResources(sampleNewsResources)
+
+                awaitItem()
+                viewModel.updateTopicSelection(1, isChecked = true)
+
+                awaitItem()
+                viewModel.saveFollowedTopics()
+
+                awaitItem()
+                topicsRepository.setFollowedTopicIds(emptySet())
+
+                assertEquals(
+                    ForYouFeedUiState.PopulatedFeed.FeedWithTopicSelection(
+                        topics = listOf(
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 0,
+                                    name = "Headlines",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 1,
+                                    name = "UI",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 2,
+                                    name = "Tools",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            )
+                        ),
+                        feed = emptyList()
+                    ),
+                    awaitItem()
+                )
+                cancel()
+            }
+    }
+
+    @Test
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
         viewModel.uiState
             .test {
