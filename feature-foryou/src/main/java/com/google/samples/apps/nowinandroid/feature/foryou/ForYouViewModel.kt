@@ -169,6 +169,11 @@ class ForYouViewModel @Inject constructor(
 
         viewModelScope.launch {
             topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
+
+            // Clear out the in-progress selection after saving it
+            withMutableSnapshot {
+                inProgressTopicSelection = emptySet()
+            }
         }
     }
 }
