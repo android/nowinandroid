@@ -84,6 +84,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
@@ -123,68 +124,70 @@ fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
-    //       https://issuetracker.google.com/issues/230514914
-    //       https://issuetracker.google.com/issues/231320714
-    BoxWithConstraints(
-        modifier = modifier
-    ) {
-        val numberOfColumns = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
-            else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
-        }
-
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            item {
-                Spacer(
-                    // TODO: Replace with windowInsetsTopHeight after
-                    //       https://issuetracker.google.com/issues/230383055
-                    Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                    )
-                )
+    NiaGradientBackground {
+        // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
+        //       https://issuetracker.google.com/issues/230514914
+        //       https://issuetracker.google.com/issues/231320714
+        BoxWithConstraints(
+            modifier = modifier
+        ) {
+            val numberOfColumns = when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
+                else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
             }
 
-            item {
-                NiaTopAppBar(
-                    titleRes = R.string.top_app_bar_title,
-                    navigationIcon = Icons.Filled.Search,
-                    navigationIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
-                    ),
-                    actionIcon = Icons.Outlined.AccountCircle,
-                    actionIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
-                    ),
-                )
-            }
-
-            InterestsSelection(
-                interestsSelectionState = interestsSelectionState,
-                showLoadingUIIfLoading = true,
-                onAuthorCheckedChanged = onAuthorCheckedChanged,
-                onTopicCheckedChanged = onTopicCheckedChanged,
-                saveFollowedTopics = saveFollowedTopics
-            )
-
-            Feed(
-                feedState = feedState,
-                // Avoid showing a second loading wheel if we already are for the interests
-                // selection
-                showLoadingUIIfLoading =
-                interestsSelectionState !is ForYouInterestsSelectionState.Loading,
-                numberOfColumns = numberOfColumns,
-                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
-            )
-
-            item {
-                Spacer(
-                    // TODO: Replace with windowInsetsBottomHeight after
-                    //       https://issuetracker.google.com/issues/230383055
-                    Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                item {
+                    Spacer(
+                        // TODO: Replace with windowInsetsTopHeight after
+                        //       https://issuetracker.google.com/issues/230383055
+                        Modifier.windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                        )
                     )
+                }
+
+                item {
+                    NiaTopAppBar(
+                        titleRes = R.string.top_app_bar_title,
+                        navigationIcon = Icons.Filled.Search,
+                        navigationIconContentDescription = stringResource(
+                            id = R.string.top_app_bar_navigation_button_content_desc
+                        ),
+                        actionIcon = Icons.Outlined.AccountCircle,
+                        actionIconContentDescription = stringResource(
+                            id = R.string.top_app_bar_navigation_button_content_desc
+                        ),
+                    )
+                }
+
+                InterestsSelection(
+                    interestsSelectionState = interestsSelectionState,
+                    showLoadingUIIfLoading = true,
+                    onAuthorCheckedChanged = onAuthorCheckedChanged,
+                    onTopicCheckedChanged = onTopicCheckedChanged,
+                    saveFollowedTopics = saveFollowedTopics
                 )
+
+                Feed(
+                    feedState = feedState,
+                    // Avoid showing a second loading wheel if we already are for the interests
+                    // selection
+                    showLoadingUIIfLoading =
+                    interestsSelectionState !is ForYouInterestsSelectionState.Loading,
+                    numberOfColumns = numberOfColumns,
+                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
+                )
+
+                item {
+                    Spacer(
+                        // TODO: Replace with windowInsetsBottomHeight after
+                        //       https://issuetracker.google.com/issues/230383055
+                        Modifier.windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                        )
+                    )
+                }
             }
         }
     }

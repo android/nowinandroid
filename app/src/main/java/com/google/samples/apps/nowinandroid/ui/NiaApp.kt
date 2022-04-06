@@ -55,6 +55,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,6 +65,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -78,41 +80,45 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
-        Scaffold(
-            modifier = Modifier,
-            bottomBar = {
-                if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
-                    NiABottomBar(
-                        navigationActions = navigationActions,
-                        currentDestination = currentDestination
-                    )
-                }
-            }
-        ) { padding ->
-            Row(
-                Modifier
-                    .fillMaxSize()
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal
+        NiaBackground {
+            Scaffold(
+                modifier = Modifier,
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                bottomBar = {
+                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
+                        NiABottomBar(
+                            navigationActions = navigationActions,
+                            currentDestination = currentDestination
                         )
-                    )
-            ) {
-                if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
-                    NiANavRail(
-                        navigationActions = navigationActions,
-                        currentDestination = currentDestination,
-                        modifier = Modifier.safeDrawingPadding()
+                    }
+                }
+            ) { padding ->
+                Row(
+                    Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Horizontal
+                            )
+                        )
+                ) {
+                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
+                        NiANavRail(
+                            navigationActions = navigationActions,
+                            currentDestination = currentDestination,
+                            modifier = Modifier.safeDrawingPadding()
+                        )
+                    }
+
+                    NiaNavGraph(
+                        windowSizeClass = windowSizeClass,
+                        navController = navController,
+                        modifier = Modifier
+                            .padding(padding)
+                            .consumedWindowInsets(padding)
                     )
                 }
-
-                NiaNavGraph(
-                    windowSizeClass = windowSizeClass,
-                    navController = navController,
-                    modifier = Modifier
-                        .padding(padding)
-                        .consumedWindowInsets(padding)
-                )
             }
         }
     }
