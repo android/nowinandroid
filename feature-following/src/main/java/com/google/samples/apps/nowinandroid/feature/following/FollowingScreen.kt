@@ -16,98 +16,112 @@
 
 package com.google.samples.apps.nowinandroid.feature.following
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.ui.FollowButton
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
 import com.google.samples.apps.nowinandroid.core.ui.NiaToolbar
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 
 @Composable
-fun FollowingRoute(
+fun InterestsRoute(
     modifier: Modifier = Modifier,
+    navigateToAuthor: () -> Unit,
     navigateToTopic: (Int) -> Unit,
     viewModel: FollowingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val tabState by viewModel.tabState.collectAsState()
 
     FollowingScreen(
-        modifier = modifier,
         uiState = uiState,
+        tabState = tabState,
         followTopic = viewModel::followTopic,
-        navigateToTopic = navigateToTopic
+        followAuthor = viewModel::followAuthor,
+        navigateToAuthor = navigateToAuthor,
+        navigateToTopic = navigateToTopic,
+        switchTab = viewModel::switchTab,
+        modifier = modifier
     )
 }
 
 @Composable
 fun FollowingScreen(
     uiState: FollowingUiState,
+    tabState: FollowingTabState,
+    followAuthor: (Int, Boolean) -> Unit,
     followTopic: (Int, Boolean) -> Unit,
+    navigateToAuthor: () -> Unit,
     navigateToTopic: (Int) -> Unit,
+    switchTab: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NiaToolbar(titleRes = R.string.following)
+        NiaToolbar(titleRes = R.string.interests)
         when (uiState) {
             FollowingUiState.Loading ->
                 NiaLoadingIndicator(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.following_loading),
                 )
-            is FollowingUiState.Topics ->
-                FollowingWithTopicsScreen(
-                    uiState = uiState,
-                    onTopicClick = navigateToTopic,
-                    onFollowButtonClick = followTopic,
+            is FollowingUiState.Interests ->
+                FollowingContent(
+                    tabState, switchTab, uiState, navigateToTopic, followTopic,
+                    navigateToAuthor, followAuthor
                 )
-            is FollowingUiState.Error -> FollowingErrorScreen()
+            is FollowingUiState.Empty -> InterestsEmptyScreen()
         }
     }
 }
 
 @Composable
-fun FollowingWithTopicsScreen(
-    modifier: Modifier = Modifier,
-    uiState: FollowingUiState.Topics,
-    onTopicClick: (Int) -> Unit,
-    onFollowButtonClick: (Int, Boolean) -> Unit
+private fun FollowingContent(
+    tabState: FollowingTabState,
+    switchTab: (Int) -> Unit,
+    uiState: FollowingUiState.Interests,
+    navigateToTopic: (Int) -> Unit,
+    followTopic: (Int, Boolean) -> Unit,
+    navigateToAuthor: () -> Unit,
+    followAuthor: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        uiState.topics.forEach { followableTopic ->
-            item {
-                FollowingTopicCard(
-                    followableTopic = followableTopic,
-                    onTopicClick = { onTopicClick(followableTopic.topic.id) },
-                    onFollowButtonClick = onFollowButtonClick
+    Column(modifier) {
+        NiaTabRow(selectedTabIndex = tabState.currentIndex) {
+            tabState.titles.forEachIndexed { index, titleId ->
+                NiaTab(
+                    selected = index == tabState.currentIndex,
+                    onClick = { switchTab(index) },
+                    text = { Text(text = stringResource(id = titleId)) }
+                )
+            }
+        }
+        when (tabState.currentIndex) {
+            0 -> {
+                TopicsTabContent(
+                    topics = uiState.topics,
+                    onTopicClick = navigateToTopic,
+                    onFollowButtonClick = followTopic,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+            1 -> {
+                AuthorsTabContent(
+                    authors = uiState.authors,
+                    onAuthorClick = { navigateToAuthor() },
+                    onFollowButtonClick = followAuthor,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
@@ -115,122 +129,6 @@ fun FollowingWithTopicsScreen(
 }
 
 @Composable
-fun FollowingErrorScreen() {
-    Text(text = stringResource(id = R.string.following_error_header))
-}
-
-@Composable
-fun FollowingTopicCard(
-    followableTopic: FollowableTopic,
-    onTopicClick: () -> Unit,
-    onFollowButtonClick: (Int, Boolean) -> Unit,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier =
-        Modifier.padding(
-            start = 24.dp,
-            end = 8.dp,
-            bottom = 24.dp
-        )
-    ) {
-        TopicIcon(
-            modifier = Modifier.padding(end = 24.dp),
-            topicImageUrl = followableTopic.topic.imageUrl,
-            onClick = onTopicClick
-        )
-        Column(
-            Modifier
-                .wrapContentSize(Alignment.CenterStart)
-                .weight(1f)
-                .clickable { onTopicClick() }
-        ) {
-            TopicTitle(topicName = followableTopic.topic.name)
-            TopicDescription(topicDescription = followableTopic.topic.shortDescription)
-        }
-        FollowButton(
-            following = followableTopic.isFollowed,
-            onFollowChange = { following ->
-                onFollowButtonClick(followableTopic.topic.id, following)
-            },
-            notFollowingContentDescription = stringResource(
-                id = R.string.following_topic_card_follow_button_content_desc
-            ),
-            followingContentDescription = stringResource(
-                id = R.string.following_topic_card_unfollow_button_content_desc
-            )
-        )
-    }
-}
-
-@Composable
-fun TopicTitle(
-    topicName: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = topicName,
-        style = MaterialTheme.typography.h5,
-        modifier = modifier.padding(top = 12.dp, bottom = 8.dp)
-    )
-}
-
-@Composable
-fun TopicDescription(topicDescription: String) {
-    Text(
-        text = topicDescription,
-        style = MaterialTheme.typography.body2,
-        modifier = Modifier.wrapContentSize(Alignment.CenterStart)
-    )
-}
-
-@Composable
-fun TopicIcon(
-    modifier: Modifier = Modifier,
-    topicImageUrl: String,
-    onClick: () -> Unit
-) {
-
-    val iconModifier = modifier.size(64.dp)
-        .clickable { onClick() }
-    val contentDescription = stringResource(id = R.string.following_topic_card_icon_content_desc)
-
-    if (topicImageUrl.isEmpty()) {
-        Icon(
-            imageVector = Icons.Filled.Android,
-            tint = Color.Magenta,
-            contentDescription = contentDescription,
-            modifier = iconModifier
-        )
-    } else {
-        AsyncImage(
-            model = topicImageUrl,
-            contentDescription = contentDescription,
-            modifier = iconModifier
-        )
-    }
-}
-
-@Preview("Topic card")
-@Composable
-fun TopicCardPreview() {
-    NiaTheme {
-        Surface {
-            FollowingTopicCard(
-                FollowableTopic(
-                    Topic(
-                        id = 0,
-                        name = "Compose",
-                        shortDescription = "Short description",
-                        longDescription = "Long description",
-                        url = "URL",
-                        imageUrl = "imageUrl"
-                    ),
-                    isFollowed = false
-                ),
-                onTopicClick = {},
-                onFollowButtonClick = { _, _ -> }
-            )
-        }
-    }
+private fun InterestsEmptyScreen() {
+    Text(text = stringResource(id = R.string.following_empty_header))
 }

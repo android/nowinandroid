@@ -199,7 +199,7 @@ private sealed class Destination(
         route = NiaDestinations.FOLLOWING_ROUTE,
         selectedIcon = Icons.Filled.Grid3x3,
         unselectedIcon = Icons.Outlined.Grid3x3,
-        iconTextId = R.string.following
+        iconTextId = R.string.interests
     )
 }
 

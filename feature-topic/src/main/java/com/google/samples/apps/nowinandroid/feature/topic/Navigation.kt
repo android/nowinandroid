@@ -16,11 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic
 
+import com.google.samples.apps.nowinandroid.feature.topic.InterestsScreens.TOPIC_SCREEN
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs.TOPIC_ID_ARG
-import com.google.samples.apps.nowinandroid.feature.topic.TopicScreens.TOPIC_SCREEN
 
-object TopicDestinations {
-    const val TOPICS_ROUTE = "topics"
+object InterestsDestinations {
+    const val INTERESTS_ROUTE = "interests"
     const val TOPIC_ROUTE = "$TOPIC_SCREEN/{$TOPIC_ID_ARG}"
 }
 
@@ -28,6 +28,6 @@ object TopicDestinationsArgs {
     const val TOPIC_ID_ARG = "topicId"
 }
 
-object TopicScreens {
+object InterestsScreens {
     const val TOPIC_SCREEN = "topic"
 }
