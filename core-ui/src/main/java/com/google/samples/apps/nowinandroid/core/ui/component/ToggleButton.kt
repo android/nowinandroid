@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.dp
  * @param enabled Controls the enabled state of the toggle button. When `false`, this toggle button
  * will not be clickable and will appear disabled to accessibility services.
  * @param icon The icon content to show when unchecked.
+ * @param checkedBackgroundRadius The background radius that will be used to draw a background color
+ * behind the checkedIcon when this toggle button is checked.
  * @param checkedIcon The icon content to show when checked.
  */
 @Composable
@@ -47,11 +50,12 @@ fun NiaToggleButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: @Composable () -> Unit,
+    checkedBackgroundRadius: Dp = NiaToggleButtonDefaults.ToggleButtonSize / 2,
     checkedIcon: @Composable () -> Unit = icon
 ) {
     val checkedColor = MaterialTheme.colorScheme.primaryContainer
     val checkedRadius = with(LocalDensity.current) {
-        (NiaToggleButtonDefaults.ToggleButtonSize / 2).toPx()
+        checkedBackgroundRadius.toPx()
     }
     IconButton(
         onClick = { onCheckedChange(!checked) },

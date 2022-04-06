@@ -49,6 +49,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -270,9 +271,15 @@ private fun LazyListScope.InterestsSelection(
                         enabled = interestsSelectionState.canSaveInterests,
                         modifier = Modifier
                             .padding(horizontal = 40.dp)
-                            .width(364.dp)
+                            .width(364.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onBackground
+                        )
                     ) {
-                        Text(text = stringResource(R.string.done))
+                        Text(
+                            text = stringResource(R.string.done),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
                 }
             }
@@ -330,6 +337,7 @@ private fun SingleTopicButton(
             .width(264.dp)
             .heightIn(min = 56.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
+        color = MaterialTheme.colorScheme.surface,
         selected = isSelected,
         onClick = {
             onClick(topicId, !isSelected)
@@ -354,10 +362,16 @@ private fun SingleTopicButton(
                 checked = isSelected,
                 onCheckedChange = { checked -> onClick(topicId, !isSelected) },
                 icon = {
-                    Icon(imageVector = NiaIcons.Add, contentDescription = name)
+                    Icon(
+                        imageVector = NiaIcons.Add, contentDescription = name,
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 },
                 checkedIcon = {
-                    Icon(imageVector = NiaIcons.Check, contentDescription = name)
+                    Icon(
+                        imageVector = NiaIcons.Check, contentDescription = name,
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             )
         }
