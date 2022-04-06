@@ -18,44 +18,61 @@ package com.google.samples.apps.nowinandroid.feature.following
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class FollowingViewModel @Inject constructor(
+    private val authorsRepository: AuthorsRepository,
     private val topicsRepository: TopicsRepository
 ) : ViewModel() {
 
-    private val followedTopicIdsStream = topicsRepository.getFollowedTopicIdsStream()
-        .map<Set<Int>, FollowingState> { followedTopics ->
-            FollowingState.Topics(topics = followedTopics)
-        }
-        .catch { emit(FollowingState.Error) }
+    private val _tabState = MutableStateFlow(
+        FollowingTabState(
+            titles = listOf(R.string.following_topics, R.string.following_people),
+            currentIndex = 0
+        )
+    )
+    val tabState: StateFlow<FollowingTabState> = _tabState.asStateFlow()
 
     val uiState: StateFlow<FollowingUiState> = combine(
-        followedTopicIdsStream,
+        authorsRepository.getAuthorsStream(),
+        authorsRepository.getFollowedAuthorIdsStream(),
         topicsRepository.getTopicsStream(),
-    ) { followedTopicIdsState, topics ->
-        if (followedTopicIdsState is FollowingState.Topics) {
-            mapFollowedAndUnfollowedTopics(topics)
-        } else {
-            flowOf(FollowingUiState.Error)
-        }
+        topicsRepository.getFollowedTopicIdsStream(),
+    ) { availableAuthors, followedAuthorIdsState, availableTopics, followedTopicIdsState ->
+
+        FollowingUiState.Interests(
+            authors = availableAuthors
+                .map { author ->
+                    FollowableAuthor(
+                        author = author,
+                        isFollowed = author.id in followedAuthorIdsState
+                    )
+                }
+                .sortedBy { it.author.name },
+            topics = availableTopics
+                .map { topic ->
+                    FollowableTopic(
+                        topic = topic,
+                        isFollowed = topic.id in followedTopicIdsState
+                    )
+                }
+                .sortedBy { it.topic.name }
+        )
     }
-        .flatMapLatest { it }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -68,28 +85,33 @@ class FollowingViewModel @Inject constructor(
         }
     }
 
-    private fun mapFollowedAndUnfollowedTopics(topics: List<Topic>): Flow<FollowingUiState.Topics> =
-        topicsRepository.getFollowedTopicIdsStream().map { followedTopicIds ->
-            FollowingUiState.Topics(
-                topics = topics
-                    .map { topic ->
-                        FollowableTopic(
-                            topic = topic,
-                            isFollowed = topic.id in followedTopicIds,
-                        )
-                    }
-                    .sortedBy { it.topic.name }
-            )
+    fun followAuthor(followedAuthorId: Int, followed: Boolean) {
+        viewModelScope.launch {
+            authorsRepository.toggleFollowedAuthorId(followedAuthorId, followed)
         }
+    }
+
+    fun switchTab(newIndex: Int) {
+        if (newIndex != tabState.value.currentIndex) {
+            _tabState.update {
+                it.copy(currentIndex = newIndex)
+            }
+        }
+    }
 }
 
-private sealed interface FollowingState {
-    data class Topics(val topics: Set<Int>) : FollowingState
-    object Error : FollowingState
-}
+data class FollowingTabState(
+    val titles: List<Int>,
+    val currentIndex: Int
+)
 
 sealed interface FollowingUiState {
     object Loading : FollowingUiState
-    data class Topics(val topics: List<FollowableTopic>) : FollowingUiState
-    object Error : FollowingUiState
+
+    data class Interests(
+        val authors: List<FollowableAuthor>,
+        val topics: List<FollowableTopic>
+    ) : FollowingUiState
+
+    object Empty : FollowingUiState
 }

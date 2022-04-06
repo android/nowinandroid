@@ -68,7 +68,7 @@ class NavigationTest {
     private lateinit var forYou: String
     private lateinit var episodes: String
     private lateinit var saved: String
-    private lateinit var topics: String
+    private lateinit var interests: String
     private lateinit var sampleTopic: String
 
     @Before
@@ -80,7 +80,7 @@ class NavigationTest {
             forYou = getString(R.string.for_you)
             episodes = getString(R.string.episodes)
             saved = getString(R.string.saved)
-            topics = getString(R.string.following)
+            interests = getString(R.string.interests)
             sampleTopic = "Headlines"
         }
     }
@@ -105,8 +105,8 @@ class NavigationTest {
         composeTestRule.apply {
             // GIVEN the user follows a topic
             onNodeWithText(sampleTopic).performClick()
-            // WHEN the user navigates to the Topics destination
-            onNodeWithText(topics).performClick()
+            // WHEN the user navigates to the Interests destination
+            onNodeWithText(interests).performClick()
             // AND the user navigates to the For You destination
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
@@ -146,7 +146,7 @@ class NavigationTest {
             // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
             // TODO: Add top level destinations here, see b/226357686.
-            onNodeWithText(topics).performClick()
+            onNodeWithText(interests).performClick()
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
         }
     }
@@ -157,8 +157,8 @@ class NavigationTest {
     @Test(expected = NoActivityResumedException::class)
     fun homeDestination_back_quitsApp() {
         composeTestRule.apply {
-            // GIVEN the user navigates to the Topics destination
-            onNodeWithText(topics).performClick()
+            // GIVEN the user navigates to the Interests destination
+            onNodeWithText(interests).performClick()
             // and then navigates to the For you destination
             onNodeWithText(forYou).performClick()
             // WHEN the user uses the system button/gesture to go back
@@ -174,8 +174,8 @@ class NavigationTest {
     @Test
     fun navigationBar_backFromAnyDestination_returnsToForYou() {
         composeTestRule.apply {
-            // GIVEN the user navigated to the Topics destination
-            onNodeWithText(topics).performClick()
+            // GIVEN the user navigated to the Interests destination
+            onNodeWithText(interests).performClick()
             // TODO: Add another destination here to increase test coverage, see b/226357686.
             // WHEN the user uses the system button/gesture to go back,
             Espresso.pressBack()
@@ -187,16 +187,16 @@ class NavigationTest {
     @Test
     fun navigationBar_multipleBackStackFollowing() {
         composeTestRule.apply {
-            onNodeWithText(topics).performClick()
+            onNodeWithText(interests).performClick()
             onNodeWithText("Android Studio").performClick() // TODO: Grab string from fake data
 
             // Switch tab
             onNodeWithText(forYou).performClick()
 
             // Come back to Following
-            onNodeWithText(topics).performClick()
+            onNodeWithText(interests).performClick()
 
-            // Verify we're not in the list of topics
+            // Verify we're not in the list of interests
             onNodeWithText("Android Auto").assertDoesNotExist() // TODO: Grab string from fake data
         }
     }

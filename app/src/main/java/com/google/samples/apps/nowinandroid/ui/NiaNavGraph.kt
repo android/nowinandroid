@@ -26,12 +26,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.feature.following.FollowingRoute
+import com.google.samples.apps.nowinandroid.feature.following.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
-import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinations
+import com.google.samples.apps.nowinandroid.feature.topic.InterestsDestinations
+import com.google.samples.apps.nowinandroid.feature.topic.InterestsScreens.TOPIC_SCREEN
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
-import com.google.samples.apps.nowinandroid.feature.topic.TopicScreens.TOPIC_SCREEN
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -60,17 +60,18 @@ fun NiaNavGraph(
             Text("SAVED", modifier)
         }
         navigation(
-            startDestination = TopicDestinations.TOPICS_ROUTE,
+            startDestination = InterestsDestinations.INTERESTS_ROUTE,
             route = NiaDestinations.FOLLOWING_ROUTE
         ) {
-            composable(TopicDestinations.TOPICS_ROUTE) {
-                FollowingRoute(
+            composable(InterestsDestinations.INTERESTS_ROUTE) {
+                InterestsRoute(
                     navigateToTopic = { navController.navigate("$TOPIC_SCREEN/$it") },
+                    navigateToAuthor = { /* TO IMPLEMENT */ },
                     modifier = modifier
                 )
             }
             composable(
-                TopicDestinations.TOPIC_ROUTE,
+                InterestsDestinations.TOPIC_ROUTE,
                 arguments = listOf(
                     navArgument(TopicDestinationsArgs.TOPIC_ID_ARG) {
                         type = NavType.IntType

@@ -14,10 +14,11 @@
   ~ limitations under the License.
 -->
 <resources>
-    <string name="following">Following</string>
-    <string name="following_loading">Loading topics</string>
-    <string name="following_error_header">"Error loading topics"</string>
-    <string name="following_topic_card_icon_content_desc">Topic icon</string>
-    <string name="following_topic_card_follow_button_content_desc">Follow Topic button</string>
-    <string name="following_topic_card_unfollow_button_content_desc">Unfollow Topic button</string>
+    <string name="interests">Interests</string>
+    <string name="following_topics">Topics</string>
+    <string name="following_people">People</string>
+    <string name="following_loading">Loading data</string>
+    <string name="following_empty_header">"No available data"</string>
+    <string name="interests_card_follow_button_content_desc">Follow interest button</string>
+    <string name="interests_card_unfollow_button_content_desc">Unfollow interest button</string>
 </resources>
