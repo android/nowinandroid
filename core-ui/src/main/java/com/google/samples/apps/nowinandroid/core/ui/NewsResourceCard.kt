@@ -27,13 +27,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -148,14 +148,14 @@ fun NewsResourceAuthors(
             } else {
                 Icon(
                     modifier = authorImageModifier
-                        .background(MaterialTheme.colors.background)
+                        .background(MaterialTheme.colorScheme.surface)
                         .padding(4.dp),
                     imageVector = Icons.Filled.Person,
                     contentDescription = null // decorative image
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(authorNameFormatted, style = MaterialTheme.typography.body2)
+            Text(authorNameFormatted, style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -165,7 +165,7 @@ fun NewsResourceTitle(
     newsResourceTitle: String,
     modifier: Modifier = Modifier
 ) {
-    Text(newsResourceTitle, style = MaterialTheme.typography.h4, modifier = modifier)
+    Text(newsResourceTitle, style = MaterialTheme.typography.headlineSmall, modifier = modifier)
 }
 
 @Composable
@@ -217,7 +217,7 @@ private fun dateFormatted(publishDate: Instant): String {
 fun NewsResourceDate(
     publishDate: Instant
 ) {
-    Text(dateFormatted(publishDate), style = MaterialTheme.typography.body2)
+    Text(dateFormatted(publishDate), style = MaterialTheme.typography.labelSmall)
 }
 
 @Composable
@@ -231,7 +231,7 @@ fun NewsResourceLink(
 fun NewsResourceShortDescription(
     newsResourceShortDescription: String
 ) {
-    Text(newsResourceShortDescription, style = MaterialTheme.typography.body1)
+    Text(newsResourceShortDescription, style = MaterialTheme.typography.bodyLarge)
 }
 
 @Composable
