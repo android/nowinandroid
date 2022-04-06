@@ -24,8 +24,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 
 /**
  * Light default theme color scheme
@@ -171,9 +173,40 @@ fun NiaTheme(
         darkTheme -> DarkDefaultColorScheme
         else -> LightDefaultColorScheme
     }
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = NiaTypography,
-        content = content
-    )
+
+    val backgroundTheme = when {
+        androidTheme && darkTheme -> BackgroundTheme(
+            color = Color.Black
+        )
+        androidTheme -> BackgroundTheme(
+            color = DarkGreenGray95
+        )
+        darkTheme -> BackgroundTheme(
+            color = colorScheme.surface,
+            tonalElevation = 2.dp
+        )
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> BackgroundTheme(
+            color = colorScheme.surface,
+            tonalElevation = 2.dp,
+            primaryGradientColor = colorScheme.primary.lighten(0.95f),
+            secondaryGradientColor = colorScheme.secondary.lighten(0.95f),
+            tertiaryGradientColor = colorScheme.tertiary.lighten(0.95f),
+            neutralGradientColor = colorScheme.surface.lighten(0.95f)
+        )
+        else -> BackgroundTheme(
+            color = colorScheme.surface,
+            tonalElevation = 2.dp,
+            primaryGradientColor = Purple95,
+            secondaryGradientColor = Orange95,
+            tertiaryGradientColor = Blue95,
+            neutralGradientColor = DarkPurpleGray95
+        )
+    }
+    CompositionLocalProvider(LocalBackgroundTheme provides backgroundTheme) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = NiaTypography,
+            content = content
+        )
+    }
 }
