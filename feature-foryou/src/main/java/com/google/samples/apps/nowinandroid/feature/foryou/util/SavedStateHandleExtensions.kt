@@ -17,14 +17,10 @@
 package com.google.samples.apps.nowinandroid.feature.foryou.util
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SnapshotMutationPolicy
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.autoSaver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotMutableState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
@@ -44,6 +40,7 @@ import kotlin.reflect.KProperty
  *
  * https://issuetracker.google.com/issues/225014345
  */
+@OptIn(SavedStateHandleSaveableApi::class)
 fun <T : Any> SavedStateHandle.saveable(
     saver: Saver<T, out Any> = autoSaver(),
     init: () -> T,
@@ -69,9 +66,9 @@ fun <T : Any> SavedStateHandle.saveable(
  * val value by savedStateHandle.saveable { mutableStateOf("initialValue") }
  * ```
  *
- * https://issuetracker.google.com/issues/224565154 and
  * https://issuetracker.google.com/issues/225014345
  */
+@OptIn(SavedStateHandleSaveableApi::class)
 @JvmName("saveableMutableState")
 fun <T : Any> SavedStateHandle.saveable(
     stateSaver: Saver<T, out Any> = autoSaver(),
@@ -92,54 +89,3 @@ fun <T : Any> SavedStateHandle.saveable(
                 mutableState.setValue(thisRef, property, value)
         }
     }
-
-/**
- * A basic interop between [SavedStateHandle] and [Saver], so the latter can be used to save
- * state holders into the [SavedStateHandle].
- *
- * This implementation is based on [rememberSaveable], [SaveableStateRegistry] and
- * [DisposableSaveableStateRegistry], with some simplifications since there will be exactly one
- * state provider storing exactly one value.
- *
- * This implementation makes use of [SavedStateHandle.setSavedStateProvider], so this
- * state will not be kept in sync with any other way to change the internal state
- * of the [SavedStateHandle].
- *
- * Use this overload if you remember a mutable state with a type which can't be stored in the
- * Bundle so you have to provide a custom saver object.
- *
- * https://issuetracker.google.com/issues/224565154
- */
-@OptIn(SavedStateHandleSaveableApi::class)
-fun <T> SavedStateHandle.saveable(
-    key: String,
-    stateSaver: Saver<T, out Any>,
-    init: () -> MutableState<T>
-): MutableState<T> = saveable(
-    saver = mutableStateSaver(stateSaver),
-    key = key,
-    init = init
-)
-
-/**
- * Copied from RememberSaveable.kt
- */
-@Suppress("UNCHECKED_CAST")
-private fun <T> mutableStateSaver(inner: Saver<T, out Any>) = with(inner as Saver<T, Any>) {
-    Saver<MutableState<T>, MutableState<Any?>>(
-        save = { state ->
-            require(state is SnapshotMutableState<T>) {
-                "If you use a custom MutableState implementation you have to write a custom " +
-                    "Saver and pass it as a saver param to saveable()"
-            }
-            mutableStateOf(save(state.value), state.policy as SnapshotMutationPolicy<Any?>)
-        },
-        restore = @Suppress("UNCHECKED_CAST") {
-            require(it is SnapshotMutableState<Any?>)
-            mutableStateOf(
-                if (it.value != null) restore(it.value!!) else null,
-                it.policy as SnapshotMutationPolicy<T?>
-            ) as MutableState<T>
-        }
-    )
-}
