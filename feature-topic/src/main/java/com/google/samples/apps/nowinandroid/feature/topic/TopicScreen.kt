@@ -22,9 +22,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
@@ -79,6 +85,14 @@ internal fun TopicScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(
+            // TODO: Replace with windowInsetsTopHeight after
+            //       https://issuetracker.google.com/issues/230383055
+            Modifier.windowInsetsPadding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+            )
+        )
+
         when (topicState) {
             Loading ->
                 LoadingWheel(
@@ -126,6 +140,14 @@ private fun TopicBody(name: String, description: String, news: NewsUiState) {
             )
         }
         TopicList(news, Modifier.padding(top = 24.dp))
+
+        Spacer(
+            // TODO: Replace with windowInsetsBottomHeight after
+            //       https://issuetracker.google.com/issues/230383055
+            Modifier.windowInsetsPadding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+            )
+        )
     }
 }
 

@@ -49,15 +49,16 @@ fun NiaNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        modifier = modifier,
     ) {
         composable(NiaDestinations.FOR_YOU_ROUTE) {
-            ForYouRoute(modifier)
+            ForYouRoute()
         }
         composable(NiaDestinations.EPISODES_ROUTE) {
-            Text("EPISODES", modifier)
+            Text("EPISODES")
         }
         composable(NiaDestinations.SAVED_ROUTE) {
-            Text("SAVED", modifier)
+            Text("SAVED")
         }
         navigation(
             startDestination = InterestsDestinations.INTERESTS_ROUTE,
@@ -67,7 +68,6 @@ fun NiaNavGraph(
                 InterestsRoute(
                     navigateToTopic = { navController.navigate("$TOPIC_SCREEN/$it") },
                     navigateToAuthor = { /* TO IMPLEMENT */ },
-                    modifier = modifier
                 )
             }
             composable(

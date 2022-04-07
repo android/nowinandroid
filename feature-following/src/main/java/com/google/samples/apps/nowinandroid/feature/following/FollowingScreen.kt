@@ -17,7 +17,13 @@
 package com.google.samples.apps.nowinandroid.feature.following
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -72,6 +78,14 @@ fun FollowingScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(
+            // TODO: Replace with windowInsetsTopHeight after
+            //       https://issuetracker.google.com/issues/230383055
+            Modifier.windowInsetsPadding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+            )
+        )
+
         NiaTopAppBar(
             titleRes = R.string.interests,
             navigationIcon = Icons.Filled.Search,
