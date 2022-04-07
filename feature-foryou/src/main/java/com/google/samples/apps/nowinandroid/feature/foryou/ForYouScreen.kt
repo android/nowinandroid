@@ -18,15 +18,13 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,9 +34,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,10 +45,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -175,9 +177,18 @@ private fun TopicSelection(
             rows = Fixed(3),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(24.dp),
             modifier = Modifier
-                .height(192.dp)
-                .padding(top = 24.dp, bottom = 24.dp)
+                // LazyHorizontalGrid has to be constrained in height.
+                // However, we can't set a fixed height because the horizontal grid contains
+                // vertical text that can be rescaled.
+                // When the fontScale is at most 1, we know that the horizontal grid will be at most
+                // 240dp tall, so this is an upper bound for when the font scale is at most 1.
+                // When the fontScale is greater than 1, the height required by the text inside the
+                // horizontal grid will increase by at most the same factor, so 240sp is a valid
+                // upper bound for how much space we need in that case.
+                // The maximum of these two bounds is therefore a valid upper bound in all cases.
+                .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
                 .fillMaxWidth()
         ) {
             val state: FeedWithTopicSelection = uiState as FeedWithTopicSelection
@@ -193,6 +204,7 @@ private fun TopicSelection(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SingleTopicButton(
     name: String,
@@ -200,36 +212,36 @@ private fun SingleTopicButton(
     isSelected: Boolean,
     onClick: (Int, Boolean) -> Unit
 ) {
-    Box(
+    Surface(
         modifier = Modifier
             .width(264.dp)
-            .height(56.dp)
-            .padding(start = 12.dp, end = 8.dp)
-            .background(
-                MaterialTheme.colors.surface,
-                shape = RoundedCornerShape(corner = CornerSize(8.dp))
-            )
-            .clickable(onClick = { onClick(topicId, !isSelected) }),
-        contentAlignment = Alignment.CenterStart
+            .heightIn(min = 56.dp),
+        shape = RoundedCornerShape(corner = CornerSize(8.dp)),
+        selected = isSelected,
+        onClick = {
+            onClick(topicId, !isSelected)
+        }
     ) {
-        Text(
-            text = name,
-            style = NiaTypography.titleSmall,
-            modifier = Modifier.padding(12.dp),
-            color = MaterialTheme.colors.onSurface
-
-        )
-        NiaToggleButton(
-            checked = isSelected,
-            modifier = Modifier.align(alignment = Alignment.CenterEnd),
-            onCheckedChange = { checked -> onClick(topicId, !isSelected) },
-            icon = {
-                Icon(imageVector = NiaIcons.Add, contentDescription = name)
-            },
-            checkedIcon = {
-                Icon(imageVector = NiaIcons.Check, contentDescription = name)
-            }
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 12.dp, end = 8.dp)
+        ) {
+            Text(
+                text = name,
+                style = NiaTypography.titleSmall,
+                modifier = Modifier.padding(12.dp).weight(1f),
+            )
+            NiaToggleButton(
+                checked = isSelected,
+                onCheckedChange = { checked -> onClick(topicId, !isSelected) },
+                icon = {
+                    Icon(imageVector = NiaIcons.Add, contentDescription = name)
+                },
+                checkedIcon = {
+                    Icon(imageVector = NiaIcons.Check, contentDescription = name)
+                }
+            )
+        }
     }
 }
 
