@@ -17,12 +17,17 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.captionBarPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Bookmarks
@@ -61,7 +66,7 @@ import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
@@ -84,19 +89,29 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 }
             }
         ) { padding ->
-            Surface(Modifier.fillMaxSize().statusBarsPadding()) {
-                Row {
-                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
-                        NiANavRail(
-                            navigationActions = navigationActions,
-                            currentDestination = currentDestination
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal
                         )
-                    }
-                    NiaNavGraph(
-                        navController = navController,
-                        modifier = Modifier.padding(padding)
+                    )
+            ) {
+                if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
+                    NiANavRail(
+                        navigationActions = navigationActions,
+                        currentDestination = currentDestination,
+                        modifier = Modifier.safeDrawingPadding()
                     )
                 }
+
+                NiaNavGraph(
+                    navController = navController,
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumedWindowInsets(padding)
+                )
             }
         }
     }
@@ -105,9 +120,10 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
 @Composable
 private fun NiANavRail(
     navigationActions: NiaNavigationActions,
-    currentDestination: NavDestination?
+    currentDestination: NavDestination?,
+    modifier: Modifier = Modifier,
 ) {
-    NavigationRail {
+    NavigationRail(modifier = modifier) {
         TOP_LEVEL_DESTINATIONS.forEach { destination ->
             val selected =
                 currentDestination?.hierarchy?.any { it.route == destination.route } == true
@@ -136,9 +152,11 @@ private fun NiABottomBar(
     Surface(color = MaterialTheme.colorScheme.surface) {
         CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
             NavigationBar(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .captionBarPadding(),
+                modifier = Modifier.windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                    )
+                ),
                 tonalElevation = 0.dp
             ) {
 
