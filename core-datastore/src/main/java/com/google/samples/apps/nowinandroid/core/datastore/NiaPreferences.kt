@@ -25,13 +25,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 
-data class ChangeListVersions(
-    val topicVersion: Int = -1,
-    val authorVersion: Int = -1,
-    val episodeVersion: Int = -1,
-    val newsResourceVersion: Int = -1,
-)
-
 class NiaPreferences @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
@@ -73,21 +66,6 @@ class NiaPreferences @Inject constructor(
             true
         }
         .map { it.followedTopicIdsList.toSet() }
-
-    suspend fun hasRunFirstTimeSync() = userPreferences.data
-        .map { it.hasRunFirstTimeSync }.firstOrNull() ?: false
-
-    suspend fun markFirstTimeSyncDone() {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    hasRunFirstTimeSync = true
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
-    }
 
     suspend fun getChangeListVersions() = userPreferences.data
         .map {

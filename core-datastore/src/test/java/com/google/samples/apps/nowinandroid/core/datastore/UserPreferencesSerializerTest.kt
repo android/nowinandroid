@@ -41,7 +41,6 @@ class UserPreferencesSerializerTest {
         val expectedUserPreferences = userPreferences {
             followedTopicIds.add(0)
             followedTopicIds.add(1)
-            hasRunFirstTimeSync = true
         }
 
         val outputStream = ByteArrayOutputStream()

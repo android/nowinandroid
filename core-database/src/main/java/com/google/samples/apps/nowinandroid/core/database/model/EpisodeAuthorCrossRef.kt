@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 /**
  * Cross reference for many to many relationship between [EpisodeEntity] and [AuthorEntity]
@@ -39,7 +40,11 @@ import androidx.room.ForeignKey
             childColumns = ["author_id"],
             onDelete = ForeignKey.CASCADE
         ),
-    ]
+    ],
+    indices = [
+        Index(value = ["episode_id"]),
+        Index(value = ["author_id"]),
+    ],
 )
 data class EpisodeAuthorCrossRef(
     @ColumnInfo(name = "episode_id")

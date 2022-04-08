@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.sync.di
+package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.google.samples.apps.nowinandroid.sync.LocalSyncRepository
-import com.google.samples.apps.nowinandroid.sync.SyncRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface SyncModule {
-    @Binds
-    fun bindsSyncStatusRepository(
-        localSyncRepository: LocalSyncRepository
-    ): SyncRepository
-}
+/**
+ * Class summarizing the local version of each model for sync
+ */
+data class ChangeListVersions(
+    val topicVersion: Int = -1,
+    val authorVersion: Int = -1,
+    val episodeVersion: Int = -1,
+    val newsResourceVersion: Int = -1,
+)

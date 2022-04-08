@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 /**
  * Cross reference for many to many relationship between [NewsResourceEntity] and [TopicEntity]
@@ -39,7 +40,11 @@ import androidx.room.ForeignKey
             childColumns = ["topic_id"],
             onDelete = ForeignKey.CASCADE
         ),
-    ]
+    ],
+    indices = [
+        Index(value = ["news_resource_id"]),
+        Index(value = ["topic_id"]),
+    ],
 )
 data class NewsResourceTopicCrossRef(
     @ColumnInfo(name = "news_resource_id")

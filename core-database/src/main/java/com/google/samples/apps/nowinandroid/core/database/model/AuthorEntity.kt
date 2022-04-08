@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 
@@ -28,9 +27,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
  */
 @Entity(
     tableName = "authors",
-    indices = [
-        Index(value = ["name"], unique = true)
-    ],
 )
 data class AuthorEntity(
     @PrimaryKey

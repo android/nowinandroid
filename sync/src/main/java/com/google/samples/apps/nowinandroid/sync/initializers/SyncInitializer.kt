@@ -22,7 +22,6 @@ import androidx.startup.Initializer
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
-import com.google.samples.apps.nowinandroid.sync.workers.FirstTimeSyncCheckWorker
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 
 object Sync {
@@ -39,19 +38,18 @@ object Sync {
 private const val SyncWorkName = "SyncWorkName"
 
 /**
- * Registers sync to sync the data layer periodically [SyncInterval] on app startup.
+ * Registers work to sync the data layer periodically on app startup.
  */
 class SyncInitializer : Initializer<Sync> {
     override fun create(context: Context): Sync {
-
-        val workManager = WorkManager.getInstance(context)
-
-        workManager.enqueueUniquePeriodicWork(
-            SyncWorkName,
-            ExistingPeriodicWorkPolicy.KEEP,
-            SyncWorker.periodicSyncWork()
-        )
-        workManager.enqueue(FirstTimeSyncCheckWorker.firstTimeSyncCheckWork())
+        WorkManager.getInstance(context).apply {
+            enqueue(SyncWorker.startUpSyncWork())
+            enqueueUniquePeriodicWork(
+                SyncWorkName,
+                ExistingPeriodicWorkPolicy.KEEP,
+                SyncWorker.periodicSyncWork()
+            )
+        }
 
         return Sync
     }
