@@ -20,8 +20,8 @@ option java_package = "com.google.samples.apps.nowinandroid.core.datastore";
 option java_multiple_files = true;
 
 message UserPreferences {
+    reserved 2;
     repeated int32 followed_topic_ids = 1;
-    bool has_run_first_time_sync = 2;
     int32 topicChangeListVersion = 3;
     int32 authorChangeListVersion = 4;
     int32 episodeChangeListVersion = 5;

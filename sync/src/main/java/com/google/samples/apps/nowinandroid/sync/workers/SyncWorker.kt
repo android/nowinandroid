@@ -27,7 +27,6 @@ import androidx.work.WorkerParameters
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
-import com.google.samples.apps.nowinandroid.sync.SyncRepository
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncConstraints
 import com.google.samples.apps.nowinandroid.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
@@ -45,7 +44,6 @@ import kotlinx.coroutines.coroutineScope
 class SyncWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val syncRepository: SyncRepository,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
     private val authorsRepository: AuthorsRepository,
@@ -62,14 +60,8 @@ class SyncWorker @AssistedInject constructor(
             async { newsRepository.sync() },
         ).all { it }
 
-        when (syncedSuccessfully) {
-            // Sync ran successfully, notify the SyncRepository that sync has been run
-            true -> {
-                syncRepository.notifyFirstTimeSyncRun()
-                Result.success()
-            }
-            false -> Result.retry()
-        }
+        if (syncedSuccessfully) Result.success()
+        else Result.retry()
     }
 
     companion object {
@@ -77,10 +69,9 @@ class SyncWorker @AssistedInject constructor(
         private val SyncIntervalTimeUnit = TimeUnit.DAYS
 
         /**
-         * Expedited one time work to sync data as quickly as possible because the app has
-         * either launched for the first time, or hasn't had the opportunity to sync at all
+         * Expedited one time work to sync data on app startup
          */
-        fun firstTimeSyncWork() = OneTimeWorkRequestBuilder<DelegatingWorker>()
+        fun startUpSyncWork() = OneTimeWorkRequestBuilder<DelegatingWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .setConstraints(SyncConstraints)
             .setInputData(SyncWorker::class.delegatedData())
