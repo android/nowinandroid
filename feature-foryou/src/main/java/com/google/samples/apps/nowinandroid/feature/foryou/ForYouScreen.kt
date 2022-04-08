@@ -142,7 +142,8 @@ fun ForYouScreen(
                         onClick = { startActivity(context, launchResourceIntent, null) },
                         onToggleBookmark = {
                             onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
-                        }
+                        },
+                        modifier = Modifier.padding(24.dp)
                     )
                 }
             }

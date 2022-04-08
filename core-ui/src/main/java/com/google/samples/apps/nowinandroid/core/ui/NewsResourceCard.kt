@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,10 +27,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -69,40 +72,55 @@ import kotlinx.datetime.toJavaInstant
  * [NewsResource] card used on the following screens: For You, Episodes, Saved
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
     newsResource: NewsResource,
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-            .clickable(
-                onClickLabel = stringResource(R.string.card_tap_action),
-                onClick = { onClick() }
-            )
+    val clickActionLabel = stringResource(R.string.card_tap_action)
+    Card(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        // Use custom label for accessibility services to communicate button's action to user.
+        // Pass null for action to only override the label and not the actual action.
+        modifier = modifier.semantics {
+            onClick(label = clickActionLabel, action = null)
+        }
     ) {
-        if (!newsResource.headerImageUrl.isNullOrEmpty()) {
-            Row {
-                NewsResourceHeaderImage(newsResource.headerImageUrl)
+        Column {
+            if (!newsResource.headerImageUrl.isNullOrEmpty()) {
+                Row {
+                    NewsResourceHeaderImage(newsResource.headerImageUrl)
+                }
             }
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-        Row {
-            NewsResourceAuthors(newsResource.authors)
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row {
-            NewsResourceTitle(newsResource.title, modifier = Modifier.fillMaxWidth((.8f)))
-            Spacer(modifier = Modifier.weight(1f))
-            // TODO: Implement functionality to 'bookmark' a resource b/227246491
+            Box(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Column {
+                    Row {
+                        NewsResourceAuthors(newsResource.authors)
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row {
+                        NewsResourceTitle(
+                            newsResource.title,
+                            modifier = Modifier.fillMaxWidth((.8f))
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        // TODO: Implement functionality to 'bookmark' a resource b/227246491
 //            BookmarkButton(isBookmarked, onToggleBookmark)
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NewsResourceDate(newsResource.publishDate)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NewsResourceShortDescription(newsResource.content)
+                }
+            }
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        NewsResourceDate(newsResource.publishDate)
-        Spacer(modifier = Modifier.height(12.dp))
-        NewsResourceShortDescription(newsResource.content)
     }
 }
 
