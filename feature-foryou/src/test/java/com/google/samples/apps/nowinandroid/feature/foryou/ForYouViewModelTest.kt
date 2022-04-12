@@ -645,6 +645,82 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun topicSelectionUpdatesAfterSavingTopicsOnly() = runTest {
+        viewModel.uiState
+            .test {
+                awaitItem()
+
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(emptySet())
+                authorsRepository.sendAuthors(sampleAuthors)
+                authorsRepository.setFollowedAuthorIds(emptySet())
+                newsRepository.sendNewsResources(sampleNewsResources)
+                awaitItem()
+
+                viewModel.updateTopicSelection(1, isChecked = true)
+                awaitItem()
+
+                viewModel.saveFollowedInterests()
+                awaitItem()
+
+                assertEquals(
+                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
+                        feed = listOf(
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[1],
+                                isSaved = false,
+                            ),
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[2],
+                                isSaved = false,
+                            )
+                        )
+                    ),
+                    awaitItem()
+                )
+                assertEquals(setOf(1), topicsRepository.getCurrentFollowedTopics())
+                assertEquals(emptySet<Int>(), authorsRepository.getCurrentFollowedAuthors())
+                cancel()
+            }
+    }
+
+    @Test
+    fun topicSelectionUpdatesAfterSavingAuthorsOnly() = runTest {
+        viewModel.uiState
+            .test {
+                awaitItem()
+
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(emptySet())
+                authorsRepository.sendAuthors(sampleAuthors)
+                authorsRepository.setFollowedAuthorIds(emptySet())
+                newsRepository.sendNewsResources(sampleNewsResources)
+                awaitItem()
+
+                viewModel.updateAuthorSelection(0, isChecked = true)
+                awaitItem()
+
+                viewModel.saveFollowedInterests()
+                awaitItem()
+
+                assertEquals(
+                    ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
+                        feed = listOf(
+                            SaveableNewsResource(
+                                newsResource = sampleNewsResources[0],
+                                isSaved = false
+                            ),
+                        )
+                    ),
+                    awaitItem()
+                )
+                assertEquals(emptySet<Int>(), topicsRepository.getCurrentFollowedTopics())
+                assertEquals(setOf(0), authorsRepository.getCurrentFollowedAuthors())
+                cancel()
+            }
+    }
+
+    @Test
     fun topicSelectionUpdatesAfterSavingAuthorsAndTopics() = runTest {
         viewModel.uiState
             .test {
@@ -702,6 +778,100 @@ class ForYouViewModelTest {
                 awaitItem()
 
                 topicsRepository.setFollowedTopicIds(emptySet())
+                assertEquals(
+                    ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
+                        topics = listOf(
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 0,
+                                    name = "Headlines",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 1,
+                                    name = "UI",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableTopic(
+                                topic = Topic(
+                                    id = 2,
+                                    name = "Tools",
+                                    shortDescription = "",
+                                    longDescription = "long description",
+                                    url = "URL",
+                                    imageUrl = "image URL",
+                                ),
+                                isFollowed = false
+                            )
+                        ),
+                        feed = emptyList(),
+                        authors = listOf(
+                            FollowableAuthor(
+                                author = Author(
+                                    id = 0,
+                                    name = "Android Dev",
+                                    imageUrl = "",
+                                    twitter = "",
+                                    mediumPage = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableAuthor(
+                                author = Author(
+                                    id = 1,
+                                    name = "Android Dev 2",
+                                    imageUrl = "",
+                                    twitter = "",
+                                    mediumPage = ""
+                                ),
+                                isFollowed = false
+                            ),
+                            FollowableAuthor(
+                                author = Author(
+                                    id = 2,
+                                    name = "Android Dev 3",
+                                    imageUrl = "",
+                                    twitter = "",
+                                    mediumPage = ""
+                                ),
+                                isFollowed = false
+                            )
+                        )
+                    ),
+                    awaitItem()
+                )
+                cancel()
+            }
+    }
+
+    @Test
+    fun authorSelectionIsResetAfterSavingAuthorsAndRemovingThem() = runTest {
+        viewModel.uiState
+            .test {
+                awaitItem()
+                topicsRepository.sendTopics(sampleTopics)
+                topicsRepository.setFollowedTopicIds(emptySet())
+                authorsRepository.sendAuthors(sampleAuthors)
+                authorsRepository.setFollowedAuthorIds(emptySet())
+                newsRepository.sendNewsResources(sampleNewsResources)
+                awaitItem()
+
+                viewModel.updateAuthorSelection(1, isChecked = true)
+                viewModel.saveFollowedInterests()
+                awaitItem()
+
+                authorsRepository.setFollowedAuthorIds(emptySet())
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                         topics = listOf(

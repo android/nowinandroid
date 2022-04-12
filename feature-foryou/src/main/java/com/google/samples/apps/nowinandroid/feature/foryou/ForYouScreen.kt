@@ -153,7 +153,7 @@ fun ForYouScreen(
                             ) {
                                 Button(
                                     onClick = saveFollowedTopics,
-                                    enabled = uiState.canSaveSelectedTopics,
+                                    enabled = uiState.canSaveInterests,
                                     modifier = Modifier
                                         .padding(horizontal = 40.dp)
                                         .width(364.dp)

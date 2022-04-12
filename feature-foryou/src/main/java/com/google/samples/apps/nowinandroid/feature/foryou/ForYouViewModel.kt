@@ -55,7 +55,7 @@ class ForYouViewModel @Inject constructor(
             authorsRepository.getFollowedAuthorIdsStream(),
             topicsRepository.getFollowedTopicIdsStream(),
         ) { followedAuthors, followedTopics ->
-            if (followedAuthors.isEmpty() || followedTopics.isEmpty()) {
+            if (followedAuthors.isEmpty() && followedTopics.isEmpty()) {
                 FollowedInterestsState.None
             } else {
                 FollowedInterestsState.FollowedInterests(
@@ -204,20 +204,18 @@ class ForYouViewModel @Inject constructor(
     }
 
     fun saveFollowedInterests() {
-        if (inProgressTopicSelection.isNotEmpty()) {
-            viewModelScope.launch {
-                topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
-                withMutableSnapshot {
-                    inProgressTopicSelection = emptySet()
-                }
-            }
+        // Don't attempt to save anything if nothing is selected
+        if (inProgressTopicSelection.isEmpty() && inProgressAuthorSelection.isEmpty()) {
+            return
         }
-        if (inProgressAuthorSelection.isNotEmpty()) {
-            viewModelScope.launch {
-                authorsRepository.setFollowedAuthorIds(inProgressAuthorSelection)
-                withMutableSnapshot {
-                    inProgressAuthorSelection = emptySet()
-                }
+
+        viewModelScope.launch {
+            topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
+            authorsRepository.setFollowedAuthorIds(inProgressAuthorSelection)
+            // Clear out the old selection, in case we return to onboarding
+            withMutableSnapshot {
+                inProgressTopicSelection = emptySet()
+                inProgressAuthorSelection = emptySet()
             }
         }
     }
@@ -275,7 +273,7 @@ sealed interface ForYouFeedUiState {
             val authors: List<FollowableAuthor>,
             override val feed: List<SaveableNewsResource>
         ) : PopulatedFeed {
-            val canSaveSelectedTopics: Boolean =
+            val canSaveInterests: Boolean =
                 topics.any { it.isFollowed } || authors.any { it.isFollowed }
         }
 
