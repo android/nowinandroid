@@ -44,7 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
+import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
@@ -81,7 +81,7 @@ internal fun TopicScreen(
     ) {
         when (topicState) {
             Loading ->
-                NiaLoadingIndicator(
+                LoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = string.topic_loading),
                 )
@@ -140,7 +140,7 @@ private fun TopicList(news: NewsUiState, modifier: Modifier = Modifier) {
             }
         }
         is NewsUiState.Loading -> {
-            NiaLoadingIndicator(contentDesc = "Loading news") // TODO
+            LoadingWheel(contentDesc = "Loading news") // TODO
         }
         else -> {
             Text("Error") // TODO

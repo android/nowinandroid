@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
+import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NiaToolbar
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
@@ -72,7 +72,7 @@ fun FollowingScreen(
         NiaToolbar(titleRes = R.string.interests)
         when (uiState) {
             FollowingUiState.Loading ->
-                NiaLoadingIndicator(
+                LoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.following_loading),
                 )
