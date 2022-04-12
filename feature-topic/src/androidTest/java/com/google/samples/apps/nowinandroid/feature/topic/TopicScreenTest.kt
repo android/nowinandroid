@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.following
+package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -24,11 +24,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.feature.topic.NewsUiState
-import com.google.samples.apps.nowinandroid.feature.topic.R
-import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
-import com.google.samples.apps.nowinandroid.feature.topic.TopicScreenUiState
-import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState
 import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
@@ -57,10 +52,8 @@ class TopicScreenTest {
     fun niaLoadingIndicator_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             TopicScreen(
-                uiState = TopicScreenUiState(
-                    topicState = TopicUiState.Loading,
-                    newsState = NewsUiState.Loading
-                ),
+                topicState = TopicUiState.Loading,
+                newsState = NewsUiState.Loading,
                 onBackClick = { },
                 onFollowClick = { }
             )
@@ -76,10 +69,8 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                uiState = TopicScreenUiState(
-                    topicState = TopicUiState.Success(testTopic),
-                    newsState = NewsUiState.Loading
-                ),
+                topicState = TopicUiState.Success(testTopic),
+                newsState = NewsUiState.Loading,
                 onBackClick = { },
                 onFollowClick = { }
             )
@@ -92,7 +83,7 @@ class TopicScreenTest {
 
         // Description is shown
         composeTestRule
-            .onNodeWithText(testTopic.topic.description)
+            .onNodeWithText(testTopic.topic.longDescription)
             .assertExists()
     }
 
@@ -101,10 +92,8 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                uiState = TopicScreenUiState(
-                    topicState = TopicUiState.Loading,
-                    newsState = NewsUiState.Success(sampleNewsResources)
-                ),
+                topicState = TopicUiState.Loading,
+                newsState = NewsUiState.Success(sampleNewsResources),
                 onBackClick = { },
                 onFollowClick = { }
             )
@@ -120,10 +109,8 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                uiState = TopicScreenUiState(
-                    topicState = TopicUiState.Success(testTopic),
-                    newsState = NewsUiState.Success(sampleNewsResources)
-                ),
+                topicState = TopicUiState.Success(testTopic),
+                newsState = NewsUiState.Success(sampleNewsResources),
                 onBackClick = { },
                 onFollowClick = { }
             )
@@ -146,7 +133,10 @@ private val testTopics = listOf(
         Topic(
             id = 0,
             name = TOPIC_1_NAME,
-            description = TOPIC_DESC,
+            longDescription = TOPIC_DESC,
+            shortDescription = "",
+            imageUrl = "",
+            url = ""
         ),
         isFollowed = true
     ),
@@ -154,7 +144,10 @@ private val testTopics = listOf(
         Topic(
             id = 1,
             name = TOPIC_2_NAME,
-            description = TOPIC_DESC
+            longDescription = TOPIC_DESC,
+            shortDescription = "",
+            imageUrl = "",
+            url = ""
         ),
         isFollowed = false
     ),
@@ -162,7 +155,10 @@ private val testTopics = listOf(
         Topic(
             id = 2,
             name = TOPIC_3_NAME,
-            description = TOPIC_DESC
+            longDescription = TOPIC_DESC,
+            shortDescription = "",
+            imageUrl = "",
+            url = ""
         ),
         isFollowed = false
     )
@@ -187,7 +183,10 @@ private val sampleNewsResources = listOf(
             Topic(
                 id = 0,
                 name = "Headlines",
-                description = ""
+                shortDescription = "",
+                longDescription = "",
+                imageUrl = "",
+                url = ""
             )
         ),
         authors = emptyList()

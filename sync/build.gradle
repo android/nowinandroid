@@ -55,4 +55,11 @@ dependencies {
     kapt libs.hilt.ext.compiler
 
     androidTestImplementation libs.androidx.work.testing
+
+    configurations.configureEach {
+        resolutionStrategy {
+            // Temporary workaround for https://issuetracker.google.com/174733673
+            force 'org.objenesis:objenesis:2.6'
+        }
+    }
 }

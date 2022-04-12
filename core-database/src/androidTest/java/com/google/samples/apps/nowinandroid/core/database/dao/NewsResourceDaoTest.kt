@@ -166,7 +166,10 @@ private fun testTopicEntity(
 ) = TopicEntity(
     id = id,
     name = name,
-    description = "",
+    shortDescription = "",
+    longDescription = "",
+    url = "",
+    imageUrl = ""
 )
 
 private fun testNewsResource(

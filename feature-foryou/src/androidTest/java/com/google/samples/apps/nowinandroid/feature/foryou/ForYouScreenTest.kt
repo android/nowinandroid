@@ -61,7 +61,10 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 0,
                                 name = "Headlines",
-                                shortDescription = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = false
                         ),
@@ -69,7 +72,10 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 1,
                                 name = "UI",
-                                shortDescription = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = false
                         ),
@@ -78,6 +84,9 @@ class ForYouScreenTest {
                                 id = 2,
                                 name = "Tools",
                                 shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = false
                         ),
@@ -122,7 +131,10 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 0,
                                 name = "Headlines",
-                                shortDescription = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = false
                         ),
@@ -130,7 +142,10 @@ class ForYouScreenTest {
                             topic = Topic(
                                 id = 1,
                                 name = "UI",
-                                shortDescription = ""
+                                shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = true
                         ),
@@ -139,6 +154,9 @@ class ForYouScreenTest {
                                 id = 2,
                                 name = "Tools",
                                 shortDescription = "",
+                                longDescription = "",
+                                imageUrl = "",
+                                url = ""
                             ),
                             isFollowed = false
                         ),

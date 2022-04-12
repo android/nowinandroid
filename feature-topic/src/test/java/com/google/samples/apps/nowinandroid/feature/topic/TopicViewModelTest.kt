@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.following
+package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -25,10 +25,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.topic.NewsUiState
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs.TOPIC_ID_ARG
-import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState
-import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals

@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,8 +68,9 @@ fun TopicRoute(
     )
 }
 
+@VisibleForTesting
 @Composable
-private fun TopicScreen(
+fun TopicScreen(
     topicState: TopicUiState,
     newsState: NewsUiState,
     onBackClick: () -> Unit,
