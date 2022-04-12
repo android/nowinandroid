@@ -74,22 +74,6 @@ class TestNewsResourceDao : NewsResourceDao {
                 }
             }
 
-    override fun getNewsResourcesForTopicsStream(
-        filterTopicIds: Set<Int>
-    ): Flow<List<PopulatedNewsResource>> =
-        getNewsResourcesStream()
-            .map { resources ->
-                resources.filter { resource -> resource.topics.any { it.id in filterTopicIds } }
-            }
-
-    override fun getNewsResourcesForAuthorsStream(
-        filterAuthorIds: Set<Int>
-    ): Flow<List<PopulatedNewsResource>> =
-        getNewsResourcesStream()
-            .map { resources ->
-                resources.filter { resource -> resource.authors.any { it.id in filterAuthorIds } }
-            }
-
     override suspend fun insertOrIgnoreNewsResources(
         entities: List<NewsResourceEntity>
     ): List<Long> {

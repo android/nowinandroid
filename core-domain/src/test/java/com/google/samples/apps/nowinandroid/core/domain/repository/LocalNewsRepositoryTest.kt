@@ -104,12 +104,13 @@ class LocalNewsRepositoryTest {
     fun localNewsRepository_news_resources_topic_filtered_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesForTopicsStream(filteredInterestsIds)
+                newsResourceDao.getNewsResourcesStream(
+                    filterTopicIds = filteredInterestsIds,
+                )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
                 subject.getNewsResourcesStream(
                     filterTopicIds = filteredInterestsIds,
-                    filterAuthorIds = emptySet()
                 )
                     .first()
             )
@@ -118,7 +119,6 @@ class LocalNewsRepositoryTest {
                 emptyList<NewsResource>(),
                 subject.getNewsResourcesStream(
                     filterTopicIds = nonPresentInterestsIds,
-                    filterAuthorIds = emptySet()
                 )
                     .first()
             )
@@ -128,11 +128,12 @@ class LocalNewsRepositoryTest {
     fun localNewsRepository_news_resources_author_filtered_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesForAuthorsStream(filteredInterestsIds)
+                newsResourceDao.getNewsResourcesStream(
+                    filterAuthorIds = filteredInterestsIds
+                )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
                 subject.getNewsResourcesStream(
-                    filterTopicIds = emptySet(),
                     filterAuthorIds = filteredInterestsIds
                 )
                     .first()
@@ -141,7 +142,6 @@ class LocalNewsRepositoryTest {
             assertEquals(
                 emptyList<NewsResource>(),
                 subject.getNewsResourcesStream(
-                    filterTopicIds = emptySet(),
                     filterAuthorIds = nonPresentInterestsIds
                 )
                     .first()
