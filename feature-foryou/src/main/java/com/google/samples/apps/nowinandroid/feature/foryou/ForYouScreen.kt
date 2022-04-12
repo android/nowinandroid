@@ -61,8 +61,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
-import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
@@ -102,7 +102,7 @@ fun ForYouScreen(
         when (uiState) {
             is ForYouFeedUiState.Loading -> {
                 item {
-                    NiaLoadingIndicator(
+                    LoadingWheel(
                         modifier = modifier,
                         contentDesc = stringResource(id = R.string.for_you_loading),
                     )

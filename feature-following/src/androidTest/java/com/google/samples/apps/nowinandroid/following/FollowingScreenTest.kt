@@ -65,7 +65,7 @@ class InterestsScreenTest {
     }
 
     @Test
-    fun niaLoadingIndicator_inTopics_whenScreenIsLoading_showLoading() {
+    fun niaLoadingWheel_inTopics_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             InterestsScreen(uiState = FollowingUiState.Loading, tabIndex = 0)
         }
@@ -76,7 +76,7 @@ class InterestsScreenTest {
     }
 
     @Test
-    fun niaLoadingIndicator_inAuthors_whenScreenIsLoading_showLoading() {
+    fun niaLoadingWheel_inAuthors_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             InterestsScreen(uiState = FollowingUiState.Loading, tabIndex = 1)
         }
