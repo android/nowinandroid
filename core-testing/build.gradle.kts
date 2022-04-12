@@ -28,7 +28,6 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     api(libs.junit4)
-    api(libs.mockk)
     api(libs.androidx.test.core)
     api(libs.kotlinx.coroutines.test)
     api(libs.turbine)
