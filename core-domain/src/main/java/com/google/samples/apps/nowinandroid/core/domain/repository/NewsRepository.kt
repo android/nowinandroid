@@ -29,11 +29,11 @@ interface NewsRepository {
     fun getNewsResourcesStream(): Flow<List<NewsResource>>
 
     /**
-     * Returns available news resources as a stream filtered by authors and topics.
+     * Returns available news resources as a stream filtered by authors or topics.
      */
     fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>,
+        filterAuthorIds: Set<Int> = emptySet(),
+        filterTopicIds: Set<Int> = emptySet(),
     ): Flow<List<NewsResource>>
 
     /**

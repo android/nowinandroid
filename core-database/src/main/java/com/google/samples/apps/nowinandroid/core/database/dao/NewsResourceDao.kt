@@ -50,45 +50,17 @@ interface NewsResourceDao {
                 SELECT news_resource_id FROM news_resources_topics
                 WHERE topic_id IN (:filterTopicIds)
             )
-            ORDER BY publish_date DESC
-    """
-    )
-    fun getNewsResourcesForTopicsStream(
-        filterTopicIds: Set<Int>
-    ): Flow<List<PopulatedNewsResource>>
-
-    @Query(
-        value = """
-            SELECT * FROM news_resources
-            WHERE id in
+            OR id in
             (
                 SELECT news_resource_id FROM news_resources_authors
-                WHERE author_id IN (:filterAuthorIds)
-            )
-            ORDER BY publish_date DESC
-    """
-    )
-    fun getNewsResourcesForAuthorsStream(
-        filterAuthorIds: Set<Int>
-    ): Flow<List<PopulatedNewsResource>>
-
-    @Query(
-        value = """
-            SELECT * FROM news_resources
-            WHERE id in
-            (
-                SELECT topics.topic_id FROM news_resources_topics as topics
-                INNER JOIN news_resources_authors as authors
-                ON topics.news_resource_id == authors.news_resource_id
-                WHERE topics.topic_id IN (:filterTopicIds)
-                AND authors.author_id  IN (:filterAuthorIds)
+                WHERE author_id  IN (:filterAuthorIds)
             )
             ORDER BY publish_date DESC
     """
     )
     fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>
+        filterAuthorIds: Set<Int> = emptySet(),
+        filterTopicIds: Set<Int> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
     /**
