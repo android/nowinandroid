@@ -19,18 +19,22 @@ package com.google.samples.apps.nowinandroid.sync.workers
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.Configuration
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
-import androidx.work.workDataOf
-import java.util.concurrent.TimeUnit
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
+@HiltAndroidTest
 class SyncWorkerTest {
+
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
 
     private val context get() = InstrumentationRegistry.getInstrumentation().context
 
@@ -46,26 +50,26 @@ class SyncWorkerTest {
     }
 
     @Test
-    fun testSyncPeriodicWork() {
-        // Define input data
-        val input = workDataOf()
-
+    fun testSyncWork() {
         // Create request
-        val request = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
-            .setInputData(input)
-            .build()
+        val request = SyncWorker.startUpSyncWork()
 
         val workManager = WorkManager.getInstance(context)
         val testDriver = WorkManagerTestInitHelper.getTestDriver(context)!!
 
         // Enqueue and wait for result.
         workManager.enqueue(request).result.get()
-        // Tells the testing framework the period delay is met
-        testDriver.setPeriodDelayMet(request.id)
+
         // Get WorkInfo and outputData
-        val workInfo = workManager.getWorkInfoById(request.id).get()
+        val preRunWorkInfo = workManager.getWorkInfoById(request.id).get()
 
         // Assert
-        assertEquals(workInfo.state, WorkInfo.State.ENQUEUED)
+        assertEquals(WorkInfo.State.ENQUEUED, preRunWorkInfo.state)
+
+        // Tells the testing framework that the constraints have been met
+        testDriver.setAllConstraintsMet(request.id)
+
+        val postRequirementWorkInfo = workManager.getWorkInfoById(request.id).get()
+        assertEquals(WorkInfo.State.RUNNING, postRequirementWorkInfo.state)
     }
 }

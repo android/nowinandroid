@@ -21,7 +21,14 @@ plugins {
     id 'nowinandroid.spotless'
 }
 
+android {
+    defaultConfig {
+        testInstrumentationRunner "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+    }
+}
+
 dependencies {
+    implementation project(':core-common')
     implementation project(':core-model')
     implementation project(':core-domain')
     implementation project(':core-datastore')
@@ -40,6 +47,9 @@ dependencies {
     kapt libs.hilt.ext.compiler
 
     androidTestImplementation libs.androidx.work.testing
+
+    kaptAndroidTest libs.hilt.compiler
+    kaptAndroidTest libs.hilt.ext.compiler
 
     configurations.configureEach {
         resolutionStrategy {
