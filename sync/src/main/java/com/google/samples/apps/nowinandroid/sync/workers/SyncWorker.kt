@@ -22,8 +22,10 @@ import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
+import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
@@ -31,7 +33,6 @@ import com.google.samples.apps.nowinandroid.sync.initializers.SyncConstraints
 import com.google.samples.apps.nowinandroid.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -44,10 +45,11 @@ import kotlinx.coroutines.coroutineScope
 class SyncWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     @Assisted workerParams: WorkerParameters,
+    private val niaPreferences: NiaPreferences,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
     private val authorsRepository: AuthorsRepository,
-) : CoroutineWorker(appContext, workerParams) {
+) : CoroutineWorker(appContext, workerParams), Synchronizer {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =
         appContext.syncForegroundInfo()
@@ -64,26 +66,19 @@ class SyncWorker @AssistedInject constructor(
         else Result.retry()
     }
 
-    companion object {
-        private const val SyncInterval = 1L
-        private val SyncIntervalTimeUnit = TimeUnit.DAYS
+    override suspend fun getChangeListVersions(): ChangeListVersions =
+        niaPreferences.getChangeListVersions()
 
+    override suspend fun updateChangeListVersions(
+        update: ChangeListVersions.() -> ChangeListVersions
+    ) = niaPreferences.updateChangeListVersion(update)
+
+    companion object {
         /**
          * Expedited one time work to sync data on app startup
          */
         fun startUpSyncWork() = OneTimeWorkRequestBuilder<DelegatingWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .setConstraints(SyncConstraints)
-            .setInputData(SyncWorker::class.delegatedData())
-            .build()
-
-        /**
-         * Periodic sync work to routinely keep the app up to date
-         */
-        fun periodicSyncWork() = PeriodicWorkRequestBuilder<DelegatingWorker>(
-            SyncInterval,
-            SyncIntervalTimeUnit
-        )
             .setConstraints(SyncConstraints)
             .setInputData(SyncWorker::class.delegatedData())
             .build()

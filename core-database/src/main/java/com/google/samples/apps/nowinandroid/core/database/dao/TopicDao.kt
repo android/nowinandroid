@@ -70,4 +70,15 @@ interface TopicDao {
         insertMany = ::insertOrIgnoreTopics,
         updateMany = ::updateTopics
     )
+
+    /**
+     * Deletes rows in the db matching the specified [ids]
+     */
+    @Query(
+        value = """
+            DELETE FROM topics
+            WHERE id in (:ids)
+        """
+    )
+    suspend fun deleteTopics(ids: List<Int>)
 }

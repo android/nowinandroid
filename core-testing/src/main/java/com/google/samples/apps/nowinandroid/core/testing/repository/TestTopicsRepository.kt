@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
@@ -69,5 +70,5 @@ class TestTopicsRepository : TopicsRepository {
      */
     fun getCurrentFollowedTopics(): Set<Int>? = _followedTopicIds.replayCache.firstOrNull()
 
-    override suspend fun sync(): Boolean = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

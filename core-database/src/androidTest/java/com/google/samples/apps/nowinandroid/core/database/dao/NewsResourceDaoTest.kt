@@ -305,6 +305,49 @@ class NewsResourceDaoTest {
                 filteredNewsResources.map { it.entity.id }
             )
         }
+
+    @Test
+    fun newsResourceDao_deletes_items_by_ids() =
+        runTest {
+            val newsResourceEntities = listOf(
+                testNewsResource(
+                    id = 0,
+                    millisSinceEpoch = 0,
+                ),
+                testNewsResource(
+                    id = 1,
+                    millisSinceEpoch = 3,
+                ),
+                testNewsResource(
+                    id = 2,
+                    millisSinceEpoch = 1,
+                ),
+                testNewsResource(
+                    id = 3,
+                    millisSinceEpoch = 2,
+                ),
+            )
+            val episodeEntityShells = newsResourceEntities
+                .map(NewsResourceEntity::episodeEntityShell)
+                .distinct()
+
+            episodeDao.upsertEpisodes(episodeEntityShells)
+            newsResourceDao.upsertNewsResources(newsResourceEntities)
+
+            val (toDelete, toKeep) = newsResourceEntities.partition { it.id % 2 == 0 }
+
+            newsResourceDao.deleteNewsResources(
+                toDelete.map(NewsResourceEntity::id)
+            )
+
+            assertEquals(
+                toKeep.map(NewsResourceEntity::id)
+                    .toSet(),
+                newsResourceDao.getNewsResourcesStream().first()
+                    .map { it.entity.id }
+                    .toSet()
+            )
+        }
 }
 
 private fun testAuthorEntity(

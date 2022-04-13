@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -68,5 +69,5 @@ class FakeAuthorsRepository @Inject constructor(
 
     override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = niaPreferences.followedAuthorIds
 
-    override suspend fun sync() = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

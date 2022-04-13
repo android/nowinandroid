@@ -28,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Instant
 
 val filteredInterestsIds = setOf(1)
@@ -96,6 +97,13 @@ class TestNewsResourceDao : NewsResourceDao {
         newsResourceAuthorCrossReferences: List<NewsResourceAuthorCrossRef>
     ) {
         authorCrossReferences = newsResourceAuthorCrossReferences
+    }
+
+    override suspend fun deleteNewsResources(ids: List<Int>) {
+        val idSet = ids.toSet()
+        entitiesStateFlow.update { entities ->
+            entities.filterNot { idSet.contains(it.id) }
+        }
     }
 }
 

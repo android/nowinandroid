@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.sync.initializers
 import android.content.Context
 import androidx.startup.AppInitializer
 import androidx.startup.Initializer
-import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
@@ -43,11 +43,11 @@ private const val SyncWorkName = "SyncWorkName"
 class SyncInitializer : Initializer<Sync> {
     override fun create(context: Context): Sync {
         WorkManager.getInstance(context).apply {
-            enqueue(SyncWorker.startUpSyncWork())
-            enqueueUniquePeriodicWork(
+            // Run sync on app startup and ensure only one sync worker runs at any time
+            enqueueUniqueWork(
                 SyncWorkName,
-                ExistingPeriodicWorkPolicy.KEEP,
-                SyncWorker.periodicSyncWork()
+                ExistingWorkPolicy.REPLACE,
+                SyncWorker.startUpSyncWork()
             )
         }
 

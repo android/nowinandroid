@@ -94,4 +94,15 @@ interface NewsResourceDao {
     suspend fun insertOrIgnoreAuthorCrossRefEntities(
         newsResourceAuthorCrossReferences: List<NewsResourceAuthorCrossRef>
     )
+
+    /**
+     * Deletes rows in the db matching the specified [ids]
+     */
+    @Query(
+        value = """
+            DELETE FROM news_resources
+            WHERE id in (:ids)
+        """
+    )
+    suspend fun deleteNewsResources(ids: List<Int>)
 }

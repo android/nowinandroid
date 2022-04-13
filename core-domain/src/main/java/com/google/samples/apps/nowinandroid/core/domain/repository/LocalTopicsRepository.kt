@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.changeListSync
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -54,20 +55,21 @@ class LocalTopicsRepository @Inject constructor(
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
-    override suspend fun sync(): Boolean = changeListSync(
-        niaPreferences = niaPreferences,
-        versionReader = ChangeListVersions::topicVersion,
-        changeListFetcher = { currentVersion ->
-            network.getTopicChangeList(after = currentVersion)
-        },
-        versionUpdater = { latestVersion ->
-            copy(topicVersion = latestVersion)
-        },
-        modelUpdater = { changedIds ->
-            val networkTopics = network.getTopics(ids = changedIds)
-            topicDao.upsertTopics(
-                entities = networkTopics.map(NetworkTopic::asEntity)
-            )
-        }
-    )
+    override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
+        synchronizer.changeListSync(
+            versionReader = ChangeListVersions::topicVersion,
+            changeListFetcher = { currentVersion ->
+                network.getTopicChangeList(after = currentVersion)
+            },
+            versionUpdater = { latestVersion ->
+                copy(topicVersion = latestVersion)
+            },
+            modelDeleter = topicDao::deleteTopics,
+            modelUpdater = { changedIds ->
+                val networkTopics = network.getTopics(ids = changedIds)
+                topicDao.upsertTopics(
+                    entities = networkTopics.map(NetworkTopic::asEntity)
+                )
+            }
+        )
 }

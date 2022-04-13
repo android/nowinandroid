@@ -16,24 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.Syncable
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import kotlinx.coroutines.flow.Flow
+import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 
 /**
- * Data layer implementation for [NewsResource]
+ * Test synchronizer that delegates to [NiaPreferences]
  */
-interface NewsRepository : Syncable {
-    /**
-     * Returns available news resources as a stream.
-     */
-    fun getNewsResourcesStream(): Flow<List<NewsResource>>
+class TestSynchronizer(
+    private val niaPreferences: NiaPreferences
+) : Synchronizer {
+    override suspend fun getChangeListVersions(): ChangeListVersions =
+        niaPreferences.getChangeListVersions()
 
-    /**
-     * Returns available news resources as a stream filtered by authors or topics.
-     */
-    fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int> = emptySet(),
-        filterTopicIds: Set<Int> = emptySet(),
-    ): Flow<List<NewsResource>>
+    override suspend fun updateChangeListVersions(
+        update: ChangeListVersions.() -> ChangeListVersions
+    ) = niaPreferences.updateChangeListVersion(update)
 }

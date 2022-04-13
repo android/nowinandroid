@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -54,5 +55,5 @@ class TestNewsRepository : NewsRepository {
         newsResourcesFlow.tryEmit(newsResources)
     }
 
-    override suspend fun sync(): Boolean = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * Test double for [AuthorDao]
@@ -49,5 +50,12 @@ class TestAuthorDao : AuthorDao {
 
     override suspend fun updateAuthors(entities: List<AuthorEntity>) {
         throw NotImplementedError("Unused in tests")
+    }
+
+    override suspend fun deleteAuthors(ids: List<Int>) {
+        val idSet = ids.toSet()
+        entitiesStateFlow.update { entities ->
+            entities.filterNot { idSet.contains(it.id) }
+        }
     }
 }
