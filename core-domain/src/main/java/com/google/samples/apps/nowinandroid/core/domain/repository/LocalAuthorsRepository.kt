@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.changeListSync
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -51,20 +52,21 @@ class LocalAuthorsRepository @Inject constructor(
 
     override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = niaPreferences.followedAuthorIds
 
-    override suspend fun sync(): Boolean = changeListSync(
-        niaPreferences = niaPreferences,
-        versionReader = ChangeListVersions::authorVersion,
-        changeListFetcher = { currentVersion ->
-            network.getAuthorChangeList(after = currentVersion)
-        },
-        versionUpdater = { latestVersion ->
-            copy(authorVersion = latestVersion)
-        },
-        modelUpdater = { changedIds ->
-            val networkAuthors = network.getAuthors(ids = changedIds)
-            authorDao.upsertAuthors(
-                entities = networkAuthors.map(NetworkAuthor::asEntity)
-            )
-        }
-    )
+    override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
+        synchronizer.changeListSync(
+            versionReader = ChangeListVersions::authorVersion,
+            changeListFetcher = { currentVersion ->
+                network.getAuthorChangeList(after = currentVersion)
+            },
+            versionUpdater = { latestVersion ->
+                copy(authorVersion = latestVersion)
+            },
+            modelDeleter = authorDao::deleteAuthors,
+            modelUpdater = { changedIds ->
+                val networkAuthors = network.getAuthors(ids = changedIds)
+                authorDao.upsertAuthors(
+                    entities = networkAuthors.map(NetworkAuthor::asEntity)
+                )
+            }
+        )
 }

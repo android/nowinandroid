@@ -21,10 +21,12 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
+import com.google.samples.apps.nowinandroid.core.domain.testdoubles.CollectionType
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestNiaNetwork
 import com.google.samples.apps.nowinandroid.core.domain.testdoubles.TestTopicDao
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -40,9 +42,11 @@ class LocalTopicsRepositoryTest {
 
     private lateinit var topicDao: TopicDao
 
-    private lateinit var network: NiANetwork
+    private lateinit var network: TestNiaNetwork
 
     private lateinit var niaPreferences: NiaPreferences
+
+    private lateinit var synchronizer: Synchronizer
 
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
@@ -54,6 +58,7 @@ class LocalTopicsRepositoryTest {
         niaPreferences = NiaPreferences(
             tmpFolder.testUserPreferencesDataStore()
         )
+        synchronizer = TestSynchronizer(niaPreferences)
 
         subject = LocalTopicsRepository(
             topicDao = topicDao,
@@ -88,23 +93,23 @@ class LocalTopicsRepositoryTest {
     @Test
     fun localTopicsRepository_sync_pulls_from_network() =
         runTest {
-            subject.sync()
+            subject.syncWith(synchronizer)
 
-            val network = network.getTopics()
+            val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
 
-            val db = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntitiesStream()
                 .first()
 
             Assert.assertEquals(
-                network.map(TopicEntity::id),
-                db.map(TopicEntity::id)
+                networkTopics.map(TopicEntity::id),
+                dbTopics.map(TopicEntity::id)
             )
 
             // After sync version should be updated
             Assert.assertEquals(
-                network.lastIndex,
-                niaPreferences.getChangeListVersions().topicVersion
+                network.latestChangeListVersion(CollectionType.Topics),
+                synchronizer.getChangeListVersions().topicVersion
             )
         }
 
@@ -112,29 +117,68 @@ class LocalTopicsRepositoryTest {
     fun localTopicsRepository_incremental_sync_pulls_from_network() =
         runTest {
             // Set topics version to 10
-            niaPreferences.updateChangeListVersion {
+            synchronizer.updateChangeListVersions {
                 copy(topicVersion = 10)
             }
 
-            subject.sync()
+            subject.syncWith(synchronizer)
 
-            val network = network.getTopics()
+            val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
                 // Drop 10 to simulate the first 10 items being unchanged
                 .drop(10)
 
-            val db = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntitiesStream()
                 .first()
 
             Assert.assertEquals(
-                network.map(TopicEntity::id),
-                db.map(TopicEntity::id)
+                networkTopics.map(TopicEntity::id),
+                dbTopics.map(TopicEntity::id)
             )
 
             // After sync version should be updated
             Assert.assertEquals(
-                network.lastIndex + 10,
-                niaPreferences.getChangeListVersions().topicVersion
+                network.latestChangeListVersion(CollectionType.Topics),
+                synchronizer.getChangeListVersions().topicVersion
+            )
+        }
+
+    @Test
+    fun localTopicsRepository_sync_deletes_items_marked_deleted_on_network() =
+        runTest {
+            val networkTopics = network.getTopics()
+                .map(NetworkTopic::asEntity)
+                .map(TopicEntity::asExternalModel)
+
+            val deletedItems = networkTopics
+                .map(Topic::id)
+                .partition { it % 2 == 0 }
+                .first
+                .toSet()
+
+            deletedItems.forEach {
+                network.editCollection(
+                    collectionType = CollectionType.Topics,
+                    id = it,
+                    isDelete = true
+                )
+            }
+
+            subject.syncWith(synchronizer)
+
+            val dbTopics = topicDao.getTopicEntitiesStream()
+                .first()
+                .map(TopicEntity::asExternalModel)
+
+            Assert.assertEquals(
+                networkTopics.map(Topic::id) - deletedItems,
+                dbTopics.map(Topic::id)
+            )
+
+            // After sync version should be updated
+            Assert.assertEquals(
+                network.latestChangeListVersion(CollectionType.Topics),
+                synchronizer.getChangeListVersions().topicVersion
             )
         }
 

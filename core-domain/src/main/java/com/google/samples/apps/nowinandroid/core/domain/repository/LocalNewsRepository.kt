@@ -26,7 +26,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.changeListSync
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.domain.model.authorCrossReferences
@@ -50,7 +50,6 @@ class LocalNewsRepository @Inject constructor(
     private val authorDao: AuthorDao,
     private val topicDao: TopicDao,
     private val network: NiANetwork,
-    private val niaPreferences: NiaPreferences,
 ) : NewsRepository {
 
     override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
@@ -66,53 +65,54 @@ class LocalNewsRepository @Inject constructor(
     )
         .map { it.map(PopulatedNewsResource::asExternalModel) }
 
-    override suspend fun sync() = changeListSync(
-        niaPreferences = niaPreferences,
-        versionReader = ChangeListVersions::newsResourceVersion,
-        changeListFetcher = { currentVersion ->
-            network.getNewsResourceChangeList(after = currentVersion)
-        },
-        versionUpdater = { latestVersion ->
-            copy(newsResourceVersion = latestVersion)
-        },
-        modelUpdater = { changedIds ->
-            val networkNewsResources = network.getNewsResources(ids = changedIds)
+    override suspend fun syncWith(synchronizer: Synchronizer) =
+        synchronizer.changeListSync(
+            versionReader = ChangeListVersions::newsResourceVersion,
+            changeListFetcher = { currentVersion ->
+                network.getNewsResourceChangeList(after = currentVersion)
+            },
+            versionUpdater = { latestVersion ->
+                copy(newsResourceVersion = latestVersion)
+            },
+            modelDeleter = newsResourceDao::deleteNewsResources,
+            modelUpdater = { changedIds ->
+                val networkNewsResources = network.getNewsResources(ids = changedIds)
 
-            // Order of invocation matters to satisfy id and foreign key constraints!
+                // Order of invocation matters to satisfy id and foreign key constraints!
 
-            topicDao.insertOrIgnoreTopics(
-                topicEntities = networkNewsResources
-                    .map(NetworkNewsResource::topicEntityShells)
-                    .flatten()
-                    .distinctBy(TopicEntity::id)
-            )
-            authorDao.insertOrIgnoreAuthors(
-                authorEntities = networkNewsResources
-                    .map(NetworkNewsResource::authorEntityShells)
-                    .flatten()
-                    .distinctBy(AuthorEntity::id)
-            )
-            episodeDao.insertOrIgnoreEpisodes(
-                episodeEntities = networkNewsResources
-                    .map(NetworkNewsResource::episodeEntityShell)
-                    .distinctBy(EpisodeEntity::id)
-            )
-            newsResourceDao.upsertNewsResources(
-                newsResourceEntities = networkNewsResources
-                    .map(NetworkNewsResource::asEntity)
-            )
-            newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
-                newsResourceTopicCrossReferences = networkNewsResources
-                    .map(NetworkNewsResource::topicCrossReferences)
-                    .distinct()
-                    .flatten()
-            )
-            newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(
-                newsResourceAuthorCrossReferences = networkNewsResources
-                    .map(NetworkNewsResource::authorCrossReferences)
-                    .distinct()
-                    .flatten()
-            )
-        }
-    )
+                topicDao.insertOrIgnoreTopics(
+                    topicEntities = networkNewsResources
+                        .map(NetworkNewsResource::topicEntityShells)
+                        .flatten()
+                        .distinctBy(TopicEntity::id)
+                )
+                authorDao.insertOrIgnoreAuthors(
+                    authorEntities = networkNewsResources
+                        .map(NetworkNewsResource::authorEntityShells)
+                        .flatten()
+                        .distinctBy(AuthorEntity::id)
+                )
+                episodeDao.insertOrIgnoreEpisodes(
+                    episodeEntities = networkNewsResources
+                        .map(NetworkNewsResource::episodeEntityShell)
+                        .distinctBy(EpisodeEntity::id)
+                )
+                newsResourceDao.upsertNewsResources(
+                    newsResourceEntities = networkNewsResources
+                        .map(NetworkNewsResource::asEntity)
+                )
+                newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
+                    newsResourceTopicCrossReferences = networkNewsResources
+                        .map(NetworkNewsResource::topicCrossReferences)
+                        .distinct()
+                        .flatten()
+                )
+                newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(
+                    newsResourceAuthorCrossReferences = networkNewsResources
+                        .map(NetworkNewsResource::authorCrossReferences)
+                        .distinct()
+                        .flatten()
+                )
+            }
+        )
 }

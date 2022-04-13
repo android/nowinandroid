@@ -16,10 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
+import com.google.samples.apps.nowinandroid.core.domain.Syncable
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.flow.Flow
 
-interface TopicsRepository {
+interface TopicsRepository : Syncable {
     /**
      * Gets the available topics as a stream
      */
@@ -44,10 +45,4 @@ interface TopicsRepository {
      * Returns the users currently followed topics
      */
     fun getFollowedTopicIdsStream(): Flow<Set<Int>>
-
-    /**
-     * Synchronizes the local database in backing the repository with the network.
-     * Returns if the sync was successful or not.
-     */
-    suspend fun sync(): Boolean
 }

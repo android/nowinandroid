@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import kotlinx.coroutines.channels.BufferOverflow
@@ -52,7 +53,7 @@ class TestAuthorsRepository : AuthorsRepository {
         }
     }
 
-    override suspend fun sync(): Boolean = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 
     /**
      * A test-only API to allow controlling the list of topics from tests.

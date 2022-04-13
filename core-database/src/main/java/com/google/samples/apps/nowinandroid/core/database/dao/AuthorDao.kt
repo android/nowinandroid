@@ -54,4 +54,15 @@ interface AuthorDao {
         insertMany = ::insertOrIgnoreAuthors,
         updateMany = ::updateAuthors
     )
+
+    /**
+     * Deletes rows in the db matching the specified [ids]
+     */
+    @Query(
+        value = """
+            DELETE FROM authors
+            WHERE id in (:ids)
+        """
+    )
+    suspend fun deleteAuthors(ids: List<Int>)
 }

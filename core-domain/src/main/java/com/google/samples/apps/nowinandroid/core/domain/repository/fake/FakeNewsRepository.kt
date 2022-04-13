@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.model.asEntity
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -71,5 +72,5 @@ class FakeNewsRepository @Inject constructor(
         }
             .flowOn(ioDispatcher)
 
-    override suspend fun sync() = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

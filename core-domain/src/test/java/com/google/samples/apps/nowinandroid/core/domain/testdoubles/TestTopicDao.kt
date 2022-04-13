@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 
 /**
  * Test double for [TopicDao]
@@ -59,5 +60,12 @@ class TestTopicDao : TopicDao {
 
     override suspend fun updateTopics(entities: List<TopicEntity>) {
         throw NotImplementedError("Unused in tests")
+    }
+
+    override suspend fun deleteTopics(ids: List<Int>) {
+        val idSet = ids.toSet()
+        entitiesStateFlow.update { entities ->
+            entities.filterNot { idSet.contains(it.id) }
+        }
     }
 }

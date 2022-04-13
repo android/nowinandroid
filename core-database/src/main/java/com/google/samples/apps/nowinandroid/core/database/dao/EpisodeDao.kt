@@ -56,4 +56,15 @@ interface EpisodeDao {
         insertMany = ::insertOrIgnoreEpisodes,
         updateMany = ::updateEpisodes
     )
+
+    /**
+     * Deletes rows in the db matching the specified [ids]
+     */
+    @Query(
+        value = """
+            DELETE FROM episodes
+            WHERE id in (:ids)
+        """
+    )
+    suspend fun deleteEpisodes(ids: List<Int>)
 }

@@ -22,6 +22,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Instant
 
 /**
@@ -54,6 +55,13 @@ class TestEpisodeDao : EpisodeDao {
 
     override suspend fun updateEpisodes(entities: List<EpisodeEntity>) {
         throw NotImplementedError("Unused in tests")
+    }
+
+    override suspend fun deleteEpisodes(ids: List<Int>) {
+        val idSet = ids.toSet()
+        entitiesStateFlow.update { entities ->
+            entities.filterNot { idSet.contains(it.id) }
+        }
     }
 }
 

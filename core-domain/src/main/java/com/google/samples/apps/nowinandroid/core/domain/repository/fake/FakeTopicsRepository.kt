@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.domain.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -72,5 +73,5 @@ class FakeTopicsRepository @Inject constructor(
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
-    override suspend fun sync() = true
+    override suspend fun syncWith(synchronizer: Synchronizer) = true
 }
