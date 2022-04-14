@@ -23,11 +23,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Android
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -87,7 +87,7 @@ private fun InterestContent(name: String, description: String, modifier: Modifie
     Column(modifier) {
         Text(
             text = name,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(
                 vertical = if (description.isEmpty()) 0.dp else 4.dp
             )
@@ -95,7 +95,7 @@ private fun InterestContent(name: String, description: String, modifier: Modifie
         if (description.isNotEmpty()) {
             Text(
                 text = description,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

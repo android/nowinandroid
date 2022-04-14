@@ -33,9 +33,8 @@ dependencies {
     debugImplementation "androidx.savedstate:savedstate-ktx:1.1.0"
     debugImplementation libs.androidx.lifecycle.viewModelCompose
 
+    api libs.androidx.compose.foundation
     api libs.androidx.compose.foundation.layout
-    // TODO (M3): Remove this dependency when all components are available
-    api libs.androidx.compose.material
     api libs.androidx.compose.material.iconsExtended
     api libs.androidx.compose.material3
     debugApi libs.androidx.compose.ui.tooling
