@@ -23,15 +23,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,8 +62,8 @@ fun NiaToolbar(
         }
         Text(
             text = stringResource(id = titleRes),
-            style = MaterialTheme.typography.h6,
-            fontWeight = FontWeight.SemiBold
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
         )
         IconButton(onClick = { onMenuClick() }) {
             Icon(
@@ -86,7 +86,6 @@ fun NiaLoadingIndicator(
     ) {
         CircularProgressIndicator(
             modifier = Modifier.semantics { contentDescription = contentDesc },
-            color = androidx.compose.material3.MaterialTheme.colorScheme.primary
         )
     }
 }

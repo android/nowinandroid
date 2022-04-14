@@ -20,7 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.window.ExperimentalMaterialWindowApi
-import androidx.compose.material.window.rememberSizeClass
+import androidx.compose.material.window.calculateSizeClass
 import androidx.core.view.WindowCompat
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         // including IME animations
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent { NiaApp(rememberSizeClass()) }
+        setContent { NiaApp(calculateSizeClass()) }
         reportFullyDrawn()
     }
 }

@@ -26,12 +26,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Chip
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -48,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -158,7 +156,6 @@ private fun TopicBodyPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun TopicToolbar(
     uiState: FollowableTopic,
@@ -180,12 +177,11 @@ private fun TopicToolbar(
             )
         }
         val selected = uiState.isFollowed
-        Chip(onClick = { onFollowClick(!selected) }) {
+        NiaFilterChip(
+            checked = selected,
+            onCheckedChange = onFollowClick,
+        ) {
             if (selected) {
-                Icon(
-                    imageVector = Filled.Check,
-                    contentDescription = null
-                )
                 Text("FOLLOWING")
             } else {
                 Text("NOT FOLLOWING")
