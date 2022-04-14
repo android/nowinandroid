@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material.window.ExperimentalMaterialWindowApi
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -38,7 +37,6 @@ import org.junit.rules.TemporaryFolder
 /**
  * Tests all the navigation flows that are handled by the navigation library.
  */
-@ExperimentalMaterialWindowApi
 @HiltAndroidTest
 class NavigationTest {
 

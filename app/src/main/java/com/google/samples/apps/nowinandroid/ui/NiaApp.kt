@@ -33,8 +33,6 @@ import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Grid3x3
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.window.SizeClass
-import androidx.compose.material.window.WidthSizeClass
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +43,8 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -63,7 +63,7 @@ import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NiaApp(windowSizeClass: SizeClass) {
+fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
         val navController = rememberNavController()
         val navigationActions = remember(navController) {
@@ -76,7 +76,7 @@ fun NiaApp(windowSizeClass: SizeClass) {
         Scaffold(
             modifier = Modifier,
             bottomBar = {
-                if (windowSizeClass.width == WidthSizeClass.Compact) {
+                if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
                     NiABottomBar(
                         navigationActions = navigationActions,
                         currentDestination = currentDestination
@@ -86,7 +86,7 @@ fun NiaApp(windowSizeClass: SizeClass) {
         ) { padding ->
             Surface(Modifier.fillMaxSize().statusBarsPadding()) {
                 Row {
-                    if (windowSizeClass.width != WidthSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
                         NiANavRail(
                             navigationActions = navigationActions,
                             currentDestination = currentDestination
