@@ -51,6 +51,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -129,6 +131,12 @@ fun NewsResourceHeaderImage(
     headerImageUrl: String?
 ) {
     AsyncImage(
+        placeholder = if (LocalInspectionMode.current) {
+            painterResource(R.drawable.ic_placeholder_default)
+        } else {
+            // TODO b/228077205, show specific loading image visual
+            null
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp),
