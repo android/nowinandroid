@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 
@@ -28,9 +27,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
  */
 @Entity(
     tableName = "topics",
-    indices = [
-        Index(value = ["name"], unique = true)
-    ]
 )
 data class TopicEntity(
     @PrimaryKey
