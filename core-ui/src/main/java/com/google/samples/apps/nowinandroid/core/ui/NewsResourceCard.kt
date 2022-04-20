@@ -300,8 +300,8 @@ fun ExpandedNewsResourcePreview() {
 }
 
 private val newsResource = NewsResource(
-    id = 1,
-    episodeId = 1,
+    id = "1",
+    episodeId = "1",
     title = "Title",
     content = "Content",
     url = "url",
@@ -310,7 +310,7 @@ private val newsResource = NewsResource(
     type = Article,
     authors = listOf(
         Author(
-            id = 1,
+            id = "1",
             name = "Name",
             imageUrl = "",
             twitter = "",
@@ -319,7 +319,7 @@ private val newsResource = NewsResource(
     ),
     topics = listOf(
         Topic(
-            id = 1,
+            id = "1",
             name = "Name",
             shortDescription = "Short description",
             longDescription = "Long description",

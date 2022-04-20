@@ -94,10 +94,10 @@ fun ForYouRoute(
 @Composable
 fun ForYouScreen(
     uiState: ForYouFeedUiState,
-    onTopicCheckedChanged: (Int, Boolean) -> Unit,
-    onAuthorCheckedChanged: (Int, Boolean) -> Unit,
+    onTopicCheckedChanged: (String, Boolean) -> Unit,
+    onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
-    onNewsResourcesCheckedChanged: (Int, Boolean) -> Unit,
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -206,7 +206,7 @@ fun ForYouScreen(
 @Composable
 private fun TopicSelection(
     uiState: FeedWithInterestsSelection,
-    onTopicCheckedChanged: (Int, Boolean) -> Unit,
+    onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
@@ -242,9 +242,9 @@ private fun TopicSelection(
 @Composable
 private fun SingleTopicButton(
     name: String,
-    topicId: Int,
+    topicId: String,
     isSelected: Boolean,
-    onClick: (Int, Boolean) -> Unit
+    onClick: (String, Boolean) -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -306,7 +306,7 @@ fun ForYouScreenTopicSelection() {
             topics = listOf(
                 FollowableTopic(
                     topic = Topic(
-                        id = 0,
+                        id = "0",
                         name = "Headlines",
                         shortDescription = "",
                         longDescription = "",
@@ -317,7 +317,7 @@ fun ForYouScreenTopicSelection() {
                 ),
                 FollowableTopic(
                     topic = Topic(
-                        id = 1,
+                        id = "1",
                         name = "UI",
                         shortDescription = "",
                         longDescription = "",
@@ -328,7 +328,7 @@ fun ForYouScreenTopicSelection() {
                 ),
                 FollowableTopic(
                     topic = Topic(
-                        id = 2,
+                        id = "2",
                         name = "Tools",
                         shortDescription = "",
                         longDescription = "",
@@ -341,8 +341,8 @@ fun ForYouScreenTopicSelection() {
             feed = listOf(
                 SaveableNewsResource(
                     newsResource = NewsResource(
-                        id = 1,
-                        episodeId = 52,
+                        id = "1",
+                        episodeId = "52",
                         title = "Thanks for helping us reach 1M YouTube Subscribers",
                         content = "Thank you everyone for following the Now in Android series " +
                             "and everything the Android Developers YouTube channel has to offer. " +
@@ -354,7 +354,7 @@ fun ForYouScreenTopicSelection() {
                         type = Video,
                         topics = listOf(
                             Topic(
-                                id = 0,
+                                id = "0",
                                 name = "Headlines",
                                 shortDescription = "",
                                 longDescription = "",
@@ -368,8 +368,8 @@ fun ForYouScreenTopicSelection() {
                 ),
                 SaveableNewsResource(
                     newsResource = NewsResource(
-                        id = 2,
-                        episodeId = 52,
+                        id = "2",
+                        episodeId = "52",
                         title = "Transformations and customisations in the Paging Library",
                         content = "A demonstration of different operations that can be performed " +
                             "with Paging. Transformations like inserting separators, when to " +
@@ -381,7 +381,7 @@ fun ForYouScreenTopicSelection() {
                         type = Video,
                         topics = listOf(
                             Topic(
-                                id = 1,
+                                id = "1",
                                 name = "UI",
                                 shortDescription = "",
                                 longDescription = "",
@@ -395,8 +395,8 @@ fun ForYouScreenTopicSelection() {
                 ),
                 SaveableNewsResource(
                     newsResource = NewsResource(
-                        id = 3,
-                        episodeId = 52,
+                        id = "3",
+                        episodeId = "52",
                         title = "Community tip on Paging",
                         content = "Tips for using the Paging library from the developer community",
                         url = "https://youtu.be/r5JgIyS3t3s",
@@ -405,7 +405,7 @@ fun ForYouScreenTopicSelection() {
                         type = Video,
                         topics = listOf(
                             Topic(
-                                id = 1,
+                                id = "1",
                                 name = "UI",
                                 shortDescription = "",
                                 longDescription = "",
@@ -421,7 +421,7 @@ fun ForYouScreenTopicSelection() {
             authors = listOf(
                 FollowableAuthor(
                     author = Author(
-                        id = 0,
+                        id = "0",
                         name = "Android Dev",
                         imageUrl = "",
                         twitter = "",
@@ -431,7 +431,7 @@ fun ForYouScreenTopicSelection() {
                 ),
                 FollowableAuthor(
                     author = Author(
-                        id = 1,
+                        id = "1",
                         name = "Android Dev 2",
                         imageUrl = "",
                         twitter = "",
@@ -441,7 +441,7 @@ fun ForYouScreenTopicSelection() {
                 ),
                 FollowableAuthor(
                     author = Author(
-                        id = 2,
+                        id = "2",
                         name = "Android Dev 3",
                         imageUrl = "",
                         twitter = "",

@@ -25,11 +25,11 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
  * Interface representing network calls to the NIA backend
  */
 interface NiANetwork {
-    suspend fun getTopics(ids: List<Int>? = null): List<NetworkTopic>
+    suspend fun getTopics(ids: List<String>? = null): List<NetworkTopic>
 
-    suspend fun getAuthors(ids: List<Int>? = null): List<NetworkAuthor>
+    suspend fun getAuthors(ids: List<String>? = null): List<NetworkAuthor>
 
-    suspend fun getNewsResources(ids: List<Int>? = null): List<NetworkNewsResource>
+    suspend fun getNewsResources(ids: List<String>? = null): List<NetworkNewsResource>
 
     suspend fun getTopicChangeList(after: Int? = null): List<NetworkChangeList>
 

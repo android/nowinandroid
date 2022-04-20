@@ -58,19 +58,19 @@ class TestNiaNetwork : NiANetwork {
             .mapToChangeList(idGetter = NetworkNewsResource::id),
     )
 
-    override suspend fun getTopics(ids: List<Int>?): List<NetworkTopic> =
+    override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         allTopics.matchIds(
             ids = ids,
             idGetter = NetworkTopic::id
         )
 
-    override suspend fun getAuthors(ids: List<Int>?): List<NetworkAuthor> =
+    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
         allAuthors.matchIds(
             ids = ids,
             idGetter = NetworkAuthor::id
         )
 
-    override suspend fun getNewsResources(ids: List<Int>?): List<NetworkNewsResource> =
+    override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         allNewsResources.matchIds(
             ids = ids,
             idGetter = NetworkNewsResource::id
@@ -95,7 +95,7 @@ class TestNiaNetwork : NiANetwork {
      * Edits the change list for the backing [collectionType] for the given [id] mimicking
      * the server's change list registry
      */
-    fun editCollection(collectionType: CollectionType, id: Int, isDelete: Boolean) {
+    fun editCollection(collectionType: CollectionType, id: String, isDelete: Boolean) {
         val changeList = changeLists.getValue(collectionType)
         val latestVersion = changeList.lastOrNull()?.changeListVersion ?: 0
         val change = NetworkChangeList(
@@ -117,8 +117,8 @@ fun List<NetworkChangeList>.after(version: Int?): List<NetworkChangeList> =
  * Return items from [this] whose id defined by [idGetter] is in [ids] if [ids] is not null
  */
 private fun <T> List<T>.matchIds(
-    ids: List<Int>?,
-    idGetter: (T) -> Int
+    ids: List<String>?,
+    idGetter: (T) -> String
 ) = when (ids) {
     null -> this
     else -> ids.toSet().let { idSet -> this.filter { idSet.contains(idGetter(it)) } }
@@ -129,7 +129,7 @@ private fun <T> List<T>.matchIds(
  * [after] simulates which models have changed by excluding items before it
  */
 private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> Int
+    idGetter: (T) -> String
 ) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),

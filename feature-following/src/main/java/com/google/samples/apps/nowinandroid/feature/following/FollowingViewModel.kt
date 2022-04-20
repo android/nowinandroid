@@ -79,13 +79,13 @@ class FollowingViewModel @Inject constructor(
             initialValue = FollowingUiState.Loading
         )
 
-    fun followTopic(followedTopicId: Int, followed: Boolean) {
+    fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
             topicsRepository.toggleFollowedTopicId(followedTopicId, followed)
         }
     }
 
-    fun followAuthor(followedAuthorId: Int, followed: Boolean) {
+    fun followAuthor(followedAuthorId: String, followed: Boolean) {
         viewModelScope.launch {
             authorsRepository.toggleFollowedAuthorId(followedAuthorId, followed)
         }

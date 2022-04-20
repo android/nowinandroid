@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class NetworkAuthor(
-    val id: Int,
+    val id: String,
     val name: String,
     val imageUrl: String,
     val twitter: String,

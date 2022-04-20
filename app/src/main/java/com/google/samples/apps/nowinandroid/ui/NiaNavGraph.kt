@@ -74,7 +74,7 @@ fun NiaNavGraph(
                 InterestsDestinations.TOPIC_ROUTE,
                 arguments = listOf(
                     navArgument(TopicDestinationsArgs.TOPIC_ID_ARG) {
-                        type = NavType.IntType
+                        type = NavType.StringType
                     }
                 )
             ) {

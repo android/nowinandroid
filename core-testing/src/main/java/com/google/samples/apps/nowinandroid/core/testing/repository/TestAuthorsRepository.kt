@@ -27,7 +27,7 @@ class TestAuthorsRepository : AuthorsRepository {
     /**
      * The backing hot flow for the list of followed author ids for testing.
      */
-    private val _followedAuthorIds: MutableSharedFlow<Set<Int>> =
+    private val _followedAuthorIds: MutableSharedFlow<Set<String>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     /**
@@ -38,13 +38,13 @@ class TestAuthorsRepository : AuthorsRepository {
 
     override fun getAuthorsStream(): Flow<List<Author>> = authorsFlow
 
-    override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = _followedAuthorIds
+    override fun getFollowedAuthorIdsStream(): Flow<Set<String>> = _followedAuthorIds
 
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) {
+    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
         _followedAuthorIds.tryEmit(followedAuthorIds)
     }
 
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) {
+    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
         getCurrentFollowedAuthors()?.let { current ->
             _followedAuthorIds.tryEmit(
                 if (followed) current.plus(followedAuthorId)
@@ -65,5 +65,5 @@ class TestAuthorsRepository : AuthorsRepository {
     /**
      * A test-only API to allow querying the current followed topics.
      */
-    fun getCurrentFollowedAuthors(): Set<Int>? = _followedAuthorIds.replayCache.firstOrNull()
+    fun getCurrentFollowedAuthors(): Set<String>? = _followedAuthorIds.replayCache.firstOrNull()
 }

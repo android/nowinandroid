@@ -82,8 +82,8 @@ suspend fun Synchronizer.changeListSync(
     versionReader: (ChangeListVersions) -> Int,
     changeListFetcher: suspend (Int) -> List<NetworkChangeList>,
     versionUpdater: ChangeListVersions.(Int) -> ChangeListVersions,
-    modelDeleter: suspend (List<Int>) -> Unit,
-    modelUpdater: suspend (List<Int>) -> Unit,
+    modelDeleter: suspend (List<String>) -> Unit,
+    modelUpdater: suspend (List<String>) -> Unit,
 ) = suspendRunCatching {
     // Fetch the change list since last sync (akin to a git fetch)
     val currentVersion = versionReader(getChangeListVersions())

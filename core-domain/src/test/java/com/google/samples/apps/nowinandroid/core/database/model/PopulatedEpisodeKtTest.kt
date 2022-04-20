@@ -29,7 +29,7 @@ class PopulatedEpisodeKtTest {
     fun populated_episode_can_be_mapped_to_episode() {
         val populatedEpisode = PopulatedEpisode(
             entity = EpisodeEntity(
-                id = 0,
+                id = "0",
                 name = "Test",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 alternateAudio = "audio",
@@ -37,8 +37,8 @@ class PopulatedEpisodeKtTest {
             ),
             newsResources = listOf(
                 NewsResourceEntity(
-                    id = 1,
-                    episodeId = 0,
+                    id = "1",
+                    episodeId = "0",
                     title = "news",
                     content = "Hilt",
                     url = "url",
@@ -49,7 +49,7 @@ class PopulatedEpisodeKtTest {
             ),
             authors = listOf(
                 AuthorEntity(
-                    id = 2,
+                    id = "2",
                     name = "name",
                     imageUrl = "imageUrl",
                     twitter = "twitter",
@@ -61,15 +61,15 @@ class PopulatedEpisodeKtTest {
 
         assertEquals(
             Episode(
-                id = 0,
+                id = "0",
                 name = "Test",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 alternateAudio = "audio",
                 alternateVideo = "video",
                 newsResources = listOf(
                     NewsResource(
-                        id = 1,
-                        episodeId = 0,
+                        id = "1",
+                        episodeId = "0",
                         title = "news",
                         content = "Hilt",
                         url = "url",
@@ -82,7 +82,7 @@ class PopulatedEpisodeKtTest {
                 ),
                 authors = listOf(
                     Author(
-                        id = 2,
+                        id = "2",
                         name = "name",
                         imageUrl = "imageUrl",
                         twitter = "twitter",

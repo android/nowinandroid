@@ -30,7 +30,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 )
 data class AuthorEntity(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     val name: String,
     @ColumnInfo(name = "image_url")
     val imageUrl: String,

@@ -196,7 +196,7 @@ private const val TOPIC_IMAGE_URL = "Image URL"
 private val testTopics = listOf(
     FollowableTopic(
         Topic(
-            id = 0,
+            id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -207,7 +207,7 @@ private val testTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 1,
+            id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -218,7 +218,7 @@ private val testTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 2,
+            id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -232,7 +232,7 @@ private val testTopics = listOf(
 private val testAuthors = listOf(
     FollowableAuthor(
         Author(
-            id = 0,
+            id = "0",
             name = "Android Dev",
             imageUrl = "",
             twitter = "",
@@ -242,7 +242,7 @@ private val testAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 1,
+            id = "1",
             name = "Android Dev 2",
             imageUrl = "",
             twitter = "",
@@ -252,7 +252,7 @@ private val testAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 2,
+            id = "2",
             name = "Android Dev 3",
             imageUrl = "",
             twitter = "",

@@ -48,7 +48,7 @@ import androidx.room.Index
 )
 data class EpisodeAuthorCrossRef(
     @ColumnInfo(name = "episode_id")
-    val episodeId: Int,
+    val episodeId: String,
     @ColumnInfo(name = "author_id")
-    val authorId: Long,
+    val authorId: String,
 )

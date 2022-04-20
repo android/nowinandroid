@@ -59,15 +59,15 @@ class FakeAuthorsRepository @Inject constructor(
     }
         .flowOn(ioDispatcher)
 
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) {
+    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
         niaPreferences.setFollowedAuthorIds(followedAuthorIds)
     }
 
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) {
+    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
         niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
     }
 
-    override fun getFollowedAuthorIdsStream(): Flow<Set<Int>> = niaPreferences.followedAuthorIds
+    override fun getFollowedAuthorIdsStream(): Flow<Set<String>> = niaPreferences.followedAuthorIds
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

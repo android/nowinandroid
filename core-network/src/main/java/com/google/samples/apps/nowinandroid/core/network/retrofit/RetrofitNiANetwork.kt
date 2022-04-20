@@ -39,17 +39,17 @@ import retrofit2.http.Query
 private interface RetrofitNiANetworkApi {
     @GET(value = "topics")
     suspend fun getTopics(
-        @Query("id") ids: List<Int>?,
+        @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkTopic>>
 
     @GET(value = "authors")
     suspend fun getAuthors(
-        @Query("id") ids: List<Int>?,
+        @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkAuthor>>
 
     @GET(value = "newsresources")
     suspend fun getNewsResources(
-        @Query("id") ids: List<Int>?,
+        @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkNewsResource>>
 
     @GET(value = "changelists/topics")
@@ -102,13 +102,13 @@ class RetrofitNiANetwork @Inject constructor(
         .build()
         .create(RetrofitNiANetworkApi::class.java)
 
-    override suspend fun getTopics(ids: List<Int>?): List<NetworkTopic> =
+    override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data
 
-    override suspend fun getAuthors(ids: List<Int>?): List<NetworkAuthor> =
+    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
         networkApi.getAuthors(ids = ids).data
 
-    override suspend fun getNewsResources(ids: List<Int>?): List<NetworkNewsResource> =
+    override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         networkApi.getNewsResources(ids = ids).data
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =

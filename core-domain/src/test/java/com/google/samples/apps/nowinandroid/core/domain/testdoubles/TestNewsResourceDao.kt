@@ -31,8 +31,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Instant
 
-val filteredInterestsIds = setOf(1)
-val nonPresentInterestsIds = setOf(2)
+val filteredInterestsIds = setOf("1")
+val nonPresentInterestsIds = setOf("2")
 
 /**
  * Test double for [NewsResourceDao]
@@ -42,8 +42,8 @@ class TestNewsResourceDao : NewsResourceDao {
     private var entitiesStateFlow = MutableStateFlow(
         listOf(
             NewsResourceEntity(
-                id = 1,
-                episodeId = 0,
+                id = "1",
+                episodeId = "0",
                 title = "news",
                 content = "Hilt",
                 url = "url",
@@ -64,8 +64,8 @@ class TestNewsResourceDao : NewsResourceDao {
         }
 
     override fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>
+        filterAuthorIds: Set<String>,
+        filterTopicIds: Set<String>
     ): Flow<List<PopulatedNewsResource>> =
         getNewsResourcesStream()
             .map { resources ->
@@ -99,7 +99,7 @@ class TestNewsResourceDao : NewsResourceDao {
         authorCrossReferences = newsResourceAuthorCrossReferences
     }
 
-    override suspend fun deleteNewsResources(ids: List<Int>) {
+    override suspend fun deleteNewsResources(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
             entities.filterNot { idSet.contains(it.id) }

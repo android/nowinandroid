@@ -56,8 +56,8 @@ class FakeNewsRepository @Inject constructor(
             .flowOn(ioDispatcher)
 
     override fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>,
+        filterAuthorIds: Set<String>,
+        filterTopicIds: Set<String>,
     ): Flow<List<NewsResource>> =
         flow {
             emit(

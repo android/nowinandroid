@@ -52,7 +52,7 @@ import com.google.samples.apps.nowinandroid.core.ui.FollowButton
 @Composable
 fun AuthorsCarousel(
     authors: List<FollowableAuthor>,
-    onAuthorClick: (Int, Boolean) -> Unit,
+    onAuthorClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(modifier) {
@@ -132,15 +132,15 @@ fun AuthorCarouselPreview() {
             AuthorsCarousel(
                 authors = listOf(
                     FollowableAuthor(
-                        Author(1, "Android Dev", "", "", ""),
+                        Author("1", "Android Dev", "", "", ""),
                         false
                     ),
                     FollowableAuthor(
-                        Author(2, "Android Dev2", "", "", ""),
+                        Author("2", "Android Dev2", "", "", ""),
                         true
                     ),
                     FollowableAuthor(
-                        Author(3, "Android Dev3", "", "", ""),
+                        Author("3", "Android Dev3", "", "", ""),
                         false
                     )
                 ),
@@ -156,7 +156,7 @@ fun AuthorItemPreview() {
     MaterialTheme {
         Surface {
             AuthorItem(
-                author = Author(0, "Android Dev", "", "", ""),
+                author = Author("0", "Android Dev", "", "", ""),
                 following = true,
                 onAuthorClick = { }
             )

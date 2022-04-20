@@ -60,19 +60,19 @@ class NewsResourceDaoTest {
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
         val newsResourceEntities = listOf(
             testNewsResource(
-                id = 0,
+                id = "0",
                 millisSinceEpoch = 0,
             ),
             testNewsResource(
-                id = 1,
+                id = "1",
                 millisSinceEpoch = 3,
             ),
             testNewsResource(
-                id = 2,
+                id = "2",
                 millisSinceEpoch = 1,
             ),
             testNewsResource(
-                id = 3,
+                id = "3",
                 millisSinceEpoch = 2,
             ),
         )
@@ -102,29 +102,29 @@ class NewsResourceDaoTest {
     fun newsResourceDao_filters_items_by_topic_ids_by_descending_publish_date() = runTest {
         val topicEntities = listOf(
             testTopicEntity(
-                id = 1,
+                id = "1",
                 name = "1"
             ),
             testTopicEntity(
-                id = 2,
+                id = "2",
                 name = "2"
             ),
         )
         val newsResourceEntities = listOf(
             testNewsResource(
-                id = 0,
+                id = "0",
                 millisSinceEpoch = 0,
             ),
             testNewsResource(
-                id = 1,
+                id = "1",
                 millisSinceEpoch = 3,
             ),
             testNewsResource(
-                id = 2,
+                id = "2",
                 millisSinceEpoch = 1,
             ),
             testNewsResource(
-                id = 3,
+                id = "3",
                 millisSinceEpoch = 2,
             ),
         )
@@ -133,7 +133,7 @@ class NewsResourceDaoTest {
             .distinct()
         val newsResourceTopicCrossRefEntities = topicEntities.mapIndexed { index, topicEntity ->
             NewsResourceTopicCrossRef(
-                newsResourceId = index,
+                newsResourceId = index.toString(),
                 topicId = topicEntity.id
             )
         }
@@ -158,7 +158,7 @@ class NewsResourceDaoTest {
         ).first()
 
         assertEquals(
-            listOf(1, 0),
+            listOf("1", "0"),
             filteredNewsResources.map { it.entity.id }
         )
     }
@@ -167,29 +167,29 @@ class NewsResourceDaoTest {
     fun newsResourceDao_filters_items_by_author_ids_by_descending_publish_date() = runTest {
         val authorEntities = listOf(
             testAuthorEntity(
-                id = 1,
+                id = "1",
                 name = "1"
             ),
             testAuthorEntity(
-                id = 2,
+                id = "2",
                 name = "2"
             ),
         )
         val newsResourceEntities = listOf(
             testNewsResource(
-                id = 0,
+                id = "0",
                 millisSinceEpoch = 0,
             ),
             testNewsResource(
-                id = 1,
+                id = "1",
                 millisSinceEpoch = 3,
             ),
             testNewsResource(
-                id = 2,
+                id = "2",
                 millisSinceEpoch = 1,
             ),
             testNewsResource(
-                id = 3,
+                id = "3",
                 millisSinceEpoch = 2,
             ),
         )
@@ -198,7 +198,7 @@ class NewsResourceDaoTest {
             .distinct()
         val newsResourceAuthorCrossRefEntities = authorEntities.mapIndexed { index, authorEntity ->
             NewsResourceAuthorCrossRef(
-                newsResourceId = index,
+                newsResourceId = index.toString(),
                 authorId = authorEntity.id
             )
         }
@@ -215,7 +215,7 @@ class NewsResourceDaoTest {
         ).first()
 
         assertEquals(
-            listOf(1, 0),
+            listOf("1", "0"),
             filteredNewsResources.map { it.entity.id }
         )
     }
@@ -225,44 +225,44 @@ class NewsResourceDaoTest {
         runTest {
             val topicEntities = listOf(
                 testTopicEntity(
-                    id = 1,
+                    id = "1",
                     name = "1"
                 ),
                 testTopicEntity(
-                    id = 2,
+                    id = "2",
                     name = "2"
                 ),
             )
             val authorEntities = listOf(
                 testAuthorEntity(
-                    id = 1,
+                    id = "1",
                     name = "1"
                 ),
                 testAuthorEntity(
-                    id = 2,
+                    id = "2",
                     name = "2"
                 ),
             )
             val newsResourceEntities = listOf(
                 testNewsResource(
-                    id = 0,
+                    id = "0",
                     millisSinceEpoch = 0,
                 ),
                 testNewsResource(
-                    id = 1,
+                    id = "1",
                     millisSinceEpoch = 3,
                 ),
                 testNewsResource(
-                    id = 2,
+                    id = "2",
                     millisSinceEpoch = 1,
                 ),
                 testNewsResource(
-                    id = 3,
+                    id = "3",
                     millisSinceEpoch = 2,
                 ),
                 // Should be missing as no topics or authors match it
                 testNewsResource(
-                    id = 4,
+                    id = "4",
                     millisSinceEpoch = 10,
                 ),
             )
@@ -271,7 +271,7 @@ class NewsResourceDaoTest {
                 .distinct()
             val newsResourceTopicCrossRefEntities = topicEntities.mapIndexed { index, topicEntity ->
                 NewsResourceTopicCrossRef(
-                    newsResourceId = index,
+                    newsResourceId = index.toString(),
                     topicId = topicEntity.id
                 )
             }
@@ -279,7 +279,7 @@ class NewsResourceDaoTest {
                 authorEntities.mapIndexed { index, authorEntity ->
                     NewsResourceAuthorCrossRef(
                         // Offset news resources by two
-                        newsResourceId = index + 2,
+                        newsResourceId = (index + 2).toString(),
                         authorId = authorEntity.id
                     )
                 }
@@ -301,7 +301,7 @@ class NewsResourceDaoTest {
             ).first()
 
             assertEquals(
-                listOf(1, 3, 2, 0),
+                listOf("1", "3", "2", "0"),
                 filteredNewsResources.map { it.entity.id }
             )
         }
@@ -311,19 +311,19 @@ class NewsResourceDaoTest {
         runTest {
             val newsResourceEntities = listOf(
                 testNewsResource(
-                    id = 0,
+                    id = "0",
                     millisSinceEpoch = 0,
                 ),
                 testNewsResource(
-                    id = 1,
+                    id = "1",
                     millisSinceEpoch = 3,
                 ),
                 testNewsResource(
-                    id = 2,
+                    id = "2",
                     millisSinceEpoch = 1,
                 ),
                 testNewsResource(
-                    id = 3,
+                    id = "3",
                     millisSinceEpoch = 2,
                 ),
             )
@@ -334,7 +334,7 @@ class NewsResourceDaoTest {
             episodeDao.upsertEpisodes(episodeEntityShells)
             newsResourceDao.upsertNewsResources(newsResourceEntities)
 
-            val (toDelete, toKeep) = newsResourceEntities.partition { it.id % 2 == 0 }
+            val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
 
             newsResourceDao.deleteNewsResources(
                 toDelete.map(NewsResourceEntity::id)
@@ -351,7 +351,7 @@ class NewsResourceDaoTest {
 }
 
 private fun testAuthorEntity(
-    id: Int = 0,
+    id: String = "0",
     name: String
 ) = AuthorEntity(
     id = id,
@@ -362,7 +362,7 @@ private fun testAuthorEntity(
 )
 
 private fun testTopicEntity(
-    id: Int = 0,
+    id: String = "0",
     name: String
 ) = TopicEntity(
     id = id,
@@ -374,11 +374,11 @@ private fun testTopicEntity(
 )
 
 private fun testNewsResource(
-    id: Int = 0,
+    id: String = "0",
     millisSinceEpoch: Long = 0
 ) = NewsResourceEntity(
     id = id,
-    episodeId = 0,
+    episodeId = "0",
     title = "",
     content = "",
     url = "",

@@ -29,20 +29,20 @@ interface TopicsRepository : Syncable {
     /**
      * Gets data for a specific topic
      */
-    fun getTopic(id: Int): Flow<Topic>
+    fun getTopic(id: String): Flow<Topic>
 
     /**
      * Sets the user's currently followed topics
      */
-    suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>)
+    suspend fun setFollowedTopicIds(followedTopicIds: Set<String>)
 
     /**
      * Toggles the user's newly followed/unfollowed topic
      */
-    suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean)
+    suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean)
 
     /**
      * Returns the users currently followed topics
      */
-    fun getFollowedTopicIdsStream(): Flow<Set<Int>>
+    fun getFollowedTopicIdsStream(): Flow<Set<String>>
 }

@@ -74,7 +74,7 @@ class ForYouScreenTest {
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
-                                id = 0,
+                                id = "0",
                                 name = "Headlines",
                                 shortDescription = "",
                                 longDescription = "",
@@ -85,7 +85,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 1,
+                                id = "1",
                                 name = "UI",
                                 shortDescription = "",
                                 longDescription = "",
@@ -96,7 +96,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 2,
+                                id = "2",
                                 name = "Tools",
                                 shortDescription = "",
                                 longDescription = "",
@@ -109,7 +109,7 @@ class ForYouScreenTest {
                     authors = listOf(
                         FollowableAuthor(
                             author = Author(
-                                id = 0,
+                                id = "0",
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
@@ -119,7 +119,7 @@ class ForYouScreenTest {
                         ),
                         FollowableAuthor(
                             author = Author(
-                                id = 1,
+                                id = "1",
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
@@ -173,7 +173,7 @@ class ForYouScreenTest {
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
-                                id = 0,
+                                id = "0",
                                 name = "Headlines",
                                 shortDescription = "",
                                 longDescription = "",
@@ -184,7 +184,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 1,
+                                id = "1",
                                 name = "UI",
                                 shortDescription = "",
                                 longDescription = "",
@@ -195,7 +195,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 2,
+                                id = "2",
                                 name = "Tools",
                                 shortDescription = "",
                                 longDescription = "",
@@ -208,7 +208,7 @@ class ForYouScreenTest {
                     authors = listOf(
                         FollowableAuthor(
                             author = Author(
-                                id = 0,
+                                id = "0",
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
@@ -218,7 +218,7 @@ class ForYouScreenTest {
                         ),
                         FollowableAuthor(
                             author = Author(
-                                id = 1,
+                                id = "1",
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
@@ -278,7 +278,7 @@ class ForYouScreenTest {
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
-                                id = 0,
+                                id = "0",
                                 name = "Headlines",
                                 shortDescription = "",
                                 longDescription = "",
@@ -289,7 +289,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 1,
+                                id = "1",
                                 name = "UI",
                                 shortDescription = "",
                                 longDescription = "",
@@ -300,7 +300,7 @@ class ForYouScreenTest {
                         ),
                         FollowableTopic(
                             topic = Topic(
-                                id = 2,
+                                id = "2",
                                 name = "Tools",
                                 shortDescription = "",
                                 longDescription = "",
@@ -313,7 +313,7 @@ class ForYouScreenTest {
                     authors = listOf(
                         FollowableAuthor(
                             author = Author(
-                                id = 0,
+                                id = "0",
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
@@ -323,7 +323,7 @@ class ForYouScreenTest {
                         ),
                         FollowableAuthor(
                             author = Author(
-                                id = 1,
+                                id = "1",
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",

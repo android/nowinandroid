@@ -58,7 +58,7 @@ class FollowingViewModelTest {
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(FollowingUiState.Loading, awaitItem())
-            authorsRepository.setFollowedAuthorIds(setOf(1))
+            authorsRepository.setFollowedAuthorIds(setOf("1"))
             topicsRepository.setFollowedTopicIds(emptySet())
             cancel()
         }
@@ -69,7 +69,7 @@ class FollowingViewModelTest {
         viewModel.uiState.test {
             assertEquals(FollowingUiState.Loading, awaitItem())
             authorsRepository.setFollowedAuthorIds(emptySet())
-            topicsRepository.setFollowedTopicIds(setOf(1))
+            topicsRepository.setFollowedTopicIds(setOf("1"))
             cancel()
         }
     }
@@ -198,7 +198,7 @@ private const val TOPIC_IMAGE_URL = "Image URL"
 private val testInputAuthors = listOf(
     FollowableAuthor(
         Author(
-            id = 0,
+            id = "0",
             name = "Android Dev",
             imageUrl = "",
             twitter = "",
@@ -208,7 +208,7 @@ private val testInputAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 1,
+            id = "1",
             name = "Android Dev 2",
             imageUrl = "",
             twitter = "",
@@ -218,7 +218,7 @@ private val testInputAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 2,
+            id = "2",
             name = "Android Dev 3",
             imageUrl = "",
             twitter = "",
@@ -231,7 +231,7 @@ private val testInputAuthors = listOf(
 private val testOutputAuthors = listOf(
     FollowableAuthor(
         Author(
-            id = 0,
+            id = "0",
             name = "Android Dev",
             imageUrl = "",
             twitter = "",
@@ -241,7 +241,7 @@ private val testOutputAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 1,
+            id = "1",
             name = "Android Dev 2",
             imageUrl = "",
             twitter = "",
@@ -251,7 +251,7 @@ private val testOutputAuthors = listOf(
     ),
     FollowableAuthor(
         Author(
-            id = 2,
+            id = "2",
             name = "Android Dev 3",
             imageUrl = "",
             twitter = "",
@@ -264,7 +264,7 @@ private val testOutputAuthors = listOf(
 private val testInputTopics = listOf(
     FollowableTopic(
         Topic(
-            id = 0,
+            id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -275,7 +275,7 @@ private val testInputTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 1,
+            id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -286,7 +286,7 @@ private val testInputTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 2,
+            id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -300,7 +300,7 @@ private val testInputTopics = listOf(
 private val testOutputTopics = listOf(
     FollowableTopic(
         Topic(
-            id = 0,
+            id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -311,7 +311,7 @@ private val testOutputTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 1,
+            id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,
@@ -322,7 +322,7 @@ private val testOutputTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 2,
+            id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
             longDescription = TOPIC_LONG_DESC,

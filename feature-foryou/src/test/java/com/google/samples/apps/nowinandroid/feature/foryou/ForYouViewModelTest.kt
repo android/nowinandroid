@@ -132,7 +132,7 @@ class ForYouViewModelTest {
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -143,7 +143,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -154,7 +154,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -167,7 +167,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -177,7 +177,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -187,7 +187,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -210,9 +210,9 @@ class ForYouViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf(0, 1))
+                authorsRepository.setFollowedAuthorIds(setOf("0", "1"))
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf(0, 1))
+                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 assertEquals(
@@ -236,9 +236,9 @@ class ForYouViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf(0, 1))
+                authorsRepository.setFollowedAuthorIds(setOf("0", "1"))
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf(0, 1))
+                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 assertEquals(
@@ -268,14 +268,14 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
-                viewModel.updateTopicSelection(1, isChecked = true)
+                viewModel.updateTopicSelection("1", isChecked = true)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -286,7 +286,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -297,7 +297,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -310,7 +310,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -320,7 +320,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -330,7 +330,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -368,14 +368,14 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
-                viewModel.updateAuthorSelection(1, isChecked = true)
+                viewModel.updateAuthorSelection("1", isChecked = true)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -386,7 +386,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -397,7 +397,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -410,7 +410,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -420,7 +420,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -430,7 +430,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -468,17 +468,17 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
-                viewModel.updateTopicSelection(1, isChecked = true)
+                viewModel.updateTopicSelection("1", isChecked = true)
 
                 awaitItem()
-                viewModel.updateTopicSelection(1, isChecked = false)
+                viewModel.updateTopicSelection("1", isChecked = false)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -489,7 +489,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -500,7 +500,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -513,7 +513,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -523,7 +523,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -533,7 +533,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -562,17 +562,17 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 awaitItem()
-                viewModel.updateAuthorSelection(1, isChecked = true)
+                viewModel.updateAuthorSelection("1", isChecked = true)
 
                 awaitItem()
-                viewModel.updateAuthorSelection(1, isChecked = false)
+                viewModel.updateAuthorSelection("1", isChecked = false)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -583,7 +583,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -594,7 +594,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -607,7 +607,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -617,7 +617,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -627,7 +627,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -657,7 +657,7 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 awaitItem()
 
-                viewModel.updateTopicSelection(1, isChecked = true)
+                viewModel.updateTopicSelection("1", isChecked = true)
                 awaitItem()
 
                 viewModel.saveFollowedInterests()
@@ -678,7 +678,7 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                assertEquals(setOf(1), topicsRepository.getCurrentFollowedTopics())
+                assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
                 assertEquals(emptySet<Int>(), authorsRepository.getCurrentFollowedAuthors())
                 cancel()
             }
@@ -697,7 +697,7 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 awaitItem()
 
-                viewModel.updateAuthorSelection(0, isChecked = true)
+                viewModel.updateAuthorSelection("0", isChecked = true)
                 awaitItem()
 
                 viewModel.saveFollowedInterests()
@@ -715,7 +715,7 @@ class ForYouViewModelTest {
                     awaitItem()
                 )
                 assertEquals(emptySet<Int>(), topicsRepository.getCurrentFollowedTopics())
-                assertEquals(setOf(0), authorsRepository.getCurrentFollowedAuthors())
+                assertEquals(setOf("0"), authorsRepository.getCurrentFollowedAuthors())
                 cancel()
             }
     }
@@ -733,8 +733,8 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 awaitItem()
 
-                viewModel.updateAuthorSelection(1, isChecked = true)
-                viewModel.updateTopicSelection(1, isChecked = true)
+                viewModel.updateAuthorSelection("1", isChecked = true)
+                viewModel.updateTopicSelection("1", isChecked = true)
                 awaitItem()
 
                 viewModel.saveFollowedInterests()
@@ -755,8 +755,8 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                assertEquals(setOf(1), topicsRepository.getCurrentFollowedTopics())
-                assertEquals(setOf(1), authorsRepository.getCurrentFollowedAuthors())
+                assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
+                assertEquals(setOf("1"), authorsRepository.getCurrentFollowedAuthors())
                 cancel()
             }
     }
@@ -773,7 +773,7 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 awaitItem()
 
-                viewModel.updateTopicSelection(1, isChecked = true)
+                viewModel.updateTopicSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
                 awaitItem()
 
@@ -783,7 +783,7 @@ class ForYouViewModelTest {
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -794,7 +794,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -805,7 +805,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -819,7 +819,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -829,7 +829,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -839,7 +839,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -867,7 +867,7 @@ class ForYouViewModelTest {
                 newsRepository.sendNewsResources(sampleNewsResources)
                 awaitItem()
 
-                viewModel.updateAuthorSelection(1, isChecked = true)
+                viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
                 awaitItem()
 
@@ -877,7 +877,7 @@ class ForYouViewModelTest {
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 0,
+                                    id = "0",
                                     name = "Headlines",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -888,7 +888,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 1,
+                                    id = "1",
                                     name = "UI",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -899,7 +899,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableTopic(
                                 topic = Topic(
-                                    id = 2,
+                                    id = "2",
                                     name = "Tools",
                                     shortDescription = "",
                                     longDescription = "long description",
@@ -913,7 +913,7 @@ class ForYouViewModelTest {
                         authors = listOf(
                             FollowableAuthor(
                                 author = Author(
-                                    id = 0,
+                                    id = "0",
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
@@ -923,7 +923,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 1,
+                                    id = "1",
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
@@ -933,7 +933,7 @@ class ForYouViewModelTest {
                             ),
                             FollowableAuthor(
                                 author = Author(
-                                    id = 2,
+                                    id = "2",
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
@@ -955,11 +955,11 @@ class ForYouViewModelTest {
             .test {
                 awaitItem()
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf(1))
+                topicsRepository.setFollowedTopicIds(setOf("1"))
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf(1))
+                authorsRepository.setFollowedAuthorIds(setOf("1"))
                 newsRepository.sendNewsResources(sampleNewsResources)
-                viewModel.updateNewsResourceSaved(2, true)
+                viewModel.updateNewsResourceSaved("2", true)
 
                 assertEquals(
                     ForYouFeedUiState.PopulatedFeed.FeedWithoutTopicSelection(
@@ -983,21 +983,21 @@ class ForYouViewModelTest {
 
 private val sampleAuthors = listOf(
     Author(
-        id = 0,
+        id = "0",
         name = "Android Dev",
         imageUrl = "",
         twitter = "",
         mediumPage = ""
     ),
     Author(
-        id = 1,
+        id = "1",
         name = "Android Dev 2",
         imageUrl = "",
         twitter = "",
         mediumPage = ""
     ),
     Author(
-        id = 2,
+        id = "2",
         name = "Android Dev 3",
         imageUrl = "",
         twitter = "",
@@ -1007,7 +1007,7 @@ private val sampleAuthors = listOf(
 
 private val sampleTopics = listOf(
     Topic(
-        id = 0,
+        id = "0",
         name = "Headlines",
         shortDescription = "",
         longDescription = "long description",
@@ -1015,7 +1015,7 @@ private val sampleTopics = listOf(
         imageUrl = "image URL",
     ),
     Topic(
-        id = 1,
+        id = "1",
         name = "UI",
         shortDescription = "",
         longDescription = "long description",
@@ -1023,7 +1023,7 @@ private val sampleTopics = listOf(
         imageUrl = "image URL",
     ),
     Topic(
-        id = 2,
+        id = "2",
         name = "Tools",
         shortDescription = "",
         longDescription = "long description",
@@ -1034,8 +1034,8 @@ private val sampleTopics = listOf(
 
 private val sampleNewsResources = listOf(
     NewsResource(
-        id = 1,
-        episodeId = 52,
+        id = "1",
+        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +
@@ -1047,7 +1047,7 @@ private val sampleNewsResources = listOf(
         type = Video,
         topics = listOf(
             Topic(
-                id = 0,
+                id = "0",
                 name = "Headlines",
                 shortDescription = "",
                 longDescription = "long description",
@@ -1057,7 +1057,7 @@ private val sampleNewsResources = listOf(
         ),
         authors = listOf(
             Author(
-                id = 0,
+                id = "0",
                 name = "Android Dev",
                 imageUrl = "",
                 twitter = "",
@@ -1066,8 +1066,8 @@ private val sampleNewsResources = listOf(
         )
     ),
     NewsResource(
-        id = 2,
-        episodeId = 52,
+        id = "2",
+        episodeId = "52",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed with Paging. " +
             "Transformations like inserting separators, when to create a new pager, and " +
@@ -1078,7 +1078,7 @@ private val sampleNewsResources = listOf(
         type = Video,
         topics = listOf(
             Topic(
-                id = 1,
+                id = "1",
                 name = "UI",
                 shortDescription = "",
                 longDescription = "long description",
@@ -1088,7 +1088,7 @@ private val sampleNewsResources = listOf(
         ),
         authors = listOf(
             Author(
-                id = 1,
+                id = "1",
                 name = "Android Dev 2",
                 imageUrl = "",
                 twitter = "",
@@ -1097,8 +1097,8 @@ private val sampleNewsResources = listOf(
         )
     ),
     NewsResource(
-        id = 3,
-        episodeId = 52,
+        id = "3",
+        episodeId = "52",
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",
         url = "https://youtu.be/r5JgIyS3t3s",
@@ -1107,7 +1107,7 @@ private val sampleNewsResources = listOf(
         type = Video,
         topics = listOf(
             Topic(
-                id = 1,
+                id = "1",
                 name = "UI",
                 shortDescription = "",
                 longDescription = "long description",
@@ -1117,7 +1117,7 @@ private val sampleNewsResources = listOf(
         ),
         authors = listOf(
             Author(
-                id = 1,
+                id = "1",
                 name = "Android Dev 2",
                 imageUrl = "",
                 twitter = "",

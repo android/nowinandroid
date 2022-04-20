@@ -57,8 +57,8 @@ class LocalNewsRepository @Inject constructor(
             .map { it.map(PopulatedNewsResource::asExternalModel) }
 
     override fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>
+        filterAuthorIds: Set<String>,
+        filterTopicIds: Set<String>
     ): Flow<List<NewsResource>> = newsResourceDao.getNewsResourcesStream(
         filterAuthorIds = filterAuthorIds,
         filterTopicIds = filterTopicIds

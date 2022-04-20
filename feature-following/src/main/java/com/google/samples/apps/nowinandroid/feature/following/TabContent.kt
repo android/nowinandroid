@@ -29,8 +29,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 @Composable
 fun TopicsTabContent(
     topics: List<FollowableTopic>,
-    onTopicClick: (Int) -> Unit,
-    onFollowButtonClick: (Int, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
+    onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -55,7 +55,7 @@ fun TopicsTabContent(
 fun AuthorsTabContent(
     authors: List<FollowableAuthor>,
     onAuthorClick: () -> Unit,
-    onFollowButtonClick: (Int, Boolean) -> Unit,
+    onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(

@@ -22,7 +22,7 @@ import kotlinx.datetime.Instant
  * External data layer representation of an NiA episode
  */
 data class Episode(
-    val id: Int,
+    val id: String,
     val name: String,
     val publishDate: Instant,
     val alternateVideo: String?,

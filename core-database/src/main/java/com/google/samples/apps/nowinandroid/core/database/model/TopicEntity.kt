@@ -30,7 +30,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 )
 data class TopicEntity(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     val name: String,
     val shortDescription: String,
     @ColumnInfo(defaultValue = "")

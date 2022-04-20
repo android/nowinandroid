@@ -61,14 +61,14 @@ class FakeTopicsRepository @Inject constructor(
     }
         .flowOn(ioDispatcher)
 
-    override fun getTopic(id: Int): Flow<Topic> {
+    override fun getTopic(id: String): Flow<Topic> {
         return getTopicsStream().map { it.first { topic -> topic.id == id } }
     }
 
-    override suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) =
+    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
         niaPreferences.setFollowedTopicIds(followedTopicIds)
 
-    override suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean) =
+    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
         niaPreferences.toggleFollowedTopicId(followedTopicId, followed)
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds

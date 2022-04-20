@@ -28,7 +28,7 @@ import org.intellij.lang.annotations.Language
 
 object FakeDataSource {
     val sampleTopic = NetworkTopic(
-        id = 1,
+        id = "1",
         name = "UI",
         shortDescription = "Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
         longDescription = "Learn how to optimize your app's user interface - everything that users can see and interact with. Stay up to date on tocpis such as Material Design, Navigation, Text, Paging, Compose, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets, and many more!",
@@ -36,13 +36,13 @@ object FakeDataSource {
         imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=5d1d25a8-db1b-4cf1-9706-82ba0d133bf9"
     )
     val sampleResource = NetworkNewsResource(
-        id = 1,
-        episodeId = 57,
+        id = "1",
+        episodeId = "57",
         title = "Discontinuing Kotlin synthetics for views",
         content = "Synthetic properties to access views were created as a way to eliminate the common boilerplate of findViewById calls. These synthetics are provided by JetBrains in the Kotlin Android Extensions Gradle plugin (not to be confused with Android KTX).",
         url = "https://android-developers.googleblog.com/2022/02/discontinuing-kotlin-synthetics-for-views.html",
         headerImageUrl = "",
-        authors = listOf(1),
+        authors = listOf("1"),
         publishDate = LocalDateTime(
             year = 2022,
             monthNumber = 2,
@@ -53,7 +53,7 @@ object FakeDataSource {
             nanosecond = 0
         ).toInstant(TimeZone.UTC),
         type = Article,
-        topics = listOf(1, 8),
+        topics = listOf("3", "10"),
     )
 
     @Language("JSON")
@@ -235,11 +235,11 @@ object FakeDataSource {
       "publishDate": "2022-02-18T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1",
-        "8"
+        "3",
+        "10"
       ],
       "authors": [
-        1
+        "1"
       ]
     },
     {
@@ -252,10 +252,10 @@ object FakeDataSource {
       "publishDate": "2022-03-15T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "18"
+        "20"
       ],
       "authors": [
-        2
+        "2"
       ]
     },
     {
@@ -268,10 +268,10 @@ object FakeDataSource {
       "publishDate": "2022-03-14T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -284,11 +284,12 @@ object FakeDataSource {
       "publishDate": "2022-03-10T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "9",
-        "11"
+        "11",
+        "13"
       ],
       "authors": [
-        4
+        "4",
+        "5"
       ]
     },
     {
@@ -301,7 +302,7 @@ object FakeDataSource {
       "publishDate": "2022-03-10T00:00:00.000Z",
       "type": "Event 📆",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": []
     },
@@ -315,13 +316,13 @@ object FakeDataSource {
       "publishDate": "2022-03-09T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "9",
-        "1",
-        "13",
-        "0"
+        "11",
+        "3",
+        "15",
+        "2"
       ],
       "authors": [
-        6
+        "6"
       ]
     },
     {
@@ -334,10 +335,11 @@ object FakeDataSource {
       "publishDate": "2022-03-08T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        7
+        "7",
+        "8"
       ]
     },
     {
@@ -350,11 +352,11 @@ object FakeDataSource {
       "publishDate": "2022-03-07T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1",
-        "19"
+        "3",
+        "21"
       ],
       "authors": [
-        9
+        "9"
       ]
     },
     {
@@ -367,10 +369,10 @@ object FakeDataSource {
       "publishDate": "2022-03-03T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": [
-        10
+        "10"
       ]
     },
     {
@@ -383,7 +385,7 @@ object FakeDataSource {
       "publishDate": "2022-02-23T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "18"
+        "20"
       ],
       "authors": []
     },
@@ -397,7 +399,7 @@ object FakeDataSource {
       "publishDate": "2022-02-23T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": []
     },
@@ -411,7 +413,7 @@ object FakeDataSource {
       "publishDate": "2022-02-23T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": []
     },
@@ -425,7 +427,7 @@ object FakeDataSource {
       "publishDate": "2022-02-23T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -439,10 +441,10 @@ object FakeDataSource {
       "publishDate": "2022-02-23T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": [
-        11
+        "11"
       ]
     },
     {
@@ -455,10 +457,10 @@ object FakeDataSource {
       "publishDate": "2022-02-17T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        12
+        "12"
       ]
     },
     {
@@ -471,10 +473,10 @@ object FakeDataSource {
       "publishDate": "2022-02-09T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        6
+        "6"
       ]
     },
     {
@@ -487,10 +489,10 @@ object FakeDataSource {
       "publishDate": "2022-02-15T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -503,10 +505,10 @@ object FakeDataSource {
       "publishDate": "2022-02-16T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -519,10 +521,12 @@ object FakeDataSource {
       "publishDate": "2022-02-10T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1",
-        "13"
+        "3",
+        "15"
       ],
-      "authors": []
+      "authors": [
+        "13"
+      ]
     },
     {
       "id": "20",
@@ -534,10 +538,10 @@ object FakeDataSource {
       "publishDate": "2022-02-10T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        14
+        "14"
       ]
     },
     {
@@ -550,11 +554,11 @@ object FakeDataSource {
       "publishDate": "2022-02-09T00:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "9",
-        "6"
+        "11",
+        "8"
       ],
       "authors": [
-        15
+        "15"
       ]
     },
     {
@@ -567,10 +571,10 @@ object FakeDataSource {
       "publishDate": "2022-02-07T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -583,10 +587,10 @@ object FakeDataSource {
       "publishDate": "2022-01-31T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -599,10 +603,10 @@ object FakeDataSource {
       "publishDate": "2022-01-26T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "19"
+        "21"
       ],
       "authors": [
-        16
+        "16"
       ]
     },
     {
@@ -615,10 +619,10 @@ object FakeDataSource {
       "publishDate": "2022-01-25T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "5"
+        "7"
       ],
       "authors": [
-        17
+        "17"
       ]
     },
     {
@@ -631,10 +635,10 @@ object FakeDataSource {
       "publishDate": "2022-01-24T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        3
+        "3"
       ]
     },
     {
@@ -647,10 +651,10 @@ object FakeDataSource {
       "publishDate": "2022-01-27T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "16"
+        "18"
       ],
       "authors": [
-        18
+        "18"
       ]
     },
     {
@@ -663,7 +667,7 @@ object FakeDataSource {
       "publishDate": "2022-01-26T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -677,7 +681,7 @@ object FakeDataSource {
       "publishDate": "2022-02-11T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": []
     },
@@ -691,10 +695,12 @@ object FakeDataSource {
       "publishDate": "2022-01-28T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "3"
+        "5"
       ],
       "authors": [
-        19
+        "19",
+        "20",
+        "21"
       ]
     },
     {
@@ -707,7 +713,7 @@ object FakeDataSource {
       "publishDate": "2022-02-02T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": []
     },
@@ -721,7 +727,7 @@ object FakeDataSource {
       "publishDate": "2022-02-11T00:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": []
     },
@@ -735,8 +741,8 @@ object FakeDataSource {
       "publishDate": "2022-02-11T00:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "17",
-        "15"
+        "19",
+        "17"
       ],
       "authors": []
     },
@@ -750,7 +756,7 @@ object FakeDataSource {
       "publishDate": "2022-01-21T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": []
     },
@@ -764,7 +770,7 @@ object FakeDataSource {
       "publishDate": "2022-02-01T00:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -778,10 +784,10 @@ object FakeDataSource {
       "publishDate": "2021-12-15T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        22
+        "9"
       ]
     },
     {
@@ -794,12 +800,12 @@ object FakeDataSource {
       "publishDate": "2021-12-01T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "19",
-        "9",
-        "6"
+        "21",
+        "11",
+        "8"
       ],
       "authors": [
-        23
+        "22"
       ]
     },
     {
@@ -812,10 +818,10 @@ object FakeDataSource {
       "publishDate": "2021-12-14T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        24
+        "23"
       ]
     },
     {
@@ -828,10 +834,10 @@ object FakeDataSource {
       "publishDate": "2022-01-19T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "18"
+        "20"
       ],
       "authors": [
-        25
+        "24"
       ]
     },
     {
@@ -844,10 +850,10 @@ object FakeDataSource {
       "publishDate": "2021-12-01T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -860,10 +866,10 @@ object FakeDataSource {
       "publishDate": "2021-12-15T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        27
+        "26"
       ]
     },
     {
@@ -876,10 +882,10 @@ object FakeDataSource {
       "publishDate": "2021-11-29T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -892,10 +898,10 @@ object FakeDataSource {
       "publishDate": "2021-12-16T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -908,9 +914,11 @@ object FakeDataSource {
       "publishDate": "2022-01-18T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "7"
+        "9"
       ],
-      "authors": []
+      "authors": [
+        "3"
+      ]
     },
     {
       "id": "45",
@@ -922,7 +930,7 @@ object FakeDataSource {
       "publishDate": "2021-12-01T00:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": []
     },
@@ -936,10 +944,10 @@ object FakeDataSource {
       "publishDate": "2022-01-18T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        23
+        "22"
       ]
     },
     {
@@ -952,10 +960,10 @@ object FakeDataSource {
       "publishDate": "2021-12-15T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        28
+        "27"
       ]
     },
     {
@@ -968,10 +976,10 @@ object FakeDataSource {
       "publishDate": "2021-12-03T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        29
+        "28"
       ]
     },
     {
@@ -984,10 +992,10 @@ object FakeDataSource {
       "publishDate": "2021-12-10T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        29
+        "28"
       ]
     },
     {
@@ -1000,10 +1008,10 @@ object FakeDataSource {
       "publishDate": "2021-12-22T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        29
+        "28"
       ]
     },
     {
@@ -1016,10 +1024,10 @@ object FakeDataSource {
       "publishDate": "2022-01-14T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "17"
+        "19"
       ],
       "authors": [
-        30
+        "29"
       ]
     },
     {
@@ -1032,10 +1040,13 @@ object FakeDataSource {
       "publishDate": "2021-11-30T00:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        31
+        "30",
+        "31",
+        "32",
+        "33"
       ]
     },
     {
@@ -1048,10 +1059,13 @@ object FakeDataSource {
       "publishDate": "2021-12-16T00:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "8"
+        "10"
       ],
       "authors": [
-        31
+        "30",
+        "31",
+        "32",
+        "34"
       ]
     },
     {
@@ -1064,10 +1078,13 @@ object FakeDataSource {
       "publishDate": "2022-01-11T00:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        32
+        "31",
+        "31",
+        "32",
+        "23"
       ]
     },
     {
@@ -1080,10 +1097,10 @@ object FakeDataSource {
       "publishDate": "2021-10-03T23:00:00.000Z",
       "type": "DAC - Android version features",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        14
+        "14"
       ]
     },
     {
@@ -1096,7 +1113,7 @@ object FakeDataSource {
       "publishDate": "2021-12-07T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": []
     },
@@ -1110,7 +1127,7 @@ object FakeDataSource {
       "publishDate": "2021-12-07T00:00:00.000Z",
       "type": "Codelab",
       "topics": [
-        "8"
+        "10"
       ],
       "authors": []
     },
@@ -1124,11 +1141,11 @@ object FakeDataSource {
       "publishDate": "2021-12-14T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "8",
-        "6"
+        "10",
+        "8"
       ],
       "authors": [
-        6
+        "6"
       ]
     },
     {
@@ -1141,12 +1158,12 @@ object FakeDataSource {
       "publishDate": "2022-01-19T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "8",
-        "1",
-        "6"
+        "10",
+        "3",
+        "8"
       ],
       "authors": [
-        36
+        "35"
       ]
     },
     {
@@ -1159,10 +1176,10 @@ object FakeDataSource {
       "publishDate": "2022-03-01T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        37
+        "36"
       ]
     },
     {
@@ -1175,10 +1192,10 @@ object FakeDataSource {
       "publishDate": "2022-03-25T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -1191,10 +1208,10 @@ object FakeDataSource {
       "publishDate": "2021-07-18T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "3"
+        "5"
       ],
       "authors": [
-        39
+        "37"
       ]
     },
     {
@@ -1207,10 +1224,10 @@ object FakeDataSource {
       "publishDate": "2021-08-22T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        40
+        "23"
       ]
     },
     {
@@ -1223,10 +1240,10 @@ object FakeDataSource {
       "publishDate": "2021-09-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": [
-        41
+        "38"
       ]
     },
     {
@@ -1239,11 +1256,11 @@ object FakeDataSource {
       "publishDate": "2021-11-15T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12",
-        "5"
+        "14",
+        "7"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -1256,7 +1273,7 @@ object FakeDataSource {
       "publishDate": "2021-05-17T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": []
     },
@@ -1270,7 +1287,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": []
     },
@@ -1284,10 +1301,10 @@ object FakeDataSource {
       "publishDate": "2021-11-30T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        42
+        "39"
       ]
     },
     {
@@ -1300,10 +1317,10 @@ object FakeDataSource {
       "publishDate": "2021-11-29T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        43
+        "25"
       ]
     },
     {
@@ -1316,10 +1333,10 @@ object FakeDataSource {
       "publishDate": "2021-11-22T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        43
+        "25"
       ]
     },
     {
@@ -1332,11 +1349,11 @@ object FakeDataSource {
       "publishDate": "2021-11-19T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6",
-        "4"
+        "8",
+        "6"
       ],
       "authors": [
-        44
+        "40"
       ]
     },
     {
@@ -1349,8 +1366,8 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": []
     },
@@ -1364,8 +1381,8 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": []
     },
@@ -1379,8 +1396,8 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "6",
-        "14"
+        "8",
+        "16"
       ],
       "authors": []
     },
@@ -1394,8 +1411,8 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": []
     },
@@ -1409,8 +1426,8 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "6",
-        "19"
+        "8",
+        "21"
       ],
       "authors": []
     },
@@ -1424,10 +1441,10 @@ object FakeDataSource {
       "publishDate": "2021-11-17T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        42
+        "39"
       ]
     },
     {
@@ -1440,7 +1457,7 @@ object FakeDataSource {
       "publishDate": "2021-11-16T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "3"
+        "5"
       ],
       "authors": []
     },
@@ -1454,10 +1471,10 @@ object FakeDataSource {
       "publishDate": "2021-11-15T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        43
+        "25"
       ]
     },
     {
@@ -1470,10 +1487,10 @@ object FakeDataSource {
       "publishDate": "2021-11-15T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "12"
+        "14"
       ],
       "authors": [
-        43
+        "25"
       ]
     },
     {
@@ -1486,12 +1503,12 @@ object FakeDataSource {
       "publishDate": "2021-11-15T00:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
+        "7",
         "5",
-        "3",
-        "13"
+        "15"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -1504,11 +1521,11 @@ object FakeDataSource {
       "publishDate": "2021-11-12T00:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": [
-        45
+        "15"
       ]
     },
     {
@@ -1521,7 +1538,7 @@ object FakeDataSource {
       "publishDate": "2021-11-11T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1535,7 +1552,7 @@ object FakeDataSource {
       "publishDate": "2021-11-09T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": []
     },
@@ -1549,7 +1566,7 @@ object FakeDataSource {
       "publishDate": "2021-11-08T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1563,10 +1580,10 @@ object FakeDataSource {
       "publishDate": "2021-11-01T00:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        41
+        "38"
       ]
     },
     {
@@ -1579,11 +1596,11 @@ object FakeDataSource {
       "publishDate": "2021-10-27T23:00:00.000Z",
       "type": "Codelab",
       "topics": [
-        "9",
-        "19"
+        "11",
+        "21"
       ],
       "authors": [
-        46
+        "41"
       ]
     },
     {
@@ -1596,11 +1613,11 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6",
-        "4"
+        "8",
+        "6"
       ],
       "authors": [
-        47
+        "42"
       ]
     },
     {
@@ -1613,7 +1630,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": []
     },
@@ -1627,7 +1644,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": []
     },
@@ -1641,10 +1658,10 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": [
-        15
+        "15"
       ]
     },
     {
@@ -1657,10 +1674,10 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": [
-        48
+        "43"
       ]
     },
     {
@@ -1673,8 +1690,8 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "10",
-        "11"
+        "12",
+        "13"
       ],
       "authors": []
     },
@@ -1688,7 +1705,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1702,7 +1719,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1716,7 +1733,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1730,8 +1747,8 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1",
-        "4"
+        "3",
+        "6"
       ],
       "authors": []
     },
@@ -1745,7 +1762,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1759,8 +1776,8 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1",
-        "13"
+        "3",
+        "15"
       ],
       "authors": []
     },
@@ -1774,8 +1791,8 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": []
     },
@@ -1789,7 +1806,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": []
     },
@@ -1803,7 +1820,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": []
     },
@@ -1817,7 +1834,7 @@ object FakeDataSource {
       "publishDate": "2021-10-26T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1831,10 +1848,10 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "8"
+        "10"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -1847,7 +1864,7 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "API change",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": []
     },
@@ -1861,7 +1878,7 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": []
     },
@@ -1875,8 +1892,8 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "12",
-        "5"
+        "14",
+        "7"
       ],
       "authors": []
     },
@@ -1890,7 +1907,7 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Codelab",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": []
     },
@@ -1904,7 +1921,7 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": []
     },
@@ -1918,8 +1935,8 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "9",
-        "1"
+        "11",
+        "3"
       ],
       "authors": []
     },
@@ -1933,8 +1950,8 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "9",
-        "1"
+        "11",
+        "3"
       ],
       "authors": []
     },
@@ -1948,7 +1965,7 @@ object FakeDataSource {
       "publishDate": "2021-10-20T23:00:00.000Z",
       "type": "Docs 📑",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": []
     },
@@ -1962,11 +1979,11 @@ object FakeDataSource {
       "publishDate": "2021-10-17T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "7",
-        "1"
+        "9",
+        "3"
       ],
       "authors": [
-        41
+        "38"
       ]
     },
     {
@@ -1979,11 +1996,11 @@ object FakeDataSource {
       "publishDate": "2021-10-17T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "10",
-        "11"
+        "12",
+        "13"
       ],
       "authors": [
-        10
+        "10"
       ]
     },
     {
@@ -1996,10 +2013,10 @@ object FakeDataSource {
       "publishDate": "2021-10-17T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -2012,10 +2029,10 @@ object FakeDataSource {
       "publishDate": "2021-10-16T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        42
+        "39"
       ]
     },
     {
@@ -2028,10 +2045,10 @@ object FakeDataSource {
       "publishDate": "2021-10-12T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": [
-        49
+        "44"
       ]
     },
     {
@@ -2044,11 +2061,11 @@ object FakeDataSource {
       "publishDate": "2021-10-11T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "19",
-        "9"
+        "21",
+        "11"
       ],
       "authors": [
-        46
+        "41"
       ]
     },
     {
@@ -2061,10 +2078,10 @@ object FakeDataSource {
       "publishDate": "2021-10-10T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        41
+        "38"
       ]
     },
     {
@@ -2077,10 +2094,10 @@ object FakeDataSource {
       "publishDate": "2021-10-09T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": [
-        35
+        "34"
       ]
     },
     {
@@ -2093,10 +2110,10 @@ object FakeDataSource {
       "publishDate": "2021-10-06T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "4"
+        "6"
       ],
       "authors": [
-        50
+        "45"
       ]
     },
     {
@@ -2109,11 +2126,11 @@ object FakeDataSource {
       "publishDate": "2021-09-14T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6",
-        "19"
+        "8",
+        "21"
       ],
       "authors": [
-        46
+        "41"
       ]
     },
     {
@@ -2126,7 +2143,7 @@ object FakeDataSource {
       "publishDate": "2021-10-05T23:00:00.000Z",
       "type": "Event 📆",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": []
     },
@@ -2140,10 +2157,10 @@ object FakeDataSource {
       "publishDate": "2021-10-03T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        14
+        "14"
       ]
     },
     {
@@ -2156,10 +2173,10 @@ object FakeDataSource {
       "publishDate": "2021-09-20T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "11"
+        "13"
       ],
       "authors": [
-        51
+        "46"
       ]
     },
     {
@@ -2172,10 +2189,10 @@ object FakeDataSource {
       "publishDate": "2021-09-16T23:00:00.000Z",
       "type": "DAC - Android version features",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": [
-        52
+        "47"
       ]
     },
     {
@@ -2188,10 +2205,10 @@ object FakeDataSource {
       "publishDate": "2021-09-19T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        53
+        "48"
       ]
     },
     {
@@ -2204,10 +2221,10 @@ object FakeDataSource {
       "publishDate": "2021-09-13T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -2220,10 +2237,10 @@ object FakeDataSource {
       "publishDate": "2021-09-12T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        54
+        "49"
       ]
     },
     {
@@ -2236,10 +2253,10 @@ object FakeDataSource {
       "publishDate": "2021-09-09T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        29
+        "28"
       ]
     },
     {
@@ -2252,11 +2269,11 @@ object FakeDataSource {
       "publishDate": "2021-09-08T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "5",
-        "9"
+        "7",
+        "11"
       ],
       "authors": [
-        33
+        "32"
       ]
     },
     {
@@ -2269,10 +2286,10 @@ object FakeDataSource {
       "publishDate": "2021-09-07T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        55
+        "50"
       ]
     },
     {
@@ -2285,10 +2302,10 @@ object FakeDataSource {
       "publishDate": "2021-09-06T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        56
+        "51"
       ]
     },
     {
@@ -2301,10 +2318,10 @@ object FakeDataSource {
       "publishDate": "2021-09-02T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": [
-        42
+        "39"
       ]
     },
     {
@@ -2317,7 +2334,7 @@ object FakeDataSource {
       "publishDate": "2021-08-31T23:00:00.000Z",
       "type": "",
       "topics": [
-        "15"
+        "17"
       ],
       "authors": []
     },
@@ -2331,7 +2348,7 @@ object FakeDataSource {
       "publishDate": "2021-08-31T23:00:00.000Z",
       "type": "API change",
       "topics": [
-        "6"
+        "8"
       ],
       "authors": []
     },
@@ -2345,7 +2362,7 @@ object FakeDataSource {
       "publishDate": "2021-08-03T23:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": []
     },
@@ -2359,10 +2376,10 @@ object FakeDataSource {
       "publishDate": "2021-07-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": [
-        57
+        "52"
       ]
     },
     {
@@ -2375,11 +2392,11 @@ object FakeDataSource {
       "publishDate": "2021-07-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "5",
-        "9"
+        "7",
+        "11"
       ],
       "authors": [
-        58
+        "53"
       ]
     },
     {
@@ -2392,10 +2409,10 @@ object FakeDataSource {
       "publishDate": "2021-07-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "11"
+        "13"
       ],
       "authors": [
-        10
+        "10"
       ]
     },
     {
@@ -2408,11 +2425,11 @@ object FakeDataSource {
       "publishDate": "2021-07-25T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "3",
-        "5"
+        "5",
+        "7"
       ],
       "authors": [
-        39
+        "37"
       ]
     },
     {
@@ -2425,11 +2442,11 @@ object FakeDataSource {
       "publishDate": "2021-06-29T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "9",
-        "2"
+        "11",
+        "4"
       ],
       "authors": [
-        59
+        "54"
       ]
     },
     {
@@ -2442,7 +2459,7 @@ object FakeDataSource {
       "publishDate": "2021-06-29T23:00:00.000Z",
       "type": "Jetpack release 🚀",
       "topics": [
-        "7"
+        "9"
       ],
       "authors": []
     },
@@ -2456,11 +2473,11 @@ object FakeDataSource {
       "publishDate": "2021-06-27T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "7",
-        "10"
+        "9",
+        "12"
       ],
       "authors": [
-        60
+        "55"
       ]
     },
     {
@@ -2473,10 +2490,10 @@ object FakeDataSource {
       "publishDate": "2021-06-14T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -2489,11 +2506,11 @@ object FakeDataSource {
       "publishDate": "2021-06-13T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "6",
-        "1"
+        "8",
+        "3"
       ],
       "authors": [
-        61
+        "56"
       ]
     },
     {
@@ -2506,10 +2523,10 @@ object FakeDataSource {
       "publishDate": "2021-06-13T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "9"
+        "11"
       ],
       "authors": [
-        62
+        "57"
       ]
     },
     {
@@ -2522,10 +2539,10 @@ object FakeDataSource {
       "publishDate": "2021-06-09T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "14"
+        "16"
       ],
       "authors": [
-        40
+        "23"
       ]
     },
     {
@@ -2538,10 +2555,10 @@ object FakeDataSource {
       "publishDate": "2021-06-08T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        14
+        "14"
       ]
     },
     {
@@ -2554,10 +2571,10 @@ object FakeDataSource {
       "publishDate": "2021-06-08T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -2570,10 +2587,10 @@ object FakeDataSource {
       "publishDate": "2021-06-07T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "10"
+        "12"
       ],
       "authors": [
-        33
+        "32"
       ]
     },
     {
@@ -2586,10 +2603,10 @@ object FakeDataSource {
       "publishDate": "2021-06-06T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        63
+        "58"
       ]
     },
     {
@@ -2602,10 +2619,10 @@ object FakeDataSource {
       "publishDate": "2021-06-02T23:00:00.000Z",
       "type": "Video 📺",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        64
+        "59"
       ]
     },
     {
@@ -2618,10 +2635,10 @@ object FakeDataSource {
       "publishDate": "2021-06-01T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        26
+        "25"
       ]
     },
     {
@@ -2634,10 +2651,10 @@ object FakeDataSource {
       "publishDate": "2021-06-01T23:00:00.000Z",
       "type": "Podcast 🎙",
       "topics": [
-        "1"
+        "3"
       ],
       "authors": [
-        38
+        "31"
       ]
     },
     {
@@ -2650,11 +2667,11 @@ object FakeDataSource {
       "publishDate": "2021-05-31T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "11",
-        "18"
+        "13",
+        "20"
       ],
       "authors": [
-        65
+        "60"
       ]
     },
     {
@@ -2667,10 +2684,10 @@ object FakeDataSource {
       "publishDate": "2021-05-25T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "13"
+        "15"
       ],
       "authors": [
-        15
+        "15"
       ]
     },
     {
@@ -2683,10 +2700,10 @@ object FakeDataSource {
       "publishDate": "2021-05-24T23:00:00.000Z",
       "type": "Article 📚",
       "topics": [
-        "0"
+        "2"
       ],
       "authors": [
-        66
+        "61"
       ]
     }
   ]

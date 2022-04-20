@@ -29,7 +29,7 @@ data class NetworkChangeList(
     /**
      * The id of the model that was changed
      */
-    val id: Int,
+    val id: String,
     /**
      * Unique consecutive, monotonically increasing version number in the collection describing
      * the relative point of change between models in the collection
