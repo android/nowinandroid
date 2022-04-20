@@ -30,7 +30,7 @@ import kotlinx.datetime.Instant
 )
 data class EpisodeEntity(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     val name: String,
     @ColumnInfo(name = "publish_date")
     val publishDate: Instant,

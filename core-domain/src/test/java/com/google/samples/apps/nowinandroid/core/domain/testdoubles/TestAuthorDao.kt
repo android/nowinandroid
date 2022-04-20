@@ -30,7 +30,7 @@ class TestAuthorDao : AuthorDao {
     private var entitiesStateFlow = MutableStateFlow(
         listOf(
             AuthorEntity(
-                id = 1,
+                id = "1",
                 name = "Topic",
                 imageUrl = "imageUrl",
                 twitter = "twitter",
@@ -52,7 +52,7 @@ class TestAuthorDao : AuthorDao {
         throw NotImplementedError("Unused in tests")
     }
 
-    override suspend fun deleteAuthors(ids: List<Int>) {
+    override suspend fun deleteAuthors(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
             entities.filterNot { idSet.contains(it.id) }

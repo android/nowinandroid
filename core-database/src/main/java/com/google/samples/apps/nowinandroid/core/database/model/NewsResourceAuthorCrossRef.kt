@@ -48,7 +48,7 @@ import androidx.room.Index
 )
 data class NewsResourceAuthorCrossRef(
     @ColumnInfo(name = "news_resource_id")
-    val newsResourceId: Int,
+    val newsResourceId: String,
     @ColumnInfo(name = "author_id")
-    val authorId: Int,
+    val authorId: String,
 )

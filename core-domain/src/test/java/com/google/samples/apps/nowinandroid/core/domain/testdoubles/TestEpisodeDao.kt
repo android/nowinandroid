@@ -33,7 +33,7 @@ class TestEpisodeDao : EpisodeDao {
     private var entitiesStateFlow = MutableStateFlow(
         listOf(
             EpisodeEntity(
-                id = 1,
+                id = "1",
                 name = "Episode",
                 publishDate = Instant.fromEpochMilliseconds(0),
                 alternateVideo = null,
@@ -57,7 +57,7 @@ class TestEpisodeDao : EpisodeDao {
         throw NotImplementedError("Unused in tests")
     }
 
-    override suspend fun deleteEpisodes(ids: List<Int>) {
+    override suspend fun deleteEpisodes(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
             entities.filterNot { idSet.contains(it.id) }

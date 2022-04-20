@@ -145,9 +145,10 @@ class LocalAuthorsRepositoryTest {
                 .map(NetworkAuthor::asEntity)
                 .map(AuthorEntity::asExternalModel)
 
+            // Delete half of the items on the network
             val deletedItems = networkAuthors
                 .map(Author::id)
-                .partition { it % 2 == 0 }
+                .partition { it.chars().sum() % 2 == 0 }
                 .first
                 .toSet()
 
@@ -165,6 +166,7 @@ class LocalAuthorsRepositoryTest {
                 .first()
                 .map(AuthorEntity::asExternalModel)
 
+            // Assert that items marked deleted on the network have been deleted locally
             Assert.assertEquals(
                 networkAuthors.map(Author::id) - deletedItems,
                 dbAuthors.map(Author::id)

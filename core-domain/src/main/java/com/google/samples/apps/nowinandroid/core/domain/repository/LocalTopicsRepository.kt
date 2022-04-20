@@ -44,13 +44,13 @@ class LocalTopicsRepository @Inject constructor(
         topicDao.getTopicEntitiesStream()
             .map { it.map(TopicEntity::asExternalModel) }
 
-    override fun getTopic(id: Int): Flow<Topic> =
+    override fun getTopic(id: String): Flow<Topic> =
         topicDao.getTopicEntity(id).map { it.asExternalModel() }
 
-    override suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) =
+    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
         niaPreferences.setFollowedTopicIds(followedTopicIds)
 
-    override suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean) =
+    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
         niaPreferences.toggleFollowedTopicId(followedTopicId, followed)
 
     override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds

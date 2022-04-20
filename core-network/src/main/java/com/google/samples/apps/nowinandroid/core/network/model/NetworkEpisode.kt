@@ -26,14 +26,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class NetworkEpisode(
-    val id: Int,
+    val id: String,
     val name: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,
     val alternateVideo: String?,
     val alternateAudio: String?,
-    val newsResources: List<Int> = listOf(),
-    val authors: List<Int> = listOf(),
+    val newsResources: List<String> = listOf(),
+    val authors: List<String> = listOf(),
 )
 
 /**
@@ -41,7 +41,7 @@ data class NetworkEpisode(
  */
 @Serializable
 data class NetworkEpisodeExpanded(
-    val id: Int,
+    val id: String,
     val name: String,
     @Serializable(InstantSerializer::class)
     val publishDate: Instant,

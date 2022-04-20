@@ -184,9 +184,10 @@ class LocalNewsRepositoryTest {
                 .map(NetworkNewsResource::asEntity)
                 .map(NewsResourceEntity::asExternalModel)
 
+            // Delete half of the items on the network
             val deletedItems = newsResourcesFromNetwork
                 .map(NewsResource::id)
-                .partition { it % 2 == 0 }
+                .partition { it.chars().sum() % 2 == 0 }
                 .first
                 .toSet()
 
@@ -204,6 +205,7 @@ class LocalNewsRepositoryTest {
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
+            // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
                 newsResourcesFromNetwork.map(NewsResource::id) - deletedItems,
                 newsResourcesFromDb.map(NewsResource::id)

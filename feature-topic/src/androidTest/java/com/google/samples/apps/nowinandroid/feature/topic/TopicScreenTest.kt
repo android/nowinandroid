@@ -130,7 +130,7 @@ private const val TOPIC_DESC = "At vero eos et accusamus et iusto odio dignissim
 private val testTopics = listOf(
     FollowableTopic(
         Topic(
-            id = 0,
+            id = "0",
             name = TOPIC_1_NAME,
             shortDescription = "",
             longDescription = TOPIC_DESC,
@@ -141,7 +141,7 @@ private val testTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 1,
+            id = "1",
             name = TOPIC_2_NAME,
             shortDescription = "",
             longDescription = TOPIC_DESC,
@@ -152,7 +152,7 @@ private val testTopics = listOf(
     ),
     FollowableTopic(
         Topic(
-            id = 2,
+            id = "2",
             name = TOPIC_3_NAME,
             shortDescription = "",
             longDescription = TOPIC_DESC,
@@ -165,8 +165,8 @@ private val testTopics = listOf(
 
 private val sampleNewsResources = listOf(
     NewsResource(
-        id = 1,
-        episodeId = 52,
+        id = "1",
+        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +
@@ -178,7 +178,7 @@ private val sampleNewsResources = listOf(
         type = Video,
         topics = listOf(
             Topic(
-                id = 0,
+                id = "0",
                 name = "Headlines",
                 shortDescription = "",
                 longDescription = TOPIC_DESC,

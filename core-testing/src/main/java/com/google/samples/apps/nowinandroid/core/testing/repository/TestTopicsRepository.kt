@@ -28,7 +28,7 @@ class TestTopicsRepository : TopicsRepository {
     /**
      * The backing hot flow for the list of followed topic ids for testing.
      */
-    private val _followedTopicIds: MutableSharedFlow<Set<Int>> =
+    private val _followedTopicIds: MutableSharedFlow<Set<String>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     /**
@@ -39,15 +39,15 @@ class TestTopicsRepository : TopicsRepository {
 
     override fun getTopicsStream(): Flow<List<Topic>> = topicsFlow
 
-    override fun getTopic(id: Int): Flow<Topic> {
+    override fun getTopic(id: String): Flow<Topic> {
         return topicsFlow.map { topics -> topics.find { it.id == id }!! }
     }
 
-    override suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) {
+    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
         _followedTopicIds.tryEmit(followedTopicIds)
     }
 
-    override suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean) {
+    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
         getCurrentFollowedTopics()?.let { current ->
             _followedTopicIds.tryEmit(
                 if (followed) current.plus(followedTopicId)
@@ -56,7 +56,7 @@ class TestTopicsRepository : TopicsRepository {
         }
     }
 
-    override fun getFollowedTopicIdsStream(): Flow<Set<Int>> = _followedTopicIds
+    override fun getFollowedTopicIdsStream(): Flow<Set<String>> = _followedTopicIds
 
     /**
      * A test-only API to allow controlling the list of topics from tests.
@@ -68,7 +68,7 @@ class TestTopicsRepository : TopicsRepository {
     /**
      * A test-only API to allow querying the current followed topics.
      */
-    fun getCurrentFollowedTopics(): Set<Int>? = _followedTopicIds.replayCache.firstOrNull()
+    fun getCurrentFollowedTopics(): Set<String>? = _followedTopicIds.replayCache.firstOrNull()
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

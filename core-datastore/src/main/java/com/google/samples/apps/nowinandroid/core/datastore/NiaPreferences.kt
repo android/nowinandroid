@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.retry
 class NiaPreferences @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
-    suspend fun setFollowedTopicIds(followedTopicIds: Set<Int>) {
+    suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
         try {
             userPreferences.updateData {
                 it.copy {
@@ -41,7 +41,7 @@ class NiaPreferences @Inject constructor(
         }
     }
 
-    suspend fun toggleFollowedTopicId(followedTopicId: Int, followed: Boolean) {
+    suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
         try {
             userPreferences.updateData {
                 it.copy {
@@ -60,7 +60,7 @@ class NiaPreferences @Inject constructor(
         }
     }
 
-    val followedTopicIds: Flow<Set<Int>> = userPreferences.data
+    val followedTopicIds: Flow<Set<String>> = userPreferences.data
         .retry {
             Log.e("NiaPreferences", "Failed to read user preferences", it)
             true
@@ -105,7 +105,7 @@ class NiaPreferences @Inject constructor(
         }
     }
 
-    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<Int>) {
+    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
         try {
             userPreferences.updateData {
                 it.copy {
@@ -118,7 +118,7 @@ class NiaPreferences @Inject constructor(
         }
     }
 
-    suspend fun toggleFollowedAuthorId(followedAuthorId: Int, followed: Boolean) {
+    suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
         try {
             userPreferences.updateData {
                 it.copy {
@@ -137,7 +137,7 @@ class NiaPreferences @Inject constructor(
         }
     }
 
-    val followedAuthorIds: Flow<Set<Int>> = userPreferences.data
+    val followedAuthorIds: Flow<Set<String>> = userPreferences.data
         .retry {
             Log.e("NiaPreferences", "Failed to read user preferences", it)
             true

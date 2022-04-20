@@ -28,8 +28,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class NetworkNewsResource(
-    val id: Int,
-    val episodeId: Int,
+    val id: String,
+    val episodeId: String,
     val title: String,
     val content: String,
     val url: String,
@@ -38,8 +38,8 @@ data class NetworkNewsResource(
     val publishDate: Instant,
     @Serializable(NewsResourceTypeSerializer::class)
     val type: NewsResourceType,
-    val authors: List<Int> = listOf(),
-    val topics: List<Int> = listOf(),
+    val authors: List<String> = listOf(),
+    val topics: List<String> = listOf(),
 )
 
 /**
@@ -47,8 +47,8 @@ data class NetworkNewsResource(
  */
 @Serializable
 data class NetworkNewsResourceExpanded(
-    val id: Int,
-    val episodeId: Int,
+    val id: String,
+    val episodeId: String,
     val title: String,
     val content: String,
     val url: String,

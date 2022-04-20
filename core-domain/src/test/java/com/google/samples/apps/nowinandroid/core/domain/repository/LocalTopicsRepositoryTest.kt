@@ -150,9 +150,10 @@ class LocalTopicsRepositoryTest {
                 .map(NetworkTopic::asEntity)
                 .map(TopicEntity::asExternalModel)
 
+            // Delete half of the items on the network
             val deletedItems = networkTopics
                 .map(Topic::id)
-                .partition { it % 2 == 0 }
+                .partition { it.chars().sum() % 2 == 0 }
                 .first
                 .toSet()
 
@@ -170,6 +171,7 @@ class LocalTopicsRepositoryTest {
                 .first()
                 .map(TopicEntity::asExternalModel)
 
+            // Assert that items marked deleted on the network have been deleted locally
             Assert.assertEquals(
                 networkTopics.map(Topic::id) - deletedItems,
                 dbTopics.map(Topic::id)
@@ -185,18 +187,18 @@ class LocalTopicsRepositoryTest {
     @Test
     fun localTopicsRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
-            subject.toggleFollowedTopicId(followedTopicId = 0, followed = true)
+            subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
             Assert.assertEquals(
-                setOf(0),
+                setOf("0"),
                 subject.getFollowedTopicIdsStream()
                     .first()
             )
 
-            subject.toggleFollowedTopicId(followedTopicId = 1, followed = true)
+            subject.toggleFollowedTopicId(followedTopicId = "1", followed = true)
 
             Assert.assertEquals(
-                setOf(0, 1),
+                setOf("0", "1"),
                 subject.getFollowedTopicIdsStream()
                     .first()
             )
@@ -212,10 +214,10 @@ class LocalTopicsRepositoryTest {
     @Test
     fun localTopicsRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
-            subject.setFollowedTopicIds(followedTopicIds = setOf(1, 2))
+            subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
 
             Assert.assertEquals(
-                setOf(1, 2),
+                setOf("1", "2"),
                 subject.getFollowedTopicIdsStream()
                     .first()
             )

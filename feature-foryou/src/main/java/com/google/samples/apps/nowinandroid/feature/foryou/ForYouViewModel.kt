@@ -79,7 +79,7 @@ class ForYouViewModel @Inject constructor(
      * This should be persisted to disk instead.
      */
     private var savedNewsResources by savedStateHandle.saveable {
-        mutableStateOf<Set<Int>>(emptySet())
+        mutableStateOf<Set<String>>(emptySet())
     }
 
     /**
@@ -87,7 +87,7 @@ class ForYouViewModel @Inject constructor(
      * [SavedStateHandle].
      */
     private var inProgressTopicSelection by savedStateHandle.saveable {
-        mutableStateOf<Set<Int>>(emptySet())
+        mutableStateOf<Set<String>>(emptySet())
     }
 
     /**
@@ -95,7 +95,7 @@ class ForYouViewModel @Inject constructor(
      * [SavedStateHandle].
      */
     private var inProgressAuthorSelection by savedStateHandle.saveable {
-        mutableStateOf<Set<Int>>(emptySet())
+        mutableStateOf<Set<String>>(emptySet())
     }
 
     val uiState: StateFlow<ForYouFeedUiState> = combine(
@@ -170,7 +170,7 @@ class ForYouViewModel @Inject constructor(
             initialValue = ForYouFeedUiState.Loading
         )
 
-    fun updateTopicSelection(topicId: Int, isChecked: Boolean) {
+    fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         withMutableSnapshot {
             inProgressTopicSelection =
                 // Update the in-progress selection based on whether the topic id was checked
@@ -182,7 +182,7 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun updateAuthorSelection(authorId: Int, isChecked: Boolean) {
+    fun updateAuthorSelection(authorId: String, isChecked: Boolean) {
         withMutableSnapshot {
             inProgressAuthorSelection =
                 // Update the in-progress selection based on whether the author id was checked
@@ -194,7 +194,7 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun updateNewsResourceSaved(newsResourceId: Int, isChecked: Boolean) {
+    fun updateNewsResourceSaved(newsResourceId: String, isChecked: Boolean) {
         withMutableSnapshot {
             savedNewsResources =
                 if (isChecked) {
@@ -242,8 +242,8 @@ private sealed interface FollowedInterestsState {
      * The user has followed the given (non-empty) set of [topicIds] or [authorIds].
      */
     data class FollowedInterests(
-        val topicIds: Set<Int>,
-        val authorIds: Set<Int>
+        val topicIds: Set<String>,
+        val authorIds: Set<String>
     ) : FollowedInterestsState
 }
 

@@ -31,7 +31,7 @@ class TestTopicDao : TopicDao {
     private var entitiesStateFlow = MutableStateFlow(
         listOf(
             TopicEntity(
-                id = 1,
+                id = "1",
                 name = "Topic",
                 shortDescription = "short description",
                 longDescription = "long description",
@@ -41,14 +41,14 @@ class TestTopicDao : TopicDao {
         )
     )
 
-    override fun getTopicEntity(topicId: Int): Flow<TopicEntity> {
+    override fun getTopicEntity(topicId: String): Flow<TopicEntity> {
         throw NotImplementedError("Unused in tests")
     }
 
     override fun getTopicEntitiesStream(): Flow<List<TopicEntity>> =
         entitiesStateFlow
 
-    override fun getTopicEntitiesStream(ids: Set<Int>): Flow<List<TopicEntity>> =
+    override fun getTopicEntitiesStream(ids: Set<String>): Flow<List<TopicEntity>> =
         getTopicEntitiesStream()
             .map { topics -> topics.filter { it.id in ids } }
 
@@ -62,7 +62,7 @@ class TestTopicDao : TopicDao {
         throw NotImplementedError("Unused in tests")
     }
 
-    override suspend fun deleteTopics(ids: List<Int>) {
+    override suspend fun deleteTopics(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
             entities.filterNot { idSet.contains(it.id) }

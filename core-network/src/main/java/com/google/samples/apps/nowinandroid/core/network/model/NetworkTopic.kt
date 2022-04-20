@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class NetworkTopic(
-    val id: Int,
+    val id: String,
     val name: String = "",
     val shortDescription: String = "",
     val longDescription: String = "",

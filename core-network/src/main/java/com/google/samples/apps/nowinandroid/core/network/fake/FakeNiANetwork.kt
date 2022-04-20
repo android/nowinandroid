@@ -36,17 +36,17 @@ class FakeNiANetwork @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json
 ) : NiANetwork {
-    override suspend fun getTopics(ids: List<Int>?): List<NetworkTopic> =
+    override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.topicsData)
         }
 
-    override suspend fun getNewsResources(ids: List<Int>?): List<NetworkNewsResource> =
+    override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.data)
         }
 
-    override suspend fun getAuthors(ids: List<Int>?): List<NetworkAuthor> =
+    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
         withContext(ioDispatcher) {
             networkJson.decodeFromString(FakeDataSource.authors)
         }
@@ -66,7 +66,7 @@ class FakeNiANetwork @Inject constructor(
  * [NetworkChangeList.id]
  */
 private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> Int
+    idGetter: (T) -> String
 ) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),

@@ -59,8 +59,8 @@ interface NewsResourceDao {
     """
     )
     fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int> = emptySet(),
-        filterTopicIds: Set<Int> = emptySet(),
+        filterAuthorIds: Set<String> = emptySet(),
+        filterTopicIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
     /**
@@ -104,5 +104,5 @@ interface NewsResourceDao {
             WHERE id in (:ids)
         """
     )
-    suspend fun deleteNewsResources(ids: List<Int>)
+    suspend fun deleteNewsResources(ids: List<String>)
 }

@@ -41,9 +41,9 @@ import kotlinx.datetime.Instant
 )
 data class NewsResourceEntity(
     @PrimaryKey
-    val id: Int,
+    val id: String,
     @ColumnInfo(name = "episode_id")
-    val episodeId: Int,
+    val episodeId: String,
     val title: String,
     val content: String,
     val url: String,

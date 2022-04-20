@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import com.google.samples.apps.nowinandroid.core.datastore.IntToStringIdsMigration
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferencesSerializer
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -47,7 +48,10 @@ object DataStoreModule {
     ): DataStore<UserPreferences> =
         DataStoreFactory.create(
             serializer = userPreferencesSerializer,
-            scope = CoroutineScope(ioDispatcher + SupervisorJob())
+            scope = CoroutineScope(ioDispatcher + SupervisorJob()),
+            migrations = listOf(
+                IntToStringIdsMigration,
+            )
         ) {
             context.dataStoreFile("user_preferences.pb")
         }

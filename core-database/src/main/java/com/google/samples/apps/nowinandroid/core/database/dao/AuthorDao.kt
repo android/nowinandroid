@@ -64,5 +64,5 @@ interface AuthorDao {
             WHERE id in (:ids)
         """
     )
-    suspend fun deleteAuthors(ids: List<Int>)
+    suspend fun deleteAuthors(ids: List<String>)
 }

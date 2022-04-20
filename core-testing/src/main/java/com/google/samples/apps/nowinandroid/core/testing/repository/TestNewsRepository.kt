@@ -37,8 +37,8 @@ class TestNewsRepository : NewsRepository {
     override fun getNewsResourcesStream(): Flow<List<NewsResource>> = newsResourcesFlow
 
     override fun getNewsResourcesStream(
-        filterAuthorIds: Set<Int>,
-        filterTopicIds: Set<Int>
+        filterAuthorIds: Set<String>,
+        filterTopicIds: Set<String>
     ): Flow<List<NewsResource>> =
         getNewsResourcesStream().map { newsResources ->
             newsResources

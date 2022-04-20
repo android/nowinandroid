@@ -39,7 +39,7 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 fun InterestsRoute(
     modifier: Modifier = Modifier,
     navigateToAuthor: () -> Unit,
-    navigateToTopic: (Int) -> Unit,
+    navigateToTopic: (String) -> Unit,
     viewModel: FollowingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -61,10 +61,10 @@ fun InterestsRoute(
 fun FollowingScreen(
     uiState: FollowingUiState,
     tabState: FollowingTabState,
-    followAuthor: (Int, Boolean) -> Unit,
-    followTopic: (Int, Boolean) -> Unit,
+    followAuthor: (String, Boolean) -> Unit,
+    followTopic: (String, Boolean) -> Unit,
     navigateToAuthor: () -> Unit,
-    navigateToTopic: (Int) -> Unit,
+    navigateToTopic: (String) -> Unit,
     switchTab: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -104,10 +104,10 @@ private fun FollowingContent(
     tabState: FollowingTabState,
     switchTab: (Int) -> Unit,
     uiState: FollowingUiState.Interests,
-    navigateToTopic: (Int) -> Unit,
-    followTopic: (Int, Boolean) -> Unit,
+    navigateToTopic: (String) -> Unit,
+    followTopic: (String, Boolean) -> Unit,
     navigateToAuthor: () -> Unit,
-    followAuthor: (Int, Boolean) -> Unit,
+    followAuthor: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {

@@ -66,5 +66,5 @@ interface EpisodeDao {
             WHERE id in (:ids)
         """
     )
-    suspend fun deleteEpisodes(ids: List<Int>)
+    suspend fun deleteEpisodes(ids: List<String>)
 }

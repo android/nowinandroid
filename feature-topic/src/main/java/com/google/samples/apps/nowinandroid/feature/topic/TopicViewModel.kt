@@ -42,10 +42,10 @@ class TopicViewModel @Inject constructor(
     newsRepository: NewsRepository
 ) : ViewModel() {
 
-    private val topicId: Int = checkNotNull(savedStateHandle[TopicDestinationsArgs.TOPIC_ID_ARG])
+    private val topicId: String = checkNotNull(savedStateHandle[TopicDestinationsArgs.TOPIC_ID_ARG])
 
     // Observe the followed topics, as they could change over time.
-    private val followedTopicIdsStream: Flow<Result<Set<Int>>> =
+    private val followedTopicIdsStream: Flow<Result<Set<String>>> =
         topicsRepository.getFollowedTopicIdsStream().asResult()
 
     // Observe topic information

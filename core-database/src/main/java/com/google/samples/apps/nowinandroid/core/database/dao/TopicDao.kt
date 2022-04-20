@@ -36,7 +36,7 @@ interface TopicDao {
         WHERE id = :topicId
     """
     )
-    fun getTopicEntity(topicId: Int): Flow<TopicEntity>
+    fun getTopicEntity(topicId: String): Flow<TopicEntity>
 
     @Query(value = "SELECT * FROM topics")
     fun getTopicEntitiesStream(): Flow<List<TopicEntity>>
@@ -47,7 +47,7 @@ interface TopicDao {
         WHERE id IN (:ids)
     """
     )
-    fun getTopicEntitiesStream(ids: Set<Int>): Flow<List<TopicEntity>>
+    fun getTopicEntitiesStream(ids: Set<String>): Flow<List<TopicEntity>>
 
     /**
      * Inserts [topicEntities] into the db if they don't exist, and ignores those that do
@@ -80,5 +80,5 @@ interface TopicDao {
             WHERE id in (:ids)
         """
     )
-    suspend fun deleteTopics(ids: List<Int>)
+    suspend fun deleteTopics(ids: List<String>)
 }
