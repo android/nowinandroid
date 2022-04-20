@@ -22,6 +22,8 @@ import androidx.compose.runtime.snapshots.Snapshot.Companion.withMutableSnapshot
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.google.samples.apps.nowinandroid.core.domain.combine
 import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
@@ -30,7 +32,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.feature.foryou.util.saveable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,6 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+@OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
     private val authorsRepository: AuthorsRepository,
