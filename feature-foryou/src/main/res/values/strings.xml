@@ -22,6 +22,9 @@
     <string name="navigate_up">Navigate up</string>
     <string name="onboarding_guidance_title">What are you interested in?</string>
     <string name="onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
+    <string name="top_app_bar_title">Now in Android</string>
+    <string name="top_app_bar_action_button_content_desc">My account</string>
+    <string name="top_app_bar_navigation_button_content_desc">Search</string>
 
     <!-- Authors-->
     <string name="following">You are following</string>
