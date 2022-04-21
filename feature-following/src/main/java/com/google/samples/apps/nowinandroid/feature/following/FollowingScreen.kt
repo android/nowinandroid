@@ -18,6 +18,9 @@ package com.google.samples.apps.nowinandroid.feature.following
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,9 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
-import com.google.samples.apps.nowinandroid.core.ui.NiaToolbar
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 
 @Composable
 fun InterestsRoute(
@@ -69,7 +72,17 @@ fun FollowingScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NiaToolbar(titleRes = R.string.interests)
+        NiaTopAppBar(
+            titleRes = R.string.interests,
+            navigationIcon = Icons.Filled.Search,
+            navigationIconContentDescription = stringResource(
+                id = R.string.top_app_bar_navigation_button_content_desc
+            ),
+            actionIcon = Icons.Filled.MoreVert,
+            actionIconContentDescription = stringResource(
+                id = R.string.top_app_bar_navigation_button_content_desc
+            )
+        )
         when (uiState) {
             FollowingUiState.Loading ->
                 NiaLoadingIndicator(
