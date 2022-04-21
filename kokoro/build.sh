@@ -19,7 +19,7 @@ set -e
 # Display commands to stderr.
 set -x
 
-deviceIds=${1:-'Pixel2,Pixel3'}
+deviceIds=${1:-'Nexus5,Pixel2,Pixel3'}
 osVersionIds=${2:-'23,27,30'}
 
 GRADLE_FLAGS=()
