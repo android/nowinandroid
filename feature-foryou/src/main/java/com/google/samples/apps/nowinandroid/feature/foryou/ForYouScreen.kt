@@ -33,9 +33,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -67,7 +64,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.NiaLoadingIndicator
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouFeedUiState.PopulatedFeed
@@ -103,19 +99,6 @@ fun ForYouScreen(
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        item {
-            NiaTopAppBar(
-                titleRes = R.string.top_app_bar_title,
-                navigationIcon = Icons.Filled.Search,
-                navigationIconContentDescription = stringResource(
-                    id = R.string.top_app_bar_navigation_button_content_desc
-                ),
-                actionIcon = Icons.Outlined.AccountCircle,
-                actionIconContentDescription = stringResource(
-                    id = R.string.top_app_bar_navigation_button_content_desc
-                )
-            )
-        }
         when (uiState) {
             is ForYouFeedUiState.Loading -> {
                 item {
