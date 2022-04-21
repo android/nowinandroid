@@ -21,6 +21,4 @@
     <string name="following_empty_header">"No available data"</string>
     <string name="interests_card_follow_button_content_desc">Follow interest button</string>
     <string name="interests_card_unfollow_button_content_desc">Unfollow interest button</string>
-    <string name="top_app_bar_action_button_content_desc">Menu</string>
-    <string name="top_app_bar_navigation_button_content_desc">Search</string>
 </resources>
