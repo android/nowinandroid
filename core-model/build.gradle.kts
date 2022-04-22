@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlinx-serialization'
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    id("kotlinx-serialization")
     alias(libs.plugins.ksp)
-    id 'nowinandroid.spotless'
+    id("nowinandroid.spotless")
 }
 
 dependencies {
-    testImplementation project(':core-testing')
+    testImplementation(project(":core-testing"))
 
-    implementation libs.room.runtime
-    implementation libs.room.ktx
-    ksp libs.room.compiler
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.kotlinx.datetime
-    implementation libs.kotlinx.serialization.json
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
 }

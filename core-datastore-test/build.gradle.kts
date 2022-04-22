@@ -14,37 +14,26 @@
  * limitations under the License.
  */
 plugins {
-    id "nowinandroid.android.library"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+    id("nowinandroid.android.library")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+    id("nowinandroid.spotless")
 }
 
 dependencies {
-    implementation project(':core-common')
-    implementation project(':core-domain')
-    implementation project(':core-model')
+    api(project(":core-datastore"))
+    implementation(project(":core-testing"))
 
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    api(libs.androidx.dataStore.core)
 
-    api libs.junit4
-    api libs.mockk
-    api libs.androidx.test.core
-    api libs.kotlinx.coroutines.test
-    api libs.turbine
-
-    api libs.androidx.test.espresso.core
-    api libs.androidx.test.runner
-    api libs.androidx.test.rules
-    api libs.androidx.compose.ui.test
-    api libs.hilt.android.testing
-
-    debugApi libs.androidx.compose.ui.testManifest
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
 
     configurations.configureEach {
         resolutionStrategy {
             // Temporary workaround for https://issuetracker.google.com/174733673
-            force 'org.objenesis:objenesis:2.6'
+            force("org.objenesis:objenesis:2.6")
         }
     }
 }

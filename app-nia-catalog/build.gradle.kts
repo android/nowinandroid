@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 plugins {
-    id "nowinandroid.android.library"
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'nowinandroid.spotless'
+    id("nowinandroid.android.application")
+    id("nowinandroid.android.application.compose")
+}
+
+android {
+    defaultConfig {
+        applicationId = "com.google.samples.apps.niacatalog"
+    }
+
+    packagingOptions {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
+    }
 }
 
 dependencies {
-    api project(':core-domain')
-    implementation project(':core-testing')
+    implementation(project(":core-ui"))
 
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
-    kaptAndroidTest libs.hilt.compiler
-
-    configurations.configureEach {
-        resolutionStrategy {
-            // Temporary workaround for https://issuetracker.google.com/174733673
-            force 'org.objenesis:objenesis:2.6'
-        }
-    }
+    implementation(libs.androidx.activity.compose)
 }

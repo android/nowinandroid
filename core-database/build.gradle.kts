@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 plugins {
-    id 'nowinandroid.android.library'
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
     alias(libs.plugins.ksp)
-    id 'nowinandroid.spotless'
+    id("nowinandroid.spotless")
 }
 
 android {
@@ -31,31 +31,31 @@ android {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
 
-        testInstrumentationRunner "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+        testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
 }
 
 dependencies {
-    implementation project(':core-model')
+    implementation(project(":core-model"))
 
-    implementation libs.room.runtime
-    implementation libs.room.ktx
-    ksp libs.room.compiler
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.kotlinx.datetime
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.datetime)
 
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    androidTestImplementation project(':core-testing')
+    androidTestImplementation(project(":core-testing"))
 
     // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {
-            force libs.junit4
+            force(libs.junit4)
             // Temporary workaround for https://issuetracker.google.com/174733673
-            force 'org.objenesis:objenesis:2.6'
+            force("org.objenesis:objenesis:2.6")
         }
     }
 }

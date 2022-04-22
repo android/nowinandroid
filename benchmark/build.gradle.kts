@@ -15,26 +15,26 @@
  */
 
 plugins {
-    id "nowinandroid.android.test"
-    id 'nowinandroid.spotless'
+    id("nowinandroid.android.test")
+    id("nowinandroid.spotless")
 }
 
 android {
-    namespace 'com.google.samples.apps.nowinandroid.benchmark'
+    namespace = "com.google.samples.apps.nowinandroid.benchmark"
 
     defaultConfig {
-        minSdk 23
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdk = 23
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         // This benchmark buildType is used for benchmarking, and should function like your
         // release build (for example, with minification on). It's signed with a debug key
         // for easy local/CI testing.
-        benchmark {
-            debuggable true
-            signingConfig debug.signingConfig
-            matchingFallbacks = ['release']
+        val benchmark by creating {
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks.add("release")
         }
     }
 
@@ -43,18 +43,18 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.test.core
-    implementation libs.androidx.test.espresso.core
-    implementation libs.androidx.test.ext
-    implementation libs.androidx.test.runner
-    implementation libs.androidx.test.rules
-    implementation libs.androidx.test.uiautomator
-    implementation libs.androidx.benchmark.macro
-    implementation libs.androidx.profileinstaller
+    implementation(libs.androidx.test.core)
+    implementation(libs.androidx.test.espresso.core)
+    implementation(libs.androidx.test.ext)
+    implementation(libs.androidx.test.runner)
+    implementation(libs.androidx.test.rules)
+    implementation(libs.androidx.test.uiautomator)
+    implementation(libs.androidx.benchmark.macro)
+    implementation(libs.androidx.profileinstaller)
 }
 
 androidComponents {
-    beforeVariants(selector().all()) {
-        enabled = buildType == "benchmark"
+    beforeVariants {
+        it.enable = it.buildType == "benchmark"
     }
 }
