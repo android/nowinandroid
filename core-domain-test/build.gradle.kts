@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'nowinandroid.spotless'
+    id("nowinandroid.android.library")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+    id("nowinandroid.spotless")
 }
 
 dependencies {
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    api(project(":core-domain"))
+    implementation(project(":core-testing"))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
+
+    configurations.configureEach {
+        resolutionStrategy {
+            // Temporary workaround for https://issuetracker.google.com/174733673
+            force("org.objenesis:objenesis:2.6")
+        }
+    }
 }

@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 plugins {
-    id 'nowinandroid.android.application'
-    id 'nowinandroid.android.application.compose'
-}
-
-android {
-    defaultConfig {
-        applicationId "com.google.samples.apps.niacatalog"
-    }
-
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    kotlin("kapt")
+    id("nowinandroid.spotless")
 }
 
 dependencies {
-    implementation project(':core-ui')
-
-    implementation libs.androidx.activity.compose
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

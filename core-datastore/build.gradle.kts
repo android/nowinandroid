@@ -13,28 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.google.protobuf.gradle.builtins
+import com.google.protobuf.gradle.generateProtoTasks
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
+
 plugins {
-    id "nowinandroid.android.library"
-    id "nowinandroid.android.library.jacoco"
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
     alias(libs.plugins.protobuf)
-    id 'nowinandroid.spotless'
+    id("nowinandroid.spotless")
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes
 protobuf {
     protoc {
-        artifact = libs.protobuf.protoc.get()
+        artifact = libs.protobuf.protoc.get().toString()
     }
     generateProtoTasks {
-        all().each { task ->
+        all().forEach { task ->
             task.builtins {
-                java {
-                    option "lite"
+                val java by registering {
+                    option("lite")
                 }
-                kotlin {
-                    option "lite"
+                val kotlin by registering {
+                    option("lite")
                 }
             }
         }
@@ -42,16 +48,16 @@ protobuf {
 }
 
 dependencies {
-    implementation project(':core-common')
+    implementation(project(":core-common"))
 
-    testImplementation project(':core-testing')
+    testImplementation(project(":core-testing"))
 
-    implementation libs.kotlinx.coroutines.android
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation libs.androidx.dataStore.core
+    implementation(libs.androidx.dataStore.core)
     implementation(libs.protobuf.kotlin.lite)
 
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
-    kaptAndroidTest libs.hilt.compiler
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
 }
