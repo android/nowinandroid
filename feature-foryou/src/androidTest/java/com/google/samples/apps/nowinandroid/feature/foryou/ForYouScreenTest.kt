@@ -23,9 +23,13 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -36,6 +40,12 @@ import org.junit.Test
 class ForYouScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    private val doneButtonMatcher by lazy {
+        hasText(
+            composeTestRule.activity.resources.getString(R.string.done)
+        )
+    }
 
     @Test
     fun circularProgressIndicator_whenScreenIsLoading_exists() {
@@ -142,8 +152,14 @@ class ForYouScreenTest {
             .assertIsDisplayed()
             .assertHasClickAction()
 
+        // Scroll until the Done button is visible
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.resources.getString(R.string.done))
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+            .performScrollToNode(doneButtonMatcher)
+
+        composeTestRule
+            .onNode(doneButtonMatcher)
             .assertIsDisplayed()
             .assertIsNotEnabled()
             .assertHasClickAction()
@@ -241,8 +257,14 @@ class ForYouScreenTest {
             .assertIsOff()
             .assertHasClickAction()
 
+        // Scroll until the Done button is visible
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.resources.getString(R.string.done))
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+            .performScrollToNode(doneButtonMatcher)
+
+        composeTestRule
+            .onNode(doneButtonMatcher)
             .assertIsDisplayed()
             .assertIsEnabled()
             .assertHasClickAction()
@@ -346,8 +368,14 @@ class ForYouScreenTest {
             .assertIsOff()
             .assertHasClickAction()
 
+        // Scroll until the Done button is visible
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.resources.getString(R.string.done))
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+            .performScrollToNode(doneButtonMatcher)
+
+        composeTestRule
+            .onNode(doneButtonMatcher)
             .assertIsDisplayed()
             .assertIsEnabled()
             .assertHasClickAction()
