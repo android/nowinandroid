@@ -16,8 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,7 +36,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -55,7 +52,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,7 +60,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -75,10 +70,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
-import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlinx.datetime.Instant
 
@@ -220,21 +215,18 @@ fun ForYouScreen(
                 }
             }
             is ForYouFeedState.Success -> {
-                items(feedState.feed) { (newsResource: NewsResource, isBookmarked: Boolean) ->
-                    val launchResourceIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
-                    val context = LocalContext.current
-
-                    NewsResourceCardExpanded(
-                        newsResource = newsResource,
-                        isBookmarked = isBookmarked,
-                        onClick = { startActivity(context, launchResourceIntent, null) },
-                        onToggleBookmark = {
-                            onNewsResourcesCheckedChanged(newsResource.id, !isBookmarked)
-                        },
-                        modifier = Modifier.padding(24.dp)
-                    )
-                }
+                newsResourceCardItems(
+                    items = feedState.feed,
+                    newsResourceMapper = SaveableNewsResource::newsResource,
+                    isBookmarkedMapper = SaveableNewsResource::isSaved,
+                    onToggleBookmark = { saveableNewsResource ->
+                        onNewsResourcesCheckedChanged(
+                            saveableNewsResource.newsResource.id,
+                            !saveableNewsResource.isSaved
+                        )
+                    },
+                    itemModifier = Modifier.padding(24.dp)
+                )
             }
         }
 

@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -52,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -72,6 +75,7 @@ fun TopicRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(
@@ -81,31 +85,35 @@ internal fun TopicScreen(
     onFollowClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            // TODO: Replace with windowInsetsTopHeight after
-            //       https://issuetracker.google.com/issues/230383055
-            Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+        item {
+            Spacer(
+                // TODO: Replace with windowInsetsTopHeight after
+                //       https://issuetracker.google.com/issues/230383055
+                Modifier.windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                )
             )
-        )
-
+        }
         when (topicState) {
-            Loading ->
+            Loading -> item {
                 LoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = string.topic_loading),
                 )
+            }
             TopicUiState.Error -> TODO()
             is TopicUiState.Success -> {
-                TopicToolbar(
-                    onBackClick = onBackClick,
-                    onFollowClick = onFollowClick,
-                    uiState = topicState.followableTopic
-                )
+                item {
+                    TopicToolbar(
+                        onBackClick = onBackClick,
+                        onFollowClick = onFollowClick,
+                        uiState = topicState.followableTopic,
+                    )
+                }
                 TopicBody(
                     name = topicState.followableTopic.topic.name,
                     description = topicState.followableTopic.topic.longDescription,
@@ -113,13 +121,36 @@ internal fun TopicScreen(
                 )
             }
         }
+        item {
+            Spacer(
+                // TODO: Replace with windowInsetsBottomHeight after
+                //       https://issuetracker.google.com/issues/230383055
+                Modifier.windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                )
+            )
+        }
     }
 }
 
+private fun LazyListScope.TopicBody(
+    name: String,
+    description: String,
+    news: NewsUiState
+) {
+    // TODO: Show icon if available
+    item {
+        TopicHeader(name, description)
+    }
+
+    TopicCards(news)
+}
+
 @Composable
-private fun TopicBody(name: String, description: String, news: NewsUiState) {
-    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-        // TODO: Show icon if available
+private fun TopicHeader(name: String, description: String) {
+    Column(
+        modifier = Modifier.padding(horizontal = 24.dp)
+    ) {
         Box(
             modifier = Modifier
                 .size(216.dp)
@@ -139,32 +170,24 @@ private fun TopicBody(name: String, description: String, news: NewsUiState) {
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-        TopicList(news, Modifier.padding(top = 24.dp))
-
-        Spacer(
-            // TODO: Replace with windowInsetsBottomHeight after
-            //       https://issuetracker.google.com/issues/230383055
-            Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-            )
-        )
     }
 }
 
-@Composable
-private fun TopicList(news: NewsUiState, modifier: Modifier = Modifier) {
+private fun LazyListScope.TopicCards(news: NewsUiState) {
     when (news) {
         is NewsUiState.Success -> {
-            LazyColumn(modifier = modifier) {
-                items(news.news.size) { index ->
-                    Text(news.news[index].title)
-                }
-            }
+            newsResourceCardItems(
+                items = news.news,
+                newsResourceMapper = { it },
+                isBookmarkedMapper = { /* TODO */ false },
+                onToggleBookmark = { /* TODO */ },
+                itemModifier = Modifier.padding(24.dp)
+            )
         }
-        is NewsUiState.Loading -> {
+        is NewsUiState.Loading -> item {
             LoadingWheel(contentDesc = "Loading news") // TODO
         }
-        else -> {
+        else -> item {
             Text("Error") // TODO
         }
     }
@@ -174,7 +197,9 @@ private fun TopicList(news: NewsUiState, modifier: Modifier = Modifier) {
 @Composable
 private fun TopicBodyPreview() {
     MaterialTheme {
-        TopicBody("Jetpack Compose", "Lorem ipsum maximum", NewsUiState.Success(emptyList()))
+        LazyColumn {
+            TopicBody("Jetpack Compose", "Lorem ipsum maximum", NewsUiState.Success(emptyList()))
+        }
     }
 }
 
