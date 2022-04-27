@@ -46,6 +46,10 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
+    // TODO : Remove this dependency once we upgrade to Android Studio Dolphin b/228889042
+    // These dependencies are currently necessary to render Compose previews
+    debugImplementation(libs.androidx.customview.poolingcontainer)
+
     // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {
