@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
-import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.Synchronizer
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic

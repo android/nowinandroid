@@ -71,7 +71,7 @@ dependencies {
 
     androidTestImplementation(project(":core-testing"))
     androidTestImplementation(project(":core-datastore-test"))
-    androidTestImplementation(project(":core-domain-test"))
+    androidTestImplementation(project(":core-data-test"))
     androidTestImplementation(project(":core-network"))
 
     implementation(libs.androidx.activity.compose)

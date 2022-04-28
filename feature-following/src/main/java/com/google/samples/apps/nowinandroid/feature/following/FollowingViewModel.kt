@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid.feature.following
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
