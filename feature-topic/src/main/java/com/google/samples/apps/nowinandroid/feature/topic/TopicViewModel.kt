@@ -19,8 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic

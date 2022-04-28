@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
-import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.Synchronizer
+import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow

@@ -23,12 +23,12 @@ import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkerParameters
+import com.google.samples.apps.nowinandroid.core.data.Synchronizer
+import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
-import com.google.samples.apps.nowinandroid.core.domain.Synchronizer
-import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncConstraints

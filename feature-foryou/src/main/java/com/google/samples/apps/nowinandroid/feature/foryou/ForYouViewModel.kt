@@ -24,9 +24,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.google.samples.apps.nowinandroid.core.domain.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
