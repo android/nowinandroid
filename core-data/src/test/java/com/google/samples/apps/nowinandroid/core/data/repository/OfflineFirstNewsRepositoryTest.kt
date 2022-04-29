@@ -51,9 +51,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-class LocalNewsRepositoryTest {
+class OfflineFirstNewsRepositoryTest {
 
-    private lateinit var subject: LocalNewsRepository
+    private lateinit var subject: OfflineFirstNewsRepository
 
     private lateinit var newsResourceDao: TestNewsResourceDao
 
@@ -83,7 +83,7 @@ class LocalNewsRepositoryTest {
             )
         )
 
-        subject = LocalNewsRepository(
+        subject = OfflineFirstNewsRepository(
             newsResourceDao = newsResourceDao,
             episodeDao = episodeDao,
             authorDao = authorDao,
@@ -93,7 +93,7 @@ class LocalNewsRepositoryTest {
     }
 
     @Test
-    fun localNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
+    fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
                 newsResourceDao.getNewsResourcesStream()
@@ -105,7 +105,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_news_resources_topic_filtered_stream_is_backed_by_news_resource_dao() =
+    fun offlineFirstNewsRepository_news_resources_for_topic_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
                 newsResourceDao.getNewsResourcesStream(
@@ -129,7 +129,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_news_resources_author_filtered_stream_is_backed_by_news_resource_dao() =
+    fun offlineFirstNewsRepository_news_resources_for_author_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
                 newsResourceDao.getNewsResourcesStream(
@@ -153,7 +153,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_pulls_from_network() =
+    fun offlineFirstNewsRepository_sync_pulls_from_network() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -178,7 +178,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_deletes_items_marked_deleted_on_network() =
+    fun offlineFirstNewsRepository_sync_deletes_items_marked_deleted_on_network() =
         runTest {
             val newsResourcesFromNetwork = network.getNewsResources()
                 .map(NetworkNewsResource::asEntity)
@@ -219,7 +219,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_incremental_sync_pulls_from_network() =
+    fun offlineFirstNewsRepository_incremental_sync_pulls_from_network() =
         runTest {
             // Set news version to 7
             synchronizer.updateChangeListVersions {
@@ -258,7 +258,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_saves_shell_topic_entities() =
+    fun offlineFirstNewsRepository_sync_saves_shell_topic_entities() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -273,7 +273,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_saves_shell_author_entities() =
+    fun offlineFirstNewsRepository_sync_saves_shell_author_entities() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -288,7 +288,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_saves_shell_episode_entities() =
+    fun offlineFirstNewsRepository_sync_saves_shell_episode_entities() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -303,7 +303,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_saves_topic_cross_references() =
+    fun offlineFirstNewsRepository_sync_saves_topic_cross_references() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -317,7 +317,7 @@ class LocalNewsRepositoryTest {
         }
 
     @Test
-    fun localNewsRepository_sync_saves_author_cross_references() =
+    fun offlineFirstNewsRepository_sync_saves_author_cross_references() =
         runTest {
             subject.syncWith(synchronizer)
 

@@ -19,53 +19,57 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.changeListSync
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
-import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
-import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
-import com.google.samples.apps.nowinandroid.core.model.data.Author
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Room database backed implementation of the [AuthorsRepository].
+ * Disk storage backed implementation of the [TopicsRepository].
+ * Reads are exclusively from local storage to support offline access.
  */
-class LocalAuthorsRepository @Inject constructor(
-    private val authorDao: AuthorDao,
+class OfflineFirstTopicsRepository @Inject constructor(
+    private val topicDao: TopicDao,
     private val network: NiANetwork,
     private val niaPreferences: NiaPreferences,
-) : AuthorsRepository {
+) : TopicsRepository {
 
-    override fun getAuthorsStream(): Flow<List<Author>> =
-        authorDao.getAuthorEntitiesStream()
-            .map { it.map(AuthorEntity::asExternalModel) }
+    override fun getTopicsStream(): Flow<List<Topic>> =
+        topicDao.getTopicEntitiesStream()
+            .map { it.map(TopicEntity::asExternalModel) }
 
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) =
-        niaPreferences.setFollowedAuthorIds(followedAuthorIds)
+    override fun getTopic(id: String): Flow<Topic> =
+        topicDao.getTopicEntity(id).map { it.asExternalModel() }
 
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) =
-        niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
+    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
+        niaPreferences.setFollowedTopicIds(followedTopicIds)
 
-    override fun getFollowedAuthorIdsStream(): Flow<Set<String>> = niaPreferences.followedAuthorIds
+    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
+        niaPreferences.toggleFollowedTopicId(followedTopicId, followed)
+
+    override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
         synchronizer.changeListSync(
-            versionReader = ChangeListVersions::authorVersion,
+            versionReader = ChangeListVersions::topicVersion,
             changeListFetcher = { currentVersion ->
-                network.getAuthorChangeList(after = currentVersion)
+                network.getTopicChangeList(after = currentVersion)
             },
             versionUpdater = { latestVersion ->
-                copy(authorVersion = latestVersion)
+                copy(topicVersion = latestVersion)
             },
-            modelDeleter = authorDao::deleteAuthors,
+            modelDeleter = topicDao::deleteTopics,
             modelUpdater = { changedIds ->
-                val networkAuthors = network.getAuthors(ids = changedIds)
-                authorDao.upsertAuthors(
-                    entities = networkAuthors.map(NetworkAuthor::asEntity)
+                val networkTopics = network.getTopics(ids = changedIds)
+                topicDao.upsertTopics(
+                    entities = networkTopics.map(NetworkTopic::asEntity)
                 )
             }
         )

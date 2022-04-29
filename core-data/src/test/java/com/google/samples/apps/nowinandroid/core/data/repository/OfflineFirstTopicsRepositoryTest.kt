@@ -36,9 +36,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-class LocalTopicsRepositoryTest {
+class OfflineFirstTopicsRepositoryTest {
 
-    private lateinit var subject: LocalTopicsRepository
+    private lateinit var subject: OfflineFirstTopicsRepository
 
     private lateinit var topicDao: TopicDao
 
@@ -60,7 +60,7 @@ class LocalTopicsRepositoryTest {
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
-        subject = LocalTopicsRepository(
+        subject = OfflineFirstTopicsRepository(
             topicDao = topicDao,
             network = network,
             niaPreferences = niaPreferences
@@ -68,7 +68,7 @@ class LocalTopicsRepositoryTest {
     }
 
     @Test
-    fun localTopicsRepository_topics_stream_is_backed_by_topics_dao() =
+    fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
         runTest {
             Assert.assertEquals(
                 topicDao.getTopicEntitiesStream()
@@ -80,7 +80,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_news_resources_filtered_stream_is_backed_by_news_resource_dao() =
+    fun offlineFirstTopicsRepository_news_resources_for_interests_is_backed_by_news_resource_dao() =
         runTest {
             Assert.assertEquals(
                 niaPreferences.followedTopicIds
@@ -91,7 +91,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_sync_pulls_from_network() =
+    fun offlineFirstTopicsRepository_sync_pulls_from_network() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -114,7 +114,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_incremental_sync_pulls_from_network() =
+    fun offlineFirstTopicsRepository_incremental_sync_pulls_from_network() =
         runTest {
             // Set topics version to 10
             synchronizer.updateChangeListVersions {
@@ -144,7 +144,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_sync_deletes_items_marked_deleted_on_network() =
+    fun offlineFirstTopicsRepository_sync_deletes_items_marked_deleted_on_network() =
         runTest {
             val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
@@ -185,7 +185,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
+    fun offlineFirstTopicsRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
             subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
@@ -212,7 +212,7 @@ class LocalTopicsRepositoryTest {
         }
 
     @Test
-    fun localTopicsRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
+    fun offlineFirstTopicsRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
             subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
 

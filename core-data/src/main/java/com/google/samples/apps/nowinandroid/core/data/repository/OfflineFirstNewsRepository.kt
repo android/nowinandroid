@@ -42,9 +42,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Room database backed implementation of the [NewsRepository].
+ * Disk storage backed implementation of the [NewsRepository].
+ * Reads are exclusively from local storage to support offline access.
  */
-class LocalNewsRepository @Inject constructor(
+class OfflineFirstNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val episodeDao: EpisodeDao,
     private val authorDao: AuthorDao,

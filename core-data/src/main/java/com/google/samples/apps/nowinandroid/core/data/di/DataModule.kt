@@ -17,10 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.data.di
 
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.LocalAuthorsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.LocalNewsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.LocalTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstAuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import dagger.Binds
 import dagger.Module
@@ -33,16 +33,16 @@ interface DataModule {
 
     @Binds
     fun bindsTopicRepository(
-        topicsRepository: LocalTopicsRepository
+        topicsRepository: OfflineFirstTopicsRepository
     ): TopicsRepository
 
     @Binds
     fun bindsAuthorsRepository(
-        authorsRepository: LocalAuthorsRepository
+        authorsRepository: OfflineFirstAuthorsRepository
     ): AuthorsRepository
 
     @Binds
     fun bindsNewsResourceRepository(
-        newsRepository: LocalNewsRepository
+        newsRepository: OfflineFirstNewsRepository
     ): NewsRepository
 }
