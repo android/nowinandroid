@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -182,13 +183,7 @@ fun ForYouScreen(
                     )
 
                     item {
-                        Spacer(
-                            // TODO: Replace with windowInsetsBottomHeight after
-                            //       https://issuetracker.google.com/issues/230383055
-                            Modifier.windowInsetsPadding(
-                                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                            )
-                        )
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                     }
                 }
             }
