@@ -37,9 +37,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-class LocalAuthorsRepositoryTest {
+class OfflineFirstAuthorsRepositoryTest {
 
-    private lateinit var subject: LocalAuthorsRepository
+    private lateinit var subject: OfflineFirstAuthorsRepository
 
     private lateinit var authorDao: AuthorDao
 
@@ -59,7 +59,7 @@ class LocalAuthorsRepositoryTest {
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
-        subject = LocalAuthorsRepository(
+        subject = OfflineFirstAuthorsRepository(
             authorDao = authorDao,
             network = network,
             niaPreferences = niaPreferences,
@@ -67,7 +67,7 @@ class LocalAuthorsRepositoryTest {
     }
 
     @Test
-    fun localAuthorsRepository_Authors_stream_is_backed_by_Authors_dao() =
+    fun offlineFirstAuthorsRepository_Authors_stream_is_backed_by_Authors_dao() =
         runTest {
             Assert.assertEquals(
                 authorDao.getAuthorEntitiesStream()
@@ -79,7 +79,7 @@ class LocalAuthorsRepositoryTest {
         }
 
     @Test
-    fun localAuthorsRepository_sync_pulls_from_network() =
+    fun offlineFirstAuthorsRepository_sync_pulls_from_network() =
         runTest {
             subject.syncWith(synchronizer)
 
@@ -102,7 +102,7 @@ class LocalAuthorsRepositoryTest {
         }
 
     @Test
-    fun localAuthorsRepository_incremental_sync_pulls_from_network() =
+    fun offlineFirstAuthorsRepository_incremental_sync_pulls_from_network() =
         runTest {
             // Set author version to 5
             synchronizer.updateChangeListVersions {
@@ -139,7 +139,7 @@ class LocalAuthorsRepositoryTest {
         }
 
     @Test
-    fun localAuthorsRepository_sync_deletes_items_marked_deleted_on_network() =
+    fun offlineFirstAuthorsRepository_sync_deletes_items_marked_deleted_on_network() =
         runTest {
             val networkAuthors = network.getAuthors()
                 .map(NetworkAuthor::asEntity)

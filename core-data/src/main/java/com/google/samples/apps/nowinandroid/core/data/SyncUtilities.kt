@@ -44,7 +44,7 @@ interface Synchronizer {
  */
 interface Syncable {
     /**
-     * Synchronizes the local database in backing the repository with the network.
+     * Synchronizes the local database backing the repository with the network.
      * Returns if the sync was successful or not.
      */
     suspend fun syncWith(synchronizer: Synchronizer): Boolean
