@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -56,6 +57,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +66,7 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -275,6 +278,7 @@ private fun TopicSelection(
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
+                imageUrl = it.topic.imageUrl,
                 isSelected = it.isFollowed,
                 onClick = onTopicCheckedChanged
             )
@@ -287,6 +291,7 @@ private fun TopicSelection(
 private fun SingleTopicButton(
     name: String,
     topicId: String,
+    imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit
 ) {
@@ -304,6 +309,9 @@ private fun SingleTopicButton(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = 12.dp, end = 8.dp)
         ) {
+            TopicIcon(
+                imageUrl = imageUrl
+            )
             Text(
                 text = name,
                 style = NiaTypography.titleSmall,
@@ -324,6 +332,22 @@ private fun SingleTopicButton(
             )
         }
     }
+}
+
+@Composable
+fun TopicIcon(
+    modifier: Modifier = Modifier,
+    imageUrl: String
+) {
+    AsyncImage(
+        // TODO b/228077205, show loading image visual instead of static placeholder
+        placeholder = painterResource(R.drawable.ic_icon_placeholder),
+        model = imageUrl,
+        contentDescription = null, // decorative
+        modifier = modifier
+            .padding(10.dp)
+            .size(32.dp)
+    )
 }
 
 @Preview
