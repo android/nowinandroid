@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.feature")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
-    alias(libs.plugins.ksp)
-}
+package com.google.samples.apps.nowinandroid
 
-dependencies {
-    implementation(libs.kotlinx.datetime)
+import com.airbnb.android.showkase.annotation.ShowkaseRoot
+import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 
-    implementation(libs.showkase.runtime)
-    ksp(libs.showkase.processor)
-}
+@ShowkaseRoot
+class ScreenshotShowkaseModule : ShowkaseRootModule

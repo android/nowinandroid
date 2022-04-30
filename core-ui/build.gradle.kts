@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.compose")
     id("nowinandroid.android.library.jacoco")
     id("nowinandroid.spotless")
+    alias(libs.plugins.ksp)
 }
 
 dependencies {
@@ -28,6 +32,9 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.showkase.runtime)
+    ksp(libs.showkase.processor)
 
     // TODO : Remove these dependency once we upgrade to Android Studio Dolphin b/228889042
     // These dependencies are currently necessary to render Compose previews
