@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -42,6 +43,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
  */
 @Composable
 fun NiaNavGraph(
+    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = NiaDestinations.FOR_YOU_ROUTE
@@ -52,7 +54,7 @@ fun NiaNavGraph(
         modifier = modifier,
     ) {
         composable(NiaDestinations.FOR_YOU_ROUTE) {
-            ForYouRoute()
+            ForYouRoute(windowSizeClass)
         }
         composable(NiaDestinations.EPISODES_ROUTE) {
             Text("EPISODES")

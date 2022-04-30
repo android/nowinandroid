@@ -107,6 +107,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 }
 
                 NiaNavGraph(
+                    windowSizeClass = windowSizeClass,
                     navController = navController,
                     modifier = Modifier
                         .padding(padding)
