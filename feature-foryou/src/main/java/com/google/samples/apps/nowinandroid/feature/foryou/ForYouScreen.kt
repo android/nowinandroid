@@ -16,7 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.content.Intent
+import android.net.Uri
+import androidx.annotation.IntRange
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,9 +38,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells.Fixed
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -47,19 +54,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -70,21 +83,25 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
+import kotlin.math.floor
 import kotlinx.datetime.Instant
 
 @Composable
 fun ForYouRoute(
+    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
     val interestsSelectionState by viewModel.interestsSelectionState.collectAsState()
     val feedState by viewModel.feedState.collectAsState()
     ForYouScreen(
+        windowSizeClass = windowSizeClass,
         modifier = modifier,
         interestsSelectionState = interestsSelectionState,
         feedState = feedState,
@@ -97,6 +114,7 @@ fun ForYouRoute(
 
 @Composable
 fun ForYouScreen(
+    windowSizeClass: WindowSizeClass,
     interestsSelectionState: ForYouInterestsSelectionState,
     feedState: ForYouFeedState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
@@ -105,35 +123,91 @@ fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
+    // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
+    //       https://issuetracker.google.com/issues/230514914
+    //       https://issuetracker.google.com/issues/231320714
+    BoxWithConstraints(
+        modifier = modifier
     ) {
-        item {
-            Spacer(
-                // TODO: Replace with windowInsetsTopHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                )
-            )
+        val numberOfColumns = when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
+            else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
         }
 
-        item {
-            NiaTopAppBar(
-                titleRes = R.string.top_app_bar_title,
-                navigationIcon = Icons.Filled.Search,
-                navigationIconContentDescription = stringResource(
-                    id = R.string.top_app_bar_navigation_button_content_desc
-                ),
-                actionIcon = Icons.Outlined.AccountCircle,
-                actionIconContentDescription = stringResource(
-                    id = R.string.top_app_bar_navigation_button_content_desc
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                Spacer(
+                    // TODO: Replace with windowInsetsTopHeight after
+                    //       https://issuetracker.google.com/issues/230383055
+                    Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                    )
                 )
-            )
-        }
+            }
 
-        when (interestsSelectionState) {
-            ForYouInterestsSelectionState.Loading -> {
+            item {
+                NiaTopAppBar(
+                    titleRes = R.string.top_app_bar_title,
+                    navigationIcon = Icons.Filled.Search,
+                    navigationIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                    actionIcon = Icons.Outlined.AccountCircle,
+                    actionIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                )
+            }
+
+            InterestsSelection(
+                interestsSelectionState = interestsSelectionState,
+                showLoadingUIIfLoading = true,
+                onAuthorCheckedChanged = onAuthorCheckedChanged,
+                onTopicCheckedChanged = onTopicCheckedChanged,
+                saveFollowedTopics = saveFollowedTopics
+            )
+
+            Feed(
+                feedState = feedState,
+                // Avoid showing a second loading wheel if we already are for the interests
+                // selection
+                showLoadingUIIfLoading =
+                interestsSelectionState !is ForYouInterestsSelectionState.Loading,
+                numberOfColumns = numberOfColumns,
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
+            )
+
+            item {
+                Spacer(
+                    // TODO: Replace with windowInsetsBottomHeight after
+                    //       https://issuetracker.google.com/issues/230383055
+                    Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                    )
+                )
+            }
+        }
+    }
+}
+
+/**
+ * An extension on [LazyListScope] defining the interests selection portion of the for you screen.
+ * Depending on the [interestsSelectionState], this might emit no items.
+ *
+ * @param showLoadingUIIfLoading if true, show a visual indication of loading if the
+ * [interestsSelectionState] is loading. This is controllable to permit du-duplicating loading
+ * states.
+ */
+private fun LazyListScope.InterestsSelection(
+    interestsSelectionState: ForYouInterestsSelectionState,
+    showLoadingUIIfLoading: Boolean,
+    onAuthorCheckedChanged: (String, Boolean) -> Unit,
+    onTopicCheckedChanged: (String, Boolean) -> Unit,
+    saveFollowedTopics: () -> Unit
+) {
+    when (interestsSelectionState) {
+        ForYouInterestsSelectionState.Loading -> {
+            if (showLoadingUIIfLoading) {
                 item {
                     LoadingWheel(
                         modifier = Modifier
@@ -143,101 +217,62 @@ fun ForYouScreen(
                     )
                 }
             }
-            ForYouInterestsSelectionState.NoInterestsSelection -> Unit
-            is ForYouInterestsSelectionState.WithInterestsSelection -> {
-                item {
-                    Text(
-                        text = stringResource(R.string.onboarding_guidance_title),
-                        textAlign = TextAlign.Center,
+        }
+        ForYouInterestsSelectionState.NoInterestsSelection -> Unit
+        is ForYouInterestsSelectionState.WithInterestsSelection -> {
+            item {
+                Text(
+                    text = stringResource(R.string.onboarding_guidance_title),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                    style = NiaTypography.titleMedium
+                )
+            }
+            item {
+                Text(
+                    text = stringResource(R.string.onboarding_guidance_subtitle),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                    textAlign = TextAlign.Center,
+                    style = NiaTypography.bodyMedium
+                )
+            }
+            item {
+                AuthorsCarousel(
+                    authors = interestsSelectionState.authors,
+                    onAuthorClick = onAuthorCheckedChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
+            item {
+                TopicSelection(
+                    interestsSelectionState,
+                    onTopicCheckedChanged,
+                    Modifier.padding(bottom = 8.dp)
+                )
+            }
+            item {
+                // Done button
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = saveFollowedTopics,
+                        enabled = interestsSelectionState.canSaveInterests,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp),
-                        style = NiaTypography.titleMedium
-                    )
-                }
-                item {
-                    Text(
-                        text = stringResource(R.string.onboarding_guidance_subtitle),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                        textAlign = TextAlign.Center,
-                        style = NiaTypography.bodyMedium
-                    )
-                }
-                item {
-                    AuthorsCarousel(
-                        authors = interestsSelectionState.authors,
-                        onAuthorClick = onAuthorCheckedChanged,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-                item {
-                    TopicSelection(
-                        interestsSelectionState,
-                        onTopicCheckedChanged,
-                        Modifier.padding(bottom = 8.dp)
-                    )
-                }
-                item {
-                    // Done button
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 40.dp)
+                            .width(364.dp)
                     ) {
-                        Button(
-                            onClick = saveFollowedTopics,
-                            enabled = interestsSelectionState.canSaveInterests,
-                            modifier = Modifier
-                                .padding(horizontal = 40.dp)
-                                .width(364.dp)
-                        ) {
-                            Text(text = stringResource(R.string.done))
-                        }
+                        Text(text = stringResource(R.string.done))
                     }
                 }
             }
-        }
-
-        when (feedState) {
-            ForYouFeedState.Loading -> {
-                // Avoid showing a second loading wheel if we already are for the interests
-                // selection
-                if (interestsSelectionState !is ForYouInterestsSelectionState.Loading) {
-                    item {
-                        LoadingWheel(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentSize(),
-                            contentDesc = stringResource(id = R.string.for_you_loading),
-                        )
-                    }
-                }
-            }
-            is ForYouFeedState.Success -> {
-                newsResourceCardItems(
-                    items = feedState.feed,
-                    newsResourceMapper = SaveableNewsResource::newsResource,
-                    isBookmarkedMapper = SaveableNewsResource::isSaved,
-                    onToggleBookmark = { saveableNewsResource ->
-                        onNewsResourcesCheckedChanged(
-                            saveableNewsResource.newsResource.id,
-                            !saveableNewsResource.isSaved
-                        )
-                    },
-                    itemModifier = Modifier.padding(24.dp)
-                )
-            }
-        }
-
-        item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
         }
     }
 }
@@ -249,7 +284,7 @@ private fun TopicSelection(
     modifier: Modifier = Modifier
 ) {
     LazyHorizontalGrid(
-        rows = Fixed(3),
+        rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(24.dp),
@@ -342,12 +377,99 @@ fun TopicIcon(
     )
 }
 
-@Preview
+/**
+ * An extension on [LazyListScope] defining the feed portion of the for you screen.
+ * Depending on the [feedState], this might emit no items.
+ *
+ * @param showLoadingUIIfLoading if true, show a visual indication of loading if the
+ * [feedState] is loading. This is controllable to permit du-duplicating loading
+ * states.
+ */
+private fun LazyListScope.Feed(
+    feedState: ForYouFeedState,
+    showLoadingUIIfLoading: Boolean,
+    @IntRange(from = 1) numberOfColumns: Int,
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+) {
+    when (feedState) {
+        ForYouFeedState.Loading -> {
+            if (showLoadingUIIfLoading) {
+                item {
+                    LoadingWheel(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(),
+                        contentDesc = stringResource(id = R.string.for_you_loading),
+                    )
+                }
+            }
+        }
+        is ForYouFeedState.Success -> {
+            items(
+                feedState.feed.chunked(numberOfColumns)
+            ) { saveableNewsResources ->
+                Row(
+                    modifier = Modifier.padding(
+                        top = 32.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    // The last row may not be complete, but for a consistent grid
+                    // structure we still want an element taking up the empty space.
+                    // Therefore, the last row may have empty boxes.
+                    repeat(numberOfColumns) { index ->
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            val saveableNewsResource =
+                                saveableNewsResources.getOrNull(index)
+
+                            if (saveableNewsResource != null) {
+                                val launchResourceIntent =
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(saveableNewsResource.newsResource.url)
+                                    )
+                                val context = LocalContext.current
+
+                                NewsResourceCardExpanded(
+                                    newsResource = saveableNewsResource.newsResource,
+                                    isBookmarked = saveableNewsResource.isSaved,
+                                    onClick = {
+                                        ContextCompat.startActivity(
+                                            context,
+                                            launchResourceIntent,
+                                            null
+                                        )
+                                    },
+                                    onToggleBookmark = {
+                                        onNewsResourcesCheckedChanged(
+                                            saveableNewsResource.newsResource.id,
+                                            !saveableNewsResource.isSaved
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
 fun ForYouScreenLoading() {
-    MaterialTheme {
-        Surface {
+    BoxWithConstraints {
+        NiaTheme {
             ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionState.Loading,
                 feedState = ForYouFeedState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
@@ -359,98 +481,110 @@ fun ForYouScreenLoading() {
     }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
 fun ForYouScreenTopicSelection() {
-    ForYouScreen(
-        interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
-            topics = listOf(
-                FollowableTopic(
-                    topic = Topic(
-                        id = "0",
-                        name = "Headlines",
-                        shortDescription = "",
-                        longDescription = "",
-                        url = "",
-                        imageUrl = ""
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    topics = listOf(
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "0",
+                                name = "Headlines",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "1",
+                                name = "UI",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableTopic(
+                            topic = Topic(
+                                id = "2",
+                                name = "Tools",
+                                shortDescription = "",
+                                longDescription = "",
+                                url = "",
+                                imageUrl = ""
+                            ),
+                            isFollowed = false
+                        ),
                     ),
-                    isFollowed = false
+                    authors = listOf(
+                        FollowableAuthor(
+                            author = Author(
+                                id = "0",
+                                name = "Android Dev",
+                                imageUrl = "",
+                                twitter = "",
+                                mediumPage = "",
+                                bio = "",
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableAuthor(
+                            author = Author(
+                                id = "1",
+                                name = "Android Dev 2",
+                                imageUrl = "",
+                                twitter = "",
+                                mediumPage = "",
+                                bio = "",
+                            ),
+                            isFollowed = false
+                        ),
+                        FollowableAuthor(
+                            author = Author(
+                                id = "2",
+                                name = "Android Dev 3",
+                                imageUrl = "",
+                                twitter = "",
+                                mediumPage = "",
+                                bio = "",
+                            ),
+                            isFollowed = false
+                        )
+                    )
                 ),
-                FollowableTopic(
-                    topic = Topic(
-                        id = "1",
-                        name = "UI",
-                        shortDescription = "",
-                        longDescription = "",
-                        url = "",
-                        imageUrl = ""
-                    ),
-                    isFollowed = false
+                feedState = ForYouFeedState.Success(
+                    feed = saveableNewsResource,
                 ),
-                FollowableTopic(
-                    topic = Topic(
-                        id = "2",
-                        name = "Tools",
-                        shortDescription = "",
-                        longDescription = "",
-                        url = "",
-                        imageUrl = ""
-                    ),
-                    isFollowed = false
-                ),
-            ),
-            authors = listOf(
-                FollowableAuthor(
-                    author = Author(
-                        id = "0",
-                        name = "Android Dev",
-                        imageUrl = "",
-                        twitter = "",
-                        mediumPage = "",
-                        bio = "",
-                    ),
-                    isFollowed = false
-                ),
-                FollowableAuthor(
-                    author = Author(
-                        id = "1",
-                        name = "Android Dev 2",
-                        imageUrl = "",
-                        twitter = "",
-                        mediumPage = "",
-                        bio = "",
-                    ),
-                    isFollowed = false
-                ),
-                FollowableAuthor(
-                    author = Author(
-                        id = "2",
-                        name = "Android Dev 3",
-                        imageUrl = "",
-                        twitter = "",
-                        mediumPage = "",
-                        bio = "",
-                    ),
-                    isFollowed = false
-                )
+                onAuthorCheckedChanged = { _, _ -> },
+                onTopicCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
             )
-        ),
-        feedState = ForYouFeedState.Success(
-            feed = saveableNewsResource,
-        ),
-        onAuthorCheckedChanged = { _, _ -> },
-        onTopicCheckedChanged = { _, _ -> },
-        saveFollowedTopics = {},
-        onNewsResourcesCheckedChanged = { _, _ -> }
-    )
+        }
+    }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
 fun PopulatedFeed() {
-    MaterialTheme {
-        Surface {
+    BoxWithConstraints {
+        NiaTheme {
             ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionState.NoInterestsSelection,
                 feedState = ForYouFeedState.Success(
                     feed = saveableNewsResource
