@@ -114,7 +114,8 @@ class ForYouScreenTest {
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -124,7 +125,8 @@ class ForYouScreenTest {
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -215,7 +217,8 @@ class ForYouScreenTest {
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -225,7 +228,8 @@ class ForYouScreenTest {
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -322,7 +326,8 @@ class ForYouScreenTest {
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -332,7 +337,8 @@ class ForYouScreenTest {
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),
@@ -429,7 +435,8 @@ class ForYouScreenTest {
                                 name = "Android Dev",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = true
                         ),
@@ -439,7 +446,8 @@ class ForYouScreenTest {
                                 name = "Android Dev 2",
                                 imageUrl = "",
                                 twitter = "",
-                                mediumPage = ""
+                                mediumPage = "",
+                                bio = "",
                             ),
                             isFollowed = false
                         ),

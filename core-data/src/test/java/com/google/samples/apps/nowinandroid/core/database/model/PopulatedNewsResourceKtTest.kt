@@ -52,6 +52,7 @@ class PopulatedNewsResourceKtTest {
                     imageUrl = "imageUrl",
                     twitter = "twitter",
                     mediumPage = "mediumPage",
+                    bio = "bio",
                 )
             ),
             topics = listOf(
@@ -84,6 +85,7 @@ class PopulatedNewsResourceKtTest {
                         imageUrl = "imageUrl",
                         twitter = "twitter",
                         mediumPage = "mediumPage",
+                        bio = "bio",
                     )
                 ),
                 topics = listOf(

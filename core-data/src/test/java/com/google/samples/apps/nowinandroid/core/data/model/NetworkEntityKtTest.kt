@@ -37,6 +37,7 @@ class NetworkEntityKtTest {
             imageUrl = "something",
             twitter = "twitter",
             mediumPage = "mediumPage",
+            bio = "bio",
         )
         val entity = networkModel.asEntity()
 

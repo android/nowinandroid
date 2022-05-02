@@ -38,6 +38,8 @@ data class AuthorEntity(
     val twitter: String,
     @ColumnInfo(name = "medium_page", defaultValue = "")
     val mediumPage: String,
+    @ColumnInfo(defaultValue = "")
+    val bio: String,
 )
 
 fun AuthorEntity.asExternalModel() = Author(
@@ -46,4 +48,5 @@ fun AuthorEntity.asExternalModel() = Author(
     imageUrl = imageUrl,
     twitter = twitter,
     mediumPage = mediumPage,
+    bio = bio,
 )

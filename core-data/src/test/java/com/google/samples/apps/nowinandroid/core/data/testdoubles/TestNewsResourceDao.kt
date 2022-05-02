@@ -123,6 +123,7 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
             imageUrl = "imageUrl",
             twitter = "twitter",
             mediumPage = "mediumPage",
+            bio = "bio",
         )
     ),
     topics = listOf(

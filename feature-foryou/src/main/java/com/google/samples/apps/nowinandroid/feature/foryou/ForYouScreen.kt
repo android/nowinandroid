@@ -406,7 +406,8 @@ fun ForYouScreenTopicSelection() {
                         name = "Android Dev",
                         imageUrl = "",
                         twitter = "",
-                        mediumPage = ""
+                        mediumPage = "",
+                        bio = "",
                     ),
                     isFollowed = false
                 ),
@@ -416,7 +417,8 @@ fun ForYouScreenTopicSelection() {
                         name = "Android Dev 2",
                         imageUrl = "",
                         twitter = "",
-                        mediumPage = ""
+                        mediumPage = "",
+                        bio = "",
                     ),
                     isFollowed = false
                 ),
@@ -426,7 +428,8 @@ fun ForYouScreenTopicSelection() {
                         name = "Android Dev 3",
                         imageUrl = "",
                         twitter = "",
-                        mediumPage = ""
+                        mediumPage = "",
+                        bio = "",
                     ),
                     isFollowed = false
                 )

@@ -29,4 +29,5 @@ data class NetworkAuthor(
     val imageUrl: String,
     val twitter: String,
     val mediumPage: String,
+    val bio: String,
 )

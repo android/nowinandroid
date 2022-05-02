@@ -25,4 +25,5 @@ fun NetworkAuthor.asEntity() = AuthorEntity(
     imageUrl = imageUrl,
     twitter = twitter,
     mediumPage = mediumPage,
+    bio = bio,
 )

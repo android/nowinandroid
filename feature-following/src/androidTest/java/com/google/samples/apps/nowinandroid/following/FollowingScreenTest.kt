@@ -236,7 +236,8 @@ private val testAuthors = listOf(
             name = "Android Dev",
             imageUrl = "",
             twitter = "",
-            mediumPage = ""
+            mediumPage = "",
+            bio = "",
         ),
         isFollowed = true
     ),
@@ -246,7 +247,8 @@ private val testAuthors = listOf(
             name = "Android Dev 2",
             imageUrl = "",
             twitter = "",
-            mediumPage = ""
+            mediumPage = "",
+            bio = "",
         ),
         isFollowed = false
     ),
@@ -256,7 +258,8 @@ private val testAuthors = listOf(
             name = "Android Dev 3",
             imageUrl = "",
             twitter = "",
-            mediumPage = ""
+            mediumPage = "",
+            bio = "",
         ),
         isFollowed = false
     )

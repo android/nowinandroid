@@ -315,6 +315,7 @@ private val newsResource = NewsResource(
             imageUrl = "",
             twitter = "",
             mediumPage = "",
+            bio = "",
         )
     ),
     topics = listOf(

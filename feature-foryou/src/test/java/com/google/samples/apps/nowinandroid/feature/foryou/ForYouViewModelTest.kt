@@ -66,12 +66,13 @@ class ForYouViewModelTest {
         val feedState: ForYouFeedState,
     )
 
-    private val ForYouViewModel.uiState get() =
-        combine(
-            interestsSelectionState,
-            feedState,
-            ::ForYouUiState
-        )
+    private val ForYouViewModel.uiState
+        get() =
+            combine(
+                interestsSelectionState,
+                feedState,
+                ::ForYouUiState
+            )
 
     @Test
     fun stateIsInitiallyLoading() = runTest {
@@ -208,7 +209,8 @@ class ForYouViewModelTest {
                                     name = "Android Dev",
                                     imageUrl = "",
                                     twitter = "",
-                                    mediumPage = ""
+                                    mediumPage = "",
+                                    bio = "",
                                 ),
                                 isFollowed = false
                             ),
@@ -218,7 +220,8 @@ class ForYouViewModelTest {
                                     name = "Android Dev 2",
                                     imageUrl = "",
                                     twitter = "",
-                                    mediumPage = ""
+                                    mediumPage = "",
+                                    bio = "",
                                 ),
                                 isFollowed = false
                             ),
@@ -228,7 +231,8 @@ class ForYouViewModelTest {
                                     name = "Android Dev 3",
                                     imageUrl = "",
                                     twitter = "",
-                                    mediumPage = ""
+                                    mediumPage = "",
+                                    bio = "",
                                 ),
                                 isFollowed = false
                             )
@@ -302,7 +306,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -312,7 +317,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -322,7 +328,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -481,7 +488,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -491,7 +499,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -501,7 +510,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -559,7 +569,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -569,7 +580,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -579,7 +591,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -635,7 +648,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -645,7 +659,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -655,7 +670,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -741,7 +757,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -751,7 +768,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = true
                                 ),
@@ -761,7 +779,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -819,7 +838,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -829,7 +849,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = true
                                 ),
@@ -839,7 +860,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -895,7 +917,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -905,7 +928,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = true
                                 ),
@@ -915,7 +939,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -999,7 +1024,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1009,7 +1035,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1019,7 +1046,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -1094,7 +1122,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1104,7 +1133,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1114,7 +1144,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -1317,7 +1348,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1327,7 +1359,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1337,7 +1370,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -1418,7 +1452,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1428,7 +1463,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 2",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 ),
@@ -1438,7 +1474,8 @@ class ForYouViewModelTest {
                                         name = "Android Dev 3",
                                         imageUrl = "",
                                         twitter = "",
-                                        mediumPage = ""
+                                        mediumPage = "",
+                                        bio = "",
                                     ),
                                     isFollowed = false
                                 )
@@ -1496,21 +1533,24 @@ private val sampleAuthors = listOf(
         name = "Android Dev",
         imageUrl = "",
         twitter = "",
-        mediumPage = ""
+        mediumPage = "",
+        bio = "",
     ),
     Author(
         id = "1",
         name = "Android Dev 2",
         imageUrl = "",
         twitter = "",
-        mediumPage = ""
+        mediumPage = "",
+        bio = "",
     ),
     Author(
         id = "2",
         name = "Android Dev 3",
         imageUrl = "",
         twitter = "",
-        mediumPage = ""
+        mediumPage = "",
+        bio = "",
     )
 )
 
@@ -1570,7 +1610,8 @@ private val sampleNewsResources = listOf(
                 name = "Android Dev",
                 imageUrl = "",
                 twitter = "",
-                mediumPage = ""
+                mediumPage = "",
+                bio = "",
             )
         )
     ),
@@ -1601,7 +1642,8 @@ private val sampleNewsResources = listOf(
                 name = "Android Dev 2",
                 imageUrl = "",
                 twitter = "",
-                mediumPage = ""
+                mediumPage = "",
+                bio = "",
             )
         )
     ),
@@ -1630,7 +1672,8 @@ private val sampleNewsResources = listOf(
                 name = "Android Dev 2",
                 imageUrl = "",
                 twitter = "",
-                mediumPage = ""
+                mediumPage = "",
+                bio = "",
             )
         )
     ),
