@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs.TOPIC_ID_ARG
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
@@ -50,6 +51,25 @@ class TopicViewModelTest {
             topicsRepository = topicsRepository,
             newsRepository = newsRepository
         )
+    }
+
+    @Test
+    fun uiStateAuthor_whenSuccess_matchesTopicFromRepository() = runTest {
+        viewModel.uiState.test {
+            awaitItem()
+            topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
+            topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+            val item = awaitItem()
+            assertTrue(item.topicState is TopicUiState.Success)
+
+            val successTopicState = item.topicState as TopicUiState.Success
+            val topicFromRepository = topicsRepository.getTopic(
+                testInputTopics[0].topic.id
+            ).first()
+
+            assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
+            cancel()
+        }
     }
 
     @Test
