@@ -54,6 +54,7 @@ class PopulatedEpisodeKtTest {
                     imageUrl = "imageUrl",
                     twitter = "twitter",
                     mediumPage = "mediumPage",
+                    bio = "bio",
                 )
             ),
         )
@@ -87,6 +88,7 @@ class PopulatedEpisodeKtTest {
                         imageUrl = "imageUrl",
                         twitter = "twitter",
                         mediumPage = "mediumPage",
+                        bio = "bio",
                     )
                 ),
             ),

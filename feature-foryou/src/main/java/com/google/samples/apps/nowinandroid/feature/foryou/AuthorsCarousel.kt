@@ -132,15 +132,36 @@ fun AuthorCarouselPreview() {
             AuthorsCarousel(
                 authors = listOf(
                     FollowableAuthor(
-                        Author("1", "Android Dev", "", "", ""),
+                        Author(
+                            id = "1",
+                            name = "Android Dev",
+                            imageUrl = "",
+                            twitter = "",
+                            mediumPage = "",
+                            bio = "",
+                        ),
                         false
                     ),
                     FollowableAuthor(
-                        Author("2", "Android Dev2", "", "", ""),
-                        true
+                        author = Author(
+                            id = "2",
+                            name = "Android Dev2",
+                            imageUrl = "",
+                            twitter = "",
+                            mediumPage = "",
+                            bio = "",
+                        ),
+                        isFollowed = true
                     ),
                     FollowableAuthor(
-                        Author("3", "Android Dev3", "", "", ""),
+                        Author(
+                            id = "3",
+                            name = "Android Dev3",
+                            imageUrl = "",
+                            twitter = "",
+                            mediumPage = "",
+                            bio = "",
+                        ),
                         false
                     )
                 ),
@@ -156,7 +177,14 @@ fun AuthorItemPreview() {
     MaterialTheme {
         Surface {
             AuthorItem(
-                author = Author("0", "Android Dev", "", "", ""),
+                author = Author(
+                    id = "0",
+                    name = "Android Dev",
+                    imageUrl = "",
+                    twitter = "",
+                    mediumPage = "",
+                    bio = "",
+                ),
                 following = true,
                 onAuthorClick = { }
             )

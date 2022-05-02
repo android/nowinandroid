@@ -2717,462 +2717,528 @@ object FakeDataSource {
       "name": "Márton Braun",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "2",
       "name": "Greg Hartrell",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "3",
       "name": "Simona Stojanovic",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "4",
       "name": "Andrew Flynn",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "5",
       "name": "Jon Boekenoogen",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "6",
       "name": "Florina Muntenescu",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "7",
       "name": "Lidia Gaymond",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "8",
       "name": "Vicki Amin",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "9",
       "name": "Marcel Pintó",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "10",
       "name": "Krish Vitaldevara",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "11",
       "name": "Gerry Fan",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "12",
       "name": "Pietro Maggi",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "13",
       "name": "Rohan Shah",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "14",
       "name": "Dave Burke",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "15",
       "name": "Meghan Mehta",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "16",
       "name": "Anna Bernbaum",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "17",
       "name": "Adarsh Fernando",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "18",
       "name": "Madan Ankapura",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "19",
       "name": "Kateryna Semenova",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "20",
       "name": "Rahul Ravikumar",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "21",
       "name": "Chris Craik",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "22",
       "name": "Marcel Pintó Biescas",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "23",
       "name": "Alex Vanyo",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "24",
       "name": "Manuel Vicente Vivo",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "25",
       "name": "Arjun Dayal",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "26",
       "name": "Murat Yener",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "27",
       "name": "Alex Saveau",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "28",
       "name": "Paul Lammertsma",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "29",
       "name": "Caren Chang",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "30",
       "name": "Mayuri Khinvasara Khabya",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "31",
       "name": "Romain Guy",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "32",
       "name": "Chet Hasse",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "33",
       "name": "Tor Norbye",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "34",
       "name": "Nicole Laure",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "35",
       "name": "Yigit Boyar",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "36",
       "name": "Sean McQuillan",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "37",
       "name": "Ben Weiss",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "38",
       "name": "Chet Haase",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "39",
       "name": "Carmen Jackson",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "40",
       "name": "Manuel Vivo",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "41",
       "name": "TJ Dahunsi",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "42",
       "name": "Shailen Tuli",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "43",
       "name": "Murat",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "44",
       "name": "Kailiang Chen",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "45",
       "name": "Meghan",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "46",
       "name": "Jeremy Walker",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "47",
       "name": "Don Turner",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "48",
       "name": "Lilian Young",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "49",
       "name": "Wenhung Teng",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "50",
       "name": "Charcoal Chen",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "51",
       "name": "Mike Yerou",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "52",
       "name": "Peter Visontay",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "53",
       "name": "Marcelo Hernandez",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "54",
       "name": "Daniel Santiago",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "55",
       "name": "Brad Corso",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "56",
       "name": "Jonathan Koren",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "57",
       "name": "Anna-Chiara Bellini",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "58",
       "name": "Amanda Alexander",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "59",
       "name": "Android Developers Backstage",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "60",
       "name": "Nicole Borrelli",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "61",
       "name": "Dan Saadati",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "62",
       "name": "Nick Butcher",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "63",
       "name": "Ian Lake",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "64",
       "name": "Diana Wong",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "65",
       "name": "Patricia Correa",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     },
     {
       "id": "66",
       "name": "The Modern Android Development Team",
       "mediumPage": "",
       "twitter": "",
-      "imageUrl": ""
+      "imageUrl": "",
+      "bio": ""
     }
   ]
     """.trimIndent()

@@ -71,6 +71,7 @@ fun NetworkNewsResource.authorEntityShells() =
             imageUrl = "",
             twitter = "",
             mediumPage = "",
+            bio = "",
         )
     }
 

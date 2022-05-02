@@ -358,7 +358,8 @@ private fun testAuthorEntity(
     name = name,
     imageUrl = "",
     twitter = "",
-    mediumPage = ""
+    mediumPage = "",
+    bio = "",
 )
 
 private fun testTopicEntity(

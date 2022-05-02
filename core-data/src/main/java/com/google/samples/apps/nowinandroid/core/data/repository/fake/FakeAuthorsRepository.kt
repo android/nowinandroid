@@ -53,6 +53,7 @@ class FakeAuthorsRepository @Inject constructor(
                     imageUrl = it.imageUrl,
                     twitter = it.twitter,
                     mediumPage = it.mediumPage,
+                    bio = it.bio,
                 )
             }
         )
