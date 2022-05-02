@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -59,6 +60,10 @@ class FakeAuthorsRepository @Inject constructor(
         )
     }
         .flowOn(ioDispatcher)
+
+    override fun getAuthorStream(id: String): Flow<Author> {
+        return getAuthorsStream().map { it.first { author -> author.id == id } }
+    }
 
     override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
         niaPreferences.setFollowedAuthorIds(followedAuthorIds)

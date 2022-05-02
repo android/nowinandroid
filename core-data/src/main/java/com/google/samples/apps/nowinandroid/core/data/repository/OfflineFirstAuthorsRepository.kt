@@ -41,6 +41,11 @@ class OfflineFirstAuthorsRepository @Inject constructor(
     private val niaPreferences: NiaPreferences,
 ) : AuthorsRepository {
 
+    override fun getAuthorStream(id: String): Flow<Author> =
+        authorDao.getAuthorEntityStream(id).map {
+            it.asExternalModel()
+        }
+
     override fun getAuthorsStream(): Flow<List<Author>> =
         authorDao.getAuthorEntitiesStream()
             .map { it.map(AuthorEntity::asExternalModel) }

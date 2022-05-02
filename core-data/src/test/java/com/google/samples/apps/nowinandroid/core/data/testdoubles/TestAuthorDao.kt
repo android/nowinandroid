@@ -43,6 +43,10 @@ class TestAuthorDao : AuthorDao {
     override fun getAuthorEntitiesStream(): Flow<List<AuthorEntity>> =
         entitiesStateFlow
 
+    override fun getAuthorEntityStream(authorId: String): Flow<AuthorEntity> {
+        throw NotImplementedError("Unused in tests")
+    }
+
     override suspend fun insertOrIgnoreAuthors(authorEntities: List<AuthorEntity>): List<Long> {
         entitiesStateFlow.value = authorEntities
         // Assume no conflicts on insert

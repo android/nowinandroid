@@ -70,21 +70,21 @@ fun TopicsTabContent(
 @Composable
 fun AuthorsTabContent(
     authors: List<FollowableAuthor>,
-    onAuthorClick: () -> Unit,
+    onAuthorClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp)
     ) {
-        authors.forEach { followableTopic ->
+        authors.forEach { followableAuthor ->
             item {
                 InterestsItem(
-                    name = followableTopic.author.name,
-                    following = followableTopic.isFollowed,
-                    topicImageUrl = followableTopic.author.imageUrl,
-                    onClick = onAuthorClick,
-                    onFollowButtonClick = { onFollowButtonClick(followableTopic.author.id, it) },
+                    name = followableAuthor.author.name,
+                    following = followableAuthor.isFollowed,
+                    topicImageUrl = followableAuthor.author.imageUrl,
+                    onClick = { onAuthorClick(followableAuthor.author.id) },
+                    onFollowButtonClick = { onFollowButtonClick(followableAuthor.author.id, it) },
                     iconModifier = Modifier.clip(CircleShape)
                 )
             }
