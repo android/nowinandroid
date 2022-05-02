@@ -28,6 +28,12 @@ plugins {
     id("nowinandroid.spotless")
 }
 
+android {
+    defaultConfig {
+        consumerProguardFiles("consumer-proguard-rules.pro")
+    }
+}
+
 // Setup protobuf configuration, generating lite Java and Kotlin classes
 protobuf {
     protoc {
