@@ -61,6 +61,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature-author"))
     implementation(project(":feature-interests"))
     implementation(project(":feature-foryou"))
     implementation(project(":feature-topic"))

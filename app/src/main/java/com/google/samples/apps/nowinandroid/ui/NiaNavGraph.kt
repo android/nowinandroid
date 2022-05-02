@@ -27,6 +27,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.samples.apps.nowinandroid.feature.author.AuthorDestinations
+import com.google.samples.apps.nowinandroid.feature.author.AuthorDestinationsArgs
+import com.google.samples.apps.nowinandroid.feature.author.AuthorRoute
+import com.google.samples.apps.nowinandroid.feature.author.InterestsScreens.AUTHOR_SCREEN
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.InterestsDestinations
@@ -69,7 +73,7 @@ fun NiaNavGraph(
             composable(InterestsDestinations.INTERESTS_DESTINATION) {
                 InterestsRoute(
                     navigateToTopic = { navController.navigate("$TOPIC_SCREEN/$it") },
-                    navigateToAuthor = { /* TO IMPLEMENT */ },
+                    navigateToAuthor = { navController.navigate("$AUTHOR_SCREEN/$it") },
                 )
             }
             composable(
@@ -81,6 +85,16 @@ fun NiaNavGraph(
                 )
             ) {
                 TopicRoute(onBackClick = { navController.popBackStack() })
+            }
+            composable(
+                AuthorDestinations.AUTHOR_ROUTE,
+                arguments = listOf(
+                    navArgument(AuthorDestinationsArgs.AUTHOR_ID_ARG) {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                AuthorRoute(onBackClick = { navController.popBackStack() })
             }
         }
     }

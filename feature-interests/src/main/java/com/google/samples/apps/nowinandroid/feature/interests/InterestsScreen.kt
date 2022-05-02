@@ -44,7 +44,7 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 @Composable
 fun InterestsRoute(
     modifier: Modifier = Modifier,
-    navigateToAuthor: () -> Unit,
+    navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
     viewModel: InterestsViewModel = hiltViewModel()
 ) {
@@ -69,7 +69,7 @@ fun InterestsScreen(
     tabState: InterestsTabState,
     followAuthor: (String, Boolean) -> Unit,
     followTopic: (String, Boolean) -> Unit,
-    navigateToAuthor: () -> Unit,
+    navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
     switchTab: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -105,8 +105,13 @@ fun InterestsScreen(
                 )
             is InterestsUiState.Interests ->
                 InterestsContent(
-                    tabState, switchTab, uiState, navigateToTopic, followTopic,
-                    navigateToAuthor, followAuthor
+                    tabState = tabState,
+                    switchTab = switchTab,
+                    uiState = uiState,
+                    navigateToTopic = navigateToTopic,
+                    followTopic = followTopic,
+                    navigateToAuthor = navigateToAuthor,
+                    followAuthor = followAuthor
                 )
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
@@ -120,7 +125,7 @@ private fun InterestsContent(
     uiState: InterestsUiState.Interests,
     navigateToTopic: (String) -> Unit,
     followTopic: (String, Boolean) -> Unit,
-    navigateToAuthor: () -> Unit,
+    navigateToAuthor: (String) -> Unit,
     followAuthor: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -146,7 +151,7 @@ private fun InterestsContent(
             1 -> {
                 AuthorsTabContent(
                     authors = uiState.authors,
-                    onAuthorClick = { navigateToAuthor() },
+                    onAuthorClick = navigateToAuthor,
                     onFollowButtonClick = followAuthor,
                     modifier = Modifier.padding(top = 8.dp)
                 )

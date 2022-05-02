@@ -30,6 +30,14 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface AuthorDao {
+    @Query(
+        value = """
+        SELECT * FROM authors
+        WHERE id = :authorId
+    """
+    )
+    fun getAuthorEntityStream(authorId: String): Flow<AuthorEntity>
+
     @Query(value = "SELECT * FROM authors")
     fun getAuthorEntitiesStream(): Flow<List<AuthorEntity>>
 
