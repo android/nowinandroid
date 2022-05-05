@@ -25,6 +25,6 @@ android {
     configureKotlinAndroid(this)
 
     defaultConfig {
-        targetSdk = 31
+        targetSdk = 32
     }
 }
