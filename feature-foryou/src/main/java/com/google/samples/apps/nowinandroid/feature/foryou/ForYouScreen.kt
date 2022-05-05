@@ -343,7 +343,7 @@ private fun SingleTopicButton(
 ) {
     Surface(
         modifier = Modifier
-            .width(264.dp)
+            .width(312.dp)
             .heightIn(min = 56.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
@@ -363,7 +363,7 @@ private fun SingleTopicButton(
                 text = name,
                 style = NiaTypography.titleSmall,
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(horizontal = 12.dp)
                     .weight(1f),
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -544,7 +544,7 @@ fun ForYouScreenTopicSelection() {
                         FollowableTopic(
                             topic = Topic(
                                 id = "2",
-                                name = "Tools",
+                                name = "Publishing and Distribution",
                                 shortDescription = "",
                                 longDescription = "",
                                 url = "",
