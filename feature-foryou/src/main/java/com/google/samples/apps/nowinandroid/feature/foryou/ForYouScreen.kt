@@ -22,11 +22,13 @@ import androidx.annotation.IntRange
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -53,8 +55,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -63,6 +67,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -114,6 +119,7 @@ fun ForYouRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ForYouScreen(
     windowSizeClass: WindowSizeClass,
@@ -126,68 +132,71 @@ fun ForYouScreen(
     modifier: Modifier = Modifier,
 ) {
     NiaGradientBackground {
-        // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
-        //       https://issuetracker.google.com/issues/230514914
-        //       https://issuetracker.google.com/issues/231320714
-        BoxWithConstraints(
-            modifier = modifier
-        ) {
-            val numberOfColumns = when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
-                else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
-            }
-
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                item {
-                    Spacer(
-                        // TODO: Replace with windowInsetsTopHeight after
-                        //       https://issuetracker.google.com/issues/230383055
-                        Modifier.windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                        )
+        Scaffold(
+            topBar = {
+                NiaTopAppBar(
+                    titleRes = R.string.top_app_bar_title,
+                    navigationIcon = Icons.Filled.Search,
+                    navigationIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                    actionIcon = Icons.Outlined.AccountCircle,
+                    actionIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
                     )
+                )
+            },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
+            //       https://issuetracker.google.com/issues/230514914
+            //       https://issuetracker.google.com/issues/231320714
+            BoxWithConstraints(
+                modifier = modifier
+                    .padding(innerPadding)
+                    .consumedWindowInsets(innerPadding)
+            ) {
+                val numberOfColumns = when (windowSizeClass.widthSizeClass) {
+                    WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
+                    else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
                 }
 
-                item {
-                    NiaTopAppBar(
-                        titleRes = R.string.top_app_bar_title,
-                        navigationIcon = Icons.Filled.Search,
-                        navigationIconContentDescription = stringResource(
-                            id = R.string.top_app_bar_navigation_button_content_desc
-                        ),
-                        actionIcon = Icons.Outlined.AccountCircle,
-                        actionIconContentDescription = stringResource(
-                            id = R.string.top_app_bar_navigation_button_content_desc
-                        ),
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    InterestsSelection(
+                        interestsSelectionState = interestsSelectionState,
+                        showLoadingUIIfLoading = true,
+                        onAuthorCheckedChanged = onAuthorCheckedChanged,
+                        onTopicCheckedChanged = onTopicCheckedChanged,
+                        saveFollowedTopics = saveFollowedTopics
                     )
-                }
 
-                InterestsSelection(
-                    interestsSelectionState = interestsSelectionState,
-                    showLoadingUIIfLoading = true,
-                    onAuthorCheckedChanged = onAuthorCheckedChanged,
-                    onTopicCheckedChanged = onTopicCheckedChanged,
-                    saveFollowedTopics = saveFollowedTopics
-                )
+                    Feed(
+                        feedState = feedState,
+                        // Avoid showing a second loading wheel if we already are for the interests
+                        // selection
+                        showLoadingUIIfLoading =
+                        interestsSelectionState !is ForYouInterestsSelectionState.Loading,
+                        numberOfColumns = numberOfColumns,
+                        onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
+                    )
 
-                Feed(
-                    feedState = feedState,
-                    // Avoid showing a second loading wheel if we already are for the interests
-                    // selection
-                    showLoadingUIIfLoading =
-                    interestsSelectionState !is ForYouInterestsSelectionState.Loading,
-                    numberOfColumns = numberOfColumns,
-                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
-                )
-
-                item {
-                    Spacer(
-                        // TODO: Replace with windowInsetsBottomHeight after
-                        //       https://issuetracker.google.com/issues/230383055
-                        Modifier.windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                    item {
+                        Spacer(
+                            // TODO: Replace with windowInsetsBottomHeight after
+                            //       https://issuetracker.google.com/issues/230383055
+                            Modifier.windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
