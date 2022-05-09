@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
+import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -68,7 +69,7 @@ private interface RetrofitNiANetworkApi {
     ): List<NetworkChangeList>
 }
 
-private const val NiABaseUrl = "https://staging-url.com/"
+private const val NiABaseUrl = BuildConfig.BACKEND_URL
 
 /**
  * Wrapper for data provided from the [NiABaseUrl]
