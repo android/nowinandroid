@@ -37,6 +37,9 @@ android {
     }
 
     buildTypes {
+        val debug by getting {
+            applicationIdSuffix = ".debug"
+        }
         val release by getting {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -46,6 +49,12 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
             proguardFiles("benchmark-rules.pro")
+        }
+        val staging by creating {
+            initWith(debug)
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks.add("debug")
+            applicationIdSuffix = ".staging"
         }
     }
     packagingOptions {
