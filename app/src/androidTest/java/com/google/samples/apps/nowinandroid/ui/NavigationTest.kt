@@ -183,7 +183,7 @@ class NavigationTest {
     }
 
     @Test
-    fun navigationBar_multipleBackStackFollowing() {
+    fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
             onNodeWithText("Android Studio").performClick() // TODO: Grab string from fake data
@@ -191,7 +191,7 @@ class NavigationTest {
             // Switch tab
             onNodeWithText(forYou).performClick()
 
-            // Come back to Following
+            // Come back to Interests
             onNodeWithText(interests).performClick()
 
             // Verify we're not in the list of interests

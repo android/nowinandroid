@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature-following"))
+    implementation(project(":feature-interests"))
     implementation(project(":feature-foryou"))
     implementation(project(":feature-topic"))
 

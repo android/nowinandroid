@@ -220,8 +220,8 @@ private sealed class Destination(
         iconTextId = R.string.saved
     )
 
-    object Following : Destination(
-        route = NiaDestinations.FOLLOWING_ROUTE,
+    object Interests : Destination(
+        route = NiaDestinations.INTERESTS_ROUTE,
         selectedIcon = Icons.Filled.Grid3x3,
         unselectedIcon = Icons.Outlined.Grid3x3,
         iconTextId = R.string.interests
@@ -231,5 +231,5 @@ private sealed class Destination(
 private val TOP_LEVEL_DESTINATIONS = listOf(
     Destination.ForYou,
     // TODO: Add destinations here, see b/226359180.
-    Destination.Following
+    Destination.Interests
 )

@@ -20,7 +20,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.InterestsScreens.TOPIC
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs.TOPIC_ID_ARG
 
 object InterestsDestinations {
-    const val INTERESTS_ROUTE = "interests"
+    const val INTERESTS_DESTINATION = "interests_destination"
     const val TOPIC_ROUTE = "$TOPIC_SCREEN/{$TOPIC_ID_ARG}"
 }
 

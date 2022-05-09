@@ -27,8 +27,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.feature.following.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.InterestsDestinations
 import com.google.samples.apps.nowinandroid.feature.topic.InterestsScreens.TOPIC_SCREEN
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs
@@ -63,10 +63,10 @@ fun NiaNavGraph(
             Text("SAVED")
         }
         navigation(
-            startDestination = InterestsDestinations.INTERESTS_ROUTE,
-            route = NiaDestinations.FOLLOWING_ROUTE
+            startDestination = InterestsDestinations.INTERESTS_DESTINATION,
+            route = NiaDestinations.INTERESTS_ROUTE
         ) {
-            composable(InterestsDestinations.INTERESTS_ROUTE) {
+            composable(InterestsDestinations.INTERESTS_DESTINATION) {
                 InterestsRoute(
                     navigateToTopic = { navController.navigate("$TOPIC_SCREEN/$it") },
                     navigateToAuthor = { /* TO IMPLEMENT */ },
