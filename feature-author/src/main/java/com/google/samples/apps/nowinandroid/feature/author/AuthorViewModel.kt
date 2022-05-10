@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +44,7 @@ class AuthorViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val authorId: String = checkNotNull(
-        savedStateHandle[AuthorDestinationsArgs.AUTHOR_ID_ARG]
+        savedStateHandle[AuthorDestination.authorIdArg]
     )
 
     // Observe the followed authors, as they could change over time.

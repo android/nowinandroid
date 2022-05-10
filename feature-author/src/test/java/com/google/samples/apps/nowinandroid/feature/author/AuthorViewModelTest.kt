@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.author.AuthorDestinationsArgs.AUTHOR_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -49,7 +49,7 @@ class AuthorViewModelTest {
         viewModel = AuthorViewModel(
             savedStateHandle = SavedStateHandle(
                 mapOf(
-                    AUTHOR_ID_ARG to testInputAuthors[0].author.id
+                    AuthorDestination.authorIdArg to testInputAuthors[0].author.id
                 )
             ),
             authorsRepository = authorsRepository,

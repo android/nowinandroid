@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -28,15 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoStories
-import androidx.compose.material.icons.filled.Bookmarks
-import androidx.compose.material.icons.filled.Grid3x3
-import androidx.compose.material.icons.filled.Upcoming
-import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.outlined.Bookmarks
-import androidx.compose.material.icons.outlined.Grid3x3
-import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -56,25 +46,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
+import com.google.samples.apps.nowinandroid.navigation.NiaTopLevelNavigation
+import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_DESTINATIONS
+import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
         val navController = rememberNavController()
-        val navigationActions = remember(navController) {
-            NiaNavigationActions(navController)
+        val niaTopLevelNavigation = remember(navController) {
+            NiaTopLevelNavigation(navController)
         }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -88,7 +80,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 bottomBar = {
                     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
                         NiABottomBar(
-                            navigationActions = navigationActions,
+                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination
                         )
                     }
@@ -105,13 +97,13 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 ) {
                     if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
                         NiANavRail(
-                            navigationActions = navigationActions,
+                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination,
                             modifier = Modifier.safeDrawingPadding()
                         )
                     }
 
-                    NiaNavGraph(
+                    NiaNavHost(
                         windowSizeClass = windowSizeClass,
                         navController = navController,
                         modifier = Modifier
@@ -126,7 +118,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
 
 @Composable
 private fun NiANavRail(
-    navigationActions: NiaNavigationActions,
+    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
@@ -136,7 +128,7 @@ private fun NiANavRail(
                 currentDestination?.hierarchy?.any { it.route == destination.route } == true
             NavigationRailItem(
                 selected = selected,
-                onClick = { navigationActions.navigateToTopLevelDestination(destination.route) },
+                onClick = { onNavigateToTopLevelDestination(destination) },
                 icon = {
                     Icon(
                         if (selected) destination.selectedIcon else destination.unselectedIcon,
@@ -151,7 +143,7 @@ private fun NiANavRail(
 
 @Composable
 private fun NiABottomBar(
-    navigationActions: NiaNavigationActions,
+    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?
 ) {
     // Wrap the navigation bar in a surface so the color behind the system
@@ -172,9 +164,7 @@ private fun NiABottomBar(
                         currentDestination?.hierarchy?.any { it.route == destination.route } == true
                     NavigationBarItem(
                         selected = selected,
-                        onClick = {
-                            navigationActions.navigateToTopLevelDestination(destination.route)
-                        },
+                        onClick = { onNavigateToTopLevelDestination(destination) },
                         icon = {
                             Icon(
                                 if (selected) {
@@ -192,44 +182,3 @@ private fun NiABottomBar(
         }
     }
 }
-
-private sealed class Destination(
-    val route: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    @StringRes val iconTextId: Int
-) {
-    object ForYou : Destination(
-        route = NiaDestinations.FOR_YOU_ROUTE,
-        selectedIcon = Icons.Filled.Upcoming,
-        unselectedIcon = Icons.Outlined.Upcoming,
-        iconTextId = R.string.for_you
-    )
-
-    object Episodes : Destination(
-        route = NiaDestinations.EPISODES_ROUTE,
-        selectedIcon = Icons.Filled.AutoStories,
-        unselectedIcon = Icons.Outlined.AutoStories,
-        iconTextId = R.string.episodes
-    )
-
-    object Saved : Destination(
-        route = NiaDestinations.SAVED_ROUTE,
-        selectedIcon = Icons.Filled.Bookmarks,
-        unselectedIcon = Icons.Outlined.Bookmarks,
-        iconTextId = R.string.saved
-    )
-
-    object Interests : Destination(
-        route = NiaDestinations.INTERESTS_ROUTE,
-        selectedIcon = Icons.Filled.Grid3x3,
-        unselectedIcon = Icons.Outlined.Grid3x3,
-        iconTextId = R.string.interests
-    )
-}
-
-private val TOP_LEVEL_DESTINATIONS = listOf(
-    Destination.ForYou,
-    // TODO: Add destinations here, see b/226359180.
-    Destination.Interests
-)

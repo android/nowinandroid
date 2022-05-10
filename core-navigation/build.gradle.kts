@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.google.samples.apps.nowinandroid.feature.topic
-
-import com.google.samples.apps.nowinandroid.feature.topic.InterestsScreens.TOPIC_SCREEN
-import com.google.samples.apps.nowinandroid.feature.topic.TopicDestinationsArgs.TOPIC_ID_ARG
-
-object InterestsDestinations {
-    const val INTERESTS_DESTINATION = "interests_destination"
-    const val TOPIC_ROUTE = "$TOPIC_SCREEN/{$TOPIC_ID_ARG}"
+plugins {
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.ksp)
+    id("nowinandroid.spotless")
 }
 
-object TopicDestinationsArgs {
-    const val TOPIC_ID_ARG = "topicId"
-}
+dependencies {
+    api(libs.androidx.hilt.navigation.compose)
+    api(libs.androidx.navigation.compose)
 
-object InterestsScreens {
-    const val TOPIC_SCREEN = "topic"
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

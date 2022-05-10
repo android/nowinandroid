@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":core-data"))
     implementation(project(":core-common"))
+    implementation(project(":core-navigation"))
 
     testImplementation(project(":core-testing"))
     androidTestImplementation(project(":core-testing"))

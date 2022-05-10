@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +43,7 @@ class TopicViewModel @Inject constructor(
     newsRepository: NewsRepository
 ) : ViewModel() {
 
-    private val topicId: String = checkNotNull(savedStateHandle[TopicDestinationsArgs.TOPIC_ID_ARG])
+    private val topicId: String = checkNotNull(savedStateHandle[TopicDestination.topicIdArg])
 
     // Observe the followed topics, as they could change over time.
     private val followedTopicIdsStream: Flow<Result<Set<String>>> =
