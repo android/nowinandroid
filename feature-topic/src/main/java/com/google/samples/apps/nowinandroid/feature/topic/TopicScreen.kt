@@ -18,9 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,12 +43,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
@@ -117,7 +114,8 @@ internal fun TopicScreen(
                 TopicBody(
                     name = topicState.followableTopic.topic.name,
                     description = topicState.followableTopic.topic.longDescription,
-                    news = newsState
+                    news = newsState,
+                    imageUrl = topicState.followableTopic.topic.imageUrl
                 )
             }
         }
@@ -136,30 +134,27 @@ internal fun TopicScreen(
 private fun LazyListScope.TopicBody(
     name: String,
     description: String,
-    news: NewsUiState
+    news: NewsUiState,
+    imageUrl: String
 ) {
     // TODO: Show icon if available
     item {
-        TopicHeader(name, description)
+        TopicHeader(name, description, imageUrl)
     }
 
     TopicCards(news)
 }
 
 @Composable
-private fun TopicHeader(name: String, description: String) {
+private fun TopicHeader(name: String, description: String, imageUrl: String) {
     Column(
         modifier = Modifier.padding(horizontal = 24.dp)
     ) {
-        Box(
-            modifier = Modifier
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
                 .size(216.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(Color.Black, Color.White)
-                    )
-                )
                 .padding(bottom = 12.dp)
         )
         Text(name, style = MaterialTheme.typography.displayMedium)
@@ -198,7 +193,10 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
 private fun TopicBodyPreview() {
     MaterialTheme {
         LazyColumn {
-            TopicBody("Jetpack Compose", "Lorem ipsum maximum", NewsUiState.Success(emptyList()))
+            TopicBody(
+                "Jetpack Compose", "Lorem ipsum maximum",
+                NewsUiState.Success(emptyList()), ""
+            )
         }
     }
 }

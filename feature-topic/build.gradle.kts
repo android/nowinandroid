@@ -43,6 +43,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewModelCompose)
 
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
