@@ -40,12 +40,11 @@ class BaselineProfileGenerator {
             // through your most important UI.
             startActivityAndWait()
             device.waitForIdle()
-            listOf("Episodes", "Saved", "Interests").forEach {
-                device.run {
-                    findObject(By.text(it))
-                        .click()
-                    waitForIdle()
-                }
+
+            device.run {
+                findObject(By.text("Interests"))
+                    .click()
+                waitForIdle()
             }
         }
 }
