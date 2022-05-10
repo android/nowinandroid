@@ -76,6 +76,7 @@ dependencies {
     implementation(project(":feature-topic"))
 
     implementation(project(":core-ui"))
+    implementation(project(":core-navigation"))
 
     implementation(project(":sync"))
 
@@ -88,8 +89,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.material3)
     implementation(libs.androidx.profileinstaller)
