@@ -225,6 +225,7 @@ private fun TopicToolbar(
         NiaFilterChip(
             checked = selected,
             onCheckedChange = onFollowClick,
+            modifier = Modifier.padding(end = 24.dp)
         ) {
             if (selected) {
                 Text("FOLLOWING")
