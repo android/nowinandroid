@@ -157,8 +157,7 @@ private fun AuthorHeader(author: Author) {
             modifier = Modifier
                 .size(216.dp)
                 .align(Alignment.CenterHorizontally)
-                .clip(CircleShape)
-                .padding(bottom = 12.dp),
+                .clip(CircleShape),
             contentScale = ContentScale.Crop,
             model = author.imageUrl,
             contentDescription = "Author profile picture",
@@ -216,6 +215,7 @@ private fun AuthorToolbar(
         }
         val selected = uiState.isFollowed
         NiaFilterChip(
+            modifier = Modifier.padding(horizontal = 16.dp),
             checked = selected,
             onCheckedChange = onFollowClick,
         ) {
