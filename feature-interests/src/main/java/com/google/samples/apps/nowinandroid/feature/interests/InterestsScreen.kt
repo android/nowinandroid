@@ -16,7 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -27,16 +30,21 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
@@ -63,6 +71,7 @@ fun InterestsRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun InterestsScreen(
     uiState: InterestsUiState,
@@ -74,46 +83,56 @@ fun InterestsScreen(
     switchTab: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(
-            // TODO: Replace with windowInsetsTopHeight after
-            //       https://issuetracker.google.com/issues/230383055
-            Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-            )
-        )
-
-        NiaTopAppBar(
-            titleRes = R.string.interests,
-            navigationIcon = Icons.Filled.Search,
-            navigationIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
-            ),
-            actionIcon = Icons.Filled.MoreVert,
-            actionIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
-            )
-        )
-        when (uiState) {
-            InterestsUiState.Loading ->
-                LoadingWheel(
-                    modifier = modifier,
-                    contentDesc = stringResource(id = R.string.interests_loading),
+    NiaGradientBackground {
+        Scaffold(
+            topBar = {
+                NiaTopAppBar(
+                    titleRes = R.string.interests,
+                    navigationIcon = Icons.Filled.Search,
+                    navigationIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                    actionIcon = Icons.Filled.MoreVert,
+                    actionIconContentDescription = stringResource(
+                        id = R.string.top_app_bar_navigation_button_content_desc
+                    ),
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                    )
                 )
-            is InterestsUiState.Interests ->
-                InterestsContent(
-                    tabState = tabState,
-                    switchTab = switchTab,
-                    uiState = uiState,
-                    navigateToTopic = navigateToTopic,
-                    followTopic = followTopic,
-                    navigateToAuthor = navigateToAuthor,
-                    followAuthor = followAuthor
-                )
-            is InterestsUiState.Empty -> InterestsEmptyScreen()
+            },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
+            //       https://issuetracker.google.com/issues/230514914
+            //       https://issuetracker.google.com/issues/231320714
+            BoxWithConstraints(
+                modifier = modifier
+                    .padding(innerPadding)
+                    .consumedWindowInsets(innerPadding)
+            ) {
+                when (uiState) {
+                    InterestsUiState.Loading ->
+                        LoadingWheel(
+                            modifier = modifier,
+                            contentDesc = stringResource(id = R.string.interests_loading),
+                        )
+                    is InterestsUiState.Interests ->
+                        InterestsContent(
+                            tabState = tabState,
+                            switchTab = switchTab,
+                            uiState = uiState,
+                            navigateToTopic = navigateToTopic,
+                            followTopic = followTopic,
+                            navigateToAuthor = navigateToAuthor,
+                            followAuthor = followAuthor
+                        )
+                    is InterestsUiState.Empty -> InterestsEmptyScreen()
+                }
+            }
         }
     }
 }
