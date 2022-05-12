@@ -103,6 +103,7 @@ jobs:
           arch: x86
           disable-animations: true
           disk-size: 1500M
+          heap-size: 512M
           script: ./gradlew connectedAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload test reports
