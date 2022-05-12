@@ -1,4 +1,6 @@
-Now in Android App [WIP]
+![Now in Android](docs/images/nia-splash.jpg "Now in Android")
+
+Now in Android App [Work in progress 🚧]
 ==================
 
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
@@ -9,6 +11,8 @@ follows Android design and development best practices and is intended to be a us
 for developers. As a running app, it's intended to help developers keep up-to-date with the world
 of Android development by providing regular news updates.
 
+The app is currently in early stage development and is not yet available on the Play Store.
+
 # Features
 
 Now in Android displays content from the
@@ -16,7 +20,12 @@ Now in Android displays content from the
 links to recent videos, articles and other content. Users can also follow topics they are interested
 in or follow specific authors.
 
-<!-- TODO: Add screenshots -->
+## Screenshots
+
+![Screenshot showing For You screen](docs/images/screenshot-1-foryou.png "Screenshot showing For You screen") 
+![Screenshot showing Interests screen](docs/images/screenshot-2-interests.png "Screenshot showing Interests screen") 
+![Screenshot showing Topic detail screen](docs/images/screenshot-3-topicdetail.png "Screenshot showing Topic detail screen")
+
 
 # Development Environment
 
@@ -34,23 +43,72 @@ NOTE: Building the app using an M1 Mac will require the use of
 [the following bug](https://github.com/protocolbuffers/protobuf/issues/9397#issuecomment-1086138036)
 for more details.
 
-<!--
 # Architecture
 
-TODO (brief overview, link to another doc?)
+The Now in Android app follows the
+[official architecture guidance]([official architecture guidance](https://developer.android.com/topic/architecture))
+and is described in detail in the
+[architecture learning journey](docs/ArchitectureLearningJourney.md).
 
 # Build
 
-TODO (brief overview, link to another doc?
+The `debug` variant of `app` uses local data to allow immediate building and exploring the UI.
 
-# Testing + CI
+The `staging` and `release` variants of `app` make real network calls to a backend server, providing
+up-to-date data as new episodes of Now in Android are released. At this time, there is not a
+public backend available.
 
-TODO (brief overview, link to another doc?)
+The `benchmark` variant of `app` is used to test startup performance and generate a baseline profile
+(see below for more information).
+
+`app-nia-catalog` is a standalone app that displays the list of components that are stylized for
+Now in Android.
+
+# Testing
+
+To facilitate testing of components, Now in Android uses dependency injection with
+[Hilt](https://developer.android.com/training/dependency-injection/hilt-android).
+
+Most data layer components are defined as interfaces.
+Then, concrete implementations (with various dependencies) are bound to provide those interfaces to
+other components in the app.
+In tests, Now in Android notably does _not_ use any mocking libraries.
+Instead, the production implementations can be replaced with test doubles using Hilt's testing APIs
+(or via manual constructor injection for `ViewModel` tests).
+
+These test doubles implement the same interface as the production implementations, and generally
+provide a simplified (but still realistic) implementation with additional testing hooks.
+This results in less brittle tests that may exercise more production code, instead of just verifying
+specific calls against mocks.
+
+Examples:
+- In instrumentation tests, a temporary folder is used to store the user's preferences, which is
+  wiped after reach test.
+  This allows using the real `DataStore` and exercising all related code, instead of mocking the 
+  flow of data updates.
+
+- There are `Test` implementations of each repository, which implement the normal, full repository
+  interface and also provide test-only hooks.
+  `ViewModel` tests use these `Test` repositories, and thus can use the test-only hooks to
+  manipulate the the state of the `Test` repository and verify the resulting behavior, instead of
+  checking that specific repository methods were called.
 
 # UI
 
-TODO (brief overview, link to another doc?)
--->
+UI components are designed according to [Material 3 guidelines](https://m3.material.io/) and built
+entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
+
+The app has two themes: 
+
+- Dynamic color - uses colors based on the [user's current color theme](https://material.io/blog/announcing-material-you) (if supported)
+- Default theme - uses predefined colors when dynamic color is not supported
+
+Each theme also supports dark mode. 
+
+The app uses adaptive layouts to
+[support different screen sizes](https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes).
+
+Find out more about the [UI architecture here](docs/ArchitectureLearningJourney.md#ui-layer).
 
 # Baseline profiles
 
