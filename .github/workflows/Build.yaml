@@ -102,7 +102,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86
           disable-animations: true
-          disk-size: 800M
+          disk-size: 1500M
           script: ./gradlew connectedAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload test reports
