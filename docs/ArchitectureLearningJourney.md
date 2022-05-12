@@ -163,6 +163,8 @@ Repositories are the public API for other layers, they provide the _only_ way to
 
 Data is exposed as data streams. This means each client of the repository must be prepared to react to data changes. Data is not exposed as a snapshot (e.g. `getModel`) because there's no guarantee that it will still be valid by the time it is used.
 
+Reads are performed from local storage as the source of truth, therefore errors are not expected when reading from `Repository` instances. However, errors may occur when trying to reconcile data in local storage with remote sources. For more on error reconciliation, check the data synchronization section below.
+
 _Example: Read a list of authors_
 
 A list of Authors can be obtained by subscribing to `AuthorsRepository::getAuthorsStream` flow which emits `List<Authors>`.
@@ -220,9 +222,16 @@ A repository may depend on one or more data sources. For example, the `OfflineFi
 </table>
 
 
-Repositories are also responsible for liaising with any remote data sources. Repositories are syncable (they implement `Syncable`), which means they can synchronize data from a remote data source with a local data source.
 
-This is achieved in the `syncWith` method which takes a `Synchronizer` as a parameter. The `Synchronizer` will keep attempting to sync the repository until it successfully completes. In the case of errors, the sync is retried with exponential backoff.
+### Data synchronization
+
+Repositories are responsible for reconciling data in local storage with remote sources. Once data is obtained from a remote data source it is immediately written to local storage. The  updated data is emitted from local storage (Room) into the relevant data stream and received by any listening clients.
+
+This approach ensures that the read and write concerns of the app are separate and do not interfere with each other.
+
+In the case of errors during data synchronization, an exponential backoff strategy is employed. This is delegated to `WorkManager` via the `SyncWorker`, an implementation of the `Synchronizer` interface.
+
+See the `OfflineFirstNewsRepository.syncWith` for an example of data synchronization.
 
 
 ## UI Layer
