@@ -141,7 +141,7 @@ fun NewsResourceHeaderImage(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(topEnd = 24.dp, topStart = 24.dp))
+            .clip(RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp))
             .height(180.dp),
         contentScale = ContentScale.Crop,
         model = headerImageUrl,
