@@ -63,7 +63,6 @@ fun AuthorsCarousel(
                 onAuthorClick = { following ->
                     onAuthorClick(followableAuthor.author.id, following)
                 },
-                modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -90,12 +89,16 @@ fun AuthorItem(
                 role = Role.Button,
                 onValueChange = { newFollowing -> onAuthorClick(newFollowing) },
             )
-            .sizeIn(maxWidth = 48.dp)
+            .padding(vertical = 8.dp, horizontal = 4.dp)
+            .sizeIn(maxWidth = 56.dp)
             .semantics(mergeDescendants = true) {
                 stateDescription = "$followDescription ${author.name}"
             }
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
             AsyncImage(
                 modifier = Modifier
                     .size(48.dp)
