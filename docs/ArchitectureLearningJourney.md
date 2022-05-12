@@ -280,7 +280,7 @@ The `FollowingViewModel` exposes `uiState` as a `StateFlow<FollowingUiState>`. T
 
 
 
-*   List of authors (getAuthorsStream)
+*   List of authors (`getAuthorsStream`)
 *   List of author IDs which the current user is following
 *   List of topics
 *   List of topic IDs which the current user is following
