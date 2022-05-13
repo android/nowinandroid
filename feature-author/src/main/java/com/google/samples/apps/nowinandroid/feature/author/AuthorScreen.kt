@@ -155,6 +155,7 @@ private fun AuthorHeader(author: Author) {
     ) {
         AsyncImage(
             modifier = Modifier
+                .padding(bottom = 12.dp)
                 .size(216.dp)
                 .align(Alignment.CenterHorizontally)
                 .clip(CircleShape),
