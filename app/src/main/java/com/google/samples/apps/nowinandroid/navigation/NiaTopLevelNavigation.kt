@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Upcoming
 import androidx.compose.material.icons.outlined.Grid3x3
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.google.samples.apps.nowinandroid.feature.foryou.R.string.for_you
@@ -78,3 +79,15 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         iconTextId = interests
     )
 )
+
+/**
+ * @return true when the current destination is
+ * top level destination else false.
+ */
+fun NavDestination?.isTopLevelDestination(): Boolean {
+    return when (this?.route) {
+        ForYouDestination.route -> true
+        InterestsDestination.route -> true
+        else -> false
+    }
+}

@@ -59,6 +59,7 @@ import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.NiaTopLevelNavigation
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_DESTINATIONS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.navigation.isTopLevelDestination
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -79,10 +80,12 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
                     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
-                        NiABottomBar(
-                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
-                            currentDestination = currentDestination
-                        )
+                        if (currentDestination.isTopLevelDestination()) {
+                            NiABottomBar(
+                                onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
+                                currentDestination = currentDestination
+                            )
+                        }
                     }
                 }
             ) { padding ->
