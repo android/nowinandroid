@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@kotlin.Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
