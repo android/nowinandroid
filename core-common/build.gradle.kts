@@ -20,6 +20,10 @@ plugins {
     id("nowinandroid.spotless")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)

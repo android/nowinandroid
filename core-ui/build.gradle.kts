@@ -20,6 +20,10 @@ plugins {
     id("nowinandroid.spotless")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.ui"
+}
+
 dependencies {
     implementation(project(":core-model"))
 

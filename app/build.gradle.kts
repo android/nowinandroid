@@ -24,6 +24,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.samples.apps.nowinandroid"
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
         versionCode = 1

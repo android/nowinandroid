@@ -24,6 +24,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.samples.apps.nowinandroid.core.network"
     buildTypes {
         val staging by creating {
             initWith(getByName("debug"))

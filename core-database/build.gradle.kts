@@ -23,6 +23,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.samples.apps.nowinandroid.core.database"
     defaultConfig {
         // The schemas directory contains a schema file for each version of the Room database.
         // This is required to enable Room auto migrations.

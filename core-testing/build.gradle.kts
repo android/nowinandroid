@@ -19,6 +19,10 @@ plugins {
     id("nowinandroid.spotless")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.testing"
+}
+
 dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-data"))

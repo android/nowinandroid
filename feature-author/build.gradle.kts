@@ -23,6 +23,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.samples.apps.nowinandroid.feature.author"
     defaultConfig {
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }

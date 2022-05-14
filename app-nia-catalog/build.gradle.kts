@@ -20,6 +20,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.samples.apps.niacatalog"
     defaultConfig {
         applicationId = "com.google.samples.apps.niacatalog"
     }
