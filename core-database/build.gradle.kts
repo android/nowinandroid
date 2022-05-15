@@ -20,6 +20,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.ksp)
     id("nowinandroid.spotless")
+    id("nowinandroid.wtf.emulator")
 }
 
 android {

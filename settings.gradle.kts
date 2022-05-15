@@ -24,7 +24,7 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         // Register the AndroidX snapshot repository first so snapshots don't attempt (and fail)
         // to download from the non-snapshot repositories
@@ -37,6 +37,11 @@ dependencyResolutionManagement {
         }
         google()
         mavenCentral()
+        maven(url = "https://maven.emulator.wtf/releases/") {
+            content {
+                includeGroup("wtf.emulator")
+            }
+        }
     }
 }
 rootProject.name = "nowinandroid"

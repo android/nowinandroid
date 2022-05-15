@@ -22,6 +22,7 @@ buildscript {
 
     dependencies {
         classpath(libs.android.gradlePlugin)
+        classpath(libs.emulator.wtf.gradlePlugin)
         classpath(libs.kotlin.gradlePlugin)
         classpath(libs.kotlin.serializationPlugin)
         classpath(libs.hilt.gradlePlugin)

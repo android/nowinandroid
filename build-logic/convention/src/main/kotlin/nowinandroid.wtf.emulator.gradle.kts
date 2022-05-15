@@ -15,19 +15,13 @@
  */
 
 plugins {
-    `kotlin-dsl`
+    id("wtf.emulator.gradle")
 }
 
-group = "com.google.samples.apps.nowinandroid.buildlogic"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-dependencies {
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.spotless.gradlePlugin)
-    implementation(libs.emulator.wtf.gradlePlugin)
+emulatorwtf {
+    devices.set(listOf(
+        mapOf("model" to "Pixel2", "version" to 23),
+        mapOf("model" to "Pixel2", "version" to 27),
+        mapOf("model" to "Pixel2", "version" to 31),
+    ))
 }

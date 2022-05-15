@@ -19,6 +19,7 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
+    id("nowinandroid.wtf.emulator")
 }
 
 android {
