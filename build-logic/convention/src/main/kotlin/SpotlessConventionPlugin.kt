@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.getByType
 
 class SpotlessConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        with (target) {
+        with(target) {
             pluginManager.apply("com.diffplug.spotless")
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
