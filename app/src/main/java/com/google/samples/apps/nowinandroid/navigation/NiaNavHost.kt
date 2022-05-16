@@ -54,13 +54,11 @@ fun NiaNavHost(
         )
         interestsGraph(
             navigateToTopic = { navController.navigate("${TopicDestination.route}/$it") },
-            navigateToAuthor = { navController.navigate("${AuthorDestination.route}/$it") }
-        )
-        topicGraph(
-            onBackClick = { navController.popBackStack() }
-        )
-        authorGraph(
-            onBackClick = { navController.popBackStack() }
+            navigateToAuthor = { navController.navigate("${AuthorDestination.route}/$it") },
+            nestedGraphs = {
+                topicGraph(onBackClick = { navController.popBackStack() })
+                authorGraph(onBackClick = { navController.popBackStack() })
+            }
         )
     }
 }
