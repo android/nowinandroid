@@ -19,6 +19,7 @@ import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 @kotlin.Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("nowinandroid.android.library")
