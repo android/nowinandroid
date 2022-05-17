@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,8 +24,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons.Filled
-import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -105,10 +106,11 @@ private fun InterestContent(name: String, description: String, modifier: Modifie
 private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
-            imageVector = Filled.Android,
-            tint = Color.Magenta,
-            contentDescription = null,
             modifier = modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(4.dp),
+            imageVector = Icons.Filled.Person,
+            contentDescription = null, // decorative image
         )
     } else {
         AsyncImage(
