@@ -46,7 +46,7 @@ for more details.
 # Architecture
 
 The Now in Android app follows the
-[official architecture guidance]([official architecture guidance](https://developer.android.com/topic/architecture))
+[official architecture guidance](https://developer.android.com/topic/architecture) 
 and is described in detail in the
 [architecture learning journey](docs/ArchitectureLearningJourney.md).
 
