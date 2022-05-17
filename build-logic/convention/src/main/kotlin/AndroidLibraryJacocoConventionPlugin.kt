@@ -23,11 +23,12 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.withPlugin("com.android.library") {
-                pluginManager.apply("org.gradle.jacoco")
-                val extension = extensions.getByType<LibraryAndroidComponentsExtension>()
-                configureJacoco(extension)
+            with(pluginManager) {
+                apply("org.gradle.jacoco")
+                apply("com.android.library")
             }
+            val extension = extensions.getByType<LibraryAndroidComponentsExtension>()
+            configureJacoco(extension)
         }
     }
 
