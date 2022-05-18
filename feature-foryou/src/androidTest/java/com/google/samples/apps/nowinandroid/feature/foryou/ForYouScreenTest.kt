@@ -428,7 +428,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
