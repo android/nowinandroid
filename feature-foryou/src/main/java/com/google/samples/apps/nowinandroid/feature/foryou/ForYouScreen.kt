@@ -287,7 +287,7 @@ private fun LazyListScope.InterestsSelection(
                     ) {
                         Text(
                             text = stringResource(R.string.done),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
