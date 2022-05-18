@@ -12,7 +12,7 @@ By setting up convention plugins in `build-logic`, we can avoid duplicated build
 messy `subproject` configurations, without the pitfalls of the `buildSrc` directory.
 
 `build-logic` is an included build, as configured in the root
-[`settings.gradle`](../settings.gradle).
+[`settings.gradle.kts`](../settings.gradle.kts).
 
 Inside `build-logic` is a `convention` module, which defines a set of plugins that all normal
 modules can use to configure themselves.
