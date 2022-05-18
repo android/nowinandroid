@@ -39,11 +39,4 @@ dependencies {
     api(libs.hilt.android.testing)
 
     debugApi(libs.androidx.compose.ui.testManifest)
-
-    configurations.configureEach {
-        resolutionStrategy {
-            // Temporary workaround for https://issuetracker.google.com/174733673
-            force("org.objenesis:objenesis:2.6")
-        }
-    }
 }
