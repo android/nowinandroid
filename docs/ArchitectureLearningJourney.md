@@ -176,7 +176,7 @@ Whenever the list of authors changes (for example, when a new author is added), 
 
 To write data, the repository provides suspend functions. It is up to the caller to ensure that their execution is suitably scoped.
 
-_Example: Follow a topic _
+_Example: Follow a topic_
 
 Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
 
