@@ -47,7 +47,7 @@ The following diagram shows the events which occur and how data flows from the r
 ![Diagram showing how news resources are displayed on the For You screen](images/architecture-2-example.png "Diagram showing how news resources are displayed on the For You screen")
 
 
-Here's what's happening in each step. The easiest way to find the associated code is to load the project into Android Studio and search for the text in the Code column (handy shortcut: tap SHIFT twice).
+Here's what's happening in each step. The easiest way to find the associated code is to load the project into Android Studio and search for the text in the Code column (handy shortcut: tap <kbd>⇧ SHIFT</kbd> twice).
 
 
 <table>
@@ -176,7 +176,7 @@ Whenever the list of authors changes (for example, when a new author is added), 
 
 To write data, the repository provides suspend functions. It is up to the caller to ensure that their execution is suitably scoped.
 
-_Example: Follow a topic _
+_Example: Follow a topic_
 
 Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
 
@@ -280,7 +280,7 @@ The `FollowingViewModel` exposes `uiState` as a `StateFlow<FollowingUiState>`. T
 
 
 
-*   List of authors (getAuthorsStream)
+*   List of authors (`getAuthorsStream`)
 *   List of author IDs which the current user is following
 *   List of topics
 *   List of topic IDs which the current user is following
