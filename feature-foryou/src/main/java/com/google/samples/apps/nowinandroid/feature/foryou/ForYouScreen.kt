@@ -50,8 +50,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -90,6 +88,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
@@ -275,19 +274,15 @@ private fun LazyListScope.InterestsSelection(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Button(
+                    NiaFilledButton(
                         onClick = saveFollowedTopics,
                         enabled = interestsSelectionState.canSaveInterests,
                         modifier = Modifier
                             .padding(horizontal = 40.dp)
-                            .width(364.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onBackground
-                        )
+                            .width(364.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.done),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            text = stringResource(R.string.done)
                         )
                     }
                 }
