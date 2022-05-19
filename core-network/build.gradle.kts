@@ -23,22 +23,6 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
-android {
-    buildTypes {
-        val staging by creating {
-            initWith(getByName("debug"))
-            matchingFallbacks.add("debug")
-        }
-    }
-    // Force the staging variant to use the release source directory. This is necessary so that the
-    // staging variant uses the remote network.
-    sourceSets {
-        getByName("staging") {
-            java.srcDir("src/release/java")
-        }
-    }
-}
-
 secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
 }
