@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
@@ -55,7 +54,11 @@ fun AuthorsCarousel(
     onAuthorClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(modifier) {
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 24.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
                 author = followableAuthor.author,
@@ -89,8 +92,7 @@ fun AuthorItem(
                 role = Role.Button,
                 onValueChange = { newFollowing -> onAuthorClick(newFollowing) },
             )
-            .padding(vertical = 8.dp, horizontal = 4.dp)
-            .sizeIn(maxWidth = 56.dp)
+            .sizeIn(maxWidth = 48.dp)
             .semantics(mergeDescendants = true) {
                 stateDescription = "$followDescription ${author.name}"
             }
