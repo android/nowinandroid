@@ -92,7 +92,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -200,7 +201,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -314,7 +316,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -670,7 +673,10 @@ class ForYouScreenTest {
             )
 
         val firstFeedItem = composeTestRule
-            .onNodeWithText("Thanks for helping us reach 1M YouTube Subscribers", substring = true)
+            .onNodeWithText(
+                "Thanks for helping us reach 1M YouTube Subscribers",
+                substring = true
+            )
             .assertHasClickAction()
             .fetchSemanticsNode()
 
