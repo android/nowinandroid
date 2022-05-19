@@ -281,10 +281,7 @@ private fun LazyListScope.InterestsSelection(
                         enabled = interestsSelectionState.canSaveInterests,
                         modifier = Modifier
                             .padding(horizontal = 40.dp)
-                            .width(364.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onBackground
-                        )
+                            .width(364.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.done)
