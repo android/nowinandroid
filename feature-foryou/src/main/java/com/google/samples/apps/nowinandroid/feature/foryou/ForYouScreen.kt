@@ -90,6 +90,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
@@ -275,7 +276,7 @@ private fun LazyListScope.InterestsSelection(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Button(
+                    NiaFilledButton(
                         onClick = saveFollowedTopics,
                         enabled = interestsSelectionState.canSaveInterests,
                         modifier = Modifier
@@ -286,8 +287,7 @@ private fun LazyListScope.InterestsSelection(
                         )
                     ) {
                         Text(
-                            text = stringResource(R.string.done),
-                            style = MaterialTheme.typography.bodyMedium
+                            text = stringResource(R.string.done)
                         )
                     }
                 }
