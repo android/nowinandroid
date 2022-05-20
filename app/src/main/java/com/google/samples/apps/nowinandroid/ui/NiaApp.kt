@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,7 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -52,7 +50,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
@@ -149,35 +146,33 @@ private fun NiABottomBar(
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
     Surface(color = MaterialTheme.colorScheme.surface) {
-        CompositionLocalProvider(LocalRippleTheme provides ClearRippleTheme) {
-            NavigationBar(
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
-                    )
-                ),
-                tonalElevation = 0.dp
-            ) {
+        NavigationBar(
+            modifier = Modifier.windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                )
+            ),
+            tonalElevation = 0.dp
+        ) {
 
-                TOP_LEVEL_DESTINATIONS.forEach { destination ->
-                    val selected =
-                        currentDestination?.hierarchy?.any { it.route == destination.route } == true
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = { onNavigateToTopLevelDestination(destination) },
-                        icon = {
-                            Icon(
-                                if (selected) {
-                                    destination.selectedIcon
-                                } else {
-                                    destination.unselectedIcon
-                                },
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(stringResource(destination.iconTextId)) }
-                    )
-                }
+            TOP_LEVEL_DESTINATIONS.forEach { destination ->
+                val selected =
+                    currentDestination?.hierarchy?.any { it.route == destination.route } == true
+                NavigationBarItem(
+                    selected = selected,
+                    onClick = { onNavigateToTopLevelDestination(destination) },
+                    icon = {
+                        Icon(
+                            if (selected) {
+                                destination.selectedIcon
+                            } else {
+                                destination.unselectedIcon
+                            },
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(stringResource(destination.iconTextId)) }
+                )
             }
         }
     }
