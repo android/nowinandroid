@@ -58,12 +58,12 @@ class ForYouViewModelTest {
     }
 
     /**
-     * A pairing of [ForYouInterestsSelectionState] and [ForYouFeedState] for ease of testing
+     * A pairing of [ForYouInterestsSelectionUiState] and [ForYouFeedUiState] for ease of testing
      * state updates as a single flow.
      */
     private data class ForYouUiState(
-        val interestsSelectionState: ForYouInterestsSelectionState,
-        val feedState: ForYouFeedState,
+        val interestsSelectionState: ForYouInterestsSelectionUiState,
+        val feedState: ForYouFeedUiState,
     )
 
     private val ForYouViewModel.uiState
@@ -79,8 +79,8 @@ class ForYouViewModelTest {
         viewModel.uiState.test {
             assertEquals(
                 ForYouUiState(
-                    ForYouInterestsSelectionState.Loading,
-                    ForYouFeedState.Loading
+                    ForYouInterestsSelectionUiState.Loading,
+                    ForYouFeedUiState.Loading
                 ),
                 awaitItem()
             )
@@ -93,8 +93,8 @@ class ForYouViewModelTest {
         viewModel.uiState.test {
             assertEquals(
                 ForYouUiState(
-                    ForYouInterestsSelectionState.Loading,
-                    ForYouFeedState.Loading
+                    ForYouInterestsSelectionUiState.Loading,
+                    ForYouFeedUiState.Loading
                 ),
                 awaitItem()
             )
@@ -109,8 +109,8 @@ class ForYouViewModelTest {
         viewModel.uiState.test {
             assertEquals(
                 ForYouUiState(
-                    ForYouInterestsSelectionState.Loading,
-                    ForYouFeedState.Loading
+                    ForYouInterestsSelectionUiState.Loading,
+                    ForYouFeedUiState.Loading
                 ),
                 awaitItem()
             )
@@ -125,8 +125,8 @@ class ForYouViewModelTest {
         viewModel.uiState.test {
             assertEquals(
                 ForYouUiState(
-                    ForYouInterestsSelectionState.Loading,
-                    ForYouFeedState.Loading
+                    ForYouInterestsSelectionUiState.Loading,
+                    ForYouFeedUiState.Loading
                 ),
                 awaitItem()
             )
@@ -141,8 +141,8 @@ class ForYouViewModelTest {
         viewModel.uiState.test {
             assertEquals(
                 ForYouUiState(
-                    ForYouInterestsSelectionState.Loading,
-                    ForYouFeedState.Loading
+                    ForYouInterestsSelectionUiState.Loading,
+                    ForYouFeedUiState.Loading
                 ),
                 awaitItem()
             )
@@ -166,7 +166,7 @@ class ForYouViewModelTest {
             assertEquals(
                 ForYouUiState(
                     interestsSelectionState =
-                    ForYouInterestsSelectionState.WithInterestsSelection(
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -238,7 +238,7 @@ class ForYouViewModelTest {
                             )
                         ),
                     ),
-                    feedState = ForYouFeedState.Success(
+                    feedState = ForYouFeedUiState.Success(
                         feed = emptyList()
                     )
                 ),
@@ -263,7 +263,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -335,7 +335,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList()
                         )
                     ),
@@ -359,8 +359,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Loading
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Loading
                     ),
                     awaitItem()
                 )
@@ -370,8 +370,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = sampleNewsResources.map {
                                 SaveableNewsResource(
                                     newsResource = it,
@@ -400,8 +400,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Loading
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Loading
                     ),
                     awaitItem()
                 )
@@ -411,8 +411,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = sampleNewsResources.map {
                                 SaveableNewsResource(
                                     newsResource = it,
@@ -445,7 +445,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -517,7 +517,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList(),
                         )
                     ),
@@ -526,7 +526,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -598,14 +598,14 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Loading
+                        feedState = ForYouFeedUiState.Loading
                     ),
                     awaitItem()
                 )
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -677,7 +677,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[1],
@@ -714,7 +714,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -786,7 +786,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList(),
                         )
                     ),
@@ -795,7 +795,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -867,14 +867,14 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Loading
+                        feedState = ForYouFeedUiState.Loading
                     ),
                     awaitItem()
                 )
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -946,7 +946,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[1],
@@ -981,7 +981,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -1053,7 +1053,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList()
                         )
                     ),
@@ -1079,7 +1079,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -1151,7 +1151,7 @@ class ForYouViewModelTest {
                                 )
                             ),
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList()
                         )
                     ),
@@ -1181,8 +1181,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[1],
@@ -1223,8 +1223,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[0],
@@ -1262,8 +1262,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[1],
@@ -1305,7 +1305,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -1377,7 +1377,7 @@ class ForYouViewModelTest {
                                 )
                             )
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList()
                         )
                     ),
@@ -1409,7 +1409,7 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.WithInterestsSelection(
+                        ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = listOf(
                                 FollowableTopic(
                                     topic = Topic(
@@ -1481,7 +1481,7 @@ class ForYouViewModelTest {
                                 )
                             )
                         ),
-                        feedState = ForYouFeedState.Success(
+                        feedState = ForYouFeedUiState.Success(
                             feed = emptyList()
                         )
                     ),
@@ -1506,8 +1506,8 @@ class ForYouViewModelTest {
                 assertEquals(
                     ForYouUiState(
                         interestsSelectionState =
-                        ForYouInterestsSelectionState.NoInterestsSelection,
-                        feedState = ForYouFeedState.Success(
+                        ForYouInterestsSelectionUiState.NoInterestsSelection,
+                        feedState = ForYouFeedUiState.Success(
                             feed = listOf(
                                 SaveableNewsResource(
                                     newsResource = sampleNewsResources[1],
