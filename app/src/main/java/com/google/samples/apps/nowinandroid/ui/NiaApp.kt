@@ -80,8 +80,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 bottomBar = {
                     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
                         NiABottomBar(
-                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
-                            currentDestination = currentDestination
+                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo
                         )
                     }
                 }
@@ -143,8 +142,7 @@ private fun NiANavRail(
 
 @Composable
 private fun NiABottomBar(
-    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?
+    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit
 ) {
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
