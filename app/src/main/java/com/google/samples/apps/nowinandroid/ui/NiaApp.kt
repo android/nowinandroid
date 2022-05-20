@@ -69,7 +69,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
         val metricsStateHolder = PerformanceMetricsState.getForHierarchy(LocalView.current)
         val navController = rememberNavController()
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            metricsStateHolder.state?.addState("Navigation", "Jank at ${destination.route}")
+            metricsStateHolder.state?.addState("Navigation", "${destination.route}")
         }
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
