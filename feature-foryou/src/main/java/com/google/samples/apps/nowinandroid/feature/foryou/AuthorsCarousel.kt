@@ -104,10 +104,7 @@ fun AuthorItem(
                 stateDescription = "$followDescription ${author.name}"
             }
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
                 modifier = Modifier
                     .size(48.dp)
