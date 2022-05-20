@@ -35,6 +35,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.work.ktx)
     implementation(libs.hilt.ext.work)
