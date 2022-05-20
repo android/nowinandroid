@@ -22,16 +22,16 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 /**
  * A sealed hierarchy describing the interests selection state for the for you screen.
  */
-sealed interface ForYouInterestsSelectionState {
+sealed interface ForYouInterestsSelectionUiState {
     /**
      * The interests selection state is loading.
      */
-    object Loading : ForYouInterestsSelectionState
+    object Loading : ForYouInterestsSelectionUiState
 
     /**
      * There is no interests selection state.
      */
-    object NoInterestsSelection : ForYouInterestsSelectionState
+    object NoInterestsSelection : ForYouInterestsSelectionUiState
 
     /**
      * There is a interests selection state, with the given lists of topics and authors.
@@ -39,7 +39,7 @@ sealed interface ForYouInterestsSelectionState {
     data class WithInterestsSelection(
         val topics: List<FollowableTopic>,
         val authors: List<FollowableAuthor>
-    ) : ForYouInterestsSelectionState {
+    ) : ForYouInterestsSelectionUiState {
         /**
          * True if the current in-progress selection can be saved.
          */

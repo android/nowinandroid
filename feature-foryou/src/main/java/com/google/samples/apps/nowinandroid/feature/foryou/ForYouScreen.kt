@@ -122,8 +122,8 @@ fun ForYouRoute(
 @Composable
 fun ForYouScreen(
     windowSizeClass: WindowSizeClass,
-    interestsSelectionState: ForYouInterestsSelectionState,
-    feedState: ForYouFeedState,
+    interestsSelectionState: ForYouInterestsSelectionUiState,
+    feedState: ForYouFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -182,7 +182,7 @@ fun ForYouScreen(
                         // Avoid showing a second loading wheel if we already are for the interests
                         // selection
                         showLoadingUIIfLoading =
-                        interestsSelectionState !is ForYouInterestsSelectionState.Loading,
+                        interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
                         numberOfColumns = numberOfColumns,
                         onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
                     )
@@ -211,14 +211,14 @@ fun ForYouScreen(
  * states.
  */
 private fun LazyListScope.InterestsSelection(
-    interestsSelectionState: ForYouInterestsSelectionState,
+    interestsSelectionState: ForYouInterestsSelectionUiState,
     showLoadingUIIfLoading: Boolean,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit
 ) {
     when (interestsSelectionState) {
-        ForYouInterestsSelectionState.Loading -> {
+        ForYouInterestsSelectionUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
                     LoadingWheel(
@@ -230,8 +230,8 @@ private fun LazyListScope.InterestsSelection(
                 }
             }
         }
-        ForYouInterestsSelectionState.NoInterestsSelection -> Unit
-        is ForYouInterestsSelectionState.WithInterestsSelection -> {
+        ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
+        is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
             item {
                 Text(
                     text = stringResource(R.string.onboarding_guidance_title),
@@ -293,7 +293,7 @@ private fun LazyListScope.InterestsSelection(
 
 @Composable
 private fun TopicSelection(
-    interestsSelectionState: ForYouInterestsSelectionState.WithInterestsSelection,
+    interestsSelectionState: ForYouInterestsSelectionUiState.WithInterestsSelection,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -407,13 +407,13 @@ fun TopicIcon(
  * states.
  */
 private fun LazyListScope.Feed(
-    feedState: ForYouFeedState,
+    feedState: ForYouFeedUiState,
     showLoadingUIIfLoading: Boolean,
     @IntRange(from = 1) numberOfColumns: Int,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
 ) {
     when (feedState) {
-        ForYouFeedState.Loading -> {
+        ForYouFeedUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
                     LoadingWheel(
@@ -425,7 +425,7 @@ private fun LazyListScope.Feed(
                 }
             }
         }
-        is ForYouFeedState.Success -> {
+        is ForYouFeedUiState.Success -> {
             items(
                 feedState.feed.chunked(numberOfColumns)
             ) { saveableNewsResources ->
@@ -491,8 +491,8 @@ fun ForYouScreenLoading() {
         NiaTheme {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionState.Loading,
-                feedState = ForYouFeedState.Loading,
+                interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                feedState = ForYouFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -512,7 +512,7 @@ fun ForYouScreenTopicSelection() {
         NiaTheme {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
                     topics = listOf(
                         FollowableTopic(
                             topic = Topic(
@@ -584,7 +584,7 @@ fun ForYouScreenTopicSelection() {
                         )
                     )
                 ),
-                feedState = ForYouFeedState.Success(
+                feedState = ForYouFeedUiState.Success(
                     feed = saveableNewsResource,
                 ),
                 onAuthorCheckedChanged = { _, _ -> },
@@ -606,8 +606,8 @@ fun PopulatedFeed() {
         NiaTheme {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionState.NoInterestsSelection,
-                feedState = ForYouFeedState.Success(
+                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                feedState = ForYouFeedUiState.Success(
                     feed = saveableNewsResource
                 ),
                 onTopicCheckedChanged = { _, _ -> },
