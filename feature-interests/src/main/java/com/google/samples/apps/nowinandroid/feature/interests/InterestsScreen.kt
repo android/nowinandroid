@@ -33,10 +33,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.addPerformanceMetricsState
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
@@ -50,7 +52,6 @@ fun InterestsRoute(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val tabState by viewModel.tabState.collectAsState()
-
     InterestsScreen(
         uiState = uiState,
         tabState = tabState,
@@ -61,6 +62,7 @@ fun InterestsRoute(
         switchTab = viewModel::switchTab,
         modifier = modifier
     )
+    LocalView.current.addPerformanceMetricsState("Interests", "$tabState")
 }
 
 @Composable
