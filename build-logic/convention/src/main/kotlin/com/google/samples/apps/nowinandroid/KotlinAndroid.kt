@@ -49,13 +49,13 @@ fun Project.configureKotlinAndroid(
             allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
 
             freeCompilerArgs = freeCompilerArgs + listOf(
-                "-Xopt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.RequiresOptIn",
                 // Enable experimental coroutines APIs, including Flow
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xopt-in=kotlinx.coroutines.FlowPreview",
-                "-Xopt-in=kotlin.Experimental",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.coroutines.FlowPreview",
+                "-opt-in=kotlin.Experimental",
                 // Enable experimental kotlinx serialization APIs
-                "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
             )
 
             // Set JVM target to 1.8
