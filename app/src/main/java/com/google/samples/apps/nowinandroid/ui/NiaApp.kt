@@ -46,8 +46,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.metrics.performance.PerformanceMetricsState
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -64,7 +66,11 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 @Composable
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
+        val metricsStateHolder = PerformanceMetricsState.getForHierarchy(LocalView.current)
         val navController = rememberNavController()
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            metricsStateHolder.state?.addState("Navigation", "Jank at ${destination.route}")
+        }
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
         }

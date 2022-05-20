@@ -13,6 +13,7 @@ androidxEspresso = "3.3.0"
 androidxHiltNavigationCompose = "1.0.0"
 androidxLifecycle = "2.5.0-beta01"
 androidxMacroBenchmark = "1.1.0-rc02"
+androidxMetrics = "1.0.0-alpha01"
 androidxNavigation = "2.4.0-rc01"
 androidxProfileinstaller = "1.2.0-beta01"
 androidxSavedState = "1.1.0"
@@ -71,6 +72,7 @@ androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", ve
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-savedstate-ktx = { group = "androidx.savedstate", name = "savedstate-ktx", version.ref= "androidxSavedState"}
