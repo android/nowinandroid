@@ -32,9 +32,9 @@ object DatabaseModule {
     @Singleton
     fun providesNiADatabase(
         @ApplicationContext context: Context,
-    ): NiADatabase = Room.databaseBuilder(
+    ): NiaDatabase = Room.databaseBuilder(
         context,
-        NiADatabase::class.java,
+        NiaDatabase::class.java,
         "nia-database"
     ).build()
 }

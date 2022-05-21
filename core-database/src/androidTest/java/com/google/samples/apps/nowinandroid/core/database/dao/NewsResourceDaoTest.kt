@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.dao
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.google.samples.apps.nowinandroid.core.database.NiADatabase
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
@@ -41,14 +41,14 @@ class NewsResourceDaoTest {
     private lateinit var episodeDao: EpisodeDao
     private lateinit var topicDao: TopicDao
     private lateinit var authorDao: AuthorDao
-    private lateinit var db: NiADatabase
+    private lateinit var db: NiaDatabase
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
             context,
-            NiADatabase::class.java
+            NiaDatabase::class.java
         ).build()
         newsResourceDao = db.newsResourceDao()
         episodeDao = db.episodeDao()

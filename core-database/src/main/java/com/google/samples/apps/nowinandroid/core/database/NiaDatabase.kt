@@ -61,7 +61,7 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
     InstantConverter::class,
     NewsResourceTypeConverter::class,
 )
-abstract class NiADatabase : RoomDatabase() {
+abstract class NiaDatabase : RoomDatabase() {
     abstract fun topicDao(): TopicDao
     abstract fun authorDao(): AuthorDao
     abstract fun episodeDao(): EpisodeDao
