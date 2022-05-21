@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiANetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -32,8 +32,8 @@ interface NetworkModule {
 
     @Binds
     fun bindsNiANetwork(
-        niANetwork: FakeNiANetwork
-    ): NiANetwork
+        niANetwork: FakeNiaNetwork
+    ): NiaNetwork
 
     companion object {
         @Provides

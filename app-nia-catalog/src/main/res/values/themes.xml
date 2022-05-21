@@ -15,5 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <style name="Theme.NiACatalog" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.NiaCatalog" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

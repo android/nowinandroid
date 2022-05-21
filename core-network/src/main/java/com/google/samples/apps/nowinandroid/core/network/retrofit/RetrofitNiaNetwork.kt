@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
@@ -37,7 +37,7 @@ import retrofit2.http.Query
 /**
  * Retrofit API declaration for NIA Network API
  */
-private interface RetrofitNiANetworkApi {
+private interface RetrofitNiaNetworkApi {
     @GET(value = "topics")
     suspend fun getTopics(
         @Query("id") ids: List<String>?,
@@ -69,10 +69,10 @@ private interface RetrofitNiANetworkApi {
     ): List<NetworkChangeList>
 }
 
-private const val NiABaseUrl = BuildConfig.BACKEND_URL
+private const val NiaBaseUrl = BuildConfig.BACKEND_URL
 
 /**
- * Wrapper for data provided from the [NiABaseUrl]
+ * Wrapper for data provided from the [NiaBaseUrl]
  */
 @Serializable
 private data class NetworkResponse<T>(
@@ -80,15 +80,15 @@ private data class NetworkResponse<T>(
 )
 
 /**
- * [Retrofit] backed [NiANetwork]
+ * [Retrofit] backed [NiaNetwork]
  */
 @Singleton
-class RetrofitNiANetwork @Inject constructor(
+class RetrofitNiaNetwork @Inject constructor(
     networkJson: Json
-) : NiANetwork {
+) : NiaNetwork {
 
     private val networkApi = Retrofit.Builder()
-        .baseUrl(NiABaseUrl)
+        .baseUrl(NiaBaseUrl)
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(
@@ -101,7 +101,7 @@ class RetrofitNiANetwork @Inject constructor(
         )
         .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
         .build()
-        .create(RetrofitNiANetworkApi::class.java)
+        .create(RetrofitNiaNetworkApi::class.java)
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data
