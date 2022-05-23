@@ -42,7 +42,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -55,8 +54,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.core.ui.ClearRippleTheme
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.ui.rememberMetricsStateHolder
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.NiaTopLevelNavigation
@@ -68,8 +67,7 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
         val navController = rememberNavController()
-        val metricsHolder = rememberMetricsStateHolder()
-        DisposableEffect(navController, metricsHolder) {
+        JankMetricDisposableEffect(navController) { metricsHolder ->
             val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
                 metricsHolder.state?.addState("Navigation", destination.route.toString())
             }

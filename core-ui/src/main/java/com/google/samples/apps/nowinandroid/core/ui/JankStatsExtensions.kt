@@ -17,6 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.DisposableEffectResult
+import androidx.compose.runtime.DisposableEffectScope
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
@@ -52,3 +55,19 @@ fun JankMetricEffect(
         reportMetric(metrics)
     }
 }
+
+/**
+ * Convenience function to work with [PerformanceMetricsState] state that needs to be cleaned up.
+ * The side effect is re-launched if any of the [keys] value is not equal to the previous composition.
+ */
+@Composable
+fun JankMetricDisposableEffect(
+    vararg keys: Any?,
+    reportMetric: DisposableEffectScope.(state: PerformanceMetricsState.MetricsStateHolder) -> DisposableEffectResult
+) {
+    val metrics = rememberMetricsStateHolder()
+    DisposableEffect(metrics, *keys) {
+        reportMetric(this, metrics)
+    }
+}
+
