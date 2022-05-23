@@ -44,6 +44,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
@@ -320,7 +321,25 @@ private fun TopicSelection(
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val lazyGridState = rememberLazyGridState()
+    JankMetricEffect(lazyGridState) { metricsHolder ->
+        combine(
+            snapshotFlow { lazyGridState.isScrollInProgress },
+            snapshotFlow { lazyGridState.firstVisibleItemIndex },
+        ) { isScrollInProgress, firstVisibleItemIndex ->
+            if (isScrollInProgress) {
+                metricsHolder.state?.addState(
+                    "ForYou:TopicSelection:Scrolling",
+                    "index=${firstVisibleItemIndex}"
+                )
+            } else {
+                metricsHolder.state?.removeState("ForYou:TopicSelection:Scrolling")
+            }
+        }.collect()
+    }
+
     LazyHorizontalGrid(
+        state = lazyGridState,
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
