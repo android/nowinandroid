@@ -369,7 +369,7 @@ private fun SingleTopicButton(
             )
             NiaToggleButton(
                 checked = isSelected,
-                onCheckedChange = { checked -> onClick(topicId, !isSelected) },
+                onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
                     Icon(
                         imageVector = NiaIcons.Add, contentDescription = name,
@@ -631,9 +631,9 @@ private val saveableNewsResource = listOf(
             episodeId = "52",
             title = "Thanks for helping us reach 1M YouTube Subscribers",
             content = "Thank you everyone for following the Now in Android series " +
-                "and everything the Android Developers YouTube channel has to offer. " +
-                "During the Android Developer Summit, our YouTube channel reached 1 " +
-                "million subscribers! Here’s a small video to thank you all.",
+                    "and everything the Android Developers YouTube channel has to offer. " +
+                    "During the Android Developer Summit, our YouTube channel reached 1 " +
+                    "million subscribers! Here’s a small video to thank you all.",
             url = "https://youtu.be/-fJ6poHQrjM",
             headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
             publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
@@ -658,9 +658,9 @@ private val saveableNewsResource = listOf(
             episodeId = "52",
             title = "Transformations and customisations in the Paging Library",
             content = "A demonstration of different operations that can be performed " +
-                "with Paging. Transformations like inserting separators, when to " +
-                "create a new pager, and customisation options for consuming " +
-                "PagingData.",
+                    "with Paging. Transformations like inserting separators, when to " +
+                    "create a new pager, and customisation options for consuming " +
+                    "PagingData.",
             url = "https://youtu.be/ZARz0pjm5YM",
             headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
             publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
