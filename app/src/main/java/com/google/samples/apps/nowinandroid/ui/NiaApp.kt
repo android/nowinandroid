@@ -155,16 +155,15 @@ private fun NiABottomBar(
             ),
             tonalElevation = 0.dp
         ) {
-
-            var selected by rememberSaveable {
+            var indexOfSelectedItem by rememberSaveable {
                 mutableStateOf(0)
             }
-            TOP_LEVEL_DESTINATIONS.forEachIndexed { index, destination ->
-                val isSelect = selected == index
+            TOP_LEVEL_DESTINATIONS.forEachIndexed { itemIndex, destination ->
+                val isSelect = indexOfSelectedItem == itemIndex
                 NavigationBarItem(
                     selected = isSelect,
                     onClick = {
-                        selected = index
+                        indexOfSelectedItem = itemIndex
                         onNavigateToTopLevelDestination(destination)
                     },
                     icon = {
