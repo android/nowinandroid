@@ -17,8 +17,25 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalView
 import androidx.metrics.performance.PerformanceMetricsState
 
 fun View.addPerformanceMetricsState(stateName: String, state: String) {
     PerformanceMetricsState.getForHierarchy(this).state?.addState(stateName, state)
+}
+
+/**
+ * Retrieves [PerformanceMetricsState.MetricsStateHolder] from current [LocalView] and
+ * remembers it until the View changes.
+ * @see PerformanceMetricsState.getForHierarchy
+ */
+@Composable
+fun rememberMetricsStateHolder(): PerformanceMetricsState.MetricsStateHolder {
+    val localView = LocalView.current
+
+    return remember(localView) {
+        PerformanceMetricsState.getForHierarchy(localView)
+    }
 }
