@@ -65,7 +65,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
         }
-
+        var indexOfSelectedItem by rememberSaveable {
+            mutableStateOf(0)
+        }
         NiaBackground {
             Scaffold(
                 modifier = Modifier,
@@ -74,8 +76,11 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 bottomBar = {
                     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
                         NiABottomBar(
+                            indexOfSelectedItem = indexOfSelectedItem,
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo
-                        )
+                        ) { selectedIndex ->
+                            indexOfSelectedItem = selectedIndex
+                        }
                     }
                 }
             ) { padding ->
@@ -90,9 +95,12 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 ) {
                     if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
                         NiANavRail(
+                            indexOfSelectedItem = indexOfSelectedItem,
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             modifier = Modifier.safeDrawingPadding()
-                        )
+                        ) { selectedIndex ->
+                            indexOfSelectedItem = selectedIndex
+                        }
                     }
 
                     NiaNavHost(
@@ -110,19 +118,19 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
 
 @Composable
 private fun NiANavRail(
+    indexOfSelectedItem: Int,
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     modifier: Modifier = Modifier,
+    onSelectedItem: (Int) -> Unit
 ) {
     NavigationRail(modifier = modifier) {
-        var indexOfSelectedItem by rememberSaveable {
-            mutableStateOf(0)
-        }
+
         TOP_LEVEL_DESTINATIONS.forEachIndexed { itemIndex, destination ->
             val isSelect = indexOfSelectedItem == itemIndex
             NavigationRailItem(
                 selected = isSelect,
                 onClick = {
-                    indexOfSelectedItem = itemIndex
+                    onSelectedItem(itemIndex)
                     onNavigateToTopLevelDestination(destination)
                 },
                 icon = {
@@ -139,7 +147,9 @@ private fun NiANavRail(
 
 @Composable
 private fun NiABottomBar(
-    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit
+    indexOfSelectedItem: Int,
+    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
+    onSelectedItem: (Int) -> Unit
 ) {
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
@@ -152,15 +162,13 @@ private fun NiABottomBar(
             ),
             tonalElevation = 0.dp
         ) {
-            var indexOfSelectedItem by rememberSaveable {
-                mutableStateOf(0)
-            }
+
             TOP_LEVEL_DESTINATIONS.forEachIndexed { itemIndex, destination ->
                 val isSelect = indexOfSelectedItem == itemIndex
                 NavigationBarItem(
                     selected = isSelect,
                     onClick = {
-                        indexOfSelectedItem = itemIndex
+                        onSelectedItem(itemIndex)
                         onNavigateToTopLevelDestination(destination)
                     },
                     icon = {
