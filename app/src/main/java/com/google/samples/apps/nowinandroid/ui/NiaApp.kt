@@ -49,8 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
@@ -70,7 +68,6 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
         }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
 
         NiaBackground {
             Scaffold(
@@ -97,7 +94,6 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                     if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
                         NiANavRail(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
-                            currentDestination = currentDestination,
                             modifier = Modifier.safeDrawingPadding()
                         )
                     }
@@ -118,19 +114,23 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
 @Composable
 private fun NiANavRail(
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
     NavigationRail(modifier = modifier) {
-        TOP_LEVEL_DESTINATIONS.forEach { destination ->
-            val selected =
-                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+        var indexOfSelectedItem by rememberSaveable {
+            mutableStateOf(0)
+        }
+        TOP_LEVEL_DESTINATIONS.forEachIndexed { itemIndex, destination ->
+            val isSelect = indexOfSelectedItem == itemIndex
             NavigationRailItem(
-                selected = selected,
-                onClick = { onNavigateToTopLevelDestination(destination) },
+                selected = isSelect,
+                onClick = {
+                    indexOfSelectedItem = itemIndex
+                    onNavigateToTopLevelDestination(destination)
+                },
                 icon = {
                     Icon(
-                        if (selected) destination.selectedIcon else destination.unselectedIcon,
+                        if (isSelect) destination.selectedIcon else destination.unselectedIcon,
                         contentDescription = null
                     )
                 },
