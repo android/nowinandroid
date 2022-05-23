@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,11 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.ui.rememberMetricsStateHolder
 
 @Composable
 fun InterestsRoute(
@@ -63,8 +62,7 @@ fun InterestsRoute(
         modifier = modifier
     )
 
-    val metricsHolder = rememberMetricsStateHolder()
-    DisposableEffect(tabState, metricsHolder) {
+    JankMetricDisposableEffect(tabState) { metricsHolder ->
         metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
 
         onDispose {
