@@ -77,7 +77,7 @@ fun AuthorsCarousel(
             }
         }.collect()
     }
-    
+
     LazyRow(modifier, lazyListState) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
