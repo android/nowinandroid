@@ -31,7 +31,7 @@ import kotlinx.serialization.json.Json
 interface NetworkModule {
 
     @Binds
-    fun bindsNiANetwork(
+    fun bindsNiaNetwork(
         niANetwork: FakeNiaNetwork
     ): NiaNetwork
 

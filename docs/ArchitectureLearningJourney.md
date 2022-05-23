@@ -212,7 +212,7 @@ A repository may depend on one or more data sources. For example, the `OfflineFi
    </td>
   </tr>
   <tr>
-   <td>NiANetwork
+   <td>NiaNetwork
    </td>
    <td>Remote API accessed using Retrofit
    </td>

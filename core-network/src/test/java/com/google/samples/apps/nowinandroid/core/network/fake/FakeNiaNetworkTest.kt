@@ -31,7 +31,7 @@ class FakeNiaNetworkTest {
 
     @Before
     fun setUp() {
-        subject = com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetwork(
+        subject = FakeNiaNetwork(
             ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true }
         )
