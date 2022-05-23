@@ -61,7 +61,7 @@ fun AuthorsCarousel(
 ) {
     LazyRow(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 24.dp),
+        contentPadding = PaddingValues(24.dp),
         horizontalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
