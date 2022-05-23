@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
+import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
