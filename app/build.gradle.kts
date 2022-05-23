@@ -44,17 +44,20 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        val benchmark by creating {
-            initWith(release)
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("release")
-            proguardFiles("benchmark-rules.pro")
-        }
         val staging by creating {
             initWith(debug)
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("debug")
             applicationIdSuffix = ".staging"
+        }
+        val benchmark by creating {
+            initWith(staging) // Usually should be `initWith(release)`. Connecting to demo backend.
+            matchingFallbacks.add("debug") // Making some settings below to align closer to release.
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles("benchmark-rules.pro") // Only use benchmark proguard rules
+            isMinifyEnabled = false //  FIXME enabling minification breaks access to demo backend.
+            isDebuggable = true
+            applicationIdSuffix = ".benchmark"
         }
     }
     packagingOptions {
