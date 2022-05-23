@@ -67,8 +67,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.Loading,
-                    feedState = ForYouFeedState.Loading,
+                    interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                    feedState = ForYouFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -92,7 +92,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -153,7 +154,7 @@ class ForYouScreenTest {
                             ),
                         )
                     ),
-                    feedState = ForYouFeedState.Success(
+                    feedState = ForYouFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -200,7 +201,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -261,7 +263,7 @@ class ForYouScreenTest {
                             ),
                         ),
                     ),
-                    feedState = ForYouFeedState.Success(
+                    feedState = ForYouFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -314,7 +316,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -375,7 +378,7 @@ class ForYouScreenTest {
                             ),
                         ),
                     ),
-                    feedState = ForYouFeedState.Success(
+                    feedState = ForYouFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -428,7 +431,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.WithInterestsSelection(
+                    interestsSelectionState =
+                    ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = listOf(
                             FollowableTopic(
                                 topic = Topic(
@@ -489,7 +493,7 @@ class ForYouScreenTest {
                             ),
                         ),
                     ),
-                    feedState = ForYouFeedState.Loading,
+                    feedState = ForYouFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -523,8 +527,8 @@ class ForYouScreenTest {
                     windowSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(maxWidth, maxHeight)
                     ),
-                    interestsSelectionState = ForYouInterestsSelectionState.NoInterestsSelection,
-                    feedState = ForYouFeedState.Loading,
+                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                    feedState = ForYouFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -643,8 +647,8 @@ class ForYouScreenTest {
 
                 ForYouScreen(
                     windowSizeClass = windowSizeClass,
-                    interestsSelectionState = ForYouInterestsSelectionState.NoInterestsSelection,
-                    feedState = ForYouFeedState.Success(
+                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                    feedState = ForYouFeedUiState.Success(
                         feed = saveableNewsResources
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -669,7 +673,10 @@ class ForYouScreenTest {
             )
 
         val firstFeedItem = composeTestRule
-            .onNodeWithText("Thanks for helping us reach 1M YouTube Subscribers", substring = true)
+            .onNodeWithText(
+                "Thanks for helping us reach 1M YouTube Subscribers",
+                substring = true
+            )
             .assertHasClickAction()
             .fetchSemanticsNode()
 

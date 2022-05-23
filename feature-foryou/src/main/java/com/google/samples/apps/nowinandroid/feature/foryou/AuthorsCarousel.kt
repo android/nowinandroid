@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +31,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -104,15 +108,29 @@ fun AuthorItem(
                 stateDescription = "$followDescription ${author.name}"
             }
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape),
-                model = author.imageUrl,
-                contentScale = ContentScale.Fit,
-                contentDescription = null
-            )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val authorImageModifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+            if (author.imageUrl.isEmpty()) {
+                Icon(
+                    modifier = authorImageModifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(4.dp),
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = null // decorative image
+                )
+            } else {
+                AsyncImage(
+                    modifier = authorImageModifier,
+                    model = author.imageUrl,
+                    contentScale = ContentScale.Fit,
+                    contentDescription = null
+                )
+            }
             FollowButton(
                 following = following,
                 backgroundColor = MaterialTheme.colorScheme.surface,

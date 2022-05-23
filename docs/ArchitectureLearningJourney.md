@@ -47,7 +47,7 @@ The following diagram shows the events which occur and how data flows from the r
 ![Diagram showing how news resources are displayed on the For You screen](images/architecture-2-example.png "Diagram showing how news resources are displayed on the For You screen")
 
 
-Here's what's happening in each step. The easiest way to find the associated code is to load the project into Android Studio and search for the text in the Code column (handy shortcut: tap SHIFT twice).
+Here's what's happening in each step. The easiest way to find the associated code is to load the project into Android Studio and search for the text in the Code column (handy shortcut: tap <kbd>⇧ SHIFT</kbd> twice).
 
 
 <table>
@@ -176,7 +176,7 @@ Whenever the list of authors changes (for example, when a new author is added), 
 
 To write data, the repository provides suspend functions. It is up to the caller to ensure that their execution is suitably scoped.
 
-_Example: Follow a topic _
+_Example: Follow a topic_
 
 Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
 
@@ -276,18 +276,18 @@ View models receive streams of data as cold [flows](https://kotlin.github.io/kot
 
 **Example: Displaying followed topics and authors**
 
-The `FollowingViewModel` exposes `uiState` as a `StateFlow<FollowingUiState>`. This hot flow is created by combining four data streams:
+The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. This hot flow is created by combining four data streams:
 
 
 
-*   List of authors (getAuthorsStream)
+*   List of authors (`getAuthorsStream`)
 *   List of author IDs which the current user is following
 *   List of topics
 *   List of topic IDs which the current user is following
 
 The list of `Author`s is mapped to a new list of `FollowableAuthor`s. `FollowableAuthor` is a wrapper for `Author` which also indicates whether the current user is following that author. The same transformation is applied for the list of `Topic`s.
 
-The two new lists are used to create a `FollowingUiState.Interests` state which is exposed to the UI.
+The two new lists are used to create a `InterestsUiState.Interests` state which is exposed to the UI.
 
 
 ### Processing user interactions
@@ -296,7 +296,7 @@ User actions are communicated from UI elements to view models using regular meth
 
 **Example: Following a topic**
 
-The `FollowingScreen` takes a lambda expression named `followTopic` which is supplied from `FollowingViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The view model then processes this action by informing the topics repository.
+The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The view model then processes this action by informing the topics repository.
 
 
 ## Further reading
