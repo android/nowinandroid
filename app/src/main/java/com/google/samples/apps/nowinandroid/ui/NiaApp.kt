@@ -49,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
@@ -66,8 +65,6 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
         }
-
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
 
         NiaBackground {
             Scaffold(
