@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumedWindowInsets
@@ -121,6 +122,7 @@ private fun NiANavRail(
 ) {
     NavigationRail(modifier = modifier) {
         TOP_LEVEL_DESTINATIONS.forEach { destination ->
+            Spacer(Modifier.weight(1f))
             val selected =
                 currentDestination?.hierarchy?.any { it.route == destination.route } == true
             NavigationRailItem(
@@ -134,6 +136,7 @@ private fun NiANavRail(
                 },
                 label = { Text(stringResource(destination.iconTextId)) }
             )
+            Spacer(Modifier.weight(1f))
         }
     }
 }
