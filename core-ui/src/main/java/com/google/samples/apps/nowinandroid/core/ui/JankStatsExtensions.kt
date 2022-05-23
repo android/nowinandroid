@@ -17,9 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import androidx.metrics.performance.PerformanceMetricsState
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Retrieves [PerformanceMetricsState.MetricsStateHolder] from current [LocalView] and
@@ -32,5 +34,21 @@ fun rememberMetricsStateHolder(): PerformanceMetricsState.MetricsStateHolder {
 
     return remember(localView) {
         PerformanceMetricsState.getForHierarchy(localView)
+    }
+}
+
+/**
+ * Convenience function to work with [PerformanceMetricsState] state. The side effect is
+ * re-launched if any of the [keys] value is not equal to the previous composition.
+ * @see JankMetricDisposableEffect if you need to work with DisposableEffect to cleanup added state.
+ */
+@Composable
+fun JankMetricEffect(
+    vararg keys: Any?,
+    reportMetric: suspend CoroutineScope.(state: PerformanceMetricsState.MetricsStateHolder) -> Unit
+) {
+    val metrics = rememberMetricsStateHolder()
+    LaunchedEffect(metrics, *keys) {
+        reportMetric(metrics)
     }
 }
