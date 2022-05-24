@@ -35,7 +35,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -50,7 +50,7 @@ class OfflineFirstNewsRepository @Inject constructor(
     private val episodeDao: EpisodeDao,
     private val authorDao: AuthorDao,
     private val topicDao: TopicDao,
-    private val network: NiANetwork,
+    private val network: NiaNetwork,
 ) : NewsRepository {
 
     override fun getNewsResourcesStream(): Flow<List<NewsResource>> =

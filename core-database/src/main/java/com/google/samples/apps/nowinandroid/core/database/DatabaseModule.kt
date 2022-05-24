@@ -30,11 +30,11 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
-    fun providesNiADatabase(
+    fun providesNiaDatabase(
         @ApplicationContext context: Context,
-    ): NiADatabase = Room.databaseBuilder(
+    ): NiaDatabase = Room.databaseBuilder(
         context,
-        NiADatabase::class.java,
+        NiaDatabase::class.java,
         "nia-database"
     ).build()
 }
