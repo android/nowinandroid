@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.24.8-beta"
+accompanist = "0.24.9-beta"
 androidDesugarJdkLibs = "1.1.5"
 androidGradlePlugin = "7.2.1"
 androidxActivity = "1.4.0"
@@ -46,6 +46,8 @@ turbine = "0.8.0"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
