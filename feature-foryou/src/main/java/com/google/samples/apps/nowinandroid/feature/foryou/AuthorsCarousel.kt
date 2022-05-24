@@ -17,8 +17,11 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,11 +34,13 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +64,11 @@ fun AuthorsCarousel(
     onAuthorClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(modifier) {
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
                 author = followableAuthor.author,
@@ -67,7 +76,6 @@ fun AuthorsCarousel(
                 onAuthorClick = { following ->
                     onAuthorClick(followableAuthor.author.id, following)
                 },
-                modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -92,6 +100,8 @@ fun AuthorItem(
                 value = following,
                 enabled = true,
                 role = Role.Button,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(bounded = false),
                 onValueChange = { newFollowing -> onAuthorClick(newFollowing) },
             )
             .sizeIn(maxWidth = 48.dp)
