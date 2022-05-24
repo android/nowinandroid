@@ -76,7 +76,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
                     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
-                        NiABottomBar(
+                        NiaBottomBar(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination
                         )
@@ -93,7 +93,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                         )
                 ) {
                     if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
-                        NiANavRail(
+                        NiaNavRail(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination,
                             modifier = Modifier.safeDrawingPadding()
@@ -114,7 +114,7 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
 }
 
 @Composable
-private fun NiANavRail(
+private fun NiaNavRail(
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -139,7 +139,7 @@ private fun NiANavRail(
 }
 
 @Composable
-private fun NiABottomBar(
+private fun NiaBottomBar(
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?
 ) {

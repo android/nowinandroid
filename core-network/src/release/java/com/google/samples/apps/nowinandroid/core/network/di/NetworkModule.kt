@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
-import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiANetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -31,9 +31,9 @@ import kotlinx.serialization.json.Json
 interface NetworkModule {
 
     @Binds
-    fun bindsNiANetwork(
-        niANetwork: RetrofitNiANetwork
-    ): NiANetwork
+    fun bindsNiaNetwork(
+        niANetwork: RetrofitNiaNetwork
+    ): NiaNetwork
 
     companion object {
         @Provides

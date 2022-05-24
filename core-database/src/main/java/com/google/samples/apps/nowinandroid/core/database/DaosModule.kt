@@ -30,21 +30,21 @@ import dagger.hilt.components.SingletonComponent
 object DaosModule {
     @Provides
     fun providesAuthorDao(
-        database: NiADatabase,
+        database: NiaDatabase,
     ): AuthorDao = database.authorDao()
 
     @Provides
     fun providesTopicsDao(
-        database: NiADatabase,
+        database: NiaDatabase,
     ): TopicDao = database.topicDao()
 
     @Provides
     fun providesEpisodeDao(
-        database: NiADatabase,
+        database: NiaDatabase,
     ): EpisodeDao = database.episodeDao()
 
     @Provides
     fun providesNewsResourceDao(
-        database: NiADatabase,
+        database: NiaDatabase,
     ): NewsResourceDao = database.newsResourceDao()
 }
