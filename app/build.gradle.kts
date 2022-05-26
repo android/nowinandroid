@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.samples.apps.nowinandroid.FlavorDimension
+import com.google.samples.apps.nowinandroid.Flavor
+
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
@@ -43,6 +46,11 @@ android {
         val release by getting {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            // To publish on the Play store a private signing key is required, but to allow anyone
+            // who clones the code to sign and run the release variant, use the debug signing key.
+            // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
+            signingConfig = signingConfigs.getByName("debug")
         }
         val benchmark by creating {
             initWith(release)
@@ -50,13 +58,21 @@ android {
             matchingFallbacks.add("release")
             proguardFiles("benchmark-rules.pro")
         }
-        val staging by creating {
-            initWith(debug)
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("debug")
-            applicationIdSuffix = ".staging"
+    }
+
+    // @see Flavor for more details on the app product flavors.
+    flavorDimensions += FlavorDimension.contentType.name
+    productFlavors {
+        Flavor.values().forEach {
+            create(it.name) {
+                dimension = it.dimension.name
+                if (it.applicationIdSuffix != null) {
+                    applicationIdSuffix = it.applicationIdSuffix
+                }
+            }
         }
     }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
