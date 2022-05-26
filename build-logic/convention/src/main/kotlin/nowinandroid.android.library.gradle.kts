@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 
 plugins {
@@ -27,6 +28,8 @@ android {
     defaultConfig {
         targetSdk = 32
     }
+
+    configureFlavors(this)
 }
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
