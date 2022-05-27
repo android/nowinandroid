@@ -75,12 +75,10 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
-                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
-                        NiaBottomBar(
-                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
-                            currentDestination = currentDestination
-                        )
-                    }
+                    NiaBottomBar(
+                        onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
+                        currentDestination = currentDestination
+                    )
                 }
             ) { padding ->
                 Row(
@@ -92,14 +90,6 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                             )
                         )
                 ) {
-                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
-                        NiaNavRail(
-                            onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
-                            currentDestination = currentDestination,
-                            modifier = Modifier.safeDrawingPadding()
-                        )
-                    }
-
                     NiaNavHost(
                         windowSizeClass = windowSizeClass,
                         navController = navController,
