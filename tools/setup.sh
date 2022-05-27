@@ -37,12 +37,7 @@ cp "${GIT_ROOT}/tools/pre-push" "${GIT_DIR}/hooks/pre-push" \
   && chmod +x "${GIT_DIR}/hooks/pre-push"
 
 cat <<-EOF
-Please import the code style settings in Android Studio:
-  * open Settings -> Editor -> Code Style
-  * click the gear icon and select "Import Scheme..."
-  * find the file ${GIT_ROOT}/tools/nowinandroid-codestyle.xml
-
-Additionally, checking the following settings helps avoid miscellaneous issues:
+Checking the following settings helps avoid miscellaneous issues:
   * Settings -> Editor -> General -> Remove trailing spaces on: Modified lines
   * Settings -> Editor -> General -> Ensure every file ends with a line break
   * Settings -> Editor -> General -> Auto Import -> Optimize imports on the fly (for both Kotlin\
