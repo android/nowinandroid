@@ -46,7 +46,7 @@ class SyncInitializer : Initializer<Sync> {
             // Run sync on app startup and ensure only one sync worker runs at any time
             enqueueUniqueWork(
                 SyncWorkName,
-                ExistingWorkPolicy.REPLACE,
+                ExistingWorkPolicy.KEEP,
                 SyncWorker.startUpSyncWork()
             )
         }
