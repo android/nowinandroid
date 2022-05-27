@@ -29,7 +29,11 @@ local.properties
 *.iml
 .idea/*
 !.idea/copyright
-!.idea/codeStyles/codeStyleConfig.xml
+# Keep the code styles.
+!/.idea/codeStyles
+/.idea/codeStyles/*
+!/.idea/codeStyles/Project.xml
+!/.idea/codeStyles/codeStyleConfig.xml
 
 # Gradle cache
 .gradle
