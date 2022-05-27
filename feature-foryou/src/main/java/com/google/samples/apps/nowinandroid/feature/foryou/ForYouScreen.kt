@@ -364,7 +364,7 @@ private fun SingleTopicButton(
             )
             NiaToggleButton(
                 checked = isSelected,
-                onCheckedChange = { checked -> onClick(topicId, !isSelected) },
+                onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
                     Icon(
                         imageVector = NiaIcons.Add, contentDescription = name,
