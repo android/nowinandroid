@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -41,7 +41,7 @@ import kotlinx.serialization.json.Json
  */
 class FakeAuthorsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val niaPreferences: NiaPreferences,
+    private val niaPreferences: NiaPreferencesLocalDataSource,
     private val networkJson: Json,
 ) : AuthorsRepository {
 

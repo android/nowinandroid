@@ -27,7 +27,7 @@ import com.google.samples.apps.nowinandroid.core.data.testdoubles.CollectionType
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestAuthorDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestEpisodeDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNewsResourceDao
-import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetwork
+import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestTopicDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.filteredInterestsIds
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.nonPresentInterestsIds
@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -63,7 +63,7 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var topicDao: TestTopicDao
 
-    private lateinit var network: TestNiaNetwork
+    private lateinit var network: TestNiaNetworkDataSource
 
     private lateinit var synchronizer: Synchronizer
 
@@ -76,9 +76,9 @@ class OfflineFirstNewsRepositoryTest {
         episodeDao = TestEpisodeDao()
         authorDao = TestAuthorDao()
         topicDao = TestTopicDao()
-        network = TestNiaNetwork()
+        network = TestNiaNetworkDataSource()
         synchronizer = TestSynchronizer(
-            NiaPreferences(
+            NiaPreferencesLocalDataSource(
                 tmpFolder.testUserPreferencesDataStore()
             )
         )

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 
-class NiaPreferences @Inject constructor(
+class NiaPreferencesLocalDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
     suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
