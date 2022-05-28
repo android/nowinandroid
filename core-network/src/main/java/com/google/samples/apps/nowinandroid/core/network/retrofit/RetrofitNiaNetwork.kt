@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
-import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
@@ -80,12 +80,12 @@ private data class NetworkResponse<T>(
 )
 
 /**
- * [Retrofit] backed [NiaNetwork]
+ * [Retrofit] backed [NiaNetworkDataSource]
  */
 @Singleton
 class RetrofitNiaNetwork @Inject constructor(
     networkJson: Json
-) : NiaNetwork {
+) : NiaNetworkDataSource {
 
     private val networkApi = Retrofit.Builder()
         .baseUrl(NiaBaseUrl)

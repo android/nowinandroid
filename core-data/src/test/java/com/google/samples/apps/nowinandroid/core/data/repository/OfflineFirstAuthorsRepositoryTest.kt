@@ -20,11 +20,11 @@ import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.CollectionType
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestAuthorDao
-import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetwork
+import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
@@ -43,7 +43,7 @@ class OfflineFirstAuthorsRepositoryTest {
 
     private lateinit var authorDao: AuthorDao
 
-    private lateinit var network: TestNiaNetwork
+    private lateinit var network: TestNiaNetworkDataSource
 
     private lateinit var synchronizer: Synchronizer
 
@@ -53,16 +53,16 @@ class OfflineFirstAuthorsRepositoryTest {
     @Before
     fun setup() {
         authorDao = TestAuthorDao()
-        network = TestNiaNetwork()
-        val niaPreferences = NiaPreferences(
+        network = TestNiaNetworkDataSource()
+        val niaPreferencesDataSource = NiaPreferencesLocalDataSource(
             tmpFolder.testUserPreferencesDataStore()
         )
-        synchronizer = TestSynchronizer(niaPreferences)
+        synchronizer = TestSynchronizer(niaPreferencesDataSource)
 
         subject = OfflineFirstAuthorsRepository(
             authorDao = authorDao,
             network = network,
-            niaPreferences = niaPreferences,
+            niaPreferences = niaPreferencesDataSource,
         )
     }
 

@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 /**
  * Interface representing network calls to the NIA backend
  */
-interface NiaNetwork {
+interface NiaNetworkDataSource {
     suspend fun getTopics(ids: List<String>? = null): List<NetworkTopic>
 
     suspend fun getAuthors(ids: List<String>? = null): List<NetworkAuthor>
