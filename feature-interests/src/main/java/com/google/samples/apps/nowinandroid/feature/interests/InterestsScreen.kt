@@ -27,19 +27,30 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @Composable
 fun InterestsRoute(
@@ -163,4 +174,100 @@ private fun InterestsContent(
 @Composable
 private fun InterestsEmptyScreen() {
     Text(text = stringResource(id = R.string.interests_empty_header))
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun InterestsScreenPopulated() {
+    NiaTheme {
+        NiaBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ) { padding ->
+                InterestsScreen(
+                    uiState = InterestsUiState.Interests(
+                        authors = previewAuthors.map { FollowableAuthor(it, false) },
+                        topics = previewTopics.map { FollowableTopic(it, false) }
+                    ),
+                    tabState = InterestsTabState(
+                        titles = listOf(R.string.interests_topics, R.string.interests_people),
+                        currentIndex = 0
+                    ),
+                    followAuthor = { _, _ -> },
+                    followTopic = { _, _ -> },
+                    navigateToAuthor = {},
+                    navigateToTopic = {},
+                    switchTab = {},
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun InterestsScreenLoading() {
+    NiaTheme {
+        NiaBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ) { padding ->
+                InterestsScreen(
+                    uiState = InterestsUiState.Loading,
+                    tabState = InterestsTabState(
+                        titles = listOf(R.string.interests_topics, R.string.interests_people),
+                        currentIndex = 0
+                    ),
+                    followAuthor = { _, _ -> },
+                    followTopic = { _, _ -> },
+                    navigateToAuthor = {},
+                    navigateToTopic = {},
+                    switchTab = {},
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun InterestsScreenEmpty() {
+    NiaTheme {
+        NiaBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ) { padding ->
+                InterestsScreen(
+                    uiState = InterestsUiState.Empty,
+                    tabState = InterestsTabState(
+                        titles = listOf(R.string.interests_topics, R.string.interests_people),
+                        currentIndex = 0
+                    ),
+                    followAuthor = { _, _ -> },
+                    followTopic = { _, _ -> },
+                    navigateToAuthor = {},
+                    navigateToTopic = {},
+                    switchTab = {},
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
+    }
 }

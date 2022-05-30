@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,9 +34,11 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -45,6 +46,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,11 +55,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
-import com.google.samples.apps.nowinandroid.feature.author.AuthorUiState.Loading
-import com.google.samples.apps.nowinandroid.feature.author.R.string
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @Composable
 fun AuthorRoute(
@@ -76,7 +80,6 @@ fun AuthorRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun AuthorScreen(
@@ -100,11 +103,11 @@ internal fun AuthorScreen(
             )
         }
         when (authorState) {
-            Loading -> {
+            AuthorUiState.Loading -> {
                 item {
                     LoadingWheel(
                         modifier = modifier,
-                        contentDesc = stringResource(id = string.author_loading),
+                        contentDesc = stringResource(id = R.string.author_loading),
                     )
                 }
             }
@@ -221,30 +224,60 @@ private fun AuthorToolbar(
             onCheckedChange = onFollowClick,
         ) {
             if (selected) {
-                Text(stringResource(id = string.author_following))
+                Text(stringResource(id = R.string.author_following))
             } else {
-                Text(stringResource(id = string.author_not_following))
+                Text(stringResource(id = R.string.author_not_following))
             }
         }
     }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
-private fun AuthorBodyPreview() {
-    MaterialTheme {
-        LazyColumn {
-            authorBody(
-                author = Author(
-                    id = "0",
-                    name = "Android Dev",
-                    bio = "Works on Compose",
-                    twitter = "dev",
-                    mediumPage = "",
-                    imageUrl = "",
-                ),
-                news = NewsUiState.Success(emptyList())
-            )
+fun AuthorScreenPopulated() {
+    NiaTheme {
+        NiaBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ) { padding ->
+                AuthorScreen(
+                    authorState = AuthorUiState.Success(FollowableAuthor(previewAuthors[0], false)),
+                    newsState = NewsUiState.Success(previewNewsResources),
+                    onBackClick = {},
+                    onFollowClick = {},
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun AuthorScreenLoading() {
+    NiaTheme {
+        NiaBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ) { padding ->
+                AuthorScreen(
+                    authorState = AuthorUiState.Loading,
+                    newsState = NewsUiState.Loading,
+                    onBackClick = {},
+                    onFollowClick = {},
+                    modifier = Modifier.padding(padding)
+                )
+            }
         }
     }
 }
