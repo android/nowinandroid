@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 /**
  * Configure base Kotlin with Android options
  */
-fun Project.configureKotlinAndroid(
+internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *>,
 ) {
     commonExtension.apply {
