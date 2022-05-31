@@ -28,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -42,6 +43,7 @@ class ForYouViewModelTest {
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
+    private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
@@ -50,6 +52,7 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
+            userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
             topicsRepository = topicsRepository,
             newsRepository = newsRepository,
@@ -130,7 +133,7 @@ class ForYouViewModelTest {
                 ),
                 awaitItem()
             )
-            topicsRepository.setFollowedTopicIds(emptySet())
+            userDataRepository.setFollowedTopicIds(emptySet())
 
             cancel()
         }
@@ -146,7 +149,7 @@ class ForYouViewModelTest {
                 ),
                 awaitItem()
             )
-            authorsRepository.setFollowedAuthorIds(emptySet())
+            userDataRepository.setFollowedAuthorIds(emptySet())
 
             cancel()
         }
@@ -158,9 +161,9 @@ class ForYouViewModelTest {
             advanceUntilIdle()
             expectMostRecentItem()
             topicsRepository.sendTopics(sampleTopics)
-            topicsRepository.setFollowedTopicIds(emptySet())
+            userDataRepository.setFollowedTopicIds(emptySet())
             authorsRepository.sendAuthors(sampleAuthors)
-            authorsRepository.setFollowedAuthorIds(emptySet())
+            userDataRepository.setFollowedAuthorIds(emptySet())
 
             advanceUntilIdle()
             assertEquals(
@@ -255,8 +258,8 @@ class ForYouViewModelTest {
             .test {
                 topicsRepository.sendTopics(sampleTopics)
                 authorsRepository.sendAuthors(sampleAuthors)
-                topicsRepository.setFollowedTopicIds(emptySet())
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 advanceUntilIdle()
@@ -352,9 +355,9 @@ class ForYouViewModelTest {
                 advanceUntilIdle()
                 expectMostRecentItem()
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf("0", "1"))
+                userDataRepository.setFollowedTopicIds(setOf("0", "1"))
 
                 assertEquals(
                     ForYouUiState(
@@ -393,9 +396,9 @@ class ForYouViewModelTest {
                 advanceUntilIdle()
                 expectMostRecentItem()
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf("0", "1"))
+                userDataRepository.setFollowedAuthorIds(setOf("0", "1"))
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
 
                 assertEquals(
                     ForYouUiState(
@@ -432,9 +435,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 advanceUntilIdle()
@@ -701,9 +704,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
 
                 advanceUntilIdle()
@@ -970,9 +973,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateTopicSelection("1", isChecked = true)
                 viewModel.updateTopicSelection("1", isChecked = false)
@@ -1068,9 +1071,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.updateAuthorSelection("1", isChecked = false)
@@ -1166,9 +1169,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateTopicSelection("1", isChecked = true)
 
@@ -1197,8 +1200,8 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
-                assertEquals(emptySet<Int>(), authorsRepository.getCurrentFollowedAuthors())
+                assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
+                assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedAuthors())
                 cancel()
             }
     }
@@ -1208,9 +1211,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateAuthorSelection("0", isChecked = true)
 
@@ -1235,8 +1238,8 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                assertEquals(emptySet<Int>(), topicsRepository.getCurrentFollowedTopics())
-                assertEquals(setOf("0"), authorsRepository.getCurrentFollowedAuthors())
+                assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedTopics())
+                assertEquals(setOf("0"), userDataRepository.getCurrentFollowedAuthors())
                 cancel()
             }
     }
@@ -1246,9 +1249,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.updateTopicSelection("1", isChecked = true)
@@ -1278,8 +1281,8 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                assertEquals(setOf("1"), topicsRepository.getCurrentFollowedTopics())
-                assertEquals(setOf("1"), authorsRepository.getCurrentFollowedAuthors())
+                assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
+                assertEquals(setOf("1"), userDataRepository.getCurrentFollowedAuthors())
                 cancel()
             }
     }
@@ -1289,9 +1292,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateTopicSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
@@ -1299,7 +1302,7 @@ class ForYouViewModelTest {
                 advanceUntilIdle()
                 expectMostRecentItem()
 
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
 
                 advanceUntilIdle()
                 assertEquals(
@@ -1393,9 +1396,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(emptySet())
+                userDataRepository.setFollowedTopicIds(emptySet())
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateAuthorSelection("1", isChecked = true)
                 viewModel.saveFollowedInterests()
@@ -1403,7 +1406,7 @@ class ForYouViewModelTest {
                 advanceUntilIdle()
                 expectMostRecentItem()
 
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
 
                 advanceUntilIdle()
                 assertEquals(
@@ -1496,9 +1499,9 @@ class ForYouViewModelTest {
         viewModel.uiState
             .test {
                 topicsRepository.sendTopics(sampleTopics)
-                topicsRepository.setFollowedTopicIds(setOf("1"))
+                userDataRepository.setFollowedTopicIds(setOf("1"))
                 authorsRepository.sendAuthors(sampleAuthors)
-                authorsRepository.setFollowedAuthorIds(setOf("1"))
+                userDataRepository.setFollowedAuthorIds(setOf("1"))
                 newsRepository.sendNewsResources(sampleNewsResources)
                 viewModel.updateNewsResourceSaved("2", true)
 

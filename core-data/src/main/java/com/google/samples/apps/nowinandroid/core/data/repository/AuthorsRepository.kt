@@ -30,19 +30,4 @@ interface AuthorsRepository : Syncable {
      * Gets data for a specific author
      */
     fun getAuthorStream(id: String): Flow<Author>
-
-    /**
-     * Sets the user's currently followed authors
-     */
-    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>)
-
-    /**
-     * Toggles the user's newly followed/unfollowed author
-     */
-    suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean)
-
-    /**
-     * Returns the users currently followed authors
-     */
-    fun getFollowedAuthorIdsStream(): Flow<Set<String>>
 }
