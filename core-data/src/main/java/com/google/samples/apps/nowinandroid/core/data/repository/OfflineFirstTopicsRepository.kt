@@ -23,7 +23,7 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.map
 class OfflineFirstTopicsRepository @Inject constructor(
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
-    private val niaPreferences: NiaPreferencesLocalDataSource,
+    private val niaPreferences: NiaPreferencesDataSource,
 ) : TopicsRepository {
 
     override fun getTopicsStream(): Flow<List<Topic>> =

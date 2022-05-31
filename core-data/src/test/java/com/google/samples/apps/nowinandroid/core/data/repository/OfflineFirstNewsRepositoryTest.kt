@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -78,7 +78,7 @@ class OfflineFirstNewsRepositoryTest {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         synchronizer = TestSynchronizer(
-            NiaPreferencesLocalDataSource(
+            NiaPreferencesDataSource(
                 tmpFolder.testUserPreferencesDataStore()
             )
         )

@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetwork
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesLocalDataSource
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
@@ -54,7 +54,7 @@ class OfflineFirstAuthorsRepositoryTest {
     fun setup() {
         authorDao = TestAuthorDao()
         network = TestNiaNetworkDataSource()
-        val niaPreferencesDataSource = NiaPreferencesLocalDataSource(
+        val niaPreferencesDataSource = NiaPreferencesDataSource(
             tmpFolder.testUserPreferencesDataStore()
         )
         synchronizer = TestSynchronizer(niaPreferencesDataSource)
