@@ -16,18 +16,33 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.Syncable
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 
-interface TopicsRepository : Syncable {
-    /**
-     * Gets the available topics as a stream
-     */
-    fun getTopicsStream(): Flow<List<Topic>>
+interface UserDataRepository {
 
     /**
-     * Gets data for a specific topic
+     * Stream of [UserData]
      */
-    fun getTopic(id: String): Flow<Topic>
+    val userDataStream: Flow<UserData>
+
+    /**
+     * Sets the user's currently followed topics
+     */
+    suspend fun setFollowedTopicIds(followedTopicIds: Set<String>)
+
+    /**
+     * Toggles the user's newly followed/unfollowed topic
+     */
+    suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean)
+
+    /**
+     * Sets the user's currently followed authors
+     */
+    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>)
+
+    /**
+     * Toggles the user's newly followed/unfollowed author
+     */
+    suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean)
 }

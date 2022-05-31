@@ -62,8 +62,7 @@ class OfflineFirstTopicsRepositoryTest {
 
         subject = OfflineFirstTopicsRepository(
             topicDao = topicDao,
-            network = network,
-            niaPreferences = niaPreferences
+            network = network
         )
     }
 
@@ -75,17 +74,6 @@ class OfflineFirstTopicsRepositoryTest {
                     .first()
                     .map(TopicEntity::asExternalModel),
                 subject.getTopicsStream()
-                    .first()
-            )
-        }
-
-    @Test
-    fun offlineFirstTopicsRepository_news_resources_for_interests_is_backed_by_news_resource_dao() =
-        runTest {
-            Assert.assertEquals(
-                niaPreferences.followedTopicIds
-                    .first(),
-                subject.getFollowedTopicIdsStream()
                     .first()
             )
         }
@@ -181,52 +169,6 @@ class OfflineFirstTopicsRepositoryTest {
             Assert.assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
                 synchronizer.getChangeListVersions().topicVersion
-            )
-        }
-
-    @Test
-    fun offlineFirstTopicsRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
-            subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
-
-            Assert.assertEquals(
-                setOf("0"),
-                subject.getFollowedTopicIdsStream()
-                    .first()
-            )
-
-            subject.toggleFollowedTopicId(followedTopicId = "1", followed = true)
-
-            Assert.assertEquals(
-                setOf("0", "1"),
-                subject.getFollowedTopicIdsStream()
-                    .first()
-            )
-
-            Assert.assertEquals(
-                niaPreferences.followedTopicIds
-                    .first(),
-                subject.getFollowedTopicIdsStream()
-                    .first()
-            )
-        }
-
-    @Test
-    fun offlineFirstTopicsRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
-            subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
-
-            Assert.assertEquals(
-                setOf("1", "2"),
-                subject.getFollowedTopicIdsStream()
-                    .first()
-            )
-
-            Assert.assertEquals(
-                niaPreferences.followedTopicIds
-                    .first(),
-                subject.getFollowedTopicIdsStream()
-                    .first()
             )
         }
 }
