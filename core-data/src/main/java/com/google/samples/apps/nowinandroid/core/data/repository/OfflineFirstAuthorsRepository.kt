@@ -23,9 +23,9 @@ import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -37,8 +37,8 @@ import kotlinx.coroutines.flow.map
  */
 class OfflineFirstAuthorsRepository @Inject constructor(
     private val authorDao: AuthorDao,
-    private val network: NiaNetwork,
-    private val niaPreferences: NiaPreferences,
+    private val network: NiaNetworkDataSource,
+    private val niaPreferences: NiaPreferencesDataSource,
 ) : AuthorsRepository {
 
     override fun getAuthorStream(id: String): Flow<Author> =

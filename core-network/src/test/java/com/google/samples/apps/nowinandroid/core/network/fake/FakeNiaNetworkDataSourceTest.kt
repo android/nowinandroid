@@ -23,15 +23,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class FakeNiaNetworkTest {
+class FakeNiaNetworkDataSourceTest {
 
-    private lateinit var subject: FakeNiaNetwork
+    private lateinit var subject: FakeNiaNetworkDataSource
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        subject = FakeNiaNetwork(
+        subject = FakeNiaNetworkDataSource(
             ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true }
         )
