@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
-import com.google.samples.apps.nowinandroid.core.network.NiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -33,9 +33,9 @@ enum class CollectionType {
 }
 
 /**
- * Test double for [NiaNetwork]
+ * Test double for [NiaNetworkDataSource]
  */
-class TestNiaNetwork : NiaNetwork {
+class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
     private val networkJson = Json
 
