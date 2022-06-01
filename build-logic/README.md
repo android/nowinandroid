@@ -29,12 +29,12 @@ setup.
 
 Current list of convention plugins:
 
-- [`nowinandroid.spotless`](convention/src/main/kotlin/nowinandroid.spotless.gradle.kts):
+- [`nowinandroid.spotless`](convention/src/main/kotlin/SpotlessConventionPlugin.kt):
   Configures spotless. 
-- [`nowinandroid.android.application`](convention/src/main/kotlin/nowinandroid.android.application.gradle.kts),
-  [`nowinandroid.android.library`](convention/src/main/kotlin/nowinandroid.android.library.gradle.kts),
-  [`nowinandroid.android.test`](convention/src/main/kotlin/nowinandroid.android.test.gradle.kts):
+- [`nowinandroid.android.application`](convention/src/main/kotlin/AndroidApplicationConventionPlugin.kt),
+  [`nowinandroid.android.library`](convention/src/main/kotlin/AndroidLibraryConventionPlugin.kt),
+  [`nowinandroid.android.test`](convention/src/main/kotlin/AndroidTestConventionPlugin.kt):
   Configures common Android and Kotlin options.
-- [`nowinandroid.android.application.compose`](convention/src/main/kotlin/nowinandroid.android.application.compose.gradle.kts),
-  [`nowinandroid.android.library.compose`](convention/src/main/kotlin/nowinandroid.android.library.gradle.kts):
+- [`nowinandroid.android.application.compose`](convention/src/main/kotlin/AndroidApplicationComposeConventionPlugin.kt),
+  [`nowinandroid.android.library.compose`](convention/src/main/kotlin/AndroidLibraryComposeConventionPlugin.kt):
   Configures Jetpack Compose options

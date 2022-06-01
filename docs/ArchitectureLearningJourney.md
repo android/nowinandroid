@@ -204,7 +204,7 @@ A repository may depend on one or more data sources. For example, the `OfflineFi
    </td>
   </tr>
   <tr>
-   <td>NiaPreferences
+   <td>NiaPreferencesDataSource
    </td>
    <td><a href="https://developer.android.com/topic/libraries/architecture/datastore">Proto DataStore</a>
    </td>
@@ -212,7 +212,7 @@ A repository may depend on one or more data sources. For example, the `OfflineFi
    </td>
   </tr>
   <tr>
-   <td>NiaNetwork
+   <td>NiaNetworkDataSource
    </td>
    <td>Remote API accessed using Retrofit
    </td>
