@@ -31,9 +31,9 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.FollowedInterests
-import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.None
-import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.Unknown
+import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.FollowedInterests
+import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.None
+import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.Unknown
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -57,7 +57,7 @@ class ForYouViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val followedInterestsState: StateFlow<FollowedInterestsState> =
+    private val followedInterestsUiState: StateFlow<FollowedInterestsUiState> =
         combine(
             authorsRepository.getFollowedAuthorIdsStream(),
             topicsRepository.getFollowedTopicIdsStream(),
@@ -105,7 +105,7 @@ class ForYouViewModel @Inject constructor(
 
     val feedState: StateFlow<ForYouFeedUiState> =
         combine(
-            followedInterestsState,
+            followedInterestsUiState,
             snapshotFlow { inProgressTopicSelection },
             snapshotFlow { inProgressAuthorSelection },
             snapshotFlow { savedNewsResources }
@@ -148,7 +148,7 @@ class ForYouViewModel @Inject constructor(
 
     val interestsSelectionState: StateFlow<ForYouInterestsSelectionUiState> =
         combine(
-            followedInterestsState,
+            followedInterestsUiState,
             topicsRepository.getTopicsStream(),
             authorsRepository.getAuthorsStream(),
             snapshotFlow { inProgressTopicSelection },
