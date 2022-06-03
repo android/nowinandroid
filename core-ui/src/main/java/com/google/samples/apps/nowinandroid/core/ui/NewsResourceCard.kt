@@ -64,6 +64,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
@@ -224,8 +225,31 @@ fun BookmarkButton(
     )
 }
 
+/**
+ * Formats that given [publishDate] as a [String].
+ *
+ * In production, this will return the string in the current time zone, and automatically update
+ * whenever the timezone changes.
+ *
+ * In preview mode, this will always return the string as formatted in UTC.
+ */
 @Composable
 private fun dateFormatted(publishDate: Instant): String {
+    val zoneId = if (LocalInspectionMode.current) {
+        ZoneId.of(ZoneOffset.UTC.id)
+    } else {
+        currentTimeZone()
+    }
+
+    return DateTimeFormatter.ofPattern("MMM d, yyyy")
+        .withZone(zoneId).format(publishDate.toJavaInstant())
+}
+
+/**
+ * Returns the current time zone with updates when the time zone changes.
+ */
+@Composable
+private fun currentTimeZone(): ZoneId {
     var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
 
     val context = LocalContext.current
@@ -240,8 +264,7 @@ private fun dateFormatted(publishDate: Instant): String {
         }
     }
 
-    return DateTimeFormatter.ofPattern("MMM d, yyyy")
-        .withZone(zoneId).format(publishDate.toJavaInstant())
+    return zoneId
 }
 
 @Composable
