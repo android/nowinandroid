@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew assemble --stacktrace
 
       - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug --stacktrace
+        run: ./gradlew check --stacktrace
 
       - name: Upload Demo build outputs (APKs)
         uses: actions/upload-artifact@v3
