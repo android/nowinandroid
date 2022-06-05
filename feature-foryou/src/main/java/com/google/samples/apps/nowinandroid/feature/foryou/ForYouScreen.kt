@@ -455,7 +455,6 @@ private fun LazyListScope.Feed(
 
                                 NewsResourceCardExpanded(
                                     newsResource = saveableNewsResource.newsResource,
-                                    isBookmarked = saveableNewsResource.isSaved,
                                     onClick = {
                                         ContextCompat.startActivity(
                                             context,
@@ -463,12 +462,6 @@ private fun LazyListScope.Feed(
                                             null
                                         )
                                     },
-                                    onToggleBookmark = {
-                                        onNewsResourcesCheckedChanged(
-                                            saveableNewsResource.newsResource.id,
-                                            !saveableNewsResource.isSaved
-                                        )
-                                    }
                                 )
                             }
                         }

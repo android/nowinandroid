@@ -66,10 +66,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 /**
  * [NewsResource] card used on the following screens: For You, Episodes, Saved
@@ -79,8 +79,6 @@ import kotlinx.datetime.toJavaInstant
 @Composable
 fun NewsResourceCardExpanded(
     newsResource: NewsResource,
-    isBookmarked: Boolean,
-    onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -294,7 +292,7 @@ fun BookmarkButtonBookmarkedPreview() {
 fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
-            NewsResourceCardExpanded(newsResource, true, {}, {})
+            NewsResourceCardExpanded(newsResource, {})
         }
     }
 }

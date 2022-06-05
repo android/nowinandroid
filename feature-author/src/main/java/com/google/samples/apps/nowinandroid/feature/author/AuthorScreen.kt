@@ -180,8 +180,6 @@ private fun LazyListScope.authorCards(news: NewsUiState) {
             newsResourceCardItems(
                 items = news.news,
                 newsResourceMapper = { it },
-                isBookmarkedMapper = { /* TODO */ false },
-                onToggleBookmark = { /* TODO */ },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -211,7 +209,7 @@ private fun AuthorToolbar(
         IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = Filled.ArrowBack,
-                contentDescription = stringResource(id = R.string.back)
+                contentDescription = stringResource(id = string.back)
             )
         }
         val selected = uiState.isFollowed

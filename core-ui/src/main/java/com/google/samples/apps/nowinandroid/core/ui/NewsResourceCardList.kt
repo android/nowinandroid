@@ -30,16 +30,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
  * [List] [T].
  *
  * [newsResourceMapper] maps type [T] to a [NewsResource]
- * [isBookmarkedMapper] maps type [T] to whether the [NewsResource] is bookmarked
- * [onToggleBookmark] defines the action invoked when a user wishes to bookmark an item
  * [onItemClick] optional parameter for action to be performed when the card is clicked. The
  * default action launches an intent matching the card.
  */
 fun <T> LazyListScope.newsResourceCardItems(
     items: List<T>,
     newsResourceMapper: (item: T) -> NewsResource,
-    isBookmarkedMapper: (item: T) -> Boolean,
-    onToggleBookmark: (item: T) -> Unit,
     onItemClick: ((item: T) -> Unit)? = null,
     itemModifier: Modifier = Modifier,
 ) = items(
@@ -53,8 +49,6 @@ fun <T> LazyListScope.newsResourceCardItems(
 
         NewsResourceCardExpanded(
             newsResource = newsResource,
-            isBookmarked = isBookmarkedMapper(item),
-            onToggleBookmark = { onToggleBookmark(item) },
             onClick = {
                 when (onItemClick) {
                     null -> ContextCompat.startActivity(context, launchResourceIntent, null)

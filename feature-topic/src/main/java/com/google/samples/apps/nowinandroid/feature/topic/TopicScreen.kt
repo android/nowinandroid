@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,7 +75,6 @@ fun TopicRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(
@@ -178,8 +176,6 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
             newsResourceCardItems(
                 items = news.news,
                 newsResourceMapper = { it },
-                isBookmarkedMapper = { /* TODO */ false },
-                onToggleBookmark = { /* TODO */ },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -209,7 +205,7 @@ private fun TopicToolbar(
         IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = Filled.ArrowBack,
-                contentDescription = stringResource(id = R.string.back)
+                contentDescription = stringResource(id = string.back)
             )
         }
         val selected = uiState.isFollowed
