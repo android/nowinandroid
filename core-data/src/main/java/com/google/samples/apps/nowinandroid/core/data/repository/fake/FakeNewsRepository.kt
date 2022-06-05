@@ -26,13 +26,13 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
 
 /**
  * Fake implementation of the [NewsRepository] that retrieves the news resources from a JSON String.

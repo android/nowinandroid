@@ -23,6 +23,8 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -31,8 +33,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Retrofit API declaration for NIA Network API
