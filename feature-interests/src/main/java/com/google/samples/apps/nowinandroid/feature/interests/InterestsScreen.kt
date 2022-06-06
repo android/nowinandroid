@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
@@ -50,7 +51,6 @@ fun InterestsRoute(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val tabState by viewModel.tabState.collectAsState()
-
     InterestsScreen(
         uiState = uiState,
         tabState = tabState,
@@ -61,6 +61,14 @@ fun InterestsRoute(
         switchTab = viewModel::switchTab,
         modifier = modifier
     )
+
+    JankMetricDisposableEffect(tabState) { metricsHolder ->
+        metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
+
+        onDispose {
+            metricsHolder.state?.removeState("Interests:TabState")
+        }
+    }
 }
 
 @Composable
