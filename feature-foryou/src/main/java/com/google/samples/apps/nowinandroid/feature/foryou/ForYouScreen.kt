@@ -44,7 +44,9 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -63,6 +65,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -86,6 +89,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
@@ -96,6 +100,8 @@ import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlin.math.floor
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.datetime.Instant
 
 @Composable
@@ -166,7 +172,25 @@ fun ForYouScreen(
                     else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
                 }
 
+                val lazyListState = rememberLazyListState()
+                JankMetricEffect(lazyListState) { metricsHolder ->
+                    combine(
+                        snapshotFlow { lazyListState.isScrollInProgress },
+                        snapshotFlow { lazyListState.firstVisibleItemIndex },
+                    ) { isScrollInProgress, firstVisibleItemIndex ->
+                        if (isScrollInProgress) {
+                            metricsHolder.state?.addState(
+                                "ForYou:Feed:Scrolling",
+                                "index=$firstVisibleItemIndex"
+                            )
+                        } else {
+                            metricsHolder.state?.removeState("ForYou:Feed:Scrolling")
+                        }
+                    }.collect()
+                }
+
                 LazyColumn(
+                    state = lazyListState,
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     InterestsSelection(
@@ -297,7 +321,25 @@ private fun TopicSelection(
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val lazyGridState = rememberLazyGridState()
+    JankMetricEffect(lazyGridState) { metricsHolder ->
+        combine(
+            snapshotFlow { lazyGridState.isScrollInProgress },
+            snapshotFlow { lazyGridState.firstVisibleItemIndex },
+        ) { isScrollInProgress, firstVisibleItemIndex ->
+            if (isScrollInProgress) {
+                metricsHolder.state?.addState(
+                    "ForYou:TopicSelection:Scrolling",
+                    "index=$firstVisibleItemIndex"
+                )
+            } else {
+                metricsHolder.state?.removeState("ForYou:TopicSelection:Scrolling")
+            }
+        }.collect()
+    }
+
     LazyHorizontalGrid(
+        state = lazyGridState,
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),

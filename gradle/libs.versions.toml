@@ -14,12 +14,14 @@ androidxHiltNavigationCompose = "1.0.0"
 androidxLifecycle = "2.5.0-rc01"
 androidxMacroBenchmark = "1.1.0-rc03"
 androidxNavigation = "2.4.2"
+androidxMetrics = "1.0.0-alpha01"
 androidxProfileinstaller = "1.2.0-beta01"
 androidxSavedState = "1.1.0"
 androidxStartup = "1.1.1"
 androidxWindowManager = "1.0.0"
 androidxTest = "1.4.0"
 androidxTestExt = "1.1.3"
+androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
 androidxWork = "2.7.1"
 coil = "2.0.0-rc01"
@@ -69,6 +71,7 @@ androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", ve
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-savedstate-ktx = { group = "androidx.savedstate", name = "savedstate-ktx", version.ref= "androidxSavedState"}
@@ -80,6 +83,7 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
+androidx-tracing-ktx = {group = "androidx.tracing", name="tracing-ktx", version.ref = "androidxTracing" }
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil"}

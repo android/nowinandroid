@@ -22,12 +22,21 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
+import androidx.metrics.performance.JankStats
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var lazyStats: dagger.Lazy<JankStats>
+
+    @Inject
+    lateinit var jankFrameListener: JankStats.OnFrameListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,6 +44,22 @@ class MainActivity : ComponentActivity() {
         // including IME animations
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent { NiaApp(calculateWindowSizeClass(this)) }
+        setContent {
+            NiaApp(calculateWindowSizeClass(this))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isTrackingEnabled(true)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isTrackingEnabled(false)
+    }
+
+    private fun isTrackingEnabled(enabled: Boolean) {
+        lazyStats.get().isTrackingEnabled = enabled
     }
 }

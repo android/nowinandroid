@@ -18,10 +18,8 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -41,6 +40,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +57,9 @@ import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.ui.FollowButton
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 
 @Composable
 fun AuthorsCarousel(
@@ -64,11 +67,25 @@ fun AuthorsCarousel(
     onAuthorClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(
-        modifier = modifier,
-        contentPadding = PaddingValues(24.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
+    val lazyListState = rememberLazyListState()
+
+    JankMetricEffect(lazyListState) { metricsHolder ->
+        combine(
+            snapshotFlow { lazyListState.isScrollInProgress },
+            snapshotFlow { lazyListState.firstVisibleItemIndex }
+        ) { isScrollInProgress, firstVisibleItemIndex ->
+            if (isScrollInProgress) {
+                metricsHolder.state?.addState(
+                    "ForYou:AuthorsCarousel:Scrolling",
+                    "Index=$firstVisibleItemIndex"
+                )
+            } else {
+                metricsHolder.state?.removeState("ForYou:AuthorsCarousel:Scrolling")
+            }
+        }.collect()
+    }
+
+    LazyRow(modifier, lazyListState) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
                 author = followableAuthor.author,
