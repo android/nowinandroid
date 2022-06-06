@@ -37,6 +37,8 @@ jobs:
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
 
+      - uses: gradle/wrapper-validation-action@v1
+
       - name: Check spotless
         run: ./gradlew spotlessCheck --stacktrace
 
@@ -95,6 +97,8 @@ jobs:
             ~/.gradle/caches/jars-*
             ~/.gradle/caches/build-cache-*
           key: gradle-${{ hashFiles('checksum.txt') }}
+
+      - uses: gradle/wrapper-validation-action@v1
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
