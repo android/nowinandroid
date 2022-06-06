@@ -64,17 +64,6 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
         val navController = rememberNavController()
-        JankMetricDisposableEffect(navController) { metricsHolder ->
-            val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-                metricsHolder.state?.addState("Navigation", destination.route.toString())
-            }
-
-            navController.addOnDestinationChangedListener(listener)
-
-            onDispose {
-                navController.removeOnDestinationChangedListener(listener)
-            }
-        }
 
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
@@ -122,6 +111,17 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                             .consumedWindowInsets(padding)
                     )
                 }
+            }
+        }
+        JankMetricDisposableEffect(navController) { metricsHolder ->
+            val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+                metricsHolder.state?.addState("Navigation", destination.route.toString())
+            }
+
+            navController.addOnDestinationChangedListener(listener)
+
+            onDispose {
+                navController.removeOnDestinationChangedListener(listener)
             }
         }
     }
