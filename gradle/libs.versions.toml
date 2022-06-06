@@ -42,7 +42,7 @@ retrofitKotlinxSerializationJson = "0.8.0"
 room = "2.4.2"
 secrets = "2.0.1"
 spotless = "6.7.0"
-turbine = "0.7.0"
+turbine = "0.8.0"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
