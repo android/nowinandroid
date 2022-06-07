@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties        
 
@@ -111,4 +114,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-reports
-          path: app/build/reports/androidTests
+          path: '*/build/reports/androidTests'
