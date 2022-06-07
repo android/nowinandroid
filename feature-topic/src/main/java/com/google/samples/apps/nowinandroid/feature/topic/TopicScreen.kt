@@ -34,18 +34,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -230,7 +227,6 @@ private fun TopicToolbar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
@@ -239,23 +235,16 @@ private fun TopicToolbar(
 fun TopicScreenPopulated() {
     NiaTheme {
         NiaBackground {
-            Scaffold(
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            ) { padding ->
-                TopicScreen(
-                    topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
-                    newsState = NewsUiState.Success(previewNewsResources),
-                    onBackClick = {},
-                    onFollowClick = {},
-                    modifier = Modifier.padding(padding)
-                )
-            }
+            TopicScreen(
+                topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
+                newsState = NewsUiState.Success(previewNewsResources),
+                onBackClick = {},
+                onFollowClick = {}
+            )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
@@ -264,18 +253,12 @@ fun TopicScreenPopulated() {
 fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
-            Scaffold(
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            ) { padding ->
-                TopicScreen(
-                    topicState = TopicUiState.Loading,
-                    newsState = NewsUiState.Loading,
-                    onBackClick = {},
-                    onFollowClick = {},
-                    modifier = Modifier.padding(padding)
-                )
-            }
+            TopicScreen(
+                topicState = TopicUiState.Loading,
+                newsState = NewsUiState.Loading,
+                onBackClick = {},
+                onFollowClick = {}
+            )
         }
     }
 }
