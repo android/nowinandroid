@@ -176,6 +176,8 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
             newsResourceCardItems(
                 items = news.news,
                 newsResourceMapper = { it },
+                isBookmarkedMapper = { /* TODO */ false },
+                onToggleBookmark = { /* TODO */ },
                 itemModifier = Modifier.padding(24.dp)
             )
         }

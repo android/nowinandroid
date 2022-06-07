@@ -36,6 +36,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 fun <T> LazyListScope.newsResourceCardItems(
     items: List<T>,
     newsResourceMapper: (item: T) -> NewsResource,
+    isBookmarkedMapper: (item: T) -> Boolean,
+    onToggleBookmark: (item: T) -> Unit,
     onItemClick: ((item: T) -> Unit)? = null,
     itemModifier: Modifier = Modifier,
 ) = items(
