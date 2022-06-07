@@ -53,10 +53,18 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         val benchmark by creating {
+            // Enable all the optimizations from release build through initWith(release).
             initWith(release)
-            signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
+            // Debug key signing is available to everyone.
+            signingConfig = signingConfigs.getByName("debug")
+            // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
+            //  FIXME enabling minification breaks access to demo backend.
+            isMinifyEnabled = false
+            // Keep the build type debuggable so we can attach a debugger if needed.
+            isDebuggable = true
+            applicationIdSuffix = ".benchmark"
         }
     }
 
