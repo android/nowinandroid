@@ -24,6 +24,7 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import java.io.File
 
 /**
  * Configure base Kotlin with Android options
@@ -56,7 +57,7 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=kotlin.Experimental",
                 // Enable experimental kotlinx serialization APIs
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-            )
+            ) + buildComposeMetricsParameters()
 
             // Set JVM target to 1.8
             jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -68,6 +69,26 @@ internal fun Project.configureKotlinAndroid(
     dependencies {
         add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
     }
+}
+
+private fun Project.buildComposeMetricsParameters(): List<String> {
+    val metricParameters = mutableListOf<String>()
+    val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
+    val enableMetrics = (enableMetricsProvider.orNull == "true")
+    if (enableMetrics) {
+        val metricsFolder = File(project.buildDir, "compose-metrics")
+        metricParameters.add("-P")
+        metricParameters.add("plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath)
+    }
+
+    val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
+    val enableReports = (enableReportsProvider.orNull == "true")
+    if (enableReports) {
+        val reportsFolder = File(project.buildDir, "compose-reports")
+        metricParameters.add("-P")
+        metricParameters.add("plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath)
+    }
+    return metricParameters
 }
 
 private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
