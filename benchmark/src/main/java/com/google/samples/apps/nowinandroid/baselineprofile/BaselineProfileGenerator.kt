@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Direction
 import org.junit.Rule
 import org.junit.Test
 
@@ -32,7 +33,7 @@ class BaselineProfileGenerator {
     @Test
     fun startup() =
         baselineProfileRule.collectBaselineProfile(
-            packageName = "com.google.samples.apps.nowinandroid"
+            packageName = "com.google.samples.apps.nowinandroid.demo.benchmark"
         ) {
             pressHome()
             // This block defines the app's critical user journey. Here we are interested in
@@ -44,6 +45,12 @@ class BaselineProfileGenerator {
             device.run {
                 findObject(By.text("Interests"))
                     .click()
+                waitForIdle()
+                findObject(By.text("Accessibility")).scroll(Direction.DOWN, 2000f)
+                waitForIdle()
+                findObject(By.text("People")).click()
+                waitForIdle()
+                findObject(By.textStartsWith("Android")).scroll(Direction.DOWN, 2000f)
                 waitForIdle()
             }
         }
