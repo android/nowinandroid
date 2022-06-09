@@ -52,17 +52,25 @@ and is described in detail in the
 
 # Build
 
-The `debug` variant of `app` uses local data to allow immediate building and exploring the UI.
+The app contains the usual `debug` and `release` build variants. 
 
-The `staging` and `release` variants of `app` make real network calls to a backend server, providing
-up-to-date data as new episodes of Now in Android are released. At this time, there is not a
-public backend available.
-
-The `benchmark` variant of `app` is used to test startup performance and generate a baseline profile
-(see below for more information).
+In addition, the `benchmark` variant of `app` is used to test startup performance and generate a
+baseline profile (see below for more information).
 
 `app-nia-catalog` is a standalone app that displays the list of components that are stylized for
 Now in Android.
+
+The app also uses
+[product flavors](https://developer.android.com/studio/build/build-variants#product-flavors) to
+control where content for the app should be loaded from.
+
+The `demo` flavor uses static local data to allow immediate building and exploring the UI.
+
+The `prod` flavor makes real network calls to a backend server, providing up-to-date content. At 
+this time, there is not a public backend available.
+
+For normal development use the `demoDebug` variant. For UI performance testing use the
+`demoRelease` variant. 
 
 # Testing
 

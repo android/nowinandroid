@@ -22,6 +22,10 @@ plugins {
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.niacatalog"
+
+        // The UI catalog does not depend on content from the app, however, it depends on modules
+        // which do, so we must specify a default value for the contentType dimension.
+        missingDimensionStrategy("contentType", "demo")
     }
 
     packagingOptions {

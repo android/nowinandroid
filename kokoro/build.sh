@@ -62,8 +62,8 @@ run_firebase_test_lab() {
   while [ $result != 0 -a $counter -lt $MAX_RETRY ]; do
     gcloud firebase test android run \
       --type instrumentation \
-      --app  "app/build/outputs/apk/debug/app-debug.apk" \
-      --test "$module/build/outputs/apk/androidTest/debug/$module-debug-androidTest.apk" \
+      --app  "app/build/outputs/apk/demo/debug/app-demo-debug.apk" \
+      --test "$module/build/outputs/apk/androidTest/demo/debug/$module-demo-debug-androidTest.apk" \
       --device-ids $deviceIds \
       --os-version-ids $osVersionIds \
       --locales en \

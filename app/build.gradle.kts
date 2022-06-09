@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.samples.apps.nowinandroid.FlavorDimension
+import com.google.samples.apps.nowinandroid.Flavor
+
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
@@ -43,23 +46,41 @@ android {
         val release by getting {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-        val staging by creating {
-            initWith(debug)
+
+            // To publish on the Play store a private signing key is required, but to allow anyone
+            // who clones the code to sign and run the release variant, use the debug signing key.
+            // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("debug")
-            applicationIdSuffix = ".staging"
         }
         val benchmark by creating {
-            initWith(staging) // Usually should be `initWith(release)`. Connecting to demo backend.
-            matchingFallbacks.add("debug") // Making some settings below to align closer to release.
+            // Enable all the optimizations from release build through initWith(release).
+            initWith(release)
+            matchingFallbacks.add("release")
+            // Debug key signing is available to everyone.
             signingConfig = signingConfigs.getByName("debug")
-            proguardFiles("benchmark-rules.pro") // Only use benchmark proguard rules
-            isMinifyEnabled = false //  FIXME enabling minification breaks access to demo backend.
+            // Only use benchmark proguard rules
+            proguardFiles("benchmark-rules.pro")
+            //  FIXME enabling minification breaks access to demo backend.
+            isMinifyEnabled = false
+            // Keep the build type debuggable so we can attach a debugger if needed.
             isDebuggable = true
             applicationIdSuffix = ".benchmark"
         }
     }
+
+    // @see Flavor for more details on the app product flavors.
+    flavorDimensions += FlavorDimension.contentType.name
+    productFlavors {
+        Flavor.values().forEach {
+            create(it.name) {
+                dimension = it.dimension.name
+                if (it.applicationIdSuffix != null) {
+                    applicationIdSuffix = it.applicationIdSuffix
+                }
+            }
+        }
+    }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")

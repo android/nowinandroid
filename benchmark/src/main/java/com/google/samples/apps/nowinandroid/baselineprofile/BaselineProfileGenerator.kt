@@ -33,7 +33,7 @@ class BaselineProfileGenerator {
     @Test
     fun startup() =
         baselineProfileRule.collectBaselineProfile(
-            packageName = "com.google.samples.apps.nowinandroid"
+            packageName = "com.google.samples.apps.nowinandroid.demo.benchmark"
         ) {
             pressHome()
             // This block defines the app's critical user journey. Here we are interested in
