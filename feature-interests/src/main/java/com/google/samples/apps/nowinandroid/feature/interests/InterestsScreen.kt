@@ -51,8 +51,8 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
-import kotlinx.coroutines.launch
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun InterestsRoute(
