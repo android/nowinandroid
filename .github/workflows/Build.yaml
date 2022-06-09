@@ -44,31 +44,18 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug testProdDebug --stacktrace
 
-      - name: Upload Demo build outputs (APKs)
+      - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v2
         with:
-          name: build-outputs-demo
-          path: app/demo/build/outputs
+          name: build-outputs
+          path: app/build/outputs
 
-      - name: Upload Prod build outputs (APKs)
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-outputs-prod
-          path: app/prod/build/outputs
-
-      - name: Upload Demo build reports
+      - name: Upload build reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: build-reports-demo
-          path: app/demo/build/reports
-
-      - name: Upload Prod build reports
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-reports-prod
-          path: app/prod/build/reports
+          name: build-reports
+          path: app/build/reports
 
   androidTest:
     needs: build
