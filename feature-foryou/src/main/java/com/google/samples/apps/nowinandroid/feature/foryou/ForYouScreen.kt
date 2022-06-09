@@ -95,7 +95,6 @@ import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlin.math.floor
-import kotlinx.datetime.Instant
 
 @Composable
 fun ForYouRoute(
