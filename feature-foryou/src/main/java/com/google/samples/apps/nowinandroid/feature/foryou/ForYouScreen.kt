@@ -94,6 +94,7 @@ import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
+import kotlinx.datetime.Instant
 import kotlin.math.floor
 
 @Composable

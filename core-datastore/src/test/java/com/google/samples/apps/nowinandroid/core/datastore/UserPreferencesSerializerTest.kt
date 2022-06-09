@@ -17,11 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.datastore
 
 import androidx.datastore.core.CorruptionException
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 class UserPreferencesSerializerTest {
     private val userPreferencesSerializer = UserPreferencesSerializer()

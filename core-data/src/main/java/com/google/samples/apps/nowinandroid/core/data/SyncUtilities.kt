@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.core.data
 import android.util.Log
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Interface marker for a class that manages synchronization between local data and a remote
