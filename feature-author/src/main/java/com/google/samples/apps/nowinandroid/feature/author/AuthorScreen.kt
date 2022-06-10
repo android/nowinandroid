@@ -211,7 +211,7 @@ private fun AuthorToolbar(
         IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = Filled.ArrowBack,
-                contentDescription = stringResource(id = string.back)
+                contentDescription = stringResource(id = R.string.back)
             )
         }
         val selected = uiState.isFollowed

@@ -26,5 +26,6 @@ buildscript {
         classpath(libs.kotlin.serializationPlugin)
         classpath(libs.hilt.gradlePlugin)
         classpath(libs.secrets.gradlePlugin)
+        classpath("com.android.tools.build:gradle:7.2.1")
     }
 }
