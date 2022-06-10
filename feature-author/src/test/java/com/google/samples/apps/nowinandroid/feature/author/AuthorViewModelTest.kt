@@ -75,8 +75,6 @@ class AuthorViewModelTest {
 
             successAuthorUiState.followableAuthor.author
             assertEquals(authorFromRepository, successAuthorUiState.followableAuthor.author)
-
-            cancel()
         }
     }
 
@@ -84,7 +82,6 @@ class AuthorViewModelTest {
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(NewsUiState.Loading, awaitItem().newsState)
-            cancel()
         }
     }
 
@@ -92,7 +89,6 @@ class AuthorViewModelTest {
     fun uiStateAuthor_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(AuthorUiState.Loading, awaitItem().authorState)
-            cancel()
         }
     }
 
@@ -101,7 +97,6 @@ class AuthorViewModelTest {
         viewModel.uiState.test {
             authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
             assertEquals(AuthorUiState.Loading, awaitItem().authorState)
-            cancel()
         }
     }
 
@@ -115,7 +110,6 @@ class AuthorViewModelTest {
                 val item = awaitItem()
                 assertTrue(item.authorState is AuthorUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Loading)
-                cancel()
             }
         }
 
@@ -130,7 +124,6 @@ class AuthorViewModelTest {
                 val item = awaitItem()
                 assertTrue(item.authorState is AuthorUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Success)
-                cancel()
             }
         }
 
@@ -149,7 +142,6 @@ class AuthorViewModelTest {
                     AuthorUiState.Success(followableAuthor = testOutputAuthors[0]),
                     awaitItem().authorState
                 )
-                cancel()
             }
     }
 }
