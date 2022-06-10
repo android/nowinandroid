@@ -50,7 +50,6 @@ class InterestsViewModelTest {
     fun uiState_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(InterestsUiState.Loading, awaitItem())
-            cancel()
         }
     }
 
@@ -60,7 +59,6 @@ class InterestsViewModelTest {
             assertEquals(InterestsUiState.Loading, awaitItem())
             authorsRepository.setFollowedAuthorIds(setOf("1"))
             topicsRepository.setFollowedTopicIds(emptySet())
-            cancel()
         }
     }
 
@@ -70,7 +68,6 @@ class InterestsViewModelTest {
             assertEquals(InterestsUiState.Loading, awaitItem())
             authorsRepository.setFollowedAuthorIds(emptySet())
             topicsRepository.setFollowedTopicIds(setOf("1"))
-            cancel()
         }
     }
 
@@ -100,7 +97,6 @@ class InterestsViewModelTest {
                     InterestsUiState.Interests(topics = testOutputTopics, authors = emptyList()),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -124,7 +120,6 @@ class InterestsViewModelTest {
                     InterestsUiState.Interests(topics = emptyList(), authors = testOutputAuthors),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -156,7 +151,6 @@ class InterestsViewModelTest {
                     InterestsUiState.Interests(topics = testInputTopics, authors = emptyList()),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -182,7 +176,6 @@ class InterestsViewModelTest {
                     InterestsUiState.Interests(topics = emptyList(), authors = testInputAuthors),
                     awaitItem()
                 )
-                cancel()
             }
     }
 }
