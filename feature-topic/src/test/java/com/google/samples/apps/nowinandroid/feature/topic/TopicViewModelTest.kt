@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
-import app.cash.turbine.test
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -25,9 +24,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
+import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
@@ -36,10 +38,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * To learn more about how this test handles Flows created with stateIn, see
+ * https://developer.android.com/kotlin/flow/test#statein
+ */
 class TopicViewModelTest {
 
     @get:Rule
-    val dispatcherRule = TestDispatcherRule()
+    val dispatcherRule = MainDispatcherRule()
 
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
@@ -59,87 +65,88 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateAuthor_whenSuccess_matchesTopicFromRepository() = runTest {
-        viewModel.uiState.test {
-            awaitItem()
-            topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
-            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-            val item = awaitItem()
-            assertTrue(item.topicState is TopicUiState.Success)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
-            val successTopicState = item.topicState as TopicUiState.Success
-            val topicFromRepository = topicsRepository.getTopic(
-                testInputTopics[0].topic.id
-            ).first()
+        topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
+        userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+        val item = viewModel.uiState.value
+        assertTrue(item.topicState is TopicUiState.Success)
 
-            assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
-        }
+        val successTopicState = item.topicState as TopicUiState.Success
+        val topicFromRepository = topicsRepository.getTopic(
+            testInputTopics[0].topic.id
+        ).first()
+
+        assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            assertEquals(NewsUiState.Loading, awaitItem().newsState)
-        }
+        assertEquals(NewsUiState.Loading, viewModel.uiState.value.newsState)
     }
 
     @Test
     fun uiStateTopic_whenInitialized_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            assertEquals(TopicUiState.Loading, awaitItem().topicState)
-        }
+        assertEquals(TopicUiState.Loading, viewModel.uiState.value.topicState)
     }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicLoading_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-            assertEquals(TopicUiState.Loading, awaitItem().topicState)
-        }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+        userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+        assertEquals(TopicUiState.Loading, viewModel.uiState.value.topicState)
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccess_thenTopicSuccessAndNewsLoading() =
         runTest {
-            viewModel.uiState.test {
-                awaitItem()
-                topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-                val item = awaitItem()
-                assertTrue(item.topicState is TopicUiState.Success)
-                assertTrue(item.newsState is NewsUiState.Loading)
-            }
+            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+            topicsRepository.sendTopics(testInputTopics.map { it.topic })
+            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+            val item = viewModel.uiState.value
+            assertTrue(item.topicState is TopicUiState.Success)
+            assertTrue(item.newsState is NewsUiState.Loading)
+
+            collectJob.cancel()
         }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-            viewModel.uiState.test {
-                awaitItem()
-                topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-                newsRepository.sendNewsResources(sampleNewsResources)
-                val item = awaitItem()
-                assertTrue(item.topicState is TopicUiState.Success)
-                assertTrue(item.newsState is NewsUiState.Success)
-            }
+            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+            topicsRepository.sendTopics(testInputTopics.map { it.topic })
+            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+            newsRepository.sendNewsResources(sampleNewsResources)
+            val item = viewModel.uiState.value
+            assertTrue(item.topicState is TopicUiState.Success)
+            assertTrue(item.newsState is NewsUiState.Success)
+
+            collectJob.cancel()
         }
 
     @Test
     fun uiStateTopic_whenFollowingTopic_thenShowUpdatedTopic() = runTest {
-        viewModel.uiState
-            .test {
-                awaitItem()
-                topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                // Set which topic IDs are followed, not including 0.
-                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
-                viewModel.followTopicToggle(true)
+        topicsRepository.sendTopics(testInputTopics.map { it.topic })
+        // Set which topic IDs are followed, not including 0.
+        userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
 
-                assertEquals(
-                    TopicUiState.Success(followableTopic = testOutputTopics[0]),
-                    awaitItem().topicState
-                )
-            }
+        viewModel.followTopicToggle(true)
+
+        assertEquals(
+            TopicUiState.Success(followableTopic = testOutputTopics[0]),
+            viewModel.uiState.value.topicState
+        )
+
+        collectJob.cancel()
     }
 }
 
