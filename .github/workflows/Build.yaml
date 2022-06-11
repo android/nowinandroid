@@ -16,7 +16,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties        
@@ -43,39 +46,49 @@ jobs:
       - name: Check lint
         run: ./gradlew lintDebug --stacktrace
 
-      - name: Build debug
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Build release
-        run: ./gradlew assembleRelease --stacktrace
+      - name: Build all build type and flavor permutations
+        run: ./gradlew assemble --stacktrace
 
       - name: Run local tests
-        run: ./gradlew testDebug --stacktrace
+        run: ./gradlew testDemoDebug testProdDebug --stacktrace
 
-      - name: Upload build outputs (APKs)
+      - name: Upload Demo build outputs (APKs)
         uses: actions/upload-artifact@v2
         with:
-          name: build-outputs
-          path: app/build/outputs
+          name: build-outputs-demo
+          path: app/demo/build/outputs
 
-      - name: Upload build reports
+      - name: Upload Prod build outputs (APKs)
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-outputs-prod
+          path: app/prod/build/outputs
+
+      - name: Upload Demo build reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: build-reports
-          path: app/build/reports
+          name: build-reports-demo
+          path: app/demo/build/reports
+
+      - name: Upload Prod build reports
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-reports-prod
+          path: app/prod/build/reports
 
   androidTest:
     needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       matrix:
         api-level: [23, 26, 30]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -104,11 +117,11 @@ jobs:
           disable-animations: true
           disk-size: 1500M
           heap-size: 512M
-          script: ./gradlew connectedAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
+          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
 
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: test-reports
-          path: app/build/reports/androidTests
+          path: '*/build/reports/androidTests'

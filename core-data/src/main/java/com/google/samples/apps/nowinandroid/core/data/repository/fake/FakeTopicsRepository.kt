@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -43,7 +43,7 @@ import kotlinx.serialization.json.Json
 class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
-    private val niaPreferences: NiaPreferences
+    private val niaPreferences: NiaPreferencesDataSource
 ) : TopicsRepository {
     override fun getTopicsStream(): Flow<List<Topic>> = flow<List<Topic>> {
         emit(

@@ -156,8 +156,14 @@ fun NewsResourceAuthors(
     if (authors.isNotEmpty()) {
         // Only display first author for now
         val author = authors[0]
-        val authorNameFormatted =
-            author.name.uppercase(ConfigurationCompat.getLocales(LocalConfiguration.current).get(0))
+
+        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
+
+        val authorNameFormatted = if (locale != null) {
+            author.name.uppercase(locale)
+        } else {
+            author.name.uppercase()
+        }
 
         val authorImageUrl = author.imageUrl
 
