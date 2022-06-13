@@ -82,12 +82,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
@@ -524,9 +524,65 @@ private fun LazyListScope.Feed(
 }
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun ForYouScreenPopulatedFeed() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                feedState = ForYouFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun ForYouScreenTopicSelection() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    topics = previewTopics.map { FollowableTopic(it, false) },
+                    authors = previewAuthors.map { FollowableAuthor(it, false) }
+                ),
+                feedState = ForYouFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onAuthorCheckedChanged = { _, _ -> },
+                onTopicCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
 fun ForYouScreenLoading() {
     BoxWithConstraints {
@@ -543,201 +599,3 @@ fun ForYouScreenLoading() {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
-@Composable
-fun ForYouScreenTopicSelection() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
-                    topics = listOf(
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "0",
-                                name = "Headlines",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "1",
-                                name = "UI",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "2",
-                                name = "Publishing and Distribution",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                    ),
-                    authors = listOf(
-                        FollowableAuthor(
-                            author = Author(
-                                id = "0",
-                                name = "Android Dev",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableAuthor(
-                            author = Author(
-                                id = "1",
-                                name = "Android Dev 2",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableAuthor(
-                            author = Author(
-                                id = "2",
-                                name = "Android Dev 3",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        )
-                    )
-                ),
-                feedState = ForYouFeedUiState.Success(
-                    feed = saveableNewsResource,
-                ),
-                onAuthorCheckedChanged = { _, _ -> },
-                onTopicCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
-@Composable
-fun PopulatedFeed() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                feedState = ForYouFeedUiState.Success(
-                    feed = saveableNewsResource
-                ),
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-private val saveableNewsResource = listOf(
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "1",
-            episodeId = "52",
-            title = "Thanks for helping us reach 1M YouTube Subscribers",
-            content = "Thank you everyone for following the Now in Android series " +
-                "and everything the Android Developers YouTube channel has to offer. " +
-                "During the Android Developer Summit, our YouTube channel reached 1 " +
-                "million subscribers! Here’s a small video to thank you all.",
-            url = "https://youtu.be/-fJ6poHQrjM",
-            headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "0",
-                    name = "Headlines",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                )
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "2",
-            episodeId = "52",
-            title = "Transformations and customisations in the Paging Library",
-            content = "A demonstration of different operations that can be performed " +
-                "with Paging. Transformations like inserting separators, when to " +
-                "create a new pager, and customisation options for consuming " +
-                "PagingData.",
-            url = "https://youtu.be/ZARz0pjm5YM",
-            headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "3",
-            episodeId = "52",
-            title = "Community tip on Paging",
-            content = "Tips for using the Paging library from the developer community",
-            url = "https://youtu.be/r5JgIyS3t3s",
-            headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-)

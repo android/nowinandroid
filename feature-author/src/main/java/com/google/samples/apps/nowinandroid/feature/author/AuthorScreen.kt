@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,11 +52,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
-import com.google.samples.apps.nowinandroid.feature.author.AuthorUiState.Loading
-import com.google.samples.apps.nowinandroid.feature.author.R.string
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @Composable
 fun AuthorRoute(
@@ -76,7 +77,6 @@ fun AuthorRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun AuthorScreen(
@@ -100,11 +100,11 @@ internal fun AuthorScreen(
             )
         }
         when (authorState) {
-            Loading -> {
+            AuthorUiState.Loading -> {
                 item {
                     LoadingWheel(
                         modifier = modifier,
-                        contentDesc = stringResource(id = string.author_loading),
+                        contentDesc = stringResource(id = R.string.author_loading),
                     )
                 }
             }
@@ -221,29 +221,45 @@ private fun AuthorToolbar(
             onCheckedChange = onFollowClick,
         ) {
             if (selected) {
-                Text(stringResource(id = string.author_following))
+                Text(stringResource(id = R.string.author_following))
             } else {
-                Text(stringResource(id = string.author_not_following))
+                Text(stringResource(id = R.string.author_not_following))
             }
         }
     }
 }
 
-@Preview
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
-private fun AuthorBodyPreview() {
-    MaterialTheme {
-        LazyColumn {
-            authorBody(
-                author = Author(
-                    id = "0",
-                    name = "Android Dev",
-                    bio = "Works on Compose",
-                    twitter = "dev",
-                    mediumPage = "",
-                    imageUrl = "",
-                ),
-                news = NewsUiState.Success(emptyList())
+fun AuthorScreenPopulated() {
+    NiaTheme {
+        NiaBackground {
+            AuthorScreen(
+                authorState = AuthorUiState.Success(FollowableAuthor(previewAuthors[0], false)),
+                newsState = NewsUiState.Success(previewNewsResources),
+                onBackClick = {},
+                onFollowClick = {}
+            )
+        }
+    }
+}
+
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun AuthorScreenLoading() {
+    NiaTheme {
+        NiaBackground {
+            AuthorScreen(
+                authorState = AuthorUiState.Loading,
+                newsState = NewsUiState.Loading,
+                onBackClick = {},
+                onFollowClick = {}
             )
         }
     }
