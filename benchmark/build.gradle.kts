@@ -25,6 +25,7 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        missingDimensionStrategy("contentType", "demo")
     }
 
     buildTypes {
@@ -32,7 +33,7 @@ android {
         // release build (for example, with minification on). It's signed with a debug key
         // for easy local/CI testing.
         val benchmark by creating {
-            isDebuggable = true
+            isDebuggable = false
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
         }
