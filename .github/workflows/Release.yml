@@ -25,8 +25,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build all projects
-        run: ./gradlew assembleDebug
+      - name: Build app
+        run: ./gradlew :app:assembleDemoRelease
 
       - name: Create Release
         id: create_release
@@ -45,6 +45,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/demo/debug/app-demo-debug.apk
-          asset_name: app-demo-debug.apk
+          asset_path: app/build/outputs/apk/demo/release/app-demo-release.apk
+          asset_name: app-demo-release.apk
           asset_content_type: application/vnd.android.package-archive          
