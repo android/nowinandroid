@@ -35,5 +35,5 @@ object NewsResourceTypeSerializer : KSerializer<NewsResourceType> {
     )
 
     override fun serialize(encoder: Encoder, value: NewsResourceType) =
-        encoder.encodeString(value.name)
+        encoder.encodeString(value.serializedName)
 }
