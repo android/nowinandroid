@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -40,7 +41,8 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier.padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         topics.forEach { followableTopic ->
             item {
@@ -75,7 +77,8 @@ fun AuthorsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp)
+        modifier = modifier.padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         authors.forEach { followableAuthor ->
             item {
