@@ -76,7 +76,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
-                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact || windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
+                        windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+                    ) {
                         NiaBottomBar(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination
@@ -93,7 +95,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                             )
                         )
                 ) {
-                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact && windowSizeClass.heightSizeClass != WindowHeightSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact &&
+                        windowSizeClass.heightSizeClass != WindowHeightSizeClass.Compact
+                    ) {
                         NiaNavRail(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination,
