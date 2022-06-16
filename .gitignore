@@ -43,3 +43,5 @@ _sandbox
 
 # Android Studio captures folder
 captures/
+# ignore all github things
+.github
