@@ -42,7 +42,7 @@ fun TopicsTabContent(
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(vertical = 8.dp)
+        contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
             item {
@@ -78,7 +78,7 @@ fun AuthorsTabContent(
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(vertical = 8.dp)
+        contentPadding = PaddingValues(top = 8.dp)
     ) {
         authors.forEach { followableAuthor ->
             item {

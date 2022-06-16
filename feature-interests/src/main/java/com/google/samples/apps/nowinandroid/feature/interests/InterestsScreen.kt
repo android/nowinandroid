@@ -150,7 +150,6 @@ private fun InterestsContent(
                     topics = uiState.topics,
                     onTopicClick = navigateToTopic,
                     onFollowButtonClick = followTopic,
-                    modifier = Modifier
                 )
             }
             1 -> {
@@ -158,7 +157,6 @@ private fun InterestsContent(
                     authors = uiState.authors,
                     onAuthorClick = navigateToAuthor,
                     onFollowButtonClick = followAuthor,
-                    modifier = Modifier
                 )
             }
         }
