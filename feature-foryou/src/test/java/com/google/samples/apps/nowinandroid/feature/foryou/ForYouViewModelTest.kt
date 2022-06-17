@@ -87,7 +87,6 @@ class ForYouViewModelTest {
                 ),
                 awaitItem()
             )
-            cancel()
         }
     }
 
@@ -102,8 +101,6 @@ class ForYouViewModelTest {
                 awaitItem()
             )
             topicsRepository.sendTopics(sampleTopics)
-
-            cancel()
         }
     }
 
@@ -118,8 +115,6 @@ class ForYouViewModelTest {
                 awaitItem()
             )
             authorsRepository.sendAuthors(sampleAuthors)
-
-            cancel()
         }
     }
 
@@ -134,8 +129,6 @@ class ForYouViewModelTest {
                 awaitItem()
             )
             userDataRepository.setFollowedTopicIds(emptySet())
-
-            cancel()
         }
     }
 
@@ -150,8 +143,6 @@ class ForYouViewModelTest {
                 awaitItem()
             )
             userDataRepository.setFollowedAuthorIds(emptySet())
-
-            cancel()
         }
     }
 
@@ -247,8 +238,6 @@ class ForYouViewModelTest {
                 ),
                 expectMostRecentItem()
             )
-
-            cancel()
         }
     }
 
@@ -344,7 +333,6 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 
@@ -385,7 +373,6 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -426,7 +413,6 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -695,7 +681,6 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -964,7 +949,6 @@ class ForYouViewModelTest {
                     ),
                     awaitItem()
                 )
-                cancel()
             }
     }
 
@@ -1062,7 +1046,6 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 
@@ -1160,7 +1143,6 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 
@@ -1202,7 +1184,6 @@ class ForYouViewModelTest {
                 )
                 assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
                 assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedAuthors())
-                cancel()
             }
     }
 
@@ -1240,7 +1221,6 @@ class ForYouViewModelTest {
                 )
                 assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedTopics())
                 assertEquals(setOf("0"), userDataRepository.getCurrentFollowedAuthors())
-                cancel()
             }
     }
 
@@ -1283,7 +1263,6 @@ class ForYouViewModelTest {
                 )
                 assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
                 assertEquals(setOf("1"), userDataRepository.getCurrentFollowedAuthors())
-                cancel()
             }
     }
 
@@ -1387,7 +1366,6 @@ class ForYouViewModelTest {
 
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 
@@ -1490,7 +1468,6 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 
@@ -1525,7 +1502,6 @@ class ForYouViewModelTest {
                     ),
                     expectMostRecentItem()
                 )
-                cancel()
             }
     }
 }
