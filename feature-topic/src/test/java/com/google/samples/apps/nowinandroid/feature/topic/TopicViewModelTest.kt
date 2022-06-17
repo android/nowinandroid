@@ -72,7 +72,6 @@ class TopicViewModelTest {
             ).first()
 
             assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
-            cancel()
         }
     }
 
@@ -80,7 +79,6 @@ class TopicViewModelTest {
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(NewsUiState.Loading, awaitItem().newsState)
-            cancel()
         }
     }
 
@@ -88,7 +86,6 @@ class TopicViewModelTest {
     fun uiStateTopic_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(TopicUiState.Loading, awaitItem().topicState)
-            cancel()
         }
     }
 
@@ -97,7 +94,6 @@ class TopicViewModelTest {
         viewModel.uiState.test {
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             assertEquals(TopicUiState.Loading, awaitItem().topicState)
-            cancel()
         }
     }
 
@@ -111,7 +107,6 @@ class TopicViewModelTest {
                 val item = awaitItem()
                 assertTrue(item.topicState is TopicUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Loading)
-                cancel()
             }
         }
 
@@ -126,7 +121,6 @@ class TopicViewModelTest {
                 val item = awaitItem()
                 assertTrue(item.topicState is TopicUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Success)
-                cancel()
             }
         }
 
@@ -145,7 +139,6 @@ class TopicViewModelTest {
                     TopicUiState.Success(followableTopic = testOutputTopics[0]),
                     awaitItem().topicState
                 )
-                cancel()
             }
     }
 }

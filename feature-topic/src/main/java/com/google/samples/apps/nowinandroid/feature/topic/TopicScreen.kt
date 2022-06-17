@@ -49,9 +49,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
+import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -188,19 +192,6 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
     }
 }
 
-@Preview
-@Composable
-private fun TopicBodyPreview() {
-    MaterialTheme {
-        LazyColumn {
-            TopicBody(
-                "Jetpack Compose", "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()), ""
-            )
-        }
-    }
-}
-
 @Composable
 private fun TopicToolbar(
     uiState: FollowableTopic,
@@ -232,6 +223,42 @@ private fun TopicToolbar(
             } else {
                 Text("NOT FOLLOWING")
             }
+        }
+    }
+}
+
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun TopicScreenPopulated() {
+    NiaTheme {
+        NiaBackground {
+            TopicScreen(
+                topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
+                newsState = NewsUiState.Success(previewNewsResources),
+                onBackClick = {},
+                onFollowClick = {}
+            )
+        }
+    }
+}
+
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun TopicScreenLoading() {
+    NiaTheme {
+        NiaBackground {
+            TopicScreen(
+                topicState = TopicUiState.Loading,
+                newsState = NewsUiState.Loading,
+                onBackClick = {},
+                onFollowClick = {}
+            )
         }
     }
 }
