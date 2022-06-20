@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository
+package com.google.samples.apps.nowinandroid.core.model.data
 
-import com.google.samples.apps.nowinandroid.core.data.Syncable
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import kotlinx.coroutines.flow.Flow
-
-interface TopicsRepository : Syncable {
-    /**
-     * Gets the available topics as a stream
-     */
-    fun getTopicsStream(): Flow<List<Topic>>
-
-    /**
-     * Gets data for a specific topic
-     */
-    fun getTopic(id: String): Flow<Topic>
-}
+/**
+ * Class summarizing user interest data
+ */
+data class UserData(
+    val bookmarkedNewsResources: Set<String>,
+    val followedTopics: Set<String>,
+    val followedAuthors: Set<String>,
+)

@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
@@ -37,13 +38,18 @@ class InterestsViewModelTest {
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
+    private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
     private lateinit var viewModel: InterestsViewModel
 
     @Before
     fun setup() {
-        viewModel = InterestsViewModel(authorsRepository, topicsRepository)
+        viewModel = InterestsViewModel(
+            userDataRepository = userDataRepository,
+            authorsRepository = authorsRepository,
+            topicsRepository = topicsRepository,
+        )
     }
 
     @Test
@@ -57,8 +63,8 @@ class InterestsViewModelTest {
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(InterestsUiState.Loading, awaitItem())
-            authorsRepository.setFollowedAuthorIds(setOf("1"))
-            topicsRepository.setFollowedTopicIds(emptySet())
+            userDataRepository.setFollowedAuthorIds(setOf("1"))
+            userDataRepository.setFollowedTopicIds(emptySet())
         }
     }
 
@@ -66,8 +72,8 @@ class InterestsViewModelTest {
     fun uiState_whenFollowedAuthorsAreLoading_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(InterestsUiState.Loading, awaitItem())
-            authorsRepository.setFollowedAuthorIds(emptySet())
-            topicsRepository.setFollowedTopicIds(setOf("1"))
+            userDataRepository.setFollowedAuthorIds(emptySet())
+            userDataRepository.setFollowedTopicIds(setOf("1"))
         }
     }
 
@@ -78,9 +84,9 @@ class InterestsViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(emptyList())
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                topicsRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
+                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
 
                 assertEquals(
                     false,
@@ -106,9 +112,9 @@ class InterestsViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(testInputAuthors.map { it.author })
-                authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[0].author.id))
+                userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[0].author.id))
                 topicsRepository.sendTopics(listOf())
-                topicsRepository.setFollowedTopicIds(setOf())
+                userDataRepository.setFollowedTopicIds(setOf())
 
                 awaitItem()
                 viewModel.followAuthor(
@@ -130,9 +136,9 @@ class InterestsViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(emptyList())
-                authorsRepository.setFollowedAuthorIds(emptySet())
+                userDataRepository.setFollowedAuthorIds(emptySet())
                 topicsRepository.sendTopics(testOutputTopics.map { it.topic })
-                topicsRepository.setFollowedTopicIds(
+                userDataRepository.setFollowedTopicIds(
                     setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
                 )
 
@@ -160,11 +166,11 @@ class InterestsViewModelTest {
             .test {
                 awaitItem()
                 authorsRepository.sendAuthors(testOutputAuthors.map { it.author })
-                authorsRepository.setFollowedAuthorIds(
+                userDataRepository.setFollowedAuthorIds(
                     setOf(testOutputAuthors[0].author.id, testOutputAuthors[1].author.id)
                 )
                 topicsRepository.sendTopics(listOf())
-                topicsRepository.setFollowedTopicIds(setOf())
+                userDataRepository.setFollowedTopicIds(setOf())
 
                 awaitItem()
                 viewModel.followAuthor(

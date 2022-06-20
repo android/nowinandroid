@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import java.io.IOException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -143,4 +144,13 @@ class NiaPreferencesDataSource @Inject constructor(
             true
         }
         .map { it.followedAuthorIdsList.toSet() }
+
+    val userDataStream = userPreferences.data
+        .map {
+            UserData(
+                bookmarkedNewsResources = emptySet(),
+                followedTopics = it.followedTopicIdsList.toSet(),
+                followedAuthors = it.followedAuthorIdsList.toSet(),
+            )
+        }
 }
