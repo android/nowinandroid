@@ -62,7 +62,6 @@ class OfflineFirstAuthorsRepositoryTest {
         subject = OfflineFirstAuthorsRepository(
             authorDao = authorDao,
             network = network,
-            niaPreferences = niaPreferencesDataSource,
         )
     }
 

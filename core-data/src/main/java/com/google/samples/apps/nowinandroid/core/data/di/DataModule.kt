@@ -21,7 +21,9 @@ import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -45,4 +47,9 @@ interface DataModule {
     fun bindsNewsResourceRepository(
         newsRepository: OfflineFirstNewsRepository
     ): NewsRepository
+
+    @Binds
+    fun bindsUserDataRepository(
+        userDataRepository: OfflineFirstUserDataRepository
+    ): UserDataRepository
 }
