@@ -88,7 +88,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
 import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
@@ -102,7 +101,6 @@ import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlin.math.floor
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.datetime.Instant
 
 @Composable
 fun ForYouRoute(
