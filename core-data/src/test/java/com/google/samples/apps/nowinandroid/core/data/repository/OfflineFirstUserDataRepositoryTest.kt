@@ -47,7 +47,7 @@ class OfflineFirstUserDataRepositoryTest {
     }
 
     @Test
-    fun offlineFirstTopicsRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
+    fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
             subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
@@ -68,7 +68,8 @@ class OfflineFirstUserDataRepositoryTest {
             )
 
             assertEquals(
-                niaPreferencesDataSource.followedTopicIds
+                niaPreferencesDataSource.userDataStream
+                    .map { it.followedTopics }
                     .first(),
                 subject.userDataStream
                     .map { it.followedTopics }
@@ -77,7 +78,7 @@ class OfflineFirstUserDataRepositoryTest {
         }
 
     @Test
-    fun offlineFirstTopicsRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
+    fun offlineFirstUserDataRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
             subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
 
@@ -89,10 +90,42 @@ class OfflineFirstUserDataRepositoryTest {
             )
 
             assertEquals(
-                niaPreferencesDataSource.followedTopicIds
+                niaPreferencesDataSource.userDataStream
+                    .map { it.followedTopics }
                     .first(),
                 subject.userDataStream
                     .map { it.followedTopics }
+                    .first()
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_bookmark_news_resource_logic_delegates_to_nia_preferences() =
+        runTest {
+            subject.updateNewsResourceBookmark(newsResourceId = "0", bookmarked = true)
+
+            assertEquals(
+                setOf("0"),
+                subject.userDataStream
+                    .map { it.bookmarkedNewsResources }
+                    .first()
+            )
+
+            subject.updateNewsResourceBookmark(newsResourceId = "1", bookmarked = true)
+
+            assertEquals(
+                setOf("0", "1"),
+                subject.userDataStream
+                    .map { it.bookmarkedNewsResources }
+                    .first()
+            )
+
+            assertEquals(
+                niaPreferencesDataSource.userDataStream
+                    .map { it.bookmarkedNewsResources }
+                    .first(),
+                subject.userDataStream
+                    .map { it.bookmarkedNewsResources }
                     .first()
             )
         }
