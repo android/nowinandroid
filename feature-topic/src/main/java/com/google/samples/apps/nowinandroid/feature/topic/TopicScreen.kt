@@ -48,14 +48,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -101,7 +101,7 @@ internal fun TopicScreen(
         }
         when (topicState) {
             Loading -> item {
-                LoadingWheel(
+                NiaLoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = string.topic_loading),
                 )
@@ -157,7 +157,8 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
                 .size(216.dp)
                 .padding(bottom = 12.dp)
         )
@@ -184,10 +185,23 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
             )
         }
         is NewsUiState.Loading -> item {
-            LoadingWheel(contentDesc = "Loading news") // TODO
+            NiaLoadingWheel(contentDesc = "Loading news") // TODO
         }
         else -> item {
             Text("Error") // TODO
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TopicBodyPreview() {
+    NiaTheme {
+        LazyColumn {
+            TopicBody(
+                "Jetpack Compose", "Lorem ipsum maximum",
+                NewsUiState.Success(emptyList()), ""
+            )
         }
     }
 }
@@ -214,8 +228,8 @@ private fun TopicToolbar(
         }
         val selected = uiState.isFollowed
         NiaFilterChip(
-            checked = selected,
-            onCheckedChange = onFollowClick,
+            selected = selected,
+            onSelectedChange = onFollowClick,
             modifier = Modifier.padding(end = 24.dp)
         ) {
             if (selected) {
