@@ -24,6 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import kotlinx.coroutines.flow.first
@@ -40,6 +41,7 @@ class TopicViewModelTest {
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
+    private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
     private lateinit var viewModel: TopicViewModel
@@ -49,6 +51,7 @@ class TopicViewModelTest {
         viewModel = TopicViewModel(
             savedStateHandle =
             SavedStateHandle(mapOf(TopicDestination.topicIdArg to testInputTopics[0].topic.id)),
+            userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
             newsRepository = newsRepository
         )
@@ -59,7 +62,7 @@ class TopicViewModelTest {
         viewModel.uiState.test {
             awaitItem()
             topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
-            topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             val item = awaitItem()
             assertTrue(item.topicState is TopicUiState.Success)
 
@@ -69,7 +72,6 @@ class TopicViewModelTest {
             ).first()
 
             assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
-            cancel()
         }
     }
 
@@ -77,7 +79,6 @@ class TopicViewModelTest {
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(NewsUiState.Loading, awaitItem().newsState)
-            cancel()
         }
     }
 
@@ -85,16 +86,14 @@ class TopicViewModelTest {
     fun uiStateTopic_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(TopicUiState.Loading, awaitItem().topicState)
-            cancel()
         }
     }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicLoading_thenShowLoading() = runTest {
         viewModel.uiState.test {
-            topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+            userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             assertEquals(TopicUiState.Loading, awaitItem().topicState)
-            cancel()
         }
     }
 
@@ -104,11 +103,10 @@ class TopicViewModelTest {
             viewModel.uiState.test {
                 awaitItem()
                 topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
                 val item = awaitItem()
                 assertTrue(item.topicState is TopicUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Loading)
-                cancel()
             }
         }
 
@@ -118,12 +116,11 @@ class TopicViewModelTest {
             viewModel.uiState.test {
                 awaitItem()
                 topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
                 newsRepository.sendNewsResources(sampleNewsResources)
                 val item = awaitItem()
                 assertTrue(item.topicState is TopicUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Success)
-                cancel()
             }
         }
 
@@ -134,7 +131,7 @@ class TopicViewModelTest {
                 awaitItem()
                 topicsRepository.sendTopics(testInputTopics.map { it.topic })
                 // Set which topic IDs are followed, not including 0.
-                topicsRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
+                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
 
                 viewModel.followTopicToggle(true)
 
@@ -142,7 +139,6 @@ class TopicViewModelTest {
                     TopicUiState.Success(followableTopic = testOutputTopics[0]),
                     awaitItem().topicState
                 )
-                cancel()
             }
     }
 }

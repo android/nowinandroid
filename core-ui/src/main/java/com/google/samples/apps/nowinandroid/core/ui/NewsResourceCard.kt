@@ -28,15 +28,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -61,11 +56,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.Instant
@@ -156,8 +153,14 @@ fun NewsResourceAuthors(
     if (authors.isNotEmpty()) {
         // Only display first author for now
         val author = authors[0]
-        val authorNameFormatted =
-            author.name.uppercase(ConfigurationCompat.getLocales(LocalConfiguration.current).get(0))
+
+        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
+
+        val authorNameFormatted = if (locale != null) {
+            author.name.uppercase(locale)
+        } else {
+            author.name.uppercase()
+        }
 
         val authorImageUrl = author.imageUrl
 
@@ -178,7 +181,7 @@ fun NewsResourceAuthors(
                     modifier = authorImageModifier
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(4.dp),
-                    imageVector = Icons.Filled.Person,
+                    imageVector = NiaIcons.Person,
                     contentDescription = null // decorative image
                 )
             }
@@ -202,23 +205,23 @@ fun BookmarkButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val clickActionLabel = stringResource(
-        if (isBookmarked) R.string.unbookmark else R.string.bookmark
-    )
-    IconToggleButton(
+    NiaToggleButton(
         checked = isBookmarked,
         onCheckedChange = { onClick() },
-        modifier = modifier.semantics {
-            // Use custom label for accessibility services to communicate button's action to user.
-            // Pass null for action to only override the label and not the actual action.
-            this.onClick(label = clickActionLabel, action = null)
+        modifier = modifier,
+        icon = {
+            Icon(
+                painter = painterResource(NiaIcons.BookmarkBorder),
+                contentDescription = stringResource(R.string.bookmark)
+            )
+        },
+        checkedIcon = {
+            Icon(
+                painter = painterResource(NiaIcons.Bookmark),
+                contentDescription = stringResource(R.string.unbookmark)
+            )
         }
-    ) {
-        Icon(
-            imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
-            contentDescription = null // handled by click label of parent
-        )
-    }
+    )
 }
 
 @Composable

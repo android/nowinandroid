@@ -94,4 +94,13 @@ class NewsResourceTypeSerializerTest {
             Json.decodeFromString(NewsResourceTypeSerializer, """"umm"""")
         )
     }
+
+    @Test
+    fun test_serialize_and_deserialize() {
+        val json = Json.encodeToString(NewsResourceTypeSerializer, NewsResourceType.Video)
+        assertEquals(
+            NewsResourceType.Video,
+            Json.decodeFromString(NewsResourceTypeSerializer, json)
+        )
+    }
 }

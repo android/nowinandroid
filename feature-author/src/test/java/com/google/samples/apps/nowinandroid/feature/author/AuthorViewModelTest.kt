@@ -24,6 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import kotlinx.coroutines.flow.first
@@ -40,6 +41,7 @@ class AuthorViewModelTest {
     @get:Rule
     val dispatcherRule = TestDispatcherRule()
 
+    private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val newsRepository = TestNewsRepository()
     private lateinit var viewModel: AuthorViewModel
@@ -52,6 +54,7 @@ class AuthorViewModelTest {
                     AuthorDestination.authorIdArg to testInputAuthors[0].author.id
                 )
             ),
+            userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
             newsRepository = newsRepository
         )
@@ -63,7 +66,7 @@ class AuthorViewModelTest {
             awaitItem()
             // To make sure AuthorUiState is success
             authorsRepository.sendAuthors(testInputAuthors.map(FollowableAuthor::author))
-            authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
+            userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
 
             val item = awaitItem()
             assertTrue(item.authorState is AuthorUiState.Success)
@@ -75,8 +78,6 @@ class AuthorViewModelTest {
 
             successAuthorUiState.followableAuthor.author
             assertEquals(authorFromRepository, successAuthorUiState.followableAuthor.author)
-
-            cancel()
         }
     }
 
@@ -84,7 +85,6 @@ class AuthorViewModelTest {
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(NewsUiState.Loading, awaitItem().newsState)
-            cancel()
         }
     }
 
@@ -92,16 +92,14 @@ class AuthorViewModelTest {
     fun uiStateAuthor_whenInitialized_thenShowLoading() = runTest {
         viewModel.uiState.test {
             assertEquals(AuthorUiState.Loading, awaitItem().authorState)
-            cancel()
         }
     }
 
     @Test
     fun uiStateAuthor_whenFollowedIdsSuccessAndAuthorLoading_thenShowLoading() = runTest {
         viewModel.uiState.test {
-            authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
+            userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
             assertEquals(AuthorUiState.Loading, awaitItem().authorState)
-            cancel()
         }
     }
 
@@ -111,11 +109,10 @@ class AuthorViewModelTest {
             viewModel.uiState.test {
                 awaitItem()
                 authorsRepository.sendAuthors(testInputAuthors.map { it.author })
-                authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
+                userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
                 val item = awaitItem()
                 assertTrue(item.authorState is AuthorUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Loading)
-                cancel()
             }
         }
 
@@ -125,12 +122,11 @@ class AuthorViewModelTest {
             viewModel.uiState.test {
                 awaitItem()
                 authorsRepository.sendAuthors(testInputAuthors.map { it.author })
-                authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
+                userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
                 newsRepository.sendNewsResources(sampleNewsResources)
                 val item = awaitItem()
                 assertTrue(item.authorState is AuthorUiState.Success)
                 assertTrue(item.newsState is NewsUiState.Success)
-                cancel()
             }
         }
 
@@ -141,7 +137,7 @@ class AuthorViewModelTest {
                 awaitItem()
                 authorsRepository.sendAuthors(testInputAuthors.map { it.author })
                 // Set which author IDs are followed, not including 0.
-                authorsRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
+                userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
 
                 viewModel.followAuthorToggle(true)
 
@@ -149,7 +145,6 @@ class AuthorViewModelTest {
                     AuthorUiState.Success(followableAuthor = testOutputAuthors[0]),
                     awaitItem().authorState
                 )
-                cancel()
             }
     }
 }
