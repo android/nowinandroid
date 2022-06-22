@@ -50,15 +50,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
-import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @Composable
 fun AuthorRoute(
@@ -102,7 +102,7 @@ internal fun AuthorScreen(
         when (authorState) {
             AuthorUiState.Loading -> {
                 item {
-                    LoadingWheel(
+                    NiaLoadingWheel(
                         modifier = modifier,
                         contentDesc = stringResource(id = R.string.author_loading),
                     )
@@ -186,7 +186,7 @@ private fun LazyListScope.authorCards(news: NewsUiState) {
             )
         }
         is NewsUiState.Loading -> item {
-            LoadingWheel(contentDesc = "Loading news") // TODO
+            NiaLoadingWheel(contentDesc = "Loading news") // TODO
         }
         else -> item {
             Text("Error") // TODO
@@ -217,8 +217,8 @@ private fun AuthorToolbar(
         val selected = uiState.isFollowed
         NiaFilterChip(
             modifier = Modifier.padding(horizontal = 16.dp),
-            checked = selected,
-            onCheckedChange = onFollowClick,
+            selected = selected,
+            onSelectedChange = onFollowClick,
         ) {
             if (selected) {
                 Text(stringResource(id = R.string.author_following))
