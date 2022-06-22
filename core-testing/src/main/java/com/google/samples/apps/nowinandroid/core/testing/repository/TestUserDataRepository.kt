@@ -65,6 +65,15 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
+    override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
+        currentUserData.let { current ->
+            val bookmarkedNews = if (bookmarked) current.bookmarkedNewsResources + newsResourceId
+            else current.bookmarkedNewsResources - newsResourceId
+
+            _userData.tryEmit(current.copy(bookmarkedNewsResources = bookmarkedNews))
+        }
+    }
+
     /**
      * A test-only API to allow querying the current followed topics.
      */
