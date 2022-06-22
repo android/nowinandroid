@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,8 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.ui.FollowButton
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.feature.interests.R.string
 
 @Composable
@@ -69,15 +68,25 @@ fun InterestsItem(
             Spacer(modifier = Modifier.width(16.dp))
             InterestContent(name, description)
         }
-        FollowButton(
-            following = following,
-            onFollowChange = onFollowButtonClick,
-            notFollowingContentDescription = stringResource(
-                id = string.interests_card_follow_button_content_desc
-            ),
-            followingContentDescription = stringResource(
-                id = string.interests_card_unfollow_button_content_desc
-            )
+        NiaToggleButton(
+            checked = following,
+            onCheckedChange = onFollowButtonClick,
+            icon = {
+                Icon(
+                    imageVector = NiaIcons.Add,
+                    contentDescription = stringResource(
+                        id = string.interests_card_follow_button_content_desc
+                    )
+                )
+            },
+            checkedIcon = {
+                Icon(
+                    imageVector = NiaIcons.Check,
+                    contentDescription = stringResource(
+                        id = string.interests_card_unfollow_button_content_desc
+                    )
+                )
+            }
         )
     }
 }
@@ -108,7 +117,7 @@ private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) 
             modifier = modifier
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(4.dp),
-            imageVector = Icons.Filled.Person,
+            imageVector = NiaIcons.Person,
             contentDescription = null, // decorative image
         )
     } else {
