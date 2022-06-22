@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -41,7 +40,6 @@ import kotlinx.serialization.json.Json
  */
 class FakeAuthorsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val niaPreferences: NiaPreferencesDataSource,
     private val networkJson: Json,
 ) : AuthorsRepository {
 
@@ -64,16 +62,6 @@ class FakeAuthorsRepository @Inject constructor(
     override fun getAuthorStream(id: String): Flow<Author> {
         return getAuthorsStream().map { it.first { author -> author.id == id } }
     }
-
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
-        niaPreferences.setFollowedAuthorIds(followedAuthorIds)
-    }
-
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
-        niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
-    }
-
-    override fun getFollowedAuthorIdsStream(): Flow<Set<String>> = niaPreferences.followedAuthorIds
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }
