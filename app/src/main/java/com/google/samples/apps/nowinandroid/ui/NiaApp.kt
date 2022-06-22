@@ -33,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -77,7 +78,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
-                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
+                        windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+                    ) {
                         NiaBottomBar(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination
@@ -94,7 +97,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                             )
                         )
                 ) {
-                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact &&
+                        windowSizeClass.heightSizeClass != WindowHeightSizeClass.Compact
+                    ) {
                         NiaNavRail(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination,
