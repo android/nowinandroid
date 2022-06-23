@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -57,10 +60,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicChip
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -117,6 +122,8 @@ fun NewsResourceCardExpanded(
                     NewsResourceDate(newsResource.publishDate)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NewsResourceTopics(newsResource.topics)
                 }
             }
         }
@@ -152,13 +159,7 @@ fun NewsResourceAuthors(
         // Only display first author for now
         val author = authors[0]
 
-        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
-
-        val authorNameFormatted = if (locale != null) {
-            author.name.uppercase(locale)
-        } else {
-            author.name.uppercase()
-        }
+        val authorNameFormatted = uppercaseFormat(author.name)
 
         val authorImageUrl = author.imageUrl
 
@@ -265,9 +266,35 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    newsResource: NewsResource
+    topics: List<Topic>,
+    modifier: Modifier = Modifier
 ) {
-    TODO()
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(items = topics, key = { item -> item.id }) { topic ->
+            NiaTopicChip(
+                enabled = true, // ToDo: Chip should be disabled if user is not following
+                onClick = { }, // ToDo: Handle topic chip interaction
+            ) {
+                Text(uppercaseFormat(topic.name))
+            }
+        }
+    }
+}
+
+@Composable
+private fun uppercaseFormat(string: String): String {
+    val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
+
+    val uppercaseFormatted = if (locale != null) {
+        string.uppercase(locale)
+    } else {
+        string.uppercase()
+    }
+
+    return uppercaseFormatted
 }
 
 @Preview("Bookmark Button")
