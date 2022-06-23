@@ -23,11 +23,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android filter chip with included leading checked icon as well as text content slot.
@@ -99,6 +105,80 @@ fun NiaFilterChip(
             selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground
         )
     )
+}
+
+/**
+ * Now in Android topic chip that displays a topic name text.
+ *
+ * @param enabled Whether the chip is currently enabled.
+ * @param onClick Called when the user clicks the chip for more options.
+ * @param modifier Modifier to be applied to the chip.
+ * @param label The text label content.
+ */
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun NiaTopicChip(
+    enabled: Boolean,
+    onClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    label: @Composable () -> Unit
+) {
+    SuggestionChip(
+        enabled = enabled,
+        onClick = { onClick },
+        label = {
+            ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
+                label()
+            }
+        },
+        modifier = modifier,
+        shape = Shapes.Full,
+        border = SuggestionChipDefaults.suggestionChipBorder(
+            borderColor = MaterialTheme.colorScheme.primaryContainer,
+            disabledBorderColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = NiaChipDefaults.DisabledChipContainerAlpha
+            ),
+            borderWidth = NiaChipDefaults.ChipBorderWidth
+        ),
+        colors = SuggestionChipDefaults.suggestionChipColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                alpha = NiaChipDefaults.DisabledChipContainerAlpha
+            ),
+            labelColor = MaterialTheme.colorScheme.onBackground,
+            disabledLabelColor = MaterialTheme.colorScheme.onBackground
+        )
+    )
+}
+
+@Preview("Enabled Topic Chip Preview")
+@Composable
+fun NiaEnabledTopicChipPreview() {
+    NiaTheme {
+        Surface {
+            NiaTopicChip(
+                enabled = true,
+                onClick = { }
+            ) {
+                Text("Accessibility")
+            }
+        }
+    }
+}
+
+@Preview("Disabled Topic Chip Preview")
+@Composable
+fun NiaDisabledTopicChipPreview() {
+    NiaTheme {
+        Surface {
+            NiaTopicChip(
+                enabled = false,
+                onClick = { }
+            ) {
+                Text("Accessibility")
+            }
+        }
+    }
 }
 
 /**
