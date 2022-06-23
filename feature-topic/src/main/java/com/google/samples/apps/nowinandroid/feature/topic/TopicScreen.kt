@@ -182,7 +182,7 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
 
 @Preview
 @Composable
-private fun TopicBodyPreview() {
+fun TopicBodyPreview() {
     NiaTheme {
         LazyColumn {
             TopicBody(
