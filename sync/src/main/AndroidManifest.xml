@@ -24,11 +24,9 @@
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <!--  TODO: b/2173216 Disable auto sync startup till it works well with instrumented tests   -->
             <meta-data
                 android:name="com.google.samples.apps.nowinandroid.sync.initializers.SyncInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
+                android:value="androidx.startup" />
         </provider>
 
     </application>

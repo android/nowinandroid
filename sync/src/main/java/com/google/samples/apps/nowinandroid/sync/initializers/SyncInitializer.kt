@@ -17,22 +17,13 @@
 package com.google.samples.apps.nowinandroid.sync.initializers
 
 import android.content.Context
-import androidx.startup.AppInitializer
 import androidx.startup.Initializer
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import androidx.work.WorkManagerInitializer
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 
-object Sync {
-    // This method is a workaround to manually initialize the sync process instead of relying on
-    // automatic initialization with Androidx Startup. It is called from the app module's
-    // Application.onCreate() and should be only done once.
-    fun initialize(context: Context) {
-        AppInitializer.getInstance(context)
-            .initializeComponent(SyncInitializer::class.java)
-    }
-}
+object Sync
 
 // This name should not be changed otherwise the app may have concurrent sync requests running
 private const val SyncWorkName = "SyncWorkName"
