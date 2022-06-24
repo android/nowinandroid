@@ -33,7 +33,8 @@ android {
         // release build (for example, with minification on). It's signed with a debug key
         // for easy local/CI testing.
         val benchmark by creating {
-            isDebuggable = false
+            // Keep the build type debuggable so we can attach a debugger if needed.
+            isDebuggable = true
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
         }
