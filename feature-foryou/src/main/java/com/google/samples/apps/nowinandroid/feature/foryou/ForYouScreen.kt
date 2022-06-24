@@ -65,6 +65,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -161,7 +162,9 @@ fun ForYouScreen(
                 }
 
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("forYou:feed"),
                 ) {
                     InterestsSelection(
                         interestsSelectionState = interestsSelectionState,
@@ -218,7 +221,8 @@ private fun LazyListScope.InterestsSelection(
                     NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentSize(),
+                            .wrapContentSize()
+                            .testTag("forYou:loading"),
                         contentDesc = stringResource(id = R.string.for_you_loading),
                     )
                 }
