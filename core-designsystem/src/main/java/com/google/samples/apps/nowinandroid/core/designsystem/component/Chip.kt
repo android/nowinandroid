@@ -119,13 +119,13 @@ fun NiaFilterChip(
 @OptIn(ExperimentalMaterial3Api::class)
 fun NiaTopicChip(
     enabled: Boolean,
-    onClick: (Boolean) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit
 ) {
     SuggestionChip(
         enabled = enabled,
-        onClick = { onClick },
+        onClick = onClick,
         label = {
             ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
                 label()
