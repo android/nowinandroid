@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,8 +36,9 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class InterestsViewModel @Inject constructor(
-    private val authorsRepository: AuthorsRepository,
-    private val topicsRepository: TopicsRepository
+    private val userDataRepository: UserDataRepository,
+    authorsRepository: AuthorsRepository,
+    topicsRepository: TopicsRepository
 ) : ViewModel() {
 
     private val _tabState = MutableStateFlow(
@@ -48,18 +50,17 @@ class InterestsViewModel @Inject constructor(
     val tabState: StateFlow<InterestsTabState> = _tabState.asStateFlow()
 
     val uiState: StateFlow<InterestsUiState> = combine(
+        userDataRepository.userDataStream,
         authorsRepository.getAuthorsStream(),
-        authorsRepository.getFollowedAuthorIdsStream(),
         topicsRepository.getTopicsStream(),
-        topicsRepository.getFollowedTopicIdsStream(),
-    ) { availableAuthors, followedAuthorIdsState, availableTopics, followedTopicIdsState ->
+    ) { userData, availableAuthors, availableTopics ->
 
         InterestsUiState.Interests(
             authors = availableAuthors
                 .map { author ->
                     FollowableAuthor(
                         author = author,
-                        isFollowed = author.id in followedAuthorIdsState
+                        isFollowed = author.id in userData.followedAuthors
                     )
                 }
                 .sortedBy { it.author.name },
@@ -67,7 +68,7 @@ class InterestsViewModel @Inject constructor(
                 .map { topic ->
                     FollowableTopic(
                         topic = topic,
-                        isFollowed = topic.id in followedTopicIdsState
+                        isFollowed = topic.id in userData.followedTopics
                     )
                 }
                 .sortedBy { it.topic.name }
@@ -81,13 +82,13 @@ class InterestsViewModel @Inject constructor(
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
-            topicsRepository.toggleFollowedTopicId(followedTopicId, followed)
+            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
         }
     }
 
     fun followAuthor(followedAuthorId: String, followed: Boolean) {
         viewModelScope.launch {
-            authorsRepository.toggleFollowedAuthorId(followedAuthorId, followed)
+            userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
         }
     }
 

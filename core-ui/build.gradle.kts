@@ -21,6 +21,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":core-designsystem"))
     implementation(project(":core-model"))
 
     implementation(libs.androidx.core.ktx)

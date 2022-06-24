@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -33,13 +34,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class TopicViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val topicsRepository: TopicsRepository,
+    private val userDataRepository: UserDataRepository,
+    topicsRepository: TopicsRepository,
     newsRepository: NewsRepository
 ) : ViewModel() {
 
@@ -47,7 +50,9 @@ class TopicViewModel @Inject constructor(
 
     // Observe the followed topics, as they could change over time.
     private val followedTopicIdsStream: Flow<Result<Set<String>>> =
-        topicsRepository.getFollowedTopicIdsStream().asResult()
+        userDataRepository.userDataStream
+            .map { it.followedTopics }
+            .asResult()
 
     // Observe topic information
     private val topic: Flow<Result<Topic>> = topicsRepository.getTopic(topicId).asResult()
@@ -97,7 +102,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            topicsRepository.toggleFollowedTopicId(topicId, followed)
+            userDataRepository.toggleFollowedTopicId(topicId, followed)
         }
     }
 }

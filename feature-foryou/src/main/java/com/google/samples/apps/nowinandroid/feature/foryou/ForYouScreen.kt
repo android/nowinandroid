@@ -47,9 +47,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -79,21 +76,20 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlin.math.floor
 
 @Composable
@@ -133,11 +129,11 @@ fun ForYouScreen(
             topBar = {
                 NiaTopAppBar(
                     titleRes = R.string.top_app_bar_title,
-                    navigationIcon = Icons.Filled.Search,
+                    navigationIcon = NiaIcons.Search,
                     navigationIconContentDescription = stringResource(
                         id = R.string.top_app_bar_navigation_button_content_desc
                     ),
-                    actionIcon = Icons.Outlined.AccountCircle,
+                    actionIcon = NiaIcons.AccountCircle,
                     actionIconContentDescription = stringResource(
                         id = R.string.top_app_bar_navigation_button_content_desc
                     ),
@@ -219,7 +215,7 @@ private fun LazyListScope.InterestsSelection(
         ForYouInterestsSelectionUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
-                    LoadingWheel(
+                    NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize(),
@@ -237,7 +233,7 @@ private fun LazyListScope.InterestsSelection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
-                    style = NiaTypography.titleMedium
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
             item {
@@ -247,7 +243,7 @@ private fun LazyListScope.InterestsSelection(
                         .fillMaxWidth()
                         .padding(top = 8.dp, start = 16.dp, end = 16.dp),
                     textAlign = TextAlign.Center,
-                    style = NiaTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             item {
@@ -354,7 +350,7 @@ private fun SingleTopicButton(
             )
             Text(
                 text = name,
-                style = NiaTypography.titleSmall,
+                style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .weight(1f),
@@ -365,14 +361,14 @@ private fun SingleTopicButton(
                 onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
                     Icon(
-                        imageVector = NiaIcons.Add, contentDescription = name,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        imageVector = NiaIcons.Add,
+                        contentDescription = name
                     )
                 },
                 checkedIcon = {
                     Icon(
-                        imageVector = NiaIcons.Check, contentDescription = name,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        imageVector = NiaIcons.Check,
+                        contentDescription = name
                     )
                 }
             )
@@ -414,7 +410,7 @@ private fun LazyListScope.Feed(
         ForYouFeedUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
-                    LoadingWheel(
+                    NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize(),

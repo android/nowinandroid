@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.saveable
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -51,26 +52,25 @@ import kotlinx.coroutines.launch
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
-    private val authorsRepository: AuthorsRepository,
-    private val topicsRepository: TopicsRepository,
+    authorsRepository: AuthorsRepository,
+    topicsRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
+    private val userDataRepository: UserDataRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val followedInterestsState: StateFlow<FollowedInterestsState> =
-        combine(
-            authorsRepository.getFollowedAuthorIdsStream(),
-            topicsRepository.getFollowedTopicIdsStream(),
-        ) { followedAuthors, followedTopics ->
-            if (followedAuthors.isEmpty() && followedTopics.isEmpty()) {
-                None
-            } else {
-                FollowedInterests(
-                    authorIds = followedAuthors,
-                    topicIds = followedTopics
-                )
+        userDataRepository.userDataStream
+            .map { userData ->
+                if (userData.followedAuthors.isEmpty() && userData.followedTopics.isEmpty()) {
+                    None
+                } else {
+                    FollowedInterests(
+                        authorIds = userData.followedAuthors,
+                        topicIds = userData.followedTopics
+                    )
+                }
             }
-        }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -232,8 +232,8 @@ class ForYouViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            topicsRepository.setFollowedTopicIds(inProgressTopicSelection)
-            authorsRepository.setFollowedAuthorIds(inProgressAuthorSelection)
+            userDataRepository.setFollowedTopicIds(inProgressTopicSelection)
+            userDataRepository.setFollowedAuthorIds(inProgressAuthorSelection)
             // Clear out the old selection, in case we return to onboarding
             withMutableSnapshot {
                 inProgressTopicSelection = emptySet()

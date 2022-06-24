@@ -23,7 +23,6 @@ import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
@@ -38,7 +37,6 @@ import kotlinx.coroutines.flow.map
 class OfflineFirstAuthorsRepository @Inject constructor(
     private val authorDao: AuthorDao,
     private val network: NiaNetworkDataSource,
-    private val niaPreferences: NiaPreferencesDataSource,
 ) : AuthorsRepository {
 
     override fun getAuthorStream(id: String): Flow<Author> =
@@ -49,14 +47,6 @@ class OfflineFirstAuthorsRepository @Inject constructor(
     override fun getAuthorsStream(): Flow<List<Author>> =
         authorDao.getAuthorEntitiesStream()
             .map { it.map(AuthorEntity::asExternalModel) }
-
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) =
-        niaPreferences.setFollowedAuthorIds(followedAuthorIds)
-
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) =
-        niaPreferences.toggleFollowedAuthorId(followedAuthorId, followed)
-
-    override fun getFollowedAuthorIdsStream(): Flow<Set<String>> = niaPreferences.followedAuthorIds
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
         synchronizer.changeListSync(

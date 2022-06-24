@@ -20,9 +20,11 @@ import com.google.samples.apps.nowinandroid.core.data.di.DataModule
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeTopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeUserDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
@@ -48,4 +50,9 @@ interface TestDataModule {
     fun bindsNewsResourceRepository(
         fakeNewsRepository: FakeNewsRepository
     ): NewsRepository
+
+    @Binds
+    fun bindsUserDataRepository(
+        userDataRepository: FakeUserDataRepository
+    ): UserDataRepository
 }
