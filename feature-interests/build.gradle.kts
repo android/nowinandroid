@@ -23,7 +23,5 @@ plugins {
 }
 
 dependencies {
-
-    //compose pagers
     implementation(libs.accompanist.pager)
 }
