@@ -21,19 +21,23 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationWithArguments
 import com.google.samples.apps.nowinandroid.feature.author.AuthorRoute
 
-object AuthorDestination : NiaNavigationDestination {
+object AuthorDestination : NiaNavigationDestination, NiaNavigationWithArguments {
     override val route = "author_route"
     override val destination = "author_destination"
     const val authorIdArg = "authorId"
+
+    override val routeWithArguments: String
+        get() = route.plus("/{$authorIdArg}")
 }
 
 fun NavGraphBuilder.authorGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${AuthorDestination.route}/{${AuthorDestination.authorIdArg}}",
+        route = AuthorDestination.routeWithArguments,
         arguments = listOf(
             navArgument(AuthorDestination.authorIdArg) {
                 type = NavType.StringType

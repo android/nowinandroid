@@ -36,3 +36,11 @@ interface NiaNavigationDestination {
      */
     val destination: String
 }
+
+interface NiaNavigationWithArguments {
+
+    /**
+     * Defines the arguments on the screen, which will be combined with the screen route.
+     */
+    val routeWithArguments: String
+}
