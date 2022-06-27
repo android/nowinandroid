@@ -34,6 +34,7 @@ class ScrollForYouFeedBenchmark {
     @Test
     fun scrollFeedCompilationNone() = scrollFeed(CompilationMode.None())
 
+    @Test
     fun scrollFeedCompilationBaselineProfile() = scrollFeed(CompilationMode.Partial())
 
     private fun scrollFeed(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
