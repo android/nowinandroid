@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.samples.apps.nowinandroid.Flavor
+import com.google.samples.apps.nowinandroid.FlavorDimension
+import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
     id("nowinandroid.android.test")
@@ -25,7 +28,6 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        missingDimensionStrategy("contentType", "demo")
     }
 
     buildTypes {
@@ -40,6 +42,11 @@ android {
         }
     }
 
+    // Use the same flavor dimensions as the application to allow generating Baseline Profiles on prod,
+    // which is more close to what will be shipped to users (no fake data), but has ability to run the
+    // benchmarks on demo, so we benchmark on stable data. 
+    configureFlavors(this)
+    
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 }

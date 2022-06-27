@@ -20,6 +20,7 @@ import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
+import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import org.junit.Rule
 import org.junit.Test
 
@@ -32,9 +33,7 @@ class BaselineProfileGenerator {
 
     @Test
     fun startup() =
-        baselineProfileRule.collectBaselineProfile(
-            packageName = "com.google.samples.apps.nowinandroid.demo.benchmark"
-        ) {
+        baselineProfileRule.collectBaselineProfile(PACKAGE_NAME) {
             pressHome()
             // This block defines the app's critical user journey. Here we are interested in
             // optimizing for app startup. But you can also navigate and scroll
