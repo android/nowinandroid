@@ -30,4 +30,5 @@ message UserPreferences {
     bool has_done_int_to_string_id_migration = 8;
     repeated string followed_topic_ids = 9;
     repeated string followed_author_ids = 10;
+    repeated string bookmarked_news_resource_ids = 11;
 }

@@ -30,13 +30,10 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -44,16 +41,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRailItem
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.NiaTopLevelNavigation
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_DESTINATIONS
@@ -78,7 +81,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 bottomBar = {
-                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
+                        windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+                    ) {
                         NiaBottomBar(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination
@@ -95,7 +100,9 @@ fun NiaApp(windowSizeClass: WindowSizeClass) {
                             )
                         )
                 ) {
-                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact) {
+                    if (windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact &&
+                        windowSizeClass.heightSizeClass != WindowHeightSizeClass.Compact
+                    ) {
                         NiaNavRail(
                             onNavigateToTopLevelDestination = niaTopLevelNavigation::navigateTo,
                             currentDestination = currentDestination,
@@ -133,18 +140,29 @@ private fun NiaNavRail(
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
-    NavigationRail(modifier = modifier) {
+    NiaNavigationRail(modifier = modifier) {
         TOP_LEVEL_DESTINATIONS.forEach { destination ->
             val selected =
                 currentDestination?.hierarchy?.any { it.route == destination.route } == true
-            NavigationRailItem(
+            NiaNavigationRailItem(
                 selected = selected,
                 onClick = { onNavigateToTopLevelDestination(destination) },
                 icon = {
-                    Icon(
-                        if (selected) destination.selectedIcon else destination.unselectedIcon,
-                        contentDescription = null
-                    )
+                    val icon = if (selected) {
+                        destination.selectedIcon
+                    } else {
+                        destination.unselectedIcon
+                    }
+                    when (icon) {
+                        is ImageVectorIcon -> Icon(
+                            imageVector = icon.imageVector,
+                            contentDescription = null
+                        )
+                        is DrawableResourceIcon -> Icon(
+                            painter = painterResource(id = icon.id),
+                            contentDescription = null
+                        )
+                    }
                 },
                 label = { Text(stringResource(destination.iconTextId)) }
             )
@@ -160,30 +178,36 @@ private fun NiaBottomBar(
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
     Surface(color = MaterialTheme.colorScheme.surface) {
-        NavigationBar(
+        NiaNavigationBar(
             modifier = Modifier.windowInsetsPadding(
                 WindowInsets.safeDrawing.only(
                     WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
                 )
-            ),
-            tonalElevation = 0.dp
+            )
         ) {
 
             TOP_LEVEL_DESTINATIONS.forEach { destination ->
                 val selected =
                     currentDestination?.hierarchy?.any { it.route == destination.route } == true
-                NavigationBarItem(
+                NiaNavigationBarItem(
                     selected = selected,
                     onClick = { onNavigateToTopLevelDestination(destination) },
                     icon = {
-                        Icon(
-                            if (selected) {
-                                destination.selectedIcon
-                            } else {
-                                destination.unselectedIcon
-                            },
-                            contentDescription = null
-                        )
+                        val icon = if (selected) {
+                            destination.selectedIcon
+                        } else {
+                            destination.unselectedIcon
+                        }
+                        when (icon) {
+                            is ImageVectorIcon -> Icon(
+                                imageVector = icon.imageVector,
+                                contentDescription = null
+                            )
+                            is DrawableResourceIcon -> Icon(
+                                painter = painterResource(id = icon.id),
+                                contentDescription = null
+                            )
+                        }
                     },
                     label = { Text(stringResource(destination.iconTextId)) }
                 )
