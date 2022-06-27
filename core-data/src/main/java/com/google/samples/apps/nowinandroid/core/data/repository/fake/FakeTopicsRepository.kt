@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -43,7 +42,6 @@ import kotlinx.serialization.json.Json
 class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
-    private val niaPreferences: NiaPreferencesDataSource
 ) : TopicsRepository {
     override fun getTopicsStream(): Flow<List<Topic>> = flow<List<Topic>> {
         emit(
@@ -64,14 +62,6 @@ class FakeTopicsRepository @Inject constructor(
     override fun getTopic(id: String): Flow<Topic> {
         return getTopicsStream().map { it.first { topic -> topic.id == id } }
     }
-
-    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
-        niaPreferences.setFollowedTopicIds(followedTopicIds)
-
-    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
-        niaPreferences.toggleFollowedTopicId(followedTopicId, followed)
-
-    override fun getFollowedTopicIdsStream() = niaPreferences.followedTopicIds
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

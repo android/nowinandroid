@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -33,13 +34,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AuthorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val authorsRepository: AuthorsRepository,
+    private val userDataRepository: UserDataRepository,
+    authorsRepository: AuthorsRepository,
     newsRepository: NewsRepository
 ) : ViewModel() {
 
@@ -49,7 +52,9 @@ class AuthorViewModel @Inject constructor(
 
     // Observe the followed authors, as they could change over time.
     private val followedAuthorIdsStream: Flow<Result<Set<String>>> =
-        authorsRepository.getFollowedAuthorIdsStream().asResult()
+        userDataRepository.userDataStream
+            .map { it.followedAuthors }
+            .asResult()
 
     // Observe author information
     private val author: Flow<Result<Author>> = authorsRepository.getAuthorStream(
@@ -102,7 +107,7 @@ class AuthorViewModel @Inject constructor(
 
     fun followAuthorToggle(followed: Boolean) {
         viewModelScope.launch {
-            authorsRepository.toggleFollowedAuthorId(authorId, followed)
+            userDataRepository.toggleFollowedAuthorId(authorId, followed)
         }
     }
 }

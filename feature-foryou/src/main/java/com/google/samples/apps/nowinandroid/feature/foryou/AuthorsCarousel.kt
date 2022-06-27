@@ -31,8 +31,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -54,9 +52,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.ui.FollowButton
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -138,7 +138,7 @@ fun AuthorItem(
                     modifier = authorImageModifier
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(4.dp),
-                    imageVector = Icons.Filled.Person,
+                    imageVector = NiaIcons.Person,
                     contentDescription = null // decorative image
                 )
             } else {
@@ -149,12 +149,24 @@ fun AuthorItem(
                     contentDescription = null
                 )
             }
-            FollowButton(
-                following = following,
-                backgroundColor = MaterialTheme.colorScheme.surface,
-                size = 20.dp,
-                iconSize = 14.dp,
-                modifier = Modifier.align(Alignment.BottomEnd)
+            NiaToggleButton(
+                checked = following,
+                onCheckedChange = onAuthorClick,
+                modifier = Modifier.align(Alignment.BottomEnd),
+                icon = {
+                    Icon(
+                        imageVector = NiaIcons.Add,
+                        contentDescription = null
+                    )
+                },
+                checkedIcon = {
+                    Icon(
+                        imageVector = NiaIcons.Check,
+                        contentDescription = null
+                    )
+                },
+                size = 24.dp,
+                backgroundColor = MaterialTheme.colorScheme.surface
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -172,7 +184,7 @@ fun AuthorItem(
 @Preview
 @Composable
 fun AuthorCarouselPreview() {
-    MaterialTheme {
+    NiaTheme {
         Surface {
             AuthorsCarousel(
                 authors = listOf(
@@ -219,7 +231,7 @@ fun AuthorCarouselPreview() {
 @Preview
 @Composable
 fun AuthorItemPreview() {
-    MaterialTheme {
+    NiaTheme {
         Surface {
             AuthorItem(
                 author = Author(

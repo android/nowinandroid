@@ -19,35 +19,31 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
-import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
 
 @Composable
 fun InterestsRoute(
@@ -94,28 +90,25 @@ fun InterestsScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            // TODO: Replace with windowInsetsTopHeight after
-            //       https://issuetracker.google.com/issues/230383055
-            Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-            )
-        )
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
 
         NiaTopAppBar(
             titleRes = R.string.interests,
-            navigationIcon = Icons.Filled.Search,
+            navigationIcon = NiaIcons.Search,
             navigationIconContentDescription = stringResource(
                 id = R.string.top_app_bar_navigation_button_content_desc
             ),
-            actionIcon = Icons.Filled.MoreVert,
+            actionIcon = NiaIcons.MoreVert,
             actionIconContentDescription = stringResource(
                 id = R.string.top_app_bar_navigation_button_content_desc
+            ),
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent
             )
         )
         when (uiState) {
             InterestsUiState.Loading ->
-                LoadingWheel(
+                NiaLoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.interests_loading),
                 )
@@ -161,7 +154,6 @@ private fun InterestsContent(
                     topics = uiState.topics,
                     onTopicClick = navigateToTopic,
                     onFollowButtonClick = followTopic,
-                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
             1 -> {
@@ -169,7 +161,6 @@ private fun InterestsContent(
                     authors = uiState.authors,
                     onAuthorClick = navigateToAuthor,
                     onFollowButtonClick = followAuthor,
-                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }

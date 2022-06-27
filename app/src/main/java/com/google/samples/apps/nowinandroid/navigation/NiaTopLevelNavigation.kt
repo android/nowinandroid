@@ -16,15 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Grid3x3
-import androidx.compose.material.icons.filled.Upcoming
-import androidx.compose.material.icons.outlined.Grid3x3
-import androidx.compose.material.icons.outlined.Upcoming
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.tracing.trace
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.foryou.R.string.for_you
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.feature.interests.R.string.interests
@@ -62,22 +60,22 @@ class NiaTopLevelNavigation(private val navController: NavHostController) {
 
 data class TopLevelDestination(
     val route: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    val selectedIcon: Icon,
+    val unselectedIcon: Icon,
     val iconTextId: Int
 )
 
 val TOP_LEVEL_DESTINATIONS = listOf(
     TopLevelDestination(
         route = ForYouDestination.route,
-        selectedIcon = Icons.Filled.Upcoming,
-        unselectedIcon = Icons.Outlined.Upcoming,
+        selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
+        unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
         iconTextId = for_you
     ),
     TopLevelDestination(
         route = InterestsDestination.route,
-        selectedIcon = Icons.Filled.Grid3x3,
-        unselectedIcon = Icons.Outlined.Grid3x3,
+        selectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
+        unselectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
         iconTextId = interests
     )
 )

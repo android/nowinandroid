@@ -100,6 +100,7 @@ dependencies {
     implementation(project(":feature-topic"))
 
     implementation(project(":core-ui"))
+    implementation(project(":core-designsystem"))
     implementation(project(":core-navigation"))
 
     implementation(project(":sync"))
@@ -129,7 +130,7 @@ dependencies {
         resolutionStrategy {
             force(libs.junit4)
             // Temporary workaround for https://issuetracker.google.com/174733673
-            force("org.objenesis:objenesis:3.2")
+            force("org.objenesis:objenesis:2.6")
         }
     }
 }

@@ -50,6 +50,12 @@ The Now in Android app follows the
 and is described in detail in the
 [architecture learning journey](docs/ArchitectureLearningJourney.md).
 
+# Modularization
+
+The Now in Android app has been fully modularized and you can find the detailed guidance and
+description of the modularization strategy used in
+[modularization learning journey](docs/ModularizationLearningJourney.md).
+
 # Build
 
 The app contains the usual `debug` and `release` build variants. 
