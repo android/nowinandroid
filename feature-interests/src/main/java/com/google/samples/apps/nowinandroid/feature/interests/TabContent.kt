@@ -19,11 +19,9 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -58,13 +56,7 @@ fun TopicsTabContent(
         }
 
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
@@ -94,13 +86,7 @@ fun AuthorsTabContent(
         }
 
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
