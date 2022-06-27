@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.IntRange
@@ -58,6 +59,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -65,6 +67,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,6 +78,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
@@ -159,6 +163,20 @@ fun ForYouScreen(
                 val numberOfColumns = when (windowSizeClass.widthSizeClass) {
                     WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
                     else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
+                }
+
+                // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+                // This code should be called when the UI is ready for use and relates to Time To Full Display. 
+                if (interestsSelectionState !is ForYouInterestsSelectionUiState.Loading && feedState !is ForYouFeedUiState.Loading) {
+                    val localView = LocalView.current
+                    // Unit prevents calling it only once on recomposition, but doesn't prevent when the composable goes out of scope. 
+                    // Activity.reportFullyDrawn has inside check  to be called only once.
+                    LaunchedEffect(Unit) {
+                        // We're leveraging the fact, that the current view is directly set as content of Activity.
+                        val activity = localView.context as? Activity ?: return@LaunchedEffect
+                        // To be sure not to call in the middle of a frame draw.
+                        localView.doOnPreDraw { activity.reportFullyDrawn() }
+                    }
                 }
 
                 LazyColumn(
