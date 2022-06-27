@@ -23,13 +23,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons.Filled
@@ -91,13 +90,7 @@ internal fun TopicScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsTopHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                )
-            )
+            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         }
         when (topicState) {
             Loading -> item {
@@ -124,13 +117,7 @@ internal fun TopicScreen(
             }
         }
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
