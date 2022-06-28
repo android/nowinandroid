@@ -50,7 +50,7 @@ class BaselineProfileGenerator {
             forYouSelectAuthors()
             forYouScrollFeedDownUp()
 
-            // Navigate to interests screen            
+            // Navigate to interests screen
             device.findObject(By.text("Interests")).click()
             device.waitForIdle()
 
@@ -63,4 +63,3 @@ class BaselineProfileGenerator {
             interestsScrollPeopleDownUp()
         }
 }
-

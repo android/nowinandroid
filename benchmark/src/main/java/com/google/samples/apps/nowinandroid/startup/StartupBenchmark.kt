@@ -86,7 +86,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         }
     ) {
         startActivityAndWait()
-        // Waits until the content is ready to capture Time To Full Display 
+        // Waits until the content is ready to capture Time To Full Display
         forYouWaitForContent()
     }
 }

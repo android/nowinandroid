@@ -166,10 +166,15 @@ fun ForYouScreen(
                 }
 
                 // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-                // This code should be called when the UI is ready for use and relates to Time To Full Display. 
-                if (interestsSelectionState !is ForYouInterestsSelectionUiState.Loading && feedState !is ForYouFeedUiState.Loading) {
+                // This code should be called when the UI is ready for use
+                // and relates to Time To Full Display.
+                val interestsLoaded =
+                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+                val feedLoaded = feedState !is ForYouFeedUiState.Loading
+
+                if (interestsLoaded && feedLoaded) {
                     val localView = LocalView.current
-                    // Unit prevents calling it only once on recomposition, but doesn't prevent when the composable goes out of scope. 
+                    // Unit prevents calling it only once on recomposition, but doesn't prevent when the composable goes out of scope.
                     // Activity.reportFullyDrawn has inside check  to be called only once.
                     LaunchedEffect(Unit) {
                         // We're leveraging the fact, that the current view is directly set as content of Activity.
