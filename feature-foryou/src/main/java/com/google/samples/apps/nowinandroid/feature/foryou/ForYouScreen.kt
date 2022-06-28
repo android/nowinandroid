@@ -77,6 +77,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.trace
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -317,7 +318,7 @@ private fun TopicSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState.WithInterestsSelection,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
-) {
+) = trace("TopicSelection") {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -356,7 +357,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit
-) {
+) = trace("SingleTopicButton") {
     Surface(
         modifier = Modifier
             .width(312.dp)
