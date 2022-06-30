@@ -175,8 +175,10 @@ fun ForYouScreen(
 
                 if (interestsLoaded && feedLoaded) {
                     val localView = LocalView.current
-                    // Unit prevents calling it only once on recomposition, but doesn't prevent when the composable goes out of scope.
-                    // Activity.reportFullyDrawn has inside check  to be called only once.
+                    // We use Unit to call reportFullyDrawn only on the first recomposition, 
+                    // however it will be called again if this composable goes out of scope. 
+                    // Activity.reportFullyDrawn() has its own check for this 
+                    // and is safe to call multiple times though.
                     LaunchedEffect(Unit) {
                         // We're leveraging the fact, that the current view is directly set as content of Activity.
                         val activity = localView.context as? Activity ?: return@LaunchedEffect
