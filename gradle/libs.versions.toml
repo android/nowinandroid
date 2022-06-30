@@ -11,7 +11,7 @@ androidxCustomView = "1.0.0-rc01"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.4.0"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.5.0-rc02"
+androidxLifecycle = "2.6.0-alpha01"
 androidxMacroBenchmark = "1.1.0"
 androidxNavigation = "2.4.2"
 androidxProfileinstaller = "1.2.0-rc01"
@@ -69,6 +69,7 @@ androidx-customview-poolingcontainer = { group = "androidx.customview", name = "
 androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
