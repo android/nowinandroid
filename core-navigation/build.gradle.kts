@@ -28,7 +28,6 @@ dependencies {
     api(libs.androidx.hilt.navigation.compose)
     api(libs.androidx.navigation.compose)
 
-    implementation(libs.androidx.tracing.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 }
