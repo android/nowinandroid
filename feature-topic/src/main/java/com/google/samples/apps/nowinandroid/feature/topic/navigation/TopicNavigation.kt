@@ -21,23 +21,20 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationWithArguments
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 
-object TopicDestination : NiaNavigationDestination, NiaNavigationWithArguments {
+object TopicDestination : NiaNavigationDestination {
     override val route = "topic_route"
     override val destination = "topic_destination"
     const val topicIdArg = "topicId"
-
-    override val routeWithArguments: String
-        get() = route.plus("/{$topicIdArg}")
+    val routeWithArgs = "$route/{$topicIdArg}"
 }
 
 fun NavGraphBuilder.topicGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = TopicDestination.routeWithArguments,
+        route = TopicDestination.routeWithArgs,
         arguments = listOf(
             navArgument(TopicDestination.topicIdArg) {
                 type = NavType.StringType
