@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.IntRange
@@ -59,6 +60,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -66,6 +68,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -74,7 +78,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.trace
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
@@ -161,8 +167,31 @@ fun ForYouScreen(
                     else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
                 }
 
+                // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+                // This code should be called when the UI is ready for use
+                // and relates to Time To Full Display.
+                val interestsLoaded =
+                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+                val feedLoaded = feedState !is ForYouFeedUiState.Loading
+
+                if (interestsLoaded && feedLoaded) {
+                    val localView = LocalView.current
+                    // We use Unit to call reportFullyDrawn only on the first recomposition,
+                    // however it will be called again if this composable goes out of scope.
+                    // Activity.reportFullyDrawn() has its own check for this
+                    // and is safe to call multiple times though.
+                    LaunchedEffect(Unit) {
+                        // We're leveraging the fact, that the current view is directly set as content of Activity.
+                        val activity = localView.context as? Activity ?: return@LaunchedEffect
+                        // To be sure not to call in the middle of a frame draw.
+                        localView.doOnPreDraw { activity.reportFullyDrawn() }
+                    }
+                }
+
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("forYou:feed"),
                 ) {
                     InterestsSelection(
                         interestsSelectionState = interestsSelectionState,
@@ -213,7 +242,8 @@ private fun LazyListScope.InterestsSelection(
                     NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentSize(),
+                            .wrapContentSize()
+                            .testTag("forYou:loading"),
                         contentDesc = stringResource(id = R.string.for_you_loading),
                     )
                 }
@@ -285,7 +315,7 @@ private fun TopicSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState.WithInterestsSelection,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
-) {
+) = trace("TopicSelection") {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -324,7 +354,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit
-) {
+) = trace("SingleTopicButton") {
     Surface(
         modifier = Modifier
             .width(312.dp)
