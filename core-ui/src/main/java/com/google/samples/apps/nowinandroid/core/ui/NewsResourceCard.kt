@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,8 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -48,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -57,10 +56,9 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -69,6 +67,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 
@@ -159,7 +158,7 @@ fun NewsResourceAuthors(
         // Only display first author for now
         val author = authors[0]
 
-        val authorNameFormatted = uppercaseFormat(author.name)
+        val authorNameFormatted = author.name.uppercase(Locale.getDefault())
 
         val authorImageUrl = author.imageUrl
 
@@ -269,32 +268,20 @@ fun NewsResourceTopics(
     topics: List<Topic>,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    Row(
+        modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        items(items = topics, key = { item -> item.id }) { topic ->
-            NiaTopicChip(
-                enabled = true, // ToDo: Chip should be disabled if user is not following
-                onClick = { }, // ToDo: Handle topic chip interaction
-            ) {
-                Text(uppercaseFormat(topic.name))
-            }
+        for (topic in topics) {
+            NiaTopicTag(
+                followed = true, // Todo
+                onFollowClick = { }, // Todo
+                onUnfollowClick = { }, // Todo
+                onBrowseClick = { }, // Todo
+                text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
+            )
         }
     }
-}
-
-@Composable
-private fun uppercaseFormat(string: String): String {
-    val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
-
-    val uppercaseFormatted = if (locale != null) {
-        string.uppercase(locale)
-    } else {
-        string.uppercase()
-    }
-
-    return uppercaseFormatted
 }
 
 @Preview("Bookmark Button")
