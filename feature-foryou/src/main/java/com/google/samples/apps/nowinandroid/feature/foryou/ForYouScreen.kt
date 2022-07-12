@@ -96,6 +96,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import kotlin.math.floor
 
@@ -124,7 +125,7 @@ fun ForYouRoute(
 fun ForYouScreen(
     windowSizeClass: WindowSizeClass,
     interestsSelectionState: ForYouInterestsSelectionUiState,
-    feedState: ForYouFeedUiState,
+    feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -172,7 +173,7 @@ fun ForYouScreen(
                 // and relates to Time To Full Display.
                 val interestsLoaded =
                     interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-                val feedLoaded = feedState !is ForYouFeedUiState.Loading
+                val feedLoaded = feedState !is NewsFeedUiState.Loading
 
                 if (interestsLoaded && feedLoaded) {
                     val localView = LocalView.current
@@ -426,13 +427,13 @@ fun TopicIcon(
  * states.
  */
 private fun LazyListScope.Feed(
-    feedState: ForYouFeedUiState,
+    feedState: NewsFeedUiState,
     showLoadingUIIfLoading: Boolean,
     @IntRange(from = 1) numberOfColumns: Int,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
 ) {
     when (feedState) {
-        ForYouFeedUiState.Loading -> {
+        NewsFeedUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
                     NiaLoadingWheel(
@@ -444,7 +445,7 @@ private fun LazyListScope.Feed(
                 }
             }
         }
-        is ForYouFeedUiState.Success -> {
+        is NewsFeedUiState.Success -> {
             items(
                 feedState.feed.chunked(numberOfColumns)
             ) { saveableNewsResources ->
@@ -512,7 +513,7 @@ fun ForYouScreenPopulatedFeed() {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                feedState = ForYouFeedUiState.Success(
+                feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
                     }
@@ -541,7 +542,7 @@ fun ForYouScreenTopicSelection() {
                     topics = previewTopics.map { FollowableTopic(it, false) },
                     authors = previewAuthors.map { FollowableAuthor(it, false) }
                 ),
-                feedState = ForYouFeedUiState.Success(
+                feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
                     }
@@ -567,7 +568,7 @@ fun ForYouScreenLoading() {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
-                feedState = ForYouFeedUiState.Loading,
+                feedState = NewsFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
