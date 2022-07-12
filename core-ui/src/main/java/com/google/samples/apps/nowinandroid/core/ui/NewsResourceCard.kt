@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
@@ -75,6 +77,8 @@ import kotlinx.datetime.toJavaInstant
  * [NewsResource] card used on the following screens: For You, Episodes, Saved
  */
 
+const val NewsResourceCardTestTag = "NewsResourceCardTestTag"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
@@ -91,9 +95,11 @@ fun NewsResourceCardExpanded(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
         // Pass null for action to only override the label and not the actual action.
-        modifier = modifier.semantics {
-            onClick(label = clickActionLabel, action = null)
-        }
+        modifier = modifier
+            .semantics {
+                onClick(label = clickActionLabel, action = null)
+            }
+            .testTag(NewsResourceCardTestTag)
     ) {
         Column {
             if (!newsResource.headerImageUrl.isNullOrEmpty()) {
@@ -223,7 +229,8 @@ fun BookmarkButton(
 }
 
 @Composable
-private fun dateFormatted(publishDate: Instant): String {
+@VisibleForTesting
+fun dateFormatted(publishDate: Instant): String {
     var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
 
     val context = LocalContext.current

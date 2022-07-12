@@ -20,6 +20,12 @@ plugins {
     id("nowinandroid.spotless")
 }
 
+android {
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
 dependencies {
     implementation(project(":core-designsystem"))
     implementation(project(":core-model"))
@@ -47,4 +53,6 @@ dependencies {
     api(libs.androidx.compose.runtime.livedata)
     api(libs.androidx.metrics)
     api(libs.androidx.tracing.ktx)
+
+    androidTestImplementation(project(":core-testing"))
 }
