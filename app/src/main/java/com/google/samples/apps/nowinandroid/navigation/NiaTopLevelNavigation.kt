@@ -22,7 +22,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.R.string.for_you
+import com.google.samples.apps.nowinandroid.feature.foryou.R.string.saved
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.feature.interests.R.string.interests
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
@@ -68,6 +70,12 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
         unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
         iconTextId = for_you
+    ),
+    TopLevelDestination(
+        route = BookmarksDestination.route,
+        selectedIcon = DrawableResourceIcon(NiaIcons.Bookmarks),
+        unselectedIcon = DrawableResourceIcon(NiaIcons.BookmarksBorder),
+        iconTextId = saved
     ),
     TopLevelDestination(
         route = InterestsDestination.route,

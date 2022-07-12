@@ -61,8 +61,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.Instant
@@ -112,8 +111,7 @@ fun NewsResourceCardExpanded(
                             modifier = Modifier.fillMaxWidth((.8f))
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        // TODO: Implement functionality to 'bookmark' a resource b/227246491
-//            BookmarkButton(isBookmarked, onToggleBookmark)
+                        BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceDate(newsResource.publishDate)
@@ -297,38 +295,12 @@ fun BookmarkButtonBookmarkedPreview() {
 fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
-            NewsResourceCardExpanded(newsResource, true, {}, {})
+            NewsResourceCardExpanded(
+                newsResource = previewNewsResources[0],
+                isBookmarked = true,
+                onToggleBookmark = {},
+                onClick = {}
+            )
         }
     }
 }
-
-private val newsResource = NewsResource(
-    id = "1",
-    episodeId = "1",
-    title = "Title",
-    content = "Content",
-    url = "url",
-    headerImageUrl = "https://i.ytimg.com/vi/WL9h46CymlU/maxresdefault.jpg",
-    publishDate = Instant.DISTANT_FUTURE,
-    type = Article,
-    authors = listOf(
-        Author(
-            id = "1",
-            name = "Name",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        )
-    ),
-    topics = listOf(
-        Topic(
-            id = "1",
-            name = "Name",
-            shortDescription = "Short description",
-            longDescription = "Long description",
-            url = "URL",
-            imageUrl = "image URL"
-        )
-    )
-)
