@@ -29,6 +29,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -71,7 +72,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.Loading,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Loading, viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
     }
 
     @Test
@@ -86,7 +87,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.Loading,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Loading, viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
         collectJob1.cancel()
         collectJob2.cancel()
@@ -104,7 +105,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.Loading,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Loading, viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
         collectJob1.cancel()
         collectJob2.cancel()
@@ -122,7 +123,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.Loading,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Success(emptyList()), viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
         collectJob1.cancel()
         collectJob2.cancel()
@@ -140,7 +141,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.Loading,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Success(emptyList()), viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
         collectJob1.cancel()
         collectJob2.cancel()
@@ -233,7 +234,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
             ),
             viewModel.feedState.value
@@ -331,7 +332,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
 
             ),
@@ -357,7 +358,7 @@ class ForYouViewModelTest {
             ForYouInterestsSelectionUiState.NoInterestsSelection,
             viewModel.interestsSelectionState.value
         )
-        assertEquals(ForYouFeedUiState.Loading, viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
         newsRepository.sendNewsResources(sampleNewsResources)
 
@@ -366,7 +367,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed =
                 sampleNewsResources.map {
                     SaveableNewsResource(
@@ -398,7 +399,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Loading,
+            NewsFeedUiState.Loading,
             viewModel.feedState.value
         )
 
@@ -409,7 +410,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = sampleNewsResources.map {
                     SaveableNewsResource(
                         newsResource = it,
@@ -512,7 +513,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList(),
             ),
             viewModel.feedState.value
@@ -596,7 +597,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[1],
@@ -703,7 +704,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList(),
             ),
             viewModel.feedState.value
@@ -787,7 +788,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[1],
@@ -897,7 +898,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
             ),
             viewModel.feedState.value
@@ -998,7 +999,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
             ),
             viewModel.feedState.value
@@ -1028,7 +1029,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[1],
@@ -1069,7 +1070,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[0],
@@ -1107,7 +1108,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[1],
@@ -1220,7 +1221,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
             ),
             viewModel.feedState.value
@@ -1322,7 +1323,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = emptyList()
             ),
             viewModel.feedState.value
@@ -1350,7 +1351,7 @@ class ForYouViewModelTest {
             viewModel.interestsSelectionState.value
         )
         assertEquals(
-            ForYouFeedUiState.Success(
+            NewsFeedUiState.Success(
                 feed = listOf(
                     SaveableNewsResource(
                         newsResource = sampleNewsResources[1],
