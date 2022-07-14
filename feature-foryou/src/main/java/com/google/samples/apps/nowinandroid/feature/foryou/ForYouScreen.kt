@@ -63,7 +63,6 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -93,11 +92,9 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import kotlin.math.floor
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 
 @Composable
 fun ForYouRoute(
@@ -168,21 +165,7 @@ fun ForYouScreen(
                 }
 
                 val lazyListState = rememberLazyListState()
-                JankMetricEffect(lazyListState) { metricsHolder ->
-                    combine(
-                        snapshotFlow { lazyListState.isScrollInProgress },
-                        snapshotFlow { lazyListState.firstVisibleItemIndex },
-                    ) { isScrollInProgress, firstVisibleItemIndex ->
-                        if (isScrollInProgress) {
-                            metricsHolder.state?.addState(
-                                "ForYou:Feed:Scrolling",
-                                "index=$firstVisibleItemIndex"
-                            )
-                        } else {
-                            metricsHolder.state?.removeState("ForYou:Feed:Scrolling")
-                        }
-                    }.collect()
-                }
+                TrackScrollJank(lazyListState, "ForYou:Feed")
 
                 LazyColumn(
                     state = lazyListState,
@@ -311,21 +294,8 @@ private fun TopicSelection(
     modifier: Modifier = Modifier
 ) {
     val lazyGridState = rememberLazyGridState()
-    JankMetricEffect(lazyGridState) { metricsHolder ->
-        combine(
-            snapshotFlow { lazyGridState.isScrollInProgress },
-            snapshotFlow { lazyGridState.firstVisibleItemIndex },
-        ) { isScrollInProgress, firstVisibleItemIndex ->
-            if (isScrollInProgress) {
-                metricsHolder.state?.addState(
-                    "ForYou:TopicSelection:Scrolling",
-                    "index=$firstVisibleItemIndex"
-                )
-            } else {
-                metricsHolder.state?.removeState("ForYou:TopicSelection:Scrolling")
-            }
-        }.collect()
-    }
+
+    TrackScrollJank(scrollableState = lazyGridState, stateName = "ForYou:TopicSelection")
 
     LazyHorizontalGrid(
         state = lazyGridState,

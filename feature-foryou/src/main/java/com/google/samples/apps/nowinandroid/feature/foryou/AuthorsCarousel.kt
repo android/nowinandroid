@@ -38,7 +38,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,9 +56,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.ui.JankMetricEffect
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 
 @Composable
 fun AuthorsCarousel(
@@ -69,21 +66,7 @@ fun AuthorsCarousel(
 ) {
     val lazyListState = rememberLazyListState()
 
-    JankMetricEffect(lazyListState) { metricsHolder ->
-        combine(
-            snapshotFlow { lazyListState.isScrollInProgress },
-            snapshotFlow { lazyListState.firstVisibleItemIndex }
-        ) { isScrollInProgress, firstVisibleItemIndex ->
-            if (isScrollInProgress) {
-                metricsHolder.state?.addState(
-                    "ForYou:AuthorsCarousel:Scrolling",
-                    "Index=$firstVisibleItemIndex"
-                )
-            } else {
-                metricsHolder.state?.removeState("ForYou:AuthorsCarousel:Scrolling")
-            }
-        }.collect()
-    }
+    TrackScrollJank(lazyListState, "ForYou:AuthorsCarousel")
 
     LazyRow(modifier, lazyListState) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->

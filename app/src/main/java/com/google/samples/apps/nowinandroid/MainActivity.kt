@@ -31,11 +31,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    /**
+     * Lazily inject [JankStats], which is used to track jank throughout the app.
+     */
     @Inject
     lateinit var lazyStats: dagger.Lazy<JankStats>
-
-    @Inject
-    lateinit var jankFrameListener: JankStats.OnFrameListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +51,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        isTrackingEnabled(true)
+        lazyStats.get().isTrackingEnabled = true
     }
 
     override fun onPause() {
         super.onPause()
-        isTrackingEnabled(false)
-    }
-
-    private fun isTrackingEnabled(enabled: Boolean) {
-        lazyStats.get().isTrackingEnabled = enabled
+        lazyStats.get().isTrackingEnabled = false
     }
 }
