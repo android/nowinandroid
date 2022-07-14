@@ -18,8 +18,10 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
@@ -65,10 +68,14 @@ fun AuthorsCarousel(
     modifier: Modifier = Modifier
 ) {
     val lazyListState = rememberLazyListState()
-
     TrackScrollJank(lazyListState, "ForYou:AuthorsCarousel")
 
-    LazyRow(modifier, lazyListState) {
+    LazyRow(
+        modifier = modifier.testTag("forYou:authors"),
+        contentPadding = PaddingValues(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
+        state = lazyListState
+    ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
                 author = followableAuthor.author,

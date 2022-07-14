@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -39,7 +40,9 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag("interests:topics"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
@@ -69,7 +72,9 @@ fun AuthorsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag("interests:people"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         authors.forEach { followableAuthor ->
