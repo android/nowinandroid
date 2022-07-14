@@ -67,7 +67,6 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 fun NiaApp(windowSizeClass: WindowSizeClass) {
     NiaTheme {
         val navController = rememberNavController()
-
         val niaTopLevelNavigation = remember(navController) {
             NiaTopLevelNavigation(navController)
         }
