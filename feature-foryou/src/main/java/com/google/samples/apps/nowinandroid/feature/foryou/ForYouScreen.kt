@@ -138,11 +138,11 @@ fun ForYouScreen(
                     titleRes = R.string.top_app_bar_title,
                     navigationIcon = NiaIcons.Search,
                     navigationIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
+                        id = R.string.for_you_top_app_bar_action_search
                     ),
                     actionIcon = NiaIcons.AccountCircle,
                     actionIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
+                        id = R.string.for_you_top_app_bar_action_my_account
                     ),
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent
