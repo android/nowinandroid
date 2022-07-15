@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.IntRange
@@ -37,6 +38,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,9 +49,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +60,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -68,6 +68,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -76,27 +78,26 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.trace
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.model.data.Author
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.ui.LoadingWheel
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTypography
 import kotlin.math.floor
-import kotlinx.datetime.Instant
 
 @Composable
 fun ForYouRoute(
@@ -135,13 +136,13 @@ fun ForYouScreen(
             topBar = {
                 NiaTopAppBar(
                     titleRes = R.string.top_app_bar_title,
-                    navigationIcon = Icons.Filled.Search,
+                    navigationIcon = NiaIcons.Search,
                     navigationIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
+                        id = R.string.for_you_top_app_bar_action_search
                     ),
-                    actionIcon = Icons.Outlined.AccountCircle,
+                    actionIcon = NiaIcons.AccountCircle,
                     actionIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_navigation_button_content_desc
+                        id = R.string.for_you_top_app_bar_action_my_account
                     ),
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent
@@ -166,8 +167,31 @@ fun ForYouScreen(
                     else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
                 }
 
+                // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+                // This code should be called when the UI is ready for use
+                // and relates to Time To Full Display.
+                val interestsLoaded =
+                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+                val feedLoaded = feedState !is ForYouFeedUiState.Loading
+
+                if (interestsLoaded && feedLoaded) {
+                    val localView = LocalView.current
+                    // We use Unit to call reportFullyDrawn only on the first recomposition,
+                    // however it will be called again if this composable goes out of scope.
+                    // Activity.reportFullyDrawn() has its own check for this
+                    // and is safe to call multiple times though.
+                    LaunchedEffect(Unit) {
+                        // We're leveraging the fact, that the current view is directly set as content of Activity.
+                        val activity = localView.context as? Activity ?: return@LaunchedEffect
+                        // To be sure not to call in the middle of a frame draw.
+                        localView.doOnPreDraw { activity.reportFullyDrawn() }
+                    }
+                }
+
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("forYou:feed"),
                 ) {
                     InterestsSelection(
                         interestsSelectionState = interestsSelectionState,
@@ -188,13 +212,7 @@ fun ForYouScreen(
                     )
 
                     item {
-                        Spacer(
-                            // TODO: Replace with windowInsetsBottomHeight after
-                            //       https://issuetracker.google.com/issues/230383055
-                            Modifier.windowInsetsPadding(
-                                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                            )
-                        )
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                     }
                 }
             }
@@ -221,10 +239,11 @@ private fun LazyListScope.InterestsSelection(
         ForYouInterestsSelectionUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
-                    LoadingWheel(
+                    NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentSize(),
+                            .wrapContentSize()
+                            .testTag("forYou:loading"),
                         contentDesc = stringResource(id = R.string.for_you_loading),
                     )
                 }
@@ -239,7 +258,7 @@ private fun LazyListScope.InterestsSelection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
-                    style = NiaTypography.titleMedium
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
             item {
@@ -249,7 +268,7 @@ private fun LazyListScope.InterestsSelection(
                         .fillMaxWidth()
                         .padding(top = 8.dp, start = 16.dp, end = 16.dp),
                     textAlign = TextAlign.Center,
-                    style = NiaTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             item {
@@ -296,7 +315,7 @@ private fun TopicSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState.WithInterestsSelection,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
-) {
+) = trace("TopicSelection") {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -335,7 +354,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit
-) {
+) = trace("SingleTopicButton") {
     Surface(
         modifier = Modifier
             .width(312.dp)
@@ -356,7 +375,7 @@ private fun SingleTopicButton(
             )
             Text(
                 text = name,
-                style = NiaTypography.titleSmall,
+                style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .weight(1f),
@@ -367,14 +386,14 @@ private fun SingleTopicButton(
                 onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
                     Icon(
-                        imageVector = NiaIcons.Add, contentDescription = name,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        imageVector = NiaIcons.Add,
+                        contentDescription = name
                     )
                 },
                 checkedIcon = {
                     Icon(
-                        imageVector = NiaIcons.Check, contentDescription = name,
-                        tint = MaterialTheme.colorScheme.onSurface
+                        imageVector = NiaIcons.Check,
+                        contentDescription = name
                     )
                 }
             )
@@ -416,7 +435,7 @@ private fun LazyListScope.Feed(
         ForYouFeedUiState.Loading -> {
             if (showLoadingUIIfLoading) {
                 item {
-                    LoadingWheel(
+                    NiaLoadingWheel(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize(),
@@ -482,9 +501,65 @@ private fun LazyListScope.Feed(
 }
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun ForYouScreenPopulatedFeed() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                feedState = ForYouFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Composable
+fun ForYouScreenTopicSelection() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    topics = previewTopics.map { FollowableTopic(it, false) },
+                    authors = previewAuthors.map { FollowableAuthor(it, false) }
+                ),
+                feedState = ForYouFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onAuthorCheckedChanged = { _, _ -> },
+                onTopicCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
+@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
+@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Composable
 fun ForYouScreenLoading() {
     BoxWithConstraints {
@@ -501,201 +576,3 @@ fun ForYouScreenLoading() {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
-@Composable
-fun ForYouScreenTopicSelection() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
-                    topics = listOf(
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "0",
-                                name = "Headlines",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "1",
-                                name = "UI",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableTopic(
-                            topic = Topic(
-                                id = "2",
-                                name = "Publishing and Distribution",
-                                shortDescription = "",
-                                longDescription = "",
-                                url = "",
-                                imageUrl = ""
-                            ),
-                            isFollowed = false
-                        ),
-                    ),
-                    authors = listOf(
-                        FollowableAuthor(
-                            author = Author(
-                                id = "0",
-                                name = "Android Dev",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableAuthor(
-                            author = Author(
-                                id = "1",
-                                name = "Android Dev 2",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        ),
-                        FollowableAuthor(
-                            author = Author(
-                                id = "2",
-                                name = "Android Dev 3",
-                                imageUrl = "",
-                                twitter = "",
-                                mediumPage = "",
-                                bio = "",
-                            ),
-                            isFollowed = false
-                        )
-                    )
-                ),
-                feedState = ForYouFeedUiState.Success(
-                    feed = saveableNewsResource,
-                ),
-                onAuthorCheckedChanged = { _, _ -> },
-                onTopicCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
-@Composable
-fun PopulatedFeed() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
-                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                feedState = ForYouFeedUiState.Success(
-                    feed = saveableNewsResource
-                ),
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-private val saveableNewsResource = listOf(
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "1",
-            episodeId = "52",
-            title = "Thanks for helping us reach 1M YouTube Subscribers",
-            content = "Thank you everyone for following the Now in Android series " +
-                "and everything the Android Developers YouTube channel has to offer. " +
-                "During the Android Developer Summit, our YouTube channel reached 1 " +
-                "million subscribers! Here’s a small video to thank you all.",
-            url = "https://youtu.be/-fJ6poHQrjM",
-            headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "0",
-                    name = "Headlines",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                )
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "2",
-            episodeId = "52",
-            title = "Transformations and customisations in the Paging Library",
-            content = "A demonstration of different operations that can be performed " +
-                "with Paging. Transformations like inserting separators, when to " +
-                "create a new pager, and customisation options for consuming " +
-                "PagingData.",
-            url = "https://youtu.be/ZARz0pjm5YM",
-            headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "3",
-            episodeId = "52",
-            title = "Community tip on Paging",
-            content = "Tips for using the Paging library from the developer community",
-            url = "https://youtu.be/r5JgIyS3t3s",
-            headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-)
