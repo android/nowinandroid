@@ -21,3 +21,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
 }
+
+dependencies {
+    implementation(libs.accompanist.pager)
+}
