@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.navigation
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
@@ -27,10 +26,8 @@ object BookmarksDestination : NiaNavigationDestination {
     override val destination = "bookmarks_destination"
 }
 
-fun NavGraphBuilder.bookmarksGraph(
-    windowSizeClass: WindowSizeClass
-) {
+fun NavGraphBuilder.bookmarksGraph() {
     composable(route = BookmarksDestination.route) {
-        BookmarksRoute(windowSizeClass)
+        BookmarksRoute()
     }
 }
