@@ -19,10 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -45,6 +43,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 
 @Composable
 fun InterestsRoute(
@@ -66,6 +65,14 @@ fun InterestsRoute(
         switchTab = viewModel::switchTab,
         modifier = modifier
     )
+
+    JankMetricDisposableEffect(tabState) { metricsHolder ->
+        metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
+
+        onDispose {
+            metricsHolder.state?.removeState("Interests:TabState")
+        }
+    }
 }
 
 @Composable
@@ -83,23 +90,17 @@ fun InterestsScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            // TODO: Replace with windowInsetsTopHeight after
-            //       https://issuetracker.google.com/issues/230383055
-            Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-            )
-        )
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
 
         NiaTopAppBar(
             titleRes = R.string.interests,
             navigationIcon = NiaIcons.Search,
             navigationIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
+                id = R.string.interests_top_app_bar_action_seearch
             ),
             actionIcon = NiaIcons.MoreVert,
             actionIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
+                id = R.string.interests_top_app_bar_action_menu
             ),
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Transparent

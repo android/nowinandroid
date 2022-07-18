@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
-import app.cash.turbine.test
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -24,19 +23,26 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.util.TestDispatcherRule
+import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * To learn more about how this test handles Flows created with stateIn, see
+ * https://developer.android.com/kotlin/flow/test#statein
+ */
 class InterestsViewModelTest {
 
     @get:Rule
-    val dispatcherRule = TestDispatcherRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
@@ -54,135 +60,136 @@ class InterestsViewModelTest {
 
     @Test
     fun uiState_whenInitialized_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            assertEquals(InterestsUiState.Loading, awaitItem())
-        }
+        assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
     }
 
     @Test
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            assertEquals(InterestsUiState.Loading, awaitItem())
-            userDataRepository.setFollowedAuthorIds(setOf("1"))
-            userDataRepository.setFollowedTopicIds(emptySet())
-        }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+        userDataRepository.setFollowedAuthorIds(setOf("1"))
+        userDataRepository.setFollowedTopicIds(emptySet())
+        assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenFollowedAuthorsAreLoading_thenShowLoading() = runTest {
-        viewModel.uiState.test {
-            assertEquals(InterestsUiState.Loading, awaitItem())
-            userDataRepository.setFollowedAuthorIds(emptySet())
-            userDataRepository.setFollowedTopicIds(setOf("1"))
-        }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+        userDataRepository.setFollowedAuthorIds(emptySet())
+        userDataRepository.setFollowedTopicIds(setOf("1"))
+        assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenFollowingNewTopic_thenShowUpdatedTopics() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
         val toggleTopicId = testOutputTopics[1].topic.id
-        viewModel.uiState
-            .test {
-                awaitItem()
-                authorsRepository.sendAuthors(emptyList())
-                userDataRepository.setFollowedAuthorIds(emptySet())
-                topicsRepository.sendTopics(testInputTopics.map { it.topic })
-                userDataRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
+        authorsRepository.sendAuthors(emptyList())
+        userDataRepository.setFollowedAuthorIds(emptySet())
+        topicsRepository.sendTopics(testInputTopics.map { it.topic })
+        userDataRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
 
-                assertEquals(
-                    false,
-                    (awaitItem() as InterestsUiState.Interests)
-                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
-                )
+        assertEquals(
+            false,
+            (viewModel.uiState.value as InterestsUiState.Interests)
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+        )
 
-                viewModel.followTopic(
-                    followedTopicId = toggleTopicId,
-                    true
-                )
+        viewModel.followTopic(
+            followedTopicId = toggleTopicId,
+            true
+        )
 
-                assertEquals(
-                    InterestsUiState.Interests(topics = testOutputTopics, authors = emptyList()),
-                    awaitItem()
-                )
-            }
+        assertEquals(
+            InterestsUiState.Interests(topics = testOutputTopics, authors = emptyList()),
+            viewModel.uiState.value
+        )
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenFollowingNewAuthor_thenShowUpdatedAuthors() = runTest {
-        viewModel.uiState
-            .test {
-                awaitItem()
-                authorsRepository.sendAuthors(testInputAuthors.map { it.author })
-                userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[0].author.id))
-                topicsRepository.sendTopics(listOf())
-                userDataRepository.setFollowedTopicIds(setOf())
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
-                awaitItem()
-                viewModel.followAuthor(
-                    followedAuthorId = testInputAuthors[1].author.id,
-                    followed = true
-                )
+        authorsRepository.sendAuthors(testInputAuthors.map { it.author })
+        userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[0].author.id))
+        topicsRepository.sendTopics(listOf())
+        userDataRepository.setFollowedTopicIds(setOf())
 
-                assertEquals(
-                    InterestsUiState.Interests(topics = emptyList(), authors = testOutputAuthors),
-                    awaitItem()
-                )
-            }
+        viewModel.followAuthor(
+            followedAuthorId = testInputAuthors[1].author.id,
+            followed = true
+        )
+
+        assertEquals(
+            InterestsUiState.Interests(topics = emptyList(), authors = testOutputAuthors),
+            viewModel.uiState.value
+        )
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenUnfollowingTopics_thenShowUpdatedTopics() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
         val toggleTopicId = testOutputTopics[1].topic.id
-        viewModel.uiState
-            .test {
-                awaitItem()
-                authorsRepository.sendAuthors(emptyList())
-                userDataRepository.setFollowedAuthorIds(emptySet())
-                topicsRepository.sendTopics(testOutputTopics.map { it.topic })
-                userDataRepository.setFollowedTopicIds(
-                    setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
-                )
 
-                assertEquals(
-                    true,
-                    (awaitItem() as InterestsUiState.Interests)
-                        .topics.first { it.topic.id == toggleTopicId }.isFollowed
-                )
+        authorsRepository.sendAuthors(emptyList())
+        userDataRepository.setFollowedAuthorIds(emptySet())
+        topicsRepository.sendTopics(testOutputTopics.map { it.topic })
+        userDataRepository.setFollowedTopicIds(
+            setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
+        )
 
-                viewModel.followTopic(
-                    followedTopicId = toggleTopicId,
-                    false
-                )
+        assertEquals(
+            true,
+            (viewModel.uiState.value as InterestsUiState.Interests)
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+        )
 
-                assertEquals(
-                    InterestsUiState.Interests(topics = testInputTopics, authors = emptyList()),
-                    awaitItem()
-                )
-            }
+        viewModel.followTopic(
+            followedTopicId = toggleTopicId,
+            false
+        )
+
+        assertEquals(
+            InterestsUiState.Interests(topics = testInputTopics, authors = emptyList()),
+            viewModel.uiState.value
+        )
+
+        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenUnfollowingAuthors_thenShowUpdatedAuthors() = runTest {
-        viewModel.uiState
-            .test {
-                awaitItem()
-                authorsRepository.sendAuthors(testOutputAuthors.map { it.author })
-                userDataRepository.setFollowedAuthorIds(
-                    setOf(testOutputAuthors[0].author.id, testOutputAuthors[1].author.id)
-                )
-                topicsRepository.sendTopics(listOf())
-                userDataRepository.setFollowedTopicIds(setOf())
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
-                awaitItem()
-                viewModel.followAuthor(
-                    followedAuthorId = testOutputAuthors[1].author.id,
-                    followed = false
-                )
+        authorsRepository.sendAuthors(testOutputAuthors.map { it.author })
+        userDataRepository.setFollowedAuthorIds(
+            setOf(testOutputAuthors[0].author.id, testOutputAuthors[1].author.id)
+        )
+        topicsRepository.sendTopics(listOf())
+        userDataRepository.setFollowedTopicIds(setOf())
 
-                assertEquals(
-                    InterestsUiState.Interests(topics = emptyList(), authors = testInputAuthors),
-                    awaitItem()
-                )
-            }
+        viewModel.followAuthor(
+            followedAuthorId = testOutputAuthors[1].author.id,
+            followed = false
+        )
+
+        assertEquals(
+            InterestsUiState.Interests(topics = emptyList(), authors = testInputAuthors),
+            viewModel.uiState.value
+        )
+
+        collectJob.cancel()
     }
 }
 

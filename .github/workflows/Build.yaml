@@ -45,14 +45,14 @@ jobs:
         run: ./gradlew testDemoDebug testProdDebug --stacktrace
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-outputs
           path: app/build/outputs
 
       - name: Upload build reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-reports
           path: app/build/reports
@@ -88,11 +88,11 @@ jobs:
           disable-animations: true
           disk-size: 1500M
           heap-size: 512M
-          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
+          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-reports
           path: '*/build/reports/androidTests'
