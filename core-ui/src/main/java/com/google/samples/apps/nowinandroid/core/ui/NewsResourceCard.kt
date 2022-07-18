@@ -274,10 +274,10 @@ fun NewsResourceTopics(
     ) {
         for (topic in topics) {
             NiaTopicTag(
-                followed = true, // Todo
-                onFollowClick = { }, // Todo
-                onUnfollowClick = { }, // Todo
-                onBrowseClick = { }, // Todo
+                followed = true, // ToDo: Check if topic is followed
+                onFollowClick = { }, // ToDo
+                onUnfollowClick = { }, // ToDo
+                onBrowseClick = { }, // ToDo
                 text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
             )
         }
