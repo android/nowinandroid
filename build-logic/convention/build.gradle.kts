@@ -69,5 +69,9 @@ gradlePlugin {
             id = "nowinandroid.spotless"
             implementationClass = "SpotlessConventionPlugin"
         }
+        register("firebase-perf") {
+            id = "nowinandroid.firebase-perf"
+            implementationClass = "FirebasePerfConventionPlugin"
+        }
     }
 }
