@@ -24,6 +24,7 @@ plugins {
     id("jacoco")
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
+    id("nowinandroid.firebase-perf")
 }
 
 android {
@@ -62,8 +63,6 @@ android {
             proguardFiles("benchmark-rules.pro")
             //  FIXME enabling minification breaks access to demo backend.
             isMinifyEnabled = false
-            // Keep the build type debuggable so we can attach a debugger if needed.
-            isDebuggable = true
             applicationIdSuffix = ".benchmark"
         }
     }

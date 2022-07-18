@@ -19,16 +19,15 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -41,7 +40,9 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag("interests:topics"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
@@ -58,13 +59,7 @@ fun TopicsTabContent(
         }
 
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
@@ -77,7 +72,9 @@ fun AuthorsTabContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag("interests:people"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         authors.forEach { followableAuthor ->
@@ -94,13 +91,7 @@ fun AuthorsTabContent(
         }
 
         item {
-            Spacer(
-                // TODO: Replace with windowInsetsBottomHeight after
-                //       https://issuetracker.google.com/issues/230383055
-                Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }

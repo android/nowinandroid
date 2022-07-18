@@ -16,31 +16,27 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.util
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import org.junit.runners.model.Statement
 
 /**
- * A [TestRule] that initializes the main dispatcher to [dispatcher], which defaults to a
- * [StandardTestDispatcher].
+ * A JUnit [TestRule] that sets the Main dispatcher to [testDispatcher]
+ * for the duration of the test.
  */
-class TestDispatcherRule(
-    private val dispatcher: CoroutineDispatcher = StandardTestDispatcher()
-) : TestRule {
-    override fun apply(base: Statement, description: Description): Statement =
-        object : Statement() {
-            override fun evaluate() {
-                Dispatchers.setMain(dispatcher)
-                try {
-                    base.evaluate()
-                } finally {
-                    Dispatchers.resetMain()
-                }
-            }
-        }
+class MainDispatcherRule(
+    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
+    }
 }
