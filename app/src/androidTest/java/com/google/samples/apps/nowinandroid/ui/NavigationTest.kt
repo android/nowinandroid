@@ -64,8 +64,6 @@ class NavigationTest {
     private lateinit var navigateUp: String
     private lateinit var forYouLoading: String
     private lateinit var forYou: String
-    private lateinit var episodes: String
-    private lateinit var saved: String
     private lateinit var interests: String
     private lateinit var sampleTopic: String
 
@@ -76,8 +74,6 @@ class NavigationTest {
             navigateUp = getString(R.string.navigate_up)
             forYouLoading = getString(R.string.for_you_loading)
             forYou = getString(R.string.for_you)
-            episodes = getString(R.string.episodes)
-            saved = getString(R.string.saved)
             interests = getString(R.string.interests)
             sampleTopic = "Headlines"
         }
