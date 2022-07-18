@@ -46,7 +46,9 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -97,6 +99,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import kotlin.math.floor
 
 @Composable
@@ -188,10 +191,16 @@ fun ForYouScreen(
                     }
                 }
 
+                val tag = "forYou:feed"
+
+                val lazyListState = rememberLazyListState()
+                TrackScrollJank(scrollableState = lazyListState, stateName = tag)
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .testTag("forYou:feed"),
+                        .testTag(tag),
+                    state = lazyListState,
                 ) {
                     InterestsSelection(
                         interestsSelectionState = interestsSelectionState,
@@ -316,7 +325,11 @@ private fun TopicSelection(
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) = trace("TopicSelection") {
+    val lazyGridState = rememberLazyGridState()
+    TrackScrollJank(scrollableState = lazyGridState, stateName = "forYou:TopicSelection")
+
     LazyHorizontalGrid(
+        state = lazyGridState,
         rows = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
