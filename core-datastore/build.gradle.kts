@@ -71,9 +71,7 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
 }
 
-// Workaround for kapt issues in Kotlin 1.7
-// https://github.com/google/dagger/issues/3448
-// https://youtrack.jetbrains.com/issue/KT-52761
+// TODO b/239411851, Remove kapt workaround configuration
 kapt {
     correctErrorTypes = true
 }
