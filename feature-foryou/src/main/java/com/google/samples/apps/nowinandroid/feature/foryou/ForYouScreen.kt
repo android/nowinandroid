@@ -191,13 +191,15 @@ fun ForYouScreen(
                     }
                 }
 
+                val tag = "forYou:feed"
+
                 val lazyListState = rememberLazyListState()
-                TrackScrollJank(lazyListState, "ForYou:Feed")
+                TrackScrollJank(scrollableState = lazyListState, stateName = tag)
 
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .testTag("forYou:feed"),
+                        .testTag(tag),
                     state = lazyListState,
                 ) {
                     InterestsSelection(
@@ -324,7 +326,7 @@ private fun TopicSelection(
     modifier: Modifier = Modifier
 ) = trace("TopicSelection") {
     val lazyGridState = rememberLazyGridState()
-    TrackScrollJank(scrollableState = lazyGridState, stateName = "ForYou:TopicSelection")
+    TrackScrollJank(scrollableState = lazyGridState, stateName = "forYou:TopicSelection")
 
     LazyHorizontalGrid(
         state = lazyGridState,

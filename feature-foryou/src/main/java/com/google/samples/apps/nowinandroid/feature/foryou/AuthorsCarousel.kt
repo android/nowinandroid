@@ -68,10 +68,11 @@ fun AuthorsCarousel(
     modifier: Modifier = Modifier
 ) {
     val lazyListState = rememberLazyListState()
-    TrackScrollJank(lazyListState, "ForYou:AuthorsCarousel")
+    val tag = "forYou:authors"
+    TrackScrollJank(scrollableState = lazyListState, stateName = tag)
 
     LazyRow(
-        modifier = modifier.testTag("forYou:authors"),
+        modifier = modifier.testTag(tag),
         contentPadding = PaddingValues(24.dp),
         horizontalArrangement = Arrangement.spacedBy(24.dp),
         state = lazyListState
