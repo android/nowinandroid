@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.navigation
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
@@ -41,18 +42,20 @@ import com.google.samples.apps.nowinandroid.feature.interests.navigation.Interes
 class NiaTopLevelNavigation(private val navController: NavHostController) {
 
     fun navigateTo(destination: TopLevelDestination) {
-        navController.navigate(destination.route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+        trace("Navigation: $destination") {
+            navController.navigate(destination.route) {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
             }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
         }
     }
 }

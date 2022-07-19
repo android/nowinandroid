@@ -70,3 +70,8 @@ dependencies {
     kapt(libs.hilt.compiler)
     kaptAndroidTest(libs.hilt.compiler)
 }
+
+// TODO b/239411851, Remove kapt workaround configuration
+kapt {
+    correctErrorTypes = true
+}
