@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.sync.workers
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
+import androidx.tracing.traceAsync
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
@@ -59,15 +60,17 @@ class SyncWorker @AssistedInject constructor(
         appContext.syncForegroundInfo()
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
-        // First sync the repositories in parallel
-        val syncedSuccessfully = awaitAll(
-            async { topicRepository.sync() },
-            async { authorsRepository.sync() },
-            async { newsRepository.sync() },
-        ).all { it }
+        traceAsync("Sync", 0) {
+            // First sync the repositories in parallel
+            val syncedSuccessfully = awaitAll(
+                async { topicRepository.sync() },
+                async { authorsRepository.sync() },
+                async { newsRepository.sync() },
+            ).all { it }
 
-        if (syncedSuccessfully) Result.success()
-        else Result.retry()
+            if (syncedSuccessfully) Result.success()
+            else Result.retry()
+        }
     }
 
     override suspend fun getChangeListVersions(): ChangeListVersions =

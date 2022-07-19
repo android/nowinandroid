@@ -24,6 +24,7 @@ plugins {
     id("jacoco")
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
+    id("nowinandroid.firebase-perf")
 }
 
 android {
