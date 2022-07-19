@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.author.navigation
 
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -24,20 +25,26 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestina
 import com.google.samples.apps.nowinandroid.feature.author.AuthorRoute
 
 object AuthorDestination : NiaNavigationDestination {
-    override val route = "author_route"
-    override val destination = "author_destination"
     const val authorIdArg = "authorId"
+    override val route = "author_route/{$authorIdArg}"
+    override val destination = "author_destination"
+
+    fun createNavigationRoute(authorIdArg: String): String {
+        return "author_route/$authorIdArg"
+    }
+
+    fun fromNavArgs(entry: NavBackStackEntry): String {
+        return entry.arguments?.getString(authorIdArg)!!
+    }
 }
 
 fun NavGraphBuilder.authorGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${AuthorDestination.route}/{${AuthorDestination.authorIdArg}}",
+        route = AuthorDestination.route,
         arguments = listOf(
-            navArgument(AuthorDestination.authorIdArg) {
-                type = NavType.StringType
-            }
+            navArgument(AuthorDestination.authorIdArg) { type = NavType.StringType }
         )
     ) {
         AuthorRoute(onBackClick = onBackClick)
