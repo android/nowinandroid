@@ -72,7 +72,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td>The initial news feed state is set to <code>Loading</code>, which causes the UI to show a loading spinner on the screen.
    </td>
-   <td>Search for usages of <code>ForYouFeedState.Loading</code>
+   <td>Search for usages of <code>ForYouFeedUiState.Loading</code>
    </td>
   </tr>
   <tr>
