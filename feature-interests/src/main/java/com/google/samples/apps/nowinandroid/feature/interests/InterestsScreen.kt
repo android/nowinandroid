@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
@@ -45,6 +46,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun InterestsRoute(
     modifier: Modifier = Modifier,
@@ -52,8 +54,8 @@ fun InterestsRoute(
     navigateToTopic: (String) -> Unit,
     viewModel: InterestsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val tabState by viewModel.tabState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val tabState by viewModel.tabState.collectAsStateWithLifecycle()
 
     InterestsScreen(
         uiState = uiState,
