@@ -17,9 +17,13 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -115,10 +119,11 @@ class TopicScreenTest {
             )
         }
 
-        // First news title shown
+        // Scroll to first news title if available
         composeTestRule
-            .onNodeWithText(sampleNewsResources.first().title)
-            .assertExists()
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+            .performScrollToNode(hasText(sampleNewsResources.first().title))
     }
 }
 

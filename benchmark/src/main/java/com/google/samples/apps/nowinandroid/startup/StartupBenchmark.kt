@@ -26,6 +26,8 @@ import androidx.benchmark.macro.StartupMode.WARM
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -74,7 +76,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
     fun startupFullCompilation() = startup(CompilationMode.Full())
 
     private fun startup(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
-        packageName = "com.google.samples.apps.nowinandroid",
+        packageName = PACKAGE_NAME,
         metrics = listOf(StartupTimingMetric()),
         compilationMode = compilationMode,
         iterations = 10,
@@ -84,5 +86,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         }
     ) {
         startActivityAndWait()
+        // Waits until the content is ready to capture Time To Full Display
+        forYouWaitForContent()
     }
 }

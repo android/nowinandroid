@@ -44,6 +44,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -66,6 +67,14 @@ fun InterestsRoute(
         switchTab = viewModel::switchTab,
         modifier = modifier
     )
+
+    JankMetricDisposableEffect(tabState) { metricsHolder ->
+        metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
+
+        onDispose {
+            metricsHolder.state?.removeState("Interests:TabState")
+        }
+    }
 }
 
 @Composable
@@ -89,11 +98,11 @@ fun InterestsScreen(
             titleRes = R.string.interests,
             navigationIcon = NiaIcons.Search,
             navigationIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
+                id = R.string.interests_top_app_bar_action_seearch
             ),
             actionIcon = NiaIcons.MoreVert,
             actionIconContentDescription = stringResource(
-                id = R.string.top_app_bar_navigation_button_content_desc
+                id = R.string.interests_top_app_bar_action_menu
             ),
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Transparent

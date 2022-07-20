@@ -117,7 +117,7 @@ jobs:
           disable-animations: true
           disk-size: 1500M
           heap-size: 512M
-          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedBenchmarkAndroidTest
+          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
 
       - name: Upload test reports
         if: always()
