@@ -63,7 +63,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,6 +83,8 @@ import androidx.compose.ui.util.trace
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -102,14 +103,15 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import kotlin.math.floor
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ForYouRoute(
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
-    val interestsSelectionState by viewModel.interestsSelectionState.collectAsState()
-    val feedState by viewModel.feedState.collectAsState()
+    val interestsSelectionState by viewModel.interestsSelectionState.collectAsStateWithLifecycle()
+    val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     ForYouScreen(
         windowSizeClass = windowSizeClass,
         modifier = modifier,
