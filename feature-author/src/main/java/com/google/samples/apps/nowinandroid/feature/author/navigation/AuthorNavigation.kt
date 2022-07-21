@@ -27,13 +27,14 @@ object AuthorDestination : NiaNavigationDestination {
     override val route = "author_route"
     override val destination = "author_destination"
     const val authorIdArg = "authorId"
+    val routeWithArgs = "$route/{$authorIdArg}"
 }
 
 fun NavGraphBuilder.authorGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${AuthorDestination.route}/{${AuthorDestination.authorIdArg}}",
+        route = AuthorDestination.routeWithArgs,
         arguments = listOf(
             navArgument(AuthorDestination.authorIdArg) {
                 type = NavType.StringType

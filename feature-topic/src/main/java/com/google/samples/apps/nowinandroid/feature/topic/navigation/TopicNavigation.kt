@@ -27,13 +27,14 @@ object TopicDestination : NiaNavigationDestination {
     override val route = "topic_route"
     override val destination = "topic_destination"
     const val topicIdArg = "topicId"
+    val routeWithArgs = "$route/{$topicIdArg}"
 }
 
 fun NavGraphBuilder.topicGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${TopicDestination.route}/{${TopicDestination.topicIdArg}}",
+        route = TopicDestination.routeWithArgs,
         arguments = listOf(
             navArgument(TopicDestination.topicIdArg) {
                 type = NavType.StringType
