@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
+import android.net.Uri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -29,12 +30,20 @@ object TopicDestination : NiaNavigationDestination {
     override val route = "topic_route/{$topicIdArg}"
     override val destination = "topic_destination"
 
+    /**
+     * Creates destination route for a topicId that could include special characters
+     */
     fun createNavigationRoute(topicIdArg: String): String {
-        return "topic_route/$topicIdArg"
+        val encodedId = Uri.encode(topicIdArg)
+        return "topic_route/$encodedId"
     }
 
+    /**
+     * Returns the topicId from a [NavBackStackEntry] after a topic destination navigation call
+     */
     fun fromNavArgs(entry: NavBackStackEntry): String {
-        return entry.arguments?.getString(topicIdArg)!!
+        val encodedId = entry.arguments?.getString(topicIdArg)!!
+        return Uri.decode(encodedId)
     }
 }
 
