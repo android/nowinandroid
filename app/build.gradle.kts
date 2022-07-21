@@ -108,6 +108,8 @@ dependencies {
     androidTestImplementation(project(":core-datastore-test"))
     androidTestImplementation(project(":core-data-test"))
     androidTestImplementation(project(":core-network"))
+    androidTestImplementation(libs.androidx.navigation.testing)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
