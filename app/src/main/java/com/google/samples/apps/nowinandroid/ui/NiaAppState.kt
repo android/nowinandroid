@@ -67,6 +67,9 @@ class NiaAppState(
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
 
+    /**
+     * Top level destinations to be used in the BottomBar and NavRail
+     */
     val topLevelDestinations: List<TopLevelDestination> = listOf(
         TopLevelDestination(
             route = ForYouDestination.route,
@@ -84,10 +87,19 @@ class NiaAppState(
         )
     )
 
-    // --------------------
-    // NAVIGATION LOGIC
-    // --------------------
-
+    /**
+     * UI logic for navigating to a particular destination in the app. The NavigationOptions to
+     * navigate with are based on the type of destination, which could be a top level destination or
+     * just a regular destination.
+     *
+     * Top level destinations have only one copy of the destination of the back stack, and save and
+     * restore state whenever you navigate to and from it.
+     * Regular destinations can have multiple copies in the back stack and state isn't saved nor
+     * restored.
+     *
+     * @param destination: The [NiaNavigationDestination] the app needs to navigate to.
+     * @param route: Optional route to navigate to in case the destination contains arguments.
+     */
     fun navigate(destination: NiaNavigationDestination, route: String? = null) {
         trace("Navigation: $destination") {
             if (destination is TopLevelDestination) {
@@ -115,6 +127,9 @@ class NiaAppState(
     }
 }
 
+/**
+ * Stores information about navigation events to be used with JankStats
+ */
 @Composable
 private fun NavigationTrackingSideEffect(navController: NavHostController) {
     JankMetricDisposableEffect(navController) { metricsHolder ->

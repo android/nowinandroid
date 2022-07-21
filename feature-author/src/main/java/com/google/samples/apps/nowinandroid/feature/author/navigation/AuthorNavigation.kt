@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.author.navigation
 
+import android.net.Uri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -29,12 +30,20 @@ object AuthorDestination : NiaNavigationDestination {
     override val route = "author_route/{$authorIdArg}"
     override val destination = "author_destination"
 
+    /**
+     * Creates destination route for an authorId that could include special characters
+     */
     fun createNavigationRoute(authorIdArg: String): String {
-        return "author_route/$authorIdArg"
+        val encodedId = Uri.encode(authorIdArg)
+        return "author_route/$encodedId"
     }
 
+    /**
+     * Returns the authorId from a [NavBackStackEntry] after an author destination navigation call
+     */
     fun fromNavArgs(entry: NavBackStackEntry): String {
-        return entry.arguments?.getString(authorIdArg)!!
+        val encodedId = entry.arguments?.getString(authorIdArg)!!
+        return Uri.decode(encodedId)
     }
 }
 
