@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.google.samples.apps.nowinandroid.core.designsystem.R
 
 @Composable
 fun NiaTopicTag(
@@ -36,9 +39,9 @@ fun NiaTopicTag(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    followText: @Composable () -> Unit,
-    unFollowText: @Composable () -> Unit,
-    browseText: @Composable () -> Unit
+    followText: @Composable () -> Unit = { Text(stringResource(R.string.follow)) },
+    unFollowText: @Composable () -> Unit = { Text(stringResource(R.string.unfollow)) },
+    browseText: @Composable () -> Unit = { Text(stringResource(R.string.browse_topic)) }
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
