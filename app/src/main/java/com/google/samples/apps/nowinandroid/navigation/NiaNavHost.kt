@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import com.google.samples.apps.nowinandroid.feature.author.navigation.authorGraph
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksGraph
@@ -40,9 +40,11 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicGraph
  */
 @Composable
 fun NiaNavHost(
+    navController: NavHostController,
+    onNavigateToDestination: (NiaNavigationDestination, String) -> Unit,
+    onBackClick: () -> Unit,
     windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
     startDestination: String = ForYouDestination.route
 ) {
     NavHost(
@@ -55,11 +57,19 @@ fun NiaNavHost(
         )
         bookmarksGraph(windowSizeClass)
         interestsGraph(
-            navigateToTopic = { navController.navigate("${TopicDestination.route}/$it") },
-            navigateToAuthor = { navController.navigate("${AuthorDestination.route}/$it") },
+            navigateToTopic = {
+                onNavigateToDestination(
+                    TopicDestination, TopicDestination.createNavigationRoute(it)
+                )
+            },
+            navigateToAuthor = {
+                onNavigateToDestination(
+                    AuthorDestination, AuthorDestination.createNavigationRoute(it)
+                )
+            },
             nestedGraphs = {
-                topicGraph(onBackClick = { navController.popBackStack() })
-                authorGraph(onBackClick = { navController.popBackStack() })
+                topicGraph(onBackClick)
+                authorGraph(onBackClick)
             }
         )
     }

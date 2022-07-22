@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
+import android.net.Uri
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -24,20 +26,34 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestina
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 
 object TopicDestination : NiaNavigationDestination {
-    override val route = "topic_route"
-    override val destination = "topic_destination"
     const val topicIdArg = "topicId"
+    override val route = "topic_route/{$topicIdArg}"
+    override val destination = "topic_destination"
+
+    /**
+     * Creates destination route for a topicId that could include special characters
+     */
+    fun createNavigationRoute(topicIdArg: String): String {
+        val encodedId = Uri.encode(topicIdArg)
+        return "topic_route/$encodedId"
+    }
+
+    /**
+     * Returns the topicId from a [NavBackStackEntry] after a topic destination navigation call
+     */
+    fun fromNavArgs(entry: NavBackStackEntry): String {
+        val encodedId = entry.arguments?.getString(topicIdArg)!!
+        return Uri.decode(encodedId)
+    }
 }
 
 fun NavGraphBuilder.topicGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${TopicDestination.route}/{${TopicDestination.topicIdArg}}",
+        route = TopicDestination.route,
         arguments = listOf(
-            navArgument(TopicDestination.topicIdArg) {
-                type = NavType.StringType
-            }
+            navArgument(TopicDestination.topicIdArg) { type = NavType.StringType }
         )
     ) {
         TopicRoute(onBackClick = onBackClick)
