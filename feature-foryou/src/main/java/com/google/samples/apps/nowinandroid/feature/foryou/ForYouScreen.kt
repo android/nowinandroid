@@ -17,11 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import androidx.annotation.IntRange
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -67,7 +63,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -80,7 +75,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.trace
-import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -99,7 +93,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeed
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import kotlin.math.floor
 
@@ -129,7 +124,7 @@ fun ForYouRoute(
 fun ForYouScreen(
     windowSizeClass: WindowSizeClass,
     interestsSelectionState: ForYouInterestsSelectionUiState,
-    feedState: ForYouFeedUiState,
+    feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -177,7 +172,7 @@ fun ForYouScreen(
                 // and relates to Time To Full Display.
                 val interestsLoaded =
                     interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-                val feedLoaded = feedState !is ForYouFeedUiState.Loading
+                val feedLoaded = feedState !is NewsFeedUiState.Loading
 
                 if (interestsLoaded && feedLoaded) {
                     val localView = LocalView.current
@@ -212,14 +207,15 @@ fun ForYouScreen(
                         saveFollowedTopics = saveFollowedTopics
                     )
 
-                    Feed(
+                    NewsFeed(
                         feedState = feedState,
                         // Avoid showing a second loading wheel if we already are for the interests
                         // selection
                         showLoadingUIIfLoading =
                         interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
                         numberOfColumns = numberOfColumns,
-                        onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged
+                        onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                        loadingContentDescription = R.string.for_you_loading
                     )
 
                     item {
@@ -432,89 +428,6 @@ fun TopicIcon(
     )
 }
 
-/**
- * An extension on [LazyListScope] defining the feed portion of the for you screen.
- * Depending on the [feedState], this might emit no items.
- *
- * @param showLoadingUIIfLoading if true, show a visual indication of loading if the
- * [feedState] is loading. This is controllable to permit du-duplicating loading
- * states.
- */
-private fun LazyListScope.Feed(
-    feedState: ForYouFeedUiState,
-    showLoadingUIIfLoading: Boolean,
-    @IntRange(from = 1) numberOfColumns: Int,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
-) {
-    when (feedState) {
-        ForYouFeedUiState.Loading -> {
-            if (showLoadingUIIfLoading) {
-                item {
-                    NiaLoadingWheel(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(),
-                        contentDesc = stringResource(id = R.string.for_you_loading),
-                    )
-                }
-            }
-        }
-        is ForYouFeedUiState.Success -> {
-            items(
-                feedState.feed.chunked(numberOfColumns)
-            ) { saveableNewsResources ->
-                Row(
-                    modifier = Modifier.padding(
-                        top = 32.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    // The last row may not be complete, but for a consistent grid
-                    // structure we still want an element taking up the empty space.
-                    // Therefore, the last row may have empty boxes.
-                    repeat(numberOfColumns) { index ->
-                        Box(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            val saveableNewsResource =
-                                saveableNewsResources.getOrNull(index)
-
-                            if (saveableNewsResource != null) {
-                                val launchResourceIntent =
-                                    Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(saveableNewsResource.newsResource.url)
-                                    )
-                                val context = LocalContext.current
-
-                                NewsResourceCardExpanded(
-                                    newsResource = saveableNewsResource.newsResource,
-                                    isBookmarked = saveableNewsResource.isSaved,
-                                    onClick = {
-                                        ContextCompat.startActivity(
-                                            context,
-                                            launchResourceIntent,
-                                            null
-                                        )
-                                    },
-                                    onToggleBookmark = {
-                                        onNewsResourcesCheckedChanged(
-                                            saveableNewsResource.newsResource.id,
-                                            !saveableNewsResource.isSaved
-                                        )
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
@@ -527,7 +440,7 @@ fun ForYouScreenPopulatedFeed() {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                feedState = ForYouFeedUiState.Success(
+                feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
                     }
@@ -556,7 +469,7 @@ fun ForYouScreenTopicSelection() {
                     topics = previewTopics.map { FollowableTopic(it, false) },
                     authors = previewAuthors.map { FollowableAuthor(it, false) }
                 ),
-                feedState = ForYouFeedUiState.Success(
+                feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
                     }
@@ -582,7 +495,7 @@ fun ForYouScreenLoading() {
             ForYouScreen(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
-                feedState = ForYouFeedUiState.Loading,
+                feedState = NewsFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},

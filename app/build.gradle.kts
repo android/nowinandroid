@@ -96,6 +96,7 @@ dependencies {
     implementation(project(":feature-author"))
     implementation(project(":feature-interests"))
     implementation(project(":feature-foryou"))
+    implementation(project(":feature-bookmarks"))
     implementation(project(":feature-topic"))
 
     implementation(project(":core-ui"))
