@@ -131,7 +131,7 @@ private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) 
 
 @Preview
 @Composable
-private fun InterestsCardPreview() {
+fun InterestsCardPreview() {
     NiaTheme {
         Surface {
             InterestsItem(
@@ -148,7 +148,7 @@ private fun InterestsCardPreview() {
 
 @Preview
 @Composable
-private fun InterestsCardLongNamePreview() {
+fun InterestsCardLongNamePreview() {
     NiaTheme {
         Surface {
             InterestsItem(
@@ -165,7 +165,7 @@ private fun InterestsCardLongNamePreview() {
 
 @Preview
 @Composable
-private fun InterestsCardLongDescriptionPreview() {
+fun InterestsCardLongDescriptionPreview() {
     NiaTheme {
         Surface {
             InterestsItem(
@@ -183,7 +183,7 @@ private fun InterestsCardLongDescriptionPreview() {
 
 @Preview
 @Composable
-private fun InterestsCardWithEmptyDescriptionPreview() {
+fun InterestsCardWithEmptyDescriptionPreview() {
     NiaTheme {
         Surface {
             InterestsItem(
