@@ -34,6 +34,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVec
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
@@ -77,6 +79,13 @@ class NiaAppState(
             selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
             unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
             iconTextId = forYouR.string.for_you
+        ),
+        TopLevelDestination(
+            route = BookmarksDestination.route,
+            destination = BookmarksDestination.destination,
+            selectedIcon = DrawableResourceIcon(NiaIcons.Bookmarks),
+            unselectedIcon = DrawableResourceIcon(NiaIcons.BookmarksBorder),
+            iconTextId = bookmarksR.string.saved
         ),
         TopLevelDestination(
             route = InterestsDestination.route,

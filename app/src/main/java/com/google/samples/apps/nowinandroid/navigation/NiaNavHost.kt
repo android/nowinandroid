@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import com.google.samples.apps.nowinandroid.feature.author.navigation.authorGraph
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksGraph
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouGraph
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
@@ -54,6 +55,7 @@ fun NiaNavHost(
         forYouGraph(
             windowSizeClass = windowSizeClass
         )
+        bookmarksGraph(windowSizeClass)
         interestsGraph(
             navigateToTopic = {
                 onNavigateToDestination(
