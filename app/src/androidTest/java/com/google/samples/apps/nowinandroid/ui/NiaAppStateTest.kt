@@ -81,9 +81,10 @@ class NiaAppStateTest {
             state = rememberNiaAppState(getCompactWindowClass())
         }
 
-        assertEquals(2, state.topLevelDestinations.size)
+        assertEquals(3, state.topLevelDestinations.size)
         assertTrue(state.topLevelDestinations[0].destination.contains("for_you"))
-        assertTrue(state.topLevelDestinations[1].destination.contains("interests"))
+        assertTrue(state.topLevelDestinations[1].destination.contains("bookmarks"))
+        assertTrue(state.topLevelDestinations[2].destination.contains("interests"))
     }
 
     @Test

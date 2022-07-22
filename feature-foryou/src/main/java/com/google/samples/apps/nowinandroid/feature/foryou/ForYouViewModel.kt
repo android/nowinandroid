@@ -32,6 +32,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.FollowedInterests
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.None
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsState.Unknown
@@ -77,15 +78,16 @@ class ForYouViewModel @Inject constructor(
                 initialValue = Unknown
             )
 
-    /**
-     * TODO: Temporary saving of news resources persisted through process death with a
-     *       [SavedStateHandle].
-     *
-     * This should be persisted to disk instead.
-     */
-    private var savedNewsResources by savedStateHandle.saveable {
-        mutableStateOf<Set<String>>(emptySet())
-    }
+    private val savedNewsResourcesState: StateFlow<Set<String>> =
+        userDataRepository.userDataStream
+            .map { userData ->
+                userData.bookmarkedNewsResources
+            }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptySet()
+            )
 
     /**
      * The in-progress set of topics to be selected, persisted through process death with a
@@ -103,35 +105,33 @@ class ForYouViewModel @Inject constructor(
         mutableStateOf<Set<String>>(emptySet())
     }
 
-    val feedState: StateFlow<ForYouFeedUiState> =
+    val feedState: StateFlow<NewsFeedUiState> =
         combine(
             followedInterestsState,
             snapshotFlow { inProgressTopicSelection },
-            snapshotFlow { inProgressAuthorSelection },
-            snapshotFlow { savedNewsResources }
-        ) { followedInterestsUserState, inProgressTopicSelection, inProgressAuthorSelection,
-            savedNewsResources ->
-
+            snapshotFlow { inProgressAuthorSelection }
+        ) { followedInterestsUserState, inProgressTopicSelection, inProgressAuthorSelection ->
             when (followedInterestsUserState) {
                 // If we don't know the current selection state, emit loading.
-                Unknown -> flowOf<ForYouFeedUiState>(ForYouFeedUiState.Loading)
+                Unknown -> flowOf<NewsFeedUiState>(NewsFeedUiState.Loading)
                 // If the user has followed topics, use those followed topics to populate the feed
                 is FollowedInterests -> {
+
                     newsRepository.getNewsResourcesStream(
                         filterTopicIds = followedInterestsUserState.topicIds,
                         filterAuthorIds = followedInterestsUserState.authorIds
-                    ).mapToFeedState(savedNewsResources)
+                    ).mapToFeedState(savedNewsResourcesState)
                 }
                 // If the user hasn't followed interests yet, show a realtime populated feed based
                 // on the in-progress interests selections, if there are any.
                 None -> {
                     if (inProgressTopicSelection.isEmpty() && inProgressAuthorSelection.isEmpty()) {
-                        flowOf<ForYouFeedUiState>(ForYouFeedUiState.Success(emptyList()))
+                        flowOf<NewsFeedUiState>(NewsFeedUiState.Success(emptyList()))
                     } else {
                         newsRepository.getNewsResourcesStream(
                             filterTopicIds = inProgressTopicSelection,
                             filterAuthorIds = inProgressAuthorSelection
-                        ).mapToFeedState(savedNewsResources)
+                        ).mapToFeedState(savedNewsResourcesState)
                     }
                 }
             }
@@ -143,7 +143,7 @@ class ForYouViewModel @Inject constructor(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = ForYouFeedUiState.Loading
+                initialValue = NewsFeedUiState.Loading
             )
 
     val interestsSelectionState: StateFlow<ForYouInterestsSelectionUiState> =
@@ -215,13 +215,8 @@ class ForYouViewModel @Inject constructor(
     }
 
     fun updateNewsResourceSaved(newsResourceId: String, isChecked: Boolean) {
-        withMutableSnapshot {
-            savedNewsResources =
-                if (isChecked) {
-                    savedNewsResources + newsResourceId
-                } else {
-                    savedNewsResources - newsResourceId
-                }
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceBookmark(newsResourceId, isChecked)
         }
     }
 
@@ -244,10 +239,10 @@ class ForYouViewModel @Inject constructor(
 }
 
 private fun Flow<List<NewsResource>>.mapToFeedState(
-    savedNewsResources: Set<String>
-): Flow<ForYouFeedUiState> =
+    savedNewsResourcesState: Flow<Set<String>>
+): Flow<NewsFeedUiState> =
     filterNot { it.isEmpty() }
-        .map { newsResources ->
+        .combine(savedNewsResourcesState) { newsResources, savedNewsResources ->
             newsResources.map { newsResource ->
                 SaveableNewsResource(
                     newsResource = newsResource,
@@ -255,5 +250,5 @@ private fun Flow<List<NewsResource>>.mapToFeedState(
                 )
             }
         }
-        .map<List<SaveableNewsResource>, ForYouFeedUiState>(ForYouFeedUiState::Success)
-        .onStart { emit(ForYouFeedUiState.Loading) }
+        .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+        .onStart { emit(NewsFeedUiState.Loading) }
