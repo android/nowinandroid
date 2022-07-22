@@ -47,17 +47,17 @@ class NavigationTest {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Use the primary activity to initialize the app normally.
-     */
-    @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
-
-    /**
      * Create a temporary folder used to create a Data Store file. This guarantees that
      * the file is removed in between each test, preventing a crash.
      */
-    @BindValue @get:Rule(order = 2)
+    @BindValue @get:Rule(order = 1)
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+
+    /**
+     * Use the primary activity to initialize the app normally.
+     */
+    @get:Rule(order = 2)
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     // The strings used for matching in these tests
     private lateinit var done: String
