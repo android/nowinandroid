@@ -29,16 +29,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Check spotless
         run: ./gradlew spotlessCheck --stacktrace
@@ -52,31 +44,18 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug testProdDebug --stacktrace
 
-      - name: Upload Demo build outputs (APKs)
+      - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
         with:
-          name: build-outputs-demo
-          path: app/demo/build/outputs
+          name: build-outputs
+          path: app/build/outputs
 
-      - name: Upload Prod build outputs (APKs)
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-outputs-prod
-          path: app/prod/build/outputs
-
-      - name: Upload Demo build reports
+      - name: Upload build reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: build-reports-demo
-          path: app/demo/build/reports
-
-      - name: Upload Prod build reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-reports-prod
-          path: app/prod/build/reports
+          name: build-reports
+          path: app/build/reports
 
   androidTest:
     needs: build
@@ -98,16 +77,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: Generate cache key
-        run: ./scripts/checksum.sh $SAMPLE_PATH checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
