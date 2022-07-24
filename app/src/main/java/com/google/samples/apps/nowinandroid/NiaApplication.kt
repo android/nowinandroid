@@ -27,7 +27,7 @@ import dagger.hilt.android.HiltAndroidApp
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApp : Application(), ImageLoaderFactory {
+class NiaApplication : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
         // Initialize Sync; the system responsible for keeping data in the app up to date.

@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.foryou.forYouSelectAuthors
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import com.google.samples.apps.nowinandroid.interests.interestsScrollPeopleDownUp
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
+import com.google.samples.apps.nowinandroid.saved.savedScrollFeedDownUp
 import org.junit.Rule
 import org.junit.Test
 
@@ -49,6 +50,12 @@ class BaselineProfileGenerator {
             forYouWaitForContent()
             forYouSelectAuthors()
             forYouScrollFeedDownUp()
+
+            // Navigate to saved screen
+            device.findObject(By.text("Saved")).click()
+            device.waitForIdle()
+
+            savedScrollFeedDownUp()
 
             // Navigate to interests screen
             device.findObject(By.text("Interests")).click()

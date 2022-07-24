@@ -41,6 +41,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.datetime.Instant
 import org.junit.Assert
 import org.junit.Rule
@@ -66,7 +67,7 @@ class ForYouScreenTest {
                         DpSize(maxWidth, maxHeight)
                     ),
                     interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
-                    feedState = ForYouFeedUiState.Loading,
+                    feedState = NewsFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -95,7 +96,7 @@ class ForYouScreenTest {
                         topics = testTopics,
                         authors = testAuthors
                     ),
-                    feedState = ForYouFeedUiState.Success(
+                    feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -149,7 +150,7 @@ class ForYouScreenTest {
                         },
                         authors = testAuthors
                     ),
-                    feedState = ForYouFeedUiState.Success(
+                    feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -203,7 +204,7 @@ class ForYouScreenTest {
                             testAuthor.copy(isFollowed = index == 1)
                         }
                     ),
-                    feedState = ForYouFeedUiState.Success(
+                    feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
                     onAuthorCheckedChanged = { _, _ -> },
@@ -254,7 +255,7 @@ class ForYouScreenTest {
                         topics = testTopics,
                         authors = testAuthors
                     ),
-                    feedState = ForYouFeedUiState.Loading,
+                    feedState = NewsFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -289,7 +290,7 @@ class ForYouScreenTest {
                         DpSize(maxWidth, maxHeight)
                     ),
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                    feedState = ForYouFeedUiState.Loading,
+                    feedState = NewsFeedUiState.Loading,
                     onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -328,7 +329,7 @@ class ForYouScreenTest {
                 ForYouScreen(
                     windowSizeClass = windowSizeClass,
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                    feedState = ForYouFeedUiState.Success(
+                    feedState = NewsFeedUiState.Success(
                         feed = testNewsResources
                     ),
                     onAuthorCheckedChanged = { _, _ -> },

@@ -47,25 +47,23 @@ class NavigationTest {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Use the primary activity to initialize the app normally.
-     */
-    @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
-
-    /**
      * Create a temporary folder used to create a Data Store file. This guarantees that
      * the file is removed in between each test, preventing a crash.
      */
-    @BindValue @get:Rule(order = 2)
+    @BindValue @get:Rule(order = 1)
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+
+    /**
+     * Use the primary activity to initialize the app normally.
+     */
+    @get:Rule(order = 2)
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     // The strings used for matching in these tests
     private lateinit var done: String
     private lateinit var navigateUp: String
     private lateinit var forYouLoading: String
     private lateinit var forYou: String
-    private lateinit var episodes: String
-    private lateinit var saved: String
     private lateinit var interests: String
     private lateinit var sampleTopic: String
 
@@ -76,8 +74,6 @@ class NavigationTest {
             navigateUp = getString(R.string.navigate_up)
             forYouLoading = getString(R.string.for_you_loading)
             forYou = getString(R.string.for_you)
-            episodes = getString(R.string.episodes)
-            saved = getString(R.string.saved)
             interests = getString(R.string.interests)
             sampleTopic = "Headlines"
         }

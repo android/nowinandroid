@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.author.navigation
 
+import android.net.Uri
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -24,20 +26,34 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestina
 import com.google.samples.apps.nowinandroid.feature.author.AuthorRoute
 
 object AuthorDestination : NiaNavigationDestination {
-    override val route = "author_route"
-    override val destination = "author_destination"
     const val authorIdArg = "authorId"
+    override val route = "author_route/{$authorIdArg}"
+    override val destination = "author_destination"
+
+    /**
+     * Creates destination route for an authorId that could include special characters
+     */
+    fun createNavigationRoute(authorIdArg: String): String {
+        val encodedId = Uri.encode(authorIdArg)
+        return "author_route/$encodedId"
+    }
+
+    /**
+     * Returns the authorId from a [NavBackStackEntry] after an author destination navigation call
+     */
+    fun fromNavArgs(entry: NavBackStackEntry): String {
+        val encodedId = entry.arguments?.getString(authorIdArg)!!
+        return Uri.decode(encodedId)
+    }
 }
 
 fun NavGraphBuilder.authorGraph(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = "${AuthorDestination.route}/{${AuthorDestination.authorIdArg}}",
+        route = AuthorDestination.route,
         arguments = listOf(
-            navArgument(AuthorDestination.authorIdArg) {
-                type = NavType.StringType
-            }
+            navArgument(AuthorDestination.authorIdArg) { type = NavType.StringType }
         )
     ) {
         AuthorRoute(onBackClick = onBackClick)

@@ -24,6 +24,7 @@ plugins {
     id("jacoco")
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
+    id("nowinandroid.firebase-perf")
 }
 
 android {
@@ -95,6 +96,7 @@ dependencies {
     implementation(project(":feature-author"))
     implementation(project(":feature-interests"))
     implementation(project(":feature-foryou"))
+    implementation(project(":feature-bookmarks"))
     implementation(project(":feature-topic"))
 
     implementation(project(":core-ui"))
@@ -107,6 +109,8 @@ dependencies {
     androidTestImplementation(project(":core-datastore-test"))
     androidTestImplementation(project(":core-data-test"))
     androidTestImplementation(project(":core-network"))
+    androidTestImplementation(libs.androidx.navigation.testing)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

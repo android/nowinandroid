@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +37,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
@@ -58,13 +58,14 @@ import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun TopicRoute(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
-    val uiState: TopicScreenUiState by viewModel.uiState.collectAsState()
+    val uiState: TopicScreenUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TopicScreen(
         topicState = uiState.topicState,
@@ -75,7 +76,6 @@ fun TopicRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(

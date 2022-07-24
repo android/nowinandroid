@@ -72,7 +72,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td>The initial news feed state is set to <code>Loading</code>, which causes the UI to show a loading spinner on the screen.
    </td>
-   <td>Search for usages of <code>ForYouFeedState.Loading</code>
+   <td>Search for usages of <code>NewsFeedUiState.Loading</code>
    </td>
   </tr>
   <tr>
@@ -138,7 +138,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
 <p>
 The screen shows the newly retrieved news resources (as long as the user has chosen at least one topic or author).
    </td>
-   <td>Search for instances of <code>ForYouFeedState.Success</code>
+   <td>Search for instances of <code>NewsFeedUiState.Success</code>
    </td>
   </tr>
 </table>
@@ -260,7 +260,7 @@ UI state is modeled as a sealed hierarchy using interfaces and immutable data cl
 
 **Example: News feed on For You screen**
 
-The feed (a list) of news resources on the For You screen is modeled using `ForYouFeedState`. This is a sealed interface which creates a hierarchy of two possible states:
+The feed (a list) of news resources on the For You screen is modeled using `NewsFeedUiState`. This is a sealed interface which creates a hierarchy of two possible states:
 
 
 

@@ -324,7 +324,6 @@ private fun RowScope.NiaButtonContent(
     }
     Box(
         Modifier
-            .weight(1f, fill = false)
             .padding(
                 start = if (leadingIcon != null) {
                     NiaButtonDefaults.ButtonContentSpacing

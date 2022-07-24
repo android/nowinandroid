@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
@@ -58,6 +59,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 
 @Composable
 fun AuthorsCarousel(
@@ -65,10 +67,15 @@ fun AuthorsCarousel(
     onAuthorClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val lazyListState = rememberLazyListState()
+    val tag = "forYou:authors"
+    TrackScrollJank(scrollableState = lazyListState, stateName = tag)
+
     LazyRow(
-        modifier = modifier.testTag("forYou:authors"),
+        modifier = modifier.testTag(tag),
         contentPadding = PaddingValues(24.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
+        state = lazyListState
     ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
             AuthorItem(
