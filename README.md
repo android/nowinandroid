@@ -6,7 +6,7 @@ Now in Android App [Work in progress 🚧]
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
 app.
 
-Now in Android is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
+**Now in Android** is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
 follows Android design and development best practices and is intended to be a useful reference
 for developers. As a running app, it's intended to help developers keep up-to-date with the world
 of Android development by providing regular news updates.
@@ -15,7 +15,7 @@ The app is currently in early stage development and is not yet available on the 
 
 # Features
 
-Now in Android displays content from the
+**Now in Android** displays content from the
 [Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
 links to recent videos, articles and other content. Users can also follow topics they are interested
 in or follow specific authors.
@@ -29,7 +29,7 @@ in or follow specific authors.
 
 # Development Environment
 
-Now in Android uses the Gradle build system and can be imported directly into the latest stable
+**Now in Android** uses the Gradle build system and can be imported directly into the latest stable
 version of Android Studio (available [here](https://developer.android.com/studio)). The `debug`
 build can be built and run using the default configuration.
 
@@ -45,14 +45,14 @@ for more details.
 
 # Architecture
 
-The Now in Android app follows the
+The **Now in Android** app follows the
 [official architecture guidance](https://developer.android.com/topic/architecture) 
 and is described in detail in the
 [architecture learning journey](docs/ArchitectureLearningJourney.md).
 
 # Modularization
 
-The Now in Android app has been fully modularized and you can find the detailed guidance and
+The **Now in Android** app has been fully modularized and you can find the detailed guidance and
 description of the modularization strategy used in
 [modularization learning journey](docs/ModularizationLearningJourney.md).
 
@@ -64,7 +64,7 @@ In addition, the `benchmark` variant of `app` is used to test startup performanc
 baseline profile (see below for more information).
 
 `app-nia-catalog` is a standalone app that displays the list of components that are stylized for
-Now in Android.
+**Now in Android**.
 
 The app also uses
 [product flavors](https://developer.android.com/studio/build/build-variants#product-flavors) to
@@ -80,13 +80,13 @@ For normal development use the `demoDebug` variant. For UI performance testing u
 
 # Testing
 
-To facilitate testing of components, Now in Android uses dependency injection with
+To facilitate testing of components, **Now in Android** uses dependency injection with
 [Hilt](https://developer.android.com/training/dependency-injection/hilt-android).
 
 Most data layer components are defined as interfaces.
 Then, concrete implementations (with various dependencies) are bound to provide those interfaces to
 other components in the app.
-In tests, Now in Android notably does _not_ use any mocking libraries.
+In tests, **Now in Android** notably does _not_ use any mocking libraries.
 Instead, the production implementations can be replaced with test doubles using Hilt's testing APIs
 (or via manual constructor injection for `ViewModel` tests).
 
@@ -138,5 +138,5 @@ Then copy the resulting baseline profile from the emulator to [`app/src/main/bas
 
 # License
 
-Now in Android is distributed under the terms of the Apache License (Version 2.0). See the
+**Now in Android** is distributed under the terms of the Apache License (Version 2.0). See the
 [license](LICENSE) for more information.
