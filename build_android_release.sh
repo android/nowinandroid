@@ -21,7 +21,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APP_OUT=$DIR/app/build/outputs
 
-export JAVA_HOME="$(cd $DIR/../../../prebuilts/studio/jdk && pwd )"
+export JAVA_HOME="$(cd $DIR/../../../prebuilts/studio/jdk/jdk11/linux && pwd )"
 echo "JAVA_HOME=$JAVA_HOME"
 
 export ANDROID_HOME="$(cd $DIR/../../../prebuilts/fullsdk/linux && pwd )"
