@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
@@ -50,66 +51,126 @@ class AuthorViewModel @Inject constructor(
         savedStateHandle[AuthorDestination.authorIdArg]
     )
 
-    // Observe the followed authors, as they could change over time.
-    private val followedAuthorIdsStream: Flow<Result<Set<String>>> =
-        userDataRepository.userDataStream
-            .map { it.followedAuthors }
-            .asResult()
+    val authorUiState: StateFlow<AuthorUiState> = authorUiStateStream(
+        authorId = authorId,
+        userDataRepository = userDataRepository,
+        authorsRepository = authorsRepository
+    )
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = AuthorUiState.Loading
+        )
 
-    // Observe author information
-    private val author: Flow<Result<Author>> = authorsRepository.getAuthorStream(
-        id = authorId
-    ).asResult()
-
-    // Observe the News for this author
-    private val newsStream: Flow<Result<List<NewsResource>>> =
-        newsRepository.getNewsResourcesStream(
-            filterAuthorIds = setOf(element = authorId),
-            filterTopicIds = emptySet()
-        ).asResult()
-
-    val uiState: StateFlow<AuthorScreenUiState> =
-        combine(
-            followedAuthorIdsStream,
-            author,
-            newsStream
-        ) { followedAuthorsResult, authorResult, newsResult ->
-            val author: AuthorUiState =
-                if (authorResult is Result.Success && followedAuthorsResult is Result.Success) {
-                    val followed = followedAuthorsResult.data.contains(authorId)
-                    AuthorUiState.Success(
-                        followableAuthor = FollowableAuthor(
-                            author = authorResult.data,
-                            isFollowed = followed
-                        )
-                    )
-                } else if (
-                    authorResult is Result.Loading || followedAuthorsResult is Result.Loading
-                ) {
-                    AuthorUiState.Loading
-                } else {
-                    AuthorUiState.Error
-                }
-
-            val news: NewsUiState = when (newsResult) {
-                is Result.Success -> NewsUiState.Success(newsResult.data)
-                is Result.Loading -> NewsUiState.Loading
-                is Result.Error -> NewsUiState.Error
-            }
-
-            AuthorScreenUiState(author, news)
-        }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = AuthorScreenUiState(AuthorUiState.Loading, NewsUiState.Loading)
-            )
+    val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
+        authorId = authorId,
+        userDataRepository = userDataRepository,
+        newsRepository = newsRepository
+    )
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = NewsUiState.Loading
+        )
 
     fun followAuthorToggle(followed: Boolean) {
         viewModelScope.launch {
             userDataRepository.toggleFollowedAuthorId(authorId, followed)
         }
     }
+
+    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+        }
+    }
+}
+
+private fun authorUiStateStream(
+    authorId: String,
+    userDataRepository: UserDataRepository,
+    authorsRepository: AuthorsRepository,
+): Flow<AuthorUiState> {
+    // Observe the followed authors, as they could change over time.
+    val followedAuthorIdsStream: Flow<Set<String>> =
+        userDataRepository.userDataStream
+            .map { it.followedAuthors }
+
+    // Observe author information
+    val authorStream: Flow<Author> = authorsRepository.getAuthorStream(
+        id = authorId
+    )
+
+    return combine(
+        followedAuthorIdsStream,
+        authorStream,
+        ::Pair
+    )
+        .asResult()
+        .map { followedAuthorToAuthorResult ->
+            when (followedAuthorToAuthorResult) {
+                is Result.Success -> {
+                    val (followedAuthors, author) = followedAuthorToAuthorResult.data
+                    val followed = followedAuthors.contains(authorId)
+                    AuthorUiState.Success(
+                        followableAuthor = FollowableAuthor(
+                            author = author,
+                            isFollowed = followed
+                        )
+                    )
+                }
+                is Result.Loading -> {
+                    AuthorUiState.Loading
+                }
+                is Result.Error -> {
+                    AuthorUiState.Error
+                }
+            }
+        }
+}
+
+private fun newsUiStateStream(
+    authorId: String,
+    newsRepository: NewsRepository,
+    userDataRepository: UserDataRepository,
+): Flow<NewsUiState> {
+    // Observe news
+    val newsStream: Flow<List<NewsResource>> = newsRepository.getNewsResourcesStream(
+        filterAuthorIds = setOf(element = authorId),
+        filterTopicIds = emptySet()
+    )
+
+    // Observe bookmarks
+    val bookmarkStream: Flow<Set<String>> = userDataRepository.userDataStream
+        .map { it.bookmarkedNewsResources }
+
+    return combine(
+        newsStream,
+        bookmarkStream,
+        ::Pair
+    )
+        .asResult()
+        .map { newsToBookmarksResult ->
+            when (newsToBookmarksResult) {
+                is Result.Success -> {
+                    val (news, bookmarks) = newsToBookmarksResult.data
+                    NewsUiState.Success(
+                        news.map { newsResource ->
+                            SaveableNewsResource(
+                                newsResource,
+                                isSaved = bookmarks.contains(newsResource.id)
+                            )
+                        }
+                    )
+                }
+                is Result.Loading -> {
+                    NewsUiState.Loading
+                }
+                is Result.Error -> {
+                    NewsUiState.Error
+                }
+            }
+        }
 }
 
 sealed interface AuthorUiState {
@@ -119,12 +180,7 @@ sealed interface AuthorUiState {
 }
 
 sealed interface NewsUiState {
-    data class Success(val news: List<NewsResource>) : NewsUiState
+    data class Success(val news: List<SaveableNewsResource>) : NewsUiState
     object Error : NewsUiState
     object Loading : NewsUiState
 }
-
-data class AuthorScreenUiState(
-    val authorState: AuthorUiState,
-    val newsState: NewsUiState
-)
