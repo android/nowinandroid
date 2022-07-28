@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -133,7 +134,8 @@ fun NiaApp(
                     NiaBottomBar(
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
-                        currentDestination = appState.currentDestination
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.testTag("NiaBottomBar")
                     )
                 }
             }
@@ -170,7 +172,9 @@ fun NiaApp(
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination,
-                        modifier = Modifier.safeDrawingPadding()
+                        modifier = Modifier
+                            .testTag("NiaNavRail")
+                            .safeDrawingPadding()
                     )
                 }
 
@@ -230,9 +234,12 @@ private fun NiaNavRail(
 private fun NiaBottomBar(
     destinations: List<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?
+    currentDestination: NavDestination?,
+    modifier: Modifier = Modifier
 ) {
-    NiaNavigationBar {
+    NiaNavigationBar(
+        modifier = modifier
+    ) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             NiaNavigationBarItem(
