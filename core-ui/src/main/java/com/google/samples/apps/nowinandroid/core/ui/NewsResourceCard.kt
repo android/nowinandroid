@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -45,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -54,16 +56,18 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 
@@ -117,6 +121,8 @@ fun NewsResourceCardExpanded(
                     NewsResourceDate(newsResource.publishDate)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NewsResourceTopics(newsResource.topics)
                 }
             }
         }
@@ -152,13 +158,7 @@ fun NewsResourceAuthors(
         // Only display first author for now
         val author = authors[0]
 
-        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
-
-        val authorNameFormatted = if (locale != null) {
-            author.name.uppercase(locale)
-        } else {
-            author.name.uppercase()
-        }
+        val authorNameFormatted = author.name.uppercase(Locale.getDefault())
 
         val authorImageUrl = author.imageUrl
 
@@ -265,9 +265,23 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    newsResource: NewsResource
+    topics: List<Topic>,
+    modifier: Modifier = Modifier
 ) {
-    TODO()
+    Row(
+        modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        for (topic in topics) {
+            NiaTopicTag(
+                followed = true, // ToDo: Check if topic is followed
+                onFollowClick = { }, // ToDo
+                onUnfollowClick = { }, // ToDo
+                onBrowseClick = { }, // ToDo
+                text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
+            )
+        }
+    }
 }
 
 @Preview("Bookmark Button")
