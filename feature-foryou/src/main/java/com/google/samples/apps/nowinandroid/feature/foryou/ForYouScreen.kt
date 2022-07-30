@@ -414,8 +414,8 @@ private fun SingleTopicButton(
 
 @Composable
 fun TopicIcon(
-    modifier: Modifier = Modifier,
-    imageUrl: String
+    imageUrl: String,
+    modifier: Modifier = Modifier
 ) {
     AsyncImage(
         // TODO b/228077205, show loading image visual instead of static placeholder

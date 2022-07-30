@@ -49,9 +49,9 @@ import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun InterestsRoute(
-    modifier: Modifier = Modifier,
     navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
