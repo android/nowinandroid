@@ -22,8 +22,10 @@ androidxProfileinstaller = "1.2.0"
 androidxSavedState = "1.2.0"
 androidxStartup = "1.1.1"
 androidxWindowManager = "1.0.0"
-androidxTest = "1.4.0"
+androidxTestCore = "1.5.0-alpha02"
 androidxTestExt = "1.1.3"
+androidxTestRunner = "1.4.0"
+androidxTestRules = "1.4.0"
 androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
 androidxWork = "2.7.1"
@@ -83,11 +85,11 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 androidx-savedstate-ktx = { group = "androidx.savedstate", name = "savedstate-ktx", version.ref= "androidxSavedState"}
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 androidx-window-manager = {module = "androidx.window:window", version.ref = "androidxWindowManager"}
-androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTest" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
-androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
 androidx-tracing-ktx = {group = "androidx.tracing", name="tracing-ktx", version.ref = "androidxTracing" }
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
