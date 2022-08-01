@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -29,12 +29,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,19 +47,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeed
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import kotlin.math.floor
+import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
 @Composable
 fun BookmarksRoute(
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     viewModel: BookmarksViewModel = hiltViewModel()
 ) {
     val feedState by viewModel.feedState.collectAsState()
     BookmarksScreen(
-        windowSizeClass = windowSizeClass,
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
         modifier = modifier
@@ -69,7 +66,6 @@ fun BookmarksRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun BookmarksScreen(
-    windowSizeClass: WindowSizeClass,
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -97,37 +93,26 @@ fun BookmarksScreen(
             },
             containerColor = Color.Transparent
         ) { innerPadding ->
-            // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
-            //       https://issuetracker.google.com/issues/230514914
-            //       https://issuetracker.google.com/issues/231320714
-            BoxWithConstraints(
+            LazyVerticalGrid(
+                columns = Adaptive(300.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = modifier
+                    .fillMaxSize()
+                    .testTag("bookmarks:feed")
                     .padding(innerPadding)
                     .consumedWindowInsets(innerPadding)
             ) {
-                val numberOfColumns = when (windowSizeClass.widthSizeClass) {
-                    WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
-                    else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
-                }
+                newsFeed(
+                    feedState = feedState,
+                    onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+                    showLoadingUIIfLoading = true,
+                    loadingContentDescription = R.string.saved_loading
+                )
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .testTag("saved:feed"),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-
-                    NewsFeed(
-                        feedState = feedState,
-                        numberOfColumns = numberOfColumns,
-                        onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-                        showLoadingUIIfLoading = true,
-                        loadingContentDescription = R.string.saved_loading
-                    )
-
-                    item {
-                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                    }
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                 }
             }
         }
