@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 60
 
     steps:
@@ -85,7 +85,6 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          first-boot-delay: 1000
           disable-animations: true
           disk-size: 1500M
           heap-size: 512M
