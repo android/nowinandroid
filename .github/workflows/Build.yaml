@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
@@ -59,11 +59,13 @@ jobs:
 
   androidTest:
     needs: build
-    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    runs-on: macos-latest # enables hardware acceleration in the virtual machine
     timeout-minutes: 45
     strategy:
       matrix:
         api-level: [23, 26, 30]
+        arch: [x86_64]
+        first-boot-delay: [1000]
 
     steps:
       - name: Checkout
