@@ -24,6 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
@@ -52,10 +53,11 @@ class AuthorScreenTest {
     fun niaLoadingWheel_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             AuthorScreen(
-                authorState = AuthorUiState.Loading,
-                newsState = NewsUiState.Loading,
+                authorUiState = AuthorUiState.Loading,
+                newsUiState = NewsUiState.Loading,
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -69,10 +71,11 @@ class AuthorScreenTest {
         val testAuthor = testAuthors.first()
         composeTestRule.setContent {
             AuthorScreen(
-                authorState = AuthorUiState.Success(testAuthor),
-                newsState = NewsUiState.Loading,
+                authorUiState = AuthorUiState.Success(testAuthor),
+                newsUiState = NewsUiState.Loading,
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -91,10 +94,18 @@ class AuthorScreenTest {
     fun news_whenAuthorIsLoading_isNotShown() {
         composeTestRule.setContent {
             AuthorScreen(
-                authorState = AuthorUiState.Loading,
-                newsState = NewsUiState.Success(sampleNewsResources),
+                authorUiState = AuthorUiState.Loading,
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }
+                ),
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -103,15 +114,24 @@ class AuthorScreenTest {
             .onNodeWithContentDescription(authorLoading)
             .assertExists()
     }
+
     @Test
     fun news_whenSuccessAndAuthorIsSuccess_isShown() {
         val testAuthor = testAuthors.first()
         composeTestRule.setContent {
             AuthorScreen(
-                authorState = AuthorUiState.Success(testAuthor),
-                newsState = NewsUiState.Success(sampleNewsResources),
+                authorUiState = AuthorUiState.Success(testAuthor),
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }
+                ),
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
