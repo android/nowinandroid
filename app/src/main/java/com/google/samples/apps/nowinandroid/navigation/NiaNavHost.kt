@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -43,7 +42,6 @@ fun NiaNavHost(
     navController: NavHostController,
     onNavigateToDestination: (NiaNavigationDestination, String) -> Unit,
     onBackClick: () -> Unit,
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     startDestination: String = ForYouDestination.route
 ) {
@@ -52,10 +50,8 @@ fun NiaNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouGraph(
-            windowSizeClass = windowSizeClass
-        )
-        bookmarksGraph(windowSizeClass)
+        forYouGraph()
+        bookmarksGraph()
         interestsGraph(
             navigateToTopic = {
                 onNavigateToDestination(

@@ -17,8 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
@@ -33,7 +31,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.unit.DpSize
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -45,7 +42,6 @@ import org.junit.Test
 /**
  * UI tests for [BookmarksScreen] composable.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class BookmarksScreenTest {
 
     @get:Rule
@@ -53,18 +49,11 @@ class BookmarksScreenTest {
 
     @Test
     fun loading_showsLoadingSpinner() {
-        lateinit var windowSizeClass: WindowSizeClass
         composeTestRule.setContent {
-            BoxWithConstraints {
-                windowSizeClass = WindowSizeClass.calculateFromSize(
-                    DpSize(maxWidth, maxHeight)
-                )
-                BookmarksScreen(
-                    windowSizeClass = windowSizeClass,
-                    feedState = NewsFeedUiState.Loading,
-                    removeFromBookmarks = { }
-                )
-            }
+            BookmarksScreen(
+                feedState = NewsFeedUiState.Loading,
+                removeFromBookmarks = { }
+            )
         }
 
         composeTestRule
@@ -79,20 +68,13 @@ class BookmarksScreenTest {
         lateinit var windowSizeClass: WindowSizeClass
 
         composeTestRule.setContent {
-            BoxWithConstraints {
-                windowSizeClass = WindowSizeClass.calculateFromSize(
-                    DpSize(maxWidth, maxHeight)
-                )
-
-                BookmarksScreen(
-                    windowSizeClass = windowSizeClass,
-                    feedState = NewsFeedUiState.Success(
-                        previewNewsResources.take(2)
-                            .map { SaveableNewsResource(it, true) }
-                    ),
-                    removeFromBookmarks = { }
-                )
-            }
+            BookmarksScreen(
+                feedState = NewsFeedUiState.Success(
+                    previewNewsResources.take(2)
+                        .map { SaveableNewsResource(it, true) }
+                ),
+                removeFromBookmarks = { }
+            )
         }
 
         composeTestRule
@@ -122,28 +104,19 @@ class BookmarksScreenTest {
 
     @Test
     fun feed_whenRemovingBookmark_removesBookmark() {
-        lateinit var windowSizeClass: WindowSizeClass
-
         var removeFromBookmarksCalled = false
 
         composeTestRule.setContent {
-            BoxWithConstraints {
-                windowSizeClass = WindowSizeClass.calculateFromSize(
-                    DpSize(maxWidth, maxHeight)
-                )
-
-                BookmarksScreen(
-                    windowSizeClass = windowSizeClass,
-                    feedState = NewsFeedUiState.Success(
-                        previewNewsResources.take(2)
-                            .map { SaveableNewsResource(it, true) }
-                    ),
-                    removeFromBookmarks = { newsResourceId ->
-                        assertEquals(previewNewsResources[0].id, newsResourceId)
-                        removeFromBookmarksCalled = true
-                    }
-                )
-            }
+            BookmarksScreen(
+                feedState = NewsFeedUiState.Success(
+                    previewNewsResources.take(2)
+                        .map { SaveableNewsResource(it, true) }
+                ),
+                removeFromBookmarks = { newsResourceId ->
+                    assertEquals(previewNewsResources[0].id, newsResourceId)
+                    removeFromBookmarksCalled = true
+                }
+            )
         }
 
         composeTestRule
