@@ -97,7 +97,7 @@ specific calls against mocks.
 
 Examples:
 - In instrumentation tests, a temporary folder is used to store the user's preferences, which is
-  wiped after the reach test.
+  wiped after each test.
   This allows using the real `DataStore` and exercising all related code, instead of mocking the 
   flow of data updates.
 
@@ -105,7 +105,7 @@ Examples:
   interface and also provide test-only hooks.
   `ViewModel` tests use these `Test` repositories, and thus can use the test-only hooks to
   manipulate the state of the `Test` repository and verify the resulting behavior, instead of
-  checking if specific repository methods were called.
+  checking that specific repository methods were called.
 
 # UI
 
