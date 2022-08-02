@@ -82,14 +82,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         
-      - name: AVD cache
-        uses: actions/cache@v3
+      # Retrieve the cached emulator snapshot.
+      - uses: actions/cache@v3
         id: avd-cache
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+            path: |
+                ~/.android/avd/*
+                ~/.android/adb*
+            key: ${{ runner.os }}-avd-${{ env.CACHE_VERSION }}-${{ steps.avd-info.outputs.arch }}-${{ steps.avd-info.outputs.target }}-${{ matrix.api-level }}
       
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -99,8 +99,8 @@ jobs:
           arch: ${{ matrix.arch }}
           force-avd-creation: false
           disable-animations: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          sdcard-path-or-size: 100M
+          ram-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run instrumentation tests
@@ -109,9 +109,9 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
-          disk-size: 1500M
-          heap-size: 512M
           force-avd-creation: false
+          ram-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
 
       - name: Upload test reports
