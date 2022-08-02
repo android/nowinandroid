@@ -65,7 +65,7 @@ jobs:
       matrix:
         api-level: [23, 26, 30]
         arch: [x86_64]
-        first-boot-delay: [1000]
+        first-boot-delay: [600]
 
     steps:
       - name: Checkout
@@ -96,8 +96,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: ${{ matrix.arch }}
           force-avd-creation: false
           disable-animations: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          sdcard-path-or-size: 100M
+          disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run instrumentation tests
@@ -108,6 +112,7 @@ jobs:
           disable-animations: true
           disk-size: 1500M
           heap-size: 512M
+          force-avd-creation: false
           script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
 
       - name: Upload test reports
