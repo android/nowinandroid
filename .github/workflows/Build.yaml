@@ -86,8 +86,8 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
-          disk-size: 1500M
-          heap-size: 512M
+          disk-size: 2000M
+          heap-size: 600M
           script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
 
       - name: Upload test reports
