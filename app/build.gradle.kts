@@ -127,6 +127,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     kaptAndroidTest(libs.hilt.compiler)
 
+    //Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
     // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
     configurations.configureEach {
         resolutionStrategy {

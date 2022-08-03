@@ -22,6 +22,7 @@ import coil.ImageLoaderFactory
 import coil.decode.SvgDecoder
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 /**
  * [Application] class for NiA
@@ -32,6 +33,9 @@ class NiaApplication : Application(), ImageLoaderFactory {
         super.onCreate()
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
     /**

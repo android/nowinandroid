@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.di
 
 import android.app.Activity
-import android.util.Log
 import android.view.Window
 import androidx.metrics.performance.JankStats
 import dagger.Module
@@ -27,6 +26,7 @@ import dagger.hilt.android.components.ActivityComponent
 import java.util.concurrent.Executor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import timber.log.Timber
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -37,7 +37,7 @@ object JankStatsModule {
             // Make sure to only log janky frames.
             if (frameData.isJank) {
                 // We're currently logging this but would better report it to a backend.
-                Log.v("NiA Jank", frameData.toString())
+                Timber.v(frameData.toString())
             }
         }
     }
