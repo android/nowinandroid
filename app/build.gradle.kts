@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.samples.apps.nowinandroid.FlavorDimension
 import com.google.samples.apps.nowinandroid.Flavor
+import com.google.samples.apps.nowinandroid.FlavorDimension
 
 plugins {
     id("nowinandroid.android.application")
@@ -117,7 +117,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.window.manager)
-    implementation(libs.material3)
     implementation(libs.androidx.profileinstaller)
 
     implementation(libs.coil.kt)
