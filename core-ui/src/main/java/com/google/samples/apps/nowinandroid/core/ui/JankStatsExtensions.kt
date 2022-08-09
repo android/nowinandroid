@@ -26,7 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalView
 import androidx.metrics.performance.PerformanceMetricsState
-import androidx.metrics.performance.PerformanceMetricsState.MetricsStateHolder
+import androidx.metrics.performance.PerformanceMetricsState.Holder
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -35,11 +35,11 @@ import kotlinx.coroutines.CoroutineScope
  * @see PerformanceMetricsState.getForHierarchy
  */
 @Composable
-fun rememberMetricsStateHolder(): MetricsStateHolder {
+fun rememberMetricsStateHolder(): Holder {
     val localView = LocalView.current
 
     return remember(localView) {
-        PerformanceMetricsState.getForHierarchy(localView)
+        PerformanceMetricsState.getHolderForHierarchy(localView)
     }
 }
 
@@ -51,7 +51,7 @@ fun rememberMetricsStateHolder(): MetricsStateHolder {
 @Composable
 fun JankMetricEffect(
     vararg keys: Any?,
-    reportMetric: suspend CoroutineScope.(state: MetricsStateHolder) -> Unit
+    reportMetric: suspend CoroutineScope.(state: Holder) -> Unit
 ) {
     val metrics = rememberMetricsStateHolder()
     LaunchedEffect(metrics, *keys) {
@@ -66,7 +66,7 @@ fun JankMetricEffect(
 @Composable
 fun JankMetricDisposableEffect(
     vararg keys: Any?,
-    reportMetric: DisposableEffectScope.(state: MetricsStateHolder) -> DisposableEffectResult
+    reportMetric: DisposableEffectScope.(state: Holder) -> DisposableEffectResult
 ) {
     val metrics = rememberMetricsStateHolder()
     DisposableEffect(metrics, *keys) {
@@ -80,7 +80,7 @@ fun TrackScrollJank(scrollableState: ScrollableState, stateName: String) {
         snapshotFlow { scrollableState.isScrollInProgress }.collect { isScrollInProgress ->
             metricsHolder.state?.apply {
                 if (isScrollInProgress) {
-                    addState(stateName, "Scrolling=true")
+                    putState(stateName, "Scrolling=true")
                 } else {
                     removeState(stateName)
                 }

@@ -69,7 +69,7 @@ fun InterestsRoute(
     )
 
     JankMetricDisposableEffect(tabState) { metricsHolder ->
-        metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
+        metricsHolder.state?.putState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
 
         onDispose {
             metricsHolder.state?.removeState("Interests:TabState")
