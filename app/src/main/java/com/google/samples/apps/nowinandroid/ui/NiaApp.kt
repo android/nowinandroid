@@ -105,7 +105,6 @@ fun NiaApp(
                         navController = appState.navController,
                         onBackClick = appState::onBackClick,
                         onNavigateToDestination = appState::navigate,
-                        windowSizeClass = appState.windowSizeClass,
                         modifier = Modifier
                             .padding(padding)
                             .consumedWindowInsets(padding)
