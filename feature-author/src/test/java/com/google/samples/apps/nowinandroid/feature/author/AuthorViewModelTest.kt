@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -68,16 +69,16 @@ class AuthorViewModelTest {
 
     @Test
     fun uiStateAuthor_whenSuccess_matchesAuthorFromRepository() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.authorUiState.collect() }
 
         // To make sure AuthorUiState is success
         authorsRepository.sendAuthors(testInputAuthors.map(FollowableAuthor::author))
         userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
 
-        val item = viewModel.uiState.value
-        assertTrue(item.authorState is AuthorUiState.Success)
+        val item = viewModel.authorUiState.value
+        assertTrue(item is AuthorUiState.Success)
 
-        val successAuthorUiState = item.authorState as AuthorUiState.Success
+        val successAuthorUiState = item as AuthorUiState.Success
         val authorFromRepository = authorsRepository.getAuthorStream(
             id = testInputAuthors[0].author.id
         ).first()
@@ -90,20 +91,20 @@ class AuthorViewModelTest {
 
     @Test
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(NewsUiState.Loading, viewModel.uiState.value.newsState)
+        assertEquals(NewsUiState.Loading, viewModel.newUiState.value)
     }
 
     @Test
     fun uiStateAuthor_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(AuthorUiState.Loading, viewModel.uiState.value.authorState)
+        assertEquals(AuthorUiState.Loading, viewModel.authorUiState.value)
     }
 
     @Test
     fun uiStateAuthor_whenFollowedIdsSuccessAndAuthorLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.authorUiState.collect() }
 
         userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
-        assertEquals(AuthorUiState.Loading, viewModel.uiState.value.authorState)
+        assertEquals(AuthorUiState.Loading, viewModel.authorUiState.value)
 
         collectJob.cancel()
     }
@@ -111,13 +112,21 @@ class AuthorViewModelTest {
     @Test
     fun uiStateAuthor_whenFollowedIdsSuccessAndAuthorSuccess_thenAuthorSuccessAndNewsLoading() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+            val collectJob = launch(UnconfinedTestDispatcher()) {
+                combine(
+                    viewModel.authorUiState,
+                    viewModel.newUiState,
+                    ::Pair
+                ).collect()
+            }
 
             authorsRepository.sendAuthors(testInputAuthors.map { it.author })
             userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
-            val item = viewModel.uiState.value
-            assertTrue(item.authorState is AuthorUiState.Success)
-            assertTrue(item.newsState is NewsUiState.Loading)
+            val authorState = viewModel.authorUiState.value
+            val newsUiState = viewModel.newUiState.value
+
+            assertTrue(authorState is AuthorUiState.Success)
+            assertTrue(newsUiState is NewsUiState.Loading)
 
             collectJob.cancel()
         }
@@ -125,21 +134,29 @@ class AuthorViewModelTest {
     @Test
     fun uiStateAuthor_whenFollowedIdsSuccessAndAuthorSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+            val collectJob = launch(UnconfinedTestDispatcher()) {
+                combine(
+                    viewModel.authorUiState,
+                    viewModel.newUiState,
+                    ::Pair
+                ).collect()
+            }
 
             authorsRepository.sendAuthors(testInputAuthors.map { it.author })
             userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
             newsRepository.sendNewsResources(sampleNewsResources)
-            val item = viewModel.uiState.value
-            assertTrue(item.authorState is AuthorUiState.Success)
-            assertTrue(item.newsState is NewsUiState.Success)
+            val authorState = viewModel.authorUiState.value
+            val newsUiState = viewModel.newUiState.value
+
+            assertTrue(authorState is AuthorUiState.Success)
+            assertTrue(newsUiState is NewsUiState.Success)
 
             collectJob.cancel()
         }
 
     @Test
     fun uiStateAuthor_whenFollowingAuthor_thenShowUpdatedAuthor() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.authorUiState.collect() }
 
         authorsRepository.sendAuthors(testInputAuthors.map { it.author })
         // Set which author IDs are followed, not including 0.
@@ -149,7 +166,35 @@ class AuthorViewModelTest {
 
         assertEquals(
             AuthorUiState.Success(followableAuthor = testOutputAuthors[0]),
-            viewModel.uiState.value.authorState
+            viewModel.authorUiState.value
+        )
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun uiStateAuthor_whenNewsBookmarked_thenShowBookmarkedNews() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.newUiState.collect() }
+
+        authorsRepository.sendAuthors(testInputAuthors.map { it.author })
+        newsRepository.sendNewsResources(sampleNewsResources)
+
+        // Set initial bookmarked status to false
+        userDataRepository.updateNewsResourceBookmark(
+            newsResourceId = sampleNewsResources.first().id,
+            bookmarked = false
+        )
+
+        viewModel.bookmarkNews(
+            newsResourceId = sampleNewsResources.first().id,
+            bookmarked = true
+        )
+
+        assertTrue(
+            (viewModel.newUiState.value as NewsUiState.Success)
+                .news
+                .first { it.newsResource.id == sampleNewsResources.first().id }
+                .isSaved
         )
 
         collectJob.cancel()
