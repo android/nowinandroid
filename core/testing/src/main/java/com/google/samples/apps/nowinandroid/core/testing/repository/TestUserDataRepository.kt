@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +28,9 @@ import kotlinx.coroutines.flow.filterNotNull
 private val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
     followedTopics = emptySet(),
-    followedAuthors = emptySet()
+    followedAuthors = emptySet(),
+    themeBrand = ThemeBrand.DEFAULT,
+    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM
 )
 
 class TestUserDataRepository : UserDataRepository {
@@ -71,6 +75,18 @@ class TestUserDataRepository : UserDataRepository {
             else current.bookmarkedNewsResources - newsResourceId
 
             _userData.tryEmit(current.copy(bookmarkedNewsResources = bookmarkedNews))
+        }
+    }
+
+    override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(themeBrand = themeBrand))
+        }
+    }
+
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(darkThemeConfig = darkThemeConfig))
         }
     }
 

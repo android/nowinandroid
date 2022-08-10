@@ -16,6 +16,9 @@
 
 syntax = "proto3";
 
+import "com/google/samples/apps/nowinandroid/data/dark_theme_config.proto";
+import "com/google/samples/apps/nowinandroid/data/theme_brand.proto";
+
 option java_package = "com.google.samples.apps.nowinandroid.core.datastore";
 option java_multiple_files = true;
 
@@ -37,4 +40,7 @@ message UserPreferences {
     map<string, bool> followed_topic_ids = 13;
     map<string, bool> followed_author_ids = 14;
     map<string, bool> bookmarked_news_resource_ids = 15;
+
+    ThemeBrandProto theme_brand = 16;
+    DarkThemeConfigProto dark_theme_config = 17;
 }

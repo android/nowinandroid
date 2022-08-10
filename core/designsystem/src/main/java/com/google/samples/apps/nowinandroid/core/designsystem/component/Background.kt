@@ -144,7 +144,7 @@ annotation class ThemePreviews
 @ThemePreviews
 @Composable
 fun BackgroundDefault() {
-    NiaTheme {
+    NiaTheme(disableDynamicTheming = true) {
         NiaBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -152,7 +152,7 @@ fun BackgroundDefault() {
 @ThemePreviews
 @Composable
 fun BackgroundDynamic() {
-    NiaTheme(dynamicColor = true) {
+    NiaTheme {
         NiaBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -168,7 +168,7 @@ fun BackgroundAndroid() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDefault() {
-    NiaTheme {
+    NiaTheme(disableDynamicTheming = true) {
         NiaGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -176,7 +176,7 @@ fun GradientBackgroundDefault() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDynamic() {
-    NiaTheme(dynamicColor = true) {
+    NiaTheme {
         NiaGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
