@@ -209,7 +209,9 @@ private fun AuthorToolbar(
         IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = Filled.ArrowBack,
-                contentDescription = stringResource(id = R.string.back)
+                contentDescription = stringResource(
+                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back
+                )
             )
         }
         val selected = uiState.isFollowed

@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.24.8-beta"
 androidDesugarJdkLibs = "1.1.5"
-androidGradlePlugin = "7.2.2"
+androidGradlePlugin = "7.2.2" # TODO: when changing this to 7.3 resolve TODO in gradle.properties
 androidxActivity = "1.5.1"
 androidxAppCompat = "1.5.1"
 androidxCompose = "1.3.0-beta02"

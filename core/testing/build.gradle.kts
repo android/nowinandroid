@@ -15,7 +15,7 @@
  */
 plugins {
     id("nowinandroid.android.library")
-    kotlin("kapt")
+    id("nowinandroid.android.hilt")
     id("nowinandroid.spotless")
 }
 
@@ -23,9 +23,6 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 
     api(libs.junit4)
     api(libs.androidx.test.core)
