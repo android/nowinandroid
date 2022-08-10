@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.designsystem.theme
 
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -173,55 +174,63 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 /**
  * Now in Android theme.
  *
- * The order of precedence for the color scheme is: Dynamic color > Android theme > Default theme.
- * Dark theme is independent as all the aforementioned color schemes have light and dark versions.
- * The default theme color scheme is used by default.
- *
  * @param darkTheme Whether the theme should use a dark color scheme (follows system by default).
- * @param dynamicColor Whether the theme should use a dynamic color scheme (Android 12+ only).
- * @param androidTheme Whether the theme should use the Android theme color scheme.
+ * @param androidTheme Whether the theme should use the Android theme color scheme instead of the
+ *        default theme. If this is `false`, then dynamic theming will be used when supported.
  */
 @Composable
 fun NiaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     androidTheme: Boolean = false,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
+) = NiaTheme(
+    darkTheme = darkTheme,
+    androidTheme = androidTheme,
+    disableDynamicTheming = false,
+    content = content
+)
+
+/**
+ * Now in Android theme. This is an internal only version, to allow disabling dynamic theming
+ * in tests.
+ *
+ * @param darkTheme Whether the theme should use a dark color scheme (follows system by default).
+ * @param androidTheme Whether the theme should use the Android theme color scheme instead of the
+ *        default theme.
+ * @param disableDynamicTheming If `true`, disables the use of dynamic theming, even when it is
+ *        supported. This parameter has no effect if [androidTheme] is `true`.
+ */
+@Composable
+internal fun NiaTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    androidTheme: Boolean = false,
+    disableDynamicTheming: Boolean,
+    content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val context = LocalContext.current
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            } else {
-                if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
-            }
-        }
-        androidTheme -> if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
-        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
+    val colorScheme = if (androidTheme) {
+        if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
+    } else if (!disableDynamicTheming && supportsDynamicTheming()) {
+        val context = LocalContext.current
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else {
+        if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
 
     val defaultGradientColors = GradientColors()
-    val gradientColors = when {
-        dynamicColor -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                defaultGradientColors
-            } else {
-                if (darkTheme) defaultGradientColors else LightDefaultGradientColors
-            }
-        }
-        androidTheme -> defaultGradientColors
-        else -> if (darkTheme) defaultGradientColors else LightDefaultGradientColors
+    val gradientColors = if (androidTheme || (!disableDynamicTheming && supportsDynamicTheming())) {
+        defaultGradientColors
+    } else {
+        if (darkTheme) defaultGradientColors else LightDefaultGradientColors
     }
 
     val defaultBackgroundTheme = BackgroundTheme(
         color = colorScheme.surface,
         tonalElevation = 2.dp
     )
-    val backgroundTheme = when {
-        dynamicColor -> defaultBackgroundTheme
-        androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
-        else -> defaultBackgroundTheme
+    val backgroundTheme = if (androidTheme) {
+        if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
+    } else {
+        defaultBackgroundTheme
     }
 
     CompositionLocalProvider(
@@ -235,3 +244,6 @@ fun NiaTheme(
         )
     }
 }
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+private fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S

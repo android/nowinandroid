@@ -65,59 +65,56 @@ fun NiaApp(
     windowSizeClass: WindowSizeClass,
     appState: NiaAppState = rememberNiaAppState(windowSizeClass)
 ) {
-    NiaTheme {
-        val background: @Composable (@Composable () -> Unit) -> Unit =
-            when (appState.currentDestination?.route) {
-                TopLevelDestination.FOR_YOU.name -> { content ->
-                    NiaGradientBackground(content = content)
-                }
-                else -> { content -> NiaBackground(content = content) }
-            }
+    val background: @Composable (@Composable () -> Unit) -> Unit =
+        when (appState.currentDestination?.route) {
+            TopLevelDestination.FOR_YOU.name -> { content -> NiaGradientBackground(content = content) }
+            else -> { content -> NiaBackground(content = content) }
+        }
 
-        background {
-            Scaffold(
-                modifier = Modifier.semantics {
-                    testTagsAsResourceId = true
-                },
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-                contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                bottomBar = {
-                    if (appState.shouldShowBottomBar) {
-                        NiaBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination
-                        )
-                    }
-                }
-            ) { padding ->
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(
-                                WindowInsetsSides.Horizontal
-                            )
-                        )
-                ) {
-                    if (appState.shouldShowNavRail) {
-                        NiaNavRail(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier.safeDrawingPadding()
-                        )
-                    }
-
-                    NiaNavHost(
-                        navController = appState.navController,
-                        onBackClick = appState::onBackClick,
-                        modifier = Modifier
-                            .padding(padding)
-                            .consumedWindowInsets(padding)
+    background {
+        Scaffold(
+            modifier = Modifier.semantics {
+                testTagsAsResourceId = true
+            },
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            bottomBar = {
+                if (appState.shouldShowBottomBar) {
+                    NiaBottomBar(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination
                     )
                 }
+            }
+        ) { padding ->
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal
+                        )
+                    )
+            ) {
+                if (appState.shouldShowNavRail) {
+                    NiaNavRail(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.safeDrawingPadding()
+                    )
+                }
+
+                NiaNavHost(
+                    navController = appState.navController,
+                    onBackClick = appState::onBackClick,
+
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumedWindowInsets(padding)
+                )
             }
         }
     }
@@ -182,6 +179,7 @@ private fun NiaBottomBar(
                             imageVector = icon.imageVector,
                             contentDescription = null
                         )
+
                         is DrawableResourceIcon -> Icon(
                             painter = painterResource(id = icon.id),
                             contentDescription = null
