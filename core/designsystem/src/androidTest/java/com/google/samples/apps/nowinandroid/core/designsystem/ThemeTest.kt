@@ -58,7 +58,7 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                dynamicColor = false,
+                disableDynamicTheming = true,
                 androidTheme = false
             ) {
                 val colorScheme = LightDefaultColorScheme
@@ -79,7 +79,7 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                dynamicColor = false,
+                disableDynamicTheming = true,
                 androidTheme = false
             ) {
                 val colorScheme = DarkDefaultColorScheme
@@ -100,7 +100,6 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                dynamicColor = true,
                 androidTheme = false
             ) {
                 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -129,7 +128,6 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                dynamicColor = true,
                 androidTheme = false
             ) {
                 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -154,7 +152,7 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                dynamicColor = false,
+                disableDynamicTheming = true,
                 androidTheme = true
             ) {
                 val colorScheme = LightAndroidColorScheme
@@ -172,7 +170,7 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                dynamicColor = false,
+                disableDynamicTheming = true,
                 androidTheme = true
             ) {
                 val colorScheme = DarkAndroidColorScheme
@@ -190,25 +188,13 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                dynamicColor = true,
                 androidTheme = true
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicLightColorScheme(LocalContext.current)
-                } else {
-                    LightDefaultColorScheme
-                }
+                val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    GradientColors()
-                } else {
-                    LightDefaultGradientColors
-                }
+                val gradientColors = GradientColors()
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -219,21 +205,13 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                dynamicColor = true,
                 androidTheme = true
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicDarkColorScheme(LocalContext.current)
-                } else {
-                    DarkDefaultColorScheme
-                }
+                val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
                 val gradientColors = GradientColors()
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
