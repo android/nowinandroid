@@ -32,12 +32,12 @@
     <!-- The final theme we use -->
     <style name="Theme.Nia" parent="PlatformAdjusted.Theme.Nia" />
 
-    <style name="NightAdjusted.Splash" parent="Theme.SplashScreen">
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
-    <style name="Theme.Nia.Splash" parent="NightAdjusted.Splash">
+    <style name="Theme.Nia.Splash" parent="NightAdjusted.Theme.Splash">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.Nia</item>
     </style>
