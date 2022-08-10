@@ -18,16 +18,11 @@
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    alias(libs.plugins.ksp)
+    id("nowinandroid.android.hilt")
     id("nowinandroid.spotless")
 }
 
 dependencies {
     api(libs.androidx.hilt.navigation.compose)
     api(libs.androidx.navigation.compose)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 }

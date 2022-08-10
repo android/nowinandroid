@@ -20,9 +20,8 @@ plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
     id("nowinandroid.android.application.jacoco")
-    kotlin("kapt")
+    id("nowinandroid.android.hilt")
     id("jacoco")
-    id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
     id("nowinandroid.firebase-perf")
 }
@@ -64,19 +63,6 @@ android {
             //  FIXME enabling minification breaks access to demo backend.
             isMinifyEnabled = false
             applicationIdSuffix = ".benchmark"
-        }
-    }
-
-    // @see Flavor for more details on the app product flavors.
-    flavorDimensions += FlavorDimension.contentType.name
-    productFlavors {
-        Flavor.values().forEach {
-            create(it.name) {
-                dimension = it.dimension.name
-                if (it.applicationIdSuffix != null) {
-                    applicationIdSuffix = it.applicationIdSuffix
-                }
-            }
         }
     }
 
@@ -124,17 +110,13 @@ dependencies {
 
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
+}
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
-
-    // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-    configurations.configureEach {
-        resolutionStrategy {
-            force(libs.junit4)
-            // Temporary workaround for https://issuetracker.google.com/174733673
-            force("org.objenesis:objenesis:2.6")
-        }
+// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
+configurations.configureEach {
+    resolutionStrategy {
+        force(libs.junit4)
+        // Temporary workaround for https://issuetracker.google.com/174733673
+        force("org.objenesis:objenesis:2.6")
     }
 }
