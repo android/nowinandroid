@@ -97,7 +97,7 @@ specific calls against mocks.
 
 Examples:
 - In instrumentation tests, a temporary folder is used to store the user's preferences, which is
-  wiped after reach test.
+  wiped after each test.
   This allows using the real `DataStore` and exercising all related code, instead of mocking the 
   flow of data updates.
 
