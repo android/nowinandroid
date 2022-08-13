@@ -19,6 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.author
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.data.model.AuthorUiState
+import com.google.samples.apps.nowinandroid.core.data.model.SaveableNewsUiState
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -26,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.toExtensive
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
@@ -62,7 +65,7 @@ class AuthorViewModel @Inject constructor(
             initialValue = AuthorUiState.Loading
         )
 
-    val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
+    val newUiState: StateFlow<SaveableNewsUiState> = newsUiStateStream(
         authorId = authorId,
         userDataRepository = userDataRepository,
         newsRepository = newsRepository
@@ -70,7 +73,7 @@ class AuthorViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading
+            initialValue = SaveableNewsUiState.Loading
         )
 
     fun followAuthorToggle(followed: Boolean) {
@@ -113,7 +116,7 @@ private fun authorUiStateStream(
                     val (followedAuthors, author) = followedAuthorToAuthorResult.data
                     val followed = followedAuthors.contains(authorId)
                     AuthorUiState.Success(
-                        followableAuthor = FollowableAuthor(
+                        data = FollowableAuthor(
                             author = author,
                             isFollowed = followed
                         )
@@ -133,7 +136,7 @@ private fun newsUiStateStream(
     authorId: String,
     newsRepository: NewsRepository,
     userDataRepository: UserDataRepository,
-): Flow<NewsUiState> {
+): Flow<SaveableNewsUiState> {
     // Observe news
     val newsStream: Flow<List<NewsResource>> = newsRepository.getNewsResourcesStream(
         filterAuthorIds = setOf(element = authorId),
@@ -154,33 +157,21 @@ private fun newsUiStateStream(
             when (newsToBookmarksResult) {
                 is Result.Success -> {
                     val (news, bookmarks) = newsToBookmarksResult.data
-                    NewsUiState.Success(
+                    SaveableNewsUiState.Success(
                         news.map { newsResource ->
                             SaveableNewsResource(
                                 newsResource,
                                 isSaved = bookmarks.contains(newsResource.id)
                             )
-                        }
+                        }.toExtensive()
                     )
                 }
                 is Result.Loading -> {
-                    NewsUiState.Loading
+                    SaveableNewsUiState.Loading
                 }
                 is Result.Error -> {
-                    NewsUiState.Error
+                    SaveableNewsUiState.Error
                 }
             }
         }
-}
-
-sealed interface AuthorUiState {
-    data class Success(val followableAuthor: FollowableAuthor) : AuthorUiState
-    object Error : AuthorUiState
-    object Loading : AuthorUiState
-}
-
-sealed interface NewsUiState {
-    data class Success(val news: List<SaveableNewsResource>) : NewsUiState
-    object Error : NewsUiState
-    object Loading : NewsUiState
 }

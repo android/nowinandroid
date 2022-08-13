@@ -19,12 +19,15 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.data.model.NewsUiState
+import com.google.samples.apps.nowinandroid.core.data.model.TopicUiState
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.toExtensive
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
@@ -73,7 +76,7 @@ class TopicViewModel @Inject constructor(
                 if (topicResult is Result.Success && followedTopicsResult is Result.Success) {
                     val followed = followedTopicsResult.data.contains(topicId)
                     TopicUiState.Success(
-                        followableTopic = FollowableTopic(
+                        data = FollowableTopic(
                             topic = topicResult.data,
                             isFollowed = followed
                         )
@@ -87,7 +90,7 @@ class TopicViewModel @Inject constructor(
                 }
 
             val news: NewsUiState = when (newsResult) {
-                is Result.Success -> NewsUiState.Success(newsResult.data)
+                is Result.Success -> NewsUiState.Success(newsResult.data.toExtensive())
                 is Result.Loading -> NewsUiState.Loading
                 is Result.Error -> NewsUiState.Error
             }
@@ -105,18 +108,6 @@ class TopicViewModel @Inject constructor(
             userDataRepository.toggleFollowedTopicId(topicId, followed)
         }
     }
-}
-
-sealed interface TopicUiState {
-    data class Success(val followableTopic: FollowableTopic) : TopicUiState
-    object Error : TopicUiState
-    object Loading : TopicUiState
-}
-
-sealed interface NewsUiState {
-    data class Success(val news: List<NewsResource>) : NewsUiState
-    object Error : NewsUiState
-    object Loading : NewsUiState
 }
 
 data class TopicScreenUiState(

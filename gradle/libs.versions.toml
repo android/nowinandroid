@@ -36,6 +36,7 @@ kotlinxCoroutines = "1.6.3"
 kotlinxDatetime = "0.3.3"
 kotlinxSerializationJson = "1.3.3"
 ksp = "1.7.0-1.0.6"
+sealedx = "1.0.0"
 ktlint = "0.43.0"
 lint = "30.2.1"
 okhttp = "4.10.0"
@@ -120,6 +121,8 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 secrets-gradlePlugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "secrets" }
 spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+sealedx-core = { group = "com.github.skydoves", name = "sealedx-core", version.ref = "sealedx" }
+sealedx-processor = { group = "com.github.skydoves", name = "sealedx-processor", version.ref = "sealedx" }
 
 [plugins]
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }

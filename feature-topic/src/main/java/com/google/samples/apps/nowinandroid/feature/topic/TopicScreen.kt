@@ -47,16 +47,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.data.model.NewsUiState
+import com.google.samples.apps.nowinandroid.core.data.model.TopicUiState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceExtensive
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.model.data.toExtensive
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
-import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -93,7 +96,7 @@ internal fun TopicScreen(
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         }
         when (topicState) {
-            Loading -> item {
+            TopicUiState.Loading -> item {
                 NiaLoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = string.topic_loading),
@@ -105,14 +108,14 @@ internal fun TopicScreen(
                     TopicToolbar(
                         onBackClick = onBackClick,
                         onFollowClick = onFollowClick,
-                        uiState = topicState.followableTopic,
+                        uiState = topicState.data,
                     )
                 }
                 TopicBody(
-                    name = topicState.followableTopic.topic.name,
-                    description = topicState.followableTopic.topic.longDescription,
+                    name = topicState.data.topic.name,
+                    description = topicState.data.topic.longDescription,
                     news = newsState,
-                    imageUrl = topicState.followableTopic.topic.imageUrl
+                    imageUrl = topicState.data.topic.imageUrl
                 )
             }
         }
@@ -164,7 +167,7 @@ private fun LazyListScope.TopicCards(news: NewsUiState) {
     when (news) {
         is NewsUiState.Success -> {
             newsResourceCardItems(
-                items = news.news,
+                items = news.data.newsResources,
                 newsResourceMapper = { it },
                 isBookmarkedMapper = { /* TODO */ false },
                 onToggleBookmark = { /* TODO */ },
@@ -187,7 +190,7 @@ private fun TopicBodyPreview() {
         LazyColumn {
             TopicBody(
                 "Jetpack Compose", "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()), ""
+                NewsUiState.Success(NewsResourceExtensive(emptyList())), ""
             )
         }
     }
@@ -238,7 +241,7 @@ fun TopicScreenPopulated() {
         NiaBackground {
             TopicScreen(
                 topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
-                newsState = NewsUiState.Success(previewNewsResources),
+                newsState = NewsUiState.Success(previewNewsResources.toExtensive()),
                 onBackClick = {},
                 onFollowClick = {}
             )

@@ -41,6 +41,14 @@ data class NewsResource(
     val topics: List<Topic>
 )
 
+data class NewsResourceExtensive(
+    val newsResources: List<NewsResource>
+)
+
+fun List<NewsResource>.toExtensive(): NewsResourceExtensive {
+    return NewsResourceExtensive(this)
+}
+
 val previewNewsResources = listOf(
     NewsResource(
         id = "1",

@@ -20,6 +20,13 @@ plugins {
     id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
+    alias(libs.plugins.ksp)
+}
+
+kotlin {
+    sourceSets.configureEach {
+        kotlin.srcDir("$buildDir/generated/ksp/$name/kotlin/")
+    }
 }
 
 dependencies {
@@ -38,4 +45,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    implementation(libs.sealedx.core)
+    ksp(libs.sealedx.processor)
 }

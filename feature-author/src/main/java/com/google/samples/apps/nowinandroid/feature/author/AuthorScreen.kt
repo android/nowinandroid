@@ -50,6 +50,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.data.model.AuthorUiState
+import com.google.samples.apps.nowinandroid.core.data.model.SaveableNewsUiState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
@@ -59,6 +61,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.toExtensive
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -69,7 +72,7 @@ fun AuthorRoute(
     viewModel: AuthorViewModel = hiltViewModel(),
 ) {
     val authorUiState: AuthorUiState by viewModel.authorUiState.collectAsStateWithLifecycle()
-    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
+    val newsUiState: SaveableNewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
 
     AuthorScreen(
         authorUiState = authorUiState,
@@ -85,7 +88,7 @@ fun AuthorRoute(
 @Composable
 internal fun AuthorScreen(
     authorUiState: AuthorUiState,
-    newsUiState: NewsUiState,
+    newsUiState: SaveableNewsUiState,
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
@@ -115,11 +118,11 @@ internal fun AuthorScreen(
                     AuthorToolbar(
                         onBackClick = onBackClick,
                         onFollowClick = onFollowClick,
-                        uiState = authorUiState.followableAuthor,
+                        uiState = authorUiState.data,
                     )
                 }
                 authorBody(
-                    author = authorUiState.followableAuthor.author,
+                    author = authorUiState.data.author,
                     news = newsUiState,
                     onBookmarkChanged = onBookmarkChanged,
                 )
@@ -133,7 +136,7 @@ internal fun AuthorScreen(
 
 private fun LazyListScope.authorBody(
     author: Author,
-    news: NewsUiState,
+    news: SaveableNewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit
 ) {
     item {
@@ -170,20 +173,20 @@ private fun AuthorHeader(author: Author) {
 }
 
 private fun LazyListScope.authorCards(
-    news: NewsUiState,
+    news: SaveableNewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit
 ) {
     when (news) {
-        is NewsUiState.Success -> {
+        is SaveableNewsUiState.Success -> {
             newsResourceCardItems(
-                items = news.news,
+                items = news.data.newsResources,
                 newsResourceMapper = { it.newsResource },
                 isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
-        is NewsUiState.Loading -> item {
+        is SaveableNewsUiState.Loading -> item {
             NiaLoadingWheel(contentDesc = "Loading news") // TODO
         }
         else -> item {
@@ -237,13 +240,13 @@ fun AuthorScreenPopulated() {
         NiaBackground {
             AuthorScreen(
                 authorUiState = AuthorUiState.Success(FollowableAuthor(previewAuthors[0], false)),
-                newsUiState = NewsUiState.Success(
+                newsUiState = SaveableNewsUiState.Success(
                     previewNewsResources.mapIndexed { index, newsResource ->
                         SaveableNewsResource(
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )
-                    }
+                    }.toExtensive()
                 ),
                 onBackClick = {},
                 onFollowClick = {},
@@ -263,7 +266,7 @@ fun AuthorScreenLoading() {
         NiaBackground {
             AuthorScreen(
                 authorUiState = AuthorUiState.Loading,
-                newsUiState = NewsUiState.Loading,
+                newsUiState = SaveableNewsUiState.Loading,
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },

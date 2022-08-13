@@ -23,3 +23,11 @@ data class SaveableNewsResource(
     val newsResource: NewsResource,
     val isSaved: Boolean,
 )
+
+data class SaveableNewsResourceExtensive(
+    val newsResources: List<SaveableNewsResource>
+)
+
+fun List<SaveableNewsResource>.toExtensive(): SaveableNewsResourceExtensive {
+    return SaveableNewsResourceExtensive(this)
+}
