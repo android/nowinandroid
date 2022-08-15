@@ -183,7 +183,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
    <td>Making network requests and handling responses from a remote data source.
    </td>
-   <td><code>RetrofitNiANetworkApi</code>
+   <td><code>RetrofitNiaNetworkApi</code>
    </td>
   </tr>
   <tr>
@@ -209,7 +209,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
    <td>Local database storage using Room.
    </td>
-   <td><code>NiADatabase</code><br>
+   <td><code>NiaDatabase</code><br>
    <code>DatabaseMigrations</code><br>
    <code>Dao</code> classes
    </td>
