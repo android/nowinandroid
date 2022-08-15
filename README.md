@@ -70,7 +70,7 @@ The app also uses
 [product flavors](https://developer.android.com/studio/build/build-variants#product-flavors) to
 control where content for the app should be loaded from.
 
-The `demo` flavor uses static local data to allow immediate building and exploring the UI.
+The `demo` flavor uses static local data to allow immediate building and exploring of the UI.
 
 The `prod` flavor makes real network calls to a backend server, providing up-to-date content. At 
 this time, there is not a public backend available.
@@ -90,21 +90,21 @@ In tests, **Now in Android** notably does _not_ use any mocking libraries.
 Instead, the production implementations can be replaced with test doubles using Hilt's testing APIs
 (or via manual constructor injection for `ViewModel` tests).
 
-These test doubles implement the same interface as the production implementations, and generally
+These test doubles implement the same interface as the production implementations and generally
 provide a simplified (but still realistic) implementation with additional testing hooks.
 This results in less brittle tests that may exercise more production code, instead of just verifying
 specific calls against mocks.
 
 Examples:
 - In instrumentation tests, a temporary folder is used to store the user's preferences, which is
-  wiped after reach test.
+  wiped after each test.
   This allows using the real `DataStore` and exercising all related code, instead of mocking the 
   flow of data updates.
 
 - There are `Test` implementations of each repository, which implement the normal, full repository
   interface and also provide test-only hooks.
   `ViewModel` tests use these `Test` repositories, and thus can use the test-only hooks to
-  manipulate the the state of the `Test` repository and verify the resulting behavior, instead of
+  manipulate the state of the `Test` repository and verify the resulting behavior, instead of
   checking that specific repository methods were called.
 
 # UI
@@ -130,7 +130,7 @@ The baseline profile for this app is located at [`app/src/main/baseline-prof.txt
 It contains rules that enable AOT compilation of the critical user path taken during app launch.
 For more information on baseline profiles, read [this document](https://developer.android.com/studio/profile/baselineprofiles).
 
-> Note: The baseline profile needs to be re-generated for release builds that touched code which changes app startup.
+> Note: The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
 
 To generate the baseline profile, select the `benchmark` build variant and run the
 `BaselineProfileGenerator` benchmark test on an AOSP Android Emulator.
