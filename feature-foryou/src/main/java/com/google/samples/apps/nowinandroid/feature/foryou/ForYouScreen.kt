@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,10 +39,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -54,9 +58,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,7 +71,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -93,36 +93,32 @@ import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeed
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import kotlin.math.floor
+import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ForYouRoute(
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
     val interestsSelectionState by viewModel.interestsSelectionState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     ForYouScreen(
-        windowSizeClass = windowSizeClass,
-        modifier = modifier,
         interestsSelectionState = interestsSelectionState,
         feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onAuthorCheckedChanged = viewModel::updateAuthorSelection,
         saveFollowedTopics = viewModel::saveFollowedInterests,
-        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved
+        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+        modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ForYouScreen(
-    windowSizeClass: WindowSizeClass,
     interestsSelectionState: ForYouInterestsSelectionUiState,
     feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
@@ -154,69 +150,60 @@ fun ForYouScreen(
             },
             containerColor = Color.Transparent
         ) { innerPadding ->
-            // TODO: Replace with `LazyVerticalGrid` when blocking bugs are fixed:
-            //       https://issuetracker.google.com/issues/230514914
-            //       https://issuetracker.google.com/issues/231320714
-            BoxWithConstraints(
+            // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+            // This code should be called when the UI is ready for use
+            // and relates to Time To Full Display.
+            val interestsLoaded =
+                interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+            val feedLoaded = feedState !is NewsFeedUiState.Loading
+
+            if (interestsLoaded && feedLoaded) {
+                val localView = LocalView.current
+                // We use Unit to call reportFullyDrawn only on the first recomposition,
+                // however it will be called again if this composable goes out of scope.
+                // Activity.reportFullyDrawn() has its own check for this
+                // and is safe to call multiple times though.
+                LaunchedEffect(Unit) {
+                    // We're leveraging the fact, that the current view is directly set as content of Activity.
+                    val activity = localView.context as? Activity ?: return@LaunchedEffect
+                    // To be sure not to call in the middle of a frame draw.
+                    localView.doOnPreDraw { activity.reportFullyDrawn() }
+                }
+            }
+
+            val tag = "forYou:feed"
+
+            val lazyGridState = rememberLazyGridState()
+            TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
+
+            LazyVerticalGrid(
+                columns = Adaptive(300.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = modifier
                     .padding(innerPadding)
                     .consumedWindowInsets(innerPadding)
+                    .fillMaxSize()
+                    .testTag("forYou:feed"),
+                state = lazyGridState
             ) {
-                val numberOfColumns = when (windowSizeClass.widthSizeClass) {
-                    WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> 1
-                    else -> floor(maxWidth / 300.dp).toInt().coerceAtLeast(1)
-                }
+                interestsSelection(
+                    interestsSelectionState = interestsSelectionState,
+                    onAuthorCheckedChanged = onAuthorCheckedChanged,
+                    onTopicCheckedChanged = onTopicCheckedChanged,
+                    saveFollowedTopics = saveFollowedTopics
+                )
 
-                // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-                // This code should be called when the UI is ready for use
-                // and relates to Time To Full Display.
-                val interestsLoaded =
-                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-                val feedLoaded = feedState !is NewsFeedUiState.Loading
-
-                if (interestsLoaded && feedLoaded) {
-                    val localView = LocalView.current
-                    // We use Unit to call reportFullyDrawn only on the first recomposition,
-                    // however it will be called again if this composable goes out of scope.
-                    // Activity.reportFullyDrawn() has its own check for this
-                    // and is safe to call multiple times though.
-                    LaunchedEffect(Unit) {
-                        // We're leveraging the fact, that the current view is directly set as content of Activity.
-                        val activity = localView.context as? Activity ?: return@LaunchedEffect
-                        // To be sure not to call in the middle of a frame draw.
-                        localView.doOnPreDraw { activity.reportFullyDrawn() }
-                    }
-                }
-
-                val tag = "forYou:feed"
-
-                val lazyListState = rememberLazyListState()
-                TrackScrollJank(scrollableState = lazyListState, stateName = tag)
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .testTag(tag),
-                    state = lazyListState,
-                ) {
-                    InterestsSelection(
-                        interestsSelectionState = interestsSelectionState,
-                        showLoadingUIIfLoading = true,
-                        onAuthorCheckedChanged = onAuthorCheckedChanged,
-                        onTopicCheckedChanged = onTopicCheckedChanged,
-                        saveFollowedTopics = saveFollowedTopics
-                    )
-
-                    NewsFeed(
-                        feedState = feedState,
-                        // Avoid showing a second loading wheel if we already are for the interests
-                        // selection
-                        showLoadingUIIfLoading =
-                        interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
-                        numberOfColumns = numberOfColumns,
-                        onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-                        loadingContentDescription = R.string.for_you_loading
-                    )
+                newsFeed(
+                    feedState = feedState,
+                    // Avoid showing a second loading wheel if we already are for the interests
+                    // selection
+                    showLoadingUIIfLoading =
+                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
+                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                    loadingContentDescription = R.string.for_you_loading
+                )
 
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -235,85 +222,76 @@ fun ForYouScreen(
  * An extension on [LazyListScope] defining the interests selection portion of the for you screen.
  * Depending on the [interestsSelectionState], this might emit no items.
  *
- * @param showLoadingUIIfLoading if true, show a visual indication of loading if the
+ * @param showLoaderWhenLoading if true, show a visual indication of loading if the
  * [interestsSelectionState] is loading. This is controllable to permit du-duplicating loading
  * states.
  */
-private fun LazyListScope.InterestsSelection(
+private fun LazyGridScope.interestsSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState,
-    showLoadingUIIfLoading: Boolean,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit
 ) {
     when (interestsSelectionState) {
         ForYouInterestsSelectionUiState.Loading -> {
-            if (showLoadingUIIfLoading) {
-                item {
-                    NiaLoadingWheel(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize()
-                            .testTag("forYou:loading"),
-                        contentDesc = stringResource(id = R.string.for_you_loading),
-                    )
-                }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                NiaLoadingWheel(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .testTag("forYou:loading"),
+                    contentDesc = stringResource(id = R.string.for_you_loading),
+                )
             }
         }
         ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
         is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
-            item {
-                Text(
-                    text = stringResource(R.string.onboarding_guidance_title),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-            item {
-                Text(
-                    text = stringResource(R.string.onboarding_guidance_subtitle),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-            item {
-                AuthorsCarousel(
-                    authors = interestsSelectionState.authors,
-                    onAuthorClick = onAuthorCheckedChanged,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                )
-            }
-            item {
-                TopicSelection(
-                    interestsSelectionState,
-                    onTopicCheckedChanged,
-                    Modifier.padding(bottom = 8.dp)
-                )
-            }
-            item {
-                // Done button
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    NiaFilledButton(
-                        onClick = saveFollowedTopics,
-                        enabled = interestsSelectionState.canSaveInterests,
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Text(
+                        text = stringResource(R.string.onboarding_guidance_title),
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .padding(horizontal = 40.dp)
-                            .width(364.dp)
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = stringResource(R.string.onboarding_guidance_subtitle),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    AuthorsCarousel(
+                        authors = interestsSelectionState.authors,
+                        onAuthorClick = onAuthorCheckedChanged,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    )
+                    TopicSelection(
+                        interestsSelectionState,
+                        onTopicCheckedChanged,
+                        Modifier.padding(bottom = 8.dp)
+                    )
+                    // Done button
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = stringResource(R.string.done)
-                        )
+                        NiaFilledButton(
+                            onClick = saveFollowedTopics,
+                            enabled = interestsSelectionState.canSaveInterests,
+                            modifier = Modifier
+                                .padding(horizontal = 40.dp)
+                                .width(364.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.done)
+                            )
+                        }
                     }
                 }
             }
@@ -418,8 +396,8 @@ private fun SingleTopicButton(
 
 @Composable
 fun TopicIcon(
-    modifier: Modifier = Modifier,
-    imageUrl: String
+    imageUrl: String,
+    modifier: Modifier = Modifier
 ) {
     AsyncImage(
         // TODO b/228077205, show loading image visual instead of static placeholder
@@ -432,7 +410,6 @@ fun TopicIcon(
     )
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
@@ -442,7 +419,6 @@ fun ForYouScreenPopulatedFeed() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
@@ -458,7 +434,6 @@ fun ForYouScreenPopulatedFeed() {
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
@@ -468,7 +443,6 @@ fun ForYouScreenTopicSelection() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
                     topics = previewTopics.map { FollowableTopic(it, false) },
                     authors = previewAuthors.map { FollowableAuthor(it, false) }
@@ -478,8 +452,8 @@ fun ForYouScreenTopicSelection() {
                         SaveableNewsResource(it, false)
                     }
                 ),
-                onAuthorCheckedChanged = { _, _ -> },
                 onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -487,7 +461,6 @@ fun ForYouScreenTopicSelection() {
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
@@ -497,7 +470,6 @@ fun ForYouScreenLoading() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },

@@ -49,9 +49,9 @@ import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun InterestsRoute(
-    modifier: Modifier = Modifier,
     navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +69,7 @@ fun InterestsRoute(
     )
 
     JankMetricDisposableEffect(tabState) { metricsHolder ->
-        metricsHolder.state?.addState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
+        metricsHolder.state?.putState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
 
         onDispose {
             metricsHolder.state?.removeState("Interests:TabState")

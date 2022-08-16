@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.saved
+package com.google.samples.apps.nowinandroid.bookmarks
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
-import androidx.test.uiautomator.Until
 
-fun MacrobenchmarkScope.savedWaitForContent() {
-    // Wait until content is loaded
-    device.wait(Until.hasObject(By.res("saved:feed")), 30_000)
-}
-
-fun MacrobenchmarkScope.savedScrollFeedDownUp() {
-    val feedList = device.findObject(By.res("saved:feed"))
+fun MacrobenchmarkScope.bookmarksScrollFeedDownUp() {
+    val feedList = device.findObject(By.res("bookmarks:feed"))
     feedList.fling(Direction.DOWN)
     device.waitForIdle()
     feedList.fling(Direction.UP)
