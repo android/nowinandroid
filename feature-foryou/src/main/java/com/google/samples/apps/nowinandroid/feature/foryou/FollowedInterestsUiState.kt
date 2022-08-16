@@ -19,17 +19,17 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 /**
  * A sealed hierarchy for the user's current followed interests state.
  */
-sealed interface FollowedInterestsState {
+sealed interface FollowedInterestsUiState {
 
     /**
      * The current state is unknown (hasn't loaded yet)
      */
-    object Unknown : FollowedInterestsState
+    object Unknown : FollowedInterestsUiState
 
     /**
      * The user hasn't followed any interests yet.
      */
-    object None : FollowedInterestsState
+    object None : FollowedInterestsUiState
 
     /**
      * The user has followed the given (non-empty) set of [topicIds] or [authorIds].
@@ -37,5 +37,5 @@ sealed interface FollowedInterestsState {
     data class FollowedInterests(
         val topicIds: Set<String>,
         val authorIds: Set<String>
-    ) : FollowedInterestsState
+    ) : FollowedInterestsUiState
 }
