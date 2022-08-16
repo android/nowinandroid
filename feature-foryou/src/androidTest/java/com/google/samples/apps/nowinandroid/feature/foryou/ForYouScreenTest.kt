@@ -18,11 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasContentDescription
@@ -33,21 +29,16 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.unit.DpSize
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import kotlinx.datetime.Instant
-import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class ForYouScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -63,13 +54,10 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -88,9 +76,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = testTopics,
@@ -99,8 +84,8 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -110,14 +95,14 @@ class ForYouScreenTest {
         testAuthors.forEach { testAuthor ->
             composeTestRule
                 .onNodeWithText(testAuthor.author.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
             composeTestRule
                 .onNodeWithText(testTopic.topic.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
@@ -129,7 +114,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNode(doneButtonMatcher)
-            .assertIsDisplayed()
+            .assertExists()
             .assertIsNotEnabled()
             .assertHasClickAction()
     }
@@ -139,9 +124,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         // Follow one topic
@@ -153,8 +135,8 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -164,14 +146,14 @@ class ForYouScreenTest {
         testAuthors.forEach { testAuthor ->
             composeTestRule
                 .onNodeWithText(testAuthor.author.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
             composeTestRule
                 .onNodeWithText(testTopic.topic.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
@@ -183,7 +165,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNode(doneButtonMatcher)
-            .assertIsDisplayed()
+            .assertExists()
             .assertIsEnabled()
             .assertHasClickAction()
     }
@@ -193,9 +175,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         // Follow one topic
@@ -207,8 +186,8 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -218,14 +197,14 @@ class ForYouScreenTest {
         testAuthors.forEach { testAuthor ->
             composeTestRule
                 .onNodeWithText(testAuthor.author.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
             composeTestRule
                 .onNodeWithText(testTopic.topic.name)
-                .assertIsDisplayed()
+                .assertExists()
                 .assertHasClickAction()
         }
 
@@ -237,7 +216,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNode(doneButtonMatcher)
-            .assertIsDisplayed()
+            .assertExists()
             .assertIsEnabled()
             .assertHasClickAction()
     }
@@ -247,17 +226,14 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = testTopics,
                         authors = testAuthors
                     ),
                     feedState = NewsFeedUiState.Loading,
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -286,13 +262,10 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    windowSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(maxWidth, maxHeight)
-                    ),
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                     feedState = NewsFeedUiState.Loading,
-                    onAuthorCheckedChanged = { _, _ -> },
                     onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -318,60 +291,44 @@ class ForYouScreenTest {
 
     @Test
     fun feed_whenNoInterestsSelectionAndLoaded_showsFeed() {
-        lateinit var windowSizeClass: WindowSizeClass
-
         composeTestRule.setContent {
-            BoxWithConstraints {
-                windowSizeClass = WindowSizeClass.calculateFromSize(
-                    DpSize(maxWidth, maxHeight)
-                )
-
-                ForYouScreen(
-                    windowSizeClass = windowSizeClass,
-                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
-                    feedState = NewsFeedUiState.Success(
-                        feed = testNewsResources
-                    ),
-                    onAuthorCheckedChanged = { _, _ -> },
-                    onTopicCheckedChanged = { _, _ -> },
-                    saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
-                )
-            }
+            ForYouScreen(
+                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                feedState = NewsFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
         }
 
-        val firstFeedItem = composeTestRule
+        composeTestRule
             .onNodeWithText(
-                testNewsResources[0].newsResource.title,
+                previewNewsResources[0].title,
                 substring = true
             )
+            .assertExists()
             .assertHasClickAction()
-            .fetchSemanticsNode()
 
-        val secondFeedItem = composeTestRule
+        composeTestRule.onNode(hasScrollToNodeAction())
+            .performScrollToNode(
+                hasText(
+                    previewNewsResources[1].title,
+                    substring = true
+                )
+            )
+
+        composeTestRule
             .onNodeWithText(
-                testNewsResources[1].newsResource.title,
+                previewNewsResources[1].title,
                 substring = true
             )
+            .assertExists()
             .assertHasClickAction()
-            .fetchSemanticsNode()
-
-        when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> {
-                // On smaller screen widths, the second feed item should be below the first because
-                // they are displayed in a single column
-                Assert.assertTrue(
-                    firstFeedItem.positionInRoot.y < secondFeedItem.positionInRoot.y
-                )
-            }
-            else -> {
-                // On larger screen widths, the second feed item should be inline with the first
-                // because they are displayed in more than one column
-                Assert.assertTrue(
-                    firstFeedItem.positionInRoot.y == secondFeedItem.positionInRoot.y
-                )
-            }
-        }
     }
 }
 
@@ -413,73 +370,5 @@ private val testAuthors = listOf(
     FollowableAuthor(
         author = testAuthor.copy(id = "1", name = "Android Dev 2"),
         isFollowed = false
-    ),
-)
-private val testNewsResources = listOf(
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "1",
-            episodeId = "52",
-            title = "Small Title",
-            content = "small.",
-            url = "https://youtu.be/-fJ6poHQrjM",
-            headerImageUrl = null,
-            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-            type = Video,
-            topics = emptyList(),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "2",
-            episodeId = "52",
-            title = "Transformations and customisations in the Paging Library",
-            content = "A demonstration of different operations that can be performed " +
-                "with Paging. Transformations like inserting separators, when to " +
-                "create a new pager, and customisation options for consuming " +
-                "PagingData.",
-            url = "https://youtu.be/ZARz0pjm5YM",
-            headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
-    ),
-    SaveableNewsResource(
-        newsResource = NewsResource(
-            id = "3",
-            episodeId = "52",
-            title = "Community tip on Paging",
-            content = "Tips for using the Paging library from the developer community",
-            url = "https://youtu.be/r5JgIyS3t3s",
-            headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "UI",
-                    shortDescription = "",
-                    longDescription = "",
-                    url = "",
-                    imageUrl = ""
-                ),
-            ),
-            authors = emptyList()
-        ),
-        isSaved = false
     ),
 )

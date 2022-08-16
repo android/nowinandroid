@@ -143,7 +143,7 @@ class NiaAppState(
 private fun NavigationTrackingSideEffect(navController: NavHostController) {
     JankMetricDisposableEffect(navController) { metricsHolder ->
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            metricsHolder.state?.addState("Navigation", destination.route.toString())
+            metricsHolder.state?.putState("Navigation", destination.route.toString())
         }
 
         navController.addOnDestinationChangedListener(listener)

@@ -24,9 +24,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import java.util.concurrent.Executor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -48,16 +45,10 @@ object JankStatsModule {
     }
 
     @Provides
-    fun providesDefaultExecutor(): Executor {
-        return Dispatchers.Default.asExecutor()
-    }
-
-    @Provides
     fun providesJankStats(
         window: Window,
-        executor: Executor,
         frameListener: JankStats.OnFrameListener
     ): JankStats {
-        return JankStats.createAndTrack(window, executor, frameListener)
+        return JankStats.createAndTrack(window, frameListener)
     }
 }

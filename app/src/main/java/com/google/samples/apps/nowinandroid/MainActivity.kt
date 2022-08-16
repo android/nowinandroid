@@ -21,6 +21,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.metrics.performance.JankStats
 import com.google.samples.apps.nowinandroid.ui.NiaApp
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
     lateinit var lazyStats: dagger.Lazy<JankStats>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         // Turn off the decor fitting system windows, which allows us to handle insets,
