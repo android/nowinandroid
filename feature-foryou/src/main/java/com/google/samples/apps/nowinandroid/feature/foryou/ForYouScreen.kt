@@ -48,7 +48,6 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -205,11 +204,9 @@ fun ForYouScreen(
                     loadingContentDescription = R.string.for_you_loading
                 )
 
-                    item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column {
                         Spacer(modifier = Modifier.height(8.dp))
-                    }
-
-                    item {
                         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                     }
                 }
