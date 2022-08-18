@@ -255,8 +255,8 @@ UI state is modeled as a sealed hierarchy using interfaces and immutable data cl
 
 
 
-*   the UI state always represents the underlying app data - the app data is the source-of-truth.
-*   the UI elements handle all possible states.
+*   The UI state always represents the underlying app data - the app data is the source-of-truth.
+*   The UI elements handle all possible states.
 
 **Example: News feed on For You screen**
 
