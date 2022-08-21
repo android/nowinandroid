@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -204,7 +205,10 @@ fun ForYouScreen(
                 )
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                    Column {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                    }
                 }
             }
         }
