@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -46,7 +47,7 @@ internal fun Project.configureKotlinAndroid(
 
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+            allWarningsAsErrors = gradleLocalProperties(rootDir).getProperty("warningsAsErrors").toBoolean()
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
