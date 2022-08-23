@@ -36,7 +36,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,18 +43,21 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun BookmarksRoute(
     modifier: Modifier = Modifier,
     viewModel: BookmarksViewModel = hiltViewModel()
 ) {
-    val feedState by viewModel.feedState.collectAsState()
+    val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
