@@ -23,6 +23,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
@@ -52,9 +53,9 @@ internal fun Project.configureKotlinAndroid(
             val localOverrideWarningsAsErrors = gradleLocalProperties(rootDir)
                 .getProperty("warningsAsErrors")?.toBoolean()
             // Set on CI through gradle.properties
-            val warningsAsErrors: Boolean? by project
-            // Prefer local.properties, gradle.properties, or default to false
-            allWarningsAsErrors = localOverrideWarningsAsErrors ?: warningsAsErrors ?: false
+            val warningsAsErrors: String? by project
+            // Prefer local.properties, gradle.properties, or default to false when both are null
+            allWarningsAsErrors = localOverrideWarningsAsErrors ?: warningsAsErrors.toBoolean()
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
