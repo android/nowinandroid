@@ -106,40 +106,33 @@ class ForYouViewModel @Inject constructor(
     }
 
     val feedState: StateFlow<NewsFeedUiState> =
-        combine(
-            followedInterestsUiState,
-            snapshotFlow { inProgressTopicSelection },
-            snapshotFlow { inProgressAuthorSelection }
-        ) { followedInterestsUserState, inProgressTopicSelection, inProgressAuthorSelection ->
-            when (followedInterestsUserState) {
-                // If we don't know the current selection state, emit loading.
-                Unknown -> flowOf<NewsFeedUiState>(NewsFeedUiState.Loading)
+        followedInterestsUiState.flatMapLatest { interestsState ->
+            when (interestsState) {
                 // If the user has followed topics, use those followed topics to populate the feed
-                is FollowedInterests -> {
-
-                    newsRepository.getNewsResourcesStream(
-                        filterTopicIds = followedInterestsUserState.topicIds,
-                        filterAuthorIds = followedInterestsUserState.authorIds
-                    ).mapToFeedState(savedNewsResourcesState)
-                }
+                is FollowedInterests -> newsRepository.getNewsResourcesStream(
+                    filterTopicIds = interestsState.topicIds,
+                    filterAuthorIds = interestsState.authorIds
+                ).mapToFeedState(savedNewsResourcesState)
                 // If the user hasn't followed interests yet, show a realtime populated feed based
                 // on the in-progress interests selections, if there are any.
-                None -> {
-                    if (inProgressTopicSelection.isEmpty() && inProgressAuthorSelection.isEmpty()) {
-                        flowOf<NewsFeedUiState>(NewsFeedUiState.Success(emptyList()))
-                    } else {
-                        newsRepository.getNewsResourcesStream(
+                None -> combine(
+                    snapshotFlow { inProgressTopicSelection },
+                    snapshotFlow { inProgressAuthorSelection },
+                    ::Pair
+                ).flatMapLatest { (inProgressTopicSelection, inProgressAuthorSelection) ->
+                    when {
+                        inProgressTopicSelection.isEmpty() && inProgressAuthorSelection.isEmpty() ->
+                            flowOf<NewsFeedUiState>(NewsFeedUiState.Success(emptyList()))
+                        else -> newsRepository.getNewsResourcesStream(
                             filterTopicIds = inProgressTopicSelection,
                             filterAuthorIds = inProgressAuthorSelection
                         ).mapToFeedState(savedNewsResourcesState)
                     }
                 }
+                // If we don't know the current selection state, emit loading.
+                Unknown -> flowOf<NewsFeedUiState>(NewsFeedUiState.Loading)
             }
         }
-            // Flatten the feed flows.
-            // As the selected topics and topic state changes, this will cancel the old feed
-            // monitoring and start the new one.
-            .flatMapLatest { it }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -147,19 +140,19 @@ class ForYouViewModel @Inject constructor(
             )
 
     val interestsSelectionState: StateFlow<ForYouInterestsSelectionUiState> =
-        combine(
-            followedInterestsUiState,
-            topicsRepository.getTopicsStream(),
-            authorsRepository.getAuthorsStream(),
-            snapshotFlow { inProgressTopicSelection },
-            snapshotFlow { inProgressAuthorSelection },
-        ) { followedInterestsUserState, availableTopics, availableAuthors, inProgressTopicSelection,
-            inProgressAuthorSelection ->
-
-            when (followedInterestsUserState) {
-                Unknown -> ForYouInterestsSelectionUiState.Loading
-                is FollowedInterests -> ForYouInterestsSelectionUiState.NoInterestsSelection
-                None -> {
+        followedInterestsUiState.flatMapLatest { followedInterestsState ->
+            when (followedInterestsState) {
+                Unknown ->
+                    flowOf(ForYouInterestsSelectionUiState.Loading)
+                is FollowedInterests ->
+                    flowOf(ForYouInterestsSelectionUiState.NoInterestsSelection)
+                None -> combine(
+                    topicsRepository.getTopicsStream(),
+                    authorsRepository.getAuthorsStream(),
+                    snapshotFlow { inProgressTopicSelection },
+                    snapshotFlow { inProgressAuthorSelection },
+                ) { availableTopics, availableAuthors, inProgressTopicSelection,
+                    inProgressAuthorSelection ->
                     val topics = availableTopics.map { topic ->
                         FollowableTopic(
                             topic = topic,
