@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="design catalog" type="AndroidRunConfigurationType" factoryName="Android App">
-    <module name="nowinandroid.app-nia-catalog.main" />
+    <module name="nowinandroid.app-nia-catalog" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -8,7 +8,6 @@
     <option name="PM_INSTALL_OPTIONS" value="" />
     <option name="ALL_USERS" value="false" />
     <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-    <option name="CLEAR_APP_STORAGE" value="false" />
     <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
     <option name="ACTIVITY_EXTRA_FLAGS" value="" />
     <option name="MODE" value="default_activity" />
