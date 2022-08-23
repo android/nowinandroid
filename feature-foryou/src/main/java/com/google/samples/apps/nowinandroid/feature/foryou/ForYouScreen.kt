@@ -63,6 +63,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -178,7 +179,7 @@ fun ForYouScreen(
             LazyVerticalGrid(
                 columns = Adaptive(300.dp),
                 contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(32.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = modifier
                     .padding(innerPadding)
@@ -191,7 +192,19 @@ fun ForYouScreen(
                     interestsSelectionState = interestsSelectionState,
                     onAuthorCheckedChanged = onAuthorCheckedChanged,
                     onTopicCheckedChanged = onTopicCheckedChanged,
-                    saveFollowedTopics = saveFollowedTopics
+                    saveFollowedTopics = saveFollowedTopics,
+                    // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
+                    // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
+                    interestsItemModifier = Modifier.layout { measurable, constraints ->
+                        val placeable = measurable.measure(
+                            constraints.copy(
+                                maxWidth = constraints.maxWidth + 32.dp.roundToPx()
+                            )
+                        )
+                        layout(placeable.width, placeable.height) {
+                            placeable.place(0, 0)
+                        }
+                    }
                 )
 
                 newsFeed(
@@ -227,7 +240,8 @@ private fun LazyGridScope.interestsSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
-    saveFollowedTopics: () -> Unit
+    saveFollowedTopics: () -> Unit,
+    interestsItemModifier: Modifier = Modifier
 ) {
     when (interestsSelectionState) {
         ForYouInterestsSelectionUiState.Loading -> {
@@ -244,7 +258,7 @@ private fun LazyGridScope.interestsSelection(
         ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
         is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Column {
+                Column(modifier = interestsItemModifier) {
                     Text(
                         text = stringResource(R.string.onboarding_guidance_title),
                         textAlign = TextAlign.Center,
