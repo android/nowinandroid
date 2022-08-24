@@ -22,7 +22,6 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,13 +57,12 @@ fun NiaFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        selectedIcon = {
+        trailingIcon = {
             Icon(
                 imageVector = NiaIcons.Check,
                 contentDescription = null
             )
         },
-        shape = Shapes.Full,
         border = FilterChipDefaults.filterChipBorder(
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
