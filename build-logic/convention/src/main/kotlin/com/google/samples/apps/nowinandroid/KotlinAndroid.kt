@@ -49,13 +49,9 @@ internal fun Project.configureKotlinAndroid(
 
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
-            // Override locally using local.properties
-            val localOverrideWarningsAsErrors = gradleLocalProperties(rootDir)
-                .getProperty("warningsAsErrors")?.toBoolean()
-            // Set on CI through gradle.properties
+            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
             val warningsAsErrors: String? by project
-            // Prefer local.properties, gradle.properties, or default to false when both are null
-            allWarningsAsErrors = localOverrideWarningsAsErrors ?: warningsAsErrors.toBoolean()
+            allWarningsAsErrors = warningsAsErrors.toBoolean()
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
