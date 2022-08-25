@@ -78,7 +78,7 @@ how you can organize your project. In general, you should strive for low couplin
 * **High cohesion** - A module should comprise a collection of code that acts as a system. It should
   have clearly defined responsibilities and stay within boundaries of certain domain knowledge. For
   example,
-  the [`core-network` module](https://github.com/android/nowinandroid/tree/main/core-network) in Now
+  the [`core:network` module](https://github.com/android/nowinandroid/tree/main/core/network) in Now
   in Android is responsible for making network requests, handling responses from a remote data
   source, and supplying data to other modules.
 
@@ -98,14 +98,14 @@ The Now in Android app contains the following types of modules:
   through `NiaTopLevelNavigation`. The `app` module depends on all `feature` modules and
   required `core` modules.
 
-* `feature-` modules - feature specific modules which are scoped to handle a single responsibility
+* `feature:` modules - feature specific modules which are scoped to handle a single responsibility
   in the app. These modules can be reused by any app, including test or other flavoured apps, when
   needed, while still keeping it separated and isolated. If a class is needed only by one `feature`
   module, it should remain within that module. If not, it should be extracted into an
   appropriate `core` module. A `feature` module should have no dependencies on other feature
   modules. They only depend on the `core` modules that they require.
 
-* `core-` modules - common library modules containing auxiliary code and specific dependencies that
+* `core:` modules - common library modules containing auxiliary code and specific dependencies that
   need to be shared between other modules in the app. These modules can depend on other core
   modules, but they shouldn’t depend on feature nor app modules.
 
@@ -136,15 +136,15 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>feature-1,</code><br>
-   <code>feature-2</code><br>
+   <td><code>feature:1,</code><br>
+   <code>feature:2</code><br>
    ...
    </td>
    <td>Functionality associated with a specific feature or user journey. Typically contains UI components and ViewModels which read data from other modules.<br>
    Examples include:<br>
    <ul>
-      <li><a href="https://github.com/android/nowinandroid/tree/main/feature-author"><code>feature-author</code></a> displays information about an author on the AuthorScreen.</li>
-      <li><a href="https://github.com/android/nowinandroid/tree/main/feature-foryou"><code>feature-foryou</code></a> which displays the user's news feed, and onboarding during first run, on the For You screen.</li>
+      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/author"><code>feature:author</code></a> displays information about an author on the AuthorScreen.</li>
+      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/foryou"><code>feature:foryou</code></a> which displays the user's news feed, and onboarding during first run, on the For You screen.</li>
       </ul>
    </td>
    <td><code>AuthorScreen</code><br>
@@ -152,7 +152,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-data</code>
+   <td><code>core:data</code>
    </td>
    <td>Fetching app data from multiple sources, shared by different features.
    </td>
@@ -161,7 +161,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-ui</code>
+   <td><code>core:ui</code>
    </td>
    <td>UI components, composables and resources, such as icons, used by different features.
    </td>
@@ -170,7 +170,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-common</code>
+   <td><code>core:common</code>
    </td>
    <td>Common classes shared between modules.
    </td>
@@ -179,7 +179,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-network</code>
+   <td><code>core:network</code>
    </td>
    <td>Making network requests and handling responses from a remote data source.
    </td>
@@ -187,7 +187,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-testing</code>
+   <td><code>core:testing</code>
    </td>
    <td>Testing dependencies, repositories and util classes.
    </td>
@@ -196,7 +196,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-datastore</code>
+   <td><code>core:datastore</code>
    </td>
    <td>Storing persistent data using DataStore.
    </td>
@@ -205,7 +205,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-database</code>
+   <td><code>core:database</code>
    </td>
    <td>Local database storage using Room.
    </td>
@@ -215,7 +215,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-model</code>
+   <td><code>core:model</code>
    </td>
    <td>Model classes used throughout the app.
    </td>
@@ -225,7 +225,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>core-navigation</code>
+   <td><code>core:navigation</code>
    </td>
    <td>Navigation dependencies and shared navigation classes.
    </td>
