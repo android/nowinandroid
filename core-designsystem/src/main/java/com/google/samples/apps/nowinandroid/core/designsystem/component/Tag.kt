@@ -32,7 +32,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R
 
 @Composable
 fun NiaTopicTag(
+    expanded : Boolean = false,
     followed: Boolean,
+    onDropMenuToggle : (show: Boolean) -> Unit = {},
     onFollowClick: () -> Unit,
     onUnfollowClick: () -> Unit,
     onBrowseClick: () -> Unit,
@@ -43,7 +45,7 @@ fun NiaTopicTag(
     unFollowText: @Composable () -> Unit = { Text(stringResource(R.string.unfollow)) },
     browseText: @Composable () -> Unit = { Text(stringResource(R.string.browse_topic)) }
 ) {
-    var expanded by remember { mutableStateOf(false) }
+
     Box(modifier = modifier) {
         val containerColor = if (followed) {
             MaterialTheme.colorScheme.primaryContainer
@@ -51,7 +53,7 @@ fun NiaTopicTag(
             MaterialTheme.colorScheme.surfaceVariant
         }
         NiaTextButton(
-            onClick = { expanded = true },
+            onClick = { onDropMenuToggle(true) },
             enabled = enabled,
             small = true,
             colors = NiaButtonDefaults.textButtonColors(
@@ -69,7 +71,7 @@ fun NiaTopicTag(
         )
         NiaDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
+            onDismissRequest = { onDropMenuToggle(false) },
             items = if (followed) listOf(UNFOLLOW, BROWSE) else listOf(FOLLOW, BROWSE),
             onItemClick = { item ->
                 when (item) {
