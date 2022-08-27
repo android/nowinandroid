@@ -268,13 +268,17 @@ fun NewsResourceTopics(
     topics: List<Topic>,
     modifier: Modifier = Modifier
 ) {
+    var expandedTopic by remember { mutableStateOf<String?>(null) }
+
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (topic in topics) {
             NiaTopicTag(
+                expanded = expandedTopic == topic.id,
                 followed = true, // ToDo: Check if topic is followed
+                onDropMenuToggle = { show -> expandedTopic = if (show) topic.id else null },
                 onFollowClick = { }, // ToDo
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo
