@@ -85,7 +85,7 @@ how you can organize your project. In general, you should strive for low couplin
 
 ## Types of modules in Now in Android
 
-![Diagram showing types of modules and their dependencies in Now in Android](images/modularization-graph.png "Diagram showing types of modules and their dependencies in Now in Android")
+![Diagram showing types of modules and their dependencies in Now in Android](images/modularization-graph.drawio.png "Diagram showing types of modules and their dependencies in Now in Android")
 
 **Top tip**: A module graph (shown above) can be useful during modularization planning for
 visualizing dependencies between modules.
