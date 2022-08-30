@@ -19,12 +19,11 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
@@ -44,7 +43,8 @@ class TopicViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    newsRepository: NewsRepository
+    // newsRepository: NewsRepository,
+    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
 ) : ViewModel() {
 
     private val topicId: String = checkNotNull(savedStateHandle[TopicDestination.topicIdArg])
@@ -63,7 +63,7 @@ class TopicViewModel @Inject constructor(
     val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
         topicId = topicId,
         userDataRepository = userDataRepository,
-        newsRepository = newsRepository
+        getSaveableNewsResourcesStream = getSaveableNewsResourcesStream
     )
         .stateIn(
             scope = viewModelScope,
@@ -129,11 +129,11 @@ private fun topicUiStateStream(
 
 private fun newsUiStateStream(
     topicId: String,
-    newsRepository: NewsRepository,
+    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<NewsResource>> = newsRepository.getNewsResourcesStream(
+    val newsStream: Flow<List<SaveableNewsResource>> = getSaveableNewsResourcesStream(
         filterAuthorIds = emptySet(),
         filterTopicIds = setOf(element = topicId),
     )
@@ -152,14 +152,7 @@ private fun newsUiStateStream(
             when (newsToBookmarksResult) {
                 is Result.Success -> {
                     val (news, bookmarks) = newsToBookmarksResult.data
-                    NewsUiState.Success(
-                        news.map { newsResource ->
-                            SaveableNewsResource(
-                                newsResource,
-                                isSaved = bookmarks.contains(newsResource.id)
-                            )
-                        }
-                    )
+                    NewsUiState.Success(news)
                 }
                 is Result.Loading -> {
                     NewsUiState.Loading

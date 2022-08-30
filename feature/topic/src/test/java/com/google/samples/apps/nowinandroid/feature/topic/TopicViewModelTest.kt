@@ -17,7 +17,8 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -51,6 +52,10 @@ class TopicViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
+    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+        newsRepository = newsRepository,
+        userDataRepository = userDataRepository
+    )
     private lateinit var viewModel: TopicViewModel
 
     @Before
@@ -60,7 +65,7 @@ class TopicViewModelTest {
             SavedStateHandle(mapOf(TopicDestination.topicIdArg to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
-            newsRepository = newsRepository
+            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
         )
     }
 

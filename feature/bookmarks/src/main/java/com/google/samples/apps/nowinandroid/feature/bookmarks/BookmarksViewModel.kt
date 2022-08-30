@@ -18,18 +18,15 @@ package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -38,41 +35,20 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
-    newsRepository: NewsRepository,
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
+    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
 ) : ViewModel() {
-    private val savedNewsResourcesState: StateFlow<Set<String>> =
-        userDataRepository.userDataStream
-            .map { userData ->
-                userData.bookmarkedNewsResources
-            }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptySet()
-            )
 
-    val feedState: StateFlow<NewsFeedUiState> =
-        newsRepository
-            .getNewsResourcesStream()
-            .mapToFeedState(savedNewsResourcesState)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = Loading
-            )
-
-    private fun Flow<List<NewsResource>>.mapToFeedState(
-        savedNewsResourcesState: Flow<Set<String>>
-    ): Flow<NewsFeedUiState> =
-        filterNot { it.isEmpty() }
-            .combine(savedNewsResourcesState) { newsResources, savedNewsResources ->
-                newsResources
-                    .filter { newsResource -> savedNewsResources.contains(newsResource.id) }
-                    .map { SaveableNewsResource(it, true) }
-            }
-            .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
-            .onStart { emit(Loading) }
+    val feedUiState: StateFlow<NewsFeedUiState> = getSaveableNewsResourcesStream()
+        .filterNot { it.isEmpty() }
+        .map { newsResources -> newsResources.filter(SaveableNewsResource::isSaved) } // Only show bookmarked news resources.
+        .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+        .onStart { emit(Loading) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = Loading
+        )
 
     fun removeFromSavedResources(newsResourceId: String) {
         viewModelScope.launch {
