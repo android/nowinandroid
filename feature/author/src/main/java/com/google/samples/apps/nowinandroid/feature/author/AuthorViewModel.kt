@@ -20,12 +20,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
@@ -44,7 +43,7 @@ class AuthorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val userDataRepository: UserDataRepository,
     authorsRepository: AuthorsRepository,
-    newsRepository: NewsRepository
+    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
 ) : ViewModel() {
 
     private val authorId: String = checkNotNull(
@@ -62,16 +61,13 @@ class AuthorViewModel @Inject constructor(
             initialValue = AuthorUiState.Loading
         )
 
-    val newsUiState: StateFlow<NewsUiState> = newsUiStateStream(
-        authorId = authorId,
-        userDataRepository = userDataRepository,
-        newsRepository = newsRepository
-    )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading
-        )
+    val newsUiState: StateFlow<NewsUiState> =
+        getSaveableNewsResourcesStream.newsUiStateStream(authorId = authorId)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = NewsUiState.Loading
+            )
 
     fun followAuthorToggle(followed: Boolean) {
         viewModelScope.launch {
@@ -129,46 +125,18 @@ private fun authorUiStateStream(
         }
 }
 
-private fun newsUiStateStream(
-    authorId: String,
-    newsRepository: NewsRepository,
-    userDataRepository: UserDataRepository,
+private fun GetSaveableNewsResourcesStreamUseCase.newsUiStateStream(
+    authorId: String
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<NewsResource>> = newsRepository.getNewsResourcesStream(
-        filterAuthorIds = setOf(element = authorId),
-        filterTopicIds = emptySet()
-    )
-
-    // Observe bookmarks
-    val bookmarkStream: Flow<Set<String>> = userDataRepository.userDataStream
-        .map { it.bookmarkedNewsResources }
-
-    return combine(
-        newsStream,
-        bookmarkStream,
-        ::Pair
-    )
-        .asResult()
-        .map { newsToBookmarksResult ->
-            when (newsToBookmarksResult) {
-                is Result.Success -> {
-                    val (news, bookmarks) = newsToBookmarksResult.data
-                    NewsUiState.Success(
-                        news.map { newsResource ->
-                            SaveableNewsResource(
-                                newsResource,
-                                isSaved = bookmarks.contains(newsResource.id)
-                            )
-                        }
-                    )
-                }
-                is Result.Loading -> {
-                    NewsUiState.Loading
-                }
-                is Result.Error -> {
-                    NewsUiState.Error
-                }
+    return this(
+        filterAuthorIds = setOf(element = authorId)
+    ).asResult()
+        .map { newsResult ->
+            when (newsResult) {
+                is Result.Success -> NewsUiState.Success(newsResult.data)
+                is Result.Loading -> NewsUiState.Loading
+                is Result.Error -> NewsUiState.Error
             }
         }
 }

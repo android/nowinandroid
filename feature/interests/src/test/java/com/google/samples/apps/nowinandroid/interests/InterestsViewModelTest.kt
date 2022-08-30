@@ -16,9 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetPersistentSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -47,14 +49,23 @@ class InterestsViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
+    private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
+        topicsRepository = topicsRepository,
+        userDataRepository = userDataRepository
+    )
+    private val getPersistentSortedFollowableAuthorsStream =
+        GetPersistentSortedFollowableAuthorsStreamUseCase(
+            authorsRepository = authorsRepository,
+            userDataRepository = userDataRepository
+        )
     private lateinit var viewModel: InterestsViewModel
 
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
             userDataRepository = userDataRepository,
-            authorsRepository = authorsRepository,
-            topicsRepository = topicsRepository,
+            getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
+            getPersistentSortedFollowableAuthorsStream = getPersistentSortedFollowableAuthorsStream
         )
     }
 

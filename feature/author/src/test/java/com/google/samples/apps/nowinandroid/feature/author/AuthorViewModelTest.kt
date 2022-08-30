@@ -17,8 +17,9 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.lifecycle.SavedStateHandle
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
@@ -51,6 +52,10 @@ class AuthorViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val newsRepository = TestNewsRepository()
+    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+        newsRepository = newsRepository,
+        userDataRepository = userDataRepository
+    )
     private lateinit var viewModel: AuthorViewModel
 
     @Before
@@ -63,7 +68,7 @@ class AuthorViewModelTest {
             ),
             userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
-            newsRepository = newsRepository
+            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
         )
     }
 

@@ -18,11 +18,12 @@ package com.google.samples.apps.nowinandroid.feature.interests
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetPersistentSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,9 +37,9 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class InterestsViewModel @Inject constructor(
-    private val userDataRepository: UserDataRepository,
-    authorsRepository: AuthorsRepository,
-    topicsRepository: TopicsRepository
+    val userDataRepository: UserDataRepository,
+    getFollowableTopicsStream: GetFollowableTopicsStreamUseCase,
+    getPersistentSortedFollowableAuthorsStream: GetPersistentSortedFollowableAuthorsStreamUseCase
 ) : ViewModel() {
 
     private val _tabState = MutableStateFlow(
@@ -50,35 +51,14 @@ class InterestsViewModel @Inject constructor(
     val tabState: StateFlow<InterestsTabState> = _tabState.asStateFlow()
 
     val uiState: StateFlow<InterestsUiState> = combine(
-        userDataRepository.userDataStream,
-        authorsRepository.getAuthorsStream(),
-        topicsRepository.getTopicsStream(),
-    ) { userData, availableAuthors, availableTopics ->
-
-        InterestsUiState.Interests(
-            authors = availableAuthors
-                .map { author ->
-                    FollowableAuthor(
-                        author = author,
-                        isFollowed = author.id in userData.followedAuthors
-                    )
-                }
-                .sortedBy { it.author.name },
-            topics = availableTopics
-                .map { topic ->
-                    FollowableTopic(
-                        topic = topic,
-                        isFollowed = topic.id in userData.followedTopics
-                    )
-                }
-                .sortedBy { it.topic.name }
-        )
-    }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = InterestsUiState.Loading
-        )
+        getPersistentSortedFollowableAuthorsStream(),
+        getFollowableTopicsStream(sortBy = TopicSortField.NAME),
+        InterestsUiState::Interests
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = InterestsUiState.Loading
+    )
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
