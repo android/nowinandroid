@@ -23,6 +23,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 /**
@@ -46,7 +47,9 @@ internal fun Project.configureKotlinAndroid(
 
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
+            val warningsAsErrors: String? by project
+            allWarningsAsErrors = warningsAsErrors.toBoolean()
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
