@@ -518,14 +518,14 @@ fun NiaCatalog() {
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        var expandedTopic by remember { mutableStateOf<String?>(null) }
+                        var expandedTopicId by remember { mutableStateOf<String?>(null) }
 
                         var firstFollowed by remember { mutableStateOf(false) }
                         NiaTopicTag(
-                            expanded = expandedTopic == "Topic 1",
+                            expanded = expandedTopicId == "Topic 1",
                             followed = firstFollowed,
                             onDropMenuToggle = { show ->
-                                expandedTopic = if (show) "Topic 1" else null
+                                expandedTopicId = if (show) "Topic 1" else null
                             },
                             onFollowClick = { firstFollowed = true },
                             onUnfollowClick = { firstFollowed = false },
@@ -537,10 +537,10 @@ fun NiaCatalog() {
                         )
                         var secondFollowed by remember { mutableStateOf(true) }
                         NiaTopicTag(
-                            expanded = expandedTopic == "Topic 2",
+                            expanded = expandedTopicId == "Topic 2",
                             followed = secondFollowed,
                             onDropMenuToggle = { show ->
-                                expandedTopic = if (show) "Topic 2" else null
+                                expandedTopicId = if (show) "Topic 2" else null
                             },
                             onFollowClick = { secondFollowed = true },
                             onUnfollowClick = { secondFollowed = false },
