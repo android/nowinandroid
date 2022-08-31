@@ -278,7 +278,9 @@ fun NewsResourceTopics(
             NiaTopicTag(
                 expanded = expandedTopic == topic.id,
                 followed = true, // ToDo: Check if topic is followed
-                onDropMenuToggle = { show -> expandedTopic = if (show) topic.id else null },
+                onDropMenuToggle = { show ->
+                    expandedTopic = if (show) topic.id else null
+                },
                 onFollowClick = { }, // ToDo
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo

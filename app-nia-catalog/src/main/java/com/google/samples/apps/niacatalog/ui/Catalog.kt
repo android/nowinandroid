@@ -524,7 +524,9 @@ fun NiaCatalog() {
                         NiaTopicTag(
                             expanded = expandedTopic == "Topic 1",
                             followed = firstFollowed,
-                            onDropMenuToggle = { show -> expandedTopic = if (show) "Topic 1" else null },
+                            onDropMenuToggle = { show ->
+                                expandedTopic = if (show) "Topic 1" else null
+                            },
                             onFollowClick = { firstFollowed = true },
                             onUnfollowClick = { firstFollowed = false },
                             onBrowseClick = {},
@@ -537,7 +539,9 @@ fun NiaCatalog() {
                         NiaTopicTag(
                             expanded = expandedTopic == "Topic 2",
                             followed = secondFollowed,
-                            onDropMenuToggle = { show -> expandedTopic = if (show) "Topic 2" else null },
+                            onDropMenuToggle = { show ->
+                                expandedTopic = if (show) "Topic 2" else null
+                            },
                             onFollowClick = { secondFollowed = true },
                             onUnfollowClick = { secondFollowed = false },
                             onBrowseClick = {},
