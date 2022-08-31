@@ -21,10 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,9 +28,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R
 
 @Composable
 fun NiaTopicTag(
-    expanded : Boolean = false,
+    expanded: Boolean = false,
     followed: Boolean,
-    onDropMenuToggle : (show: Boolean) -> Unit = {},
+    onDropMenuToggle: (show: Boolean) -> Unit = {},
     onFollowClick: () -> Unit,
     onUnfollowClick: () -> Unit,
     onBrowseClick: () -> Unit,
