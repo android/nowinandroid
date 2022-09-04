@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface EpisodeDao {
+    @Transaction
     @Query(value = "SELECT * FROM episodes")
     fun getEpisodesStream(): Flow<List<PopulatedEpisode>>
 
