@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface NewsResourceDao {
+    @Transaction
     @Query(
         value = """
             SELECT * FROM news_resources
@@ -42,6 +43,7 @@ interface NewsResourceDao {
     )
     fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>>
 
+    @Transaction
     @Query(
         value = """
             SELECT * FROM news_resources
