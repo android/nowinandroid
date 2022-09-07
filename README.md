@@ -3,6 +3,8 @@
 Now in Android App [Work in progress 🚧]
 ==================
 
+**Learn how this app was designed by reading the [architecture](docs/ArchitectureLearningJourney.md) and [modularization](docs/ModularizationLearningJourney.md) learning journeys.**
+
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
 app.
 
