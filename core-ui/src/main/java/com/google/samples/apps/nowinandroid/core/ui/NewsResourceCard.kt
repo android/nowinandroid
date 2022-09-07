@@ -268,13 +268,21 @@ fun NewsResourceTopics(
     topics: List<Topic>,
     modifier: Modifier = Modifier
 ) {
+    // Store the ID of the Topic which has its "following" menu expanded, if any.
+    // To avoid UI confusion, only one topic can have an expanded menu at a time.
+    var expandedTopicId by remember { mutableStateOf<String?>(null) }
+
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (topic in topics) {
             NiaTopicTag(
+                expanded = expandedTopicId == topic.id,
                 followed = true, // ToDo: Check if topic is followed
+                onDropMenuToggle = { show ->
+                    expandedTopicId = if (show) topic.id else null
+                },
                 onFollowClick = { }, // ToDo
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo
