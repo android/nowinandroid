@@ -21,8 +21,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":core-data"))
-    implementation(project(":core-testing"))
+    api(project(":core:datastore"))
+    implementation(project(":core:testing"))
+
+    api(libs.androidx.dataStore.core)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
