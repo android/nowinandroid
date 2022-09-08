@@ -15,15 +15,16 @@
  */
 plugins {
     id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
     id("nowinandroid.spotless")
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines.android)
+    api(project(":core:data"))
+    implementation(project(":core:testing"))
+
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-    testImplementation(project(":core-testing"))
+    kaptAndroidTest(libs.hilt.compiler)
 }
