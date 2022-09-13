@@ -28,7 +28,6 @@ java {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.spotless.gradlePlugin)
 }
 
 gradlePlugin {
@@ -68,10 +67,6 @@ gradlePlugin {
         register("androidHilt") {
             id = "nowinandroid.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
-        }
-        register("spotless") {
-            id = "nowinandroid.spotless"
-            implementationClass = "SpotlessConventionPlugin"
         }
         register("firebase-perf") {
             id = "nowinandroid.firebase-perf"

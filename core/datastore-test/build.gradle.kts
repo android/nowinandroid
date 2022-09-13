@@ -16,7 +16,6 @@
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.hilt")
-    id("nowinandroid.spotless")
 }
 
 dependencies {

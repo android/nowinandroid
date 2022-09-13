@@ -19,7 +19,6 @@ import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
     id("nowinandroid.android.test")
-    id("nowinandroid.spotless")
 }
 
 android {

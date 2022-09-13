@@ -16,7 +16,6 @@
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
-    id("nowinandroid.spotless")
 }
 
 android {

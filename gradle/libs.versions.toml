@@ -39,7 +39,6 @@ kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.4.0"
 ksp = "1.7.10-1.0.6"
-ktlint = "0.43.0"
 lint = "30.2.2"
 okhttp = "4.10.0"
 protobuf = "3.21.5"
@@ -48,7 +47,6 @@ retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "0.8.0"
 room = "2.4.3"
 secrets = "2.0.1"
-spotless = "6.7.2"
 turbine = "0.8.0"
 
 [libraries]
@@ -122,7 +120,6 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -134,4 +131,3 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

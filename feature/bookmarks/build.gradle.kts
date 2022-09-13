@@ -17,7 +17,6 @@ plugins {
     id("nowinandroid.android.feature")
     id("nowinandroid.android.library.compose")
     id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.spotless")
 }
 
 dependencies {
