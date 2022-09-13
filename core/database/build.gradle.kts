@@ -20,7 +20,6 @@ plugins {
     id("nowinandroid.android.library.jacoco")
     id("nowinandroid.android.hilt")
     alias(libs.plugins.ksp)
-    id("nowinandroid.spotless")
 }
 
 android {

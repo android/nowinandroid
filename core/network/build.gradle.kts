@@ -19,7 +19,6 @@ plugins {
     id("nowinandroid.android.library.jacoco")
     id("nowinandroid.android.hilt")
     id("kotlinx-serialization")
-    id("nowinandroid.spotless")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 

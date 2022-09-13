@@ -22,7 +22,6 @@ plugins {
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
     id("jacoco")
-    id("nowinandroid.spotless")
     id("nowinandroid.firebase-perf")
 }
 

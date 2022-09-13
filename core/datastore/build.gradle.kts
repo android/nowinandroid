@@ -26,7 +26,6 @@ plugins {
     id("nowinandroid.android.library.jacoco")
     id("nowinandroid.android.hilt")
     alias(libs.plugins.protobuf)
-    id("nowinandroid.spotless")
 }
 
 android {
