@@ -70,6 +70,34 @@ fun NiaTopAppBar(
     )
 }
 
+/**
+ * Top app bar with action, displayed on the right
+ */
+@Composable
+fun NiaTopAppBar(
+    @StringRes titleRes: Int,
+    actionIcon: ImageVector,
+    actionIconContentDescription: String?,
+    modifier: Modifier = Modifier,
+    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    onActionClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = { Text(text = stringResource(id = titleRes)) },
+        actions = {
+            IconButton(onClick = onActionClick) {
+                Icon(
+                    imageVector = actionIcon,
+                    contentDescription = actionIconContentDescription,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        },
+        colors = colors,
+        modifier = modifier
+    )
+}
+
 @Preview("Top App Bar")
 @Composable
 fun NiaTopAppBarPreview() {
