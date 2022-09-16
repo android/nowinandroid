@@ -38,7 +38,15 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
         if (variant is HasAndroidTest) {
             val loader = variant.artifacts.getBuiltArtifactsLoader()
             val artifact = variant.androidTest?.artifacts?.get(SingleArtifact.APK)
-            val testSources = variant.androidTest?.sources?.java?.all
+            val javaSources = variant.androidTest?.sources?.java?.all
+            val kotlinSources = variant.androidTest?.sources?.kotlin?.all
+
+            val testSources = if (javaSources != null && kotlinSources != null) {
+                javaSources.zip(kotlinSources) { javaDirs, kotlinDirs ->
+                    javaDirs + kotlinDirs
+                }
+            } else javaSources ?: kotlinSources
+
             if (artifact != null && testSources != null) {
                 tasks.register(
                     "${variant.name}PrintTestApk",
@@ -70,7 +78,9 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
     @TaskAction
     fun taskAction() {
         val hasFiles = sources.orNull?.any { directory ->
-            directory.asFileTree.files.any { it.isFile }
+            directory.asFileTree.files.any {
+                it.isFile && it.parentFile.path.contains("build${File.separator}generated").not()
+            }
         } ?: throw RuntimeException("Cannot check androidTest sources")
 
         // Don't print APK location if there are no androidTest source files

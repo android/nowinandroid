@@ -34,7 +34,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --stacktrace
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache --stacktrace
 
       - name: Check lint
         run: ./gradlew lintDebug --stacktrace
