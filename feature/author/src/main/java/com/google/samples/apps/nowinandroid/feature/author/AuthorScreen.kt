@@ -69,7 +69,7 @@ fun AuthorRoute(
     viewModel: AuthorViewModel = hiltViewModel(),
 ) {
     val authorUiState: AuthorUiState by viewModel.authorUiState.collectAsStateWithLifecycle()
-    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
+    val newsUiState: NewsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
 
     AuthorScreen(
         authorUiState = authorUiState,
