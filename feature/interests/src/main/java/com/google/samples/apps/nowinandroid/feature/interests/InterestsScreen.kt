@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +43,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -174,10 +174,7 @@ private fun InterestsEmptyScreen() {
     Text(text = stringResource(id = R.string.interests_empty_header))
 }
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@DevicePreviews
 @Composable
 fun InterestsScreenPopulated() {
     NiaTheme {
@@ -201,10 +198,7 @@ fun InterestsScreenPopulated() {
     }
 }
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@DevicePreviews
 @Composable
 fun InterestsScreenLoading() {
     NiaTheme {
@@ -225,10 +219,7 @@ fun InterestsScreenLoading() {
     }
 }
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@DevicePreviews
 @Composable
 fun InterestsScreenEmpty() {
     NiaTheme {
