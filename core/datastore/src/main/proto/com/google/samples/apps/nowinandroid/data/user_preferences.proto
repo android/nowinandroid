@@ -28,7 +28,14 @@ message UserPreferences {
     int32 newsResourceChangeListVersion = 6;
     repeated int32 deprecated_int_followed_author_ids = 7;
     bool has_done_int_to_string_id_migration = 8;
-    repeated string followed_topic_ids = 9;
-    repeated string followed_author_ids = 10;
-    repeated string bookmarked_news_resource_ids = 11;
+    repeated string deprecated_followed_topic_ids = 9;
+    repeated string deprecated_followed_author_ids = 10;
+    repeated string deprecated_bookmarked_news_resource_ids = 11;
+    bool has_done_list_to_map_migration = 12;
+
+    // Each map is used to store a set of string IDs. The bool has no meaning, but proto3 doesn't
+    // have a Set type so this is the closest we can get to a Set.
+    map<string, bool> followed_topic_ids = 13;
+    map<string, bool> followed_author_ids = 14;
+    map<string, bool> bookmarked_news_resource_ids = 15;
 }

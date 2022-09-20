@@ -18,8 +18,6 @@ package com.google.samples.apps.nowinandroid.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import com.google.protobuf.kotlin.DslList
-import com.google.protobuf.kotlin.DslProxy
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import java.io.IOException
 import javax.inject.Inject
@@ -33,54 +31,85 @@ class NiaPreferencesDataSource @Inject constructor(
     val userDataStream = userPreferences.data
         .map {
             UserData(
-                bookmarkedNewsResources = it.bookmarkedNewsResourceIdsList.toSet(),
-                followedTopics = it.followedTopicIdsList.toSet(),
-                followedAuthors = it.followedAuthorIdsList.toSet(),
+                bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
+                followedTopics = it.followedTopicIdsMap.keys,
+                followedAuthors = it.followedAuthorIdsMap.keys,
             )
         }
 
-    suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
-        userPreferences.setList(
-            listGetter = { it.followedTopicIds },
-            listModifier = { followedTopicIds.toList() },
-            clear = { it.clear() },
-            addAll = { dslList, editedList -> dslList.addAll(editedList) }
-        )
+    suspend fun setFollowedTopicIds(topicIds: Set<String>) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    followedTopicIds.clear()
+                    followedTopicIds.putAll(topicIds.associateWith { true })
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 
-    suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
-        userPreferences.editList(
-            add = followed,
-            value = followedTopicId,
-            listGetter = { it.followedTopicIds },
-            clear = { it.clear() },
-            addAll = { dslList, editedList -> dslList.addAll(editedList) }
-        )
+    suspend fun toggleFollowedTopicId(topicId: String, followed: Boolean) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    if (followed) {
+                        followedTopicIds.put(topicId, true)
+                    } else {
+                        followedTopicIds.remove(topicId)
+                    }
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 
-    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) =
-        userPreferences.setList(
-            listGetter = { it.followedAuthorIds },
-            listModifier = { followedAuthorIds.toList() },
-            clear = { it.clear() },
-            addAll = { dslList, editedList -> dslList.addAll(editedList) }
-        )
+    suspend fun setFollowedAuthorIds(authorIds: Set<String>) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    followedAuthorIds.clear()
+                    followedAuthorIds.putAll(authorIds.associateWith { true })
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 
-    suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) =
-        userPreferences.editList(
-            add = followed,
-            value = followedAuthorId,
-            listGetter = { it.followedAuthorIds },
-            clear = { it.clear() },
-            addAll = { dslList, editedList -> dslList.addAll(editedList) }
-        )
+    suspend fun toggleFollowedAuthorId(authorId: String, followed: Boolean) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    if (followed) {
+                        followedAuthorIds.put(authorId, true)
+                    } else {
+                        followedAuthorIds.remove(authorId)
+                    }
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 
-    suspend fun toggleNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) =
-        userPreferences.editList(
-            add = bookmarked,
-            value = newsResourceId,
-            listGetter = { it.bookmarkedNewsResourceIds },
-            clear = { it.clear() },
-            addAll = { dslList, editedList -> dslList.addAll(editedList) }
-        )
+    suspend fun toggleNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
+        try {
+            userPreferences.updateData {
+                it.copy {
+                    if (bookmarked) {
+                        bookmarkedNewsResourceIds.put(newsResourceId, true)
+                    } else {
+                        bookmarkedNewsResourceIds.remove(newsResourceId)
+                    }
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
 
     suspend fun getChangeListVersions() = userPreferences.data
         .map {
@@ -113,50 +142,6 @@ class NiaPreferencesDataSource @Inject constructor(
                     authorChangeListVersion = updatedChangeListVersions.authorVersion
                     episodeChangeListVersion = updatedChangeListVersions.episodeVersion
                     newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    /**
-     * Adds or removes [value] from the [DslList] provided by [listGetter]
-     */
-    private suspend fun <T : DslProxy> DataStore<UserPreferences>.editList(
-        add: Boolean,
-        value: String,
-        listGetter: (UserPreferencesKt.Dsl) -> DslList<String, T>,
-        clear: UserPreferencesKt.Dsl.(DslList<String, T>) -> Unit,
-        addAll: UserPreferencesKt.Dsl.(DslList<String, T>, Iterable<String>) -> Unit
-    ) {
-        setList(
-            listGetter = listGetter,
-            listModifier = { currentList ->
-                if (add) currentList + value
-                else currentList - value
-            },
-            clear = clear,
-            addAll = addAll
-        )
-    }
-
-    /**
-     * Sets the value provided by [listModifier] into the [DslList] read by [listGetter]
-     */
-    private suspend fun <T : DslProxy> DataStore<UserPreferences>.setList(
-        listGetter: (UserPreferencesKt.Dsl) -> DslList<String, T>,
-        listModifier: (DslList<String, T>) -> List<String>,
-        clear: UserPreferencesKt.Dsl.(DslList<String, T>) -> Unit,
-        addAll: UserPreferencesKt.Dsl.(DslList<String, T>, List<String>) -> Unit
-    ) {
-        try {
-            updateData {
-                it.copy {
-                    val dslList = listGetter(this)
-                    val newList = listModifier(dslList)
-                    clear(dslList)
-                    addAll(dslList, newList)
                 }
             }
         } catch (ioException: IOException) {

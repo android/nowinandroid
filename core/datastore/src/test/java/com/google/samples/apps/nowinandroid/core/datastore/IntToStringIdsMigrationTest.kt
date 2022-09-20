@@ -35,7 +35,7 @@ class IntToStringIdsMigrationTest {
         // Assert that there are no string topic ids yet
         assertEquals(
             emptyList<String>(),
-            preMigrationUserPreferences.followedTopicIdsList
+            preMigrationUserPreferences.deprecatedFollowedTopicIdsList
         )
 
         // Run the migration
@@ -45,7 +45,7 @@ class IntToStringIdsMigrationTest {
         // Assert the deprecated int topic ids have been migrated to the string topic ids
         assertEquals(
             userPreferences {
-                followedTopicIds.addAll(listOf("1", "2", "3"))
+                deprecatedFollowedTopicIds.addAll(listOf("1", "2", "3"))
                 hasDoneIntToStringIdMigration = true
             },
             postMigrationUserPreferences
@@ -64,7 +64,7 @@ class IntToStringIdsMigrationTest {
         // Assert that there are no string author ids yet
         assertEquals(
             emptyList<String>(),
-            preMigrationUserPreferences.followedAuthorIdsList
+            preMigrationUserPreferences.deprecatedFollowedAuthorIdsList
         )
 
         // Run the migration
@@ -74,7 +74,7 @@ class IntToStringIdsMigrationTest {
         // Assert the deprecated int author ids have been migrated to the string author ids
         assertEquals(
             userPreferences {
-                followedAuthorIds.addAll(listOf("4", "5", "6"))
+                deprecatedFollowedAuthorIds.addAll(listOf("4", "5", "6"))
                 hasDoneIntToStringIdMigration = true
             },
             postMigrationUserPreferences
