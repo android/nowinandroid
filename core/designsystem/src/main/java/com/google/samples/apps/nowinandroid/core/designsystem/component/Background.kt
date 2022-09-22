@@ -133,8 +133,15 @@ fun NiaGradientBackground(
     }
 }
 
+/**
+ * Multipreview annotation that represents light and dark themes. Add this annotation to a
+ * composable to render the both themes.
+ */
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+private annotation class ThemePreviews
+
+@ThemePreviews
 @Composable
 fun BackgroundDefault() {
     NiaTheme {
@@ -142,8 +149,7 @@ fun BackgroundDefault() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@ThemePreviews
 @Composable
 fun BackgroundDynamic() {
     NiaTheme(dynamicColor = true) {
@@ -151,8 +157,7 @@ fun BackgroundDynamic() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@ThemePreviews
 @Composable
 fun BackgroundAndroid() {
     NiaTheme(androidTheme = true) {
@@ -160,8 +165,7 @@ fun BackgroundAndroid() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@ThemePreviews
 @Composable
 fun GradientBackgroundDefault() {
     NiaTheme {
@@ -169,8 +173,7 @@ fun GradientBackgroundDefault() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@ThemePreviews
 @Composable
 fun GradientBackgroundDynamic() {
     NiaTheme(dynamicColor = true) {
@@ -178,8 +181,7 @@ fun GradientBackgroundDynamic() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@ThemePreviews
 @Composable
 fun GradientBackgroundAndroid() {
     NiaTheme(androidTheme = true) {
