@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -59,6 +58,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -229,10 +229,7 @@ private fun AuthorToolbar(
     }
 }
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@DevicePreviews
 @Composable
 fun AuthorScreenPopulated() {
     NiaTheme {
@@ -255,10 +252,7 @@ fun AuthorScreenPopulated() {
     }
 }
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "landscape", device = "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@DevicePreviews
 @Composable
 fun AuthorScreenLoading() {
     NiaTheme {
