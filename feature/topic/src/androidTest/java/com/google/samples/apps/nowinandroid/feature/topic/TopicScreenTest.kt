@@ -105,7 +105,8 @@ class TopicScreenTest {
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )
-                    }),
+                    }
+                ),
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
@@ -130,7 +131,8 @@ class TopicScreenTest {
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )
-                    }),
+                    }
+                ),
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
