@@ -72,7 +72,9 @@ fun NiaToggleButton(
         onClick = { onCheckedChange(!checked) },
         modifier = modifier
             .size(size)
-            .toggleable(value = checked, enabled = enabled, role = Role.Button, onValueChange = {})
+            .toggleable(value = checked, enabled = enabled, role = Role.Button, onValueChange = {
+                onCheckedChange(!checked)
+            })
             .drawBehind {
                 drawCircle(
                     color = if (checked) checkedBackgroundColor else backgroundColor,
