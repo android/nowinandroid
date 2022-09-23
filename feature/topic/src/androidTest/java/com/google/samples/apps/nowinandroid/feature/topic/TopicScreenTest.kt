@@ -99,12 +99,13 @@ class TopicScreenTest {
         composeTestRule.setContent {
             TopicScreen(
                 topicState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Success(sampleNewsResources.mapIndexed { index, newsResource ->
-                    SaveableNewsResource(
-                        newsResource = newsResource,
-                        isSaved = index % 2 == 0,
-                    )
-                }),
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }),
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
@@ -123,12 +124,13 @@ class TopicScreenTest {
         composeTestRule.setContent {
             TopicScreen(
                 topicState = TopicUiState.Success(testTopic),
-                newsUiState = NewsUiState.Success(sampleNewsResources.mapIndexed { index, newsResource ->
-                    SaveableNewsResource(
-                        newsResource = newsResource,
-                        isSaved = index % 2 == 0,
-                    )
-                }),
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }),
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
