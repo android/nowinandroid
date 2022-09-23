@@ -27,27 +27,13 @@ import kotlinx.datetime.Instant
 
 /**
  * Defines an NiA news resource.
- * It is the child in a 1 to many relationship with [EpisodeEntity]
  */
 @Entity(
-    tableName = "news_resources",
-    foreignKeys = [
-        ForeignKey(
-            entity = EpisodeEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["episode_id"],
-            onDelete = ForeignKey.CASCADE
-        ),
-    ],
-    indices = [
-        Index(value = ["episode_id"])
-    ]
+    tableName = "news_resources"
 )
 data class NewsResourceEntity(
     @PrimaryKey
     val id: String,
-    @ColumnInfo(name = "episode_id")
-    val episodeId: String,
     val title: String,
     val content: String,
     val url: String,
@@ -60,7 +46,6 @@ data class NewsResourceEntity(
 
 fun NewsResourceEntity.asExternalModel() = NewsResource(
     id = id,
-    episodeId = episodeId,
     title = title,
     content = content,
     url = url,

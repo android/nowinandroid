@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.data.model
 
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -27,7 +26,6 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResour
 
 fun NetworkNewsResource.asEntity() = NewsResourceEntity(
     id = id,
-    episodeId = episodeId,
     title = title,
     content = content,
     url = url,
@@ -38,25 +36,12 @@ fun NetworkNewsResource.asEntity() = NewsResourceEntity(
 
 fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
     id = id,
-    episodeId = episodeId,
     title = title,
     content = content,
     url = url,
     headerImageUrl = headerImageUrl,
     publishDate = publishDate,
     type = type,
-)
-
-/**
- * A shell [EpisodeEntity] to fulfill the foreign key constraint when inserting
- * a [NewsResourceEntity] into the DB
- */
-fun NetworkNewsResource.episodeEntityShell() = EpisodeEntity(
-    id = episodeId,
-    name = "",
-    publishDate = publishDate,
-    alternateVideo = null,
-    alternateAudio = null,
 )
 
 /**
