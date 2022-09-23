@@ -72,7 +72,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 
 /**
- * [NewsResource] card used on the following screens: For You, Episodes, Saved
+ * [NewsResource] card used on the following screens: For You, Saved
  */
 
 @OptIn(ExperimentalMaterial3Api::class)

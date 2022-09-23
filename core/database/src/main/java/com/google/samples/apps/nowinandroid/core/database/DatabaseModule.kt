@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.database
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

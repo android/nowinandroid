@@ -21,7 +21,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -38,7 +37,6 @@ import org.junit.Test
 class NewsResourceDaoTest {
 
     private lateinit var newsResourceDao: NewsResourceDao
-    private lateinit var episodeDao: EpisodeDao
     private lateinit var topicDao: TopicDao
     private lateinit var authorDao: AuthorDao
     private lateinit var db: NiaDatabase
@@ -51,7 +49,6 @@ class NewsResourceDaoTest {
             NiaDatabase::class.java
         ).build()
         newsResourceDao = db.newsResourceDao()
-        episodeDao = db.episodeDao()
         topicDao = db.topicDao()
         authorDao = db.authorDao()
     }
@@ -75,13 +72,6 @@ class NewsResourceDaoTest {
                 id = "3",
                 millisSinceEpoch = 2,
             ),
-        )
-        val episodeEntityShells = newsResourceEntities
-            .map(NewsResourceEntity::episodeEntityShell)
-            .distinct()
-
-        episodeDao.insertOrIgnoreEpisodes(
-            episodeEntityShells
         )
         newsResourceDao.upsertNewsResources(
             newsResourceEntities
@@ -128,9 +118,6 @@ class NewsResourceDaoTest {
                 millisSinceEpoch = 2,
             ),
         )
-        val episodeEntityShells = newsResourceEntities
-            .map(NewsResourceEntity::episodeEntityShell)
-            .distinct()
         val newsResourceTopicCrossRefEntities = topicEntities.mapIndexed { index, topicEntity ->
             NewsResourceTopicCrossRef(
                 newsResourceId = index.toString(),
@@ -140,9 +127,6 @@ class NewsResourceDaoTest {
 
         topicDao.insertOrIgnoreTopics(
             topicEntities = topicEntities
-        )
-        episodeDao.insertOrIgnoreEpisodes(
-            episodeEntities = episodeEntityShells
         )
         newsResourceDao.upsertNewsResources(
             newsResourceEntities
@@ -193,9 +177,6 @@ class NewsResourceDaoTest {
                 millisSinceEpoch = 2,
             ),
         )
-        val episodeEntityShells = newsResourceEntities
-            .map(NewsResourceEntity::episodeEntityShell)
-            .distinct()
         val newsResourceAuthorCrossRefEntities = authorEntities.mapIndexed { index, authorEntity ->
             NewsResourceAuthorCrossRef(
                 newsResourceId = index.toString(),
@@ -204,7 +185,6 @@ class NewsResourceDaoTest {
         }
 
         authorDao.upsertAuthors(authorEntities)
-        episodeDao.upsertEpisodes(episodeEntityShells)
         newsResourceDao.upsertNewsResources(newsResourceEntities)
         newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(newsResourceAuthorCrossRefEntities)
 
@@ -266,9 +246,7 @@ class NewsResourceDaoTest {
                     millisSinceEpoch = 10,
                 ),
             )
-            val episodeEntityShells = newsResourceEntities
-                .map(NewsResourceEntity::episodeEntityShell)
-                .distinct()
+
             val newsResourceTopicCrossRefEntities = topicEntities.mapIndexed { index, topicEntity ->
                 NewsResourceTopicCrossRef(
                     newsResourceId = index.toString(),
@@ -286,7 +264,6 @@ class NewsResourceDaoTest {
 
             topicDao.upsertTopics(topicEntities)
             authorDao.upsertAuthors(authorEntities)
-            episodeDao.upsertEpisodes(episodeEntityShells)
             newsResourceDao.upsertNewsResources(newsResourceEntities)
             newsResourceDao.insertOrIgnoreTopicCrossRefEntities(newsResourceTopicCrossRefEntities)
             newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(newsResourceAuthorCrossRefEntities)
@@ -327,11 +304,6 @@ class NewsResourceDaoTest {
                     millisSinceEpoch = 2,
                 ),
             )
-            val episodeEntityShells = newsResourceEntities
-                .map(NewsResourceEntity::episodeEntityShell)
-                .distinct()
-
-            episodeDao.upsertEpisodes(episodeEntityShells)
             newsResourceDao.upsertNewsResources(newsResourceEntities)
 
             val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
@@ -379,19 +351,10 @@ private fun testNewsResource(
     millisSinceEpoch: Long = 0
 ) = NewsResourceEntity(
     id = id,
-    episodeId = "0",
     title = "",
     content = "",
     url = "",
     headerImageUrl = "",
     publishDate = Instant.fromEpochMilliseconds(millisSinceEpoch),
     type = NewsResourceType.DAC,
-)
-
-private fun NewsResourceEntity.episodeEntityShell() = EpisodeEntity(
-    id = episodeId,
-    name = "",
-    publishDate = Instant.fromEpochMilliseconds(0),
-    alternateVideo = null,
-    alternateAudio = null,
 )

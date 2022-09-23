@@ -21,12 +21,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
-import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeAuthorCrossRef
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -37,14 +34,12 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
 @Database(
     entities = [
         AuthorEntity::class,
-        EpisodeAuthorCrossRef::class,
-        EpisodeEntity::class,
         NewsResourceAuthorCrossRef::class,
         NewsResourceEntity::class,
         NewsResourceTopicCrossRef::class,
         TopicEntity::class,
     ],
-    version = 10,
+    version = 11,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3, spec = DatabaseMigrations.Schema2to3::class),
@@ -55,6 +50,7 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
+        AutoMigration(from = 10, to = 11, spec = DatabaseMigrations.Schema10to11::class)
     ],
     exportSchema = true,
 )
@@ -65,6 +61,5 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
 abstract class NiaDatabase : RoomDatabase() {
     abstract fun topicDao(): TopicDao
     abstract fun authorDao(): AuthorDao
-    abstract fun episodeDao(): EpisodeDao
     abstract fun newsResourceDao(): NewsResourceDao
 }

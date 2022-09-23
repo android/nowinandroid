@@ -24,7 +24,6 @@ message UserPreferences {
     repeated int32 deprecated_int_followed_topic_ids = 1;
     int32 topicChangeListVersion = 3;
     int32 authorChangeListVersion = 4;
-    int32 episodeChangeListVersion = 5;
     int32 newsResourceChangeListVersion = 6;
     repeated int32 deprecated_int_followed_author_ids = 7;
     bool has_done_int_to_string_id_migration = 8;

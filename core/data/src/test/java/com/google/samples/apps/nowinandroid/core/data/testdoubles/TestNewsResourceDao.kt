@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -43,7 +42,6 @@ class TestNewsResourceDao : NewsResourceDao {
         listOf(
             NewsResourceEntity(
                 id = "1",
-                episodeId = "0",
                 title = "news",
                 content = "Hilt",
                 url = "url",
@@ -109,16 +107,9 @@ class TestNewsResourceDao : NewsResourceDao {
 
 private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource(
     entity = this,
-    episode = EpisodeEntity(
-        id = this.episodeId,
-        name = "episode 4",
-        publishDate = Instant.fromEpochMilliseconds(2),
-        alternateAudio = "audio",
-        alternateVideo = "video",
-    ),
     authors = listOf(
         AuthorEntity(
-            id = this.episodeId,
+            id = "id",
             name = "name",
             imageUrl = "imageUrl",
             twitter = "twitter",
