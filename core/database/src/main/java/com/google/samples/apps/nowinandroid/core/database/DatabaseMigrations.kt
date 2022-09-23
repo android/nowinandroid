@@ -43,8 +43,8 @@ object DatabaseMigrations {
     )
     @DeleteTable.Entries(
         DeleteTable(
-           tableName = "episodes_authors"
-       ),
+            tableName = "episodes_authors"
+        ),
         DeleteTable(
             tableName = "episodes"
         )
