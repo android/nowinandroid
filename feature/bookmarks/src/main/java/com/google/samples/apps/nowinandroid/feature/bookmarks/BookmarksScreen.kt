@@ -77,10 +77,6 @@ fun BookmarksScreen(
             topBar = {
                 NiaTopAppBar(
                     titleRes = R.string.top_app_bar_title_saved,
-                    navigationIcon = NiaIcons.Search,
-                    navigationIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_action_search
-                    ),
                     actionIcon = NiaIcons.AccountCircle,
                     actionIconContentDescription = stringResource(
                         id = R.string.top_app_bar_action_menu

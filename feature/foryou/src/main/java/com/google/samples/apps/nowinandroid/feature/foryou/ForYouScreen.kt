@@ -132,10 +132,6 @@ fun ForYouScreen(
             topBar = {
                 NiaTopAppBar(
                     titleRes = R.string.top_app_bar_title,
-                    navigationIcon = NiaIcons.Search,
-                    navigationIconContentDescription = stringResource(
-                        id = R.string.for_you_top_app_bar_action_search
-                    ),
                     actionIcon = NiaIcons.AccountCircle,
                     actionIconContentDescription = stringResource(
                         id = R.string.for_you_top_app_bar_action_my_account

@@ -96,10 +96,6 @@ fun InterestsScreen(
 
         NiaTopAppBar(
             titleRes = R.string.interests,
-            navigationIcon = NiaIcons.Search,
-            navigationIconContentDescription = stringResource(
-                id = R.string.interests_top_app_bar_action_seearch
-            ),
             actionIcon = NiaIcons.MoreVert,
             actionIconContentDescription = stringResource(
                 id = R.string.interests_top_app_bar_action_menu
