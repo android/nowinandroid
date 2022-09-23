@@ -52,6 +52,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilte
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
@@ -65,24 +66,27 @@ fun TopicRoute(
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
-    val uiState: TopicScreenUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
+    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
 
     TopicScreen(
-        topicState = uiState.topicState,
-        newsState = uiState.newsState,
+        topicState = topicUiState,
+        newsUiState = newsUiState,
         modifier = modifier,
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
-    )
+        onBookmarkChanged = viewModel::bookmarkNews,
+        )
 }
 
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(
     topicState: TopicUiState,
-    newsState: NewsUiState,
+    newsUiState: NewsUiState,
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
+    onBookmarkChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -111,8 +115,9 @@ internal fun TopicScreen(
                 TopicBody(
                     name = topicState.followableTopic.topic.name,
                     description = topicState.followableTopic.topic.longDescription,
-                    news = newsState,
-                    imageUrl = topicState.followableTopic.topic.imageUrl
+                    news = newsUiState,
+                    imageUrl = topicState.followableTopic.topic.imageUrl,
+                    onBookmarkChanged = onBookmarkChanged
                 )
             }
         }
@@ -126,14 +131,15 @@ private fun LazyListScope.TopicBody(
     name: String,
     description: String,
     news: NewsUiState,
-    imageUrl: String
+    imageUrl: String,
+    onBookmarkChanged: (String, Boolean) -> Unit
 ) {
     // TODO: Show icon if available
     item {
         TopicHeader(name, description, imageUrl)
     }
 
-    TopicCards(news)
+    TopicCards(news, onBookmarkChanged)
 }
 
 @Composable
@@ -160,14 +166,17 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
     }
 }
 
-private fun LazyListScope.TopicCards(news: NewsUiState) {
+private fun LazyListScope.TopicCards(
+    news: NewsUiState,
+    onBookmarkChanged: (String, Boolean) -> Unit
+) {
     when (news) {
         is NewsUiState.Success -> {
             newsResourceCardItems(
                 items = news.news,
-                newsResourceMapper = { it },
-                isBookmarkedMapper = { /* TODO */ false },
-                onToggleBookmark = { /* TODO */ },
+                newsResourceMapper = { it.newsResource },
+                isBookmarkedMapper = { it.isSaved },
+                onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -187,7 +196,7 @@ private fun TopicBodyPreview() {
         LazyColumn {
             TopicBody(
                 "Jetpack Compose", "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()), ""
+                NewsUiState.Success(emptyList()), "", { _, _ -> }
             )
         }
     }
@@ -238,9 +247,16 @@ fun TopicScreenPopulated() {
         NiaBackground {
             TopicScreen(
                 topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
-                newsState = NewsUiState.Success(previewNewsResources),
-                onBackClick = {},
-                onFollowClick = {}
+                newsUiState = NewsUiState.Success(
+                    previewNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }
+                ), onBackClick = {},
+                onFollowClick = {},
+                onBookmarkChanged = { _, _ -> },
             )
         }
     }
@@ -256,9 +272,10 @@ fun TopicScreenLoading() {
         NiaBackground {
             TopicScreen(
                 topicState = TopicUiState.Loading,
-                newsState = NewsUiState.Loading,
+                newsUiState = NewsUiState.Loading,
                 onBackClick = {},
-                onFollowClick = {}
+                onFollowClick = {},
+                onBookmarkChanged = { _, _ -> },
             )
         }
     }
