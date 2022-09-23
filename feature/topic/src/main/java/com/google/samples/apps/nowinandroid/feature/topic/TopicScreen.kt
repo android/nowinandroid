@@ -70,7 +70,7 @@ fun TopicRoute(
     val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
 
     TopicScreen(
-        topicState = topicUiState,
+        topicUiState = topicUiState,
         newsUiState = newsUiState,
         modifier = modifier,
         onBackClick = onBackClick,
@@ -82,7 +82,7 @@ fun TopicRoute(
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(
-    topicState: TopicUiState,
+    topicUiState: TopicUiState,
     newsUiState: NewsUiState,
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
@@ -96,7 +96,7 @@ internal fun TopicScreen(
         item {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         }
-        when (topicState) {
+        when (topicUiState) {
             Loading -> item {
                 NiaLoadingWheel(
                     modifier = modifier,
@@ -109,14 +109,14 @@ internal fun TopicScreen(
                     TopicToolbar(
                         onBackClick = onBackClick,
                         onFollowClick = onFollowClick,
-                        uiState = topicState.followableTopic,
+                        uiState = topicUiState.followableTopic,
                     )
                 }
                 TopicBody(
-                    name = topicState.followableTopic.topic.name,
-                    description = topicState.followableTopic.topic.longDescription,
+                    name = topicUiState.followableTopic.topic.name,
+                    description = topicUiState.followableTopic.topic.longDescription,
                     news = newsUiState,
-                    imageUrl = topicState.followableTopic.topic.imageUrl,
+                    imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged
                 )
             }
@@ -246,7 +246,7 @@ fun TopicScreenPopulated() {
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
+                topicUiState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
                 newsUiState = NewsUiState.Success(
                     previewNewsResources.mapIndexed { index, newsResource ->
                         SaveableNewsResource(
@@ -271,7 +271,7 @@ fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicState = TopicUiState.Loading,
+                topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Loading,
                 onBackClick = {},
                 onFollowClick = {},
