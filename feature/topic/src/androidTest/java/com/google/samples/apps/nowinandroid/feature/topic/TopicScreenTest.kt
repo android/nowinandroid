@@ -57,7 +57,7 @@ class TopicScreenTest {
     fun niaLoadingWheel_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Loading,
+                topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Loading,
                 onBackClick = { },
                 onFollowClick = { },
@@ -75,7 +75,7 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Success(testTopic),
+                topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Loading,
                 onBackClick = { },
                 onFollowClick = { },
@@ -98,7 +98,7 @@ class TopicScreenTest {
     fun news_whenTopicIsLoading_isNotShown() {
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Loading,
+                topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Success(
                     sampleNewsResources.mapIndexed { index, newsResource ->
                         SaveableNewsResource(
@@ -123,7 +123,7 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Success(testTopic),
+                topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Success(
                     sampleNewsResources.mapIndexed { index, newsResource ->
                         SaveableNewsResource(
