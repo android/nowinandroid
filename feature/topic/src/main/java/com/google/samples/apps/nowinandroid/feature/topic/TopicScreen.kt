@@ -76,7 +76,7 @@ fun TopicRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
-        )
+    )
 }
 
 @VisibleForTesting
@@ -254,7 +254,8 @@ fun TopicScreenPopulated() {
                             isSaved = index % 2 == 0,
                         )
                     }
-                ), onBackClick = {},
+                ),
+                onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
             )
