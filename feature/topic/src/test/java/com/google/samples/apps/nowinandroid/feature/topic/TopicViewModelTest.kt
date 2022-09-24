@@ -64,15 +64,15 @@ class TopicViewModelTest {
     }
 
     @Test
-    fun uiStateAuthor_whenSuccess_matchesTopicFromRepository() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+    fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-        val item = viewModel.uiState.value
-        assertTrue(item.topicState is TopicUiState.Success)
+        val item = viewModel.topicUiState.value
+        assertTrue(item is TopicUiState.Success)
 
-        val successTopicState = item.topicState as TopicUiState.Success
+        val successTopicState = item as TopicUiState.Success
         val topicFromRepository = topicsRepository.getTopic(
             testInputTopics[0].topic.id
         ).first()
@@ -84,20 +84,20 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(NewsUiState.Loading, viewModel.uiState.value.newsState)
+        assertEquals(NewsUiState.Loading, viewModel.newUiState.value)
     }
 
     @Test
     fun uiStateTopic_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(TopicUiState.Loading, viewModel.uiState.value.topicState)
+        assertEquals(TopicUiState.Loading, viewModel.topicUiState.value)
     }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-        assertEquals(TopicUiState.Loading, viewModel.uiState.value.topicState)
+        assertEquals(TopicUiState.Loading, viewModel.topicUiState.value)
 
         collectJob.cancel()
     }
@@ -105,13 +105,15 @@ class TopicViewModelTest {
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccess_thenTopicSuccessAndNewsLoading() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
-            val item = viewModel.uiState.value
-            assertTrue(item.topicState is TopicUiState.Success)
-            assertTrue(item.newsState is NewsUiState.Loading)
+            val topicUiState = viewModel.topicUiState.value
+            val newsUiState = viewModel.newUiState.value
+
+            assertTrue(topicUiState is TopicUiState.Success)
+            assertTrue(newsUiState is NewsUiState.Loading)
 
             collectJob.cancel()
         }
@@ -119,21 +121,23 @@ class TopicViewModelTest {
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             newsRepository.sendNewsResources(sampleNewsResources)
-            val item = viewModel.uiState.value
-            assertTrue(item.topicState is TopicUiState.Success)
-            assertTrue(item.newsState is NewsUiState.Success)
+            val topicUiState = viewModel.topicUiState.value
+            val newsUiState = viewModel.newUiState.value
+
+            assertTrue(topicUiState is TopicUiState.Success)
+            assertTrue(newsUiState is NewsUiState.Success)
 
             collectJob.cancel()
         }
 
     @Test
     fun uiStateTopic_whenFollowingTopic_thenShowUpdatedTopic() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
         // Set which topic IDs are followed, not including 0.
@@ -143,7 +147,7 @@ class TopicViewModelTest {
 
         assertEquals(
             TopicUiState.Success(followableTopic = testOutputTopics[0]),
-            viewModel.uiState.value.topicState
+            viewModel.topicUiState.value
         )
 
         collectJob.cancel()
