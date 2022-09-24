@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -121,8 +122,13 @@ class TopicViewModelTest {
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
-
+            val collectJob = launch(UnconfinedTestDispatcher()) {
+                combine(
+                    viewModel.topicUiState,
+                    viewModel.newUiState,
+                    ::Pair
+                ).collect()
+            }
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             newsRepository.sendNewsResources(sampleNewsResources)
