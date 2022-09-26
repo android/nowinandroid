@@ -18,12 +18,8 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -31,14 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
@@ -46,30 +39,13 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 /**
  * An extension on [LazyListScope] defining a feed with news resources.
  * Depending on the [feedState], this might emit no items.
- *
- * @param showLoadingUIIfLoading if true, show a visual indication of loading if the
- * [feedState] is loading. This allows a caller to suppress a loading visual if one is already
- * present in the UI elsewhere.
  */
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
-    showLoadingUIIfLoading: Boolean,
-    @StringRes loadingContentDescription: Int,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
 ) {
     when (feedState) {
-        NewsFeedUiState.Loading -> {
-            if (showLoadingUIIfLoading) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    NiaLoadingWheel(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(),
-                        contentDesc = stringResource(loadingContentDescription),
-                    )
-                }
-            }
-        }
+        NewsFeedUiState.Loading -> Unit
         is NewsFeedUiState.Success -> {
             items(feedState.feed, key = { it.newsResource.id }) { saveableNewsResource ->
                 val resourceUrl by remember {
@@ -121,8 +97,6 @@ fun NewsFeedLoadingPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
-                showLoadingUIIfLoading = true,
-                loadingContentDescription = 0,
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
         }
@@ -141,8 +115,6 @@ fun NewsFeedContentPreview() {
                         SaveableNewsResource(it, false)
                     }
                 ),
-                showLoadingUIIfLoading = true,
-                loadingContentDescription = 0,
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
         }

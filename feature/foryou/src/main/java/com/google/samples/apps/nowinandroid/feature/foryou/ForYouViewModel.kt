@@ -28,6 +28,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsReposito
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -53,6 +55,8 @@ import kotlinx.coroutines.launch
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
+    networkMonitor: NetworkMonitor,
+    syncStatusMonitor: SyncStatusMonitor,
     authorsRepository: AuthorsRepository,
     topicsRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
@@ -104,6 +108,21 @@ class ForYouViewModel @Inject constructor(
     private var inProgressAuthorSelection by savedStateHandle.saveable {
         mutableStateOf<Set<String>>(emptySet())
     }
+
+    val isOffline = networkMonitor.isOnline
+        .map(Boolean::not)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
+
+    val isSyncing = syncStatusMonitor.isSyncing
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     val feedState: StateFlow<NewsFeedUiState> =
         combine(
@@ -174,7 +193,7 @@ class ForYouViewModel @Inject constructor(
                     }
 
                     if (topics.isEmpty() && authors.isEmpty()) {
-                        ForYouInterestsSelectionUiState.Loading
+                        ForYouInterestsSelectionUiState.LoadFailed
                     } else {
                         ForYouInterestsSelectionUiState.WithInterestsSelection(
                             topics = topics,

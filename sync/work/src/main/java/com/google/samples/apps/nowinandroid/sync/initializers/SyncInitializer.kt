@@ -35,7 +35,7 @@ object Sync {
 }
 
 // This name should not be changed otherwise the app may have concurrent sync requests running
-private const val SyncWorkName = "SyncWorkName"
+internal const val SyncWorkName = "SyncWorkName"
 
 /**
  * Registers work to sync the data layer periodically on app startup.
