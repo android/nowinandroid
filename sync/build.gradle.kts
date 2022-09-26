@@ -16,9 +16,7 @@
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
+    id("nowinandroid.android.hilt")
 }
 
 android {
@@ -43,12 +41,7 @@ dependencies {
     testImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:testing"))
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
     kapt(libs.hilt.ext.compiler)
 
     androidTestImplementation(libs.androidx.work.testing)
-
-    kaptAndroidTest(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.ext.compiler)
 }
