@@ -1,5 +1,8 @@
 package com.google.samples.apps.nowinandroid
 
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.ApplicationProductFlavor
+import com.android.build.api.dsl.ApplicationVariantDimension
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 
@@ -24,6 +27,11 @@ fun Project.configureFlavors(
             Flavor.values().forEach{
                 create(it.name) {
                     dimension = it.dimension.name
+                    if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
+                        if (it.applicationIdSuffix != null) {
+                            this.applicationIdSuffix = it.applicationIdSuffix
+                        }
+                    }
                 }
             }
         }

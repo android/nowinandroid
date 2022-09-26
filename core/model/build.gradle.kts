@@ -17,7 +17,6 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("kotlin")
-    id("nowinandroid.spotless")
 }
 
 dependencies {
