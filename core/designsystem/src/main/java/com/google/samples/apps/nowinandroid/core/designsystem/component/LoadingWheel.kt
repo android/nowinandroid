@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
-import android.content.res.Configuration
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -31,6 +30,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -44,7 +44,6 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import kotlinx.coroutines.launch
@@ -125,19 +124,40 @@ fun NiaLoadingWheel(
     }
 }
 
-@Preview(
-    name = "Loading Wheel Light Preview",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
-@Preview(
-    name = "Loading Wheel Dark Preview",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@Composable
+fun NiaOverlayLoadingWheel(
+    contentDesc: String,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(60.dp),
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.83f),
+        modifier = modifier
+            .size(60.dp),
+    ) {
+        NiaLoadingWheel(
+            contentDesc = contentDesc,
+        )
+    }
+}
+
+@ThemePreviews
 @Composable
 fun NiaLoadingWheelPreview() {
     NiaTheme {
         Surface {
             NiaLoadingWheel(contentDesc = "LoadingWheel")
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaOverlayLoadingWheelPreview() {
+    NiaTheme {
+        Surface {
+            NiaOverlayLoadingWheel(contentDesc = "LoadingWheel")
         }
     }
 }

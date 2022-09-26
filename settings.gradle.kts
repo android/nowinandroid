@@ -61,7 +61,8 @@ include(":feature:interests")
 include(":feature:bookmarks")
 include(":feature:topic")
 include(":lint")
-include(":sync")
+include(":sync:work")
+include(":sync:sync-test")
 
 
 val prePushHook = file(".git/hooks/pre-push")

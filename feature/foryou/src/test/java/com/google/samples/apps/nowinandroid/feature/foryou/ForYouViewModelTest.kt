@@ -29,6 +29,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -49,6 +51,8 @@ class ForYouViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private val networkMonitor = TestNetworkMonitor()
+    private val syncStatusMonitor = TestSyncStatusMonitor()
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
@@ -58,6 +62,8 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
+            networkMonitor = networkMonitor,
+            syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
             topicsRepository = topicsRepository,
@@ -91,6 +97,21 @@ class ForYouViewModelTest {
 
         collectJob1.cancel()
         collectJob2.cancel()
+    }
+
+    @Test
+    fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
+        syncStatusMonitor.setSyncing(true)
+
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
+
+        assertEquals(
+            true,
+            viewModel.isSyncing.value
+        )
+
+        collectJob.cancel()
     }
 
     @Test
@@ -1368,6 +1389,21 @@ class ForYouViewModelTest {
 
         collectJob1.cancel()
         collectJob2.cancel()
+    }
+
+    @Test
+    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isOffline.collect() }
+
+        networkMonitor.setConnected(false)
+
+        assertEquals(
+            true,
+            viewModel.isOffline.value
+        )
+
+        collectJob.cancel()
     }
 }
 

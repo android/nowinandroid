@@ -29,6 +29,11 @@ sealed interface ForYouInterestsSelectionUiState {
     object Loading : ForYouInterestsSelectionUiState
 
     /**
+     * The interests selection state was unable to load.
+     */
+    object LoadFailed : ForYouInterestsSelectionUiState
+
+    /**
      * There is no interests selection state.
      */
     object NoInterestsSelection : ForYouInterestsSelectionUiState

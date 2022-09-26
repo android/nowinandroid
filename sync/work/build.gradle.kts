@@ -33,6 +33,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.work.ktx)

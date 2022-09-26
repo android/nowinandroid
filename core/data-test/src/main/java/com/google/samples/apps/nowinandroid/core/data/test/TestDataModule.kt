@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeAuthor
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
@@ -55,4 +56,9 @@ interface TestDataModule {
     fun bindsUserDataRepository(
         userDataRepository: FakeUserDataRepository
     ): UserDataRepository
+
+    @Binds
+    fun bindsNetworkMonitor(
+        networkMonitor: AlwaysOnlineNetworkMonitor
+    ): NetworkMonitor
 }
