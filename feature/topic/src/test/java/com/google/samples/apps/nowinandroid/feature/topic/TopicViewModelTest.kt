@@ -233,7 +233,6 @@ private val testOutputTopics = listOf(
 private val sampleNewsResources = listOf(
     NewsResource(
         id = "1",
-        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +

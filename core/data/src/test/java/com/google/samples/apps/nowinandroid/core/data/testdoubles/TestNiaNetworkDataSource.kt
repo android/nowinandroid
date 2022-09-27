@@ -28,7 +28,6 @@ import kotlinx.serialization.json.Json
 enum class CollectionType {
     Topics,
     Authors,
-    Episodes,
     NewsResources
 }
 
@@ -53,7 +52,6 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
             .mapToChangeList(idGetter = NetworkTopic::id),
         CollectionType.Authors to allAuthors
             .mapToChangeList(idGetter = NetworkAuthor::id),
-        CollectionType.Episodes to listOf(),
         CollectionType.NewsResources to allNewsResources
             .mapToChangeList(idGetter = NetworkNewsResource::id),
     )

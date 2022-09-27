@@ -1428,7 +1428,6 @@ private val sampleTopics = listOf(
 private val sampleNewsResources = listOf(
     NewsResource(
         id = "1",
-        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +
@@ -1461,7 +1460,6 @@ private val sampleNewsResources = listOf(
     ),
     NewsResource(
         id = "2",
-        episodeId = "52",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed with Paging. " +
             "Transformations like inserting separators, when to create a new pager, and " +
@@ -1493,7 +1491,6 @@ private val sampleNewsResources = listOf(
     ),
     NewsResource(
         id = "3",
-        episodeId = "52",
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",
         url = "https://youtu.be/r5JgIyS3t3s",
