@@ -16,7 +16,6 @@
 -->
 <resources>
     <string name="for_you">For you</string>
-    <string name="episodes">Episodes</string>
     <string name="done">Done</string>
     <string name="for_you_loading">Loading for you…</string>
     <string name="navigate_up">Navigate up</string>

@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.database
 
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
-import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import dagger.Module
@@ -37,11 +36,6 @@ object DaosModule {
     fun providesTopicsDao(
         database: NiaDatabase,
     ): TopicDao = database.topicDao()
-
-    @Provides
-    fun providesEpisodeDao(
-        database: NiaDatabase,
-    ): EpisodeDao = database.episodeDao()
 
     @Provides
     fun providesNewsResourceDao(
