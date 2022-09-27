@@ -27,6 +27,7 @@ import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
 import org.junit.Before
@@ -56,10 +57,11 @@ class TopicScreenTest {
     fun niaLoadingWheel_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Loading,
-                newsState = NewsUiState.Loading,
+                topicUiState = TopicUiState.Loading,
+                newsUiState = NewsUiState.Loading,
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -73,10 +75,11 @@ class TopicScreenTest {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Success(testTopic),
-                newsState = NewsUiState.Loading,
+                topicUiState = TopicUiState.Success(testTopic),
+                newsUiState = NewsUiState.Loading,
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -95,10 +98,18 @@ class TopicScreenTest {
     fun news_whenTopicIsLoading_isNotShown() {
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Loading,
-                newsState = NewsUiState.Success(sampleNewsResources),
+                topicUiState = TopicUiState.Loading,
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }
+                ),
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
@@ -107,15 +118,24 @@ class TopicScreenTest {
             .onNodeWithContentDescription(topicLoading)
             .assertExists()
     }
+
     @Test
     fun news_whenSuccessAndTopicIsSuccess_isShown() {
         val testTopic = testTopics.first()
         composeTestRule.setContent {
             TopicScreen(
-                topicState = TopicUiState.Success(testTopic),
-                newsState = NewsUiState.Success(sampleNewsResources),
+                topicUiState = TopicUiState.Success(testTopic),
+                newsUiState = NewsUiState.Success(
+                    sampleNewsResources.mapIndexed { index, newsResource ->
+                        SaveableNewsResource(
+                            newsResource = newsResource,
+                            isSaved = index % 2 == 0,
+                        )
+                    }
+                ),
                 onBackClick = { },
-                onFollowClick = { }
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
 
