@@ -124,95 +124,93 @@ fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    NiaGradientBackground {
-        Scaffold(
-            topBar = {
-                NiaTopAppBar(
-                    titleRes = R.string.top_app_bar_title,
-                    actionIcon = NiaIcons.AccountCircle,
-                    actionIconContentDescription = stringResource(
-                        id = R.string.for_you_top_app_bar_action_my_account
-                    ),
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent
-                    )
+    Scaffold(
+        topBar = {
+            NiaTopAppBar(
+                titleRes = R.string.top_app_bar_title,
+                actionIcon = NiaIcons.AccountCircle,
+                actionIconContentDescription = stringResource(
+                    id = R.string.for_you_top_app_bar_action_my_account
+                ),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            },
-            containerColor = Color.Transparent,
-            contentWindowInsets = WindowInsets(0, 0, 0, 0)
-        ) { innerPadding ->
-            // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-            // This code should be called when the UI is ready for use
-            // and relates to Time To Full Display.
-            val interestsLoaded =
-                interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-            val feedLoaded = feedState !is NewsFeedUiState.Loading
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { innerPadding ->
+        // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+        // This code should be called when the UI is ready for use
+        // and relates to Time To Full Display.
+        val interestsLoaded =
+            interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+        val feedLoaded = feedState !is NewsFeedUiState.Loading
 
-            if (interestsLoaded && feedLoaded) {
-                val localView = LocalView.current
-                // We use Unit to call reportFullyDrawn only on the first recomposition,
-                // however it will be called again if this composable goes out of scope.
-                // Activity.reportFullyDrawn() has its own check for this
-                // and is safe to call multiple times though.
-                LaunchedEffect(Unit) {
-                    // We're leveraging the fact, that the current view is directly set as content of Activity.
-                    val activity = localView.context as? Activity ?: return@LaunchedEffect
-                    // To be sure not to call in the middle of a frame draw.
-                    localView.doOnPreDraw { activity.reportFullyDrawn() }
-                }
+        if (interestsLoaded && feedLoaded) {
+            val localView = LocalView.current
+            // We use Unit to call reportFullyDrawn only on the first recomposition,
+            // however it will be called again if this composable goes out of scope.
+            // Activity.reportFullyDrawn() has its own check for this
+            // and is safe to call multiple times though.
+            LaunchedEffect(Unit) {
+                // We're leveraging the fact, that the current view is directly set as content of Activity.
+                val activity = localView.context as? Activity ?: return@LaunchedEffect
+                // To be sure not to call in the middle of a frame draw.
+                localView.doOnPreDraw { activity.reportFullyDrawn() }
             }
+        }
 
-            val tag = "forYou:feed"
+        val tag = "forYou:feed"
 
-            val lazyGridState = rememberLazyGridState()
-            TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
+        val lazyGridState = rememberLazyGridState()
+        TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
 
-            LazyVerticalGrid(
-                columns = Adaptive(300.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = modifier
-                    .padding(innerPadding)
-                    .consumedWindowInsets(innerPadding)
-                    .fillMaxSize()
-                    .testTag("forYou:feed"),
-                state = lazyGridState
-            ) {
-                interestsSelection(
-                    interestsSelectionState = interestsSelectionState,
-                    onAuthorCheckedChanged = onAuthorCheckedChanged,
-                    onTopicCheckedChanged = onTopicCheckedChanged,
-                    saveFollowedTopics = saveFollowedTopics,
-                    // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
-                    // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
-                    interestsItemModifier = Modifier.layout { measurable, constraints ->
-                        val placeable = measurable.measure(
-                            constraints.copy(
-                                maxWidth = constraints.maxWidth + 32.dp.roundToPx()
-                            )
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = modifier
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
+                .fillMaxSize()
+                .testTag("forYou:feed"),
+            state = lazyGridState
+        ) {
+            interestsSelection(
+                interestsSelectionState = interestsSelectionState,
+                onAuthorCheckedChanged = onAuthorCheckedChanged,
+                onTopicCheckedChanged = onTopicCheckedChanged,
+                saveFollowedTopics = saveFollowedTopics,
+                // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
+                // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
+                interestsItemModifier = Modifier.layout { measurable, constraints ->
+                    val placeable = measurable.measure(
+                        constraints.copy(
+                            maxWidth = constraints.maxWidth + 32.dp.roundToPx()
                         )
-                        layout(placeable.width, placeable.height) {
-                            placeable.place(0, 0)
-                        }
+                    )
+                    layout(placeable.width, placeable.height) {
+                        placeable.place(0, 0)
                     }
-                )
+                }
+            )
 
-                newsFeed(
-                    feedState = feedState,
-                    // Avoid showing a second loading wheel if we already are for the interests
-                    // selection
-                    showLoadingUIIfLoading =
-                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
-                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-                    loadingContentDescription = R.string.for_you_loading
-                )
+            newsFeed(
+                feedState = feedState,
+                // Avoid showing a second loading wheel if we already are for the interests
+                // selection
+                showLoadingUIIfLoading =
+                interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                loadingContentDescription = R.string.for_you_loading
+            )
 
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                    }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                 }
             }
         }

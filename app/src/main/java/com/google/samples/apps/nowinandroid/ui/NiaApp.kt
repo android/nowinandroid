@@ -44,6 +44,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
@@ -51,6 +52,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
@@ -65,7 +68,13 @@ fun NiaApp(
     appState: NiaAppState = rememberNiaAppState(windowSizeClass)
 ) {
     NiaTheme {
-        NiaBackground {
+        val background: @Composable (@Composable () -> Unit) -> Unit =
+            when (appState.currentDestination?.route) {
+                ForYouDestination.route -> { content -> NiaGradientBackground(content = content) }
+                else -> { content -> NiaBackground(content = content) }
+            }
+
+        background {
             Scaffold(
                 modifier = Modifier.semantics {
                     testTagsAsResourceId = true
