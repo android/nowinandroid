@@ -69,44 +69,42 @@ fun BookmarksScreen(
     removeFromBookmarks: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NiaGradientBackground {
-        Scaffold(
-            topBar = {
-                NiaTopAppBar(
-                    titleRes = R.string.top_app_bar_title_saved,
-                    actionIcon = NiaIcons.AccountCircle,
-                    actionIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_action_menu
-                    ),
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent
-                    )
+    Scaffold(
+        topBar = {
+            NiaTopAppBar(
+                titleRes = R.string.top_app_bar_title_saved,
+                actionIcon = NiaIcons.AccountCircle,
+                actionIconContentDescription = stringResource(
+                    id = R.string.top_app_bar_action_menu
+                ),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            },
-            containerColor = Color.Transparent,
-            contentWindowInsets = WindowInsets(0, 0, 0, 0)
-        ) { innerPadding ->
-            LazyVerticalGrid(
-                columns = Adaptive(300.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(32.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = modifier
-                    .fillMaxSize()
-                    .testTag("bookmarks:feed")
-                    .padding(innerPadding)
-                    .consumedWindowInsets(innerPadding)
-            ) {
-                newsFeed(
-                    feedState = feedState,
-                    onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-                    showLoadingUIIfLoading = true,
-                    loadingContentDescription = R.string.saved_loading
-                )
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { innerPadding ->
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(32.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = modifier
+                .fillMaxSize()
+                .testTag("bookmarks:feed")
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
+        ) {
+            newsFeed(
+                feedState = feedState,
+                onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+                showLoadingUIIfLoading = true,
+                loadingContentDescription = R.string.saved_loading
+            )
 
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
     }
