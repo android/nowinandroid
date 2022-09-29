@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -99,7 +100,10 @@ class RetrofitNiaNetwork @Inject constructor(
                 )
                 .build()
         )
-        .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(
+            @OptIn(ExperimentalSerializationApi::class)
+            networkJson.asConverterFactory("application/json".toMediaType())
+        )
         .build()
         .create(RetrofitNiaNetworkApi::class.java)
 
