@@ -21,14 +21,11 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -45,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -72,46 +68,42 @@ fun BookmarksScreen(
     removeFromBookmarks: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NiaGradientBackground {
-        Scaffold(
-            topBar = {
-                NiaTopAppBar(
-                    titleRes = R.string.top_app_bar_title_saved,
-                    actionIcon = NiaIcons.AccountCircle,
-                    actionIconContentDescription = stringResource(
-                        id = R.string.top_app_bar_action_menu
-                    ),
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent
-                    ),
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                    )
+    Scaffold(
+        topBar = {
+            NiaTopAppBar(
+                titleRes = R.string.top_app_bar_title_saved,
+                actionIcon = NiaIcons.AccountCircle,
+                actionIconContentDescription = stringResource(
+                    id = R.string.top_app_bar_action_menu
+                ),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            },
-            containerColor = Color.Transparent
-        ) { innerPadding ->
-            LazyVerticalGrid(
-                columns = Adaptive(300.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(32.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = modifier
-                    .fillMaxSize()
-                    .testTag("bookmarks:feed")
-                    .padding(innerPadding)
-                    .consumedWindowInsets(innerPadding)
-            ) {
-                newsFeed(
-                    feedState = feedState,
-                    onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-                    showLoadingUIIfLoading = true,
-                    loadingContentDescription = R.string.saved_loading
-                )
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { innerPadding ->
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(32.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = modifier
+                .fillMaxSize()
+                .testTag("bookmarks:feed")
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
+        ) {
+            newsFeed(
+                feedState = feedState,
+                onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+                showLoadingUIIfLoading = true,
+                loadingContentDescription = R.string.saved_loading
+            )
 
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
     }

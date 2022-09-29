@@ -16,13 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,13 +58,13 @@ fun NiaFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        selectedIcon = {
+        trailingIcon = {
             Icon(
                 imageVector = NiaIcons.Check,
                 contentDescription = null
             )
         },
-        shape = Shapes.Full,
+        shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
