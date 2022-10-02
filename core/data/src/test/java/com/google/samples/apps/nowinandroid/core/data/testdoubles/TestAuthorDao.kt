@@ -57,6 +57,10 @@ class TestAuthorDao : AuthorDao {
         throw NotImplementedError("Unused in tests")
     }
 
+    override suspend fun upsertAuthors(entities: List<AuthorEntity>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteAuthors(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
