@@ -62,6 +62,10 @@ class TestTopicDao : TopicDao {
         throw NotImplementedError("Unused in tests")
     }
 
+    override suspend fun upsertTopics(entities: List<TopicEntity>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteTopics(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
