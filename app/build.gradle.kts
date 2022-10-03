@@ -88,7 +88,8 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
 
-    implementation(project(":sync"))
+    implementation(project(":sync:work"))
+    implementation(project(":sync:sync-test"))
 
     androidTestImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:datastore-test"))

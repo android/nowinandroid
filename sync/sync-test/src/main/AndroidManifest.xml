@@ -15,6 +15,6 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.samples.apps.nowinandroid.core.data">
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    package="com.google.samples.apps.nowinandroid.core.sync.test">
+
 </manifest>

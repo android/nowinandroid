@@ -139,7 +139,7 @@ fun NiaGradientBackground(
  */
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
-private annotation class ThemePreviews
+annotation class ThemePreviews
 
 @ThemePreviews
 @Composable
