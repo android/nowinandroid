@@ -24,6 +24,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTop
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -52,4 +54,9 @@ interface DataModule {
     fun bindsUserDataRepository(
         userDataRepository: OfflineFirstUserDataRepository
     ): UserDataRepository
+
+    @Binds
+    fun bindsNetworkMonitor(
+        networkMonitor: ConnectivityManagerNetworkMonitor
+    ): NetworkMonitor
 }
