@@ -14,31 +14,24 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.google.samples.apps.nowinandroid.configureJacoco
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.kotlin
 
 class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("org.jetbrains.kotlin.kapt")
-                apply("dagger.hilt.android.plugin")
+                apply(libs.plugins.hilt.get().pluginId)
+                apply(libs.plugins.kotlin.kapt.get().pluginId)
             }
 
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
-                "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
-                "kaptAndroidTest"(libs.findLibrary("hilt.compiler").get())
+                add("implementation", libs.hilt.android)
+                add("kapt", libs.hilt.compiler)
+                add("kaptAndroidTest", libs.hilt.compiler)
             }
-
         }
     }
-
 }

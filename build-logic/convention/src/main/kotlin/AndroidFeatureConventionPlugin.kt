@@ -15,12 +15,11 @@
  */
 
 import com.android.build.gradle.LibraryExtension
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -36,8 +35,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 }
             }
 
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
             dependencies {
                 add("implementation", project(":core:model"))
                 add("implementation", project(":core:ui"))
@@ -49,20 +46,20 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("testImplementation", project(":core:testing"))
                 add("androidTestImplementation", project(":core:testing"))
 
-                add("implementation", libs.findLibrary("coil.kt").get())
-                add("implementation", libs.findLibrary("coil.kt.compose").get())
+                add("implementation", libs.coil.kt)
+                add("implementation", libs.coil.kt.compose)
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+                add("implementation", libs.androidx.hilt.navigation.compose)
+                add("implementation", libs.androidx.lifecycle.runtimeCompose)
+                add("implementation", libs.androidx.lifecycle.viewModelCompose)
 
-                add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
+                add("implementation", libs.kotlinx.coroutines.android)
 
                 // TODO : Remove this dependency once we upgrade to Android Studio Dolphin b/228889042
                 // These dependencies are currently necessary to render Compose previews
                 add(
                     "debugImplementation",
-                    libs.findLibrary("androidx.customview.poolingcontainer").get()
+                    libs.androidx.customview.poolingcontainer
                 )
             }
         }

@@ -14,11 +14,12 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -27,13 +28,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
+                apply(libs.plugins.android.application.get().pluginId)
+                apply(libs.plugins.kotlin.android.get().pluginId)
             }
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 33
+                defaultConfig.targetSdk = libs.versions.android.targetSdk.get().toInt()
                 configureFlavors(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
@@ -41,5 +42,4 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }
