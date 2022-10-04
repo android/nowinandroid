@@ -28,6 +28,7 @@ java {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    // Workaround for https://github.com/gradle/gradle/issues/15383
     compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
