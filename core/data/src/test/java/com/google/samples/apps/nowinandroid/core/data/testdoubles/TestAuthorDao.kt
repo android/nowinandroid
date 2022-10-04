@@ -58,7 +58,7 @@ class TestAuthorDao : AuthorDao {
     }
 
     override suspend fun upsertAuthors(entities: List<AuthorEntity>) {
-        TODO("Not yet implemented")
+        entitiesStateFlow.value = entities
     }
 
     override suspend fun deleteAuthors(ids: List<String>) {

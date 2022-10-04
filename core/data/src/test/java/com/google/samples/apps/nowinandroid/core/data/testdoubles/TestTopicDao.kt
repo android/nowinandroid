@@ -63,7 +63,7 @@ class TestTopicDao : TopicDao {
     }
 
     override suspend fun upsertTopics(entities: List<TopicEntity>) {
-        TODO("Not yet implemented")
+        entitiesStateFlow.value = entities
     }
 
     override suspend fun deleteTopics(ids: List<String>) {

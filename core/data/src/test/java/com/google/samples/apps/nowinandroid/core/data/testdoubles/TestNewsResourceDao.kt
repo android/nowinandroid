@@ -86,7 +86,7 @@ class TestNewsResourceDao : NewsResourceDao {
     }
 
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
-        TODO("Not yet implemented")
+        entitiesStateFlow.value = newsResourceEntities
     }
 
     override suspend fun insertOrIgnoreTopicCrossRefEntities(
