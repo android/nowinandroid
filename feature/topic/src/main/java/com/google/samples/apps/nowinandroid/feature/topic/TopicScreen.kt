@@ -64,7 +64,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun TopicRoute(
+internal fun TopicRoute(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),

@@ -21,13 +21,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
+import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -41,17 +42,16 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class AuthorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     authorsRepository: AuthorsRepository,
     getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
 ) : ViewModel() {
 
-    private val authorId: String = checkNotNull(
-        savedStateHandle[AuthorDestination.authorIdArg]
-    )
+    private val authorArgs: AuthorArgs = AuthorArgs(savedStateHandle, stringDecoder)
 
     val authorUiState: StateFlow<AuthorUiState> = authorUiStateStream(
-        authorId = authorId,
+        authorId = authorArgs.authorId,
         userDataRepository = userDataRepository,
         authorsRepository = authorsRepository
     )
@@ -62,7 +62,7 @@ class AuthorViewModel @Inject constructor(
         )
 
     val newsUiState: StateFlow<NewsUiState> =
-        getSaveableNewsResourcesStream.newsUiStateStream(authorId = authorId)
+        getSaveableNewsResourcesStream.newsUiStateStream(authorId = authorArgs.authorId)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -71,7 +71,7 @@ class AuthorViewModel @Inject constructor(
 
     fun followAuthorToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(authorId, followed)
+            userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
         }
     }
 

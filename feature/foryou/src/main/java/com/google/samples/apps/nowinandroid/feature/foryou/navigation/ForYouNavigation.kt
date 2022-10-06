@@ -16,18 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 
-object ForYouDestination : NiaNavigationDestination {
-    override val route = "for_you_route"
-    override val destination = "for_you_destination"
+const val forYouNavigationRoute = "for_you_route"
+
+fun NavController.navigateToForYou(navOptions: NavOptions? = null) {
+    this.navigate(forYouNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.forYouGraph() {
-    composable(route = ForYouDestination.route) {
+fun NavGraphBuilder.forYouScreen() {
+    composable(route = forYouNavigationRoute) {
         ForYouRoute()
     }
 }

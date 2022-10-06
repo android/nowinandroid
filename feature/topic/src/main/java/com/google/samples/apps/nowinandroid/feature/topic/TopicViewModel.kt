@@ -21,13 +21,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -41,16 +42,17 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class TopicViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
     // newsRepository: NewsRepository,
     getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
 ) : ViewModel() {
 
-    private val topicId: String = checkNotNull(savedStateHandle[TopicDestination.topicIdArg])
+    private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
 
     val topicUiState: StateFlow<TopicUiState> = topicUiStateStream(
-        topicId = topicId,
+        topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository
     )
@@ -61,7 +63,7 @@ class TopicViewModel @Inject constructor(
         )
 
     val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
-        topicId = topicId,
+        topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         getSaveableNewsResourcesStream = getSaveableNewsResourcesStream
     )
@@ -73,7 +75,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(topicId, followed)
+            userDataRepository.toggleFollowedTopicId(topicArgs.topicId, followed)
         }
     }
 

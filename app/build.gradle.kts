@@ -85,7 +85,6 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":core:designsystem"))
-    implementation(project(":core:navigation"))
 
     implementation(project(":sync:work"))
     implementation(project(":sync:sync-test"))
@@ -104,6 +103,8 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.profileinstaller)
 
