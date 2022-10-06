@@ -17,43 +17,36 @@
 package com.google.samples.apps.nowinandroid.feature.author.navigation
 
 import android.net.Uri
-import androidx.navigation.NavBackStackEntry
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
+import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.feature.author.AuthorRoute
 
-object AuthorDestination : NiaNavigationDestination {
-    const val authorIdArg = "authorId"
-    override val route = "author_route/{$authorIdArg}"
-    override val destination = "author_destination"
+@VisibleForTesting
+internal const val authorIdArg = "authorId"
 
-    /**
-     * Creates destination route for an authorId that could include special characters
-     */
-    fun createNavigationRoute(authorIdArg: String): String {
-        val encodedId = Uri.encode(authorIdArg)
-        return "author_route/$encodedId"
-    }
-
-    /**
-     * Returns the authorId from a [NavBackStackEntry] after an author destination navigation call
-     */
-    fun fromNavArgs(entry: NavBackStackEntry): String {
-        val encodedId = entry.arguments?.getString(authorIdArg)!!
-        return Uri.decode(encodedId)
-    }
+internal class AuthorArgs(val authorId: String) {
+    constructor(savedStateHandle: SavedStateHandle, stringDecoder: StringDecoder) :
+        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[authorIdArg])))
 }
 
-fun NavGraphBuilder.authorGraph(
+fun NavController.navigateToAuthor(authorId: String) {
+    val encodedString = Uri.encode(authorId)
+    this.navigate("author_route/$encodedString")
+}
+
+fun NavGraphBuilder.authorScreen(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = AuthorDestination.route,
+        route = "author_route/{$authorIdArg}",
         arguments = listOf(
-            navArgument(AuthorDestination.authorIdArg) { type = NavType.StringType }
+            navArgument(authorIdArg) { type = NavType.StringType }
         )
     ) {
         AuthorRoute(onBackClick = onBackClick)

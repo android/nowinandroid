@@ -82,9 +82,9 @@ class NiaAppStateTest {
         }
 
         assertEquals(3, state.topLevelDestinations.size)
-        assertTrue(state.topLevelDestinations[0].destination.contains("for_you"))
-        assertTrue(state.topLevelDestinations[1].destination.contains("bookmarks"))
-        assertTrue(state.topLevelDestinations[2].destination.contains("interests"))
+        assertTrue(state.topLevelDestinations[0].name.contains("for_you", true))
+        assertTrue(state.topLevelDestinations[1].name.contains("bookmarks", true))
+        assertTrue(state.topLevelDestinations[2].name.contains("interests", true))
     }
 
     @Test

@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.bookmarks.navigation
+package com.google.samples.apps.nowinandroid.core.decoder
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
+import android.net.Uri
+import javax.inject.Inject
 
-private const val bookmarksRoute = "bookmarks_route"
-
-fun NavController.navigateToBookmarks(navOptions: NavOptions? = null) {
-    this.navigate(bookmarksRoute, navOptions)
-}
-
-fun NavGraphBuilder.bookmarksScreen() {
-    composable(route = bookmarksRoute) {
-        BookmarksRoute()
-    }
+class UriDecoder @Inject constructor() : StringDecoder {
+    override fun decodeString(encodedString: String): String = Uri.decode(encodedString)
 }

@@ -17,43 +17,36 @@
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
 import android.net.Uri
-import androidx.navigation.NavBackStackEntry
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
+import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 
-object TopicDestination : NiaNavigationDestination {
-    const val topicIdArg = "topicId"
-    override val route = "topic_route/{$topicIdArg}"
-    override val destination = "topic_destination"
+@VisibleForTesting
+internal const val topicIdArg = "topicId"
 
-    /**
-     * Creates destination route for a topicId that could include special characters
-     */
-    fun createNavigationRoute(topicIdArg: String): String {
-        val encodedId = Uri.encode(topicIdArg)
-        return "topic_route/$encodedId"
-    }
-
-    /**
-     * Returns the topicId from a [NavBackStackEntry] after a topic destination navigation call
-     */
-    fun fromNavArgs(entry: NavBackStackEntry): String {
-        val encodedId = entry.arguments?.getString(topicIdArg)!!
-        return Uri.decode(encodedId)
-    }
+internal class TopicArgs(val topicId: String) {
+    constructor(savedStateHandle: SavedStateHandle, stringDecoder: StringDecoder) :
+        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[topicIdArg])))
 }
 
-fun NavGraphBuilder.topicGraph(
+fun NavController.navigateToTopic(topicId: String) {
+    val encodedId = Uri.encode(topicId)
+    this.navigate("topic_route/$encodedId")
+}
+
+fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit
 ) {
     composable(
-        route = TopicDestination.route,
+        route = "topic_route/{$topicIdArg}",
         arguments = listOf(
-            navArgument(TopicDestination.topicIdArg) { type = NavType.StringType }
+            navArgument(topicIdArg) { type = NavType.StringType }
         )
     ) {
         TopicRoute(onBackClick = onBackClick)
