@@ -54,17 +54,3 @@ include(":feature:topic")
 include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
-
-
-val prePushHook = file(".git/hooks/pre-push")
-val commitMsgHook = file(".git/hooks/commit-msg")
-val hooksInstalled = commitMsgHook.exists()
-    && prePushHook.exists()
-    && prePushHook.readBytes().contentEquals(file("tools/pre-push").readBytes())
-
-if (!hooksInstalled) {
-    exec {
-        commandLine("tools/setup.sh")
-        workingDir = rootProject.projectDir
-    }
-}

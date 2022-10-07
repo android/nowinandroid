@@ -72,5 +72,9 @@ gradlePlugin {
             id = "nowinandroid.firebase-perf"
             implementationClass = "FirebasePerfConventionPlugin"
         }
+        register("gitHooks") {
+            id = "nowinandroid.git-hooks"
+            implementationClass = "GitHooksConventionPlugin"
+        }
     }
 }

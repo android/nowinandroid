@@ -23,6 +23,7 @@ plugins {
     id("nowinandroid.android.hilt")
     id("jacoco")
     id("nowinandroid.firebase-perf")
+    id("nowinandroid.git-hooks")
 }
 
 android {
