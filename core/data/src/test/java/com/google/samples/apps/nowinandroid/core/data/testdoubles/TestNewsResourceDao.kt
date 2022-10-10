@@ -85,6 +85,10 @@ class TestNewsResourceDao : NewsResourceDao {
         throw NotImplementedError("Unused in tests")
     }
 
+    override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
+        entitiesStateFlow.value = newsResourceEntities
+    }
+
     override suspend fun insertOrIgnoreTopicCrossRefEntities(
         newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>
     ) {

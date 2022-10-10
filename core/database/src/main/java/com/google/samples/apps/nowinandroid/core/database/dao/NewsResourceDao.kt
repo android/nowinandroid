@@ -22,6 +22,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -80,12 +81,8 @@ interface NewsResourceDao {
     /**
      * Inserts or updates [newsResourceEntities] in the db under the specified primary keys
      */
-    @Transaction
-    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) = upsert(
-        items = newsResourceEntities,
-        insertMany = ::insertOrIgnoreNewsResources,
-        updateMany = ::updateNewsResources
-    )
+    @Upsert
+    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreTopicCrossRefEntities(
