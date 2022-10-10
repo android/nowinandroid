@@ -33,7 +33,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.Drawable
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
-import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
+import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
@@ -141,7 +141,7 @@ class NiaAppState(
  */
 @Composable
 private fun NavigationTrackingSideEffect(navController: NavHostController) {
-    JankMetricDisposableEffect(navController) { metricsHolder ->
+    TrackDisposableJank(navController) { metricsHolder ->
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             metricsHolder.state?.putState("Navigation", destination.route.toString())
         }
