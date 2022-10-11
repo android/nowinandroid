@@ -31,6 +31,10 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStrea
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.FollowedInterests
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.None
@@ -76,6 +80,20 @@ class ForYouViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = Unknown
+            )
+
+    /**
+     * The current theme of the app
+     */
+    val themeState: StateFlow<Pair<ThemeBrand, DarkThemeConfig>> =
+        userDataRepository.userDataStream
+            .map { userData ->
+                Pair(userData.themeBrand, userData.darkThemeConfig)
+            }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = Pair(DEFAULT, FOLLOW_SYSTEM)
             )
 
     /**
@@ -224,6 +242,18 @@ class ForYouViewModel @Inject constructor(
                 inProgressTopicSelection = emptySet()
                 inProgressAuthorSelection = emptySet()
             }
+        }
+    }
+
+    fun updateThemeBrand(themeBrand: ThemeBrand) {
+        viewModelScope.launch {
+            userDataRepository.setThemeBrand(themeBrand)
+        }
+    }
+
+    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        viewModelScope.launch {
+            userDataRepository.setDarkThemeConfig(darkThemeConfig)
         }
     }
 }
