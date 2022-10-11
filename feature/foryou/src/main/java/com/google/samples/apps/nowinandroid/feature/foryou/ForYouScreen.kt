@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -46,11 +47,16 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
@@ -61,7 +67,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -71,6 +79,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
@@ -90,6 +99,13 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.LIGHT
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
@@ -108,6 +124,7 @@ internal fun ForYouRoute(
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
+    val themeState by viewModel.themeState.collectAsStateWithLifecycle()
 
     ForYouScreen(
         isOffline = isOffline,
@@ -118,6 +135,9 @@ internal fun ForYouRoute(
         onAuthorCheckedChanged = viewModel::updateAuthorSelection,
         saveFollowedTopics = viewModel::saveFollowedInterests,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+        themeState = themeState,
+        onChangeThemeBrand = viewModel::updateThemeBrand,
+        onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
         modifier = modifier
     )
 }
@@ -134,8 +154,22 @@ internal fun ForYouScreen(
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    themeState: Pair<ThemeBrand, DarkThemeConfig> = Pair(DEFAULT, FOLLOW_SYSTEM),
+    onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit = {},
+    onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    var openAccountDialog by remember { mutableStateOf(false) }
+
+    if (openAccountDialog) {
+        AccountDialog(
+            onDismiss = { openAccountDialog = false },
+            currentThemeBrand = themeState.first,
+            currentDarkThemeConfig = themeState.second,
+            onChangeThemeBrand = onChangeThemeBrand,
+            onChangeDarkThemeConfig = onChangeDarkThemeConfig
+        )
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -148,7 +182,8 @@ internal fun ForYouScreen(
                 ),
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.Transparent
-                )
+                ),
+                onActionClick = { openAccountDialog = true }
             )
         },
         containerColor = Color.Transparent,
@@ -268,6 +303,7 @@ private fun LazyGridScope.interestsSelection(
         ForYouInterestsSelectionUiState.Loading,
         ForYouInterestsSelectionUiState.LoadFailed,
         ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
+
         is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(modifier = interestsItemModifier) {
@@ -431,6 +467,97 @@ fun TopicIcon(
             .padding(10.dp)
             .size(32.dp)
     )
+}
+
+@Composable
+fun AccountDialog(
+    onDismiss: () -> Unit,
+    currentThemeBrand: ThemeBrand,
+    currentDarkThemeConfig: DarkThemeConfig,
+    onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
+    onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text(
+                text = "Change theme and dark mode",
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Column {
+                Divider()
+                Column {
+                    AccountDialogThemeChooserRow(
+                        text = "Default",
+                        selected = currentThemeBrand == DEFAULT,
+                        onClick = { onChangeThemeBrand(DEFAULT) }
+                    )
+                    AccountDialogThemeChooserRow(
+                        text = "Android",
+                        selected = currentThemeBrand == ANDROID,
+                        onClick = { onChangeThemeBrand(ANDROID) }
+                    )
+                }
+                Divider()
+                Column(Modifier.selectableGroup()) {
+                    AccountDialogThemeChooserRow(
+                        text = "System default",
+                        selected = currentDarkThemeConfig == FOLLOW_SYSTEM,
+                        onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) }
+                    )
+                    AccountDialogThemeChooserRow(
+                        text = "Light",
+                        selected = currentDarkThemeConfig == LIGHT,
+                        onClick = { onChangeDarkThemeConfig(LIGHT) }
+                    )
+                    AccountDialogThemeChooserRow(
+                        text = "Dark",
+                        selected = currentDarkThemeConfig == DARK,
+                        onClick = { onChangeDarkThemeConfig(DARK) }
+                    )
+                }
+                Divider()
+            }
+        },
+        confirmButton = {
+            Text(
+                text = "OK",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(15.dp)
+                    .clickable { onDismiss() }
+            )
+        }
+    )
+}
+
+@Composable
+fun AccountDialogThemeChooserRow(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .selectable(
+                selected = selected,
+                role = Role.RadioButton,
+                onClick = onClick
+            )
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = null
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(text)
+    }
 }
 
 @DevicePreviews
