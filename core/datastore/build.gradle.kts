@@ -64,8 +64,3 @@ dependencies {
     implementation(libs.androidx.dataStore.core)
     implementation(libs.protobuf.kotlin.lite)
 }
-
-// TODO b/239411851, Remove kapt workaround configuration
-kapt {
-    correctErrorTypes = true
-}
