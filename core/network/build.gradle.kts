@@ -26,6 +26,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    namespace = "com.google.samples.apps.nowinandroid.core.network"
 }
 
 secrets {
