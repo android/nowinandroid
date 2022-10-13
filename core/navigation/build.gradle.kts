@@ -21,6 +21,10 @@ plugins {
     id("nowinandroid.android.hilt")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.navigation"
+}
+
 dependencies {
     api(libs.androidx.hilt.navigation.compose)
     api(libs.androidx.navigation.compose)

@@ -19,6 +19,10 @@ plugins {
     id("nowinandroid.android.library.jacoco")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.ui"
+}
+
 dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))

@@ -19,6 +19,10 @@ plugins {
     id("nowinandroid.android.hilt")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
     testImplementation(project(":core:testing"))

@@ -18,6 +18,10 @@ plugins {
     id("nowinandroid.android.hilt")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.datastore.test"
+}
+
 dependencies {
     api(project(":core:datastore"))
     implementation(project(":core:testing"))
