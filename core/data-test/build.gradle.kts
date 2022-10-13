@@ -15,16 +15,14 @@
  */
 plugins {
     id("nowinandroid.android.library")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
+    id("nowinandroid.android.hilt")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.data.test"
 }
 
 dependencies {
     api(project(":core:data"))
     implementation(project(":core:testing"))
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
 }

@@ -28,11 +28,6 @@ data class PopulatedNewsResource(
     @Embedded
     val entity: NewsResourceEntity,
     @Relation(
-        parentColumn = "episode_id",
-        entityColumn = "id"
-    )
-    val episode: EpisodeEntity,
-    @Relation(
         parentColumn = "id",
         entityColumn = "id",
         associateBy = Junction(
@@ -56,7 +51,6 @@ data class PopulatedNewsResource(
 
 fun PopulatedNewsResource.asExternalModel() = NewsResource(
     id = entity.id,
-    episodeId = entity.episodeId,
     title = entity.title,
     content = entity.content,
     url = entity.url,

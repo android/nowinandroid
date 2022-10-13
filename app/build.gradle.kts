@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.samples.apps.nowinandroid.Flavor
-import com.google.samples.apps.nowinandroid.FlavorDimension
 
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
     id("nowinandroid.android.application.jacoco")
-    kotlin("kapt")
+    id("nowinandroid.android.hilt")
     id("jacoco")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
     id("nowinandroid.firebase-perf")
 }
 
@@ -67,19 +63,6 @@ android {
         }
     }
 
-    // @see Flavor for more details on the app product flavors.
-    flavorDimensions += FlavorDimension.contentType.name
-    productFlavors {
-        Flavor.values().forEach {
-            create(it.name) {
-                dimension = it.dimension.name
-                if (it.applicationIdSuffix != null) {
-                    applicationIdSuffix = it.applicationIdSuffix
-                }
-            }
-        }
-    }
-
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
@@ -90,6 +73,7 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    namespace = "com.google.samples.apps.nowinandroid"
 }
 
 dependencies {
@@ -103,7 +87,8 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
 
-    implementation(project(":sync"))
+    implementation(project(":sync:work"))
+    implementation(project(":sync:sync-test"))
 
     androidTestImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:datastore-test"))
@@ -124,17 +109,13 @@ dependencies {
 
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
+}
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
-
-    // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-    configurations.configureEach {
-        resolutionStrategy {
-            force(libs.junit4)
-            // Temporary workaround for https://issuetracker.google.com/174733673
-            force("org.objenesis:objenesis:2.6")
-        }
+// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
+configurations.configureEach {
+    resolutionStrategy {
+        force(libs.junit4)
+        // Temporary workaround for https://issuetracker.google.com/174733673
+        force("org.objenesis:objenesis:2.6")
     }
 }

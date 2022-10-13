@@ -20,8 +20,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -64,12 +64,8 @@ interface TopicDao {
     /**
      * Inserts or updates [entities] in the db under the specified primary keys
      */
-    @Transaction
-    suspend fun upsertTopics(entities: List<TopicEntity>) = upsert(
-        items = entities,
-        insertMany = ::insertOrIgnoreTopics,
-        updateMany = ::updateTopics
-    )
+    @Upsert
+    suspend fun upsertTopics(entities: List<TopicEntity>)
 
     /**
      * Deletes rows in the db matching the specified [ids]

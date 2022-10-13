@@ -91,7 +91,7 @@ class AuthorViewModelTest {
 
     @Test
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(NewsUiState.Loading, viewModel.newUiState.value)
+        assertEquals(NewsUiState.Loading, viewModel.newsUiState.value)
     }
 
     @Test
@@ -115,7 +115,7 @@ class AuthorViewModelTest {
             val collectJob = launch(UnconfinedTestDispatcher()) {
                 combine(
                     viewModel.authorUiState,
-                    viewModel.newUiState,
+                    viewModel.newsUiState,
                     ::Pair
                 ).collect()
             }
@@ -123,7 +123,7 @@ class AuthorViewModelTest {
             authorsRepository.sendAuthors(testInputAuthors.map { it.author })
             userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
             val authorState = viewModel.authorUiState.value
-            val newsUiState = viewModel.newUiState.value
+            val newsUiState = viewModel.newsUiState.value
 
             assertTrue(authorState is AuthorUiState.Success)
             assertTrue(newsUiState is NewsUiState.Loading)
@@ -137,7 +137,7 @@ class AuthorViewModelTest {
             val collectJob = launch(UnconfinedTestDispatcher()) {
                 combine(
                     viewModel.authorUiState,
-                    viewModel.newUiState,
+                    viewModel.newsUiState,
                     ::Pair
                 ).collect()
             }
@@ -146,7 +146,7 @@ class AuthorViewModelTest {
             userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
             newsRepository.sendNewsResources(sampleNewsResources)
             val authorState = viewModel.authorUiState.value
-            val newsUiState = viewModel.newUiState.value
+            val newsUiState = viewModel.newsUiState.value
 
             assertTrue(authorState is AuthorUiState.Success)
             assertTrue(newsUiState is NewsUiState.Success)
@@ -174,7 +174,7 @@ class AuthorViewModelTest {
 
     @Test
     fun uiStateAuthor_whenNewsBookmarked_thenShowBookmarkedNews() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.newUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.newsUiState.collect() }
 
         authorsRepository.sendAuthors(testInputAuthors.map { it.author })
         newsRepository.sendNewsResources(sampleNewsResources)
@@ -191,7 +191,7 @@ class AuthorViewModelTest {
         )
 
         assertTrue(
-            (viewModel.newUiState.value as NewsUiState.Success)
+            (viewModel.newsUiState.value as NewsUiState.Success)
                 .news
                 .first { it.newsResource.id == sampleNewsResources.first().id }
                 .isSaved
@@ -284,7 +284,6 @@ private val testOutputAuthors = listOf(
 private val sampleNewsResources = listOf(
     NewsResource(
         id = "1",
-        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +

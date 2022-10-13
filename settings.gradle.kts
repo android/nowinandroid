@@ -26,15 +26,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // Register the AndroidX snapshot repository first so snapshots don't attempt (and fail)
-        // to download from the non-snapshot repositories
-        maven(url = "https://androidx.dev/snapshots/builds/8455591/artifacts/repository") {
-            content {
-                // The AndroidX snapshot repository will only have androidx artifacts, don't
-                // bother trying to find other ones
-                includeGroupByRegex("androidx\\..*")
-            }
-        }
         google()
         mavenCentral()
     }
@@ -61,4 +52,19 @@ include(":feature:interests")
 include(":feature:bookmarks")
 include(":feature:topic")
 include(":lint")
-include(":sync")
+include(":sync:work")
+include(":sync:sync-test")
+
+
+val prePushHook = file(".git/hooks/pre-push")
+val commitMsgHook = file(".git/hooks/commit-msg")
+val hooksInstalled = commitMsgHook.exists()
+    && prePushHook.exists()
+    && prePushHook.readBytes().contentEquals(file("tools/pre-push").readBytes())
+
+if (!hooksInstalled) {
+    exec {
+        commandLine("tools/setup.sh")
+        workingDir = rootProject.projectDir
+    }
+}

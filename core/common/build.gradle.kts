@@ -16,14 +16,14 @@
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
-    id("nowinandroid.spotless")
+    id("nowinandroid.android.hilt")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
 }
 
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
     testImplementation(project(":core:testing"))
 }

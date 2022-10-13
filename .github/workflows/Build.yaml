@@ -34,10 +34,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Check spotless
-        run: ./gradlew spotlessCheck --stacktrace
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache --stacktrace
 
       - name: Check lint
-        run: ./gradlew lintDebug --stacktrace
+        run: ./gradlew lintDemoDebug --stacktrace
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble --stacktrace
@@ -61,7 +61,7 @@ jobs:
   androidTest:
     needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 45
+    timeout-minutes: 55
     strategy:
       matrix:
         api-level: [23, 26, 30]

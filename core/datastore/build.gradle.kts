@@ -24,16 +24,15 @@ import com.google.protobuf.gradle.protoc
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("nowinandroid.android.hilt")
     alias(libs.plugins.protobuf)
-    id("nowinandroid.spotless")
 }
 
 android {
     defaultConfig {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
+    namespace = "com.google.samples.apps.nowinandroid.core.datastore"
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes
@@ -65,13 +64,4 @@ dependencies {
 
     implementation(libs.androidx.dataStore.core)
     implementation(libs.protobuf.kotlin.lite)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
-}
-
-// TODO b/239411851, Remove kapt workaround configuration
-kapt {
-    correctErrorTypes = true
 }

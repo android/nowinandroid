@@ -17,7 +17,10 @@ plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.compose")
     id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.spotless")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.ui"
 }
 
 dependencies {

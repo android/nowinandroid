@@ -116,7 +116,6 @@ class NiaPreferencesDataSource @Inject constructor(
             ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
                 authorVersion = it.authorChangeListVersion,
-                episodeVersion = it.episodeChangeListVersion,
                 newsResourceVersion = it.newsResourceChangeListVersion,
             )
         }
@@ -132,7 +131,6 @@ class NiaPreferencesDataSource @Inject constructor(
                     ChangeListVersions(
                         topicVersion = currentPreferences.topicChangeListVersion,
                         authorVersion = currentPreferences.authorChangeListVersion,
-                        episodeVersion = currentPreferences.episodeChangeListVersion,
                         newsResourceVersion = currentPreferences.newsResourceChangeListVersion
                     )
                 )
@@ -140,7 +138,6 @@ class NiaPreferencesDataSource @Inject constructor(
                 currentPreferences.copy {
                     topicChangeListVersion = updatedChangeListVersions.topicVersion
                     authorChangeListVersion = updatedChangeListVersions.authorVersion
-                    episodeChangeListVersion = updatedChangeListVersions.episodeVersion
                     newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
                 }
             }

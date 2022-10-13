@@ -31,7 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
@@ -45,6 +44,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
@@ -52,6 +52,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
@@ -66,13 +67,20 @@ fun NiaApp(
     appState: NiaAppState = rememberNiaAppState(windowSizeClass)
 ) {
     NiaTheme {
-        NiaBackground {
+        val background: @Composable (@Composable () -> Unit) -> Unit =
+            when (appState.currentDestination?.route) {
+                ForYouDestination.route -> { content -> NiaGradientBackground(content = content) }
+                else -> { content -> NiaBackground(content = content) }
+            }
+
+        background {
             Scaffold(
                 modifier = Modifier.semantics {
                     testTagsAsResourceId = true
                 },
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 bottomBar = {
                     if (appState.shouldShowBottomBar) {
                         NiaBottomBar(
@@ -158,42 +166,32 @@ private fun NiaBottomBar(
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?
 ) {
-    // Wrap the navigation bar in a surface so the color behind the system
-    // navigation is equal to the container color of the navigation bar.
-    Surface(color = MaterialTheme.colorScheme.surface) {
-        NiaNavigationBar(
-            modifier = Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(
-                    WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
-                )
+    NiaNavigationBar {
+        destinations.forEach { destination ->
+            val selected =
+                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+            NiaNavigationBarItem(
+                selected = selected,
+                onClick = { onNavigateToDestination(destination) },
+                icon = {
+                    val icon = if (selected) {
+                        destination.selectedIcon
+                    } else {
+                        destination.unselectedIcon
+                    }
+                    when (icon) {
+                        is ImageVectorIcon -> Icon(
+                            imageVector = icon.imageVector,
+                            contentDescription = null
+                        )
+                        is DrawableResourceIcon -> Icon(
+                            painter = painterResource(id = icon.id),
+                            contentDescription = null
+                        )
+                    }
+                },
+                label = { Text(stringResource(destination.iconTextId)) }
             )
-        ) {
-            destinations.forEach { destination ->
-                val selected =
-                    currentDestination?.hierarchy?.any { it.route == destination.route } == true
-                NiaNavigationBarItem(
-                    selected = selected,
-                    onClick = { onNavigateToDestination(destination) },
-                    icon = {
-                        val icon = if (selected) {
-                            destination.selectedIcon
-                        } else {
-                            destination.unselectedIcon
-                        }
-                        when (icon) {
-                            is ImageVectorIcon -> Icon(
-                                imageVector = icon.imageVector,
-                                contentDescription = null
-                            )
-                            is DrawableResourceIcon -> Icon(
-                                painter = painterResource(id = icon.id),
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    label = { Text(stringResource(destination.iconTextId)) }
-                )
-            }
         }
     }
 }

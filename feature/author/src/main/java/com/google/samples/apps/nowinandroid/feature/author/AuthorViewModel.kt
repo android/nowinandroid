@@ -62,7 +62,7 @@ class AuthorViewModel @Inject constructor(
             initialValue = AuthorUiState.Loading
         )
 
-    val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
+    val newsUiState: StateFlow<NewsUiState> = newsUiStateStream(
         authorId = authorId,
         userDataRepository = userDataRepository,
         newsRepository = newsRepository

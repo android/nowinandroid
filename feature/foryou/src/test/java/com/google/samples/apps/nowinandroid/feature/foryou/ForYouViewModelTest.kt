@@ -29,6 +29,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -49,6 +51,8 @@ class ForYouViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private val networkMonitor = TestNetworkMonitor()
+    private val syncStatusMonitor = TestSyncStatusMonitor()
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
@@ -58,6 +62,8 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
+            networkMonitor = networkMonitor,
+            syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
             topicsRepository = topicsRepository,
@@ -91,6 +97,21 @@ class ForYouViewModelTest {
 
         collectJob1.cancel()
         collectJob2.cancel()
+    }
+
+    @Test
+    fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
+        syncStatusMonitor.setSyncing(true)
+
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
+
+        assertEquals(
+            true,
+            viewModel.isSyncing.value
+        )
+
+        collectJob.cancel()
     }
 
     @Test
@@ -1369,6 +1390,21 @@ class ForYouViewModelTest {
         collectJob1.cancel()
         collectJob2.cancel()
     }
+
+    @Test
+    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isOffline.collect() }
+
+        networkMonitor.setConnected(false)
+
+        assertEquals(
+            true,
+            viewModel.isOffline.value
+        )
+
+        collectJob.cancel()
+    }
 }
 
 private val sampleAuthors = listOf(
@@ -1428,7 +1464,6 @@ private val sampleTopics = listOf(
 private val sampleNewsResources = listOf(
     NewsResource(
         id = "1",
-        episodeId = "52",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
             "Android Developers YouTube channel has to offer. During the Android Developer " +
@@ -1461,7 +1496,6 @@ private val sampleNewsResources = listOf(
     ),
     NewsResource(
         id = "2",
-        episodeId = "52",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed with Paging. " +
             "Transformations like inserting separators, when to create a new pager, and " +
@@ -1493,7 +1527,6 @@ private val sampleNewsResources = listOf(
     ),
     NewsResource(
         id = "3",
-        episodeId = "52",
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",
         url = "https://youtu.be/r5JgIyS3t3s",

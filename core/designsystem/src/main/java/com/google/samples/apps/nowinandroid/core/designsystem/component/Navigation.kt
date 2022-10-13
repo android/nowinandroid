@@ -88,7 +88,6 @@ fun NiaNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = NiaNavigationDefaults.NavigationContainerColor,
         contentColor = NiaNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
         content = content
@@ -155,7 +154,7 @@ fun NiaNavigationRail(
 ) {
     NavigationRail(
         modifier = modifier,
-        containerColor = NiaNavigationDefaults.NavigationContainerColor,
+        containerColor = Color.Transparent,
         contentColor = NiaNavigationDefaults.navigationContentColor(),
         header = header,
         content = content
@@ -166,7 +165,6 @@ fun NiaNavigationRail(
  * Now in Android navigation default values.
  */
 object NiaNavigationDefaults {
-    val NavigationContainerColor = Color.Transparent
     @Composable
     fun navigationContentColor() = MaterialTheme.colorScheme.onSurfaceVariant
     @Composable

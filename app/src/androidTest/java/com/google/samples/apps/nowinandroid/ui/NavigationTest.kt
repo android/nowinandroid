@@ -25,7 +25,8 @@ import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
-import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -70,11 +71,11 @@ class NavigationTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            done = getString(R.string.done)
-            navigateUp = getString(R.string.navigate_up)
-            forYouLoading = getString(R.string.for_you_loading)
-            forYou = getString(R.string.for_you)
-            interests = getString(R.string.interests)
+            done = getString(FeatureForyouR.string.done)
+            navigateUp = getString(FeatureForyouR.string.navigate_up)
+            forYouLoading = getString(FeatureForyouR.string.for_you_loading)
+            forYou = getString(FeatureForyouR.string.for_you)
+            interests = getString(FeatureInterestsR.string.interests)
             sampleTopic = "Headlines"
         }
     }

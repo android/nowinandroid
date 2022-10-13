@@ -15,9 +15,11 @@
  */
 plugins {
     id("nowinandroid.android.library")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
+    id("nowinandroid.android.hilt")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.datastore.test"
 }
 
 dependencies {
@@ -25,8 +27,4 @@ dependencies {
     implementation(project(":core:testing"))
 
     api(libs.androidx.dataStore.core)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
 }
