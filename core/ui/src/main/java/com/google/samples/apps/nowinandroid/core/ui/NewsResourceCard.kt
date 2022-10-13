@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -72,7 +73,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 
 /**
- * [NewsResource] card used on the following screens: For You, Episodes, Saved
+ * [NewsResource] card used on the following screens: For You, Saved
  */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,7 +136,7 @@ fun NewsResourceHeaderImage(
 ) {
     AsyncImage(
         placeholder = if (LocalInspectionMode.current) {
-            painterResource(R.drawable.ic_placeholder_default)
+            painterResource(DesignsystemR.drawable.ic_placeholder_default)
         } else {
             // TODO b/228077205, show specific loading image visual
             null

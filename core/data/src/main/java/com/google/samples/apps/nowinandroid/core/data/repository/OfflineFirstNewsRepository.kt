@@ -21,15 +21,12 @@ import com.google.samples.apps.nowinandroid.core.data.changeListSync
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.model.authorCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.authorEntityShells
-import com.google.samples.apps.nowinandroid.core.data.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.data.model.topicCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.topicEntityShells
 import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
-import com.google.samples.apps.nowinandroid.core.database.dao.EpisodeDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
@@ -47,7 +44,6 @@ import kotlinx.coroutines.flow.map
  */
 class OfflineFirstNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
-    private val episodeDao: EpisodeDao,
     private val authorDao: AuthorDao,
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
@@ -92,11 +88,6 @@ class OfflineFirstNewsRepository @Inject constructor(
                         .map(NetworkNewsResource::authorEntityShells)
                         .flatten()
                         .distinctBy(AuthorEntity::id)
-                )
-                episodeDao.insertOrIgnoreEpisodes(
-                    episodeEntities = networkNewsResources
-                        .map(NetworkNewsResource::episodeEntityShell)
-                        .distinctBy(EpisodeEntity::id)
                 )
                 newsResourceDao.upsertNewsResources(
                     newsResourceEntities = networkNewsResources

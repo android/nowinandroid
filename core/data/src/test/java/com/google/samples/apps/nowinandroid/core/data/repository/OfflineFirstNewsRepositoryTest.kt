@@ -20,21 +20,17 @@ import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.model.authorCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.authorEntityShells
-import com.google.samples.apps.nowinandroid.core.data.model.episodeEntityShell
 import com.google.samples.apps.nowinandroid.core.data.model.topicCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.topicEntityShells
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.CollectionType
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestAuthorDao
-import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestEpisodeDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNewsResourceDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestTopicDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.filteredInterestsIds
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.nonPresentInterestsIds
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.EpisodeEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
-import com.google.samples.apps.nowinandroid.core.database.model.PopulatedEpisode
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
@@ -57,8 +53,6 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var newsResourceDao: TestNewsResourceDao
 
-    private lateinit var episodeDao: TestEpisodeDao
-
     private lateinit var authorDao: TestAuthorDao
 
     private lateinit var topicDao: TestTopicDao
@@ -73,7 +67,6 @@ class OfflineFirstNewsRepositoryTest {
     @Before
     fun setup() {
         newsResourceDao = TestNewsResourceDao()
-        episodeDao = TestEpisodeDao()
         authorDao = TestAuthorDao()
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
@@ -85,7 +78,6 @@ class OfflineFirstNewsRepositoryTest {
 
         subject = OfflineFirstNewsRepository(
             newsResourceDao = newsResourceDao,
-            episodeDao = episodeDao,
             authorDao = authorDao,
             topicDao = topicDao,
             network = network,
@@ -284,21 +276,6 @@ class OfflineFirstNewsRepositoryTest {
                     .distinctBy(AuthorEntity::id),
                 authorDao.getAuthorEntitiesStream()
                     .first()
-            )
-        }
-
-    @Test
-    fun offlineFirstNewsRepository_sync_saves_shell_episode_entities() =
-        runTest {
-            subject.syncWith(synchronizer)
-
-            assertEquals(
-                network.getNewsResources()
-                    .map(NetworkNewsResource::episodeEntityShell)
-                    .distinctBy(EpisodeEntity::id),
-                episodeDao.getEpisodesStream()
-                    .first()
-                    .map(PopulatedEpisode::entity)
             )
         }
 

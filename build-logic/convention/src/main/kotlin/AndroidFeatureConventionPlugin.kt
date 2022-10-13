@@ -26,9 +26,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
+                apply("nowinandroid.android.library")
+                apply("nowinandroid.android.hilt")
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
@@ -58,9 +57,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
 
                 add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
-
-                add("implementation", libs.findLibrary("hilt.android").get())
-                add("kapt", libs.findLibrary("hilt.compiler").get())
             }
         }
     }

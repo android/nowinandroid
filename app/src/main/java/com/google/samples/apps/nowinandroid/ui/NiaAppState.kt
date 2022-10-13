@@ -110,7 +110,7 @@ class NiaAppState(
      * @param route: Optional route to navigate to in case the destination contains arguments.
      */
     fun navigate(destination: NiaNavigationDestination, route: String? = null) {
-        trace("Navigation: $destination") {
+        trace("Navigation: ${destination.route}") {
             if (destination is TopLevelDestination) {
                 navController.navigate(route ?: destination.route) {
                     // Pop up to the start destination of the graph to

@@ -22,7 +22,7 @@ import androidx.room.PrimaryKey
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 
 /**
- * Defines an author for either an [EpisodeEntity] or [NewsResourceEntity].
+ * Defines an author for [NewsResourceEntity].
  * It has a many to many relationship with both entities
  */
 @Entity(

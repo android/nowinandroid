@@ -17,7 +17,9 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -25,20 +27,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
@@ -54,12 +52,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -80,8 +82,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -105,7 +106,12 @@ fun ForYouRoute(
 ) {
     val interestsSelectionState by viewModel.interestsSelectionState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
+    val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()
+    val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
+
     ForYouScreen(
+        isOffline = isOffline,
+        isSyncing = isSyncing,
         interestsSelectionState = interestsSelectionState,
         feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
@@ -119,6 +125,8 @@ fun ForYouRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ForYouScreen(
+    isOffline: Boolean,
+    isSyncing: Boolean,
     interestsSelectionState: ForYouInterestsSelectionUiState,
     feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
@@ -127,102 +135,120 @@ fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    NiaGradientBackground {
-        Scaffold(
-            topBar = {
-                NiaTopAppBar(
-                    titleRes = R.string.top_app_bar_title,
-                    navigationIcon = NiaIcons.Search,
-                    navigationIconContentDescription = stringResource(
-                        id = R.string.for_you_top_app_bar_action_search
-                    ),
-                    actionIcon = NiaIcons.AccountCircle,
-                    actionIconContentDescription = stringResource(
-                        id = R.string.for_you_top_app_bar_action_my_account
-                    ),
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent
-                    ),
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                    )
-                )
-            },
-            containerColor = Color.Transparent
-        ) { innerPadding ->
-            // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-            // This code should be called when the UI is ready for use
-            // and relates to Time To Full Display.
-            val interestsLoaded =
-                interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-            val feedLoaded = feedState !is NewsFeedUiState.Loading
+    val snackbarHostState = remember { SnackbarHostState() }
 
-            if (interestsLoaded && feedLoaded) {
-                val localView = LocalView.current
-                // We use Unit to call reportFullyDrawn only on the first recomposition,
-                // however it will be called again if this composable goes out of scope.
-                // Activity.reportFullyDrawn() has its own check for this
-                // and is safe to call multiple times though.
-                LaunchedEffect(Unit) {
-                    // We're leveraging the fact, that the current view is directly set as content of Activity.
-                    val activity = localView.context as? Activity ?: return@LaunchedEffect
-                    // To be sure not to call in the middle of a frame draw.
-                    localView.doOnPreDraw { activity.reportFullyDrawn() }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            NiaTopAppBar(
+                titleRes = R.string.top_app_bar_title,
+                actionIcon = NiaIcons.AccountCircle,
+                actionIconContentDescription = stringResource(
+                    id = R.string.for_you_top_app_bar_action_my_account
+                ),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent
+                )
+            )
+        },
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { innerPadding ->
+        // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+        // This code should be called when the UI is ready for use
+        // and relates to Time To Full Display.
+        val interestsLoaded =
+            interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+        val feedLoaded = feedState !is NewsFeedUiState.Loading
+
+        if (interestsLoaded && feedLoaded) {
+            val localView = LocalView.current
+            // We use Unit to call reportFullyDrawn only on the first recomposition,
+            // however it will be called again if this composable goes out of scope.
+            // Activity.reportFullyDrawn() has its own check for this
+            // and is safe to call multiple times though.
+            LaunchedEffect(Unit) {
+                // We're leveraging the fact, that the current view is directly set as content of Activity.
+                val activity = localView.context as? Activity ?: return@LaunchedEffect
+                // To be sure not to call in the middle of a frame draw.
+                localView.doOnPreDraw { activity.reportFullyDrawn() }
+            }
+        }
+
+        val tag = "forYou:feed"
+
+        val lazyGridState = rememberLazyGridState()
+        TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
+
+        val notConnected = stringResource(R.string.for_you_not_connected)
+        LaunchedEffect(isOffline) {
+            if (isOffline) snackbarHostState.showSnackbar(
+                message = notConnected,
+                duration = Indefinite
+            )
+        }
+
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = modifier
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
+                .fillMaxSize()
+                .testTag("forYou:feed"),
+            state = lazyGridState
+        ) {
+            interestsSelection(
+                interestsSelectionState = interestsSelectionState,
+                onAuthorCheckedChanged = onAuthorCheckedChanged,
+                onTopicCheckedChanged = onTopicCheckedChanged,
+                saveFollowedTopics = saveFollowedTopics,
+                // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
+                // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
+                interestsItemModifier = Modifier.layout { measurable, constraints ->
+                    val placeable = measurable.measure(
+                        constraints.copy(
+                            maxWidth = constraints.maxWidth + 32.dp.roundToPx()
+                        )
+                    )
+                    layout(placeable.width, placeable.height) {
+                        placeable.place(0, 0)
+                    }
+                }
+            )
+
+            newsFeed(
+                feedState = feedState,
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+            )
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Add space for the content to clear the "offline" snackbar.
+                    if (isOffline) Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                 }
             }
-
-            val tag = "forYou:feed"
-
-            val lazyGridState = rememberLazyGridState()
-            TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
-
-            LazyVerticalGrid(
-                columns = Adaptive(300.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = modifier
+        }
+        AnimatedVisibility(
+            visible = isSyncing ||
+                feedState is NewsFeedUiState.Loading ||
+                interestsSelectionState is ForYouInterestsSelectionUiState.Loading
+        ) {
+            val loadingContentDescription = stringResource(id = R.string.for_you_loading)
+            Box(
+                modifier = Modifier
                     .padding(innerPadding)
                     .consumedWindowInsets(innerPadding)
-                    .fillMaxSize()
-                    .testTag("forYou:feed"),
-                state = lazyGridState
+                    .fillMaxWidth()
             ) {
-                interestsSelection(
-                    interestsSelectionState = interestsSelectionState,
-                    onAuthorCheckedChanged = onAuthorCheckedChanged,
-                    onTopicCheckedChanged = onTopicCheckedChanged,
-                    saveFollowedTopics = saveFollowedTopics,
-                    // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
-                    // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
-                    interestsItemModifier = Modifier.layout { measurable, constraints ->
-                        val placeable = measurable.measure(
-                            constraints.copy(
-                                maxWidth = constraints.maxWidth + 32.dp.roundToPx()
-                            )
-                        )
-                        layout(placeable.width, placeable.height) {
-                            placeable.place(0, 0)
-                        }
-                    }
+                NiaOverlayLoadingWheel(
+                    modifier = Modifier.align(Alignment.Center),
+                    contentDesc = loadingContentDescription
                 )
-
-                newsFeed(
-                    feedState = feedState,
-                    // Avoid showing a second loading wheel if we already are for the interests
-                    // selection
-                    showLoadingUIIfLoading =
-                    interestsSelectionState !is ForYouInterestsSelectionUiState.Loading,
-                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-                    loadingContentDescription = R.string.for_you_loading
-                )
-
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                    }
-                }
             }
         }
     }
@@ -232,9 +258,6 @@ fun ForYouScreen(
  * An extension on [LazyListScope] defining the interests selection portion of the for you screen.
  * Depending on the [interestsSelectionState], this might emit no items.
  *
- * @param showLoaderWhenLoading if true, show a visual indication of loading if the
- * [interestsSelectionState] is loading. This is controllable to permit du-duplicating loading
- * states.
  */
 private fun LazyGridScope.interestsSelection(
     interestsSelectionState: ForYouInterestsSelectionUiState,
@@ -244,17 +267,8 @@ private fun LazyGridScope.interestsSelection(
     interestsItemModifier: Modifier = Modifier
 ) {
     when (interestsSelectionState) {
-        ForYouInterestsSelectionUiState.Loading -> {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                NiaLoadingWheel(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize()
-                        .testTag("forYou:loading"),
-                    contentDesc = stringResource(id = R.string.for_you_loading),
-                )
-            }
-        }
+        ForYouInterestsSelectionUiState.Loading,
+        ForYouInterestsSelectionUiState.LoadFailed,
         ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
         is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -427,6 +441,31 @@ fun ForYouScreenPopulatedFeed() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
+                isOffline = false,
+                isSyncing = false,
+                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                feedState = NewsFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@DevicePreviews
+@Composable
+fun ForYouScreenOfflinePopulatedFeed() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                isOffline = true,
+                isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
@@ -448,6 +487,8 @@ fun ForYouScreenTopicSelection() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
+                isOffline = false,
+                isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
                     topics = previewTopics.map { FollowableTopic(it, false) },
                     authors = previewAuthors.map { FollowableAuthor(it, false) }
@@ -472,8 +513,33 @@ fun ForYouScreenLoading() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
+                isOffline = false,
+                isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
+                onTopicCheckedChanged = { _, _ -> },
+                onAuthorCheckedChanged = { _, _ -> },
+                saveFollowedTopics = {},
+                onNewsResourcesCheckedChanged = { _, _ -> }
+            )
+        }
+    }
+}
+
+@DevicePreviews
+@Composable
+fun ForYouScreenPopulatedAndLoading() {
+    BoxWithConstraints {
+        NiaTheme {
+            ForYouScreen(
+                isOffline = false,
+                isSyncing = true,
+                interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                feedState = NewsFeedUiState.Success(
+                    feed = previewNewsResources.map {
+                        SaveableNewsResource(it, false)
+                    }
+                ),
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},

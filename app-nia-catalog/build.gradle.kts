@@ -16,7 +16,6 @@
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
-    id("nowinandroid.spotless")
 }
 
 android {
@@ -33,6 +32,7 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+    namespace = "com.google.samples.apps.niacatalog"
 }
 
 dependencies {

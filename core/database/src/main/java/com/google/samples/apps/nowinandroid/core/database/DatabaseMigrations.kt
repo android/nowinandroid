@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
+import androidx.room.DeleteColumn
+import androidx.room.DeleteTable
 import androidx.room.RenameColumn
 import androidx.room.migration.AutoMigrationSpec
 
@@ -26,7 +28,7 @@ import androidx.room.migration.AutoMigrationSpec
  * from and Y is the schema version you're migrating to. The class should implement
  * `AutoMigrationSpec`.
  */
-class DatabaseMigrations {
+object DatabaseMigrations {
 
     @RenameColumn(
         tableName = "topics",
@@ -34,4 +36,18 @@ class DatabaseMigrations {
         toColumnName = "shortDescription"
     )
     class Schema2to3 : AutoMigrationSpec
+
+    @DeleteColumn(
+        tableName = "news_resources",
+        columnName = "episode_id"
+    )
+    @DeleteTable.Entries(
+        DeleteTable(
+            tableName = "episodes_authors"
+        ),
+        DeleteTable(
+            tableName = "episodes"
+        )
+    )
+    class Schema10to11 : AutoMigrationSpec
 }

@@ -20,8 +20,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -56,12 +56,8 @@ interface AuthorDao {
     /**
      * Inserts or updates [entities] in the db under the specified primary keys
      */
-    @Transaction
-    suspend fun upsertAuthors(entities: List<AuthorEntity>) = upsert(
-        items = entities,
-        insertMany = ::insertOrIgnoreAuthors,
-        updateMany = ::updateAuthors
-    )
+    @Upsert
+    suspend fun upsertAuthors(entities: List<AuthorEntity>)
 
     /**
      * Deletes rows in the db matching the specified [ids]

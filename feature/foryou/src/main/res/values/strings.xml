@@ -16,7 +16,6 @@
 -->
 <resources>
     <string name="for_you">For you</string>
-    <string name="episodes">Episodes</string>
     <string name="done">Done</string>
     <string name="for_you_loading">Loading for you…</string>
     <string name="navigate_up">Navigate up</string>
@@ -25,6 +24,7 @@
     <string name="top_app_bar_title">Now in Android</string>
     <string name="for_you_top_app_bar_action_my_account">My account</string>
     <string name="for_you_top_app_bar_action_search">Search</string>
+    <string name="for_you_not_connected">⚠️ You aren’t connected to the internet</string>
 
     <!-- Authors-->
     <string name="following">You are following</string>

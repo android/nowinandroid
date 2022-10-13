@@ -16,10 +16,12 @@
 plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
+    id("nowinandroid.android.hilt")
     id("kotlinx-serialization")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.data"
 }
 
 dependencies {
@@ -32,10 +34,9 @@ dependencies {
     testImplementation(project(":core:testing"))
     testImplementation(project(":core:datastore-test"))
 
+    implementation(libs.androidx.core.ktx)
+
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 }

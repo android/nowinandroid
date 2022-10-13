@@ -30,20 +30,12 @@ class PopulatedNewsResourceKtTest {
         val populatedNewsResource = PopulatedNewsResource(
             entity = NewsResourceEntity(
                 id = "1",
-                episodeId = "0",
                 title = "news",
                 content = "Hilt",
                 url = "url",
                 headerImageUrl = "headerImageUrl",
                 type = Video,
                 publishDate = Instant.fromEpochMilliseconds(1),
-            ),
-            episode = EpisodeEntity(
-                id = "4",
-                name = "episode 4",
-                publishDate = Instant.fromEpochMilliseconds(2),
-                alternateAudio = "audio",
-                alternateVideo = "video",
             ),
             authors = listOf(
                 AuthorEntity(
@@ -71,7 +63,6 @@ class PopulatedNewsResourceKtTest {
         assertEquals(
             NewsResource(
                 id = "1",
-                episodeId = "0",
                 title = "news",
                 content = "Hilt",
                 url = "url",

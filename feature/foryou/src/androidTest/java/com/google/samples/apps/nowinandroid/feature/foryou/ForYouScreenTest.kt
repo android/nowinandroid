@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -54,8 +53,34 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
+                    onTopicCheckedChanged = { _, _ -> },
+                    onAuthorCheckedChanged = { _, _ -> },
+                    saveFollowedTopics = {},
+                    onNewsResourcesCheckedChanged = { _, _ -> }
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(
+                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+            )
+            .assertExists()
+    }
+
+    @Test
+    fun circularProgressIndicator_whenScreenIsSyncing_exists() {
+        composeTestRule.setContent {
+            BoxWithConstraints {
+                ForYouScreen(
+                    isOffline = false,
+                    isSyncing = true,
+                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                    feedState = NewsFeedUiState.Success(emptyList()),
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -76,6 +101,8 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = testTopics,
@@ -124,6 +151,8 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         // Follow one topic
@@ -175,6 +204,8 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         // Follow one topic
@@ -226,6 +257,8 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
                         topics = testTopics,
@@ -240,16 +273,6 @@ class ForYouScreenTest {
             }
         }
 
-        // Scroll until the loading indicator is visible
-        composeTestRule
-            .onAllNodes(hasScrollToNodeAction())
-            .onFirst()
-            .performScrollToNode(
-                hasContentDescription(
-                    composeTestRule.activity.resources.getString(R.string.for_you_loading)
-                )
-            )
-
         composeTestRule
             .onNodeWithContentDescription(
                 composeTestRule.activity.resources.getString(R.string.for_you_loading)
@@ -262,6 +285,8 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
+                    isOffline = false,
+                    isSyncing = false,
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
@@ -271,16 +296,6 @@ class ForYouScreenTest {
                 )
             }
         }
-
-        // Scroll until the loading indicator is visible
-        composeTestRule
-            .onAllNodes(hasScrollToNodeAction())
-            .onFirst()
-            .performScrollToNode(
-                hasContentDescription(
-                    composeTestRule.activity.resources.getString(R.string.for_you_loading)
-                )
-            )
 
         composeTestRule
             .onNodeWithContentDescription(
@@ -293,6 +308,8 @@ class ForYouScreenTest {
     fun feed_whenNoInterestsSelectionAndLoaded_showsFeed() {
         composeTestRule.setContent {
             ForYouScreen(
+                isOffline = false,
+                isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {

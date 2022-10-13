@@ -2,18 +2,19 @@
 accompanist = "0.24.8-beta"
 androidDesugarJdkLibs = "1.1.5"
 androidGradlePlugin = "7.3.0"
-androidxActivity = "1.5.1"
+androidxActivity = "1.6.0"
 androidxAppCompat = "1.5.1"
 androidxCompose = "1.3.0-beta02"
 androidxComposeRuntimeTracing = "1.0.0-alpha01"
-androidxComposeCompiler = "1.3.1"
-androidxComposeMaterial3 = "1.0.0-alpha13"
+androidxComposeCompiler = "1.3.2"
+androidxComposeMaterial3 = "1.0.0-beta03"
 androidxCore = "1.9.0"
 androidxCoreSplashscreen = "1.0.0"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.4.0"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.6.0-alpha02"
+# Skipping version 2.6.0-alpha02 due to https://issuetracker.google.com/249686765
+androidxLifecycle = "2.6.0-alpha01"
 androidxMacroBenchmark = "1.1.0"
 androidxNavigation = "2.5.2"
 androidxMetrics = "1.0.0-alpha03"
@@ -27,26 +28,24 @@ androidxTestRules = "1.4.0"
 androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
 androidxWork = "2.7.1"
-coil = "2.1.0"
+coil = "2.2.1"
 hilt = "2.42"
 hiltExt = "1.0.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
-kotlin = "1.7.10"
+kotlin = "1.7.20"
 kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.4.0"
-ksp = "1.7.10-1.0.6"
-ktlint = "0.43.0"
+ksp = "1.7.20-1.0.6"
 lint = "30.2.2"
 okhttp = "4.10.0"
 protobuf = "3.21.5"
 protobufPlugin = "0.8.19"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "0.8.0"
-room = "2.4.3"
+room = "2.5.0-alpha03"
 secrets = "2.0.1"
-spotless = "6.7.2"
 turbine = "0.8.0"
 
 [libraries]
@@ -73,6 +72,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
@@ -118,7 +118,6 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -130,4 +129,3 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

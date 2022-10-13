@@ -19,7 +19,6 @@ import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
     id("nowinandroid.android.test")
-    id("nowinandroid.spotless")
 }
 
 android {
@@ -28,6 +27,10 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
