@@ -18,3 +18,6 @@ plugins {
     id("nowinandroid.android.library.compose")
     id("nowinandroid.android.library.jacoco")
 }
+android {
+    namespace = "com.google.samples.apps.nowinandroid.feature.interests"
+}

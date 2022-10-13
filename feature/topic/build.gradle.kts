@@ -19,6 +19,10 @@ plugins {
     id("nowinandroid.android.library.jacoco")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.feature.topic"
+}
+
 dependencies {
     implementation(libs.kotlinx.datetime)
 }
