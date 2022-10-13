@@ -25,9 +25,9 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsTabState

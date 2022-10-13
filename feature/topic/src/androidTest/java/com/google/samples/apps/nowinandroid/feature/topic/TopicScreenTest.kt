@@ -24,10 +24,10 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
 import org.junit.Before

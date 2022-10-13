@@ -57,8 +57,8 @@ import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 
 @Composable

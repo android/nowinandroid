@@ -29,8 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 
 @Composable
 fun TopicsTabContent(
