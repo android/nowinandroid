@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
+@file:OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class,
+    ExperimentalComposeUiApi::class, ExperimentalMaterial3WindowSizeClassApi::class
+)
+
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,15 +39,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass.Companion
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
@@ -52,15 +65,20 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import com.google.samples.apps.nowinandroid.core.ui.ReferenceDevicePreviews
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouInterestsSelectionUiState.WithInterestsSelection
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class
-)
 @Composable
 fun NiaApp(
     windowSizeClass: WindowSizeClass,
@@ -109,14 +127,41 @@ fun NiaApp(
                         )
                     }
 
-                    NiaNavHost(
-                        navController = appState.navController,
-                        onBackClick = appState::onBackClick,
-                        onNavigateToDestination = appState::navigate,
-                        modifier = Modifier
-                            .padding(padding)
-                            .consumedWindowInsets(padding)
-                    )
+                    if(!LocalInspectionMode.current)
+                    {
+                        NiaNavHost(
+                            navController = appState.navController,
+                            onBackClick = appState::onBackClick,
+                            onNavigateToDestination = appState::navigate,
+                            modifier = Modifier
+                                .padding(padding)
+                                .consumedWindowInsets(padding)
+                        )
+                    }
+                    else
+                    {
+                        BoxWithConstraints {
+                            NiaTheme {
+                                ForYouScreen(
+                                    isOffline = false,
+                                    isSyncing = false,
+                                    interestsSelectionState = WithInterestsSelection(
+                                        topics = previewTopics.map { FollowableTopic(it, false) },
+                                        authors = previewAuthors.map { FollowableAuthor(it, false) }
+                                    ),
+                                    feedState = Success(
+                                        feed = previewNewsResources.map {
+                                            SaveableNewsResource(it, false)
+                                        }
+                                    ),
+                                    onTopicCheckedChanged = { _, _ -> },
+                                    onAuthorCheckedChanged = { _, _ -> },
+                                    saveFollowedTopics = {},
+                                    onNewsResourcesCheckedChanged = { _, _ -> }
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -194,4 +239,12 @@ private fun NiaBottomBar(
             )
         }
     }
+}
+@ReferenceDevicePreviews
+@Composable
+fun NiaAppLayoutPreview(){
+    val widthDp = Dp(LocalConfiguration.current.screenWidthDp.toFloat())
+    val heightDp = Dp(LocalConfiguration.current.screenHeightDp.toFloat())
+    val windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(widthDp, heightDp))
+    NiaApp(windowSizeClass = windowSizeClass)
 }

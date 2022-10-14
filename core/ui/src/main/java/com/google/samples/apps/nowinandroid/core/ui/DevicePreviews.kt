@@ -19,6 +19,15 @@ package com.google.samples.apps.nowinandroid.core.ui
 import androidx.compose.ui.tooling.preview.Preview
 
 /**
+ * Multipreview annotation the maps to the Android Studio reference devices.
+ */
+@Preview(name = "1_phone", device = Devices.PHONE)
+@Preview(name = "2_foldable", device = Devices.FOLDABLE)
+@Preview(name = "3_tablet", device = Devices.TABLET)
+@Preview(name = "4_desktop", device = Devices.DESKTOP)
+annotation class ReferenceDevicePreviews
+
+/**
  * Multipreview annotation that represents various device sizes. Add this annotation to a composable
  * to render various devices.
  */

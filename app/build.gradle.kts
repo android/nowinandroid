@@ -86,6 +86,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:model"))
 
     implementation(project(":sync:work"))
     implementation(project(":sync:sync-test"))
