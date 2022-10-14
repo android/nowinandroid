@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
@@ -59,6 +60,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -91,9 +93,12 @@ internal fun AuthorScreen(
     onBookmarkChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scrollableState = rememberLazyListState()
+    TrackScrollJank(scrollableState = scrollableState, stateName = "author:column")
     LazyColumn(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        state = scrollableState
     ) {
         item {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
