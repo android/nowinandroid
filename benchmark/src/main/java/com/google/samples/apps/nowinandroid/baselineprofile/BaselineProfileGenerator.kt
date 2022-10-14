@@ -47,26 +47,26 @@ class BaselineProfileGenerator {
             startActivityAndWait()
 
             // Scroll the feed critical user journey
-            forYouWaitForContent()
-            forYouSelectAuthors()
-            forYouScrollFeedDownUp()
-
-            // Navigate to saved screen
-            device.findObject(By.text("Saved")).click()
-            device.waitForIdle()
-
-            bookmarksScrollFeedDownUp()
-
-            // Navigate to interests screen
-            device.findObject(By.text("Interests")).click()
-            device.waitForIdle()
-
-            interestsScrollTopicsDownUp()
-
-            // Navigate to people tab
-            device.findObject(By.text("People")).click()
-            device.waitForIdle()
-
-            interestsScrollPeopleDownUp()
+//            forYouWaitForContent()
+//            forYouSelectAuthors()
+//            forYouScrollFeedDownUp()
+//
+//            // Navigate to saved screen
+//            device.findObject(By.text("Saved")).click()
+//            device.waitForIdle()
+//
+//            bookmarksScrollFeedDownUp()
+//
+//            // Navigate to interests screen
+//            device.findObject(By.text("Interests")).click()
+//            device.waitForIdle()
+//
+//            interestsScrollTopicsDownUp()
+//
+//            // Navigate to people tab
+//            device.findObject(By.text("People")).click()
+//            device.waitForIdle()
+//
+//            interestsScrollPeopleDownUp()
         }
 }

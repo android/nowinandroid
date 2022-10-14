@@ -16,10 +16,14 @@
 
 package com.google.samples.apps.nowinandroid
 
-import com.google.samples.apps.nowinandroid.benchmark.BuildConfig
+import com.google.samples.apps.nowinandroid.benchmarking.BuildConfig
 
 /**
  * Convenience parameter to use proper package name with regards to build type and build flavor.
  */
-const val PACKAGE_NAME =
+val PACKAGE_NAME = if (BuildConfig.FLAVOR_contentType == "demo") {
     "com.google.samples.apps.nowinandroid.${BuildConfig.FLAVOR}.${BuildConfig.BUILD_TYPE}"
+} else {
+    "com.google.samples.apps.nowinandroid.${BuildConfig.BUILD_TYPE}"
+}
+

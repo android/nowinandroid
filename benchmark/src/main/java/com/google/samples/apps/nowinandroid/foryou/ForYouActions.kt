@@ -27,16 +27,20 @@ fun MacrobenchmarkScope.forYouWaitForContent() {
 }
 
 fun MacrobenchmarkScope.forYouSelectAuthors() {
+    device.wait(Until.hasObject(By.res("forYou:authors")), 5_000)
     val authors = device.findObject(By.res("forYou:authors"))
     // select some authors to show some feed content
     repeat(3) { index ->
-        val author = authors.children[index % authors.childCount]
-        author.click()
+        if (authors.childCount != 0) {
+            val author = authors.children[index % authors.childCount]
+            author.click()
+        }
         device.waitForIdle()
     }
 }
 
 fun MacrobenchmarkScope.forYouScrollFeedDownUp() {
+    device.wait(Until.hasObject(By.res("forYou:feed")), 5_000)
     val feedList = device.findObject(By.res("forYou:feed"))
     feedList.fling(Direction.DOWN)
     device.waitForIdle()
