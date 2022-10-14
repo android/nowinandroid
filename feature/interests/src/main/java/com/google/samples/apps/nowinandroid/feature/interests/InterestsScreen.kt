@@ -41,7 +41,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.JankMetricDisposableEffect
+import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -65,7 +65,7 @@ fun InterestsRoute(
         modifier = modifier
     )
 
-    JankMetricDisposableEffect(tabState) { metricsHolder ->
+    TrackDisposableJank(tabState) { metricsHolder ->
         metricsHolder.state?.putState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
 
         onDispose {
