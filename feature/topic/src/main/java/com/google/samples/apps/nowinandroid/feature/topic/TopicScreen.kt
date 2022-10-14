@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -56,6 +57,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResour
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
@@ -90,7 +92,10 @@ internal fun TopicScreen(
     onBookmarkChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val state = rememberLazyListState()
+    TrackScrollJank(scrollableState = state, stateName = "topic:screen")
     LazyColumn(
+        state = state,
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

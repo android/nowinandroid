@@ -175,10 +175,8 @@ fun ForYouScreen(
             }
         }
 
-        val tag = "forYou:feed"
-
-        val lazyGridState = rememberLazyGridState()
-        TrackScrollJank(scrollableState = lazyGridState, stateName = tag)
+        val state = rememberLazyGridState()
+        TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
         val notConnected = stringResource(R.string.for_you_not_connected)
         LaunchedEffect(isOffline) {
@@ -198,7 +196,7 @@ fun ForYouScreen(
                 .consumedWindowInsets(innerPadding)
                 .fillMaxSize()
                 .testTag("forYou:feed"),
-            state = lazyGridState
+            state = state
         ) {
             interestsSelection(
                 interestsSelectionState = interestsSelectionState,
