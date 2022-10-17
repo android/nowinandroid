@@ -1,100 +1,89 @@
-name: Build
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
-
+name: Run Gradle on PRs
+on: pull_request
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+    prBranch:
+        timeout-minutes: 300
+        strategy:
+            matrix:
+                variant: [pr, main]
+                os: [ubuntu-latest]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-java@v3
+              with:
+                  distribution: temurin
+                  java-version: 11
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+            - uses: sdkman/sdkman-action@master
+              id: sdkman
+              with:
+                  candidate: gradleprofiler
+                  version: 0.19.0
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+            - name: Setup Gradle
+              uses: gradle/gradle-build-action@v2
+            - name: Execute Gradle build
+              env:
+                  GE_URL: ${{ secrets.GE_URL }}
+                  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+              run: |
+                  if [ "${{ matrix.variant }}" == "main" ]; then
+                    git fetch origin
+                    git checkout main
+                  fi
+                  unzip  ${{ steps.sdkman.outputs.file }}
+                  echo $'assemble { \n title= "assemble" \n tasks = ["assembleDebug"] \n cleanup-tasks = ["clean"] \n  apply-abi-change-to = ["core/data/src/main/java/com/google/samples/apps/nowinandroid/core/data/repository/NewsRepository.kt"] \n gradle-args = ["-Dscan.tag.${{ matrix.variant }}", "-Dscan.tag.experiment", "-Dscan.tag.${{github.run_number}}"] \n}' >scenario
+                  gradle-profiler-0.19.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups 1 --iterations 4
 
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties        
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 11
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache --stacktrace
-
-      - name: Check lint
-        run: ./gradlew lintDemoDebug --stacktrace
-
-      - name: Build all build type and flavor permutations
-        run: ./gradlew assemble --stacktrace
-
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug --stacktrace
-
-      - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-outputs
-          path: app/build/outputs
-
-      - name: Upload build reports
+    geapi:
+        timeout-minutes: 300
+        runs-on: ubuntu-latest
+        needs: [ prBranch]
         if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-reports
-          path: app/build/reports
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-java@v3
+              with:
+                  distribution: zulu
+                  java-version: 11.0.4
 
-  androidTest:
-    needs: build
-    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 55
-    strategy:
-      matrix:
-        api-level: [23, 26, 30]
+            - name: Setup Gradle
+              uses: gradle/gradle-build-action@v2
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+            - name: Execute Gradle build
+              id : geapix
+              env:
+                  GE_URL: ${{ secrets.GE_URL }}
+                  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+                  GRADLE_API_KEY: ${{ secrets.GE_API_KEY }}
+              run: |
+                  mkdir geapi
+                  cd geapi
+                  git clone https://github.com/cdsap/GradleEnterpriseApiReports.git
+                  cd GradleEnterpriseApiReports
+                  git checkout experiment_draft
+                  ./gradlew install
+                  geapi/build/install/geapi/bin/geapi --report=experiment --api-key=$GRADLE_API_KEY --url=https://ge.solutions-team.gradle.com  --task=assembleDebug --max-builds=100  --tags=main --tags=experiment --tags=pr --tags=${{github.run_number}} --experiment-id=${{github.run_number}} --project=nowinandroid > alo
+                  awk '/Processing build scan cache performance/ {p=1;next}; p==1 {print}' alo > alo2
+                  CA=""
+                  while IFS= read -r line
+                  do
+                     CA="${CA}\n$line"
+                  done < alo2
+                  echo ${CA}
+                  echo "::set-output name=test::$CA"
+            - name: Send
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{secrets.GITHUB_TOKEN}}
+                  script: |
+                      const comment = '```${{ steps.geapix.outputs.test }}';
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: comment
+                      })
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 11
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          disk-size: 2000M
-          heap-size: 600M
-          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-reports-${{ matrix.api-level }}
-          path: '*/build/reports/androidTests'
