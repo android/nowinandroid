@@ -18,8 +18,6 @@ package com.google.samples.apps.nowinandroid.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import com.google.protobuf.kotlin.DslList
-import com.google.protobuf.kotlin.DslProxy
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
