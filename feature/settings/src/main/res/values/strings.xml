@@ -15,8 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="follow">Follow</string>
-    <string name="unfollow">Unfollow</string>
-    <string name="browse_topic">Browse topic</string>
-    <string name="screen_title">Screen title</string>
+    <string name="top_app_bar_action_icon_description">Settings</string>
 </resources>

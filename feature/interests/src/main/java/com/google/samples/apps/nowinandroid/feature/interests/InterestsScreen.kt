@@ -19,12 +19,10 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -33,8 +31,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackg
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
@@ -90,16 +86,6 @@ internal fun InterestsScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NiaTopAppBar(
-            titleRes = R.string.interests,
-            actionIcon = NiaIcons.MoreVert,
-            actionIconContentDescription = stringResource(
-                id = R.string.interests_top_app_bar_action_menu
-            ),
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent
-            )
-        )
         when (uiState) {
             InterestsUiState.Loading ->
                 NiaLoadingWheel(

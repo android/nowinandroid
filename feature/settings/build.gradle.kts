@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-
-        // Android Build Server
-        maven { url = uri("../nowinandroid-prebuilts/m2repository") }
-    }
-
+plugins {
+    id("nowinandroid.android.feature")
+    id("nowinandroid.android.library.compose")
+    id("nowinandroid.android.library.jacoco")
 }
 
-plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.kotlin.serialization) apply false
-    alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.secrets) apply false
-    id("org.jetbrains.kotlin.android") version "1.7.10" apply false
+android {
+    namespace = "com.google.samples.apps.nowinandroid.feature.settings"
 }

@@ -40,6 +40,7 @@ message UserPreferences {
     map<string, bool> followed_topic_ids = 13;
     map<string, bool> followed_author_ids = 14;
     map<string, bool> bookmarked_news_resource_ids = 15;
-    ThemeBrandProto theme_brand = 12;
-    DarkThemeConfigProto dark_theme_config = 13;
+
+    ThemeBrandProto theme_brand = 16;
+    DarkThemeConfigProto dark_theme_config = 17;
 }

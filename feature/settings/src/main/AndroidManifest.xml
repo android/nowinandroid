@@ -14,9 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <string name="follow">Follow</string>
-    <string name="unfollow">Unfollow</string>
-    <string name="browse_topic">Browse topic</string>
-    <string name="screen_title">Screen title</string>
-</resources>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+</manifest>
