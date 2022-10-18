@@ -22,7 +22,6 @@
     <string name="onboarding_guidance_title">What are you interested in?</string>
     <string name="onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
     <string name="top_app_bar_title">Now in Android</string>
-    <string name="for_you_top_app_bar_action_my_account">My account</string>
     <string name="for_you_top_app_bar_action_search">Search</string>
     <string name="for_you_not_connected">⚠️ You aren’t connected to the internet</string>
 

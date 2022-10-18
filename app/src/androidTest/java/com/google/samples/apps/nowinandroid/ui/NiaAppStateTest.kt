@@ -88,6 +88,19 @@ class NiaAppStateTest {
     }
 
     @Test
+    fun niaAppState_showTopBarForTopLevelDestinations() {
+        composeTestRule.setContent {
+            val navController = rememberTestNavController()
+            state = rememberNiaAppState(
+                windowSizeClass = getCompactWindowClass(),
+                navController = navController
+            )
+
+            // Do nothing - we should already be
+        }
+    }
+
+    @Test
     fun niaAppState_showBottomBar_compact() {
         composeTestRule.setContent {
             state = NiaAppState(

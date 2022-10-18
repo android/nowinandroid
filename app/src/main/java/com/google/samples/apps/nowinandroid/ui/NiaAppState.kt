@@ -59,6 +59,9 @@ class NiaAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
+    val shouldShowTopBar: Boolean
+        @Composable get() = (currentDestination?.route in topLevelDestinations)
+
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
             windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
@@ -67,7 +70,8 @@ class NiaAppState(
         get() = !shouldShowBottomBar
 
     /**
-     * Top level destinations to be used in the BottomBar and NavRail
+     * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
+     * route.
      */
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 

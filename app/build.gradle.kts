@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
     implementation(project(":feature:topic"))
+    implementation(project(":feature:settings"))
 
     implementation(project(":core:common"))
     implementation(project(":core:ui"))

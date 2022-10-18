@@ -32,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -49,8 +50,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRailItem
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
@@ -78,6 +82,22 @@ fun NiaApp(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            topBar = {
+                val destination = appState.topLevelDestinations[appState.currentDestination?.route]
+                if (appState.shouldShowTopBar && destination != null) {
+                    NiaTopAppBar(
+                        titleRes = destination.titleTextId,
+                        actionIcon = NiaIcons.Settings,
+                        actionIconContentDescription = stringResource(
+                            id = settingsR.string.top_app_bar_action_icon_description
+                        ),
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent
+                        ),
+                        onActionClick = { /*openAccountDialog = true*/ }
+                    )
+                }
+            },
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     NiaBottomBar(
