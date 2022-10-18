@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.data
+package com.google.samples.apps.nowinandroid.core.domain.model
+
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
 /**
  * A [NewsResource] with the additional information for whether it is saved.

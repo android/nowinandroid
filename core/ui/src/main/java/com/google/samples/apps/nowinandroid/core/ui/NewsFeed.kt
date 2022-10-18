@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 
 /**
@@ -112,7 +112,10 @@ fun NewsFeedContentPreview() {
             newsFeed(
                 feedState = NewsFeedUiState.Success(
                     previewNewsResources.map {
-                        SaveableNewsResource(it, false)
+                        SaveableNewsResource(
+                            it,
+                            false
+                        )
                     }
                 ),
                 onNewsResourcesCheckedChanged = { _, _ -> }

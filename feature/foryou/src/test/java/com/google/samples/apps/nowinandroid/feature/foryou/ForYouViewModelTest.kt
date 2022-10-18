@@ -17,12 +17,15 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.lifecycle.SavedStateHandle
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
@@ -57,6 +60,17 @@ class ForYouViewModelTest {
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
+    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+        newsRepository = newsRepository,
+        userDataRepository = userDataRepository
+    )
+    private val getSortedFollowableAuthorsStream = GetSortedFollowableAuthorsStreamUseCase(
+        authorsRepository = authorsRepository
+    )
+    private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
+        topicsRepository = topicsRepository,
+        userDataRepository = userDataRepository
+    )
     private lateinit var viewModel: ForYouViewModel
 
     @Before
@@ -65,9 +79,9 @@ class ForYouViewModelTest {
             networkMonitor = networkMonitor,
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            authorsRepository = authorsRepository,
-            topicsRepository = topicsRepository,
-            newsRepository = newsRepository,
+            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase,
+            getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream,
+            getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
             savedStateHandle = SavedStateHandle()
         )
     }
@@ -76,7 +90,7 @@ class ForYouViewModelTest {
     fun stateIsInitiallyLoading() = runTest {
         assertEquals(
             ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
     }
@@ -84,14 +98,14 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenFollowedTopicsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
         assertEquals(
             ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -117,14 +131,14 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenFollowedAuthorsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         authorsRepository.sendAuthors(sampleAuthors)
 
         assertEquals(
             ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -135,14 +149,14 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenTopicsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
 
         assertEquals(
             ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
@@ -153,14 +167,14 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenAuthorsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         userDataRepository.setFollowedAuthorIds(emptySet())
 
         assertEquals(
             ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
@@ -171,7 +185,7 @@ class ForYouViewModelTest {
     @Test
     fun stateIsInterestsSelectionWhenNewsResourcesAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -252,7 +266,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -268,7 +282,7 @@ class ForYouViewModelTest {
     @Test
     fun stateIsInterestsSelectionAfterLoadingEmptyFollowedTopicsAndAuthors() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -350,7 +364,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -367,7 +381,7 @@ class ForYouViewModelTest {
     @Test
     fun stateIsWithoutInterestsSelectionAfterLoadingFollowedTopics() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         authorsRepository.sendAuthors(sampleAuthors)
@@ -377,7 +391,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -385,7 +399,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -407,7 +421,7 @@ class ForYouViewModelTest {
     @Test
     fun stateIsWithoutInterestsSelectionAfterLoadingFollowedAuthors() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         authorsRepository.sendAuthors(sampleAuthors)
@@ -417,7 +431,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Loading,
@@ -428,7 +442,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -449,7 +463,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterSelectingTopic() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -531,7 +545,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -615,7 +629,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -640,7 +654,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterSelectingAuthor() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -722,7 +736,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -806,7 +820,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -831,7 +845,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterUnselectingTopic() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -916,7 +930,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -932,7 +946,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterUnselectingAuthor() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1017,7 +1031,7 @@ class ForYouViewModelTest {
                     )
                 ),
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1033,7 +1047,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterSavingTopicsOnly() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1047,7 +1061,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1074,7 +1088,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterSavingAuthorsOnly() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1088,7 +1102,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1111,7 +1125,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterSavingAuthorsAndTopics() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1126,7 +1140,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1153,7 +1167,7 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionIsResetAfterSavingTopicsAndRemovingThem() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1239,7 +1253,7 @@ class ForYouViewModelTest {
                     )
                 )
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1255,7 +1269,7 @@ class ForYouViewModelTest {
     @Test
     fun authorSelectionIsResetAfterSavingAuthorsAndRemovingThem() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1341,7 +1355,7 @@ class ForYouViewModelTest {
                     )
                 )
             ),
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1357,7 +1371,7 @@ class ForYouViewModelTest {
     @Test
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
@@ -1369,7 +1383,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionState.value
+            viewModel.interestsSelectionUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(

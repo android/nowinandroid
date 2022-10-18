@@ -54,9 +54,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackg
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews

@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("nowinandroid.android.library")
+    id("nowinandroid.android.library.jacoco")
+    kotlin("kapt")
+}
 
-package com.google.samples.apps.nowinandroid.core.model.data
+dependencies {
 
-/**
- * An [author] with the additional information for whether or not it is followed.
- */
-data class FollowableAuthor(
-    val author: Author,
-    val isFollowed: Boolean
-)
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
+
+    testImplementation(project(":core:testing"))
+
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.datetime)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}

@@ -58,7 +58,7 @@ fun BookmarksRoute(
     modifier: Modifier = Modifier,
     viewModel: BookmarksViewModel = hiltViewModel()
 ) {
-    val feedState by viewModel.feedState.collectAsStateWithLifecycle()
+    val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,

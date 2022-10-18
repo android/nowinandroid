@@ -36,8 +36,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRo
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
