@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
- * Returns `true` if the Android theme shoudl be used, as a function of the [userDataResult].
+ * Returns `true` if the Android theme should be used, as a function of the [userDataResult].
  */
 @Composable
 fun shouldUseAndroidTheme(
