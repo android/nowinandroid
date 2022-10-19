@@ -75,6 +75,8 @@ class NavigationTest {
     private lateinit var appName: String
     private lateinit var saved: String
     private lateinit var settings: String
+    private lateinit var brand: String
+    private lateinit var ok: String
 
     @Before
     fun setup() {
@@ -88,6 +90,8 @@ class NavigationTest {
             appName = getString(R.string.app_name)
             saved = getString(BookmarksR.string.saved)
             settings = getString(SettingsR.string.top_app_bar_action_icon_description)
+            brand = getString(SettingsR.string.brand_android)
+            ok = getString(SettingsR.string.dismiss_dialog_button_text)
         }
     }
 
@@ -186,6 +190,31 @@ class NavigationTest {
 
             onNodeWithText(interests).performClick()
             onNodeWithContentDescription(settings).assertExists()
+        }
+    }
+
+    @Test
+    fun whenSettingsIconIsClicked_settingsDialogIsShown() {
+        composeTestRule.apply {
+            onNodeWithContentDescription(settings).performClick()
+
+            // Check that one of the settings is actually displayed.
+            onNodeWithText(brand).assertExists()
+        }
+    }
+
+    @Test
+    fun whenSettingsDialogDismissed_previousScreenIsDisplayed(){
+
+        composeTestRule.apply {
+
+            // Navigate to the saved screen, open the settings dialog, then close it.
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(settings).performClick()
+            onNodeWithText(ok).performClick()
+
+            // Check that the saved screen is still visible and selected.
+            onNodeWithText(saved).assertIsSelected()
         }
     }
 

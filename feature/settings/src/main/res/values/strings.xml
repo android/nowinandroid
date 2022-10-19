@@ -26,4 +26,5 @@
     <string name="dark_mode_config_system_default">System default</string>
     <string name="dark_mode_config_light">Light</string>
     <string name="dark_mode_config_dark">Dark</string>
+    <string name="dismiss_dialog_button_text">OK</string>
 </resources>

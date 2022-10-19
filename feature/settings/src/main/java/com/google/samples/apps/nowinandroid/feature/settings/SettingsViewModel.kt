@@ -73,5 +73,5 @@ data class UserEditableSettings(val brand: ThemeBrand, val darkThemeConfig: Dark
 
 sealed interface SettingsUiState {
     object Loading : SettingsUiState
-    class Success(val settings: UserEditableSettings) : SettingsUiState
+    data class Success(val settings: UserEditableSettings) : SettingsUiState
 }
