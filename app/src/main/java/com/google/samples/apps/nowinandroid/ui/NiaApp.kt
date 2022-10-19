@@ -41,7 +41,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowSizeClass.Companion
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -127,8 +126,7 @@ fun NiaApp(
                         )
                     }
 
-                    if(!LocalInspectionMode.current)
-                    {
+                    if (!LocalInspectionMode.current) {
                         NiaNavHost(
                             navController = appState.navController,
                             onBackClick = appState::onBackClick,
@@ -137,9 +135,7 @@ fun NiaApp(
                                 .padding(padding)
                                 .consumedWindowInsets(padding)
                         )
-                    }
-                    else
-                    {
+                    } else {
                         BoxWithConstraints {
                             NiaTheme {
                                 ForYouScreen(
@@ -242,7 +238,7 @@ private fun NiaBottomBar(
 }
 @ReferenceDevicePreviews
 @Composable
-fun NiaAppLayoutPreview(){
+fun NiaAppLayoutPreview() {
     val widthDp = Dp(LocalConfiguration.current.screenWidthDp.toFloat())
     val heightDp = Dp(LocalConfiguration.current.screenHeightDp.toFloat())
     val windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(widthDp, heightDp))
