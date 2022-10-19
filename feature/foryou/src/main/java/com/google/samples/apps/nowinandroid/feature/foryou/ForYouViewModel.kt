@@ -82,19 +82,6 @@ class ForYouViewModel @Inject constructor(
                 initialValue = Unknown
             )
 
-    /**
-     * The current theme of the app
-     */
-    val themeState: StateFlow<Pair<ThemeBrand, DarkThemeConfig>> =
-        userDataRepository.userDataStream
-            .map { userData ->
-                Pair(userData.themeBrand, userData.darkThemeConfig)
-            }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = Pair(DEFAULT, FOLLOW_SYSTEM)
-            )
 
     /**
      * The in-progress set of topics to be selected, persisted through process death with a
@@ -245,17 +232,7 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun updateThemeBrand(themeBrand: ThemeBrand) {
-        viewModelScope.launch {
-            userDataRepository.setThemeBrand(themeBrand)
-        }
-    }
 
-    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        viewModelScope.launch {
-            userDataRepository.setDarkThemeConfig(darkThemeConfig)
-        }
-    }
 }
 
 private fun Flow<List<SaveableNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
