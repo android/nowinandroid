@@ -25,8 +25,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +55,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.LIGH
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.feature.settings.R.string
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 
@@ -73,8 +76,8 @@ internal fun SettingsDialog(
 
 @Composable
 fun SettingsDialog(
-    onDismiss: () -> Unit,
     settingsUiState: SettingsUiState,
+    onDismiss: () -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
 ) {
@@ -88,8 +91,8 @@ fun SettingsDialog(
             )
         },
         text = {
-            Column {
-                Divider()
+            Divider()
+            Column (Modifier.verticalScroll(rememberScrollState())) {
                 when (settingsUiState) {
                     Loading -> {
                         Text(
@@ -111,7 +114,7 @@ fun SettingsDialog(
         },
         confirmButton = {
             Text(
-                text = "OK",
+                text = stringResource(string.dismiss_dialog_button_text),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -182,7 +185,7 @@ fun SettingsDialogThemeChooserRow(
             .selectable(
                 selected = selected,
                 role = Role.RadioButton,
-                onClick = onClick
+                onClick = onClick,
             )
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
