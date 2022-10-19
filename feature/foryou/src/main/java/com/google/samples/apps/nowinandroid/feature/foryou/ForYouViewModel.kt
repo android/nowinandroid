@@ -31,10 +31,6 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStrea
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.FollowedInterests
 import com.google.samples.apps.nowinandroid.feature.foryou.FollowedInterestsUiState.None
@@ -81,7 +77,6 @@ class ForYouViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = Unknown
             )
-
 
     /**
      * The in-progress set of topics to be selected, persisted through process death with a
@@ -231,8 +226,6 @@ class ForYouViewModel @Inject constructor(
             }
         }
     }
-
-
 }
 
 private fun Flow<List<SaveableNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =

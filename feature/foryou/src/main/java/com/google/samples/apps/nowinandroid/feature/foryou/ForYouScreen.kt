@@ -420,7 +420,6 @@ fun TopicIcon(
     )
 }
 
-
 @DevicePreviews
 @Composable
 fun ForYouScreenPopulatedFeed() {
