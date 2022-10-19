@@ -204,7 +204,7 @@ class NavigationTest {
     }
 
     @Test
-    fun whenSettingsDialogDismissed_previousScreenIsDisplayed(){
+    fun whenSettingsDialogDismissed_previousScreenIsDisplayed() {
 
         composeTestRule.apply {
 
