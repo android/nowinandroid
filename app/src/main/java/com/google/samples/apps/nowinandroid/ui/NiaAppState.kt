@@ -77,7 +77,8 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     private var _shouldShowSettingsDialog by mutableStateOf(false)
-    val shouldShowSettingsDialog = _shouldShowSettingsDialog
+    val shouldShowSettingsDialog
+        get() = _shouldShowSettingsDialog
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
