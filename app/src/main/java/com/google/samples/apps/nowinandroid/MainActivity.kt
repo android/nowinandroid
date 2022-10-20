@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -34,13 +35,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
+import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.result.Result
-import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -58,25 +57,20 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var lazyStats: dagger.Lazy<JankStats>
 
-    @Inject
-    lateinit var userDataRepository: UserDataRepository
+    val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        /**
-         * The current user data, updated here to drive the UI theme
-         */
-        var userDataResult: Result<UserData> by mutableStateOf(Result.Loading)
+        var uiState: MainActivityUiState by mutableStateOf(Loading)
 
-        // Update the user data
+        // Update the uiState
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userDataRepository.userDataStream
-                    .asResult()
+                viewModel.uiState
                     .onEach {
-                        userDataResult = it
+                        uiState = it
                     }
                     .collect()
             }
@@ -84,9 +78,9 @@ class MainActivity : ComponentActivity() {
 
         // Keep the splash screen on-screen until the user data is loaded
         splashScreen.setKeepOnScreenCondition {
-            when (userDataResult) {
-                Result.Loading -> true
-                is Result.Success, is Result.Error -> false
+            when (uiState) {
+                Loading -> true
+                is Success -> false
             }
         }
 
@@ -96,7 +90,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val systemUiController = rememberSystemUiController()
-            val darkTheme = shouldUseDarkTheme(userDataResult)
+            val darkTheme = shouldUseDarkTheme(uiState)
 
             // Update the dark content of the system bars to match the theme
             DisposableEffect(systemUiController, darkTheme) {
@@ -106,7 +100,7 @@ class MainActivity : ComponentActivity() {
 
             NiaTheme(
                 darkTheme = darkTheme,
-                androidTheme = shouldUseAndroidTheme(userDataResult)
+                androidTheme = shouldUseAndroidTheme(uiState)
             ) {
                 NiaApp(
                     windowSizeClass = calculateWindowSizeClass(this),
@@ -127,29 +121,29 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
- * Returns `true` if the Android theme should be used, as a function of the [userDataResult].
+ * Returns `true` if the Android theme should be used, as a function of the [uiState].
  */
 @Composable
 fun shouldUseAndroidTheme(
-    userDataResult: Result<UserData>,
-): Boolean = when (userDataResult) {
-    Result.Loading, is Result.Error -> false
-    is Result.Success -> when (userDataResult.data.themeBrand) {
+    uiState: MainActivityUiState,
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> when (uiState.userData.themeBrand) {
         ThemeBrand.DEFAULT -> false
         ThemeBrand.ANDROID -> true
     }
 }
 
 /**
- * Returns `true` if dark theme should be used, as a function of the [userDataResult] and the
+ * Returns `true` if dark theme should be used, as a function of the [uiState] and the
  * current system context.
  */
 @Composable
 fun shouldUseDarkTheme(
-    userDataResult: Result<UserData>,
-): Boolean = when (userDataResult) {
-    Result.Loading, is Result.Error -> isSystemInDarkTheme()
-    is Result.Success -> when (userDataResult.data.darkThemeConfig) {
+    uiState: MainActivityUiState,
+): Boolean = when (uiState) {
+    Loading -> isSystemInDarkTheme()
+    is Success -> when (uiState.userData.darkThemeConfig) {
         DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme()
         DarkThemeConfig.LIGHT -> false
         DarkThemeConfig.DARK -> true
