@@ -22,11 +22,12 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
+import com.google.samples.apps.nowinandroid.feature.author.navigation.authorIdArg
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -63,9 +64,10 @@ class AuthorViewModelTest {
         viewModel = AuthorViewModel(
             savedStateHandle = SavedStateHandle(
                 mapOf(
-                    AuthorDestination.authorIdArg to testInputAuthors[0].author.id
+                    authorIdArg to testInputAuthors[0].author.id
                 )
             ),
+            stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
             getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
