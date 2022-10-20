@@ -1404,21 +1404,6 @@ class ForYouViewModelTest {
         collectJob1.cancel()
         collectJob2.cancel()
     }
-
-    @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.isOffline.collect() }
-
-        networkMonitor.setConnected(false)
-
-        assertEquals(
-            true,
-            viewModel.isOffline.value
-        )
-
-        collectJob.cancel()
-    }
 }
 
 private val sampleAuthors = listOf(

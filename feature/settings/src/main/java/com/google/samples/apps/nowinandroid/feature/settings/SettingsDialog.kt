@@ -61,9 +61,9 @@ import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Suc
 
 @ExperimentalLifecycleComposeApi
 @Composable
-internal fun SettingsDialog(
-    viewModel: SettingsViewModel = hiltViewModel(),
-    onDismiss: () -> Unit
+fun SettingsDialog(
+    onDismiss: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
@@ -132,7 +132,7 @@ private fun SettingsPanel(
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
 ) {
     SettingsDialogSectionTitle(text = stringResource(R.string.theme))
-    Column {
+    Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
             text = stringResource(R.string.brand_default),
             selected = settings.brand == DEFAULT,

@@ -94,14 +94,6 @@ class ForYouViewModel @Inject constructor(
         mutableStateOf<Set<String>>(emptySet())
     }
 
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
-
     val isSyncing = syncStatusMonitor.isSyncing
         .stateIn(
             scope = viewModelScope,

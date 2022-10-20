@@ -21,6 +21,7 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -168,13 +169,13 @@ class NavigationTest {
             // Verify that the top bar contains the app name on the first screen.
             onNodeWithText(appName).assertExists()
 
-            // Go to the bookmarks tab, verify that the top bar contains the app name.
-            onNodeWithText(saved).performClick()
-            onNodeWithText(appName).assertExists()
-
-            // Go to the interests tab, verify that the top bar contains "Interests". This means
-            // we'll have 2 elements with the text "Interests" on screen. One in the top bar, and
+            // Go to the saved tab, verify that the top bar contains "saved". This means
+            // we'll have 2 elements with the text "saved" on screen. One in the top bar, and
             // one in the bottom navigation.
+            onNodeWithText(saved).performClick()
+            onAllNodesWithText(saved).assertCountEquals(2)
+
+            // As above but for the interests tab.
             onNodeWithText(interests).performClick()
             onAllNodesWithText(interests).assertCountEquals(2)
         }
@@ -214,7 +215,7 @@ class NavigationTest {
             onNodeWithText(ok).performClick()
 
             // Check that the saved screen is still visible and selected.
-            onNodeWithText(saved).assertIsSelected()
+            onAllNodesWithText(saved).onLast().assertIsSelected()
         }
     }
 
