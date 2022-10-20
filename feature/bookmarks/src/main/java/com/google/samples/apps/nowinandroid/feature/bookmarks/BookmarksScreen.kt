@@ -70,44 +70,37 @@ fun BookmarksScreen(
     removeFromBookmarks: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { innerPadding ->
-        val scrollableState = rememberLazyGridState()
-        TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(32.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            state = scrollableState,
-            modifier = modifier
-                .fillMaxSize()
-                .testTag("bookmarks:feed")
-                .padding(innerPadding)
-                .consumedWindowInsets(innerPadding)
-        ) {
-            if (feedState is NewsFeedUiState.Loading) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    NiaLoadingWheel(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize()
-                            .testTag("forYou:loading"),
-                        contentDesc = stringResource(id = R.string.saved_loading),
-                    )
-                }
-            }
-
-            newsFeed(
-                feedState = feedState,
-                onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-            )
-
+    val scrollableState = rememberLazyGridState()
+    TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
+    LazyVerticalGrid(
+        columns = Adaptive(300.dp),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        state = scrollableState,
+        modifier = modifier
+            .fillMaxSize()
+            .testTag("bookmarks:feed")
+    ) {
+        if (feedState is NewsFeedUiState.Loading) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                NiaLoadingWheel(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .testTag("forYou:loading"),
+                    contentDesc = stringResource(id = R.string.saved_loading),
+                )
             }
+        }
+
+        newsFeed(
+            feedState = feedState,
+            onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+        )
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
