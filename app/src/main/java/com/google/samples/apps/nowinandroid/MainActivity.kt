@@ -37,6 +37,7 @@ import androidx.metrics.performance.JankStats
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
@@ -56,6 +57,9 @@ class MainActivity : ComponentActivity() {
      */
     @Inject
     lateinit var lazyStats: dagger.Lazy<JankStats>
+
+    @Inject
+    lateinit var networkMonitor: NetworkMonitor
 
     val viewModel: MainActivityViewModel by viewModels()
 
@@ -105,6 +109,7 @@ class MainActivity : ComponentActivity() {
                 androidTheme = shouldUseAndroidTheme(uiState)
             ) {
                 NiaApp(
+                    networkMonitor = networkMonitor,
                     windowSizeClass = calculateWindowSizeClass(this),
                 )
             }

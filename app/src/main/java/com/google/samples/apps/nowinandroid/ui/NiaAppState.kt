@@ -21,7 +21,11 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -30,6 +34,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
@@ -38,29 +47,37 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
+    networkMonitor: NetworkMonitor,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
-    return remember(navController, windowSizeClass) {
-        NiaAppState(navController, windowSizeClass)
+    return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
+        NiaAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
     }
 }
 
 @Stable
 class NiaAppState(
     val navController: NavHostController,
-    val windowSizeClass: WindowSizeClass
+    val coroutineScope: CoroutineScope,
+    val windowSizeClass: WindowSizeClass,
+    networkMonitor: NetworkMonitor,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val shouldShowTopBar: Boolean
-        @Composable get() = (currentDestination?.route in topLevelDestinations)
+    private var _shouldShowSettingsDialog by mutableStateOf(false)
+    val shouldShowSettingsDialog = _shouldShowSettingsDialog
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
@@ -68,6 +85,14 @@ class NiaAppState(
 
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
+
+    val isOffline = networkMonitor.isOnline
+        .map(Boolean::not)
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
@@ -108,6 +133,10 @@ class NiaAppState(
 
     fun onBackClick() {
         navController.popBackStack()
+    }
+
+    fun toggleSettingsDialog(shouldShow: Boolean) {
+        _shouldShowSettingsDialog = shouldShow
     }
 }
 

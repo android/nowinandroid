@@ -47,7 +47,12 @@ class SettingsViewModel @Inject constructor(
             }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                // Starting eagerly means the user data is ready when the SettingsDialog is laid out
+                // for the first time. Without this the layout is done using the "Loading" text,
+                // then replaced with the user editable fields once loaded, however, the layout
+                // height doesn't change meaning all the fields are squashed into a small
+                // scrollable column.
+                started = SharingStarted.Eagerly,
                 initialValue = Loading
             )
 
