@@ -16,28 +16,30 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
-object InterestsDestination : NiaNavigationDestination {
-    override val route = "interests_route"
-    override val destination = "interests_destination"
+private const val interestsGraphRoutePattern = "interests_graph"
+private const val interestsRoute = "interests_route"
+
+fun NavController.navigateToInterestsGraph(navOptions: NavOptions? = null) {
+    this.navigate(interestsGraphRoutePattern, navOptions)
 }
 
 fun NavGraphBuilder.interestsGraph(
     navigateToTopic: (String) -> Unit,
     navigateToAuthor: (String) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit
-
 ) {
     navigation(
-        route = InterestsDestination.route,
-        startDestination = InterestsDestination.destination
+        route = interestsGraphRoutePattern,
+        startDestination = interestsRoute
     ) {
-        composable(route = InterestsDestination.destination) {
+        composable(route = interestsRoute) {
             InterestsRoute(
                 navigateToTopic = navigateToTopic,
                 navigateToAuthor = navigateToAuthor,

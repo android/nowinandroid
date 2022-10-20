@@ -224,14 +224,6 @@ Using the above modularization strategy, the Now in Android app has the followin
    <code>NewsResource</code>
    </td>
   </tr>
-  <tr>
-   <td><code>core:navigation</code>
-   </td>
-   <td>Navigation dependencies and shared navigation classes.
-   </td>
-   <td><code>NiaNavigationDestination</code>
-   </td>
-  </tr>
 </table>
 
 
