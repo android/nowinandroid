@@ -111,7 +111,7 @@ Examples:
 
 # UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
-obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma).
+obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma) (design assets [also available as a PDF](docs/Now-In-Android-Design-File.pdf)).
 
 The Screens and UI elements are built entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
 
