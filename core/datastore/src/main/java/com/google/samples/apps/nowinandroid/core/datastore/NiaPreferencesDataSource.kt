@@ -36,13 +36,15 @@ class NiaPreferencesDataSource @Inject constructor(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
                 followedTopics = it.followedTopicIdsMap.keys,
                 followedAuthors = it.followedAuthorIdsMap.keys,
-                themeBrand = when (it.themeBrand!!) {
+                themeBrand = when (it.themeBrand) {
+                    null,
                     ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
                     ThemeBrandProto.UNRECOGNIZED,
                     ThemeBrandProto.THEME_BRAND_DEFAULT -> ThemeBrand.DEFAULT
                     ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
                 },
-                darkThemeConfig = when (it.darkThemeConfig!!) {
+                darkThemeConfig = when (it.darkThemeConfig) {
+                    null,
                     DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
                     DarkThemeConfigProto.UNRECOGNIZED,
                     DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM ->
