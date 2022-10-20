@@ -65,7 +65,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AuthorRoute(
+internal fun AuthorRoute(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AuthorViewModel = hiltViewModel(),

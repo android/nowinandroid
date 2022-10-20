@@ -100,7 +100,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun ForYouRoute(
+internal fun ForYouRoute(
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
@@ -124,7 +124,7 @@ fun ForYouRoute(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ForYouScreen(
+internal fun ForYouScreen(
     isOffline: Boolean,
     isSyncing: Boolean,
     interestsSelectionState: ForYouInterestsSelectionUiState,

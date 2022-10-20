@@ -22,11 +22,12 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicIdArg
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -61,8 +62,8 @@ class TopicViewModelTest {
     @Before
     fun setup() {
         viewModel = TopicViewModel(
-            savedStateHandle =
-            SavedStateHandle(mapOf(TopicDestination.topicIdArg to testInputTopics[0].topic.id)),
+            savedStateHandle = SavedStateHandle(mapOf(topicIdArg to testInputTopics[0].topic.id)),
+            stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
             getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase

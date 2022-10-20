@@ -52,7 +52,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
@@ -69,7 +68,9 @@ fun NiaApp(
     NiaTheme {
         val background: @Composable (@Composable () -> Unit) -> Unit =
             when (appState.currentDestination?.route) {
-                ForYouDestination.route -> { content -> NiaGradientBackground(content = content) }
+                TopLevelDestination.FOR_YOU.name -> { content ->
+                    NiaGradientBackground(content = content)
+                }
                 else -> { content -> NiaBackground(content = content) }
             }
 
@@ -85,7 +86,7 @@ fun NiaApp(
                     if (appState.shouldShowBottomBar) {
                         NiaBottomBar(
                             destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigate,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination
                         )
                     }
@@ -103,7 +104,7 @@ fun NiaApp(
                     if (appState.shouldShowNavRail) {
                         NiaNavRail(
                             destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigate,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.safeDrawingPadding()
                         )
@@ -112,7 +113,6 @@ fun NiaApp(
                     NiaNavHost(
                         navController = appState.navController,
                         onBackClick = appState::onBackClick,
-                        onNavigateToDestination = appState::navigate,
                         modifier = Modifier
                             .padding(padding)
                             .consumedWindowInsets(padding)
@@ -132,8 +132,7 @@ private fun NiaNavRail(
 ) {
     NiaNavigationRail(modifier = modifier) {
         destinations.forEach { destination ->
-            val selected =
-                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             NiaNavigationRailItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
@@ -168,8 +167,7 @@ private fun NiaBottomBar(
 ) {
     NiaNavigationBar {
         destinations.forEach { destination ->
-            val selected =
-                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             NiaNavigationBarItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
@@ -195,3 +193,8 @@ private fun NiaBottomBar(
         }
     }
 }
+
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false

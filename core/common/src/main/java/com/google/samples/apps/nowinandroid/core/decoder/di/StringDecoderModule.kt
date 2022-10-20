@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.bookmarks.navigation
+package com.google.samples.apps.nowinandroid.core.decoder.di
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
+import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
+import com.google.samples.apps.nowinandroid.core.decoder.UriDecoder
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-private const val bookmarksRoute = "bookmarks_route"
-
-fun NavController.navigateToBookmarks(navOptions: NavOptions? = null) {
-    this.navigate(bookmarksRoute, navOptions)
-}
-
-fun NavGraphBuilder.bookmarksScreen() {
-    composable(route = bookmarksRoute) {
-        BookmarksRoute()
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class StringDecoderModule {
+    @Binds
+    abstract fun bindStringDecoder(uriDecoder: UriDecoder): StringDecoder
 }
