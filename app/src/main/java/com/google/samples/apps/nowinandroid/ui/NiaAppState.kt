@@ -28,19 +28,16 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import androidx.tracing.trace
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
-import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
-import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterestsGraph
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
+import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
+import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 
 @Composable
 fun rememberNiaAppState(
@@ -72,61 +69,35 @@ class NiaAppState(
     /**
      * Top level destinations to be used in the BottomBar and NavRail
      */
-    val topLevelDestinations: List<TopLevelDestination> = listOf(
-        TopLevelDestination(
-            route = ForYouDestination.route,
-            destination = ForYouDestination.destination,
-            selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
-            unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
-            iconTextId = forYouR.string.for_you
-        ),
-        TopLevelDestination(
-            route = BookmarksDestination.route,
-            destination = BookmarksDestination.destination,
-            selectedIcon = DrawableResourceIcon(NiaIcons.Bookmarks),
-            unselectedIcon = DrawableResourceIcon(NiaIcons.BookmarksBorder),
-            iconTextId = bookmarksR.string.saved
-        ),
-        TopLevelDestination(
-            route = InterestsDestination.route,
-            destination = InterestsDestination.destination,
-            selectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
-            unselectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
-            iconTextId = interestsR.string.interests
-        )
-    )
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
     /**
-     * UI logic for navigating to a particular destination in the app. The NavigationOptions to
-     * navigate with are based on the type of destination, which could be a top level destination or
-     * just a regular destination.
+     * UI logic for navigating to a top level destination in the app. Top level destinations have
+     * only one copy of the destination of the back stack, and save and restore state whenever you
+     * navigate to and from it.
      *
-     * Top level destinations have only one copy of the destination of the back stack, and save and
-     * restore state whenever you navigate to and from it.
-     * Regular destinations can have multiple copies in the back stack and state isn't saved nor
-     * restored.
-     *
-     * @param destination: The [NiaNavigationDestination] the app needs to navigate to.
-     * @param route: Optional route to navigate to in case the destination contains arguments.
+     * @param topLevelDestination: The destination the app needs to navigate to.
      */
-    fun navigate(destination: NiaNavigationDestination, route: String? = null) {
-        trace("Navigation: ${destination.route}") {
-            if (destination is TopLevelDestination) {
-                navController.navigate(route ?: destination.route) {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
+    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
+        trace("Navigation: ${topLevelDestination.name}") {
+            val topLevelNavOptions = navOptions {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
                 }
-            } else {
-                navController.navigate(route ?: destination.route)
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
+            }
+
+            when (topLevelDestination) {
+                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
+                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
+                INTERESTS -> navController.navigateToInterestsGraph(topLevelNavOptions)
             }
         }
     }

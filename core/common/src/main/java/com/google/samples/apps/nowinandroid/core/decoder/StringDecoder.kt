@@ -13,19 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.android.hilt")
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.navigation"
-}
+package com.google.samples.apps.nowinandroid.core.decoder
 
-dependencies {
-    api(libs.androidx.hilt.navigation.compose)
-    api(libs.androidx.navigation.compose)
+interface StringDecoder {
+    fun decodeString(encodedString: String): String
 }

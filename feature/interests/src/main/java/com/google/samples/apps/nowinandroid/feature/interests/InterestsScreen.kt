@@ -45,7 +45,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun InterestsRoute(
+internal fun InterestsRoute(
     navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -76,7 +76,7 @@ fun InterestsRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InterestsScreen(
+internal fun InterestsScreen(
     uiState: InterestsUiState,
     tabState: InterestsTabState,
     followAuthor: (String, Boolean) -> Unit,

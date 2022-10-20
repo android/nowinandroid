@@ -20,15 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
-import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorDestination
-import com.google.samples.apps.nowinandroid.feature.author.navigation.authorGraph
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksGraph
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouGraph
+import com.google.samples.apps.nowinandroid.feature.author.navigation.authorScreen
+import com.google.samples.apps.nowinandroid.feature.author.navigation.navigateToAuthor
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicGraph
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -40,32 +39,27 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicGraph
 @Composable
 fun NiaNavHost(
     navController: NavHostController,
-    onNavigateToDestination: (NiaNavigationDestination, String) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = ForYouDestination.route
+    startDestination: String = forYouNavigationRoute
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouGraph()
-        bookmarksGraph()
+        forYouScreen()
+        bookmarksScreen()
         interestsGraph(
-            navigateToTopic = {
-                onNavigateToDestination(
-                    TopicDestination, TopicDestination.createNavigationRoute(it)
-                )
+            navigateToTopic = { topicId ->
+                navController.navigateToTopic(topicId)
             },
-            navigateToAuthor = {
-                onNavigateToDestination(
-                    AuthorDestination, AuthorDestination.createNavigationRoute(it)
-                )
+            navigateToAuthor = { authorId ->
+                navController.navigateToAuthor(authorId)
             },
             nestedGraphs = {
-                topicGraph(onBackClick)
-                authorGraph(onBackClick)
+                topicScreen(onBackClick)
+                authorScreen(onBackClick)
             }
         )
     }
