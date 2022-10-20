@@ -3,7 +3,7 @@
 Now in Android App [Work in progress 🚧]
 ==================
 
-**Learn how this app was designed by reading the [architecture](docs/ArchitectureLearningJourney.md) and [modularization](docs/ModularizationLearningJourney.md) learning journeys.**
+**Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
 
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
 app.
@@ -110,9 +110,10 @@ Examples:
   checking that specific repository methods were called.
 
 # UI
+The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
+obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma).
 
-UI components are designed according to [Material 3 guidelines](https://m3.material.io/) and built
-entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
+The Screens and UI elements are built entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
 
 The app has two themes: 
 
