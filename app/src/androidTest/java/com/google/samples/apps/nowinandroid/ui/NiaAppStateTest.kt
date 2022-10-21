@@ -30,19 +30,14 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
-import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -56,29 +51,13 @@ import org.junit.Test
 class NiaAppStateTest {
 
     @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    @get:Rule
     val composeTestRule = createComposeRule()
 
     // Create the test dependencies.
-    private lateinit var testScope: TestScope
     private val networkMonitor = TestNetworkMonitor()
 
     // Subject under test.
     private lateinit var state: NiaAppState
-
-    @Before
-    fun setup() {
-        // We use the Unconfined dispatcher to ensure that coroutines are executed sequentially in
-        // tests.
-        testScope = TestScope(UnconfinedTestDispatcher())
-    }
-
-    @After
-    fun cleanup() {
-        testScope.cancel()
-    }
 
     @Test
     fun niaAppState_currentDestination() = runTest {
@@ -91,7 +70,7 @@ class NiaAppStateTest {
                     windowSizeClass = getCompactWindowClass(),
                     navController = navController,
                     networkMonitor = networkMonitor,
-                    coroutineScope = testScope
+                    coroutineScope = backgroundScope
                 )
             }
 
@@ -123,27 +102,13 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_showTopBarForTopLevelDestinations() {
-        composeTestRule.setContent {
-            val navController = rememberTestNavController()
-            state = rememberNiaAppState(
-                windowSizeClass = getCompactWindowClass(),
-                navController = navController,
-                networkMonitor = networkMonitor
-            )
-
-            // Do nothing - we should already be
-        }
-    }
-
-    @Test
     fun niaAppState_showBottomBar_compact() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = getCompactWindowClass(),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = testScope
+                coroutineScope = backgroundScope
             )
         }
 
@@ -158,7 +123,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = testScope
+                coroutineScope = backgroundScope
             )
         }
 
@@ -174,7 +139,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = testScope
+                coroutineScope = backgroundScope
             )
         }
 
@@ -183,27 +148,23 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest {
+    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
 
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = testScope
+                coroutineScope = backgroundScope
             )
         }
 
-        val collectJob = testScope.launch { state.isOffline.collect() }
-
+        backgroundScope.launch { state.isOffline.collect() }
         networkMonitor.setConnected(false)
-
         assertEquals(
             true,
             state.isOffline.value
         )
-
-        collectJob.cancel()
     }
 
     private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
