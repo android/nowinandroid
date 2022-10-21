@@ -1,6 +1,7 @@
 # Open source licenses and copyright notices
+To obtain the source code for a third party library click its title below.
 
-## [Coil](https://coil-kt.github.io/coil/#license)
+## [Coil](https://coil-kt.github.io/coil)
 
 Copyright 2022 Coil Contributors
 
@@ -16,7 +17,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-## [Jacoco](https://github.com/jacoco/jacoco/blob/master/LICENSE.md)
+## [Jacoco](https://github.com/jacoco/jacoco)
 
 Copyright (c) 2009, 2022 Mountainminds GmbH & Co. KG and Contributors
 
@@ -24,7 +25,7 @@ The JaCoCo Java Code Coverage Library and all included documentation is made ava
 
 Please visit http://www.jacoco.org/jacoco/trunk/doc/license.html for the complete license information including third party licenses and trademarks.
 
-## [JUnit 4](https://junit.org/junit4/license.html)
+## [JUnit 4](https://junit.org/junit4)
 
 Eclipse Public License - v 1.0
 THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT'S ACCEPTANCE OF THIS AGREEMENT.
@@ -113,7 +114,7 @@ Everyone is permitted to copy and distribute copies of this Agreement, but in or
 
 This Agreement is governed by the laws of the State of New York and the intellectual property laws of the United States of America. No party to this Agreement will bring a legal action under this Agreement more than one year after the cause of action arose. Each party waives its rights to a jury trial in any resulting litigation.
 
-## [ktlint](https://github.com/pinterest/ktlint/blob/master/LICENSE)
+## [ktlint](https://github.com/pinterest/ktlint)
 
 Copyright 2019 Pinterest, Inc.
 Copyright 2016-2019 Stanley Shyiko
@@ -124,7 +125,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## [OkHttp](https://github.com/square/okhttp/blob/master/LICENSE.txt)
+## [OkHttp](https://github.com/square/okhttp)
 
 Apache License
 Version 2.0, January 2004
@@ -328,7 +329,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-## [Retrofit](https://github.com/square/retrofit/blob/master/LICENSE.txt)
+## [Retrofit](https://github.com/square/retrofit)
 
 Apache License
 Version 2.0, January 2004
@@ -532,7 +533,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-## [Spotless](https://github.com/diffplug/spotless/blob/main/LICENSE.txt)
+## [Spotless](https://github.com/diffplug/spotless)
 
 Apache License
 Version 2.0, January 2004
@@ -726,7 +727,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-## [Turbine](https://github.com/cashapp/turbine/blob/trunk/LICENSE.txt)
+## [Turbine](https://github.com/cashapp/turbine)
 
 Apache License
 Version 2.0, January 2004
