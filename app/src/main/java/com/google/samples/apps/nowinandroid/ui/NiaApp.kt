@@ -48,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -110,6 +111,11 @@ fun NiaApp(
                 val destination = appState.currentTopLevelDestination
                 if (destination != null) {
                     NiaTopAppBar(
+                        // When the nav rail is displayed, the top app bar will, by default
+                        // overlap it. This means that the top most item in the nav rail
+                        // won't be tappable. A workaround is to position the top app bar
+                        // behind the nav rail using zIndex.
+                        modifier = Modifier.zIndex(-1F),
                         titleRes = destination.titleTextId,
                         actionIcon = NiaIcons.Settings,
                         actionIconContentDescription = stringResource(
