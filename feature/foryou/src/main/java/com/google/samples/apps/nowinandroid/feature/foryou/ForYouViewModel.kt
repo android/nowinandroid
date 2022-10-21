@@ -25,7 +25,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase

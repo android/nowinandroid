@@ -52,6 +52,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -64,10 +65,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.Drawable
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -86,7 +86,10 @@ fun NiaApp(
 ) {
     val background: @Composable (@Composable () -> Unit) -> Unit =
         when (appState.currentDestination?.route) {
-            TopLevelDestination.FOR_YOU.name -> { content -> NiaGradientBackground(content = content) }
+            TopLevelDestination.FOR_YOU.name -> {
+                content ->
+                NiaGradientBackground(content = content)
+            }
             else -> { content -> NiaBackground(content = content) }
         }
 
