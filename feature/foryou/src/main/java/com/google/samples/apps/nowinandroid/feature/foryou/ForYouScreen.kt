@@ -107,7 +107,6 @@ internal fun ForYouRoute(
 
 @Composable
 internal fun ForYouScreen(
-    isOffline: Boolean,
     isSyncing: Boolean,
     interestsSelectionState: ForYouInterestsSelectionUiState,
     feedState: NewsFeedUiState,

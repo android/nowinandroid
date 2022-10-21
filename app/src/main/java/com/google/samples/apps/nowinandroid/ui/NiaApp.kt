@@ -66,6 +66,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -131,7 +133,7 @@ fun NiaApp(
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
             // If user is not connected to the internet show a snack bar to inform them.
-            val notConnected = stringResource(R.string.for_you_not_connected)
+            val notConnected = stringResource(R.string.not_connected)
             LaunchedEffect(isOffline) {
                 if (isOffline) snackbarHostState.showSnackbar(
                     message = notConnected,
