@@ -76,7 +76,7 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when(currentDestination?.route){
+        @Composable get() = when (currentDestination?.route) {
             forYouNavigationRoute -> FOR_YOU
             bookmarksRoute -> BOOKMARKS
             interestsRoute -> INTERESTS
