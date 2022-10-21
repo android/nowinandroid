@@ -51,7 +51,6 @@ import kotlinx.coroutines.launch
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
-    networkMonitor: NetworkMonitor,
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
     private val getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase,

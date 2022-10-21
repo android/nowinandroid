@@ -76,7 +76,6 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
-            networkMonitor = networkMonitor,
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
             getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase,
