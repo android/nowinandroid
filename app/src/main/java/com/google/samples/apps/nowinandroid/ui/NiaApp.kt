@@ -85,8 +85,8 @@ fun NiaApp(
     ),
 ) {
     val background: @Composable (@Composable () -> Unit) -> Unit =
-        when (appState.currentDestination?.route) {
-            TopLevelDestination.FOR_YOU.name -> {
+        when (appState.currentTopLevelDestination) {
+            TopLevelDestination.FOR_YOU -> {
                 content ->
                 NiaGradientBackground(content = content)
             }
