@@ -76,9 +76,11 @@ class NiaAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    private var _shouldShowSettingsDialog by mutableStateOf(false)
-    val shouldShowSettingsDialog
-        get() = _shouldShowSettingsDialog
+    val currentTopLevelDestination: TopLevelDestination?
+        @Composable get() = topLevelDestinations[currentDestination?.route]
+
+    var shouldShowSettingsDialog by mutableStateOf(false)
+        private set
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
@@ -136,8 +138,8 @@ class NiaAppState(
         navController.popBackStack()
     }
 
-    fun toggleSettingsDialog(shouldShow: Boolean) {
-        _shouldShowSettingsDialog = shouldShow
+    fun setShowSettingsDialog(shouldShow: Boolean) {
+        shouldShowSettingsDialog = shouldShow
     }
 }
 

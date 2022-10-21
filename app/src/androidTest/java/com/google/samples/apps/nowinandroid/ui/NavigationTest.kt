@@ -206,7 +206,6 @@ class NavigationTest {
 
     @Test
     fun whenSettingsDialogDismissed_previousScreenIsDisplayed() {
-
         composeTestRule.apply {
 
             // Navigate to the saved screen, open the settings dialog, then close it.

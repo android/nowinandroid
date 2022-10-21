@@ -70,7 +70,8 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class
+    ExperimentalComposeUiApi::class,
+    ExperimentalLifecycleComposeApi::class
 )
 @Composable
 fun NiaApp(
@@ -101,11 +102,10 @@ fun NiaApp(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
                 // Show the top app bar on top level destinations.
-                val topLevelDestination =
-                    appState.topLevelDestinations[appState.currentDestination?.route]
-                if (topLevelDestination != null) {
+                val destination = appState.currentTopLevelDestination
+                if (destination != null) {
                     NiaTopAppBar(
-                        titleRes = topLevelDestination.titleTextId,
+                        titleRes = destination.titleTextId,
                         actionIcon = NiaIcons.Settings,
                         actionIconContentDescription = stringResource(
                             id = settingsR.string.top_app_bar_action_icon_description
@@ -113,7 +113,7 @@ fun NiaApp(
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent
                         ),
-                        onActionClick = { appState.toggleSettingsDialog(true) }
+                        onActionClick = { appState.setShowSettingsDialog(true) }
                     )
                 }
             },
@@ -141,7 +141,7 @@ fun NiaApp(
 
             if (appState.shouldShowSettingsDialog) {
                 SettingsDialog(
-                    onDismiss = { appState.toggleSettingsDialog(false) }
+                    onDismiss = { appState.setShowSettingsDialog(false) }
                 )
             }
 

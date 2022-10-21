@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepository.userDataStream
