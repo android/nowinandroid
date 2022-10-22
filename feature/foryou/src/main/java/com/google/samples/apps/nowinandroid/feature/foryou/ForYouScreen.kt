@@ -22,12 +22,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,20 +49,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -84,7 +75,6 @@ import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
@@ -106,11 +96,9 @@ internal fun ForYouRoute(
 ) {
     val interestsSelectionState by viewModel.interestsSelectionUiState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
-    val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
 
     ForYouScreen(
-        isOffline = isOffline,
         isSyncing = isSyncing,
         interestsSelectionState = interestsSelectionState,
         feedState = feedState,
@@ -122,10 +110,8 @@ internal fun ForYouRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun ForYouScreen(
-    isOffline: Boolean,
     isSyncing: Boolean,
     interestsSelectionState: ForYouInterestsSelectionUiState,
     feedState: NewsFeedUiState,
@@ -135,119 +121,88 @@ internal fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            NiaTopAppBar(
-                titleRes = R.string.top_app_bar_title,
-                actionIcon = NiaIcons.AccountCircle,
-                actionIconContentDescription = stringResource(
-                    id = R.string.for_you_top_app_bar_action_my_account
-                ),
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent
-                )
-            )
-        },
-        containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { innerPadding ->
-        // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-        // This code should be called when the UI is ready for use
-        // and relates to Time To Full Display.
-        val interestsLoaded =
-            interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
-        val feedLoaded = feedState !is NewsFeedUiState.Loading
+    // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
+    // This code should be called when the UI is ready for use
+    // and relates to Time To Full Display.
+    val interestsLoaded =
+        interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+    val feedLoaded = feedState !is NewsFeedUiState.Loading
 
-        if (interestsLoaded && feedLoaded) {
-            val localView = LocalView.current
-            // We use Unit to call reportFullyDrawn only on the first recomposition,
-            // however it will be called again if this composable goes out of scope.
-            // Activity.reportFullyDrawn() has its own check for this
-            // and is safe to call multiple times though.
-            LaunchedEffect(Unit) {
-                // We're leveraging the fact, that the current view is directly set as content of Activity.
-                val activity = localView.context as? Activity ?: return@LaunchedEffect
-                // To be sure not to call in the middle of a frame draw.
-                localView.doOnPreDraw { activity.reportFullyDrawn() }
-            }
+    if (interestsLoaded && feedLoaded) {
+        val localView = LocalView.current
+        // We use Unit to call reportFullyDrawn only on the first recomposition,
+        // however it will be called again if this composable goes out of scope.
+        // Activity.reportFullyDrawn() has its own check for this
+        // and is safe to call multiple times though.
+        LaunchedEffect(Unit) {
+            // We're leveraging the fact, that the current view is directly set as content of Activity.
+            val activity = localView.context as? Activity ?: return@LaunchedEffect
+            // To be sure not to call in the middle of a frame draw.
+            localView.doOnPreDraw { activity.reportFullyDrawn() }
         }
+    }
 
-        val state = rememberLazyGridState()
-        TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
+    val state = rememberLazyGridState()
+    TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
-        val notConnected = stringResource(R.string.for_you_not_connected)
-        LaunchedEffect(isOffline) {
-            if (isOffline) snackbarHostState.showSnackbar(
-                message = notConnected,
-                duration = Indefinite
-            )
-        }
-
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = modifier
-                .padding(innerPadding)
-                .consumedWindowInsets(innerPadding)
-                .fillMaxSize()
-                .testTag("forYou:feed"),
-            state = state
-        ) {
-            interestsSelection(
-                interestsSelectionState = interestsSelectionState,
-                onAuthorCheckedChanged = onAuthorCheckedChanged,
-                onTopicCheckedChanged = onTopicCheckedChanged,
-                saveFollowedTopics = saveFollowedTopics,
-                // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
-                // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
-                interestsItemModifier = Modifier.layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        constraints.copy(
-                            maxWidth = constraints.maxWidth + 32.dp.roundToPx()
-                        )
+    LazyVerticalGrid(
+        columns = Adaptive(300.dp),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .testTag("forYou:feed"),
+        state = state
+    ) {
+        interestsSelection(
+            interestsSelectionState = interestsSelectionState,
+            onAuthorCheckedChanged = onAuthorCheckedChanged,
+            onTopicCheckedChanged = onTopicCheckedChanged,
+            saveFollowedTopics = saveFollowedTopics,
+            // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
+            // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
+            interestsItemModifier = Modifier.layout { measurable, constraints ->
+                val placeable = measurable.measure(
+                    constraints.copy(
+                        maxWidth = constraints.maxWidth + 32.dp.roundToPx()
                     )
-                    layout(placeable.width, placeable.height) {
-                        placeable.place(0, 0)
-                    }
+                )
+                layout(placeable.width, placeable.height) {
+                    placeable.place(0, 0)
                 }
-            )
+            }
+        )
 
-            newsFeed(
-                feedState = feedState,
-                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-            )
+        newsFeed(
+            feedState = feedState,
+            onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+        )
 
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    // Add space for the content to clear the "offline" snackbar.
-                    if (isOffline) Spacer(modifier = Modifier.height(48.dp))
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                // Add space for the content to clear the "offline" snackbar.
+                // TODO: Check that the Scaffold handles this correctly in NiaApp
+                // if (isOffline) Spacer(modifier = Modifier.height(48.dp))
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
-        AnimatedVisibility(
-            visible = isSyncing ||
-                feedState is NewsFeedUiState.Loading ||
-                interestsSelectionState is ForYouInterestsSelectionUiState.Loading
+    }
+    AnimatedVisibility(
+        visible = isSyncing ||
+            feedState is NewsFeedUiState.Loading ||
+            interestsSelectionState is ForYouInterestsSelectionUiState.Loading
+    ) {
+        val loadingContentDescription = stringResource(id = R.string.for_you_loading)
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            val loadingContentDescription = stringResource(id = R.string.for_you_loading)
-            Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .consumedWindowInsets(innerPadding)
-                    .fillMaxWidth()
-            ) {
-                NiaOverlayLoadingWheel(
-                    modifier = Modifier.align(Alignment.Center),
-                    contentDesc = loadingContentDescription
-                )
-            }
+            NiaOverlayLoadingWheel(
+                modifier = Modifier.align(Alignment.Center),
+                contentDesc = loadingContentDescription
+            )
         }
     }
 }
@@ -268,6 +223,7 @@ private fun LazyGridScope.interestsSelection(
         ForYouInterestsSelectionUiState.Loading,
         ForYouInterestsSelectionUiState.LoadFailed,
         ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
+
         is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(modifier = interestsItemModifier) {
@@ -439,7 +395,6 @@ fun ForYouScreenPopulatedFeed() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                isOffline = false,
                 isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
@@ -462,7 +417,6 @@ fun ForYouScreenOfflinePopulatedFeed() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                isOffline = true,
                 isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
@@ -485,7 +439,6 @@ fun ForYouScreenTopicSelection() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                isOffline = false,
                 isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
                     topics = previewTopics.map { FollowableTopic(it, false) },
@@ -511,7 +464,6 @@ fun ForYouScreenLoading() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                isOffline = false,
                 isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
@@ -530,7 +482,6 @@ fun ForYouScreenPopulatedAndLoading() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
-                isOffline = false,
                 isSyncing = true,
                 interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                 feedState = NewsFeedUiState.Success(

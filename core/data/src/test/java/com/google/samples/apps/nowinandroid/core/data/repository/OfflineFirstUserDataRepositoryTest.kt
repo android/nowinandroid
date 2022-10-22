@@ -18,6 +18,9 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
@@ -45,6 +48,21 @@ class OfflineFirstUserDataRepositoryTest {
             niaPreferencesDataSource = niaPreferencesDataSource
         )
     }
+
+    @Test
+    fun offlineFirstUserDataRepository_default_user_data_is_correct() =
+        runTest {
+            assertEquals(
+                UserData(
+                    bookmarkedNewsResources = emptySet(),
+                    followedTopics = emptySet(),
+                    followedAuthors = emptySet(),
+                    themeBrand = ThemeBrand.DEFAULT,
+                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM
+                ),
+                subject.userDataStream.first()
+            )
+        }
 
     @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
@@ -126,6 +144,46 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
                 subject.userDataStream
                     .map { it.bookmarkedNewsResources }
+                    .first()
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_theme_brand_delegates_to_nia_preferences() =
+        runTest {
+            subject.setThemeBrand(ThemeBrand.ANDROID)
+
+            assertEquals(
+                ThemeBrand.ANDROID,
+                subject.userDataStream
+                    .map { it.themeBrand }
+                    .first()
+            )
+            assertEquals(
+                ThemeBrand.ANDROID,
+                niaPreferencesDataSource
+                    .userDataStream
+                    .map { it.themeBrand }
+                    .first()
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_dark_theme_config_delegates_to_nia_preferences() =
+        runTest {
+            subject.setDarkThemeConfig(DarkThemeConfig.DARK)
+
+            assertEquals(
+                DarkThemeConfig.DARK,
+                subject.userDataStream
+                    .map { it.darkThemeConfig }
+                    .first()
+            )
+            assertEquals(
+                DarkThemeConfig.DARK,
+                niaPreferencesDataSource
+                    .userDataStream
+                    .map { it.darkThemeConfig }
                     .first()
             )
         }

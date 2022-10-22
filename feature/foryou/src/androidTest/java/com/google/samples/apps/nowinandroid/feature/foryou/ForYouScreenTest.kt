@@ -53,7 +53,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
@@ -77,7 +76,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = true,
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                     feedState = NewsFeedUiState.Success(emptyList()),
@@ -101,7 +99,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
@@ -151,7 +148,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
@@ -204,7 +200,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
@@ -257,7 +252,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState =
                     ForYouInterestsSelectionUiState.WithInterestsSelection(
@@ -285,7 +279,6 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
-                    isOffline = false,
                     isSyncing = false,
                     interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                     feedState = NewsFeedUiState.Loading,
@@ -308,7 +301,6 @@ class ForYouScreenTest {
     fun feed_whenNoInterestsSelectionAndLoaded_showsFeed() {
         composeTestRule.setContent {
             ForYouScreen(
-                isOffline = false,
                 isSyncing = false,
                 interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
                 feedState = NewsFeedUiState.Success(
