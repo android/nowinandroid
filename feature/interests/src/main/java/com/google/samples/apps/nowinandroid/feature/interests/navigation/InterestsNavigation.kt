@@ -24,7 +24,7 @@ import androidx.navigation.navigation
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
 private const val interestsGraphRoutePattern = "interests_graph"
-private const val interestsRoute = "interests_route"
+const val interestsRoute = "interests_route"
 
 fun NavController.navigateToInterestsGraph(navOptions: NavOptions? = null) {
     this.navigate(interestsGraphRoutePattern, navOptions)

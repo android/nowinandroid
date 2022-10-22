@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 
@@ -50,4 +52,14 @@ interface UserDataRepository {
      * Updates the bookmarked status for a news resource
      */
     suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean)
+
+    /**
+     * Sets the desired theme brand.
+     */
+    suspend fun setThemeBrand(themeBrand: ThemeBrand)
+
+    /**
+     * Sets the desired dark theme config.
+     */
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
 }

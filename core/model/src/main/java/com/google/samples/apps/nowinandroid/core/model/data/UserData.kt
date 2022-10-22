@@ -23,4 +23,6 @@ data class UserData(
     val bookmarkedNewsResources: Set<String>,
     val followedTopics: Set<String>,
     val followedAuthors: Set<String>,
+    val themeBrand: ThemeBrand,
+    val darkThemeConfig: DarkThemeConfig,
 )
