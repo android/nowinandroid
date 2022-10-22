@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import java.io.IOException
 import javax.inject.Inject
@@ -34,6 +36,23 @@ class NiaPreferencesDataSource @Inject constructor(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
                 followedTopics = it.followedTopicIdsMap.keys,
                 followedAuthors = it.followedAuthorIdsMap.keys,
+                themeBrand = when (it.themeBrand) {
+                    null,
+                    ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
+                    ThemeBrandProto.UNRECOGNIZED,
+                    ThemeBrandProto.THEME_BRAND_DEFAULT -> ThemeBrand.DEFAULT
+                    ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
+                },
+                darkThemeConfig = when (it.darkThemeConfig) {
+                    null,
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
+                    DarkThemeConfigProto.UNRECOGNIZED,
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM ->
+                        DarkThemeConfig.FOLLOW_SYSTEM
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT ->
+                        DarkThemeConfig.LIGHT
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
+                }
             )
         }
 
@@ -92,6 +111,30 @@ class NiaPreferencesDataSource @Inject constructor(
             }
         } catch (ioException: IOException) {
             Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
+
+    suspend fun setThemeBrand(themeBrand: ThemeBrand) {
+        userPreferences.updateData {
+            it.copy {
+                this.themeBrand = when (themeBrand) {
+                    ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
+                    ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
+                }
+            }
+        }
+    }
+
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        userPreferences.updateData {
+            it.copy {
+                this.darkThemeConfig = when (darkThemeConfig) {
+                    DarkThemeConfig.FOLLOW_SYSTEM ->
+                        DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
+                    DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
+                    DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
+                }
+            }
         }
     }
 

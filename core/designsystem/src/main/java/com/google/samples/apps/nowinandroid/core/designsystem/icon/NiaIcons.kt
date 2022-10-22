@@ -32,6 +32,7 @@ import androidx.compose.material.icons.rounded.Grid3x3
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShortText
 import androidx.compose.material.icons.rounded.Tag
 import androidx.compose.material.icons.rounded.ViewDay
@@ -64,6 +65,7 @@ object NiaIcons {
     val Person = Icons.Rounded.Person
     val PlayArrow = Icons.Rounded.PlayArrow
     val Search = Icons.Rounded.Search
+    val Settings = Icons.Rounded.Settings
     val ShortText = Icons.Rounded.ShortText
     val Tag = Icons.Rounded.Tag
     val Upcoming = R.drawable.ic_upcoming

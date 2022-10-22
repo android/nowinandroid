@@ -25,7 +25,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
@@ -51,7 +50,6 @@ import kotlinx.coroutines.launch
 @OptIn(SavedStateHandleSaveableApi::class)
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
-    networkMonitor: NetworkMonitor,
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
     private val getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase,
@@ -93,14 +91,6 @@ class ForYouViewModel @Inject constructor(
     private var inProgressAuthorSelection by savedStateHandle.saveable {
         mutableStateOf<Set<String>>(emptySet())
     }
-
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
 
     val isSyncing = syncStatusMonitor.isSyncing
         .stateIn(

@@ -97,7 +97,7 @@ fun NiaTopAppBar(
             }
         },
         colors = colors,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 

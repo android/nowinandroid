@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -42,4 +44,10 @@ class OfflineFirstUserDataRepository @Inject constructor(
 
     override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) =
         niaPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)
+
+    override suspend fun setThemeBrand(themeBrand: ThemeBrand) =
+        niaPreferencesDataSource.setThemeBrand(themeBrand)
+
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) =
+        niaPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
 }
