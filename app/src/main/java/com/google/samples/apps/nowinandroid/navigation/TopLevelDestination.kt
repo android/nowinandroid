@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
+import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
@@ -32,21 +33,25 @@ import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
 enum class TopLevelDestination(
     val selectedIcon: Icon,
     val unselectedIcon: Icon,
-    val iconTextId: Int
+    val iconTextId: Int,
+    val titleTextId: Int
 ) {
     FOR_YOU(
         selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
         unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
-        iconTextId = forYouR.string.for_you
+        iconTextId = forYouR.string.for_you,
+        titleTextId = R.string.app_name
     ),
     BOOKMARKS(
         selectedIcon = DrawableResourceIcon(NiaIcons.Bookmarks),
         unselectedIcon = DrawableResourceIcon(NiaIcons.BookmarksBorder),
-        iconTextId = bookmarksR.string.saved
+        iconTextId = bookmarksR.string.saved,
+        titleTextId = bookmarksR.string.saved
     ),
     INTERESTS(
         selectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
         unselectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
-        iconTextId = interestsR.string.interests
+        iconTextId = interestsR.string.interests,
+        titleTextId = interestsR.string.interests
     )
 }

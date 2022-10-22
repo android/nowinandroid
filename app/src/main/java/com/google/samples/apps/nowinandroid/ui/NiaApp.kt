@@ -31,9 +31,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,83 +48,143 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRailItem
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalComposeUiApi::class,
+    ExperimentalLifecycleComposeApi::class
 )
 @Composable
 fun NiaApp(
     windowSizeClass: WindowSizeClass,
-    appState: NiaAppState = rememberNiaAppState(windowSizeClass)
+    networkMonitor: NetworkMonitor,
+    appState: NiaAppState = rememberNiaAppState(
+        networkMonitor = networkMonitor,
+        windowSizeClass = windowSizeClass
+    ),
 ) {
-    NiaTheme {
-        val background: @Composable (@Composable () -> Unit) -> Unit =
-            when (appState.currentDestination?.route) {
-                TopLevelDestination.FOR_YOU.name -> { content ->
-                    NiaGradientBackground(content = content)
-                }
-                else -> { content -> NiaBackground(content = content) }
+    val background: @Composable (@Composable () -> Unit) -> Unit =
+        when (appState.currentTopLevelDestination) {
+            TopLevelDestination.FOR_YOU -> {
+                content ->
+                NiaGradientBackground(content = content)
             }
+            else -> { content -> NiaBackground(content = content) }
+        }
 
-        background {
-            Scaffold(
-                modifier = Modifier.semantics {
-                    testTagsAsResourceId = true
-                },
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-                contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                bottomBar = {
-                    if (appState.shouldShowBottomBar) {
-                        NiaBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination
-                        )
-                    }
-                }
-            ) { padding ->
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(
-                                WindowInsetsSides.Horizontal
-                            )
-                        )
-                ) {
-                    if (appState.shouldShowNavRail) {
-                        NiaNavRail(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier.safeDrawingPadding()
-                        )
-                    }
+    background {
 
-                    NiaNavHost(
-                        navController = appState.navController,
-                        onBackClick = appState::onBackClick,
-                        modifier = Modifier
-                            .padding(padding)
-                            .consumedWindowInsets(padding)
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        Scaffold(
+            modifier = Modifier.semantics {
+                testTagsAsResourceId = true
+            },
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
+                // Show the top app bar on top level destinations.
+                val destination = appState.currentTopLevelDestination
+                if (destination != null) {
+                    NiaTopAppBar(
+                        // When the nav rail is displayed, the top app bar will, by default
+                        // overlap it. This means that the top most item in the nav rail
+                        // won't be tappable. A workaround is to position the top app bar
+                        // behind the nav rail using zIndex.
+                        modifier = Modifier.zIndex(-1F),
+                        titleRes = destination.titleTextId,
+                        actionIcon = NiaIcons.Settings,
+                        actionIconContentDescription = stringResource(
+                            id = settingsR.string.top_app_bar_action_icon_description
+                        ),
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent
+                        ),
+                        onActionClick = { appState.setShowSettingsDialog(true) }
                     )
                 }
+            },
+            bottomBar = {
+                if (appState.shouldShowBottomBar) {
+                    NiaBottomBar(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination
+                    )
+                }
+            }
+        ) { padding ->
+
+            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+
+            // If user is not connected to the internet show a snack bar to inform them.
+            val notConnected = stringResource(R.string.not_connected)
+            LaunchedEffect(isOffline) {
+                if (isOffline) snackbarHostState.showSnackbar(
+                    message = notConnected,
+                    duration = Indefinite
+                )
+            }
+
+            if (appState.shouldShowSettingsDialog) {
+                SettingsDialog(
+                    onDismiss = { appState.setShowSettingsDialog(false) }
+                )
+            }
+
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal
+                        )
+                    )
+            ) {
+                if (appState.shouldShowNavRail) {
+                    NiaNavRail(
+                        destinations = appState.topLevelDestinations,
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.safeDrawingPadding()
+                    )
+                }
+
+                NiaNavHost(
+                    navController = appState.navController,
+                    onBackClick = appState::onBackClick,
+
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumedWindowInsets(padding)
+                )
+
+                // TODO: We may want to add padding or spacer when the snackbar is shown so that
+                //  content doesn't display behind it.
             }
         }
     }
@@ -182,6 +249,7 @@ private fun NiaBottomBar(
                             imageVector = icon.imageVector,
                             contentDescription = null
                         )
+
                         is DrawableResourceIcon -> Icon(
                             painter = painterResource(id = icon.id),
                             contentDescription = null

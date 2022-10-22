@@ -82,9 +82,13 @@ dependencies {
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
     implementation(project(":feature:topic"))
+    implementation(project(":feature:settings"))
 
+    implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
 
     implementation(project(":sync:work"))
     implementation(project(":sync:sync-test"))
@@ -96,11 +100,13 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     debugImplementation(libs.androidx.compose.ui.testManifest)
 
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.hilt.navigation.compose)
