@@ -271,5 +271,6 @@ fun PreviewSettingsDialogLoading() {
     }
 }
 
+/* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
-private const val LICENSES_URL = "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md"
+private const val LICENSES_URL = "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
