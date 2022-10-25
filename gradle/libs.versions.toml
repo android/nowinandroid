@@ -9,7 +9,6 @@ androidxComposeCompiler = "1.3.2"
 androidxComposeRuntimeTracing = "1.0.0-alpha01"
 androidxCore = "1.9.0"
 androidxCoreSplashscreen = "1.0.0"
-androidxCustomView = "1.0.0"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.4.0"
 androidxHiltNavigationCompose = "1.0.0"
@@ -19,7 +18,6 @@ androidxMacroBenchmark = "1.1.0"
 androidxNavigation = "2.5.2"
 androidxMetrics = "1.0.0-alpha03"
 androidxProfileinstaller = "1.2.0"
-androidxSavedState = "1.2.0"
 androidxStartup = "1.1.1"
 androidxWindowManager = "1.0.0"
 androidxTestCore = "1.5.0-alpha02"
@@ -72,7 +70,6 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
-androidx-customview-poolingcontainer = { group = "androidx.customview", name = "customview-poolingcontainer", version.ref = "androidxCustomView"}
 androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
@@ -83,7 +80,6 @@ androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", v
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
-androidx-savedstate-ktx = { group = "androidx.savedstate", name = "savedstate-ktx", version.ref= "androidxSavedState"}
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 androidx-window-manager = {module = "androidx.window:window", version.ref = "androidxWindowManager"}
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
