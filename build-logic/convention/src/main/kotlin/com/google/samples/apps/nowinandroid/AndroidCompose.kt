@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import java.io.File
 
@@ -41,6 +42,12 @@ internal fun Project.configureAndroidCompose(
 
         kotlinOptions {
             freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+        }
+
+        dependencies {
+            val bom = libs.findLibrary("androidx-compose-bom").get()
+            add("implementation", platform(bom))
+            add("androidTestImplementation", platform(bom))
         }
     }
 }
