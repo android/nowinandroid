@@ -33,13 +33,6 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.kotlinx.datetime)
 
-    // TODO : Remove these dependency once we upgrade to Android Studio Dolphin b/228889042
-    // These dependencies are currently necessary to render Compose previews
-    debugImplementation(libs.androidx.customview.poolingcontainer)
-    debugImplementation(libs.androidx.lifecycle.runtimeCompose)
-    debugImplementation(libs.androidx.lifecycle.viewModelCompose)
-    debugImplementation(libs.androidx.savedstate.ktx)
-
     api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.material.iconsExtended)
