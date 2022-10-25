@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -83,6 +84,7 @@ internal fun AuthorRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @VisibleForTesting
 @Composable
 internal fun AuthorScreen(
@@ -96,13 +98,10 @@ internal fun AuthorScreen(
     val scrollableState = rememberLazyListState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "author:column")
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         horizontalAlignment = Alignment.CenterHorizontally,
         state = scrollableState
     ) {
-        item {
-            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-        }
         when (authorUiState) {
             AuthorUiState.Loading -> {
                 item {
@@ -116,7 +115,7 @@ internal fun AuthorScreen(
                 TODO()
             }
             is AuthorUiState.Success -> {
-                item {
+                stickyHeader {
                     AuthorToolbar(
                         onBackClick = onBackClick,
                         onFollowClick = onFollowClick,
@@ -204,31 +203,33 @@ private fun AuthorToolbar(
     onBackClick: () -> Unit = {},
     onFollowClick: (Boolean) -> Unit = {},
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 32.dp)
-    ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(
-                imageVector = Filled.ArrowBack,
-                contentDescription = stringResource(
-                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back
-                )
-            )
-        }
-        val selected = uiState.isFollowed
-        NiaFilterChip(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            selected = selected,
-            onSelectedChange = onFollowClick,
+    NiaBackground {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp)
         ) {
-            if (selected) {
-                Text(stringResource(id = R.string.author_following))
-            } else {
-                Text(stringResource(id = R.string.author_not_following))
+            IconButton(onClick = { onBackClick() }) {
+                Icon(
+                    imageVector = Filled.ArrowBack,
+                    contentDescription = stringResource(
+                        id = com.google.samples.apps.nowinandroid.core.ui.R.string.back
+                    )
+                )
+            }
+            val selected = uiState.isFollowed
+            NiaFilterChip(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                selected = selected,
+                onSelectedChange = onFollowClick,
+            ) {
+                if (selected) {
+                    Text(stringResource(id = R.string.author_following))
+                } else {
+                    Text(stringResource(id = R.string.author_not_following))
+                }
             }
         }
     }
