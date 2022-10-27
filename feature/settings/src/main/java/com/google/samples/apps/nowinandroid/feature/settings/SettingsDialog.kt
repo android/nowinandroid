@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -86,7 +87,7 @@ fun SettingsDialog(
         onDismissRequest = { onDismiss() },
         title = {
             Text(
-                text = stringResource(R.string.settings_title),
+                text = stringResource(string.settings_title),
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -96,7 +97,7 @@ fun SettingsDialog(
                 when (settingsUiState) {
                     Loading -> {
                         Text(
-                            text = stringResource(R.string.loading),
+                            text = stringResource(string.loading),
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
@@ -131,15 +132,15 @@ private fun SettingsPanel(
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
 ) {
-    SettingsDialogSectionTitle(text = stringResource(R.string.theme))
+    SettingsDialogSectionTitle(text = stringResource(string.theme))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(R.string.brand_default),
+            text = stringResource(string.brand_default),
             selected = settings.brand == DEFAULT,
             onClick = { onChangeThemeBrand(DEFAULT) }
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(R.string.brand_android),
+            text = stringResource(string.brand_android),
             selected = settings.brand == ANDROID,
             onClick = { onChangeThemeBrand(ANDROID) }
         )
@@ -147,17 +148,17 @@ private fun SettingsPanel(
     SettingsDialogSectionTitle(text = "Dark mode preference")
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(R.string.dark_mode_config_system_default),
+            text = stringResource(string.dark_mode_config_system_default),
             selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
             onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) }
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(R.string.dark_mode_config_light),
+            text = stringResource(string.dark_mode_config_light),
             selected = settings.darkThemeConfig == LIGHT,
             onClick = { onChangeDarkThemeConfig(LIGHT) }
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(R.string.dark_mode_config_dark),
+            text = stringResource(string.dark_mode_config_dark),
             selected = settings.darkThemeConfig == DARK,
             onClick = { onChangeDarkThemeConfig(DARK) }
         )
@@ -210,13 +211,20 @@ private fun LegalPanel() {
         ) {
             Row {
                 TextLink(
-                    text = stringResource(R.string.privacy_policy),
+                    text = stringResource(string.privacy_policy),
                     url = PRIVACY_POLICY_URL
                 )
                 Spacer(Modifier.width(16.dp))
                 TextLink(
-                    text = stringResource(R.string.licenses),
+                    text = stringResource(string.licenses),
                     url = LICENSES_URL
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Row {
+                TextLink(
+                    text = stringResource(string.brand_guidelines),
+                    url = BRAND_GUIDELINES_URL
                 )
             }
         }
@@ -274,3 +282,4 @@ fun PreviewSettingsDialogLoading() {
 /* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val LICENSES_URL = "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
+private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"

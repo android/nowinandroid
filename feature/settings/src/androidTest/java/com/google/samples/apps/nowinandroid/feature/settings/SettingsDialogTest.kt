@@ -80,4 +80,25 @@ class SettingsDialogTest {
         composeTestRule.onNodeWithText(getString(R.string.brand_android)).assertIsSelected()
         composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_dark)).assertIsSelected()
     }
+
+    @Test
+    fun whenStateIsSuccess_allLegalLinksAreDisplayed() {
+        composeTestRule.setContent {
+            SettingsDialog(
+                settingsUiState = Success(
+                    UserEditableSettings(
+                        brand = ANDROID,
+                        darkThemeConfig = DARK
+                    )
+                ),
+                onDismiss = { },
+                onChangeThemeBrand = {},
+                onChangeDarkThemeConfig = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText(getString(R.string.privacy_policy)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.licenses)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.brand_guidelines)).assertExists()
+    }
 }
