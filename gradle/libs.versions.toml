@@ -13,7 +13,7 @@ androidxDataStore = "1.0.0"
 androidxEspresso = "3.4.0"
 androidxHiltNavigationCompose = "1.0.0"
 # Skipping version 2.6.0-alpha02 due to https://issuetracker.google.com/249686765
-androidxLifecycle = "2.6.0-alpha01"
+androidxLifecycle = "2.6.0-alpha03"
 androidxMacroBenchmark = "1.1.0"
 androidxNavigation = "2.5.2"
 androidxMetrics = "1.0.0-alpha03"
