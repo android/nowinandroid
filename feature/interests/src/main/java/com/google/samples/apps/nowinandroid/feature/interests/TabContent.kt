@@ -46,14 +46,15 @@ fun TopicsTabContent(
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
-            item {
+            val topicId = followableTopic.topic.id
+            item(key = topicId) {
                 InterestsItem(
                     name = followableTopic.topic.name,
                     following = followableTopic.isFollowed,
                     description = followableTopic.topic.shortDescription,
                     topicImageUrl = followableTopic.topic.imageUrl,
-                    onClick = { onTopicClick(followableTopic.topic.id) },
-                    onFollowButtonClick = { onFollowButtonClick(followableTopic.topic.id, it) }
+                    onClick = { onTopicClick(topicId) },
+                    onFollowButtonClick = { onFollowButtonClick(topicId, it) }
                 )
             }
         }
