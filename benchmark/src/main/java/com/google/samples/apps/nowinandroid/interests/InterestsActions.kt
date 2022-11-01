@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.interests
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.Until
 
 fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
     val topicsList = device.findObject(By.res("interests:topics"))
@@ -32,4 +33,15 @@ fun MacrobenchmarkScope.interestsScrollPeopleDownUp() {
     peopleList.fling(Direction.DOWN)
     device.waitForIdle()
     peopleList.fling(Direction.UP)
+}
+
+fun MacrobenchmarkScope.interestsWaitForTopics() {
+    device.wait(Until.hasObject(By.text("Accessibility")), 30_000)
+}
+
+fun MacrobenchmarkScope.interestsToggleBookmarked() {
+    val topicsList = device.findObject(By.res("interests:topics"))
+    val checkable = topicsList.findObject(By.checkable(true))
+    checkable.click()
+    device.waitForIdle()
 }
