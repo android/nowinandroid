@@ -19,7 +19,12 @@
 ---
 status:       PUBLISHED
 technologies: [Android]
-categories:   [Architecture]
+categories:
+  - AndroidTesting
+  - AndroidArchitecture
+  - AndroidArchitectureUILayer
+  - AndroidArchitectureDomainLayer
+  - AndroidArchitectureDataLayer
 languages:    [Kotlin]
 solutions:    [Mobile]
 github:       android/nowinandroid
