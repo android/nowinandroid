@@ -64,7 +64,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [21, 26, 30]
+        api-level: [23, 26, 30]
 
     steps:
       - name: Checkout
@@ -86,6 +86,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          force-avd-creation: true
           arch: x86_64
           disable-animations: true
           disk-size: 6000M
