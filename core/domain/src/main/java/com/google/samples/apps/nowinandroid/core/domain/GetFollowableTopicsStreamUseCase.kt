@@ -61,10 +61,9 @@ class GetFollowableTopicsStreamUseCase @Inject constructor(
                         isFollowed = topic.id in followedIds
                     )
                 }
-            if (sortBy == NAME) {
-                followedTopics.sortedBy { it.topic.name }
-            } else {
-                followedTopics
+            when (sortBy) {
+                NAME -> followedTopics.sortedBy { it.topic.name }
+                else -> followedTopics
             }
         }
     }
