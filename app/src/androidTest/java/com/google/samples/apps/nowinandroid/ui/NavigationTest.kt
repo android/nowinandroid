@@ -255,7 +255,8 @@ class NavigationTest {
     fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
-            onNodeWithText("Android Studio").performClick() // TODO: Grab string from fake data
+            // TODO: Grab string from fake data
+            onNodeWithText("Android Studio & Tools").performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
