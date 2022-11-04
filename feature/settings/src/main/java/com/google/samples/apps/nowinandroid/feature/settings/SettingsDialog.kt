@@ -110,7 +110,7 @@ fun SettingsDialog(
                     }
                 }
                 Divider(Modifier.padding(top = 8.dp))
-                LegalPanel()
+                LinksPanel()
             }
         },
         confirmButton = {
@@ -201,7 +201,7 @@ fun SettingsDialogThemeChooserRow(
 }
 
 @Composable
-private fun LegalPanel() {
+private fun LinksPanel() {
     Row(
         modifier = Modifier.padding(top = 16.dp)
     ) {
@@ -225,6 +225,11 @@ private fun LegalPanel() {
                 TextLink(
                     text = stringResource(string.brand_guidelines),
                     url = BRAND_GUIDELINES_URL
+                )
+                Spacer(Modifier.width(16.dp))
+                TextLink(
+                    text = stringResource(string.feedback),
+                    url = FEEDBACK_URL
                 )
             }
         }
@@ -283,3 +288,4 @@ fun PreviewSettingsDialogLoading() {
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val LICENSES_URL = "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
 private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
+private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"
