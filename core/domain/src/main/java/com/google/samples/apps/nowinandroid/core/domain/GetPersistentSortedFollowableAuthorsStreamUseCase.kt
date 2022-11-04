@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import javax.inject.Inject
@@ -29,11 +30,12 @@ import kotlinx.coroutines.flow.map
  * data.
  */
 class GetPersistentSortedFollowableAuthorsStreamUseCase @Inject constructor(
+    newsRepository: NewsRepository,
     authorsRepository: AuthorsRepository,
     private val userDataRepository: UserDataRepository
 ) {
     private val getSortedFollowableAuthorsStream =
-        GetSortedFollowableAuthorsStreamUseCase(authorsRepository)
+        GetSortedFollowableAuthorsStreamUseCase(newsRepository, authorsRepository)
 
     /**
      * Returns a list of authors with their associated followed state sorted alphabetically by name.
