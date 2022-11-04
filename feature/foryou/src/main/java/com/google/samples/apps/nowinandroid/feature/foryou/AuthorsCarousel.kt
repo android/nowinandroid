@@ -43,10 +43,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +56,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
@@ -73,8 +74,8 @@ fun AuthorsCarousel(
 
     LazyRow(
         modifier = modifier.testTag(tag),
-        contentPadding = PaddingValues(24.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         state = lazyListState
     ) {
         items(items = authors, key = { item -> item.author.id }) { followableAuthor ->
@@ -97,24 +98,32 @@ fun AuthorItem(
     modifier: Modifier = Modifier,
 ) {
     val followDescription = if (following) {
-        stringResource(id = R.string.following)
+        stringResource(R.string.following)
     } else {
-        stringResource(id = R.string.not_following)
+        stringResource(R.string.not_following)
+    }
+    val followActionLabel = if (following) {
+        stringResource(R.string.unfollow)
+    } else {
+        stringResource(R.string.follow)
     }
 
     Column(
         modifier = modifier
             .toggleable(
                 value = following,
-                enabled = true,
                 role = Role.Button,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(bounded = false),
                 onValueChange = { newFollowing -> onAuthorClick(newFollowing) },
             )
+            .padding(8.dp)
             .sizeIn(maxWidth = 48.dp)
             .semantics(mergeDescendants = true) {
+                // Add information for A11y services, explaining what each state means and
+                // what will happen when the user interacts with the author item.
                 stateDescription = "$followDescription ${author.name}"
+                onClick(label = followActionLabel, action = null)
             }
     ) {
         Box(
@@ -140,24 +149,23 @@ fun AuthorItem(
                     contentDescription = null
                 )
             }
-            NiaToggleButton(
-                checked = following,
-                onCheckedChange = onAuthorClick,
-                modifier = Modifier.align(Alignment.BottomEnd),
-                icon = {
-                    Icon(
-                        imageVector = NiaIcons.Add,
-                        contentDescription = null
-                    )
-                },
-                checkedIcon = {
-                    Icon(
-                        imageVector = NiaIcons.Check,
-                        contentDescription = null
-                    )
-                },
-                size = 24.dp,
-                backgroundColor = MaterialTheme.colorScheme.surface
+            val backgroundColor =
+                if (following)
+                    MaterialTheme.colorScheme.primaryContainer
+                else
+                    MaterialTheme.colorScheme.surface
+            Icon(
+                imageVector = if (following) NiaIcons.Check else NiaIcons.Add,
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(18.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = backgroundColor,
+                            radius = 12.dp.toPx()
+                        )
+                    }
             )
         }
         Spacer(modifier = Modifier.height(4.dp))

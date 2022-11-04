@@ -27,5 +27,7 @@
     <!-- Authors-->
     <string name="following">You are following</string>
     <string name="not_following">You are not following</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
 
 </resources>
