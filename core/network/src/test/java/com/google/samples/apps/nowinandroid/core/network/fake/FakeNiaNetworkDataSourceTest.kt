@@ -49,7 +49,7 @@ class FakeNiaNetworkDataSourceTest {
     fun testDeserializationOfNewsResources() = runTest(testDispatcher) {
         assertEquals(
             FakeDataSource.sampleResource,
-            subject.getNewsResources().first()
+            subject.getNewsResources().find { it.id == FakeDataSource.sampleResource.id }
         )
     }
 }

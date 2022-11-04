@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.samples.apps.nowinandroid.Flavor
-import com.google.samples.apps.nowinandroid.FlavorDimension
+import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
@@ -49,9 +48,21 @@ android {
     // which is more close to what will be shipped to users (no fake data), but has ability to run the
     // benchmarks on demo, so we benchmark on stable data. 
     configureFlavors(this)
-    
+
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
+
+    testOptions {
+        managedDevices {
+            devices {
+                create<ManagedVirtualDevice>("pixel5Api30") {
+                    device = "Pixel 5"
+                    apiLevel = 30
+                    systemImageSource = "aosp"
+                }
+            }
+        }
+    }
 }
 
 dependencies {

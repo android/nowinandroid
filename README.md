@@ -24,10 +24,7 @@ in or follow specific authors.
 
 ## Screenshots
 
-![Screenshot showing For You screen](docs/images/screenshot-1-foryou.png "Screenshot showing For You screen") 
-![Screenshot showing Interests screen](docs/images/screenshot-2-interests.png "Screenshot showing Interests screen") 
-![Screenshot showing Topic detail screen](docs/images/screenshot-3-topicdetail.png "Screenshot showing Topic detail screen")
-
+![Screenshot showing For You screen, Interests screen and Topic detail screen](docs/images/screenshots.png "Screenshot showing For You screen, Interests screen and Topic detail screen")
 
 # Development Environment
 
