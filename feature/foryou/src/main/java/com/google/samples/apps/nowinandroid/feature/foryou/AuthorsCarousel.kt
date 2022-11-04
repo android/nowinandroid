@@ -145,7 +145,7 @@ fun AuthorItem(
                 AsyncImage(
                     modifier = authorImageModifier,
                     model = author.imageUrl,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     contentDescription = null
                 )
             }
