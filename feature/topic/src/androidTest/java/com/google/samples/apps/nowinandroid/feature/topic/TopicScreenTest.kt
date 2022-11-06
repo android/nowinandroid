@@ -17,20 +17,15 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.hasScrollToNodeAction
-import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performScrollToNode
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -44,107 +39,77 @@ class TopicScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private lateinit var topicLoading: String
-
-    @Before
-    fun setup() {
-        composeTestRule.activity.apply {
-            topicLoading = getString(R.string.topic_loading)
-        }
-    }
-
     @Test
     fun niaLoadingWheel_whenScreenIsLoading_showLoading() {
-        composeTestRule.setContent {
-            TopicScreen(
-                topicUiState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+        launchTopicRobot(
+            composeTestRule,
+            TopicUiState.Loading,
+            NewsUiState.Loading
+        ) {
+            loadingIndicatorExists()
         }
-
-        composeTestRule
-            .onNodeWithContentDescription(topicLoading)
-            .assertExists()
     }
 
     @Test
     fun topicTitle_whenTopicIsSuccess_isShown() {
         val testTopic = testTopics.first()
-        composeTestRule.setContent {
-            TopicScreen(
-                topicUiState = TopicUiState.Success(testTopic),
-                newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+
+        launchTopicRobot(
+            composeTestRule,
+            TopicUiState.Success(testTopic),
+            NewsUiState.Loading
+        ) {
+            topicExists(testTopic)
         }
-
-        // Name is shown
-        composeTestRule
-            .onNodeWithText(testTopic.topic.name)
-            .assertExists()
-
-        // Description is shown
-        composeTestRule
-            .onNodeWithText(testTopic.topic.longDescription)
-            .assertExists()
     }
 
     @Test
     fun news_whenTopicIsLoading_isNotShown() {
-        composeTestRule.setContent {
-            TopicScreen(
-                topicUiState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
-                ),
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
+        launchTopicRobot(
+            composeTestRule,
+            TopicUiState.Loading,
+            NewsUiState.Success(
+                sampleNewsResources.mapIndexed { index, newsResource ->
+                    SaveableNewsResource(
+                        newsResource = newsResource,
+                        isSaved = index % 2 == 0,
+                    )
+                }
             )
+        ) {
+            loadingIndicatorExists()
         }
-
-        // Loading indicator shown
-        composeTestRule
-            .onNodeWithContentDescription(topicLoading)
-            .assertExists()
     }
 
     @Test
     fun news_whenSuccessAndTopicIsSuccess_isShown() {
         val testTopic = testTopics.first()
-        composeTestRule.setContent {
-            TopicScreen(
-                topicUiState = TopicUiState.Success(testTopic),
-                newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
-                ),
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
+        launchTopicRobot(
+            composeTestRule,
+            TopicUiState.Success(testTopic),
+            NewsUiState.Success(
+                sampleNewsResources.mapIndexed { index, newsResource ->
+                    SaveableNewsResource(
+                        newsResource = newsResource,
+                        isSaved = index % 2 == 0,
+                    )
+                }
             )
+        ) {
+            // Scroll to first news title if available
+            scrollToNewsResource(sampleNewsResources.first())
         }
-
-        // Scroll to first news title if available
-        composeTestRule
-            .onAllNodes(hasScrollToNodeAction())
-            .onFirst()
-            .performScrollToNode(hasText(sampleNewsResources.first().title))
     }
+}
+
+private fun launchTopicRobot(
+    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    topicUiState: TopicUiState,
+    newsUiState: NewsUiState,
+    func: TopicRobot.() -> Unit
+) = TopicRobot(composeTestRule).apply {
+    setContent(topicUiState, newsUiState)
+    func()
 }
 
 private const val TOPIC_1_NAME = "Headlines"
