@@ -18,13 +18,17 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+
+        // Android Build Server
+        maven { url = uri("../nowinandroid-prebuilts/m2repository") }
     }
 
-    dependencies {
-        classpath(libs.android.gradlePlugin)
-        classpath(libs.kotlin.gradlePlugin)
-        classpath(libs.kotlin.serializationPlugin)
-        classpath(libs.hilt.gradlePlugin)
-        classpath(libs.secrets.gradlePlugin)
-    }
+}
+
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.secrets) apply false
 }

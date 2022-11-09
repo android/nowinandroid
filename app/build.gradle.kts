@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.samples.apps.nowinandroid.FlavorDimension
-import com.google.samples.apps.nowinandroid.Flavor
 
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
     id("nowinandroid.android.application.jacoco")
-    kotlin("kapt")
+    id("nowinandroid.android.hilt")
     id("jacoco")
-    id("dagger.hilt.android.plugin")
-    id("nowinandroid.spotless")
+    id("nowinandroid.firebase-perf")
 }
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
-        versionCode = 1
-        versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 2
+        versionName = "0.0.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
@@ -62,22 +59,7 @@ android {
             proguardFiles("benchmark-rules.pro")
             //  FIXME enabling minification breaks access to demo backend.
             isMinifyEnabled = false
-            // Keep the build type debuggable so we can attach a debugger if needed.
-            isDebuggable = true
             applicationIdSuffix = ".benchmark"
-        }
-    }
-
-    // @see Flavor for more details on the app product flavors.
-    flavorDimensions += FlavorDimension.contentType.name
-    productFlavors {
-        Flavor.values().forEach {
-            create(it.name) {
-                dimension = it.dimension.name
-                if (it.applicationIdSuffix != null) {
-                    applicationIdSuffix = it.applicationIdSuffix
-                }
-            }
         }
     }
 
@@ -91,46 +73,56 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    namespace = "com.google.samples.apps.nowinandroid"
 }
 
 dependencies {
-    implementation(project(":feature-author"))
-    implementation(project(":feature-interests"))
-    implementation(project(":feature-foryou"))
-    implementation(project(":feature-topic"))
+    implementation(project(":feature:author"))
+    implementation(project(":feature:interests"))
+    implementation(project(":feature:foryou"))
+    implementation(project(":feature:bookmarks"))
+    implementation(project(":feature:topic"))
+    implementation(project(":feature:settings"))
 
-    implementation(project(":core-ui"))
-    implementation(project(":core-designsystem"))
-    implementation(project(":core-navigation"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
 
-    implementation(project(":sync"))
+    implementation(project(":sync:work"))
+    implementation(project(":sync:sync-test"))
 
-    androidTestImplementation(project(":core-testing"))
-    androidTestImplementation(project(":core-datastore-test"))
-    androidTestImplementation(project(":core-data-test"))
-    androidTestImplementation(project(":core-network"))
+    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:datastore-test"))
+    androidTestImplementation(project(":core:data-test"))
+    androidTestImplementation(project(":core:network"))
+    androidTestImplementation(libs.androidx.navigation.testing)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
 
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
-    implementation(libs.material3)
     implementation(libs.androidx.profileinstaller)
 
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
+}
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kaptAndroidTest(libs.hilt.compiler)
-
-    // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-    configurations.configureEach {
-        resolutionStrategy {
-            force(libs.junit4)
-            // Temporary workaround for https://issuetracker.google.com/174733673
-            force("org.objenesis:objenesis:2.6")
-        }
+// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
+configurations.configureEach {
+    resolutionStrategy {
+        force(libs.junit4)
+        // Temporary workaround for https://issuetracker.google.com/174733673
+        force("org.objenesis:objenesis:2.6")
     }
 }

@@ -26,9 +26,8 @@ java {
 }
 
 dependencies {
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.spotless.gradlePlugin)
+    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.kotlin.gradlePlugin)
 }
 
 gradlePlugin {
@@ -65,9 +64,13 @@ gradlePlugin {
             id = "nowinandroid.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
-        register("spotless") {
-            id = "nowinandroid.spotless"
-            implementationClass = "SpotlessConventionPlugin"
+        register("androidHilt") {
+            id = "nowinandroid.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("firebase-perf") {
+            id = "nowinandroid.firebase-perf"
+            implementationClass = "FirebasePerfConventionPlugin"
         }
     }
 }

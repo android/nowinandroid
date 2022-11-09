@@ -16,7 +16,6 @@
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
-    id("nowinandroid.spotless")
 }
 
 android {
@@ -33,11 +32,12 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+    namespace = "com.google.samples.apps.niacatalog"
 }
 
 dependencies {
-    implementation(project(":core-ui"))
-    implementation(project(":core-designsystem"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:designsystem"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.accompanist.flowlayout)

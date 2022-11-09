@@ -20,11 +20,6 @@ NC='\033[0m' # No Color
 GIT_DIR=$(git rev-parse --git-dir 2> /dev/null)
 GIT_ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
 
-if [[ ! "$GIT_ROOT" =~ /nowinandroid$ ]]; then
-  echo -e "${RED}ERROR:${NC} Please run this script from the cloned nowinandroid directory."
-  exit 1
-fi
-
 echo "Installing git commit-message hook"
 echo
 curl -sSLo "${GIT_DIR}/hooks/commit-msg" \
