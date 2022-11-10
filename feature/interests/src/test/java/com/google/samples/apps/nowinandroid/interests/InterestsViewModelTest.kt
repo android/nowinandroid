@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetPersistentSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -53,8 +53,8 @@ class InterestsViewModelTest {
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository
     )
-    private val getPersistentSortedFollowableAuthorsStream =
-        GetPersistentSortedFollowableAuthorsStreamUseCase(
+    private val getSortedFollowableAuthorsStream =
+        GetSortedFollowableAuthorsStreamUseCase(
             authorsRepository = authorsRepository,
             userDataRepository = userDataRepository
         )
@@ -65,7 +65,7 @@ class InterestsViewModelTest {
         viewModel = InterestsViewModel(
             userDataRepository = userDataRepository,
             getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
-            getPersistentSortedFollowableAuthorsStream = getPersistentSortedFollowableAuthorsStream
+            getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream
         )
     }
 
