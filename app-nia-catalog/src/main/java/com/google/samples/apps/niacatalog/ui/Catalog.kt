@@ -37,20 +37,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaDropdownMenuButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilledButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaFilterChip
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaNavigationBar
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaNavigationBarItem
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaOutlinedButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTab
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTabRow
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTextButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaTopicTag
-import com.google.samples.apps.nowinandroid.core.ui.component.NiaViewToggleButton
-import com.google.samples.apps.nowinandroid.core.ui.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.ui.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaDropdownMenuButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOutlinedButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaViewToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android component catalog.
@@ -416,22 +416,22 @@ fun NiaCatalog() {
                     FlowRow(mainAxisSpacing = 16.dp) {
                         var firstChecked by remember { mutableStateOf(false) }
                         NiaFilterChip(
-                            checked = firstChecked,
-                            onCheckedChange = { checked -> firstChecked = checked },
-                            text = { Text(text = "Enabled".uppercase()) }
+                            selected = firstChecked,
+                            onSelectedChange = { checked -> firstChecked = checked },
+                            label = { Text(text = "Enabled".uppercase()) }
                         )
                         var secondChecked by remember { mutableStateOf(true) }
                         NiaFilterChip(
-                            checked = secondChecked,
-                            onCheckedChange = { checked -> secondChecked = checked },
-                            text = { Text(text = "Enabled".uppercase()) }
+                            selected = secondChecked,
+                            onSelectedChange = { checked -> secondChecked = checked },
+                            label = { Text(text = "Enabled".uppercase()) }
                         )
                         var thirdChecked by remember { mutableStateOf(true) }
                         NiaFilterChip(
-                            checked = thirdChecked,
-                            onCheckedChange = { checked -> thirdChecked = checked },
+                            selected = thirdChecked,
+                            onSelectedChange = { checked -> thirdChecked = checked },
                             enabled = false,
-                            text = { Text(text = "Disabled".uppercase()) }
+                            label = { Text(text = "Disabled".uppercase()) }
                         )
                     }
                 }
@@ -518,24 +518,34 @@ fun NiaCatalog() {
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
+                        var expandedTopicId by remember { mutableStateOf<String?>(null) }
+
                         var firstFollowed by remember { mutableStateOf(false) }
                         NiaTopicTag(
+                            expanded = expandedTopicId == "Topic 1",
                             followed = firstFollowed,
+                            onDropMenuToggle = { show ->
+                                expandedTopicId = if (show) "Topic 1" else null
+                            },
                             onFollowClick = { firstFollowed = true },
                             onUnfollowClick = { firstFollowed = false },
                             onBrowseClick = {},
-                            text = { Text(text = "Topic".uppercase()) },
+                            text = { Text(text = "Topic 1".uppercase()) },
                             followText = { Text(text = "Follow") },
                             unFollowText = { Text(text = "Unfollow") },
                             browseText = { Text(text = "Browse topic") }
                         )
                         var secondFollowed by remember { mutableStateOf(true) }
                         NiaTopicTag(
+                            expanded = expandedTopicId == "Topic 2",
                             followed = secondFollowed,
+                            onDropMenuToggle = { show ->
+                                expandedTopicId = if (show) "Topic 2" else null
+                            },
                             onFollowClick = { secondFollowed = true },
                             onUnfollowClick = { secondFollowed = false },
                             onBrowseClick = {},
-                            text = { Text(text = "Topic".uppercase()) },
+                            text = { Text(text = "Topic 2".uppercase()) },
                             followText = { Text(text = "Follow") },
                             unFollowText = { Text(text = "Unfollow") },
                             browseText = { Text(text = "Browse topic") }

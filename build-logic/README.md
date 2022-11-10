@@ -29,8 +29,6 @@ setup.
 
 Current list of convention plugins:
 
-- [`nowinandroid.spotless`](convention/src/main/kotlin/SpotlessConventionPlugin.kt):
-  Configures spotless. 
 - [`nowinandroid.android.application`](convention/src/main/kotlin/AndroidApplicationConventionPlugin.kt),
   [`nowinandroid.android.library`](convention/src/main/kotlin/AndroidLibraryConventionPlugin.kt),
   [`nowinandroid.android.test`](convention/src/main/kotlin/AndroidTestConventionPlugin.kt):

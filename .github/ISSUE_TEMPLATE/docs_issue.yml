@@ -1,0 +1,38 @@
+name: Documentation issue
+description: File an issue or make a suggestion for the project documentation
+title: "[Documentation]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to improve our documentation!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the documentation issue you encountered.
+      options:
+      - label: I have searched the existing issues
+        required: true
+  - type: input
+    id: page-url
+    attributes:
+      label: Page URL (type "NEW" for a new page suggestion)
+    validations:
+      required: true
+  - type: textarea
+    id: what-needs-improving
+    attributes:
+      label: What's the documentation problem or suggestion?
+      placeholder: Tell us what should be improved!
+      value: "Docs need improving!"
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

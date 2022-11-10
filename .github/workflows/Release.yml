@@ -12,18 +12,22 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2    
+        uses: actions/checkout@v3   
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
+          distribution: 'zulu'
           java-version: 11
 
-      - name: Build all projects
-        run: ./scripts/gradlew_recursive.sh assembleDebug
+      - name: Build app
+        run: ./gradlew :app:assembleDemoRelease
 
       - name: Create Release
         id: create_release
@@ -36,72 +40,12 @@ jobs:
           draft: true
           prerelease: false
 
-      - name: Upload Crane
+      - name: Upload app
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Crane/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: crane-debug.apk
+          asset_path: app/build/outputs/apk/demo/release/app-demo-release.apk
+          asset_name: app-demo-release.apk
           asset_content_type: application/vnd.android.package-archive          
-
-      - name: Upload Owl
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Owl/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: owl-debug.apk
-          asset_content_type: application/vnd.android.package-archive
-
-      - name: Upload Jetcaster
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Jetcaster/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: jetcaster-debug.apk
-          asset_content_type: application/vnd.android.package-archive          
-
-      - name: Upload Jetchat
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Jetchat/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: jetchat-debug.apk
-          asset_content_type: application/vnd.android.package-archive          
-
-      - name: Upload Jetnews
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: JetNews/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: jetnews-debug.apk
-          asset_content_type: application/vnd.android.package-archive
-
-      - name: Upload Jetsnack
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Jetsnack/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: jetsnack-debug.apk
-          asset_content_type: application/vnd.android.package-archive
-
-      - name: Upload Jetsurvey
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Jetsurvey/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: jetsurvey-debug.apk
-          asset_content_type: application/vnd.android.package-archive

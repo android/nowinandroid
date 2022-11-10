@@ -16,9 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -26,6 +29,10 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
+import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -47,39 +54,45 @@ class NavigationTest {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Use the primary activity to initialize the app normally.
-     */
-    @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
-
-    /**
      * Create a temporary folder used to create a Data Store file. This guarantees that
      * the file is removed in between each test, preventing a crash.
      */
-    @BindValue @get:Rule(order = 2)
+    @BindValue @get:Rule(order = 1)
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+
+    /**
+     * Use the primary activity to initialize the app normally.
+     */
+    @get:Rule(order = 2)
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     // The strings used for matching in these tests
     private lateinit var done: String
     private lateinit var navigateUp: String
     private lateinit var forYouLoading: String
     private lateinit var forYou: String
-    private lateinit var episodes: String
-    private lateinit var saved: String
     private lateinit var interests: String
     private lateinit var sampleTopic: String
+    private lateinit var appName: String
+    private lateinit var saved: String
+    private lateinit var settings: String
+    private lateinit var brand: String
+    private lateinit var ok: String
 
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            done = getString(R.string.done)
-            navigateUp = getString(R.string.navigate_up)
-            forYouLoading = getString(R.string.for_you_loading)
-            forYou = getString(R.string.for_you)
-            episodes = getString(R.string.episodes)
-            saved = getString(R.string.saved)
-            interests = getString(R.string.interests)
+            done = getString(FeatureForyouR.string.done)
+            navigateUp = getString(FeatureForyouR.string.navigate_up)
+            forYouLoading = getString(FeatureForyouR.string.for_you_loading)
+            forYou = getString(FeatureForyouR.string.for_you)
+            interests = getString(FeatureInterestsR.string.interests)
             sampleTopic = "Headlines"
+            appName = getString(R.string.app_name)
+            saved = getString(BookmarksR.string.saved)
+            settings = getString(SettingsR.string.top_app_bar_action_icon_description)
+            brand = getString(SettingsR.string.brand_android)
+            ok = getString(SettingsR.string.dismiss_dialog_button_text)
         }
     }
 
@@ -149,6 +162,62 @@ class NavigationTest {
         }
     }
 
+    @Test
+    fun topLevelDestinations_showTopBarWithTitle() {
+        composeTestRule.apply {
+
+            // Verify that the top bar contains the app name on the first screen.
+            onNodeWithText(appName).assertExists()
+
+            // Go to the saved tab, verify that the top bar contains "saved". This means
+            // we'll have 2 elements with the text "saved" on screen. One in the top bar, and
+            // one in the bottom navigation.
+            onNodeWithText(saved).performClick()
+            onAllNodesWithText(saved).assertCountEquals(2)
+
+            // As above but for the interests tab.
+            onNodeWithText(interests).performClick()
+            onAllNodesWithText(interests).assertCountEquals(2)
+        }
+    }
+
+    @Test
+    fun topLevelDestinations_showSettingsIcon() {
+        composeTestRule.apply {
+            onNodeWithContentDescription(settings).assertExists()
+
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(settings).assertExists()
+
+            onNodeWithText(interests).performClick()
+            onNodeWithContentDescription(settings).assertExists()
+        }
+    }
+
+    @Test
+    fun whenSettingsIconIsClicked_settingsDialogIsShown() {
+        composeTestRule.apply {
+            onNodeWithContentDescription(settings).performClick()
+
+            // Check that one of the settings is actually displayed.
+            onNodeWithText(brand).assertExists()
+        }
+    }
+
+    @Test
+    fun whenSettingsDialogDismissed_previousScreenIsDisplayed() {
+        composeTestRule.apply {
+
+            // Navigate to the saved screen, open the settings dialog, then close it.
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(settings).performClick()
+            onNodeWithText(ok).performClick()
+
+            // Check that the saved screen is still visible and selected.
+            onAllNodesWithText(saved).onLast().assertIsSelected()
+        }
+    }
+
     /*
      * There should always be at most one instance of a top-level destination at the same time.
      */
@@ -186,7 +255,8 @@ class NavigationTest {
     fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
-            onNodeWithText("Android Studio").performClick() // TODO: Grab string from fake data
+            // TODO: Grab string from fake data
+            onNodeWithText("Android Studio & Tools").performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()

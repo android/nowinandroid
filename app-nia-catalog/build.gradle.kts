@@ -16,12 +16,15 @@
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
-    id("nowinandroid.spotless")
 }
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.niacatalog"
+
+        // The UI catalog does not depend on content from the app, however, it depends on modules
+        // which do, so we must specify a default value for the contentType dimension.
+        missingDimensionStrategy("contentType", "demo")
     }
 
     packagingOptions {
@@ -29,10 +32,12 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+    namespace = "com.google.samples.apps.niacatalog"
 }
 
 dependencies {
-    implementation(project(":core-ui"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:designsystem"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.accompanist.flowlayout)

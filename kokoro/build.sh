@@ -58,12 +58,12 @@ run_firebase_test_lab() {
   set +e # To not exit on an error to retry flaky tests
   local counter=0
   local result=1
-  local module=$1
+  local testApk=$1
   while [ $result != 0 -a $counter -lt $MAX_RETRY ]; do
     gcloud firebase test android run \
       --type instrumentation \
-      --app  "app/build/outputs/apk/debug/app-debug.apk" \
-      --test "$module/build/outputs/apk/androidTest/debug/$module-debug-androidTest.apk" \
+      --app  "app/build/outputs/apk/demo/debug/app-demo-debug.apk" \
+      --test "$testApk" \
       --device-ids $deviceIds \
       --os-version-ids $osVersionIds \
       --locales en \
@@ -76,17 +76,14 @@ run_firebase_test_lab() {
 
 
 # All modules with androidTest to run tests on.
-# This command will create a list like ["app", "sync"] based on which subdirectories
-# (assumed to be modules) have an androidTest source directory.
-# The sed regex pulls out the module name from the matched directory
-modules=($(find . -regex ".*/src/androidTest" | sed -E 's|\./([^/]*)/.*|\1|g'))
+testApks=($(./gradlew -q demoDebugPrintTestApk))
 
 # Run all modules in parallel with Firebase Test Lab, and fail if any fail
 pids=""
 result=0
 
-for module in ${modules[@]}; do
-  run_firebase_test_lab $module &
+for testApk in ${testApks[@]}; do
+  run_firebase_test_lab $testApk &
   pids="$pids $!"
 done
 

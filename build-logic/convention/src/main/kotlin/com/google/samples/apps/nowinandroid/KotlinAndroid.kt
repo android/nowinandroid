@@ -23,6 +23,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 /**
@@ -32,7 +33,7 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *>,
 ) {
     commonExtension.apply {
-        compileSdk = 32
+        compileSdk = 33
 
         defaultConfig {
             minSdk = 21
@@ -46,7 +47,9 @@ internal fun Project.configureKotlinAndroid(
 
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
+            val warningsAsErrors: String? by project
+            allWarningsAsErrors = warningsAsErrors.toBoolean()
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
@@ -54,8 +57,6 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlin.Experimental",
-                // Enable experimental kotlinx serialization APIs
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
             )
 
             // Set JVM target to 1.8
@@ -70,6 +71,6 @@ internal fun Project.configureKotlinAndroid(
     }
 }
 
-private fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
+fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlinOptions", block)
 }
