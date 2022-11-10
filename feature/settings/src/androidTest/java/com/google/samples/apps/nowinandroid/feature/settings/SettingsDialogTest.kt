@@ -82,7 +82,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun whenStateIsSuccess_allLegalLinksAreDisplayed() {
+    fun whenStateIsSuccess_allLinksAreDisplayed() {
         composeTestRule.setContent {
             SettingsDialog(
                 settingsUiState = Success(
@@ -100,5 +100,6 @@ class SettingsDialogTest {
         composeTestRule.onNodeWithText(getString(R.string.privacy_policy)).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.licenses)).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.brand_guidelines)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.feedback)).assertExists()
     }
 }
