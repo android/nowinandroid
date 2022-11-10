@@ -23,6 +23,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("com.gradle.enterprise") version "3.11.4"
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -59,3 +63,14 @@ include(":feature-foryou")
 include(":feature-interests")
 include(":feature-topic")
 include(":sync")
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+        if (System.getenv("CI").toBoolean()) {
+            publishAlways()
+            isUploadInBackground = false
+        }
+    }
+}
