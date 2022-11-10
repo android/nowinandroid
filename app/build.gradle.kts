@@ -91,7 +91,6 @@ dependencies {
     implementation(project(":core:model"))
 
     implementation(project(":sync:work"))
-    implementation(project(":sync:sync-test"))
 
     androidTestImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:datastore-test"))
