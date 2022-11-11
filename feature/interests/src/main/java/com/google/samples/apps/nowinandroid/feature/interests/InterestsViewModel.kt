@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetPersistentSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 class InterestsViewModel @Inject constructor(
     val userDataRepository: UserDataRepository,
     getFollowableTopicsStream: GetFollowableTopicsStreamUseCase,
-    getPersistentSortedFollowableAuthorsStream: GetPersistentSortedFollowableAuthorsStreamUseCase
+    getSortedFollowableAuthorsStream: GetSortedFollowableAuthorsStreamUseCase
 ) : ViewModel() {
 
     private val _tabState = MutableStateFlow(
@@ -51,7 +51,7 @@ class InterestsViewModel @Inject constructor(
     val tabState: StateFlow<InterestsTabState> = _tabState.asStateFlow()
 
     val uiState: StateFlow<InterestsUiState> = combine(
-        getPersistentSortedFollowableAuthorsStream(),
+        getSortedFollowableAuthorsStream(),
         getFollowableTopicsStream(sortBy = TopicSortField.NAME),
         InterestsUiState::Interests
     ).stateIn(
