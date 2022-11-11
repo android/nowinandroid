@@ -28,6 +28,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRe
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicIdArg
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -38,8 +40,6 @@ import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
