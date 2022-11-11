@@ -31,7 +31,7 @@ private val emptyUserData = UserData(
     followedAuthors = emptySet(),
     themeBrand = ThemeBrand.DEFAULT,
     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-    hasDismissedOnboarding = false
+    shouldHideOnboarding = false
 )
 
 class TestUserDataRepository : UserDataRepository {
@@ -91,9 +91,9 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    override suspend fun setHasDismissedOnboarding(hasDismissedOnboarding: Boolean) {
+    override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         currentUserData.let { current ->
-            _userData.tryEmit(current.copy(hasDismissedOnboarding = hasDismissedOnboarding))
+            _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
         }
     }
 

@@ -53,7 +53,7 @@ class NiaPreferencesDataSource @Inject constructor(
                         DarkThemeConfig.LIGHT
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
-                hasDismissedOnboarding = it.hasDismissedOnboarding
+                shouldHideOnboarding = it.shouldHideOnboarding
             )
         }
 
@@ -63,7 +63,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 it.copy {
                     followedTopicIds.clear()
                     followedTopicIds.putAll(topicIds.associateWith { true })
-                    updateHasDismissedOnboardingIfNecessary()
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -80,7 +80,7 @@ class NiaPreferencesDataSource @Inject constructor(
                     } else {
                         followedTopicIds.remove(topicId)
                     }
-                    updateHasDismissedOnboardingIfNecessary()
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -94,7 +94,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 it.copy {
                     followedAuthorIds.clear()
                     followedAuthorIds.putAll(authorIds.associateWith { true })
-                    updateHasDismissedOnboardingIfNecessary()
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -111,7 +111,7 @@ class NiaPreferencesDataSource @Inject constructor(
                     } else {
                         followedAuthorIds.remove(authorId)
                     }
-                    updateHasDismissedOnboardingIfNecessary()
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -194,18 +194,18 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setHasDismissedOnboarding(hasDismissedOnboarding: Boolean) {
+    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         userPreferences.updateData {
             it.copy {
-                this.hasDismissedOnboarding = hasDismissedOnboarding
+                this.shouldHideOnboarding = shouldHideOnboarding
             }
         }
     }
 }
 
-fun UserPreferencesKt.Dsl.updateHasDismissedOnboardingIfNecessary() {
+fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
 
     if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
-        hasDismissedOnboarding = false
+        shouldHideOnboarding = false
     }
 }

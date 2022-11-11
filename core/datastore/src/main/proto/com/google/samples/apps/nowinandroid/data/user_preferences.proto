@@ -44,8 +44,5 @@ message UserPreferences {
     ThemeBrandProto theme_brand = 16;
     DarkThemeConfigProto dark_theme_config = 17;
 
-    // Note that proto3 only allows a default value of `false` for boolean types. This means that
-    // whilst the name `should_show_onboarding` would be preferable here we are forced to choose a
-    // name which works with this default value constraint.
-    bool has_dismissed_onboarding = 18;
+    bool should_hide_onboarding = 18;
 }
