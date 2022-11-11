@@ -45,14 +45,14 @@ internal class ForYouRobot(
 
     fun setContent(
         isSyncing: Boolean,
-        interestsSelectionState: ForYouInterestsSelectionUiState,
+        onboardingState: OnboardingUiState,
         feedState: NewsFeedUiState,
     ) {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = isSyncing,
-                    interestsSelectionState = interestsSelectionState,
+                    onboardingUiState = onboardingState,
                     feedState = feedState,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
