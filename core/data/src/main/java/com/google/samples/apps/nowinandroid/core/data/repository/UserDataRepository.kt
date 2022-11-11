@@ -66,5 +66,5 @@ interface UserDataRepository {
     /**
      * Sets whether the user has completed the onboarding process.
      */
-    suspend fun setHasDismissedOnboarding(hasDismissedOnboarding: Boolean)
+    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean)
 }

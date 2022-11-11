@@ -48,7 +48,7 @@ class ForYouViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val shouldShowOnboarding: Flow<Boolean> =
-        userDataRepository.userDataStream.map { !it.hasDismissedOnboarding }
+        userDataRepository.userDataStream.map { !it.shouldHideOnboarding }
 
     val isSyncing = syncStatusMonitor.isSyncing
         .stateIn(
@@ -63,7 +63,7 @@ class ForYouViewModel @Inject constructor(
                 // If the user hasn't completed the onboarding and hasn't selected any interests
                 // show an empty news list to clearly demonstrate that their selections affect the
                 // news articles they will see.
-                if (!userData.hasDismissedOnboarding &&
+                if (!userData.shouldHideOnboarding &&
                     userData.followedAuthors.isEmpty() &&
                     userData.followedTopics.isEmpty()
                 ) {
@@ -126,7 +126,7 @@ class ForYouViewModel @Inject constructor(
 
     fun dismissOnboarding() {
         viewModelScope.launch {
-            userDataRepository.setHasDismissedOnboarding(true)
+            userDataRepository.setShouldHideOnboarding(true)
         }
     }
 }

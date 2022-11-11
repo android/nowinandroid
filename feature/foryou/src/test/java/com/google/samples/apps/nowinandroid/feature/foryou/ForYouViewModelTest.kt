@@ -1011,7 +1011,7 @@ class ForYouViewModelTest {
         userDataRepository.setFollowedTopicIds(setOf("1"))
         authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedAuthorIds(setOf("1"))
-        userDataRepository.setHasDismissedOnboarding(true)
+        userDataRepository.setShouldHideOnboarding(true)
         newsRepository.sendNewsResources(sampleNewsResources)
         viewModel.updateNewsResourceSaved("2", true)
 

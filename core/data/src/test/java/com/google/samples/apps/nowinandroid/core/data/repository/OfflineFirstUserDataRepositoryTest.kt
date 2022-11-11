@@ -59,7 +59,7 @@ class OfflineFirstUserDataRepositoryTest {
                     followedAuthors = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-                    hasDismissedOnboarding = false
+                    shouldHideOnboarding = false
                 ),
                 subject.userDataStream.first()
             )
@@ -190,13 +190,13 @@ class OfflineFirstUserDataRepositoryTest {
         }
 
     @Test
-    fun whenUserCompletesOnboarding_thenRemovesAllInterests_hasDismissedOnboardingIsFalse() =
+    fun whenUserCompletesOnboarding_thenRemovesAllInterests_shouldHideOnboardingIsFalse() =
         runTest {
             subject.setFollowedTopicIds(setOf("1"))
-            subject.setHasDismissedOnboarding(true)
-            assertEquals(true, subject.userDataStream.first().hasDismissedOnboarding)
+            subject.setShouldHideOnboarding(true)
+            assertEquals(true, subject.userDataStream.first().shouldHideOnboarding)
 
             subject.setFollowedTopicIds(emptySet())
-            assertEquals(false, subject.userDataStream.first().hasDismissedOnboarding)
+            assertEquals(false, subject.userDataStream.first().shouldHideOnboarding)
         }
 }

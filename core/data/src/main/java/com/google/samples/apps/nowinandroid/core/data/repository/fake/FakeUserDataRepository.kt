@@ -64,7 +64,7 @@ class FakeUserDataRepository @Inject constructor(
         niaPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
     }
 
-    override suspend fun setHasDismissedOnboarding(hasDismissedOnboarding: Boolean) {
-        niaPreferencesDataSource.setHasDismissedOnboarding(hasDismissedOnboarding)
+    override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+        niaPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
     }
 }
