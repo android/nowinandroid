@@ -35,11 +35,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -77,14 +77,13 @@ class TopicViewModelTest {
         topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         val item = viewModel.topicUiState.value
-        assertTrue(item is TopicUiState.Success)
+        assertIs<TopicUiState.Success>(item)
 
-        val successTopicState = item as TopicUiState.Success
         val topicFromRepository = topicsRepository.getTopic(
             testInputTopics[0].topic.id
         ).first()
 
-        assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
+        assertEquals(topicFromRepository, item.followableTopic.topic)
 
         collectJob.cancel()
     }
@@ -119,8 +118,8 @@ class TopicViewModelTest {
             val topicUiState = viewModel.topicUiState.value
             val newsUiState = viewModel.newUiState.value
 
-            assertTrue(topicUiState is TopicUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Loading)
+            assertIs<TopicUiState.Success>(topicUiState)
+            assertIs<NewsUiState.Loading>(newsUiState)
 
             collectJob.cancel()
         }
@@ -141,8 +140,8 @@ class TopicViewModelTest {
             val topicUiState = viewModel.topicUiState.value
             val newsUiState = viewModel.newUiState.value
 
-            assertTrue(topicUiState is TopicUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Success)
+            assertIs<TopicUiState.Success>(topicUiState)
+            assertIs<NewsUiState.Success>(newsUiState)
 
             collectJob.cancel()
         }
