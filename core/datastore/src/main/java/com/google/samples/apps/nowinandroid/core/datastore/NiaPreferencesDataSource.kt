@@ -203,7 +203,7 @@ class NiaPreferencesDataSource @Inject constructor(
     }
 }
 
-fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
+private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
 
     if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
         shouldHideOnboarding = false
