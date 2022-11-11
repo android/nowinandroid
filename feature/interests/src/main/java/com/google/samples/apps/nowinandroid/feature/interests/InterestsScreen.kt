@@ -17,13 +17,16 @@
 package com.google.samples.apps.nowinandroid.feature.interests
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,6 +41,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
+import kotlinx.coroutines.launch
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -107,6 +114,7 @@ internal fun InterestsScreen(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun InterestsContent(
     tabState: InterestsTabState,
@@ -119,29 +127,41 @@ private fun InterestsContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        NiaTabRow(selectedTabIndex = tabState.currentIndex) {
+        val pagerState = rememberPagerState()
+        val scope = rememberCoroutineScope()
+        NiaTabRow(selectedTabIndex = pagerState.currentPage) {
             tabState.titles.forEachIndexed { index, titleId ->
                 NiaTab(
-                    selected = index == tabState.currentIndex,
-                    onClick = { switchTab(index) },
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        switchTab(index)
+                        scope.launch {
+                            pagerState.scrollToPage(index)
+                        }
+                    },
                     text = { Text(text = stringResource(id = titleId)) }
                 )
             }
         }
-        when (tabState.currentIndex) {
-            0 -> {
-                TopicsTabContent(
+        HorizontalPager(
+            state = pagerState,
+            count = tabState.titles.size,
+            verticalAlignment = Alignment.Top,
+            contentPadding = PaddingValues(top = 12.dp),
+        ) { index ->
+            when (index) {
+                0 -> TopicsTabContent(
                     topics = uiState.topics,
                     onTopicClick = navigateToTopic,
                     onFollowButtonClick = followTopic,
                 )
-            }
-            1 -> {
-                AuthorsTabContent(
-                    authors = uiState.authors,
-                    onAuthorClick = navigateToAuthor,
-                    onFollowButtonClick = followAuthor,
-                )
+                1 -> {
+                    AuthorsTabContent(
+                        authors = uiState.authors,
+                        onAuthorClick = navigateToAuthor,
+                        onFollowButtonClick = followAuthor,
+                    )
+                }
             }
         }
     }
