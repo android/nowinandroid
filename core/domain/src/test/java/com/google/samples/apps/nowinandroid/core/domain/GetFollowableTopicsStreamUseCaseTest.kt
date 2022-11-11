@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import androidx.compose.runtime.snapshotFlow
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField.NAME
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -60,31 +59,6 @@ class GetFollowableTopicsStreamUseCaseTest {
                 FollowableTopic(testTopics[2], true),
             ),
             followableTopics.first()
-        )
-    }
-
-    @Test
-    fun whenFollowedTopicIdsSupplied_differentFollowedTopicsAreReturned() = runTest {
-
-        // Obtain a stream of followable topics, specifying a list of topic ids which are currently
-        // followed.
-        val followableTopics = useCase(
-            followedTopicIdsStream = snapshotFlow { setOf(testTopics[1].id) }
-        )
-
-        // Send some test topics and their followed state.
-        topicsRepository.sendTopics(testTopics)
-        userDataRepository.setFollowedTopicIds(setOf(testTopics[0].id))
-
-        // Check that the topic ids supplied to the use case are used for the bookmark state, not
-        // the topic ids in the user data repository.
-        assertEquals(
-            followableTopics.first(),
-            listOf(
-                FollowableTopic(testTopics[0], false),
-                FollowableTopic(testTopics[1], true),
-                FollowableTopic(testTopics[2], false),
-            )
         )
     }
 
