@@ -25,4 +25,5 @@ data class UserData(
     val followedAuthors: Set<String>,
     val themeBrand: ThemeBrand,
     val darkThemeConfig: DarkThemeConfig,
+    val shouldHideOnboarding: Boolean
 )

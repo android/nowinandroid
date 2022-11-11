@@ -20,35 +20,35 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 
 /**
- * A sealed hierarchy describing the interests selection state for the for you screen.
+ * A sealed hierarchy describing the onboarding state for the for you screen.
  */
-sealed interface ForYouInterestsSelectionUiState {
+sealed interface OnboardingUiState {
     /**
-     * The interests selection state is loading.
+     * The onboarding state is loading.
      */
-    object Loading : ForYouInterestsSelectionUiState
+    object Loading : OnboardingUiState
 
     /**
-     * The interests selection state was unable to load.
+     * The onboarding state was unable to load.
      */
-    object LoadFailed : ForYouInterestsSelectionUiState
+    object LoadFailed : OnboardingUiState
 
     /**
-     * There is no interests selection state.
+     * There is no onboarding state.
      */
-    object NoInterestsSelection : ForYouInterestsSelectionUiState
+    object NotShown : OnboardingUiState
 
     /**
-     * There is a interests selection state, with the given lists of topics and authors.
+     * There is a onboarding state, with the given lists of topics and authors.
      */
-    data class WithInterestsSelection(
+    data class Shown(
         val topics: List<FollowableTopic>,
         val authors: List<FollowableAuthor>
-    ) : ForYouInterestsSelectionUiState {
+    ) : OnboardingUiState {
         /**
-         * True if the current in-progress selection can be saved.
+         * True if the onboarding can be dismissed.
          */
-        val canSaveInterests: Boolean get() =
+        val isDismissable: Boolean get() =
             topics.any { it.isFollowed } || authors.any { it.isFollowed }
     }
 }

@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.domain
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -32,14 +33,21 @@ class GetSortedFollowableAuthorsStreamUseCaseTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val authorsRepository = TestAuthorsRepository()
+    private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetSortedFollowableAuthorsStreamUseCase(authorsRepository)
+    val useCase = GetSortedFollowableAuthorsStreamUseCase(
+        authorsRepository = authorsRepository,
+        userDataRepository = userDataRepository
+    )
 
     @Test
     fun whenFollowedAuthorsSupplied_sortedFollowableAuthorsAreReturned() = runTest {
 
+        // Specify some authors which the user is following.
+        userDataRepository.setFollowedAuthorIds(setOf(sampleAuthor1.id))
+
         // Obtain the stream of authors, specifying their followed state.
-        val followableAuthorsStream = useCase(followedAuthorIds = setOf(sampleAuthor1.id))
+        val followableAuthorsStream = useCase()
 
         // Supply some authors.
         authorsRepository.sendAuthors(sampleAuthors)

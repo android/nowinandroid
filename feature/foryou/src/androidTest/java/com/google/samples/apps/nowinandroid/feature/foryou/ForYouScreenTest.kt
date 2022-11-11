@@ -54,7 +54,7 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                    onboardingUiState = OnboardingUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
@@ -77,7 +77,7 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = true,
-                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                    onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Success(emptyList()),
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
@@ -100,8 +100,8 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState =
-                    ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    onboardingUiState =
+                    OnboardingUiState.Shown(
                         topics = testTopics,
                         authors = testAuthors
                     ),
@@ -149,8 +149,8 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState =
-                    ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    onboardingUiState =
+                    OnboardingUiState.Shown(
                         // Follow one topic
                         topics = testTopics.mapIndexed { index, testTopic ->
                             testTopic.copy(isFollowed = index == 1)
@@ -201,8 +201,8 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState =
-                    ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    onboardingUiState =
+                    OnboardingUiState.Shown(
                         // Follow one topic
                         topics = testTopics,
                         authors = testAuthors.mapIndexed { index, testAuthor ->
@@ -253,8 +253,8 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState =
-                    ForYouInterestsSelectionUiState.WithInterestsSelection(
+                    onboardingUiState =
+                    OnboardingUiState.Shown(
                         topics = testTopics,
                         authors = testAuthors
                     ),
@@ -280,7 +280,7 @@ class ForYouScreenTest {
             BoxWithConstraints {
                 ForYouScreen(
                     isSyncing = false,
-                    interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                    onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
@@ -302,7 +302,7 @@ class ForYouScreenTest {
         composeTestRule.setContent {
             ForYouScreen(
                 isSyncing = false,
-                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)

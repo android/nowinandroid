@@ -52,7 +52,8 @@ class NiaPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT ->
                         DarkThemeConfig.LIGHT
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
-                }
+                },
+                shouldHideOnboarding = it.shouldHideOnboarding
             )
         }
 
@@ -62,6 +63,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 it.copy {
                     followedTopicIds.clear()
                     followedTopicIds.putAll(topicIds.associateWith { true })
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -78,6 +80,7 @@ class NiaPreferencesDataSource @Inject constructor(
                     } else {
                         followedTopicIds.remove(topicId)
                     }
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -91,6 +94,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 it.copy {
                     followedAuthorIds.clear()
                     followedAuthorIds.putAll(authorIds.associateWith { true })
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -107,6 +111,7 @@ class NiaPreferencesDataSource @Inject constructor(
                     } else {
                         followedAuthorIds.remove(authorId)
                     }
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -187,5 +192,20 @@ class NiaPreferencesDataSource @Inject constructor(
         } catch (ioException: IOException) {
             Log.e("NiaPreferences", "Failed to update user preferences", ioException)
         }
+    }
+
+    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+        userPreferences.updateData {
+            it.copy {
+                this.shouldHideOnboarding = shouldHideOnboarding
+            }
+        }
+    }
+}
+
+private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
+
+    if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
+        shouldHideOnboarding = false
     }
 }
