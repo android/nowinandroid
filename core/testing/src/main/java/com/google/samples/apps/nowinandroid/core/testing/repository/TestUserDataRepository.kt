@@ -30,7 +30,8 @@ private val emptyUserData = UserData(
     followedTopics = emptySet(),
     followedAuthors = emptySet(),
     themeBrand = ThemeBrand.DEFAULT,
-    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM
+    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+    shouldHideOnboarding = false
 )
 
 class TestUserDataRepository : UserDataRepository {
@@ -87,6 +88,12 @@ class TestUserDataRepository : UserDataRepository {
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(darkThemeConfig = darkThemeConfig))
+        }
+    }
+
+    override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
         }
     }
 

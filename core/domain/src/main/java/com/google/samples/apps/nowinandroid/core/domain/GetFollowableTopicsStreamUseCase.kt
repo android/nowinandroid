@@ -36,29 +36,18 @@ class GetFollowableTopicsStreamUseCase @Inject constructor(
     /**
      * Returns a list of topics with their associated followed state.
      *
-     * @param followedTopicIdsStream - the set of topic ids which are currently being followed. By
-     * default the followed topic ids are supplied from the user data repository, but in certain
-     * scenarios, such as when creating a temporary set of followed topics, you may wish to override
-     * this parameter to supply your own list of topic ids. @see ForYouViewModel for an example of
-     * this.
      * @param sortBy - the field used to sort the topics. Default NONE = no sorting.
      */
-    operator fun invoke(
-        followedTopicIdsStream: Flow<Set<String>> =
-            userDataRepository.userDataStream.map { userdata ->
-                userdata.followedTopics
-            },
-        sortBy: TopicSortField = NONE
-    ): Flow<List<FollowableTopic>> {
+    operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<FollowableTopic>> {
         return combine(
-            followedTopicIdsStream,
+            userDataRepository.userDataStream,
             topicsRepository.getTopicsStream()
-        ) { followedIds, topics ->
+        ) { userData, topics ->
             val followedTopics = topics
                 .map { topic ->
                     FollowableTopic(
                         topic = topic,
-                        isFollowed = topic.id in followedIds
+                        isFollowed = topic.id in userData.followedTopics
                     )
                 }
             when (sortBy) {
