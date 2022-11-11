@@ -27,7 +27,6 @@ import java.util.Properties
  */
 @VisibleForTesting
 internal object JvmUnitTestFakeAssetManager : FakeAssetManager {
-    // https://developer.android.com/reference/tools/gradle-api/7.3/com/android/build/api/dsl/UnitTestOptions
     private val config =
         requireNotNull(javaClass.getResource("com/android/tools/test_config.properties")) {
             """
