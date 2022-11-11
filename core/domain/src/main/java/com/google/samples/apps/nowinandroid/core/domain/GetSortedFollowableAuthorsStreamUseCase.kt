@@ -32,7 +32,7 @@ class GetSortedFollowableAuthorsStreamUseCase @Inject constructor(
     /**
      * Returns a list of authors with their associated followed state sorted alphabetically by name.
      *
-     * @param followedTopicIds - the set of topic ids which are currently being followed.
+     * @param followedAuthorIds - the set of topic ids which are currently being followed.
      */
     operator fun invoke(followedAuthorIds: Set<String>): Flow<List<FollowableAuthor>> {
         return authorsRepository.getAuthorsStream().map { authors ->
