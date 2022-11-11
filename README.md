@@ -15,7 +15,7 @@ follows Android design and development best practices and is intended to be a us
 for developers. As a running app, it's intended to help developers keep up-to-date with the world
 of Android development by providing regular news updates.
 
-The app is currently in early stage development and is not yet available on the Play Store.
+The app is currently in development. The `demoRelease` variant is [available on the Play Store in open beta](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
 
 # Features
 
