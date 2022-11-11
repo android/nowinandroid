@@ -1,17 +1,17 @@
 /*
  * Copyright 2022 The Android Open Source Project
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
@@ -35,66 +35,51 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 
 internal class BookmarksRobot(
-    private val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>
+    private val composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>
 ) {
     private val removedBookmarks = mutableSetOf<String>()
 
     fun setContent(newsFeedUiState: NewsFeedUiState) {
         composeTestRule.setContent {
-            BookmarksScreen(
-                feedState = newsFeedUiState,
-                removeFromBookmarks = {
-                    removedBookmarks.add(it)
-                }
-            )
+            BookmarksScreen(feedState = newsFeedUiState, removeFromBookmarks = {
+                removedBookmarks.add(it)
+            })
         }
     }
 
     fun loadingIndicatorShown() {
-        composeTestRule
-            .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.saved_loading)
-            )
-            .assertExists()
+        composeTestRule.onNodeWithContentDescription(
+            composeTestRule.activity.resources.getString(R.string.saved_loading)
+        ).assertExists()
     }
 
     fun clickableNewsResourceExists(newsResource: NewsResource) {
-        composeTestRule
-            .onNodeWithText(
-                newsResource.title,
-                substring = true
-            )
-            .assertExists()
-            .assertHasClickAction()
+        composeTestRule.onNodeWithText(
+            newsResource.title, substring = true
+        ).assertExists().assertHasClickAction()
     }
 
     fun scrollToNewsResource(newsResource: NewsResource) {
-        composeTestRule.onNode(hasScrollToNodeAction())
-            .performScrollToNode(
-                hasText(
-                    newsResource.title,
-                    substring = true
-                )
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(
+            hasText(
+                newsResource.title, substring = true
             )
+        )
     }
 
     fun clickNewsResourceBookmark(newsResource: NewsResource) {
-        composeTestRule
-            .onAllNodesWithContentDescription(
-                composeTestRule.activity.getString(
-                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark
-                )
-            ).filter(
-                hasAnyAncestor(
-                    hasText(
-                        newsResource.title,
-                        substring = true
-                    )
+        composeTestRule.onAllNodesWithContentDescription(
+            composeTestRule.activity.getString(
+                com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark
+            )
+        ).filter(
+            hasAnyAncestor(
+                hasText(
+                    newsResource.title, substring = true
                 )
             )
-            .assertCountEquals(1)
-            .onFirst()
-            .performClick()
+        ).assertCountEquals(1).onFirst().performClick()
     }
 
     fun removedNewsResourceBookmark(newsResource: NewsResource) =

@@ -75,7 +75,8 @@ class BookmarksScreenTest {
 }
 
 private fun launchBookmarksRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     newsFeedUiState: NewsFeedUiState,
     func: BookmarksRobot.() -> Unit
 ) = BookmarksRobot(composeTestRule).apply {

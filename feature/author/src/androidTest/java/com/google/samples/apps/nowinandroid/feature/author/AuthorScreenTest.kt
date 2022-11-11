@@ -101,7 +101,8 @@ class AuthorScreenTest {
 }
 
 private fun launchAuthorRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     authorUiState: AuthorUiState,
     newsUiState: NewsUiState,
     func: AuthorRobot.() -> Unit

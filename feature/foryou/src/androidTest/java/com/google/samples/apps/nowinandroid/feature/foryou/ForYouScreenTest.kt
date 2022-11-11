@@ -185,7 +185,8 @@ class ForYouScreenTest {
 }
 
 private fun launchForYouRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     isSyncing: Boolean,
     onboardingState: OnboardingUiState,
     feedState: NewsFeedUiState,

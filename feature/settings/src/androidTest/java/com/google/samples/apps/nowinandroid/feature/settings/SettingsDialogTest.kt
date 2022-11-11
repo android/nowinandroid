@@ -82,7 +82,8 @@ class SettingsDialogTest {
 }
 
 private fun launchSettingsDialogRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     settingsUiState: SettingsUiState,
     func: SettingsDialogRobot.() -> Unit
 ) = SettingsDialogRobot(composeTestRule).apply {

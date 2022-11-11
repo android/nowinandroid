@@ -75,7 +75,6 @@ class InterestsScreenTest {
 
             interestsTopicCardFollowButtonCountEquals(numberOfUnfollowedTopics)
             interestsTopicCardUnfollowButtonCountEquals(numberOfFollowedTopics)
-
         }
     }
 
@@ -119,7 +118,8 @@ class InterestsScreenTest {
 }
 
 private fun launchBookmarksRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     uiState: InterestsUiState,
     tabIndex: Int,
     func: InterestsRobot.() -> Unit
