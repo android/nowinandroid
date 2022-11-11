@@ -34,6 +34,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -43,7 +44,6 @@ import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
