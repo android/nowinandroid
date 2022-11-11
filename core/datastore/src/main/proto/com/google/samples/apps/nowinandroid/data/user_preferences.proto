@@ -43,4 +43,6 @@ message UserPreferences {
 
     ThemeBrandProto theme_brand = 16;
     DarkThemeConfigProto dark_theme_config = 17;
+
+    bool should_hide_onboarding = 18;
 }

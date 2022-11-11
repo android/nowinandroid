@@ -17,33 +17,34 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 
 /**
  * A use case which obtains a list of authors sorted alphabetically by name with their followed
  * state.
  */
 class GetSortedFollowableAuthorsStreamUseCase @Inject constructor(
-    private val authorsRepository: AuthorsRepository
+    private val authorsRepository: AuthorsRepository,
+    private val userDataRepository: UserDataRepository
 ) {
     /**
      * Returns a list of authors with their associated followed state sorted alphabetically by name.
-     *
-     * @param followedAuthorIds - the set of topic ids which are currently being followed.
      */
-    operator fun invoke(followedAuthorIds: Set<String>): Flow<List<FollowableAuthor>> {
-        return authorsRepository.getAuthorsStream().map { authors ->
-            authors
-                .map { author ->
-                    FollowableAuthor(
-                        author = author,
-                        isFollowed = author.id in followedAuthorIds
-                    )
-                }
+    operator fun invoke(): Flow<List<FollowableAuthor>> =
+        combine(
+            authorsRepository.getAuthorsStream(),
+            userDataRepository.userDataStream
+        ) { authors, userData ->
+            authors.map { author ->
+                FollowableAuthor(
+                    author = author,
+                    isFollowed = author.id in userData.followedAuthors
+                )
+            }
                 .sortedBy { it.author.name }
         }
-    }
 }
