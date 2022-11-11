@@ -30,9 +30,9 @@ import androidx.metrics.performance.PerformanceMetricsState.Holder
 import kotlinx.coroutines.CoroutineScope
 
 /**
- * Retrieves [PerformanceMetricsState.MetricsStateHolder] from current [LocalView] and
+ * Retrieves [PerformanceMetricsState.Holder] from current [LocalView] and
  * remembers it until the View changes.
- * @see PerformanceMetricsState.getForHierarchy
+ * @see PerformanceMetricsState.getHolderForHierarchy
  */
 @Composable
 fun rememberMetricsStateHolder(): Holder {
