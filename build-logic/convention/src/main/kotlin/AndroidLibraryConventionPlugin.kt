@@ -26,6 +26,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.kotlin
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -50,6 +51,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     // Temporary workaround for https://issuetracker.google.com/174733673
                     force("org.objenesis:objenesis:2.6")
                 }
+            }
+            dependencies {
+                add("androidTestImplementation", kotlin("test"))
+                add("testImplementation", kotlin("test"))
             }
         }
     }

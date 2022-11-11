@@ -35,11 +35,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -83,15 +84,14 @@ class AuthorViewModelTest {
         userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[1].author.id))
 
         val item = viewModel.authorUiState.value
-        assertTrue(item is AuthorUiState.Success)
+        assertIs<AuthorUiState.Success>(item)
 
-        val successAuthorUiState = item as AuthorUiState.Success
         val authorFromRepository = authorsRepository.getAuthorStream(
             id = testInputAuthors[0].author.id
         ).first()
 
-        successAuthorUiState.followableAuthor.author
-        assertEquals(authorFromRepository, successAuthorUiState.followableAuthor.author)
+        item.followableAuthor.author
+        assertEquals(authorFromRepository, item.followableAuthor.author)
 
         collectJob.cancel()
     }
@@ -132,8 +132,8 @@ class AuthorViewModelTest {
             val authorState = viewModel.authorUiState.value
             val newsUiState = viewModel.newsUiState.value
 
-            assertTrue(authorState is AuthorUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Loading)
+            assertIs<AuthorUiState.Success>(authorState)
+            assertIs<NewsUiState.Loading>(newsUiState)
 
             collectJob.cancel()
         }
@@ -155,8 +155,8 @@ class AuthorViewModelTest {
             val authorState = viewModel.authorUiState.value
             val newsUiState = viewModel.newsUiState.value
 
-            assertTrue(authorState is AuthorUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Success)
+            assertIs<AuthorUiState.Success>(authorState)
+            assertIs<NewsUiState.Success>(newsUiState)
 
             collectJob.cancel()
         }
