@@ -21,16 +21,18 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import java.io.InputStream
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [TopicsRepository] that retrieves the topics from a JSON String, and
@@ -42,19 +44,22 @@ import kotlinx.serialization.json.Json
 class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
+    private val assets: FakeAssetManager,
 ) : TopicsRepository {
-    override fun getTopicsStream(): Flow<List<Topic>> = flow<List<Topic>> {
+    override fun getTopicsStream(): Flow<List<Topic>> = flow {
         emit(
-            networkJson.decodeFromString<List<NetworkTopic>>(FakeDataSource.topicsData).map {
-                Topic(
-                    id = it.id,
-                    name = it.name,
-                    shortDescription = it.shortDescription,
-                    longDescription = it.longDescription,
-                    url = it.url,
-                    imageUrl = it.imageUrl
-                )
-            }
+            assets.open(FakeDataSource.TOPICS)
+                .use<InputStream, List<NetworkTopic>>(networkJson::decodeFromStream)
+                .map {
+                    Topic(
+                        id = it.id,
+                        name = it.name,
+                        shortDescription = it.shortDescription,
+                        longDescription = it.longDescription,
+                        url = it.url,
+                        imageUrl = it.imageUrl
+                    )
+                }
         )
     }
         .flowOn(ioDispatcher)

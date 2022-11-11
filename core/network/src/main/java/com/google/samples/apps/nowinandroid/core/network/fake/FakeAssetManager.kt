@@ -14,24 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository
+package com.google.samples.apps.nowinandroid.core.network.fake
 
-import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.serialization.json.Json
-import org.junit.Before
+import java.io.InputStream
 
-class FakeNewsRepositoryTest {
-
-    private lateinit var subject: FakeNewsRepository
-
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setup() {
-        subject = FakeNewsRepository(
-            ioDispatcher = testDispatcher,
-            networkJson = Json { ignoreUnknownKeys = true }
-        )
-    }
+fun interface FakeAssetManager {
+    fun open(fileName: String): InputStream
 }
