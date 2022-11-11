@@ -14,48 +14,53 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.settings
+package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.activity.ComponentActivity
-import androidx.annotation.StringRes
-import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
-internal class SettingsDialogRobot(
+internal class AuthorRobot(
     private val composeTestRule: AndroidComposeTestRule<
         ActivityScenarioRule<ComponentActivity>, ComponentActivity>
 ) {
-    fun setContent(settingsUiState: SettingsUiState) {
+    fun setContent(authorUiState: AuthorUiState, newsUiState: NewsUiState) {
         composeTestRule.setContent {
-            SettingsDialog(
-                settingsUiState = settingsUiState,
-                onDismiss = { },
-                onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+            AuthorScreen(
+                authorUiState = authorUiState,
+                newsUiState = newsUiState,
+                onBackClick = { },
+                onFollowClick = { },
+                onBookmarkChanged = { _, _ -> },
             )
         }
     }
 
     fun loadingIndicatorExists() {
+        val authorLoading = composeTestRule.activity.getString(R.string.author_loading)
+
         composeTestRule
-            .onNodeWithText(getString(R.string.loading))
+            .onNodeWithContentDescription(authorLoading)
             .assertExists()
     }
 
-    fun settingExists(name: String) {
+    fun authorExists(author: FollowableAuthor) {
         composeTestRule
-            .onNodeWithText(name)
+            .onNodeWithText(author.author.name)
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithText(author.author.bio)
             .assertExists()
     }
 
-    fun settingIsSelected(name: String) {
+    fun newsResourceExists(newsResource: NewsResource) {
         composeTestRule
-            .onNodeWithText(name)
-            .assertIsSelected()
+            .onNodeWithText(newsResource.title)
+            .assertExists()
     }
-
-    fun getString(@StringRes stringId: Int) =
-        composeTestRule.activity.resources.getString(stringId)
 }

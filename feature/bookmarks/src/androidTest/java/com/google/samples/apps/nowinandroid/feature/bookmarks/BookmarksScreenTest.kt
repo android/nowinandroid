@@ -17,25 +17,12 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.test.assertCountEquals
-import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.filter
-import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasScrollToNodeAction
-import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithContentDescription
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToNode
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -49,93 +36,50 @@ class BookmarksScreenTest {
 
     @Test
     fun loading_showsLoadingSpinner() {
-        composeTestRule.setContent {
-            BookmarksScreen(
-                feedState = NewsFeedUiState.Loading,
-                removeFromBookmarks = { }
-            )
+        launchBookmarksRobot(
+            composeTestRule,
+            NewsFeedUiState.Loading
+        ) {
+            loadingIndicatorShown()
         }
-
-        composeTestRule
-            .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.saved_loading)
-            )
-            .assertExists()
     }
 
     @Test
     fun feed_whenHasBookmarks_showsBookmarks() {
-        lateinit var windowSizeClass: WindowSizeClass
-
-        composeTestRule.setContent {
-            BookmarksScreen(
-                feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
-                ),
-                removeFromBookmarks = { }
+        launchBookmarksRobot(
+            composeTestRule,
+            NewsFeedUiState.Success(
+                previewNewsResources.take(2)
+                    .map { SaveableNewsResource(it, true) }
             )
+        ) {
+            clickNewsResourceBookmark(previewNewsResources[0])
+            scrollToNewsResource(previewNewsResources[1])
+            clickableNewsResourceExists(previewNewsResources[1])
         }
-
-        composeTestRule
-            .onNodeWithText(
-                previewNewsResources[0].title,
-                substring = true
-            )
-            .assertExists()
-            .assertHasClickAction()
-
-        composeTestRule.onNode(hasScrollToNodeAction())
-            .performScrollToNode(
-                hasText(
-                    previewNewsResources[1].title,
-                    substring = true
-                )
-            )
-
-        composeTestRule
-            .onNodeWithText(
-                previewNewsResources[1].title,
-                substring = true
-            )
-            .assertExists()
-            .assertHasClickAction()
     }
 
     @Test
     fun feed_whenRemovingBookmark_removesBookmark() {
-        var removeFromBookmarksCalled = false
-
-        composeTestRule.setContent {
-            BookmarksScreen(
-                feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
-                ),
-                removeFromBookmarks = { newsResourceId ->
-                    assertEquals(previewNewsResources[0].id, newsResourceId)
-                    removeFromBookmarksCalled = true
-                }
+        launchBookmarksRobot(
+            composeTestRule,
+            NewsFeedUiState.Success(
+                previewNewsResources.take(2)
+                    .map { SaveableNewsResource(it, true) }
             )
+        ) {
+            clickNewsResourceBookmark(previewNewsResources[0])
+            removedNewsResourceBookmark(previewNewsResources[0])
         }
-
-        composeTestRule
-            .onAllNodesWithContentDescription(
-                composeTestRule.activity.getString(
-                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark
-                )
-            ).filter(
-                hasAnyAncestor(
-                    hasText(
-                        previewNewsResources[0].title,
-                        substring = true
-                    )
-                )
-            )
-            .assertCountEquals(1)
-            .onFirst()
-            .performClick()
-
-        assertTrue(removeFromBookmarksCalled)
     }
+}
+
+private fun launchBookmarksRobot(
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    newsFeedUiState: NewsFeedUiState,
+    func: BookmarksRobot.() -> Unit
+) = BookmarksRobot(composeTestRule).apply {
+    setContent(newsFeedUiState)
+    func()
 }

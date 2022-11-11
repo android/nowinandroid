@@ -17,23 +17,14 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.assertCountEquals
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithContentDescription
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsTabState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
-import com.google.samples.apps.nowinandroid.feature.interests.R
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -47,142 +38,94 @@ class InterestsScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private lateinit var interestsLoading: String
-    private lateinit var interestsEmptyHeader: String
-    private lateinit var interestsTopicCardFollowButton: String
-    private lateinit var interestsTopicCardUnfollowButton: String
-
-    @Before
-    fun setup() {
-        composeTestRule.activity.apply {
-            interestsLoading = getString(R.string.interests_loading)
-            interestsEmptyHeader = getString(R.string.interests_empty_header)
-            interestsTopicCardFollowButton =
-                getString(R.string.interests_card_follow_button_content_desc)
-            interestsTopicCardUnfollowButton =
-                getString(R.string.interests_card_unfollow_button_content_desc)
-        }
-    }
-
     @Test
     fun niaLoadingWheel_inTopics_whenScreenIsLoading_showLoading() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Loading, tabIndex = 0)
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Loading,
+            0
+        ) {
+            interestsLoadingExists()
         }
-
-        composeTestRule
-            .onNodeWithContentDescription(interestsLoading)
-            .assertExists()
     }
 
     @Test
     fun niaLoadingWheel_inAuthors_whenScreenIsLoading_showLoading() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Loading, tabIndex = 1)
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Loading,
+            1
+        ) {
+            interestsLoadingExists()
         }
-
-        composeTestRule
-            .onNodeWithContentDescription(interestsLoading)
-            .assertExists()
     }
 
     @Test
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
-        composeTestRule.setContent {
-            InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = testTopics, authors = listOf()),
-                tabIndex = 0
-            )
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Interests(topics = testTopics, authors = listOf()),
+            0
+        ) {
+            nodeWithTextDisplayed(TOPIC_1_NAME)
+            nodeWithTextDisplayed(TOPIC_2_NAME)
+            nodeWithTextDisplayed(TOPIC_3_NAME)
+
+            nodesWithTextCountEquals(TOPIC_SHORT_DESC, testTopics.count())
+
+            interestsTopicCardFollowButtonCountEquals(numberOfUnfollowedTopics)
+            interestsTopicCardUnfollowButtonCountEquals(numberOfFollowedTopics)
         }
-
-        composeTestRule
-            .onNodeWithText(TOPIC_1_NAME)
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(TOPIC_2_NAME)
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(TOPIC_3_NAME)
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithText(TOPIC_SHORT_DESC)
-            .assertCountEquals(testTopics.count())
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
-            .assertCountEquals(numberOfUnfollowedTopics)
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardUnfollowButton)
-            .assertCountEquals(testAuthors.filter { it.isFollowed }.size)
     }
 
     @Test
     fun interestsWithTopics_whenAuthorsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
-        composeTestRule.setContent {
-            InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = listOf(), authors = testAuthors),
-                tabIndex = 1
-            )
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Interests(topics = listOf(), authors = testAuthors),
+            1
+        ) {
+            nodeWithTextDisplayed("Android Dev")
+            nodeWithTextDisplayed("Android Dev 2")
+            nodeWithTextDisplayed("Android Dev 3")
+
+            interestsTopicCardFollowButtonCountEquals(numberOfUnfollowedAuthors)
+            interestsTopicCardUnfollowButtonCountEquals(numberOfFollowedAuthors)
         }
-
-        composeTestRule
-            .onNodeWithText("Android Dev")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("Android Dev 2")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("Android Dev 3")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
-            .assertCountEquals(numberOfUnfollowedAuthors)
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardUnfollowButton)
-            .assertCountEquals(testTopics.filter { it.isFollowed }.size)
     }
 
     @Test
     fun topicsEmpty_whenDataIsEmptyOccurs_thenShowEmptyScreen() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Empty, tabIndex = 0)
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Empty,
+            0
+        ) {
+            interestsEmptyHeaderDisplayed()
         }
-
-        composeTestRule
-            .onNodeWithText(interestsEmptyHeader)
-            .assertIsDisplayed()
     }
 
     @Test
     fun authorsEmpty_whenDataIsEmptyOccurs_thenShowEmptyScreen() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Empty, tabIndex = 1)
+        launchBookmarksRobot(
+            composeTestRule,
+            InterestsUiState.Empty,
+            1
+        ) {
+            interestsEmptyHeaderDisplayed()
         }
-
-        composeTestRule
-            .onNodeWithText(interestsEmptyHeader)
-            .assertIsDisplayed()
     }
+}
 
-    @Composable
-    private fun InterestsScreen(uiState: InterestsUiState, tabIndex: Int = 0) {
-        InterestsScreen(
-            uiState = uiState,
-            tabState = InterestsTabState(
-                titles = listOf(R.string.interests_topics, R.string.interests_people),
-                currentIndex = tabIndex
-            ),
-            followAuthor = { _, _ -> },
-            followTopic = { _, _ -> },
-            navigateToAuthor = {},
-            navigateToTopic = {},
-            switchTab = {},
-        )
-    }
+private fun launchBookmarksRobot(
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    uiState: InterestsUiState,
+    tabIndex: Int,
+    func: InterestsRobot.() -> Unit
+) = InterestsRobot(composeTestRule).apply {
+    setContent(uiState, tabIndex)
+    func()
 }
 
 private const val TOPIC_1_NAME = "Headlines"
@@ -266,4 +209,7 @@ private val testAuthors = listOf(
 )
 
 private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size
+private val numberOfFollowedTopics = testTopics.filter { it.isFollowed }.size
+
 private val numberOfUnfollowedAuthors = testAuthors.filter { !it.isFollowed }.size
+private val numberOfFollowedAuthors = testAuthors.filter { it.isFollowed }.size

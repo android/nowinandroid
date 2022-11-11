@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":core:model"))
 
     testImplementation(project(":core:testing"))
+    testImplementation(project(":core:datastore-test"))
 
     implementation(libs.kotlinx.coroutines.android)
 

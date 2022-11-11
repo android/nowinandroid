@@ -103,7 +103,8 @@ class TopicScreenTest {
 }
 
 private fun launchTopicRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
     topicUiState: TopicUiState,
     newsUiState: NewsUiState,
     func: TopicRobot.() -> Unit

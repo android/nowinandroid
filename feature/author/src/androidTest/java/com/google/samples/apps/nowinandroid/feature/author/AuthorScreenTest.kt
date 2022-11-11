@@ -17,16 +17,15 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import kotlinx.datetime.Instant
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -40,106 +39,76 @@ class AuthorScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private lateinit var authorLoading: String
-
-    @Before
-    fun setup() {
-        composeTestRule.activity.apply {
-            authorLoading = getString(R.string.author_loading)
-        }
-    }
-
     @Test
     fun niaLoadingWheel_whenScreenIsLoading_showLoading() {
-        composeTestRule.setContent {
-            AuthorScreen(
-                authorUiState = AuthorUiState.Loading,
-                newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+        launchAuthorRobot(
+            composeTestRule, AuthorUiState.Loading, NewsUiState.Loading,
+        ) {
+            loadingIndicatorExists()
         }
-
-        composeTestRule
-            .onNodeWithContentDescription(authorLoading)
-            .assertExists()
     }
 
     @Test
     fun authorTitle_whenAuthorIsSuccess_isShown() {
         val testAuthor = testAuthors.first()
-        composeTestRule.setContent {
-            AuthorScreen(
-                authorUiState = AuthorUiState.Success(testAuthor),
-                newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+        launchAuthorRobot(
+            composeTestRule,
+            AuthorUiState.Success(testAuthor),
+            NewsUiState.Loading
+        ) {
+            authorExists(testAuthor)
         }
-
-        // Name is shown
-        composeTestRule
-            .onNodeWithText(testAuthor.author.name)
-            .assertExists()
-
-        // Bio is shown
-        composeTestRule
-            .onNodeWithText(testAuthor.author.bio)
-            .assertExists()
     }
 
     @Test
     fun news_whenAuthorIsLoading_isNotShown() {
-        composeTestRule.setContent {
-            AuthorScreen(
-                authorUiState = AuthorUiState.Loading,
-                newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
-                ),
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+        val newsUiState = NewsUiState.Success(
+            sampleNewsResources.mapIndexed { index, newsResource ->
+                SaveableNewsResource(
+                    newsResource = newsResource,
+                    isSaved = index % 2 == 0,
+                )
+            }
+        )
+        launchAuthorRobot(
+            composeTestRule,
+            AuthorUiState.Loading,
+            newsUiState
+        ) {
+            loadingIndicatorExists()
         }
-
-        // Loading indicator shown
-        composeTestRule
-            .onNodeWithContentDescription(authorLoading)
-            .assertExists()
     }
 
     @Test
     fun news_whenSuccessAndAuthorIsSuccess_isShown() {
         val testAuthor = testAuthors.first()
-        composeTestRule.setContent {
-            AuthorScreen(
-                authorUiState = AuthorUiState.Success(testAuthor),
-                newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
-                ),
-                onBackClick = { },
-                onFollowClick = { },
-                onBookmarkChanged = { _, _ -> },
-            )
+        val newsUiState = NewsUiState.Success(
+            sampleNewsResources.mapIndexed { index, newsResource ->
+                SaveableNewsResource(
+                    newsResource = newsResource,
+                    isSaved = index % 2 == 0,
+                )
+            }
+        )
+        launchAuthorRobot(
+            composeTestRule,
+            AuthorUiState.Success(testAuthor),
+            newsUiState
+        ) {
+            newsResourceExists(sampleNewsResources.first())
         }
-
-        // First news title shown
-        composeTestRule
-            .onNodeWithText(sampleNewsResources.first().title)
-            .assertExists()
     }
+}
+
+private fun launchAuthorRobot(
+    composeTestRule: AndroidComposeTestRule<
+        ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
+    authorUiState: AuthorUiState,
+    newsUiState: NewsUiState,
+    func: AuthorRobot.() -> Unit
+) = AuthorRobot(composeTestRule).apply {
+    setContent(authorUiState, newsUiState)
+    func()
 }
 
 private const val AUTHOR_1_NAME = "Author 1"

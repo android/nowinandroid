@@ -94,17 +94,17 @@ internal fun ForYouRoute(
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
-    val interestsSelectionState by viewModel.interestsSelectionUiState.collectAsStateWithLifecycle()
+    val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
 
     ForYouScreen(
         isSyncing = isSyncing,
-        interestsSelectionState = interestsSelectionState,
+        onboardingUiState = onboardingUiState,
         feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onAuthorCheckedChanged = viewModel::updateAuthorSelection,
-        saveFollowedTopics = viewModel::saveFollowedInterests,
+        saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         modifier = modifier
     )
@@ -113,7 +113,7 @@ internal fun ForYouRoute(
 @Composable
 internal fun ForYouScreen(
     isSyncing: Boolean,
-    interestsSelectionState: ForYouInterestsSelectionUiState,
+    onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
@@ -125,11 +125,11 @@ internal fun ForYouScreen(
     // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
     // This code should be called when the UI is ready for use
     // and relates to Time To Full Display.
-    val interestsLoaded =
-        interestsSelectionState !is ForYouInterestsSelectionUiState.Loading
+    val onboardingLoaded =
+        onboardingUiState !is OnboardingUiState.Loading
     val feedLoaded = feedState !is NewsFeedUiState.Loading
 
-    if (interestsLoaded && feedLoaded) {
+    if (onboardingLoaded && feedLoaded) {
         val localView = LocalView.current
         // We use Unit to call reportFullyDrawn only on the first recomposition,
         // however it will be called again if this composable goes out of scope.
@@ -156,8 +156,8 @@ internal fun ForYouScreen(
             .testTag("forYou:feed"),
         state = state
     ) {
-        interestsSelection(
-            interestsSelectionState = interestsSelectionState,
+        onboarding(
+            onboardingUiState = onboardingUiState,
             onAuthorCheckedChanged = onAuthorCheckedChanged,
             onTopicCheckedChanged = onTopicCheckedChanged,
             saveFollowedTopics = saveFollowedTopics,
@@ -193,7 +193,7 @@ internal fun ForYouScreen(
     AnimatedVisibility(
         visible = isSyncing ||
             feedState is NewsFeedUiState.Loading ||
-            interestsSelectionState is ForYouInterestsSelectionUiState.Loading
+            onboardingUiState is OnboardingUiState.Loading
     ) {
         val loadingContentDescription = stringResource(id = R.string.for_you_loading)
         Box(
@@ -208,23 +208,23 @@ internal fun ForYouScreen(
 }
 
 /**
- * An extension on [LazyListScope] defining the interests selection portion of the for you screen.
- * Depending on the [interestsSelectionState], this might emit no items.
+ * An extension on [LazyListScope] defining the onboarding portion of the for you screen.
+ * Depending on the [onboardingUiState], this might emit no items.
  *
  */
-private fun LazyGridScope.interestsSelection(
-    interestsSelectionState: ForYouInterestsSelectionUiState,
+private fun LazyGridScope.onboarding(
+    onboardingUiState: OnboardingUiState,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     interestsItemModifier: Modifier = Modifier
 ) {
-    when (interestsSelectionState) {
-        ForYouInterestsSelectionUiState.Loading,
-        ForYouInterestsSelectionUiState.LoadFailed,
-        ForYouInterestsSelectionUiState.NoInterestsSelection -> Unit
+    when (onboardingUiState) {
+        OnboardingUiState.Loading,
+        OnboardingUiState.LoadFailed,
+        OnboardingUiState.NotShown -> Unit
 
-        is ForYouInterestsSelectionUiState.WithInterestsSelection -> {
+        is OnboardingUiState.Shown -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(modifier = interestsItemModifier) {
                     Text(
@@ -244,14 +244,14 @@ private fun LazyGridScope.interestsSelection(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     AuthorsCarousel(
-                        authors = interestsSelectionState.authors,
+                        authors = onboardingUiState.authors,
                         onAuthorClick = onAuthorCheckedChanged,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp)
                     )
                     TopicSelection(
-                        interestsSelectionState,
+                        onboardingUiState,
                         onTopicCheckedChanged,
                         Modifier.padding(bottom = 8.dp)
                     )
@@ -262,7 +262,7 @@ private fun LazyGridScope.interestsSelection(
                     ) {
                         NiaFilledButton(
                             onClick = saveFollowedTopics,
-                            enabled = interestsSelectionState.canSaveInterests,
+                            enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
                                 .padding(horizontal = 40.dp)
                                 .width(364.dp)
@@ -280,7 +280,7 @@ private fun LazyGridScope.interestsSelection(
 
 @Composable
 private fun TopicSelection(
-    interestsSelectionState: ForYouInterestsSelectionUiState.WithInterestsSelection,
+    onboardingUiState: OnboardingUiState.Shown,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) = trace("TopicSelection") {
@@ -306,7 +306,7 @@ private fun TopicSelection(
             .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
             .fillMaxWidth()
     ) {
-        items(interestsSelectionState.topics) {
+        items(onboardingUiState.topics) {
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
@@ -396,7 +396,7 @@ fun ForYouScreenPopulatedFeed() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
@@ -418,7 +418,7 @@ fun ForYouScreenOfflinePopulatedFeed() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                interestsSelectionState = ForYouInterestsSelectionUiState.NoInterestsSelection,
+                onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
@@ -440,7 +440,7 @@ fun ForYouScreenTopicSelection() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                interestsSelectionState = ForYouInterestsSelectionUiState.WithInterestsSelection(
+                onboardingUiState = OnboardingUiState.Shown(
                     topics = previewTopics.map { FollowableTopic(it, false) },
                     authors = previewAuthors.map { FollowableAuthor(it, false) }
                 ),
@@ -465,7 +465,7 @@ fun ForYouScreenLoading() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
@@ -483,7 +483,7 @@ fun ForYouScreenPopulatedAndLoading() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = true,
-                interestsSelectionState = ForYouInterestsSelectionUiState.Loading,
+                onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)

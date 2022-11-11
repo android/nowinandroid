@@ -1,19 +1,21 @@
 ![Now in Android](docs/images/nia-splash.jpg "Now in Android")
 
-Now in Android App [Work in progress 🚧]
+<a href="https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
+
+Now in Android App
 ==================
 
 **Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
 
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
-app.
+app. It is a **work in progress** 🚧.
 
 **Now in Android** is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
 follows Android design and development best practices and is intended to be a useful reference
 for developers. As a running app, it's intended to help developers keep up-to-date with the world
 of Android development by providing regular news updates.
 
-The app is currently in early stage development and is not yet available on the Play Store.
+The app is currently in development. The `demoRelease` variant is [available on the Play Store in open beta](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
 
 # Features
 
