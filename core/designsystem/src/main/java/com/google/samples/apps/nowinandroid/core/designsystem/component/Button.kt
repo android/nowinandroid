@@ -71,7 +71,12 @@ fun NiaFilledButton(
         colors = colors,
         contentPadding = contentPadding,
         content = {
-            ProvideTextStyle(value = if (small) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium) {
+            ProvideTextStyle(
+                value = if (small)
+                    MaterialTheme.typography.labelSmall
+                else
+                    MaterialTheme.typography.labelMedium
+            ) {
                 content()
             }
         }
@@ -383,6 +388,7 @@ object NiaButtonDefaults {
             bottom = if (small) SmallButtonVerticalPadding else ButtonVerticalPadding
         )
     }
+
     @Composable
     fun filledButtonColors(
         containerColor: Color = MaterialTheme.colorScheme.onBackground,
@@ -399,6 +405,7 @@ object NiaButtonDefaults {
         disabledContainerColor = disabledContainerColor,
         disabledContentColor = disabledContentColor
     )
+
     @Composable
     fun outlinedButtonBorder(
         enabled: Boolean,
@@ -411,6 +418,7 @@ object NiaButtonDefaults {
         width = width,
         color = if (enabled) color else disabledColor
     )
+
     @Composable
     fun outlinedButtonColors(
         containerColor: Color = Color.Transparent,
@@ -425,6 +433,7 @@ object NiaButtonDefaults {
         disabledContainerColor = disabledContainerColor,
         disabledContentColor = disabledContentColor
     )
+
     @Composable
     fun textButtonColors(
         containerColor: Color = Color.Transparent,
