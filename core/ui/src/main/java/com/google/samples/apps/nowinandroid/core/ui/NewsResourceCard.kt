@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -65,12 +66,11 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved

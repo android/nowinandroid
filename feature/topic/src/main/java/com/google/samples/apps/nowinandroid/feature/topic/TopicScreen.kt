@@ -83,11 +83,9 @@ internal fun TopicRoute(
         onBrowseTopic = navigateToTopic,
         onFollowTopic = { topicId ->
             viewModel.followTopic(topicId, true)
-
         },
         onUnfollowTopic = { topicId ->
             viewModel.followTopic(topicId, false)
-
         },
     )
 }

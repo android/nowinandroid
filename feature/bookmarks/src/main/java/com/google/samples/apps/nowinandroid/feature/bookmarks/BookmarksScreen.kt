@@ -60,7 +60,6 @@ internal fun BookmarksRoute(
         onBrowseTopic = navigateToTopic,
         onFollowTopic = { topicId ->
             viewModel.followTopic(topicId, true)
-
         },
         onUnfollowTopic = { topicId ->
             viewModel.followTopic(topicId, false)
