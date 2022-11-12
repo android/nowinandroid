@@ -28,8 +28,8 @@ fun NavController.navigateToForYou(navOptions: NavOptions? = null) {
     this.navigate(forYouNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.forYouScreen() {
+fun NavGraphBuilder.forYouScreen(navigateToTopic: (String) -> Unit,) {
     composable(route = forYouNavigationRoute) {
-        ForYouRoute()
+        ForYouRoute(navigateToTopic = navigateToTopic)
     }
 }

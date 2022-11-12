@@ -42,7 +42,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
  */
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -63,7 +66,10 @@ fun LazyGridScope.newsFeed(
                             saveableNewsResource.newsResource.id,
                             !saveableNewsResource.isSaved
                         )
-                    }
+                    },
+                    onBrowseTopic = onBrowseTopic,
+                    onFollowTopic = onFollowTopic,
+                    onUnfollowTopic = onUnfollowTopic
                 )
             }
         }
@@ -97,7 +103,10 @@ fun NewsFeedLoadingPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }
@@ -118,7 +127,10 @@ fun NewsFeedContentPreview() {
                         )
                     }
                 ),
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }

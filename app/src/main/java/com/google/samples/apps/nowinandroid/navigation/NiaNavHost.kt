@@ -48,8 +48,16 @@ fun NiaNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen()
-        bookmarksScreen()
+        forYouScreen(
+            navigateToTopic = { topicId ->
+                navController.navigateToTopic(topicId)
+            }
+        )
+        bookmarksScreen(
+            navigateToTopic = { topicId ->
+                navController.navigateToTopic(topicId)
+            }
+        )
         interestsGraph(
             navigateToTopic = { topicId ->
                 navController.navigateToTopic(topicId)
@@ -58,8 +66,18 @@ fun NiaNavHost(
                 navController.navigateToAuthor(authorId)
             },
             nestedGraphs = {
-                topicScreen(onBackClick)
-                authorScreen(onBackClick)
+                topicScreen(
+                    onBackClick = onBackClick,
+                    navigateToTopic = { topicId ->
+                        navController.navigateToTopic(topicId)
+                    }
+                )
+                authorScreen(
+                    onBackClick = onBackClick,
+                    navigateToTopic = { topicId ->
+                        navController.navigateToTopic(topicId)
+                    }
+                )
             }
         )
     }
