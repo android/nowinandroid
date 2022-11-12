@@ -17,10 +17,11 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawing
@@ -30,9 +31,10 @@ import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -59,7 +61,6 @@ internal fun BookmarksRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun BookmarksScreen(
     feedState: NewsFeedUiState,
@@ -78,25 +79,41 @@ fun BookmarksScreen(
             .fillMaxSize()
             .testTag("bookmarks:feed")
     ) {
-        if (feedState is NewsFeedUiState.Loading) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                NiaLoadingWheel(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize()
-                        .testTag("forYou:loading"),
-                    contentDesc = stringResource(id = R.string.saved_loading),
-                )
+
+        when (feedState) {
+            is NewsFeedUiState.Loading -> {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    NiaLoadingWheel(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize()
+                            .testTag("forYou:loading"),
+                        contentDesc = stringResource(id = R.string.saved_loading),
+                    )
+                }
             }
-        }
 
-        newsFeed(
-            feedState = feedState,
-            onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-        )
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            is NewsFeedUiState.Success -> {
+                if (feedState.feed.isNotEmpty()) {
+                    newsFeed(
+                        feedState = feedState,
+                        onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+                    )
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                    }
+                } else item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .wrapContentSize()
+                            .testTag("bookmarks:empty"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = stringResource(id = R.string.bookmarks_empty))
+                    }
+                }
+            }
         }
     }
 }
