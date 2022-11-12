@@ -71,7 +71,7 @@ fun NiaFilledButton(
         colors = colors,
         contentPadding = contentPadding,
         content = {
-            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+            ProvideTextStyle(value = if (small) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium) {
                 content()
             }
         }
