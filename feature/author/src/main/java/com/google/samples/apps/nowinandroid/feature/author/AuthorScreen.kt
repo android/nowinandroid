@@ -67,6 +67,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 @Composable
 internal fun AuthorRoute(
     onBackClick: () -> Unit,
+    navigateToTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AuthorViewModel = hiltViewModel(),
 ) {
@@ -80,6 +81,13 @@ internal fun AuthorRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followAuthorToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
+        onBrowseTopic = navigateToTopic,
+        onFollowTopic = { topicId ->
+            viewModel.followTopic(topicId, true)
+        },
+        onUnfollowTopic = { topicId ->
+            viewModel.followTopic(topicId, false)
+        },
     )
 }
 
@@ -91,6 +99,9 @@ internal fun AuthorScreen(
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
@@ -127,6 +138,9 @@ internal fun AuthorScreen(
                     author = authorUiState.followableAuthor.author,
                     news = newsUiState,
                     onBookmarkChanged = onBookmarkChanged,
+                    onBrowseTopic = onBrowseTopic,
+                    onFollowTopic = onFollowTopic,
+                    onUnfollowTopic = onUnfollowTopic
                 )
             }
         }
@@ -139,13 +153,22 @@ internal fun AuthorScreen(
 private fun LazyListScope.authorBody(
     author: Author,
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     item {
         AuthorHeader(author)
     }
 
-    authorCards(news, onBookmarkChanged)
+    authorCards(
+        news = news,
+        onBookmarkChanged = onBookmarkChanged,
+        onBrowseTopic = onBrowseTopic,
+        onFollowTopic = onFollowTopic,
+        onUnfollowTopic = onUnfollowTopic
+    )
 }
 
 @Composable
@@ -176,7 +199,10 @@ private fun AuthorHeader(author: Author) {
 
 private fun LazyListScope.authorCards(
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
@@ -185,6 +211,9 @@ private fun LazyListScope.authorCards(
                 newsResourceMapper = { it.newsResource },
                 isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
+                onBrowseTopic = onBrowseTopic,
+                onFollowTopic = onFollowTopic,
+                onUnfollowTopic = onUnfollowTopic,
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -252,6 +281,9 @@ fun AuthorScreenPopulated() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
     }
@@ -268,6 +300,9 @@ fun AuthorScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
     }

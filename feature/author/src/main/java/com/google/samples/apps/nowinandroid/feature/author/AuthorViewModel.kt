@@ -80,6 +80,12 @@ class AuthorViewModel @Inject constructor(
             userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
         }
     }
+
+    fun followTopic(followedTopicId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
+        }
+    }
 }
 
 private fun authorUiStateStream(

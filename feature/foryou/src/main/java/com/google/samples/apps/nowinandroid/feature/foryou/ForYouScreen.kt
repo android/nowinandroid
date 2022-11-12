@@ -92,6 +92,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 @Composable
 internal fun ForYouRoute(
     modifier: Modifier = Modifier,
+    navigateToTopic: (String) -> Unit,
     viewModel: ForYouViewModel = hiltViewModel()
 ) {
     val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
@@ -106,6 +107,13 @@ internal fun ForYouRoute(
         onAuthorCheckedChanged = viewModel::updateAuthorSelection,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+        onBrowseTopic = navigateToTopic,
+        onFollowTopic = { topicId ->
+            viewModel.followTopic(topicId, true)
+        },
+        onUnfollowTopic = { topicId ->
+            viewModel.followTopic(topicId, false)
+        },
         modifier = modifier
     )
 }
@@ -119,6 +127,9 @@ internal fun ForYouScreen(
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -178,6 +189,9 @@ internal fun ForYouScreen(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+            onBrowseTopic = onBrowseTopic,
+            onFollowTopic = onFollowTopic,
+            onUnfollowTopic = onUnfollowTopic
         )
 
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -405,7 +419,10 @@ fun ForYouScreenPopulatedFeed() {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }
@@ -427,7 +444,10 @@ fun ForYouScreenOfflinePopulatedFeed() {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }
@@ -452,7 +472,10 @@ fun ForYouScreenTopicSelection() {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }
@@ -470,7 +493,10 @@ fun ForYouScreenLoading() {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }
@@ -492,7 +518,10 @@ fun ForYouScreenPopulatedAndLoading() {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }

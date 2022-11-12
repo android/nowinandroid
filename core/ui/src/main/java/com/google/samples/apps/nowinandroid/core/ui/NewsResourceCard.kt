@@ -57,7 +57,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -66,11 +65,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
+import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved
@@ -83,6 +83,9 @@ fun NewsResourceCardExpanded(
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
@@ -123,7 +126,12 @@ fun NewsResourceCardExpanded(
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceTopics(newsResource.topics)
+                    NewsResourceTopics(
+                        topics = newsResource.topics,
+                        onBrowseClick = onBrowseTopic,
+                        onFollowClick = onFollowTopic,
+                        onUnfollowClick = onUnfollowTopic
+                    )
                 }
             }
         }
@@ -267,6 +275,9 @@ fun NewsResourceShortDescription(
 @Composable
 fun NewsResourceTopics(
     topics: List<Topic>,
+    onFollowClick: (String) -> Unit,
+    onUnfollowClick: (String) -> Unit,
+    onBrowseClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Store the ID of the Topic which has its "following" menu expanded, if any.
@@ -284,9 +295,9 @@ fun NewsResourceTopics(
                 onDropMenuToggle = { show ->
                     expandedTopicId = if (show) topic.id else null
                 },
-                onFollowClick = { }, // ToDo
-                onUnfollowClick = { }, // ToDo
-                onBrowseClick = { }, // ToDo
+                onFollowClick = { onFollowClick(topic.id) },
+                onUnfollowClick = { onUnfollowClick(topic.id) },
+                onBrowseClick = { onBrowseClick(topic.id) },
                 text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
             )
         }
@@ -322,7 +333,10 @@ fun ExpandedNewsResourcePreview() {
                 newsResource = previewNewsResources[0],
                 isBookmarked = true,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
+                onBrowseTopic = {},
+                onFollowTopic = {},
+                onUnfollowTopic = {}
             )
         }
     }

@@ -129,6 +129,12 @@ class ForYouViewModel @Inject constructor(
             userDataRepository.setShouldHideOnboarding(true)
         }
     }
+
+    fun followTopic(followedTopicId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
+        }
+    }
 }
 
 private fun Flow<List<SaveableNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =

@@ -66,6 +66,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 @Composable
 internal fun TopicRoute(
     onBackClick: () -> Unit,
+    navigateToTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
@@ -79,6 +80,15 @@ internal fun TopicRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
+        onBrowseTopic = navigateToTopic,
+        onFollowTopic = { topicId ->
+            viewModel.followTopic(topicId, true)
+
+        },
+        onUnfollowTopic = { topicId ->
+            viewModel.followTopic(topicId, false)
+
+        },
     )
 }
 
@@ -90,6 +100,9 @@ internal fun TopicScreen(
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
@@ -123,7 +136,10 @@ internal fun TopicScreen(
                     description = topicUiState.followableTopic.topic.longDescription,
                     news = newsUiState,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
-                    onBookmarkChanged = onBookmarkChanged
+                    onBookmarkChanged = onBookmarkChanged,
+                    onBrowseTopic = onBrowseTopic,
+                    onFollowTopic = onFollowTopic,
+                    onUnfollowTopic = onUnfollowTopic,
                 )
             }
         }
@@ -138,14 +154,23 @@ private fun LazyListScope.TopicBody(
     description: String,
     news: NewsUiState,
     imageUrl: String,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
 ) {
     // TODO: Show icon if available
     item {
         TopicHeader(name, description, imageUrl)
     }
 
-    TopicCards(news, onBookmarkChanged)
+    TopicCards(
+        news = news,
+        onBookmarkChanged = onBookmarkChanged,
+        onBrowseTopic = onBrowseTopic,
+        onFollowTopic = onFollowTopic,
+        onUnfollowTopic = onUnfollowTopic,
+    )
 }
 
 @Composable
@@ -174,7 +199,10 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
 
 private fun LazyListScope.TopicCards(
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
+    onFollowTopic: (String) -> Unit,
+    onUnfollowTopic: (String) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
@@ -183,6 +211,9 @@ private fun LazyListScope.TopicCards(
                 newsResourceMapper = { it.newsResource },
                 isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
+                onBrowseTopic = onBrowseTopic,
+                onFollowTopic = onFollowTopic,
+                onUnfollowTopic = onUnfollowTopic,
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -201,8 +232,14 @@ private fun TopicBodyPreview() {
     NiaTheme {
         LazyColumn {
             TopicBody(
-                "Jetpack Compose", "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()), "", { _, _ -> }
+                name = "Jetpack Compose",
+                description = "Lorem ipsum maximum",
+                news = NewsUiState.Success(emptyList()),
+                imageUrl = "",
+                onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
     }
@@ -263,6 +300,9 @@ fun TopicScreenPopulated() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
     }
@@ -279,6 +319,9 @@ fun TopicScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
     }

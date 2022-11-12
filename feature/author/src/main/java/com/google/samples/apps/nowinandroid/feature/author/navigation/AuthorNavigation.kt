@@ -41,7 +41,8 @@ fun NavController.navigateToAuthor(authorId: String) {
 }
 
 fun NavGraphBuilder.authorScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    navigateToTopic: (String) -> Unit,
 ) {
     composable(
         route = "author_route/{$authorIdArg}",
@@ -49,6 +50,6 @@ fun NavGraphBuilder.authorScreen(
             navArgument(authorIdArg) { type = NavType.StringType }
         )
     ) {
-        AuthorRoute(onBackClick = onBackClick)
+        AuthorRoute(onBackClick = onBackClick, navigateToTopic = navigateToTopic)
     }
 }
