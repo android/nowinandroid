@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
