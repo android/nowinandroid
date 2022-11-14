@@ -52,7 +52,10 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Loading,
-                removeFromBookmarks = { }
+                removeFromBookmarks = { },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
 
@@ -73,7 +76,10 @@ class BookmarksScreenTest {
                     previewNewsResources.take(2)
                         .map { SaveableNewsResource(it, true) }
                 ),
-                removeFromBookmarks = { }
+                removeFromBookmarks = { },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
 
@@ -115,7 +121,10 @@ class BookmarksScreenTest {
                 removeFromBookmarks = { newsResourceId ->
                     assertEquals(previewNewsResources[0].id, newsResourceId)
                     removeFromBookmarksCalled = true
-                }
+                },
+                onBrowseTopic = { },
+                onFollowTopic = { },
+                onUnfollowTopic = { },
             )
         }
 
