@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -156,12 +157,17 @@ fun NewsResourceAuthors(
     authors: List<Author>
 ) {
     if (authors.isNotEmpty()) {
-        // Only display first author for now
-        val author = authors[0]
+        // display all authors
+        val authorName = StringBuilder()
+        authors.forEachIndexed { index, author ->
+            authorName
+                .append(author.name)
+                .append(if (index == authors.lastIndex) "" else ", ")
+        }
 
-        val authorNameFormatted = author.name.uppercase(Locale.getDefault())
+        val authorNameFormatted = "$authorName".uppercase(Locale.getDefault())
 
-        val authorImageUrl = author.imageUrl
+        val authorImageUrl = authors[0].imageUrl
 
         val authorImageModifier = Modifier
             .clip(CircleShape)
