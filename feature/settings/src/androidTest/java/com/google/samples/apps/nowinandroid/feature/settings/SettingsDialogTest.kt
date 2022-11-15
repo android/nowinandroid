@@ -17,9 +17,9 @@
 package com.google.samples.apps.nowinandroid.feature.settings
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
@@ -32,60 +32,74 @@ class SettingsDialogTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+    private fun getString(id: Int) = composeTestRule.activity.resources.getString(id)
+
     @Test
     fun whenLoading_showsLoadingText() {
-        launchSettingsDialogRobot(composeTestRule, Loading) {
-            loadingIndicatorExists()
+
+        composeTestRule.setContent {
+            SettingsDialog(
+                settingsUiState = Loading,
+                onDismiss = { },
+                onChangeThemeBrand = {},
+                onChangeDarkThemeConfig = {}
+            )
         }
+
+        composeTestRule
+            .onNodeWithText(getString(R.string.loading))
+            .assertExists()
     }
 
     @Test
     fun whenStateIsSuccess_allSettingsAreDisplayed() {
-        launchSettingsDialogRobot(
-            composeTestRule,
-            Success(
-                UserEditableSettings(
-                    brand = ANDROID,
-                    darkThemeConfig = DARK
-                )
+        composeTestRule.setContent {
+            SettingsDialog(
+                settingsUiState = Success(
+                    UserEditableSettings(
+                        brand = ANDROID,
+                        darkThemeConfig = DARK
+                    )
+                ),
+                onDismiss = { },
+                onChangeThemeBrand = {},
+                onChangeDarkThemeConfig = {}
             )
-        ) {
-            settingExists(getString(R.string.brand_default))
-            settingExists(getString(R.string.brand_android))
-            settingExists(getString(R.string.dark_mode_config_system_default))
-
-            settingExists(getString(R.string.dark_mode_config_light))
-            settingExists(getString(R.string.dark_mode_config_dark))
-
-            settingIsSelected(getString(R.string.brand_android))
-            settingIsSelected(getString(R.string.dark_mode_config_dark))
         }
+
+        // Check that all the possible settings are displayed.
+        composeTestRule.onNodeWithText(getString(R.string.brand_default)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.brand_android)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.dark_mode_config_system_default)
+        ).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_light)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_dark)).assertExists()
+
+        // Check that the correct settings are selected.
+        composeTestRule.onNodeWithText(getString(R.string.brand_android)).assertIsSelected()
+        composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_dark)).assertIsSelected()
     }
 
     @Test
     fun whenStateIsSuccess_allLinksAreDisplayed() {
-        launchSettingsDialogRobot(
-            composeTestRule,
-            Success(
-                UserEditableSettings(
-                    brand = ANDROID,
-                    darkThemeConfig = DARK
-                )
+        composeTestRule.setContent {
+            SettingsDialog(
+                settingsUiState = Success(
+                    UserEditableSettings(
+                        brand = ANDROID,
+                        darkThemeConfig = DARK
+                    )
+                ),
+                onDismiss = { },
+                onChangeThemeBrand = {},
+                onChangeDarkThemeConfig = {}
             )
-        ) {
-            settingExists(getString(R.string.privacy_policy))
-            settingExists(getString(R.string.licenses))
-            settingExists(getString(R.string.brand_guidelines))
-            settingExists(getString(R.string.feedback))
         }
-    }
-}
 
-private fun launchSettingsDialogRobot(
-    composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity>,
-    settingsUiState: SettingsUiState,
-    func: SettingsDialogRobot.() -> Unit
-) = SettingsDialogRobot(composeTestRule).apply {
-    setContent(settingsUiState)
-    func()
+        composeTestRule.onNodeWithText(getString(R.string.privacy_policy)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.licenses)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.brand_guidelines)).assertExists()
+        composeTestRule.onNodeWithText(getString(R.string.feedback)).assertExists()
+    }
 }
