@@ -157,14 +157,9 @@ fun NewsResourceAuthors(
 ) {
     if (authors.isNotEmpty()) {
         // display all authors
-        val authorName = StringBuilder()
-        authors.forEachIndexed { index, author ->
-            authorName
-                .append(author.name)
-                .append(if (index == authors.lastIndex) "" else ", ")
-        }
-
-        val authorNameFormatted = "$authorName".uppercase(Locale.getDefault())
+        val authorNameFormatted =
+            authors.joinToString(separator = ", ") { author -> author.name }
+                .uppercase(Locale.getDefault())
 
         val authorImageUrl = authors[0].imageUrl
 
