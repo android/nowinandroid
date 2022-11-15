@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "com.google.samples.apps.nowinandroid.benchmark"
+    namespace = "com.google.samples.apps.nowinandroid.benchmarks"
 
     defaultConfig {
         minSdk = 23
@@ -55,9 +55,9 @@ android {
     testOptions {
         managedDevices {
             devices {
-                create<ManagedVirtualDevice>("pixel5Api30") {
-                    device = "Pixel 5"
-                    apiLevel = 30
+                create<ManagedVirtualDevice>("pixel6Api31") {
+                    device = "Pixel 6"
+                    apiLevel = 31
                     systemImageSource = "aosp"
                 }
             }

@@ -16,10 +16,16 @@
 
 package com.google.samples.apps.nowinandroid
 
-import com.google.samples.apps.nowinandroid.benchmark.BuildConfig
+import com.google.samples.apps.nowinandroid.benchmarks.BuildConfig
 
 /**
  * Convenience parameter to use proper package name with regards to build type and build flavor.
  */
-const val PACKAGE_NAME =
-    "com.google.samples.apps.nowinandroid.${BuildConfig.FLAVOR}.${BuildConfig.BUILD_TYPE}"
+val PACKAGE_NAME = StringBuilder("com.google.samples.apps.nowinandroid").apply {
+    if (BuildConfig.FLAVOR != "prod") {
+        append(".${BuildConfig.FLAVOR}")
+    }
+    if (BuildConfig.BUILD_TYPE != "release") {
+        append(".${BuildConfig.BUILD_TYPE}")
+    }
+}.toString()
