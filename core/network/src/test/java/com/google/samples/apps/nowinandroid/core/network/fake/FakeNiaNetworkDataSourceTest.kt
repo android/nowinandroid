@@ -20,13 +20,13 @@ import JvmUnitTestFakeAssetManager
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 

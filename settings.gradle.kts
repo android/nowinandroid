@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 rootProject.name = "nowinandroid"
 include(":app")
 include(":app-nia-catalog")
-include(":benchmark")
+include(":benchmarks")
 include(":core:common")
 include(":core:data")
 include(":core:data-test")

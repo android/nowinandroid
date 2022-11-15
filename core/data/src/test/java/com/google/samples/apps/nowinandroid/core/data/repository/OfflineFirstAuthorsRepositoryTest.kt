@@ -29,9 +29,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -68,7 +68,7 @@ class OfflineFirstAuthorsRepositoryTest {
     @Test
     fun offlineFirstAuthorsRepository_Authors_stream_is_backed_by_Authors_dao() =
         runTest {
-            Assert.assertEquals(
+            assertEquals(
                 authorDao.getAuthorEntitiesStream()
                     .first()
                     .map(AuthorEntity::asExternalModel),
@@ -88,13 +88,13 @@ class OfflineFirstAuthorsRepositoryTest {
             val dbAuthors = authorDao.getAuthorEntitiesStream()
                 .first()
 
-            Assert.assertEquals(
+            assertEquals(
                 networkAuthors.map(AuthorEntity::id),
                 dbAuthors.map(AuthorEntity::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 network.latestChangeListVersion(CollectionType.Authors),
                 synchronizer.getChangeListVersions().authorVersion
             )
@@ -125,13 +125,13 @@ class OfflineFirstAuthorsRepositoryTest {
             val db = authorDao.getAuthorEntitiesStream()
                 .first()
 
-            Assert.assertEquals(
+            assertEquals(
                 network.map(AuthorEntity::id),
                 db.map(AuthorEntity::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 changeList.last().changeListVersion,
                 synchronizer.getChangeListVersions().authorVersion
             )
@@ -166,13 +166,13 @@ class OfflineFirstAuthorsRepositoryTest {
                 .map(AuthorEntity::asExternalModel)
 
             // Assert that items marked deleted on the network have been deleted locally
-            Assert.assertEquals(
+            assertEquals(
                 networkAuthors.map(Author::id) - deletedItems,
                 dbAuthors.map(Author::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 network.latestChangeListVersion(CollectionType.Authors),
                 synchronizer.getChangeListVersions().authorVersion
             )
