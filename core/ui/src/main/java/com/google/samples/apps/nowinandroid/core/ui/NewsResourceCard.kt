@@ -156,12 +156,12 @@ fun NewsResourceAuthors(
     authors: List<Author>
 ) {
     if (authors.isNotEmpty()) {
-        // Only display first author for now
-        val author = authors[0]
+        // display all authors
+        val authorNameFormatted =
+            authors.joinToString(separator = ", ") { author -> author.name }
+                .uppercase(Locale.getDefault())
 
-        val authorNameFormatted = author.name.uppercase(Locale.getDefault())
-
-        val authorImageUrl = author.imageUrl
+        val authorImageUrl = authors[0].imageUrl
 
         val authorImageModifier = Modifier
             .clip(CircleShape)
