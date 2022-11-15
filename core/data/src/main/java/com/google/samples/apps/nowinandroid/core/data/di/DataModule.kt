@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
-import android.content.Context
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstAuthorsRepository
@@ -27,26 +26,14 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
-
-    companion object {
-        @Provides
-        @Singleton
-        fun providesFakeAssetManager(
-            @ApplicationContext context: Context
-        ): FakeAssetManager = FakeAssetManager(context.assets::open)
-    }
 
     @Binds
     fun bindsTopicRepository(
