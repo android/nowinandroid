@@ -20,8 +20,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import kotlin.test.assertEquals
 import kotlinx.datetime.Instant
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PopulatedNewsResourceKtTest {

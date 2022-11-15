@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
