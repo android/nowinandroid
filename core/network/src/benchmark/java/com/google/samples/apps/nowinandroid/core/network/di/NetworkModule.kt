@@ -16,11 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
+import android.content.Context
 import com.google.samples.apps.nowinandroid.core.network.NiANetwork
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiANetwork
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -41,5 +44,11 @@ interface NetworkModule {
         fun providesNetworkJson(): Json = Json {
             ignoreUnknownKeys = true
         }
+
+        @Provides
+        @Singleton
+        fun providesFakeAssetManager(
+            @ApplicationContext context: Context
+        ): FakeAssetManager = FakeAssetManager(context.assets::open)
     }
 }
