@@ -17,38 +17,28 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import android.content.Context
-import com.google.samples.apps.nowinandroid.core.network.NiANetwork
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiANetwork
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkModule {
+object NetworkModule {
 
-    @Binds
-    fun bindsNiANetwork(
-        niANetwork: FakeNiANetwork
-    ): NiANetwork
-
-    companion object {
-        @Provides
-        @Singleton
-        fun providesNetworkJson(): Json = Json {
-            ignoreUnknownKeys = true
-        }
-
-        @Provides
-        @Singleton
-        fun providesFakeAssetManager(
-            @ApplicationContext context: Context
-        ): FakeAssetManager = FakeAssetManager(context.assets::open)
+    @Provides
+    @Singleton
+    fun providesNetworkJson(): Json = Json {
+        ignoreUnknownKeys = true
     }
+
+    @Provides
+    @Singleton
+    fun providesFakeAssetManager(
+        @ApplicationContext context: Context,
+    ): FakeAssetManager = FakeAssetManager(context.assets::open)
 }
