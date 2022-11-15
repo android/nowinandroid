@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
