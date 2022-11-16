@@ -20,4 +20,5 @@
     <string name="top_app_bar_title">Saved</string>
     <string name="top_app_bar_action_search">Search</string>
     <string name="top_app_bar_action_menu">Menu</string>
+    <string name="bookmarks_empty">No bookmarks yet!</string>
 </resources>
