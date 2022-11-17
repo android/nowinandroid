@@ -28,8 +28,8 @@ fun NavController.navigateToBookmarks(navOptions: NavOptions? = null) {
     this.navigate(bookmarksRoute, navOptions)
 }
 
-fun NavGraphBuilder.bookmarksScreen() {
+fun NavGraphBuilder.bookmarksScreen(onBrowseTopic: (String) -> Unit) {
     composable(route = bookmarksRoute) {
-        BookmarksRoute()
+        BookmarksRoute(onBrowseTopic = onBrowseTopic)
     }
 }

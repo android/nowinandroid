@@ -64,12 +64,14 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 @Composable
 internal fun BookmarksRoute(
     modifier: Modifier = Modifier,
+    onBrowseTopic: (String) -> Unit,
     viewModel: BookmarksViewModel = hiltViewModel()
 ) {
     val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
+        onBrowseTopic = onBrowseTopic,
         modifier = modifier
     )
 }
@@ -109,6 +111,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollableState = rememberLazyGridState()

@@ -66,6 +66,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
 @Composable
 internal fun AuthorRoute(
     onBackClick: () -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AuthorViewModel = hiltViewModel(),
 ) {
@@ -79,6 +80,7 @@ internal fun AuthorRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followAuthorToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
+        onBrowseTopic = onBrowseTopic
     )
 }
 
@@ -90,6 +92,7 @@ internal fun AuthorScreen(
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
@@ -126,6 +129,7 @@ internal fun AuthorScreen(
                     author = authorUiState.followableAuthor.author,
                     news = newsUiState,
                     onBookmarkChanged = onBookmarkChanged,
+                    onBrowseTopic = onBrowseTopic
                 )
             }
         }
@@ -138,13 +142,14 @@ internal fun AuthorScreen(
 private fun LazyListScope.authorBody(
     author: Author,
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     item {
         AuthorHeader(author)
     }
 
-    authorCards(news, onBookmarkChanged)
+    authorCards(news, onBookmarkChanged, onBrowseTopic)
 }
 
 @Composable
@@ -175,7 +180,8 @@ private fun AuthorHeader(author: Author) {
 
 private fun LazyListScope.authorCards(
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
@@ -184,7 +190,8 @@ private fun LazyListScope.authorCards(
                 newsResourceMapper = { it.newsResource },
                 isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
-                itemModifier = Modifier.padding(24.dp)
+                itemModifier = Modifier.padding(24.dp),
+                onBrowseTopic = onBrowseTopic
             )
         }
         is NewsUiState.Loading -> item {
@@ -251,6 +258,7 @@ fun AuthorScreenPopulated() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
     }
@@ -267,6 +275,7 @@ fun AuthorScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
     }

@@ -42,7 +42,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
  */
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onBrowseTopic: (String) -> Unit,
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -58,6 +59,7 @@ fun LazyGridScope.newsFeed(
                     newsResource = saveableNewsResource.newsResource,
                     isBookmarked = saveableNewsResource.isSaved,
                     onClick = { ContextCompat.startActivity(context, launchResourceIntent, null) },
+                    onBrowseTopic = onBrowseTopic,
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
                             saveableNewsResource.newsResource.id,
@@ -97,7 +99,8 @@ fun NewsFeedLoadingPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
     }
@@ -118,7 +121,8 @@ fun NewsFeedContentPreview() {
                         )
                     }
                 ),
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
     }

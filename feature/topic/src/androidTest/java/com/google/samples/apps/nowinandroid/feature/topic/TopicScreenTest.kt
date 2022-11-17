@@ -62,6 +62,7 @@ class TopicScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -80,6 +81,7 @@ class TopicScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -110,6 +112,7 @@ class TopicScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -136,6 +139,7 @@ class TopicScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 

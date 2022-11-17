@@ -59,7 +59,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -82,7 +83,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -111,7 +113,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -163,7 +166,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -215,7 +219,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -262,7 +267,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -285,7 +291,8 @@ class ForYouScreenTest {
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
+                    onBrowseTopic = {}
                 )
             }
         }
@@ -311,7 +318,8 @@ class ForYouScreenTest {
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 

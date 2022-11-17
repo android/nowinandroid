@@ -58,6 +58,7 @@ class AuthorScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -76,6 +77,7 @@ class AuthorScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -106,6 +108,7 @@ class AuthorScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
@@ -132,6 +135,7 @@ class AuthorScreenTest {
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
+                onBrowseTopic = {}
             )
         }
 
