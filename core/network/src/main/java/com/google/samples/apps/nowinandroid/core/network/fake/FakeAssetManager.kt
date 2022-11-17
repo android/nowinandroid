@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid
+package com.google.samples.apps.nowinandroid.core.network.fake
 
-import com.google.samples.apps.nowinandroid.benchmark.BuildConfig
+import java.io.InputStream
 
-/**
- * Convenience parameter to use proper package name with regards to build type and build flavor.
- */
-const val PACKAGE_NAME =
-    "com.google.samples.apps.nowinandroid.${BuildConfig.FLAVOR}.${BuildConfig.BUILD_TYPE}"
+fun interface FakeAssetManager {
+    fun open(fileName: String): InputStream
+}

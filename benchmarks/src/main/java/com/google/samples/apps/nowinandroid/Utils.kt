@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository
+package com.google.samples.apps.nowinandroid
 
-import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.serialization.json.Json
-import org.junit.Before
+import com.google.samples.apps.nowinandroid.benchmarks.BuildConfig
 
-class FakeNewsRepositoryTest {
-
-    private lateinit var subject: FakeNewsRepository
-
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setup() {
-        subject = FakeNewsRepository(
-            ioDispatcher = testDispatcher,
-            networkJson = Json { ignoreUnknownKeys = true }
-        )
+/**
+ * Convenience parameter to use proper package name with regards to build type and build flavor.
+ */
+val PACKAGE_NAME = StringBuilder("com.google.samples.apps.nowinandroid").apply {
+    if (BuildConfig.FLAVOR != "prod") {
+        append(".${BuildConfig.FLAVOR}")
     }
-}
+    if (BuildConfig.BUILD_TYPE != "release") {
+        append(".${BuildConfig.BUILD_TYPE}")
+    }
+}.toString()

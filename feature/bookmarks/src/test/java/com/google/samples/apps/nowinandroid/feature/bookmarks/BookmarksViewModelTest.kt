@@ -23,12 +23,12 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,8 +69,8 @@ class BookmarksViewModelTest {
         newsRepository.sendNewsResources(previewNewsResources)
         userDataRepository.updateNewsResourceBookmark(previewNewsResources[0].id, true)
         val item = viewModel.feedUiState.value
-        assertTrue(item is Success)
-        assertEquals((item as Success).feed.size, 1)
+        assertIs<Success>(item)
+        assertEquals(item.feed.size, 1)
 
         collectJob.cancel()
     }
@@ -86,8 +86,8 @@ class BookmarksViewModelTest {
         viewModel.removeFromSavedResources(previewNewsResources[0].id)
         // Verify list of saved resources is now empty
         val item = viewModel.feedUiState.value
-        assertTrue(item is Success)
-        assertEquals((item as Success).feed.size, 0)
+        assertIs<Success>(item)
+        assertEquals(item.feed.size, 0)
 
         collectJob.cancel()
     }

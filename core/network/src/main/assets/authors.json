@@ -1,0 +1,794 @@
+[
+  {
+    "id": "1",
+    "name": "Márton Braun",
+    "mediumPage": "https://medium.com/@zsmb13",
+    "twitter": "https://twitter.com/zsmb13",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1047591879431397377/nNjQUt0F_400x400.jpg",
+    "bio": "Márton is an Android Developer Relations Engineer at Google, working on anything and everything Kotlin."
+  },
+  {
+    "id": "2",
+    "name": "Greg Hartrell",
+    "mediumPage": "https://medium.com/@greghart/about",
+    "twitter": "https://twitter.com/ghartrell",
+    "imageUrl": "https://pbs.twimg.com/profile_images/971602488984940547/plY3bBRz_400x400.jpg",
+    "bio": "Greg Hartrell is a product leader with a 15+ year history helping large teams build high performing software products and businesses. At Google, he’s a Product Management Director at Google Play / Android, covering product lines from games, to digital content and platform expansion.  He’s previously been VP of Product Development at Capcom/Beeline, and a product leader for 8 years at Microsoft for Xbox Live/360 and the Windows platform. When he’s not speaking, he enjoys looting random objects out of boxes, jumping from platform to platform, and grinding while afk."
+  },
+  {
+    "id": "3",
+    "name": "Simona Stojanovic",
+    "mediumPage": "https://medium.com/@anomisSi",
+    "twitter": "https://twitter.com/anomisSi",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1437506849016778756/pG0NZALw_400x400.jpg",
+    "bio": "Android Developer Relations Engineer @Google, working on the Compose team and taking care of Layouts & Navigation."
+  },
+  {
+    "id": "4",
+    "name": "Andrew Flynn",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://lh3.googleusercontent.com/xfI5PujnEqdQ4GlsRZAvVOGiC_v3VTz6wYM8kxaPyOtXIZY4-BDYOr-d-cjN8kxAkr4yAthuWu2gTZ7t-do=s1016-rw-no",
+    "bio": "Andrew joined Google in 2007 after graduating from Dartmouth College. He has worked on a wide range of team from Ads to Android devices to Google Fi, and currently works on the Play Store."
+  },
+  {
+    "id": "5",
+    "name": "Jon Boekenoogen",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "6",
+    "name": "Florina Muntenescu",
+    "mediumPage": "https://medium.com/@florina.muntenescu",
+    "twitter": "https://twitter.com/FMuntenescu",
+    "imageUrl": "https://pbs.twimg.com/profile_images/726323972686503937/nZkTQVQJ_400x400.jpg",
+    "bio": "Florina is working as an Android Developer Relations Engineer at Google, helping developers build beautiful apps with Jetpack Compose. She has been working with Android for more than 10 years, previous work covering news at upday, payment solutions at payleven and navigation services at Garmin."
+  },
+  {
+    "id": "7",
+    "name": "Lidia Gaymond",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "8",
+    "name": "Vicki Amin",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "9",
+    "name": "Marcel Pintó",
+    "mediumPage": "https://medium.com/@marxallski",
+    "twitter": "https://twitter.com/marxallski",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1196804242310234112/6pq8qguX_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "10",
+    "name": "Krish Vitaldevara",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/vitaldevara",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1326982232100122626/GDN-QoX-_400x400.png",
+    "bio": ""
+  },
+  {
+    "id": "11",
+    "name": "Gerry Fan",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "12",
+    "name": "Pietro Maggi",
+    "mediumPage": "https://medium.com/@pmaggi",
+    "twitter": "https://twitter.com/pfmaggi",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1149328128868794370/T59BFarK_400x400.png",
+    "bio": "Pietro joined Android DevRel in 2018, and has worked supporting Jetpack WorkManager, large screen devices and lately, Android Enterprise."
+  },
+  {
+    "id": "13",
+    "name": "Rohan Shah",
+    "mediumPage": "",
+    "twitter": "twitter.com/rohanscloud",
+    "imageUrl": "https://pbs.twimg.com/profile_images/828723313396502530/dfVBFeZP_400x400.jpg",
+    "bio": "Product Manager on the System UI team, experienced Android developer in a past life. Focused on customization, gesture navigation, and smooth motion."
+  },
+  {
+    "id": "14",
+    "name": "Dave Burke",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/davey_burke",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1035017742825357312/f0IHVAG1_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "15",
+    "name": "Meghan Mehta",
+    "mediumPage": "https://medium.com/@magicalmeghan",
+    "twitter": "https://twitter.com/adressyengineer",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1121847353214824449/wIB-dD0__400x400.jpg",
+    "bio": "Meghan has been in Google DevRel since 2018 and loves every minute of it. She mostly works on training and is passionate about making learning Android accessible to all. Outside of work you can find her singing, dancing, or petting dogs."
+  },
+  {
+    "id": "16",
+    "name": "Anna Bernbaum",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Anna Bernbaum is a Product Manager for Wear OS, she specifically focusses on Watch Faces, Complications and Tiles."
+  },
+  {
+    "id": "17",
+    "name": "Adarsh Fernando",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/AdarshFernando",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1291755351298121728/SFGD_KCm_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "18",
+    "name": "Madan Ankapura",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/madan_ankapura",
+    "imageUrl": "https://pbs.twimg.com/profile_images/195140822/IMG_0612_400x400.JPG",
+    "bio": ""
+  },
+  {
+    "id": "19",
+    "name": "Kateryna Semenova",
+    "mediumPage": "https://medium.com/@katerynasemenova",
+    "twitter": "https://twitter.com/SKateryna",
+    "imageUrl": "https://miro.medium.com/fit/c/176/176/2*MWidJNpRKpwnPhMYw1hBTA.png",
+    "bio": "Kate joined Google Android DevRel team in 2020 with the focus on Android performance. She worked on Android12 features, such as Splash screens and App links as well as App startup improvements. Right now she is working on new Deep links tools for develoeprs.\n\nBefore Google, Kate worked as an Android engineer at Lyft. She built LyftPink membership, ride passes, subscriptions and users onboarding flow."
+  },
+  {
+    "id": "20",
+    "name": "Rahul Ravikumar",
+    "mediumPage": "https://medium.com/@rahulrav",
+    "twitter": "https://twitter.com/tikurahul",
+    "imageUrl": "https://pbs.twimg.com/profile_images/839866273160822785/sLb2Ld53_400x400.jpg",
+    "bio": "Software Engineer on the Toolkit team. Recent projects include Jetpack Macrobenchmarks, Baseline Profiles and WorkManager."
+  },
+  {
+    "id": "21",
+    "name": "Chris Craik",
+    "mediumPage": "https://medium.com/@chriscraik",
+    "twitter": "https://twitter.com/chris_craik",
+    "imageUrl": "https://pbs.twimg.com/profile_images/865356883971919872/EkFpz3r1_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "22",
+    "name": "Alex Vanyo",
+    "mediumPage": "https://medium.com/@alexvanyo",
+    "twitter": "https://twitter.com/alex_vanyo",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1431339735931305989/nOE2mmi2_400x400.jpg",
+    "bio": "Alex joined Android DevRel in 2021, and has worked supporting form factors from small watches to large foldables and tablets. His special interests include insets, Compose, testing and state."
+  },
+  {
+    "id": "23",
+    "name": "Manuel Vivo",
+    "mediumPage": "https://medium.com/@manuelvicnt",
+    "twitter": "https://twitter.com/manuelvicnt",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1126564755202760705/x3qLaiBB_400x400.jpg",
+    "bio": "Manuel is an Android Developer Relations Engineer at Google. With previous experience at Capital One, he currently focuses on App Architecture, Kotlin & Coroutines, Dependency Injection and Jetpack Compose."
+  },
+  {
+    "id": "24",
+    "name": "Arjun Dayal",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "25",
+    "name": "Murat Yener",
+    "mediumPage": "https://medium.com/@yenerm",
+    "twitter": "https://twitter.com/yenerm",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1201558524385316866/7lBmCYmD_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "26",
+    "name": "Alex Saveau",
+    "mediumPage": "https://medium.com/@SUPERCILEX",
+    "twitter": "https://twitter.com/SUPERCILEX",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1093296033759604736/kO9WSDy4_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "27",
+    "name": "Paul Lammertsma",
+    "mediumPage": "https://medium.com/@officesunshine",
+    "twitter": "https://twitter.com/officesunshine",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1281278859506331651/2XBTbfIK_400x400.jpg",
+    "bio": "Paul is an Android Developer Relations Engineer at Google, supporting developers for TVs, watches and large screens. He has passionate about building amazing Android experiences since Froyo."
+  },
+  {
+    "id": "28",
+    "name": "Caren Chang",
+    "mediumPage": "https://medium.com/@calren24",
+    "twitter": "https://twitter.com/calren24",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1521260707521519617/cW-G-T2R_400x400.jpg",
+    "bio": "Developer Relations Engineer on the Android team, with a focus on Accessibiliity. "
+  },
+  {
+    "id": "29",
+    "name": "Mayuri Khinvasara Khabya",
+    "mediumPage": "https://medium.com/@mayuri.k18",
+    "twitter": "https://twitter.com/mayuri_k",
+    "imageUrl": "https://pbs.twimg.com/profile_images/769886964170436608/6tsEB7zi_400x400.jpg",
+    "bio": "Mayuri is an Android Developer Relations Engineer and has worked across Android TV, App performance and device backup"
+  },
+  {
+    "id": "30",
+    "name": "Romain Guy",
+    "mediumPage": "https://medium.com/@romainguy",
+    "twitter": "https://twitter.com/romainguy",
+    "imageUrl": "https://pbs.twimg.com/profile_images/459175652105527298/6qGNL0QI_400x400.jpeg",
+    "bio": "Romain joined the Android team in 2007, working on the UI Toolkit and the Graphics pipeline for many years. He now leads the Toolkit and Jetpack teams."
+  },
+  {
+    "id": "31",
+    "name": "Chet Haase",
+    "mediumPage": "https://chethaase.medium.com/",
+    "twitter": "https://twitter.com/chethaase",
+    "imageUrl": "https://miro.medium.com/max/3150/1*5pR0GFT8Cosn_zGIdRfc0Q.jpeg",
+    "bio": "Chet joined the Android team in 2010, where he has worked as an engineer and lead for the UI Toolkit team, as Chief Android Advocate on the Developer Relations team, and now as an engineer on the Graphics team."
+  },
+  {
+    "id": "32",
+    "name": "Tor Norbye",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/tornorbye",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1411058065839845376/SeUHA-sR_400x400.jpg",
+    "bio": "Tor joined the Android team in 2010, and leads engineering for Android Studio."
+  },
+  {
+    "id": "33",
+    "name": "Nicole Laure",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/nicolelaure",
+    "imageUrl": "https://pbs.twimg.com/profile_images/442979550285557760/0nq7QOTn_400x400.jpeg",
+    "bio": ""
+  },
+  {
+    "id": "34",
+    "name": "Yigit Boyar",
+    "mediumPage": "https://medium.com/@yigit",
+    "twitter": "https://twitter.com/yigitboyar",
+    "imageUrl": "https://pbs.twimg.com/profile_images/530840695347482624/me4HgEMU_400x400.jpeg",
+    "bio": "Yigit joined the Android team in 2014 and worked on various projects from RecyclerView to Architecture Components with the dream of making Android development better. Still trying :)"
+  },
+  {
+    "id": "35",
+    "name": "Sean McQuillan",
+    "mediumPage": "https://medium.com/@objcode",
+    "twitter": "https://twitter.com/objcode",
+    "imageUrl": "https://pbs.twimg.com/profile_images/913524063175286784/nhyO1wkU_400x400.jpg",
+    "bio": "Software Engineer on the Toolkit team. Working on making text 📜 sparkle ✨. Also helping melting face 🫠 render on your phone."
+  },
+  {
+    "id": "36",
+    "name": "Ben Weiss",
+    "mediumPage": "https://medium.com/@keyboardsurfer",
+    "twitter": "https://twitter.com/keyboardsurfer",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1455956781830709255/GqeqbgEY_400x400.jpg",
+    "bio": "Ben works as an Engineer on the Android Developer Relations team. Over the years he contributed to many areas of Android. To get the latest info on what's up with Ben, read one of his articles or follow him on Twitter."
+  },
+  {
+    "id": "37",
+    "name": "Carmen Jackson",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://media-exp1.licdn.com/dms/image/C5603AQE8wPl4iNUPeA/profile-displayphoto-shrink_200_200/0/1553574292680?e=1655337600&v=beta&t=6zsc9QaC95DM19uXbG3FJQwUIpObp4XeO-WsLzlNGIo",
+    "bio": "Carmen has been an engineer on the Android Platform Performance team since 2016 and has worked with Android for over 10 years. She currently leads a team focused on improving application performance."
+  },
+  {
+    "id": "38",
+    "name": "TJ Dahunsi",
+    "mediumPage": "https://tunjid.medium.com/",
+    "twitter": "",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1504815529848152074/iA9Q_QME_400x400.jpg",
+    "bio": "Tj is an engineer on the Android Developer Relations Team working on app architecture. He's also a connoiseur of fine memes."
+  },
+  {
+    "id": "39",
+    "name": "Shailen Tuli",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/shailentuli",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1521593961/shailen_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "40",
+    "name": "Kailiang Chen",
+    "mediumPage": "https://medium.com/@bbfee",
+    "twitter": "https://twitter.com/KailiangChen3",
+    "imageUrl": "https://avatars.githubusercontent.com/u/1756481?v=4",
+    "bio": "Kailiang is a software engineer on Android Camera Platform team. He works on Jetpack CameraX. In the past, he worked at Youtube and Uber."
+  },
+  {
+    "id": "41",
+    "name": "Jeremy Walker",
+    "mediumPage": "https://medium.com/@codingjeremy",
+    "twitter": "https://twitter.com/codingjeremy",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1124334569887428610/etnNE5hz_400x400.png",
+    "bio": ""
+  },
+  {
+    "id": "42",
+    "name": "Don Turner",
+    "mediumPage": "https://medium.com/@donturner",
+    "twitter": "https://twitter.com/donturner",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1282701855555018753/xcnlScis_400x400.jpg",
+    "bio": "Don is an engineer on the Android Developer Relations team. He has founded and led several businesses in the software development, digital marketing and events industries. He joined Google in 2014 and focuses on improving Android app architecture. "
+  },
+  {
+    "id": "43",
+    "name": "Lilian Young",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/memnus",
+    "imageUrl": "https://developer.android.com/events/dev-summit/images/speakers/lilian_young_720.jpg",
+    "bio": "Lilian has been part of the Android Vulnerability Rewards Program nearly from the beginning, since joining Android Security Assurance in 2016. As a member of both the vulnerability assessment team and the design review team for upcoming Android versions, they review bugs and features to determine which is which. "
+  },
+  {
+    "id": "44",
+    "name": "Wenhung Teng",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://lh3.googleusercontent.com/a-/AOh14Ghsnwfup3BUugAxNwQsAD8Ph_CWNrH8SL6Wb8OZ",
+    "bio": ""
+  },
+  {
+    "id": "45",
+    "name": "Charcoal Chen",
+    "mediumPage": "https://medium.com/@charcoalchen",
+    "twitter": "",
+    "imageUrl": "https://miro.medium.com/fit/c/262/262/0*XgfVFjuchPekBYfh",
+    "bio": "Charcoal Chen is a software engineer on Jetpack CameraX team."
+  },
+  {
+    "id": "46",
+    "name": "Mike Yerou",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "47",
+    "name": "Peter Visontay",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "48",
+    "name": "Marcelo Hernandez",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "49",
+    "name": "Daniel Santiago",
+    "mediumPage": "https://medium.com/@danysantiago",
+    "twitter": "",
+    "imageUrl": "https://miro.medium.com/fit/c/262/262/2*fe7m2z-tRofWYjaiXihi9g.jpeg",
+    "bio": ""
+  },
+  {
+    "id": "50",
+    "name": "Brad Corso",
+    "mediumPage": "https://medium.com/@bcorso1",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "51",
+    "name": "Jonathan Koren",
+    "mediumPage": "https://medium.com/@jdkoren",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Jonathan is an Android Developer Relations Engineer at Google, with particular interest in UI and app architecture. In the past, he developed Android applications and libraries at Yahoo and Personal Capital. In the future, he will have fixed the bugs he is writing in the present (hopefully)."
+  },
+  {
+    "id": "52",
+    "name": "Anna-Chiara Bellini",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/dr0nequeen",
+    "imageUrl": "https://pbs.twimg.com/profile_images/852490449961066496/AxcrR7xX_400x400.jpg",
+    "bio": "Anna-Chiara joined Google in 2019 after a long career as a Computer Engineer and Startup founder. Now she focuses on making Android developers' lives easier. "
+  },
+  {
+    "id": "53",
+    "name": "Amanda Alexander",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://developer.android.com/events/dev-summit/images/speakers/amanda_alexander_720.jpg",
+    "bio": ""
+  },
+  {
+    "id": "54",
+    "name": "Android Developers Backstage",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://ssl-static.libsyn.com/p/assets/d/b/3/6/db362cf09b34bd4ce5bbc093207a2619/height_250_width_250_Android_Devs_Backstage_Thumb_v2.png",
+    "bio": "Android Developers Backstage is a podcast by and for Android developers. Hosted by developers from the Android platform team, this show covers topics of interest to Android programmers, with in-depth discussions and interviews with engineers on the Android team at Google."
+  },
+  {
+    "id": "55",
+    "name": "Nicole Borrelli",
+    "mediumPage": "https://medium.com/@borrelli",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "56",
+    "name": "Dan Saadati",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "57",
+    "name": "Nick Butcher",
+    "mediumPage": "https://medium.com/@crafty",
+    "twitter": "https://twitter.com/crafty",
+    "imageUrl": "https://pbs.twimg.com/profile_images/964457443517444097/AiMNiPtx_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "58",
+    "name": "Ian Lake",
+    "mediumPage": "https://medium.com/@ianhlake",
+    "twitter": "https://twitter.com/ianhlake",
+    "imageUrl": "https://pbs.twimg.com/profile_images/438932314504978434/uj3Sgwy9_400x400.jpeg",
+    "bio": "Ian is a software engineer on the Android Toolkit team at Google. He leads the teams working on the Navigation Component, Fragments, and the integration of fundamental building blocks such as Lifecycle, Saved State, and Activity APIs across Jetpack."
+  },
+  {
+    "id": "59",
+    "name": "Diana Wong",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/droidiana1000",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1268358805537951744/zCYvvpvV_400x400.jpg",
+    "bio": "Diana is a Product Manager on the Android Developer team, owning the Large Screen app ecosystem and loves Android foldables and tablets. Previously she's worked on Android Jetpack, the NDK, and the Android runtime (ART), among other things."
+  },
+  {
+    "id": "60",
+    "name": "Patricia Correa",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "https://pbs.twimg.com/profile_images/940666196050944000/w12h2qOz_400x400.jpg",
+    "bio": ""
+  },
+  {
+    "id": "61",
+    "name": "The Modern Android Development Team",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Development tools, APIs, language, and distribution technologies recommended by the Android team to help developers be productive and create better apps that run across billions of devices."
+  },
+  {
+    "id": "62",
+    "name": "Maru Ahues Bouza",
+    "mediumPage": "https://medium.com/@mahues",
+    "twitter": "https://twitter.com/mabouza",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1496362581253967872/4S4SBVYC_400x400.jpg",
+    "bio": "Director of Android Developer Relations @ Google. Venezolana 🇻🇪."
+  },
+  {
+    "id": "63",
+    "name": "Purnima Kochikar",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/purnimakochikar",
+    "imageUrl": "https://media-exp1.licdn.com/dms/image/C4D03AQHUHmUGiioagQ/profile-displayphoto-shrink_800_800/0/1639519434507?e=2147483647&v=beta&t=OIt4yJkbJ7Suewlgyc7OrsLweMLBULRBvVHb9h4ZX5o",
+    "bio": "VP, Google Play, Apps & Games at Google"
+  },
+  {
+    "id": "64",
+    "name": "Yasmine Evjen",
+    "mediumPage": "https://yasmineevjen.medium.com/",
+    "twitter": "https://twitter.com/yasmineevjen",
+    "imageUrl": "https://miro.medium.com/fit/c/96/96/1*xK0hkXcG3TYOXDkdxorXOA.jpeg",
+    "bio": "Community Lead, Android Developer Relations"
+  },
+  {
+    "id": "65",
+    "name": "Jolanda Verhoef",
+    "mediumPage": "https://medium.com/@lojanda",
+    "twitter": "https://twitter.com/Lojanda",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1396863889996980225/qBgkY5rY_400x400.jpg",
+    "bio": "Android Developer Relations Engineer @Google, focusing on Jetpack Compose 🚀"
+  },
+  {
+    "id": "66",
+    "name": "Rakesh Iyer",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Staff Software Engineer"
+  },
+  {
+    "id": "67",
+    "name": "Leland Rechis",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Group Product Manager"
+  },
+  {
+    "id": "68",
+    "name": "Chris Arriola",
+    "mediumPage": "https://medium.com/@arriolachris",
+    "twitter": "https://twitter.com/arriolachris",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1392882006074093568/zITOTjRR_400x400.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "69",
+    "name": "Ryan O’Leary",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "70",
+    "name": "Wojtek Kaliciński",
+    "mediumPage": "https://medium.com/@wkalicinski",
+    "twitter": "https://twitter.com/wkalic",
+    "imageUrl": "https://pbs.twimg.com/profile_images/906094366388875264/RzDjkVh7_400x400.jpg",
+    "bio": "Android Developer Relations Engineer"
+  },
+  {
+    "id": "71",
+    "name": "Boris Farber",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/BorisFarber",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "72",
+    "name": "Xavier Ducrohet",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/droidxav",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "73",
+    "name": "Niharika Arora",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/theDroidLady",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "74",
+    "name": "Marcus Leal",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": ""
+  },
+  {
+    "id": "75",
+    "name": "Kseniia Shumelchyk",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/kseniiaS",
+    "imageUrl": "https://media-exp1.licdn.com/dms/image/C4D03AQGdVWXQeoKI3g/profile-displayphoto-shrink_800_800/0/1635165725069?e=2147483647&v=beta&t=lyf4j6SsqBidEZQZem5Ewi62QkqERPxZWVNByKeRMks",
+    "bio": "Developer Relations Engineer @Google focused on ⌚️and 📱. Former Android @GoogleDevExpert, #GDG and @WomenTechmakers 🇺🇦."
+  },
+  {
+    "id": "76",
+    "name": "Tom Grinsted",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Group Product Manager, Google Play"
+  },
+  {
+    "id": "77",
+    "name": "Fred Chung",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/fredchung",
+    "imageUrl": "https://pbs.twimg.com/profile_images/2670736355/1a3614dbe62d9ba31933626e273a3f77_400x400.jpeg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "78",
+    "name": "Kat Kuan",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/katherine_kuan",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1062503708964020224/gXpwDkOM_400x400.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "79",
+    "name": "Summers Pitman",
+    "mediumPage": "https://medium.com/@mrsummers",
+    "twitter": "",
+    "imageUrl": "https://miro.medium.com/fit/c/176/176/0*8wWgPmCgxariqpFo",
+    "bio": ""
+  },
+  {
+    "id": "80",
+    "name": "Ben Trengrove",
+    "mediumPage": "https://medium.com/androiddevelopers/jetpack-compose-composition-tracing-9ec2b3aea535",
+    "twitter": "https://twitter.com/bentrengrove",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1536488024661700609/zxdNBhWT_400x400.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "81",
+    "name": "Takeshi Hagikura",
+    "mediumPage": "https://medium.com/@thagikura",
+    "twitter": "",
+    "imageUrl": "https://miro.medium.com/fit/c/176/176/1*esL5OPETU5LMXNO-8os7dw.jpeg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "82",
+    "name": "Miłosz Moczkowski",
+    "mediumPage": "https://medium.com/@m_moczkowski",
+    "twitter": "https://twitter.com/m_moczkowski?lang=en",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1571116773612654592/sAJD-u-T_400x400.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "83",
+    "name": "Sabs",
+    "mediumPage": "https://medium.com/@iamsabs",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Relations Engineer at Google"
+  },
+  {
+    "id": "84",
+    "name": "Alex Rocha",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Relations Engineer at Google"
+  },
+  {
+    "id": "85",
+    "name": "Donovan McMurray",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "CameraX Developer Relations Engineer"
+  },
+  {
+    "id": "86",
+    "name": "Ataul Munim",
+    "mediumPage": "https://medium.com/@ataulm",
+    "twitter": "https://twitter.com/ataulm",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1586614206803083266/BrGIIU23_400x400.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "87",
+    "name": "Yafit Becher",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Google Play Product Manager at Google"
+  },
+  {
+    "id": "88",
+    "name": "Luis Dorelli",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Google Play Software Engineer at Google"
+  },
+  {
+    "id": "89",
+    "name": "Terence Zhang",
+    "mediumPage": "https://medium.com/@tzterencezhang",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Relations Engineer at Google"
+  },
+  {
+    "id": "90",
+    "name": "Roberto Orgiu",
+    "mediumPage": "https://tiwiz.medium.com/",
+    "twitter": "https://twitter.com/_tiwiz",
+    "imageUrl": "https://pbs.twimg.com/profile_images/1504459589877698562/CncWER1I_400x400.jpg",
+    "bio": "@AndroidDev Relations Engineer @Google | Former @nytimes | 🚴🚵📷 👨‍👩‍👧‍👦"
+  },
+  {
+    "id": "91",
+    "name": "Alejandra Stamato",
+    "mediumPage": "https://medium.com/@astamato",
+    "twitter": "https://twitter.com/astamatok",
+    "imageUrl": "https://developer.android.com/events/dev-summit/images/speakers/alejandra-stamato.jpg",
+    "bio": "Android Developer Relations Engineer 🥑 @Google #JetpackCompose | 🇦🇷 @ 🏴󠁧󠁢󠁥󠁮󠁧󠁿👑 | Ex 🇮🇪🍀"
+  },
+  {
+    "id": "92",
+    "name": "Jason Tang",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Product Manager at Google"
+  },
+  {
+    "id": "93",
+    "name": "Diego Zuluaga",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Relations Engineer at Google"
+  },
+  {
+    "id": "94",
+    "name": "Michael Mauzy",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Documentation at Google"
+  },
+  {
+    "id": "95",
+    "name": "Dan Galpin",
+    "mediumPage": "https://medium.com/@dagalpin",
+    "twitter": "https://twitter.com/dagalpin",
+    "imageUrl": "https://developer.android.com/events/dev-summit/images/speakers/daniel-galpin_720.jpg",
+    "bio": "Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "96",
+    "name": "Rebecca Franks",
+    "mediumPage": "https://medium.com/@riggaroo ",
+    "twitter": "https://twitter.com/riggaroo",
+    "imageUrl": "https://developer.android.com/events/dev-summit/images/speakers/rebecca-franks_720.jpg",
+    "bio": "Rebecca is a Developer Relations Engineer on the Android team. Having joined the team in 2022, she is focused on Jetpack Compose: all things animation and graphics. Prior to joining Google she worked on a couple of interesting projects such as a Image/Video editor and TV Streaming app. "
+  },
+  {
+    "id": "97",
+    "name": "Rebecca Gutteridge",
+    "mediumPage": "",
+    "twitter": "https://twitter.com/BexSG_",
+    "imageUrl": "https://twitter.com/BexSG_/photo",
+    "bio": "Senior Android Developer Relations Engineer at Google"
+  },
+  {
+    "id": "98",
+    "name": "Sachiyo Sugimoto",
+    "mediumPage": "",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Android Partner Engineering"
+  },
+  {
+    "id": "99",
+    "name": "Todd Burner",
+    "mediumPage": "https://medium.com/@tburner",
+    "twitter": "",
+    "imageUrl": "",
+    "bio": "Developer Relations Engineer"
+  }
+]

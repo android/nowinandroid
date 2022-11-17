@@ -21,10 +21,12 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -194,9 +196,9 @@ class OfflineFirstUserDataRepositoryTest {
         runTest {
             subject.setFollowedTopicIds(setOf("1"))
             subject.setShouldHideOnboarding(true)
-            assertEquals(true, subject.userDataStream.first().shouldHideOnboarding)
+            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
 
             subject.setFollowedTopicIds(emptySet())
-            assertEquals(false, subject.userDataStream.first().shouldHideOnboarding)
+            assertFalse(subject.userDataStream.first().shouldHideOnboarding)
         }
 }

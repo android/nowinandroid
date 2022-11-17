@@ -16,10 +16,17 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
+import JvmUnitTestFakeAssetManager
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -33,14 +40,24 @@ class FakeNiaNetworkDataSourceTest {
     fun setUp() {
         subject = FakeNiaNetworkDataSource(
             ioDispatcher = testDispatcher,
-            networkJson = Json { ignoreUnknownKeys = true }
+            networkJson = Json { ignoreUnknownKeys = true },
+            assets = JvmUnitTestFakeAssetManager
         )
     }
 
     @Test
     fun testDeserializationOfTopics() = runTest(testDispatcher) {
         assertEquals(
-            FakeDataSource.sampleTopic,
+            /* ktlint-disable max-line-length */
+            NetworkTopic(
+                id = "1",
+                name = "Headlines",
+                shortDescription = "News you'll definitely be interested in",
+                longDescription = "The latest events and announcements from the world of Android development.",
+                url = "",
+                imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f"
+            ),
+            /* ktlint-enable max-line-length */
             subject.getTopics().first()
         )
     }
@@ -48,8 +65,28 @@ class FakeNiaNetworkDataSourceTest {
     @Test
     fun testDeserializationOfNewsResources() = runTest(testDispatcher) {
         assertEquals(
-            FakeDataSource.sampleResource,
-            subject.getNewsResources().find { it.id == FakeDataSource.sampleResource.id }
+            /* ktlint-disable max-line-length */
+            NetworkNewsResource(
+                id = "125",
+                title = "Android Basics with Compose",
+                content = "We released the first two units of Android Basics with Compose, our first free course that teaches Android Development with Jetpack Compose to anyone; you do not need any prior programming experience other than basic computer literacy to get started. ",
+                url = "https://android-developers.googleblog.com/2022/05/new-android-basics-with-compose-course.html",
+                headerImageUrl = "https://developer.android.com/images/hero-assets/android-basics-compose.svg",
+                authors = listOf("25"),
+                publishDate = LocalDateTime(
+                    year = 2022,
+                    monthNumber = 5,
+                    dayOfMonth = 4,
+                    hour = 23,
+                    minute = 0,
+                    second = 0,
+                    nanosecond = 0
+                ).toInstant(TimeZone.UTC),
+                type = Codelab,
+                topics = listOf("2", "3", "10"),
+            ),
+            /* ktlint-enable max-line-length */
+            subject.getNewsResources().find { it.id == "125" }
         )
     }
 }

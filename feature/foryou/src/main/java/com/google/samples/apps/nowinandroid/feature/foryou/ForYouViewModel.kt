@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -67,7 +67,7 @@ class ForYouViewModel @Inject constructor(
                     userData.followedAuthors.isEmpty() &&
                     userData.followedTopics.isEmpty()
                 ) {
-                    snapshotFlow { NewsFeedUiState.Success(emptyList()) }
+                    flowOf(NewsFeedUiState.Success(emptyList()))
                 } else {
                     getSaveableNewsResourcesStream(
                         filterTopicIds = userData.followedTopics,

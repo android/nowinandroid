@@ -21,16 +21,18 @@ import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsReposito
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
+import java.io.InputStream
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
 /**
  * Fake implementation of the [AuthorsRepository] that returns hardcoded authors.
@@ -41,20 +43,23 @@ import kotlinx.serialization.json.Json
 class FakeAuthorsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
+    private val assets: FakeAssetManager,
 ) : AuthorsRepository {
 
     override fun getAuthorsStream(): Flow<List<Author>> = flow {
         emit(
-            networkJson.decodeFromString<List<NetworkAuthor>>(FakeDataSource.authors).map {
-                Author(
-                    id = it.id,
-                    name = it.name,
-                    imageUrl = it.imageUrl,
-                    twitter = it.twitter,
-                    mediumPage = it.mediumPage,
-                    bio = it.bio,
-                )
-            }
+            assets.open(FakeDataSource.AUTHORS)
+                .use<InputStream, List<NetworkAuthor>>(networkJson::decodeFromStream)
+                .map {
+                    Author(
+                        id = it.id,
+                        name = it.name,
+                        imageUrl = it.imageUrl,
+                        twitter = it.twitter,
+                        mediumPage = it.mediumPage,
+                        bio = it.bio,
+                    )
+                }
         )
     }
         .flowOn(ioDispatcher)

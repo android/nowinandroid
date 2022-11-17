@@ -39,9 +39,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -112,7 +112,7 @@ class OfflineFirstNewsRepositoryTest {
             )
 
             assertEquals(
-                emptyList<NewsResource>(),
+                emptyList(),
                 subject.getNewsResourcesStream(
                     filterTopicIds = nonPresentInterestsIds,
                 )
@@ -136,7 +136,7 @@ class OfflineFirstNewsRepositoryTest {
             )
 
             assertEquals(
-                emptyList<NewsResource>(),
+                emptyList(),
                 subject.getNewsResourcesStream(
                     filterAuthorIds = nonPresentInterestsIds
                 )

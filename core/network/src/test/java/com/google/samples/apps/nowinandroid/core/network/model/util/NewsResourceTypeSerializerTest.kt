@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.network.model.util
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import kotlin.test.assertEquals
 import kotlinx.serialization.json.Json
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class NewsResourceTypeSerializerTest {
