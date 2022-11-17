@@ -130,7 +130,7 @@ private fun EmptyState() {
             .fillMaxSize()
             .testTag("bookmarks:empty"),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             modifier = Modifier.fillMaxWidth(),
@@ -142,8 +142,8 @@ private fun EmptyState() {
 
         Text(
             text = stringResource(id = R.string.bookmarks_empty_error),
-            textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
@@ -152,8 +152,8 @@ private fun EmptyState() {
 
         Text(
             text = stringResource(id = R.string.bookmarks_empty_description),
-            textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
     }
