@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright 2022 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,4 +19,6 @@
     <string name="top_app_bar_title">Saved</string>
     <string name="top_app_bar_action_search">Search</string>
     <string name="top_app_bar_action_menu">Menu</string>
+    <string name="bookmarks_empty_error">No saved updates</string>
+    <string name="bookmarks_empty_description">Updates you save will be stored here\nto read later</string>
 </resources>
