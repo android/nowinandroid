@@ -17,29 +17,16 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-import kotlinx.serialization.json.Json
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkModule {
+interface FlavoredNetworkModule {
 
     @Binds
-    fun bindsNiaNetwork(
-        niANetwork: RetrofitNiaNetwork
-    ): NiaNetworkDataSource
-
-    companion object {
-        @Provides
-        @Singleton
-        fun providesNetworkJson(): Json = Json {
-            ignoreUnknownKeys = true
-        }
-    }
+    fun FakeNiaNetworkDataSource.binds(): NiaNetworkDataSource
 }

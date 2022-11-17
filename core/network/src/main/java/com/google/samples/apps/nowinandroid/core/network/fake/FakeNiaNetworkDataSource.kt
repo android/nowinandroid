@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
+import JvmUnitTestFakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
@@ -26,29 +27,30 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
  */
 class FakeNiaNetworkDataSource @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val networkJson: Json
+    private val networkJson: Json,
+    private val assets: FakeAssetManager = JvmUnitTestFakeAssetManager,
 ) : NiaNetworkDataSource {
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString(FakeDataSource.topicsData)
+            assets.open(FakeDataSource.TOPICS).use(networkJson::decodeFromStream)
         }
 
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString(FakeDataSource.data)
+            assets.open(FakeDataSource.DATA).use(networkJson::decodeFromStream)
         }
 
     override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString(FakeDataSource.authors)
+            assets.open(FakeDataSource.AUTHORS).use(networkJson::decodeFromStream)
         }
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
