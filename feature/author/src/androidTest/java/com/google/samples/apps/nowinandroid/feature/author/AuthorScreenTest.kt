@@ -59,8 +59,6 @@ class AuthorScreenTest {
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
@@ -80,8 +78,6 @@ class AuthorScreenTest {
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
@@ -113,8 +109,6 @@ class AuthorScreenTest {
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
@@ -142,8 +136,6 @@ class AuthorScreenTest {
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 

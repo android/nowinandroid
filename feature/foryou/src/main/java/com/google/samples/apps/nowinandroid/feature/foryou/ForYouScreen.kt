@@ -108,12 +108,6 @@ internal fun ForYouRoute(
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onBrowseTopic = navigateToTopic,
-        onFollowTopic = { topicId ->
-            viewModel.followTopic(topicId, true)
-        },
-        onUnfollowTopic = { topicId ->
-            viewModel.followTopic(topicId, false)
-        },
         modifier = modifier
     )
 }
@@ -127,8 +121,6 @@ internal fun ForYouScreen(
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
     onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -190,8 +182,6 @@ internal fun ForYouScreen(
             feedState = feedState,
             onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
             onBrowseTopic = onBrowseTopic,
-            onFollowTopic = onFollowTopic,
-            onUnfollowTopic = onUnfollowTopic
         )
 
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -421,8 +411,6 @@ fun ForYouScreenPopulatedFeed() {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }
@@ -446,8 +434,6 @@ fun ForYouScreenOfflinePopulatedFeed() {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }
@@ -474,8 +460,6 @@ fun ForYouScreenTopicSelection() {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }
@@ -495,8 +479,6 @@ fun ForYouScreenLoading() {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }
@@ -520,8 +502,6 @@ fun ForYouScreenPopulatedAndLoading() {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }

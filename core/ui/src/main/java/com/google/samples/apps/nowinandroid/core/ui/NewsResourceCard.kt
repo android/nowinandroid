@@ -83,8 +83,6 @@ fun NewsResourceCardExpanded(
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
     onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -129,8 +127,6 @@ fun NewsResourceCardExpanded(
                     NewsResourceTopics(
                         topics = newsResource.topics,
                         onBrowseClick = onBrowseTopic,
-                        onFollowClick = onFollowTopic,
-                        onUnfollowClick = onUnfollowTopic
                     )
                 }
             }
@@ -275,28 +271,16 @@ fun NewsResourceShortDescription(
 @Composable
 fun NewsResourceTopics(
     topics: List<Topic>,
-    onFollowClick: (String) -> Unit,
-    onUnfollowClick: (String) -> Unit,
     onBrowseClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Store the ID of the Topic which has its "following" menu expanded, if any.
-    // To avoid UI confusion, only one topic can have an expanded menu at a time.
-    var expandedTopicId by remember { mutableStateOf<String?>(null) }
-
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (topic in topics) {
             NiaTopicTag(
-                expanded = expandedTopicId == topic.id,
                 followed = true, // ToDo: Check if topic is followed
-                onDropMenuToggle = { show ->
-                    expandedTopicId = if (show) topic.id else null
-                },
-                onFollowClick = { onFollowClick(topic.id) },
-                onUnfollowClick = { onUnfollowClick(topic.id) },
                 onBrowseClick = { onBrowseClick(topic.id) },
                 text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
             )
@@ -335,8 +319,6 @@ fun ExpandedNewsResourcePreview() {
                 onToggleBookmark = {},
                 onClick = {},
                 onBrowseTopic = {},
-                onFollowTopic = {},
-                onUnfollowTopic = {}
             )
         }
     }

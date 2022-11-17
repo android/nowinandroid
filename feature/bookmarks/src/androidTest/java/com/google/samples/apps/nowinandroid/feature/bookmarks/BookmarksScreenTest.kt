@@ -54,8 +54,6 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Loading,
                 removeFromBookmarks = { },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
@@ -78,8 +76,6 @@ class BookmarksScreenTest {
                 ),
                 removeFromBookmarks = { },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
@@ -123,8 +119,6 @@ class BookmarksScreenTest {
                     removeFromBookmarksCalled = true
                 },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 
