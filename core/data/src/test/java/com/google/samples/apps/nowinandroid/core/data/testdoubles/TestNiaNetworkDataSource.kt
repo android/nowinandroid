@@ -17,12 +17,13 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import kotlinx.serialization.decodeFromString
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.serialization.json.Json
 
 enum class CollectionType {
@@ -36,16 +37,13 @@ enum class CollectionType {
  */
 class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
-    private val networkJson = Json
+    private val source = FakeNiaNetworkDataSource(UnconfinedTestDispatcher(), Json)
 
-    private val allTopics =
-        networkJson.decodeFromString<List<NetworkTopic>>(FakeDataSource.topicsData)
+    private val allTopics = runBlocking { source.getTopics() }
 
-    private val allAuthors =
-        networkJson.decodeFromString<List<NetworkAuthor>>(FakeDataSource.authors)
+    private val allAuthors = runBlocking { source.getAuthors() }
 
-    private val allNewsResources =
-        networkJson.decodeFromString<List<NetworkNewsResource>>(FakeDataSource.data)
+    private val allNewsResources = runBlocking { source.getNewsResources() }
 
     private val changeLists: MutableMap<CollectionType, List<NetworkChangeList>> = mutableMapOf(
         CollectionType.Topics to allTopics
