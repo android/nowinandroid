@@ -49,7 +49,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
@@ -119,25 +118,24 @@ fun BookmarksScreen(
      ** The [Column] is handling the Empty state when the feed is empty.
      **/
     if (feedState is NewsFeedUiState.Success && feedState.feed.isEmpty()) {
-        OnEmptyStateView()
+        EmptyState()
     }
 }
 
 @Composable
-private fun OnEmptyStateView() {
+private fun EmptyState() {
     Column(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(16.dp)
             .fillMaxSize()
             .testTag("bookmarks:empty"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.img_no_bookmarks_error),
-            contentDescription = stringResource(id = R.string.bookmarks_empty_description),
+            modifier = Modifier.fillMaxWidth(),
+            painter = painterResource(id = R.drawable.img_empty_bookmarks),
+            contentDescription = null
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -145,8 +143,7 @@ private fun OnEmptyStateView() {
         Text(
             text = stringResource(id = R.string.bookmarks_empty_error),
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
@@ -156,19 +153,8 @@ private fun OnEmptyStateView() {
         Text(
             text = stringResource(id = R.string.bookmarks_empty_description),
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium
         )
     }
-}
-
-@DevicePreviews
-@Composable
-fun ShowErrorPreview() {
-    BookmarksScreen(
-        feedState = NewsFeedUiState.Success(emptyList()),
-        removeFromBookmarks = {},
-        modifier = Modifier
-    )
 }
