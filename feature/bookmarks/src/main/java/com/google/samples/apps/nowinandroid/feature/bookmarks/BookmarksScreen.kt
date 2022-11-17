@@ -16,13 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -30,17 +33,23 @@ import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
@@ -59,7 +68,6 @@ internal fun BookmarksRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun BookmarksScreen(
     feedState: NewsFeedUiState,
@@ -68,6 +76,11 @@ fun BookmarksScreen(
 ) {
     val scrollableState = rememberLazyGridState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
+
+    /**
+     ** The [LazyVerticalGrid] is handling the Loading and Success states when the feed is not empty.
+     **/
+
     LazyVerticalGrid(
         columns = Adaptive(300.dp),
         contentPadding = PaddingValues(16.dp),
@@ -78,8 +91,8 @@ fun BookmarksScreen(
             .fillMaxSize()
             .testTag("bookmarks:feed")
     ) {
-        if (feedState is NewsFeedUiState.Loading) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+        when (feedState) {
+            is NewsFeedUiState.Loading -> item(span = { GridItemSpan(maxLineSpan) }) {
                 NiaLoadingWheel(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -88,15 +101,74 @@ fun BookmarksScreen(
                     contentDesc = stringResource(id = R.string.saved_loading),
                 )
             }
-        }
-
-        newsFeed(
-            feedState = feedState,
-            onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-        )
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            is NewsFeedUiState.Success -> {
+                if (feedState.feed.isNotEmpty()) {
+                    newsFeed(
+                        feedState = feedState,
+                        onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+                    )
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                    }
+                }
+            }
         }
     }
+
+    /**
+     ** The [Column] is handling the Empty state when the feed is empty.
+     **/
+    if (feedState is NewsFeedUiState.Success && feedState.feed.isEmpty()) {
+        OnEmptyStateView()
+    }
+}
+
+@Composable
+private fun OnEmptyStateView() {
+    Column(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxSize()
+            .testTag("bookmarks:empty"),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth(),
+            painter = painterResource(id = R.drawable.img_no_bookmarks_error),
+            contentDescription = stringResource(id = R.string.bookmarks_empty_description),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(id = R.string.bookmarks_empty_error),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        Text(
+            text = stringResource(id = R.string.bookmarks_empty_description),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+fun ShowErrorPreview() {
+    BookmarksScreen(
+        feedState = NewsFeedUiState.Success(emptyList()),
+        removeFromBookmarks = {},
+        modifier = Modifier
+    )
 }
