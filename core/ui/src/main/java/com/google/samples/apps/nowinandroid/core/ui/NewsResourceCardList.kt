@@ -40,8 +40,6 @@ fun <T> LazyListScope.newsResourceCardItems(
     newsResourceMapper: (item: T) -> NewsResource,
     isBookmarkedMapper: (item: T) -> Boolean,
     onToggleBookmark: (item: T) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
     onBrowseTopic: (String) -> Unit,
     onItemClick: ((item: T) -> Unit)? = null,
     itemModifier: Modifier = Modifier,
@@ -59,8 +57,6 @@ fun <T> LazyListScope.newsResourceCardItems(
             isBookmarked = isBookmarkedMapper(item),
             onToggleBookmark = { onToggleBookmark(item) },
             onBrowseTopic = onBrowseTopic,
-            onFollowTopic = onFollowTopic,
-            onUnfollowTopic = onUnfollowTopic,
             onClick = {
                 when (onItemClick) {
                     null -> ContextCompat.startActivity(context, launchResourceIntent, null)

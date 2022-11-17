@@ -79,12 +79,6 @@ class TopicViewModel @Inject constructor(
         }
     }
 
-    fun followTopic(followedTopicId: String, followed: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
-        }
-    }
-
     fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
         viewModelScope.launch {
             userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)

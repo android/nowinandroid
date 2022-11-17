@@ -81,12 +81,6 @@ internal fun TopicRoute(
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
         onBrowseTopic = navigateToTopic,
-        onFollowTopic = { topicId ->
-            viewModel.followTopic(topicId, true)
-        },
-        onUnfollowTopic = { topicId ->
-            viewModel.followTopic(topicId, false)
-        },
     )
 }
 
@@ -99,8 +93,6 @@ internal fun TopicScreen(
     onFollowClick: (Boolean) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
     onBrowseTopic: (String) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
@@ -136,8 +128,6 @@ internal fun TopicScreen(
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged,
                     onBrowseTopic = onBrowseTopic,
-                    onFollowTopic = onFollowTopic,
-                    onUnfollowTopic = onUnfollowTopic,
                 )
             }
         }
@@ -154,8 +144,6 @@ private fun LazyListScope.TopicBody(
     imageUrl: String,
     onBookmarkChanged: (String, Boolean) -> Unit,
     onBrowseTopic: (String) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
 ) {
     // TODO: Show icon if available
     item {
@@ -166,8 +154,6 @@ private fun LazyListScope.TopicBody(
         news = news,
         onBookmarkChanged = onBookmarkChanged,
         onBrowseTopic = onBrowseTopic,
-        onFollowTopic = onFollowTopic,
-        onUnfollowTopic = onUnfollowTopic,
     )
 }
 
@@ -199,8 +185,6 @@ private fun LazyListScope.TopicCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit,
     onBrowseTopic: (String) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
@@ -210,8 +194,6 @@ private fun LazyListScope.TopicCards(
                 isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
                 onBrowseTopic = onBrowseTopic,
-                onFollowTopic = onFollowTopic,
-                onUnfollowTopic = onUnfollowTopic,
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -236,8 +218,6 @@ private fun TopicBodyPreview() {
                 imageUrl = "",
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
     }
@@ -299,8 +279,6 @@ fun TopicScreenPopulated() {
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
     }
@@ -318,8 +296,6 @@ fun TopicScreenLoading() {
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
     }

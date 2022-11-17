@@ -61,8 +61,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -87,8 +85,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -119,8 +115,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -174,8 +168,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -229,8 +221,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -279,8 +269,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -305,8 +293,6 @@ class ForYouScreenTest {
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onBrowseTopic = { },
-                    onFollowTopic = { },
-                    onUnfollowTopic = { },
                 )
             }
         }
@@ -334,8 +320,6 @@ class ForYouScreenTest {
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onBrowseTopic = { },
-                onFollowTopic = { },
-                onUnfollowTopic = { },
             )
         }
 

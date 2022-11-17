@@ -58,12 +58,6 @@ internal fun BookmarksRoute(
         removeFromBookmarks = viewModel::removeFromSavedResources,
         modifier = modifier,
         onBrowseTopic = navigateToTopic,
-        onFollowTopic = { topicId ->
-            viewModel.followTopic(topicId, true)
-        },
-        onUnfollowTopic = { topicId ->
-            viewModel.followTopic(topicId, false)
-        }
     )
 }
 
@@ -72,8 +66,6 @@ internal fun BookmarksRoute(
 fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
-    onFollowTopic: (String) -> Unit,
-    onUnfollowTopic: (String) -> Unit,
     onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -105,8 +97,6 @@ fun BookmarksScreen(
             feedState = feedState,
             onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
             onBrowseTopic = onBrowseTopic,
-            onFollowTopic = onFollowTopic,
-            onUnfollowTopic = onUnfollowTopic
         )
 
         item(span = { GridItemSpan(maxLineSpan) }) {
