@@ -156,6 +156,5 @@ private fun EmptyState() {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
-
     }
 }
