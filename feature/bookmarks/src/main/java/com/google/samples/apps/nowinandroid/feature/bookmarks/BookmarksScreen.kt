@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,8 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
@@ -67,19 +70,35 @@ internal fun BookmarksRoute(
     )
 }
 
+/**
+ * Displays the user's bookmarked articles. Includes support for loading and empty states.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-fun BookmarksScreen(
+internal fun BookmarksScreen(
+    feedState: NewsFeedUiState,
+    removeFromBookmarks: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (feedState) {
+        Loading -> LoadingState(modifier)
+        is Success ->
+            if (feedState.feed.isNotEmpty()) {
+                BookmarksGrid(feedState, removeFromBookmarks, modifier)
+            } else {
+                EmptyState(modifier)
+            }
+    }
+}
+
+@Composable
+private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollableState = rememberLazyGridState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
-
-    /**
-     ** The [LazyVerticalGrid] is handling the Loading and Success states when the feed is not empty.
-     **/
-
     LazyVerticalGrid(
         columns = Adaptive(300.dp),
         contentPadding = PaddingValues(16.dp),
@@ -90,42 +109,20 @@ fun BookmarksScreen(
             .fillMaxSize()
             .testTag("bookmarks:feed")
     ) {
-        when (feedState) {
-            is NewsFeedUiState.Loading -> item(span = { GridItemSpan(maxLineSpan) }) {
-                NiaLoadingWheel(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize()
-                        .testTag("forYou:loading"),
-                    contentDesc = stringResource(id = R.string.saved_loading),
-                )
-            }
-            is NewsFeedUiState.Success -> {
-                if (feedState.feed.isNotEmpty()) {
-                    newsFeed(
-                        feedState = feedState,
-                        onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
-                    )
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                    }
-                }
-            }
+        newsFeed(
+            feedState = feedState,
+            onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+        )
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
-    }
-
-    /**
-     ** The [Column] is handling the Empty state when the feed is empty.
-     **/
-    if (feedState is NewsFeedUiState.Success && feedState.feed.isEmpty()) {
-        EmptyState()
     }
 }
 
 @Composable
-private fun EmptyState() {
+private fun EmptyState(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .fillMaxSize()
             .testTag("bookmarks:empty"),
@@ -157,4 +154,15 @@ private fun EmptyState() {
             style = MaterialTheme.typography.bodyMedium
         )
     }
+}
+
+@Composable
+private fun LoadingState(modifier: Modifier = Modifier) {
+    NiaLoadingWheel(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+            .testTag("forYou:loading"),
+        contentDesc = stringResource(id = R.string.saved_loading),
+    )
 }
