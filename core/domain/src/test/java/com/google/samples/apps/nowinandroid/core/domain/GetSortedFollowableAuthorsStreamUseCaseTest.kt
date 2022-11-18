@@ -18,12 +18,16 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,15 +37,18 @@ class GetSortedFollowableAuthorsStreamUseCaseTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val authorsRepository = TestAuthorsRepository()
+    private val newsRepository = TestNewsRepository()
     private val userDataRepository = TestUserDataRepository()
 
     val useCase = GetSortedFollowableAuthorsStreamUseCase(
         authorsRepository = authorsRepository,
-        userDataRepository = userDataRepository
+        newsRepository = newsRepository,
+        userDataRepository = userDataRepository,
     )
 
     @Test
     fun whenFollowedAuthorsSupplied_sortedFollowableAuthorsAreReturned() = runTest {
+        newsRepository.sendNewsResources(listOf(sampleNews1))
 
         // Specify some authors which the user is following.
         userDataRepository.setFollowedAuthorIds(setOf(sampleAuthor1.id))
@@ -95,3 +102,16 @@ private val sampleAuthor3 =
     )
 
 private val sampleAuthors = listOf(sampleAuthor1, sampleAuthor2, sampleAuthor3)
+
+private val sampleNews1 =
+    NewsResource(
+        id = "1",
+        title = "",
+        content = "",
+        url = "",
+        headerImageUrl = null,
+        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
+        type = Video,
+        authors = listOf(sampleAuthor2),
+        topics = emptyList()
+    )

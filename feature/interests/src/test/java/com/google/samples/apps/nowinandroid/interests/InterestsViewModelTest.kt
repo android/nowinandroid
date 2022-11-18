@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
@@ -48,6 +49,7 @@ class InterestsViewModelTest {
 
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
+    private val newsRepository = TestNewsRepository()
     private val topicsRepository = TestTopicsRepository()
     private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
         topicsRepository = topicsRepository,
@@ -56,6 +58,7 @@ class InterestsViewModelTest {
     private val getSortedFollowableAuthorsStream =
         GetSortedFollowableAuthorsStreamUseCase(
             authorsRepository = authorsRepository,
+            newsRepository = newsRepository,
             userDataRepository = userDataRepository
         )
     private lateinit var viewModel: InterestsViewModel
@@ -67,6 +70,7 @@ class InterestsViewModelTest {
             getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
             getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream
         )
+        newsRepository.sendNewsResources(emptyList())
     }
 
     @Test

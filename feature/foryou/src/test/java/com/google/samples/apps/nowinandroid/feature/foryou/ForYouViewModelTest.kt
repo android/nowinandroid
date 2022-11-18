@@ -65,6 +65,7 @@ class ForYouViewModelTest {
     )
     private val getSortedFollowableAuthorsStream = GetSortedFollowableAuthorsStreamUseCase(
         authorsRepository = authorsRepository,
+        newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
     private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
@@ -190,6 +191,7 @@ class ForYouViewModelTest {
         userDataRepository.setFollowedTopicIds(emptySet())
         authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedAuthorIds(emptySet())
+        newsRepository.sendNewsResources(emptyList())
 
         assertEquals(
             OnboardingUiState.Shown(
@@ -329,8 +331,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -340,8 +342,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -386,6 +388,7 @@ class ForYouViewModelTest {
         userDataRepository.setFollowedAuthorIds(emptySet())
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(setOf("0", "1"))
+        newsRepository.sendNewsResources(emptyList())
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -469,8 +472,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -480,8 +483,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -553,8 +556,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -564,8 +567,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -660,8 +663,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -671,8 +674,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -744,17 +747,6 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
                             id = "1",
                             name = "Android Dev 2",
                             imageUrl = "",
@@ -763,6 +755,17 @@ class ForYouViewModelTest {
                             bio = "",
                         ),
                         isFollowed = true
+                    ),
+                    FollowableAuthor(
+                        author = Author(
+                            id = "0",
+                            name = "Android Dev",
+                            imageUrl = "",
+                            twitter = "",
+                            mediumPage = "",
+                            bio = "",
+                        ),
+                        isFollowed = false
                     ),
                     FollowableAuthor(
                         author = Author(
@@ -854,8 +857,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -865,8 +868,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -955,8 +958,8 @@ class ForYouViewModelTest {
                 authors = listOf(
                     FollowableAuthor(
                         author = Author(
-                            id = "0",
-                            name = "Android Dev",
+                            id = "1",
+                            name = "Android Dev 2",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",
@@ -966,8 +969,8 @@ class ForYouViewModelTest {
                     ),
                     FollowableAuthor(
                         author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
+                            id = "0",
+                            name = "Android Dev",
                             imageUrl = "",
                             twitter = "",
                             mediumPage = "",

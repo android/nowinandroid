@@ -17,34 +17,49 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.Author
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 /**
- * A use case which obtains a list of authors sorted alphabetically by name with their followed
- * state.
+ * A use case which obtains a list of authors sorted by descending news count and then alphabetically by name with their followed state.
  */
 class GetSortedFollowableAuthorsStreamUseCase @Inject constructor(
     private val authorsRepository: AuthorsRepository,
-    private val userDataRepository: UserDataRepository
+    private val newsRepository: NewsRepository,
+    private val userDataRepository: UserDataRepository,
 ) {
     /**
-     * Returns a list of authors with their associated followed state sorted alphabetically by name.
+     * Returns a list of authors with their associated followed state sorted by descending news count and then alphabetically by name.
      */
     operator fun invoke(): Flow<List<FollowableAuthor>> =
         combine(
             authorsRepository.getAuthorsStream(),
-            userDataRepository.userDataStream
-        ) { authors, userData ->
+            newsRepository.getNewsResourcesStream(),
+            userDataRepository.userDataStream,
+        ) { authors, news, userData ->
+            val newsCountByAuthor: Map<Author, Long> = buildMap {
+                news.forEach { news ->
+                    news.authors.forEach { author ->
+                        compute(author) { _, count -> count?.inc() ?: 1 }
+                    }
+                }
+            }
             authors.map { author ->
                 FollowableAuthor(
                     author = author,
                     isFollowed = author.id in userData.followedAuthors
                 )
-            }
-                .sortedBy { it.author.name }
+            }.sortedWith(
+                compareByDescending<FollowableAuthor> {
+                    newsCountByAuthor[it.author]
+                }.thenBy {
+                    it.author.name
+                }
+            )
         }
 }

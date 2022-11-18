@@ -68,6 +68,7 @@ class TopicViewModelTest {
             topicsRepository = topicsRepository,
             getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
         )
+        newsRepository.sendNewsResources(emptyList())
     }
 
     @Test
