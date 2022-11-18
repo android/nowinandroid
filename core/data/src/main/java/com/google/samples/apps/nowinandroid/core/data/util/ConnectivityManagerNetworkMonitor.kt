@@ -38,11 +38,11 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
 
-        /*
-        The callback's methods are invoked on changes to *any* network, not just the active
-        network. So to check for network connectivity, one must query the active network of the
-        ConnectivityManager.
-        */
+        /**
+         * The callback's methods are invoked on changes to *any* network, not just the active
+         * network. So to check for network connectivity, one must query the active network of the
+         * ConnectivityManager.
+         */
         val callback = object : NetworkCallback() {
             override fun onAvailable(network: Network) {
                 channel.trySend(connectivityManager.isCurrentlyConnected())
