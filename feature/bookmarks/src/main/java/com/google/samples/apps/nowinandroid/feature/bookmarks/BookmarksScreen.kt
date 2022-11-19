@@ -45,11 +45,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
@@ -89,6 +93,17 @@ internal fun BookmarksScreen(
                 EmptyState(modifier)
             }
     }
+}
+
+@Composable
+private fun LoadingState(modifier: Modifier = Modifier) {
+    NiaLoadingWheel(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+            .testTag("forYou:loading"),
+        contentDesc = stringResource(id = R.string.saved_loading),
+    )
 }
 
 @Composable
@@ -156,13 +171,33 @@ private fun EmptyState(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview
 @Composable
-private fun LoadingState(modifier: Modifier = Modifier) {
-    NiaLoadingWheel(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentSize()
-            .testTag("forYou:loading"),
-        contentDesc = stringResource(id = R.string.saved_loading),
-    )
+private fun LoadingStatePreview() {
+    NiaTheme {
+        LoadingState()
+    }
+}
+
+@Preview
+@Composable
+private fun BookmarksGridPreview() {
+    NiaTheme {
+        BookmarksGrid(
+            feedState = Success(
+                previewNewsResources.map {
+                    SaveableNewsResource(it, false)
+                }
+            ),
+            removeFromBookmarks = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun EmptyStatePreview() {
+    NiaTheme {
+        EmptyState()
+    }
 }
