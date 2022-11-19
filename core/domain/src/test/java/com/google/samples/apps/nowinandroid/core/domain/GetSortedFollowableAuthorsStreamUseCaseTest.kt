@@ -17,10 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.Author
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -64,34 +65,8 @@ class GetSortedFollowableAuthorsStreamUseCaseTest {
     }
 }
 
-private val sampleAuthor1 =
-    Author(
-        id = "Author1",
-        name = "Mandy",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    )
-
-private val sampleAuthor2 =
-    Author(
-        id = "Author2",
-        name = "Andy",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    )
-
-private val sampleAuthor3 =
-    Author(
-        id = "Author2",
-        name = "Sandy",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    )
+private val sampleAuthor1 = Random.nextFakeAuthor(id = "1", name = "Mandy")
+private val sampleAuthor2 = Random.nextFakeAuthor(id = "2", name = "Andy")
+private val sampleAuthor3 = Random.nextFakeAuthor(id = "3", name = "Sandy")
 
 private val sampleAuthors = listOf(sampleAuthor1, sampleAuthor2, sampleAuthor3)

@@ -16,10 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.database.model
 
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlin.test.assertEquals
 import kotlinx.datetime.Instant
 import org.junit.Test
@@ -58,39 +56,20 @@ class PopulatedNewsResourceKtTest {
                 )
             ),
         )
-        val newsResource = populatedNewsResource.asExternalModel()
 
         assertEquals(
             NewsResource(
-                id = "1",
-                title = "news",
-                content = "Hilt",
-                url = "url",
-                headerImageUrl = "headerImageUrl",
-                type = Video,
-                publishDate = Instant.fromEpochMilliseconds(1),
-                authors = listOf(
-                    Author(
-                        id = "2",
-                        name = "name",
-                        imageUrl = "imageUrl",
-                        twitter = "twitter",
-                        mediumPage = "mediumPage",
-                        bio = "bio",
-                    )
-                ),
-                topics = listOf(
-                    Topic(
-                        id = "3",
-                        name = "name",
-                        shortDescription = "short description",
-                        longDescription = "long description",
-                        url = "URL",
-                        imageUrl = "image URL",
-                    )
-                )
+                id = populatedNewsResource.entity.id,
+                title = populatedNewsResource.entity.title,
+                content = populatedNewsResource.entity.content,
+                url = populatedNewsResource.entity.url,
+                headerImageUrl = populatedNewsResource.entity.headerImageUrl,
+                publishDate = populatedNewsResource.entity.publishDate,
+                type = populatedNewsResource.entity.type,
+                authors = populatedNewsResource.authors.map(AuthorEntity::asExternalModel),
+                topics = populatedNewsResource.topics.map(TopicEntity::asExternalModel),
             ),
-            newsResource
+            populatedNewsResource.asExternalModel()
         )
     }
 }

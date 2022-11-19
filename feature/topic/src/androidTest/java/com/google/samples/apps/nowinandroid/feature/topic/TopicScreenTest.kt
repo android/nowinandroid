@@ -26,10 +26,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import kotlinx.datetime.Instant
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import kotlin.random.Random
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -147,69 +146,10 @@ class TopicScreenTest {
     }
 }
 
-private const val TOPIC_1_NAME = "Headlines"
-private const val TOPIC_2_NAME = "UI"
-private const val TOPIC_3_NAME = "Tools"
-private const val TOPIC_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-
 private val testTopics = listOf(
-    FollowableTopic(
-        Topic(
-            id = "0",
-            name = TOPIC_1_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = true
-    ),
-    FollowableTopic(
-        Topic(
-            id = "1",
-            name = TOPIC_2_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = false
-    ),
-    FollowableTopic(
-        Topic(
-            id = "2",
-            name = TOPIC_3_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = false
-    )
+    FollowableTopic(Random.nextFakeTopic(id = "1", name = "Headlines"), isFollowed = true),
+    FollowableTopic(Random.nextFakeTopic(id = "2", name = "UI"), isFollowed = false),
+    FollowableTopic(Random.nextFakeTopic(id = "3", name = "Tools"), isFollowed = false),
 )
 
-private val sampleNewsResources = listOf(
-    NewsResource(
-        id = "1",
-        title = "Thanks for helping us reach 1M YouTube Subscribers",
-        content = "Thank you everyone for following the Now in Android series and everything the " +
-            "Android Developers YouTube channel has to offer. During the Android Developer " +
-            "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
-            "thank you all.",
-        url = "https://youtu.be/-fJ6poHQrjM",
-        headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = Video,
-        topics = listOf(
-            Topic(
-                id = "0",
-                name = "Headlines",
-                shortDescription = "",
-                longDescription = TOPIC_DESC,
-                url = "",
-                imageUrl = ""
-            )
-        ),
-        authors = emptyList()
-    )
-)
+private val sampleNewsResources = listOf(Random.nextFakeNewsResource())

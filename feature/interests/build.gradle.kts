@@ -21,3 +21,7 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests"
 }
+dependencies {
+    androidTestImplementation(testFixtures(project(":core:model")))
+    testImplementation(testFixtures(project(":core:model")))
+}

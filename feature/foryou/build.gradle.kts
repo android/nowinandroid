@@ -27,4 +27,6 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.accompanist.flowlayout)
+    androidTestImplementation(testFixtures(project(":core:model")))
+    testImplementation(testFixtures(project(":core:model")))
 }

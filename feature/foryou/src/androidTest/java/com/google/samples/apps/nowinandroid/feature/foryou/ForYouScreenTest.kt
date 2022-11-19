@@ -31,10 +31,11 @@ import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlin.random.Random
 import org.junit.Rule
 import org.junit.Test
 
@@ -341,43 +342,13 @@ class ForYouScreenTest {
     }
 }
 
-private val testTopic = Topic(
-    id = "",
-    name = "",
-    shortDescription = "",
-    longDescription = "",
-    url = "",
-    imageUrl = ""
-)
-private val testAuthor = Author(
-    id = "",
-    name = "",
-    imageUrl = "",
-    twitter = "",
-    mediumPage = "",
-    bio = ""
-)
+private val testAuthor = Random.nextFakeAuthor()
 private val testTopics = listOf(
-    FollowableTopic(
-        topic = testTopic.copy(id = "0", name = "Headlines"),
-        isFollowed = false
-    ),
-    FollowableTopic(
-        topic = testTopic.copy(id = "1", name = "UI"),
-        isFollowed = false
-    ),
-    FollowableTopic(
-        topic = testTopic.copy(id = "2", name = "Tools"),
-        isFollowed = false
-    ),
+    FollowableTopic(topic = Random.nextFakeTopic(id = "1", name = "Headlines"), isFollowed = false),
+    FollowableTopic(topic = Random.nextFakeTopic(id = "2", name = "UI"), isFollowed = false),
+    FollowableTopic(topic = Random.nextFakeTopic(id = "3", name = "Tools"), isFollowed = false),
 )
 private val testAuthors = listOf(
-    FollowableAuthor(
-        author = testAuthor.copy(id = "0", name = "Android Dev"),
-        isFollowed = false
-    ),
-    FollowableAuthor(
-        author = testAuthor.copy(id = "1", name = "Android Dev 2"),
-        isFollowed = false
-    ),
+    FollowableAuthor(author = testAuthor.copy(id = "1", name = "Android Dev"), isFollowed = false),
+    FollowableAuthor(author = testAuthor.copy(id = "2", name = "Android Dev 2"), isFollowed = false)
 )

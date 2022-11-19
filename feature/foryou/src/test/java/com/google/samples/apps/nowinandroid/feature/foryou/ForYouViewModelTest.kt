@@ -22,10 +22,9 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAutho
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -34,13 +33,13 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -193,83 +192,13 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
@@ -291,84 +220,13 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
@@ -385,7 +243,7 @@ class ForYouViewModelTest {
         authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedAuthorIds(emptySet())
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("0", "1"))
+        userDataRepository.setFollowedTopicIds(sampleTopics.take(2).map { it.id }.toSet())
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -402,13 +260,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed =
-                sampleNewsResources.map {
-                    SaveableNewsResource(
-                        newsResource = it,
-                        isSaved = false
-                    )
-                }
+                feed = sampleNewsResources.map { SaveableNewsResource(it, isSaved = false) }
             ),
             viewModel.feedState.value
         )
@@ -431,174 +283,34 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList(),
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
-        viewModel.updateTopicSelection("1", isChecked = true)
+        viewModel.updateTopicSelection(sampleTopics[1].id, isChecked = true)
 
         assertEquals(
             OnboardingUiState.Shown(
                 topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = true
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
+                    FollowableTopic(sampleTopics[0], isFollowed = false),
+                    FollowableTopic(sampleTopics[1], isFollowed = true),
+                    FollowableTopic(sampleTopics[2], isFollowed = false),
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
+                    SaveableNewsResource(sampleNewsResources[1], isSaved = false),
+                    SaveableNewsResource(sampleNewsResources[2], isSaved = false)
                 )
             ),
             viewModel.feedState.value
@@ -622,159 +334,25 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList(),
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
-        viewModel.updateAuthorSelection("1", isChecked = true)
+        viewModel.updateAuthorSelection(sampleAuthors[1].id, isChecked = true)
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
                 authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = true
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
+                    FollowableAuthor(sampleAuthors[0], isFollowed = false),
+                    FollowableAuthor(sampleAuthors[1], isFollowed = true),
+                    FollowableAuthor(sampleAuthors[2], isFollowed = false)
                 ),
             ),
             viewModel.onboardingUiState.value
@@ -782,14 +360,8 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
+                    SaveableNewsResource(sampleNewsResources[1], isSaved = false),
+                    SaveableNewsResource(sampleNewsResources[2], isSaved = false)
                 )
             ),
             viewModel.feedState.value
@@ -810,89 +382,19 @@ class ForYouViewModelTest {
         authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedAuthorIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateTopicSelection("1", isChecked = true)
-        viewModel.updateTopicSelection("1", isChecked = false)
+        viewModel.updateTopicSelection(sampleTopics[1].id, isChecked = true)
+        viewModel.updateTopicSelection(sampleTopics[1].id, isChecked = false)
 
         advanceUntilIdle()
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
@@ -911,89 +413,18 @@ class ForYouViewModelTest {
         authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedAuthorIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateAuthorSelection("1", isChecked = true)
-        viewModel.updateAuthorSelection("1", isChecked = false)
+        viewModel.updateAuthorSelection(sampleAuthors[1].id, isChecked = true)
+        viewModel.updateAuthorSelection(sampleAuthors[1].id, isChecked = false)
 
         assertEquals(
-
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map { FollowableTopic(it, isFollowed = false) },
+                authors = sampleAuthors.map { FollowableAuthor(it, isFollowed = false) },
             ),
             viewModel.onboardingUiState.value
         )
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
+            NewsFeedUiState.Success(emptyList()),
             viewModel.feedState.value
         )
 
@@ -1008,12 +439,12 @@ class ForYouViewModelTest {
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("1"))
+        userDataRepository.setFollowedTopicIds(setOf(sampleTopics[1].id))
         authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(setOf("1"))
+        userDataRepository.setFollowedAuthorIds(setOf(sampleAuthors[1].id))
         userDataRepository.setShouldHideOnboarding(true)
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateNewsResourceSaved("2", true)
+        viewModel.updateNewsResourceSaved(sampleNewsResources[1].id, true)
 
         assertEquals(
             OnboardingUiState.NotShown,
@@ -1022,14 +453,8 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = true
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
+                    SaveableNewsResource(sampleNewsResources[1], isSaved = true),
+                    SaveableNewsResource(sampleNewsResources[2], isSaved = false)
                 )
             ),
             viewModel.feedState.value
@@ -1041,150 +466,31 @@ class ForYouViewModelTest {
 }
 
 private val sampleAuthors = listOf(
-    Author(
-        id = "0",
-        name = "Android Dev",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    ),
-    Author(
-        id = "1",
-        name = "Android Dev 2",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    ),
-    Author(
-        id = "2",
-        name = "Android Dev 3",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    )
+    Random.nextFakeAuthor(id = "1"),
+    Random.nextFakeAuthor(id = "2"),
+    Random.nextFakeAuthor(id = "3"),
 )
 
 private val sampleTopics = listOf(
-    Topic(
-        id = "0",
-        name = "Headlines",
-        shortDescription = "",
-        longDescription = "long description",
-        url = "URL",
-        imageUrl = "image URL",
-    ),
-    Topic(
-        id = "1",
-        name = "UI",
-        shortDescription = "",
-        longDescription = "long description",
-        url = "URL",
-        imageUrl = "image URL",
-    ),
-    Topic(
-        id = "2",
-        name = "Tools",
-        shortDescription = "",
-        longDescription = "long description",
-        url = "URL",
-        imageUrl = "image URL",
-    )
+    Random.nextFakeTopic(id = "1", name = "Headlines"),
+    Random.nextFakeTopic(id = "2", name = "UI"),
+    Random.nextFakeTopic(id = "3", name = "Tools"),
 )
 
 private val sampleNewsResources = listOf(
-    NewsResource(
+    Random.nextFakeNewsResource(
         id = "1",
-        title = "Thanks for helping us reach 1M YouTube Subscribers",
-        content = "Thank you everyone for following the Now in Android series and everything the " +
-            "Android Developers YouTube channel has to offer. During the Android Developer " +
-            "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
-            "thank you all.",
-        url = "https://youtu.be/-fJ6poHQrjM",
-        headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = Video,
-        topics = listOf(
-            Topic(
-                id = "0",
-                name = "Headlines",
-                shortDescription = "",
-                longDescription = "long description",
-                url = "URL",
-                imageUrl = "image URL",
-            )
-        ),
-        authors = listOf(
-            Author(
-                id = "0",
-                name = "Android Dev",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
+        authors = listOf(sampleAuthors[0]),
+        topics = listOf(sampleTopics[0])
     ),
-    NewsResource(
+    Random.nextFakeNewsResource(
         id = "2",
-        title = "Transformations and customisations in the Paging Library",
-        content = "A demonstration of different operations that can be performed with Paging. " +
-            "Transformations like inserting separators, when to create a new pager, and " +
-            "customisation options for consuming PagingData.",
-        url = "https://youtu.be/ZARz0pjm5YM",
-        headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
-        publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-        type = Video,
-        topics = listOf(
-            Topic(
-                id = "1",
-                name = "UI",
-                shortDescription = "",
-                longDescription = "long description",
-                url = "URL",
-                imageUrl = "image URL",
-            ),
-        ),
-        authors = listOf(
-            Author(
-                id = "1",
-                name = "Android Dev 2",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
+        authors = listOf(sampleAuthors[1]),
+        topics = listOf(sampleTopics[1])
     ),
-    NewsResource(
+    Random.nextFakeNewsResource(
         id = "3",
-        title = "Community tip on Paging",
-        content = "Tips for using the Paging library from the developer community",
-        url = "https://youtu.be/r5JgIyS3t3s",
-        headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
-        publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-        type = Video,
-        topics = listOf(
-            Topic(
-                id = "1",
-                name = "UI",
-                shortDescription = "",
-                longDescription = "long description",
-                url = "URL",
-                imageUrl = "image URL",
-            ),
-        ),
-        authors = listOf(
-            Author(
-                id = "1",
-                name = "Android Dev 2",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
+        authors = listOf(sampleAuthors[1]),
+        topics = listOf(sampleTopics[1])
     ),
 )

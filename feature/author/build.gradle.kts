@@ -25,4 +25,6 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.datetime)
+    androidTestImplementation(testFixtures(project(":core:model")))
+    testImplementation(testFixtures(project(":core:model")))
 }

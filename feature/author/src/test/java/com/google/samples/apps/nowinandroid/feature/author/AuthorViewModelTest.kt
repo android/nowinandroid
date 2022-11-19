@@ -19,15 +19,15 @@ package com.google.samples.apps.nowinandroid.feature.author
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.Author
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.author.navigation.authorIdArg
+import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -208,108 +207,18 @@ class AuthorViewModelTest {
     }
 }
 
-private const val AUTHOR_1_NAME = "Author 1"
-private const val AUTHOR_2_NAME = "Author 2"
-private const val AUTHOR_3_NAME = "Author 3"
-private const val AUTHOR_BIO = "At vero eos et accusamus."
-private const val AUTHOR_TWITTER = "dev"
-private const val AUTHOR_MEDIUM_PAGE = "URL"
-private const val AUTHOR_IMAGE_URL = "Image URL"
-
 private val testInputAuthors = listOf(
-    FollowableAuthor(
-        Author(
-            id = "0",
-            name = AUTHOR_1_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "1",
-            name = AUTHOR_2_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = false
-    ),
-    FollowableAuthor(
-        Author(
-            id = "2",
-            name = AUTHOR_3_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = false
-    )
+    FollowableAuthor(Random.nextFakeAuthor(id = "1"), isFollowed = true),
+    FollowableAuthor(Random.nextFakeAuthor(id = "2"), isFollowed = false),
+    FollowableAuthor(Random.nextFakeAuthor(id = "3"), isFollowed = false),
 )
 
 private val testOutputAuthors = listOf(
-    FollowableAuthor(
-        Author(
-            id = "0",
-            name = AUTHOR_1_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "1",
-            name = AUTHOR_2_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "2",
-            name = AUTHOR_3_NAME,
-            bio = AUTHOR_BIO,
-            twitter = AUTHOR_TWITTER,
-            mediumPage = AUTHOR_MEDIUM_PAGE,
-            imageUrl = AUTHOR_IMAGE_URL,
-        ),
-        isFollowed = false
-    )
+    FollowableAuthor(testInputAuthors[0].author, isFollowed = true),
+    FollowableAuthor(testInputAuthors[1].author, isFollowed = true),
+    FollowableAuthor(testInputAuthors[2].author, isFollowed = false),
 )
 
 private val sampleNewsResources = listOf(
-    NewsResource(
-        id = "1",
-        title = "Thanks for helping us reach 1M YouTube Subscribers",
-        content = "Thank you everyone for following the Now in Android series and everything the " +
-            "Android Developers YouTube channel has to offer. During the Android Developer " +
-            "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
-            "thank you all.",
-        url = "https://youtu.be/-fJ6poHQrjM",
-        headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-        publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = Video,
-        authors = listOf(
-            Author(
-                id = "0",
-                name = "Android Dev",
-                bio = "Hello there!",
-                twitter = "dev",
-                mediumPage = "URL",
-                imageUrl = "image URL",
-            )
-        ),
-        topics = emptyList()
-    )
+    Random.nextFakeNewsResource(id = "1", authors = listOf(testInputAuthors[0].author)),
 )
