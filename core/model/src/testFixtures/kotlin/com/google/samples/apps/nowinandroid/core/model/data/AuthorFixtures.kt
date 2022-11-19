@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
-    id("kotlin")
-    `java-test-fixtures`
-}
 
-dependencies {
-    implementation(libs.kotlinx.datetime)
-    testFixturesImplementation(libs.kotlinx.datetime)
-}
+package com.google.samples.apps.nowinandroid.core.model.data
+
+import kotlin.random.Random
+
+fun Random.nextFakeAuthor(
+    id: String = nextLong().toString(),
+    name: String = "Android Dev $id",
+    imageUrl: String = "https://example.org/dev-android/$id.png",
+    twitter: String = "@dev-android-$id",
+    mediumPage: String = "https://medium.com/dev-android/$id",
+    bio: String = "At vero eos et accusamus et iusto odio dignissimos ducimus qui.",
+): Author = Author(
+    id = id,
+    name = name,
+    imageUrl = imageUrl,
+    twitter = twitter,
+    mediumPage = mediumPage,
+    bio = bio,
+)
