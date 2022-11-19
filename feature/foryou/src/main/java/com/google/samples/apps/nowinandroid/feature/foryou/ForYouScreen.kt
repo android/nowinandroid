@@ -56,6 +56,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -383,6 +384,7 @@ fun TopicIcon(
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
         model = imageUrl,
         contentDescription = null, // decorative
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         modifier = modifier
             .padding(10.dp)
             .size(32.dp)
