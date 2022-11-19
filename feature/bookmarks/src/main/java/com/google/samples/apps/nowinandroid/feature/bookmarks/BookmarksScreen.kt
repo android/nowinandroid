@@ -86,12 +86,11 @@ internal fun BookmarksScreen(
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
-        is Success ->
-            if (feedState.feed.isNotEmpty()) {
-                BookmarksGrid(feedState, removeFromBookmarks, modifier)
-            } else {
-                EmptyState(modifier)
-            }
+        is Success -> if (feedState.feed.isNotEmpty()) {
+            BookmarksGrid(feedState, removeFromBookmarks, modifier)
+        } else {
+            EmptyState(modifier)
+        }
     }
 }
 
@@ -160,7 +159,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = stringResource(id = R.string.bookmarks_empty_description),
