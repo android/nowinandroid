@@ -42,6 +42,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -56,7 +57,8 @@ fun NiaLoadingWheel(
     val infiniteTransition = rememberInfiniteTransition()
 
     // Specifies the float animation for slowly drawing out the lines on entering
-    val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(1F) } }
+    val startValue = if (LocalInspectionMode.current) 0F else 1F
+    val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(startValue) } }
     LaunchedEffect(floatAnimValues) {
         (0 until NUM_OF_LINES).map { index ->
             launch {
