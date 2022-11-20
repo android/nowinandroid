@@ -16,10 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.model.data
 
-import kotlin.random.Random
-
-fun Random.nextFakeAuthor(
-    id: String = nextLong().toString(),
+fun fakeAuthor(
+    id: String,
     name: String = "Android Dev $id",
     imageUrl: String = "https://example.org/dev-android/$id.png",
     twitter: String = "@dev-android-$id",

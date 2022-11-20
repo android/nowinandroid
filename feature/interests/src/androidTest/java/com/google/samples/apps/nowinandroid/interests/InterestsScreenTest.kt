@@ -27,13 +27,12 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsTabState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.R
-import kotlin.random.Random
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -187,24 +186,15 @@ class InterestsScreenTest {
 }
 private const val TOPIC_SHORT_DESC = "At vero eos et accusamus."
 private val testTopics = listOf(
-    FollowableTopic(
-        Random.nextFakeTopic(id = "1", shortDescription = TOPIC_SHORT_DESC),
-        isFollowed = true
-    ),
-    FollowableTopic(
-        Random.nextFakeTopic(id = "2", shortDescription = TOPIC_SHORT_DESC),
-        isFollowed = false
-    ),
-    FollowableTopic(
-        Random.nextFakeTopic(id = "3", shortDescription = TOPIC_SHORT_DESC),
-        isFollowed = false
-    )
+    FollowableTopic(fakeTopic(id = "1", shortDescription = TOPIC_SHORT_DESC), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "2", shortDescription = TOPIC_SHORT_DESC), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "3", shortDescription = TOPIC_SHORT_DESC), isFollowed = false)
 )
 
 private val testAuthors = listOf(
-    FollowableAuthor(Random.nextFakeAuthor(id = "1", name = "Android Dev"), isFollowed = true),
-    FollowableAuthor(Random.nextFakeAuthor(id = "2", name = "Android Dev 2"), isFollowed = false),
-    FollowableAuthor(Random.nextFakeAuthor(id = "3", name = "Android Dev 3"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "1", name = "Android Dev"), isFollowed = true),
+    FollowableAuthor(fakeAuthor(id = "2", name = "Android Dev 2"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "3", name = "Android Dev 3"), isFollowed = false),
 )
 
 private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size

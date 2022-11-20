@@ -20,15 +20,14 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStrea
 import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -206,25 +205,25 @@ class InterestsViewModelTest {
 }
 
 private val testInputAuthors = listOf(
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "1"), isFollowed = true),
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "2"), isFollowed = false),
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "3"), isFollowed = false),
+    FollowableAuthor(author = fakeAuthor(id = "1"), isFollowed = true),
+    FollowableAuthor(author = fakeAuthor(id = "2"), isFollowed = false),
+    FollowableAuthor(author = fakeAuthor(id = "3"), isFollowed = false),
 )
 
 private val testOutputAuthors = listOf(
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "1"), isFollowed = true),
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "2"), isFollowed = true),
-    FollowableAuthor(author = Random.nextFakeAuthor(id = "3"), isFollowed = false),
+    FollowableAuthor(author = fakeAuthor(id = "1"), isFollowed = true),
+    FollowableAuthor(author = fakeAuthor(id = "2"), isFollowed = true),
+    FollowableAuthor(author = fakeAuthor(id = "3"), isFollowed = false),
 )
 
 private val testInputTopics = listOf(
-    FollowableTopic(Random.nextFakeTopic(id = "1"), isFollowed = true),
-    FollowableTopic(Random.nextFakeTopic(id = "2"), isFollowed = false),
-    FollowableTopic(Random.nextFakeTopic(id = "3"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "1"), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "2"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "3"), isFollowed = false),
 )
 
 private val testOutputTopics = listOf(
-    FollowableTopic(Random.nextFakeTopic(id = "1"), isFollowed = true),
-    FollowableTopic(Random.nextFakeTopic(id = "2"), isFollowed = true),
-    FollowableTopic(Random.nextFakeTopic(id = "3"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "1"), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "2"), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "3"), isFollowed = false),
 )

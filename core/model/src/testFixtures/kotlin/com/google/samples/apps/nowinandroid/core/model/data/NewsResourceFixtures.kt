@@ -17,11 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.model.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
-import kotlin.random.Random
 import kotlinx.datetime.Instant
 
-fun Random.nextFakeNewsResource(
-    id: String = nextLong().toString(),
+fun fakeNewsResource(
+    id: String,
     title: String = "News resource $id",
     content: String = "",
     url: String = "https://example.org/news/$id",

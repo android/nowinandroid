@@ -22,9 +22,9 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAutho
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -33,7 +33,6 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -466,29 +465,29 @@ class ForYouViewModelTest {
 }
 
 private val sampleAuthors = listOf(
-    Random.nextFakeAuthor(id = "1"),
-    Random.nextFakeAuthor(id = "2"),
-    Random.nextFakeAuthor(id = "3"),
+    fakeAuthor(id = "1"),
+    fakeAuthor(id = "2"),
+    fakeAuthor(id = "3"),
 )
 
 private val sampleTopics = listOf(
-    Random.nextFakeTopic(id = "1", name = "Headlines"),
-    Random.nextFakeTopic(id = "2", name = "UI"),
-    Random.nextFakeTopic(id = "3", name = "Tools"),
+    fakeTopic(id = "1", name = "Headlines"),
+    fakeTopic(id = "2", name = "UI"),
+    fakeTopic(id = "3", name = "Tools"),
 )
 
 private val sampleNewsResources = listOf(
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "1",
         authors = listOf(sampleAuthors[0]),
         topics = listOf(sampleTopics[0])
     ),
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "2",
         authors = listOf(sampleAuthors[1]),
         topics = listOf(sampleTopics[1])
     ),
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "3",
         authors = listOf(sampleAuthors[1]),
         topics = listOf(sampleTopics[1])

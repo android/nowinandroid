@@ -17,13 +17,12 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -124,23 +123,23 @@ class GetSaveableNewsResourcesStreamUseCaseTest {
     }
 }
 
-private val sampleTopic1 = Random.nextFakeTopic(id = "1", name = "Headlines")
-private val sampleTopic2 = Random.nextFakeTopic(id = "2", name = "UI")
-private val sampleAuthor1 = Random.nextFakeAuthor(id = "1")
-private val sampleAuthor2 = Random.nextFakeAuthor(id = "2")
+private val sampleTopic1 = fakeTopic(id = "1", name = "Headlines")
+private val sampleTopic2 = fakeTopic(id = "2", name = "UI")
+private val sampleAuthor1 = fakeAuthor(id = "1")
+private val sampleAuthor2 = fakeAuthor(id = "2")
 
 private val sampleNewsResources = listOf(
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "1",
         authors = listOf(sampleAuthor1),
         topics = listOf(sampleTopic1)
     ),
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "2",
         authors = listOf(sampleAuthor1),
         topics = listOf(sampleTopic1, sampleTopic2)
     ),
-    Random.nextFakeNewsResource(
+    fakeNewsResource(
         id = "3",
         authors = listOf(sampleAuthor2),
         topics = listOf(sampleTopic2)

@@ -19,15 +19,14 @@ package com.google.samples.apps.nowinandroid.feature.author
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.author.navigation.authorIdArg
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -208,9 +207,9 @@ class AuthorViewModelTest {
 }
 
 private val testInputAuthors = listOf(
-    FollowableAuthor(Random.nextFakeAuthor(id = "1"), isFollowed = true),
-    FollowableAuthor(Random.nextFakeAuthor(id = "2"), isFollowed = false),
-    FollowableAuthor(Random.nextFakeAuthor(id = "3"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "1"), isFollowed = true),
+    FollowableAuthor(fakeAuthor(id = "2"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "3"), isFollowed = false),
 )
 
 private val testOutputAuthors = listOf(
@@ -220,5 +219,5 @@ private val testOutputAuthors = listOf(
 )
 
 private val sampleNewsResources = listOf(
-    Random.nextFakeNewsResource(id = "1", authors = listOf(testInputAuthors[0].author)),
+    fakeNewsResource(id = "1", authors = listOf(testInputAuthors[0].author)),
 )

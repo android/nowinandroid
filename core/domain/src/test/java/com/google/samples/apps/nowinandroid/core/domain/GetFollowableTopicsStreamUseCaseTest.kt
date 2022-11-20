@@ -18,11 +18,10 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField.NAME
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -88,7 +87,7 @@ class GetFollowableTopicsStreamUseCaseTest {
 }
 
 private val testTopics = listOf(
-    Random.nextFakeTopic(id = "1", name = "Headlines"),
-    Random.nextFakeTopic(id = "2", name = "Android Studio"),
-    Random.nextFakeTopic(id = "3", name = "Compose"),
+    fakeTopic(id = "1", name = "Headlines"),
+    fakeTopic(id = "2", name = "Android Studio"),
+    fakeTopic(id = "3", name = "Compose"),
 )

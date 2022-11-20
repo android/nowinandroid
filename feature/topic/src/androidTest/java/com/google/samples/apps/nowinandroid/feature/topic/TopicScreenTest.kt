@@ -26,9 +26,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
-import kotlin.random.Random
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -147,9 +146,9 @@ class TopicScreenTest {
 }
 
 private val testTopics = listOf(
-    FollowableTopic(Random.nextFakeTopic(id = "1", name = "Headlines"), isFollowed = true),
-    FollowableTopic(Random.nextFakeTopic(id = "2", name = "UI"), isFollowed = false),
-    FollowableTopic(Random.nextFakeTopic(id = "3", name = "Tools"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "1", name = "Headlines"), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "2", name = "UI"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "3", name = "Tools"), isFollowed = false),
 )
 
-private val sampleNewsResources = listOf(Random.nextFakeNewsResource())
+private val sampleNewsResources = listOf(fakeNewsResource(id = "0"))

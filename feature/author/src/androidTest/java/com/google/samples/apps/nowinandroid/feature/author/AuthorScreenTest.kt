@@ -22,9 +22,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeAuthor
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
-import kotlin.random.Random
+import com.google.samples.apps.nowinandroid.core.model.data.fakeAuthor
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -142,11 +141,11 @@ class AuthorScreenTest {
 }
 
 private val testAuthors = listOf(
-    FollowableAuthor(Random.nextFakeAuthor(id = "1"), isFollowed = true),
-    FollowableAuthor(Random.nextFakeAuthor(id = "2"), isFollowed = false),
-    FollowableAuthor(Random.nextFakeAuthor(id = "3"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "1"), isFollowed = true),
+    FollowableAuthor(fakeAuthor(id = "2"), isFollowed = false),
+    FollowableAuthor(fakeAuthor(id = "3"), isFollowed = false),
 )
 
 private val sampleNewsResources = listOf(
-    Random.nextFakeNewsResource(id = "1", authors = listOf(testAuthors.first().author)),
+    fakeNewsResource(id = "1", authors = listOf(testAuthors.first().author)),
 )

@@ -19,15 +19,14 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.nextFakeTopic
+import com.google.samples.apps.nowinandroid.core.model.data.fakeNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.fakeTopic
 import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicIdArg
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
@@ -165,9 +164,9 @@ class TopicViewModelTest {
 }
 
 private val testInputTopics = listOf(
-    FollowableTopic(Random.nextFakeTopic(id = "1", name = "Android Studio"), isFollowed = true),
-    FollowableTopic(Random.nextFakeTopic(id = "2", name = "Build"), isFollowed = false),
-    FollowableTopic(Random.nextFakeTopic(id = "3", name = "Compose"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "1", name = "Android Studio"), isFollowed = true),
+    FollowableTopic(fakeTopic(id = "2", name = "Build"), isFollowed = false),
+    FollowableTopic(fakeTopic(id = "3", name = "Compose"), isFollowed = false),
 )
 
 private val testOutputTopics = listOf(
@@ -177,5 +176,5 @@ private val testOutputTopics = listOf(
 )
 
 private val sampleNewsResources = listOf(
-    Random.nextFakeNewsResource(id = "1", topics = listOf(testInputTopics[0].topic)),
+    fakeNewsResource(id = "1", topics = listOf(testInputTopics[0].topic)),
 )

@@ -16,10 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.model.data
 
-import kotlin.random.Random
-
-fun Random.nextFakeTopic(
-    id: String = nextLong().toString(),
+fun fakeTopic(
+    id: String,
     name: String = "Topic $id",
     shortDescription: String = "At vero eos et accusamus.",
     longDescription: String = "At vero eos et accusamus et iusto odio dignissimos ducimus qui.",
