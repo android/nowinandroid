@@ -33,11 +33,10 @@ import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.core.ui.R.string
-import org.junit.Rule
-import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.Rule
+import org.junit.Test
 
 /**
  * UI tests for [BookmarksScreen] composable.
@@ -118,8 +117,11 @@ class BookmarksScreenTest {
         }
 
         composeTestRule
-            .onAllNodesWithContentDescription(composeTestRule.activity.getString(string.unbookmark))
-            .filter(
+            .onAllNodesWithContentDescription(
+                composeTestRule.activity.getString(
+                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark
+                )
+            ).filter(
                 hasAnyAncestor(
                     hasText(
                         previewNewsResources[0].title,
