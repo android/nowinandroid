@@ -61,8 +61,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
-import com.google.samples.apps.nowinandroid.feature.author.AuthorViewModel.AuthorUiState
-import com.google.samples.apps.nowinandroid.feature.author.AuthorViewModel.NewsUiState
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
