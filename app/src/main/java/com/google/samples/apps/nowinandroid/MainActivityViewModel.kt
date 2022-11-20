@@ -22,12 +22,11 @@ import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
@@ -35,11 +34,7 @@ class MainActivityViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
         Success(it)
-    }.stateIn(
-        scope = viewModelScope,
-        initialValue = Loading,
-        started = SharingStarted.WhileSubscribed(5_000)
-    )
+    }.stateInViewModelScope(viewModelScope, initialValue = Loading)
 }
 
 sealed interface MainActivityUiState {

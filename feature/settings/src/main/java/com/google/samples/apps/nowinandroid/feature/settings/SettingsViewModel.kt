@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -44,29 +44,23 @@ class SettingsViewModel @Inject constructor(
                         darkThemeConfig = userData.darkThemeConfig
                     )
                 )
-            }
-            .stateIn(
-                scope = viewModelScope,
-                // Starting eagerly means the user data is ready when the SettingsDialog is laid out
-                // for the first time. Without this, due to b/221643630 the layout is done using the
-                // "Loading" text, then replaced with the user editable fields once loaded, however,
-                // the layout height doesn't change meaning all the fields are squashed into a small
-                // scrollable column.
-                // TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
-                started = SharingStarted.Eagerly,
-                initialValue = Loading
-            )
+            }.stateInViewModelScope(viewModelScope, SharingStarted.Eagerly, Loading)
 
-    fun updateThemeBrand(themeBrand: ThemeBrand) {
-        viewModelScope.launch {
-            userDataRepository.setThemeBrand(themeBrand)
-        }
+    /**
+     * Starting eagerly means the user data is ready when the SettingsDialog is laid out
+     * for the first time. Without this, due to b/221643630 the layout is done using the
+     * "Loading" text, then replaced with the user editable fields once loaded, however,
+     * the layout height doesn't change meaning all the fields are squashed into a small
+     * scrollable column.
+     * TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
+     */
+
+    fun updateThemeBrand(themeBrand: ThemeBrand) = viewModelScope.launch {
+        userDataRepository.setThemeBrand(themeBrand)
     }
 
-    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        viewModelScope.launch {
-            userDataRepository.setDarkThemeConfig(darkThemeConfig)
-        }
+    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) = viewModelScope.launch {
+        userDataRepository.setDarkThemeConfig(darkThemeConfig)
     }
 }
 

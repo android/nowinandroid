@@ -27,17 +27,19 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.result.Result
+import com.google.samples.apps.nowinandroid.core.result.Result.Error
+import com.google.samples.apps.nowinandroid.core.result.Result.Loading
+import com.google.samples.apps.nowinandroid.core.result.Result.Success
 import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AuthorViewModel @Inject constructor(
@@ -54,75 +56,67 @@ class AuthorViewModel @Inject constructor(
         authorId = authorArgs.authorId,
         userDataRepository = userDataRepository,
         authorsRepository = authorsRepository
-    )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = AuthorUiState.Loading
+    ).stateInViewModelScope(viewModelScope, initialValue = AuthorUiState.Loading)
+
+    val newsUiState: StateFlow<NewsUiState> = getSaveableNewsResourcesStream
+        .newsUiStateStream(authorId = authorArgs.authorId)
+        .stateInViewModelScope(viewModelScope, initialValue = NewsUiState.Loading)
+
+    fun followAuthorToggle(followed: Boolean) = viewModelScope.launch {
+        userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
+    }
+
+    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) = viewModelScope.launch {
+        userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+    }
+
+    private fun authorUiStateStream(
+        authorId: String,
+        userDataRepository: UserDataRepository,
+        authorsRepository: AuthorsRepository,
+    ): Flow<AuthorUiState> {
+        // Observe the followed authors, as they could change over time.
+        val followedAuthorIdsStream: Flow<Set<String>> =
+            userDataRepository.userDataStream.map { it.followedAuthors }
+
+        // Observe author information
+        val authorStream: Flow<Author> = authorsRepository.getAuthorStream(
+            id = authorId
         )
 
-    val newsUiState: StateFlow<NewsUiState> =
-        getSaveableNewsResourcesStream.newsUiStateStream(authorId = authorArgs.authorId)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = NewsUiState.Loading
-            )
-
-    fun followAuthorToggle(followed: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
-        }
-    }
-
-    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
-        }
-    }
-}
-
-private fun authorUiStateStream(
-    authorId: String,
-    userDataRepository: UserDataRepository,
-    authorsRepository: AuthorsRepository,
-): Flow<AuthorUiState> {
-    // Observe the followed authors, as they could change over time.
-    val followedAuthorIdsStream: Flow<Set<String>> =
-        userDataRepository.userDataStream
-            .map { it.followedAuthors }
-
-    // Observe author information
-    val authorStream: Flow<Author> = authorsRepository.getAuthorStream(
-        id = authorId
-    )
-
-    return combine(
-        followedAuthorIdsStream,
-        authorStream,
-        ::Pair
-    )
-        .asResult()
-        .map { followedAuthorToAuthorResult ->
-            when (followedAuthorToAuthorResult) {
-                is Result.Success -> {
-                    val (followedAuthors, author) = followedAuthorToAuthorResult.data
-                    val followed = followedAuthors.contains(authorId)
-                    AuthorUiState.Success(
-                        followableAuthor = FollowableAuthor(
-                            author = author,
-                            isFollowed = followed
-                        )
-                    )
-                }
-                is Result.Loading -> {
-                    AuthorUiState.Loading
-                }
-                is Result.Error -> {
-                    AuthorUiState.Error
-                }
+        return combine(
+            followedAuthorIdsStream,
+            authorStream,
+            ::Pair
+        )
+            .asResult()
+            .map { followedAuthorToAuthorResult ->
+                handleToAuthorResult(followedAuthorToAuthorResult, authorId)
             }
-        }
+    }
+
+    private fun handleToAuthorResult(
+        followedAuthorToAuthorResult: Result<Pair<Set<String>, Author>>,
+        authorId: String
+    ) = when (followedAuthorToAuthorResult) {
+        is Success -> onSuccessResult(followedAuthorToAuthorResult, authorId)
+        is Loading -> AuthorUiState.Loading
+        is Error -> AuthorUiState.Error
+    }
+
+    private fun onSuccessResult(
+        followedAuthorToAuthorResult: Success<Pair<Set<String>, Author>>,
+        authorId: String
+    ): AuthorUiState.Success {
+        val (followedAuthors, author) = followedAuthorToAuthorResult.data
+        val followed = followedAuthors.contains(authorId)
+        return AuthorUiState.Success(
+            followableAuthor = FollowableAuthor(
+                author = author,
+                isFollowed = followed
+            )
+        )
+    }
 }
 
 private fun GetSaveableNewsResourcesStreamUseCase.newsUiStateStream(
@@ -134,9 +128,9 @@ private fun GetSaveableNewsResourcesStreamUseCase.newsUiStateStream(
     ).asResult()
         .map { newsResult ->
             when (newsResult) {
-                is Result.Success -> NewsUiState.Success(newsResult.data)
-                is Result.Loading -> NewsUiState.Loading
-                is Result.Error -> NewsUiState.Error
+                is Success -> NewsUiState.Success(newsResult.data)
+                is Loading -> NewsUiState.Loading
+                is Error -> NewsUiState.Error
             }
         }
 }

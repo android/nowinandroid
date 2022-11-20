@@ -25,17 +25,16 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResources
 import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -50,12 +49,9 @@ class ForYouViewModel @Inject constructor(
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userDataStream.map { !it.shouldHideOnboarding }
 
-    val isSyncing = syncStatusMonitor.isSyncing
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
+    val isSyncing = syncStatusMonitor
+        .isSyncing
+        .stateInViewModelScope(viewModelScope, initialValue = false)
 
     val feedState: StateFlow<NewsFeedUiState> =
         userDataRepository.userDataStream
@@ -79,11 +75,7 @@ class ForYouViewModel @Inject constructor(
             // As the selected topics and topic state changes, this will cancel the old feed
             // monitoring and start the new one.
             .flatMapLatest { it }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = NewsFeedUiState.Loading
-            )
+            .stateInViewModelScope(viewModelScope, initialValue = NewsFeedUiState.Loading)
 
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(
@@ -99,23 +91,14 @@ class ForYouViewModel @Inject constructor(
             } else {
                 OnboardingUiState.NotShown
             }
-        }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = OnboardingUiState.Loading
-            )
+        }.stateInViewModelScope(viewModelScope, initialValue = OnboardingUiState.Loading)
 
-    fun updateTopicSelection(topicId: String, isChecked: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(topicId, isChecked)
-        }
+    fun updateTopicSelection(topicId: String, isChecked: Boolean) = viewModelScope.launch {
+        userDataRepository.toggleFollowedTopicId(topicId, isChecked)
     }
 
-    fun updateAuthorSelection(authorId: String, isChecked: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
-        }
+    fun updateAuthorSelection(authorId: String, isChecked: Boolean) = viewModelScope.launch {
+        userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
     }
 
     fun updateNewsResourceSaved(newsResourceId: String, isChecked: Boolean) {
@@ -124,10 +107,8 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun dismissOnboarding() {
-        viewModelScope.launch {
-            userDataRepository.setShouldHideOnboarding(true)
-        }
+    fun dismissOnboarding() = viewModelScope.launch {
+        userDataRepository.setShouldHideOnboarding(true)
     }
 }
 

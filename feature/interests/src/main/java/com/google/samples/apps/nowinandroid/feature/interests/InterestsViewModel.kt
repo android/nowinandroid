@@ -24,14 +24,13 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAutho
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -54,22 +53,14 @@ class InterestsViewModel @Inject constructor(
         getSortedFollowableAuthorsStream(),
         getFollowableTopicsStream(sortBy = TopicSortField.NAME),
         InterestsUiState::Interests
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = InterestsUiState.Loading
-    )
+    ).stateInViewModelScope(viewModelScope, initialValue = InterestsUiState.Loading)
 
-    fun followTopic(followedTopicId: String, followed: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
-        }
+    fun followTopic(followedTopicId: String, followed: Boolean) = viewModelScope.launch {
+        userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
     }
 
-    fun followAuthor(followedAuthorId: String, followed: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
-        }
+    fun followAuthor(followedAuthorId: String, followed: Boolean) = viewModelScope.launch {
+        userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
     }
 
     fun switchTab(newIndex: Int) {

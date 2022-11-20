@@ -23,14 +23,13 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResources
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
+import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -44,15 +43,9 @@ class BookmarksViewModel @Inject constructor(
         .map { newsResources -> newsResources.filter(SaveableNewsResource::isSaved) } // Only show bookmarked news resources.
         .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
         .onStart { emit(Loading) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = Loading
-        )
+        .stateInViewModelScope(viewModelScope, initialValue = Loading)
 
-    fun removeFromSavedResources(newsResourceId: String) {
-        viewModelScope.launch {
-            userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
-        }
+    fun removeFromSavedResources(newsResourceId: String) = viewModelScope.launch {
+        userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
     }
 }
