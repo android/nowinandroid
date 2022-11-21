@@ -21,11 +21,8 @@ import com.google.samples.apps.nowinandroid.benchmarks.BuildConfig
 /**
  * Convenience parameter to use proper package name with regards to build type and build flavor.
  */
-val PACKAGE_NAME = StringBuilder("com.google.samples.apps.nowinandroid").apply {
-    if (BuildConfig.FLAVOR != "prod") {
-        append(".${BuildConfig.FLAVOR}")
-    }
-    if (BuildConfig.BUILD_TYPE != "release") {
-        append(".${BuildConfig.BUILD_TYPE}")
-    }
-}.toString()
+val PACKAGE_NAME = buildString {
+    append("com.google.samples.apps.nowinandroid")
+    append(BuildConfig.APP_FLAVOR_SUFFIX)
+    append(BuildConfig.APP_BUILD_TYPE_SUFFIX)
+}
