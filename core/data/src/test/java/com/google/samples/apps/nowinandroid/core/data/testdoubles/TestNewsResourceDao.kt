@@ -17,8 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
-import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
@@ -54,22 +52,18 @@ class TestNewsResourceDao : NewsResourceDao {
 
     internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
 
-    internal var authorCrossReferences: List<NewsResourceAuthorCrossRef> = listOf()
-
     override fun getNewsResources(): Flow<List<PopulatedNewsResource>> =
         entitiesStateFlow.map {
             it.map(NewsResourceEntity::asPopulatedNewsResource)
         }
 
     override fun getNewsResources(
-        filterAuthorIds: Set<String>,
         filterTopicIds: Set<String>
     ): Flow<List<PopulatedNewsResource>> =
         getNewsResources()
             .map { resources ->
                 resources.filter { resource ->
-                    resource.topics.any { it.id in filterTopicIds } ||
-                        resource.authors.any { it.id in filterAuthorIds }
+                    resource.topics.any { it.id in filterTopicIds }
                 }
             }
 
@@ -95,12 +89,6 @@ class TestNewsResourceDao : NewsResourceDao {
         topicCrossReferences = newsResourceTopicCrossReferences
     }
 
-    override suspend fun insertOrIgnoreAuthorCrossRefEntities(
-        newsResourceAuthorCrossReferences: List<NewsResourceAuthorCrossRef>
-    ) {
-        authorCrossReferences = newsResourceAuthorCrossReferences
-    }
-
     override suspend fun deleteNewsResources(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
@@ -111,16 +99,6 @@ class TestNewsResourceDao : NewsResourceDao {
 
 private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource(
     entity = this,
-    authors = listOf(
-        AuthorEntity(
-            id = "id",
-            name = "name",
-            imageUrl = "imageUrl",
-            twitter = "twitter",
-            mediumPage = "mediumPage",
-            bio = "bio",
-        )
-    ),
     topics = listOf(
         TopicEntity(
             id = filteredInterestsIds.random(),

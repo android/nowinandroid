@@ -82,10 +82,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverl
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
@@ -108,7 +106,6 @@ internal fun ForYouRoute(
         onboardingUiState = onboardingUiState,
         feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
-        onAuthorCheckedChanged = viewModel::updateAuthorSelection,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         modifier = modifier
@@ -121,7 +118,6 @@ internal fun ForYouScreen(
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
-    onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -162,7 +158,6 @@ internal fun ForYouScreen(
     ) {
         onboarding(
             onboardingUiState = onboardingUiState,
-            onAuthorCheckedChanged = onAuthorCheckedChanged,
             onTopicCheckedChanged = onTopicCheckedChanged,
             saveFollowedTopics = saveFollowedTopics,
             // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
@@ -224,7 +219,6 @@ internal fun ForYouScreen(
  */
 private fun LazyGridScope.onboarding(
     onboardingUiState: OnboardingUiState,
-    onAuthorCheckedChanged: (String, Boolean) -> Unit,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
     interestsItemModifier: Modifier = Modifier
@@ -252,13 +246,6 @@ private fun LazyGridScope.onboarding(
                             .padding(top = 8.dp, start = 16.dp, end = 16.dp),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyMedium
-                    )
-                    AuthorsCarousel(
-                        authors = onboardingUiState.authors,
-                        onAuthorClick = onAuthorCheckedChanged,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
                     )
                     TopicSelection(
                         onboardingUiState,
@@ -414,7 +401,6 @@ fun ForYouScreenPopulatedFeed() {
                     }
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -436,7 +422,6 @@ fun ForYouScreenOfflinePopulatedFeed() {
                     }
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -453,7 +438,6 @@ fun ForYouScreenTopicSelection() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.Shown(
                     topics = previewTopics.map { FollowableTopic(it, false) },
-                    authors = previewAuthors.map { FollowableAuthor(it, false) }
                 ),
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
@@ -461,7 +445,6 @@ fun ForYouScreenTopicSelection() {
                     }
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -479,7 +462,6 @@ fun ForYouScreenLoading() {
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -501,7 +483,6 @@ fun ForYouScreenPopulatedAndLoading() {
                     }
                 ),
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
