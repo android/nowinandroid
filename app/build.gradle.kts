@@ -1,3 +1,5 @@
+import com.google.samples.apps.nowinandroid.NiABuildType
+
 /*
  * Copyright 2021 The Android Open Source Project
  *
@@ -38,10 +40,11 @@ android {
 
     buildTypes {
         val debug by getting {
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = NiABuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
             isMinifyEnabled = true
+            applicationIdSuffix = NiABuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
@@ -59,7 +62,7 @@ android {
             proguardFiles("benchmark-rules.pro")
             //  FIXME enabling minification breaks access to demo backend.
             isMinifyEnabled = false
-            applicationIdSuffix = ".benchmark"
+            applicationIdSuffix = NiABuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
