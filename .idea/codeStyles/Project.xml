@@ -28,9 +28,6 @@
       <option name="JD_PRESERVE_LINE_FEEDS" value="true" />
     </JavaCodeStyleSettings>
     <JetCodeStyleSettings>
-      <option name="PACKAGES_TO_USE_STAR_IMPORTS">
-        <value />
-      </option>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="99" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="99" />
       <option name="IMPORT_NESTED_CLASSES" value="true" />

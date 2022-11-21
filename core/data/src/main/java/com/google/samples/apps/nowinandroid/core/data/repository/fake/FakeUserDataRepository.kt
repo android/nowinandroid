@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
-import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
@@ -26,7 +25,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Fake implementation of the [AuthorsRepository] that returns hardcoded authors.
+ * Fake implementation of the [UserDataRepository] that returns hardcoded user data.
  *
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
@@ -43,14 +42,6 @@ class FakeUserDataRepository @Inject constructor(
 
     override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) =
         niaPreferencesDataSource.toggleFollowedTopicId(followedTopicId, followed)
-
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
-        niaPreferencesDataSource.setFollowedAuthorIds(followedAuthorIds)
-    }
-
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
-        niaPreferencesDataSource.toggleFollowedAuthorId(followedAuthorId, followed)
-    }
 
     override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
         niaPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)

@@ -35,7 +35,6 @@ class NiaPreferencesDataSource @Inject constructor(
             UserData(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
                 followedTopics = it.followedTopicIdsMap.keys,
-                followedAuthors = it.followedAuthorIdsMap.keys,
                 themeBrand = when (it.themeBrand) {
                     null,
                     ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
@@ -79,37 +78,6 @@ class NiaPreferencesDataSource @Inject constructor(
                         followedTopicIds.put(topicId, true)
                     } else {
                         followedTopicIds.remove(topicId)
-                    }
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    suspend fun setFollowedAuthorIds(authorIds: Set<String>) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    followedAuthorIds.clear()
-                    followedAuthorIds.putAll(authorIds.associateWith { true })
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    suspend fun toggleFollowedAuthorId(authorId: String, followed: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (followed) {
-                        followedAuthorIds.put(authorId, true)
-                    } else {
-                        followedAuthorIds.remove(authorId)
                     }
                     updateShouldHideOnboardingIfNecessary()
                 }
@@ -163,7 +131,6 @@ class NiaPreferencesDataSource @Inject constructor(
         .map {
             ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
-                authorVersion = it.authorChangeListVersion,
                 newsResourceVersion = it.newsResourceChangeListVersion,
             )
         }
@@ -178,14 +145,12 @@ class NiaPreferencesDataSource @Inject constructor(
                 val updatedChangeListVersions = update(
                     ChangeListVersions(
                         topicVersion = currentPreferences.topicChangeListVersion,
-                        authorVersion = currentPreferences.authorChangeListVersion,
                         newsResourceVersion = currentPreferences.newsResourceChangeListVersion
                     )
                 )
 
                 currentPreferences.copy {
                     topicChangeListVersion = updatedChangeListVersions.topicVersion
-                    authorChangeListVersion = updatedChangeListVersions.authorVersion
                     newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
                 }
             }
