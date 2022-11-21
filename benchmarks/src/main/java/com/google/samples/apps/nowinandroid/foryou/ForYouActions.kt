@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid.foryou
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.Until
+import com.google.samples.apps.nowinandroid.flingElementDownUp
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded
@@ -38,7 +38,5 @@ fun MacrobenchmarkScope.forYouSelectAuthors() {
 
 fun MacrobenchmarkScope.forYouScrollFeedDownUp() {
     val feedList = device.findObject(By.res("forYou:feed"))
-    feedList.fling(Direction.DOWN)
-    device.waitForIdle()
-    feedList.fling(Direction.UP)
+    device.flingElementDownUp(feedList)
 }
