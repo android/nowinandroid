@@ -18,6 +18,10 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -194,7 +198,13 @@ internal fun ForYouScreen(
     AnimatedVisibility(
         visible = isSyncing ||
             feedState is NewsFeedUiState.Loading ||
-            onboardingUiState is OnboardingUiState.Loading
+            onboardingUiState is OnboardingUiState.Loading,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> -fullHeight },
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> -fullHeight },
+        ) + fadeOut(),
     ) {
         val loadingContentDescription = stringResource(id = R.string.for_you_loading)
         Box(
