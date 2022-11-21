@@ -18,12 +18,15 @@ package com.google.samples.apps.nowinandroid.foryou
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Until
+import androidx.test.uiautomator.Direction.RIGHT
+import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
+import kotlin.random.Random.Default.nextInt
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
-    // Wait until content is loaded
-    device.wait(Until.hasObject(By.text("What are you interested in?")), 30_000)
+    // Wait until content is loaded by checking if authors are loaded
+    val obj = device.findObject(By.res("forYou:authors"))
+    obj.wait(untilHasChildren(), 30_000)
 }
 
 fun MacrobenchmarkScope.forYouSelectAuthors() {
