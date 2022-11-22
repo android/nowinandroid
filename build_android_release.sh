@@ -31,7 +31,7 @@ cd $DIR
 
 # Build
 GRADLE_PARAMS=" --stacktrace"
-$DIR/gradlew :app:clean :app:assemble ${GRADLE_PARAMS}
+$DIR/gradlew :app:mobile:clean :app:assemble ${GRADLE_PARAMS}
 BUILD_RESULT=$?
 
 # Demo debug
@@ -49,7 +49,7 @@ cp $APP_OUT/apk/prod/release/app-prod-release.apk $DIST_DIR/app-prod-release.apk
 
 # Build App Bundles
 # Don't clean here, otherwise all apks are gone.
-$DIR/gradlew :app:bundle ${GRADLE_PARAMS}
+$DIR/gradlew :app:mobile:bundle ${GRADLE_PARAMS}
 
 # Demo debug
 cp $APP_OUT/bundle/demoDebug/app-demo-debug.aab $DIST_DIR/app-demo-debug.aab

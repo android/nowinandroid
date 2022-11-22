@@ -27,7 +27,7 @@ jobs:
           java-version: 11
 
       - name: Build app
-        run: ./gradlew :app:assembleDemoRelease
+        run: ./gradlew :mobile:app:assembleDemoRelease
 
       - name: Create Release
         id: create_release

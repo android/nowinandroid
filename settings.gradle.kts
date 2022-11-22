@@ -31,7 +31,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "nowinandroid"
-include(":app")
+include(":app:mobile")
 include(":app-nia-catalog")
 include(":benchmarks")
 include(":core:common")
@@ -52,6 +52,8 @@ include(":feature:interests")
 include(":feature:bookmarks")
 include(":feature:topic")
 include(":feature:settings")
+include(":feature:wear:news")
 include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
+include(":app:wear")

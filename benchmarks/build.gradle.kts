@@ -49,7 +49,7 @@ android {
     // benchmarks on demo, so we benchmark on stable data. 
     configureFlavors(this)
 
-    targetProjectPath = ":app"
+    targetProjectPath = ":app:mobile"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
     testOptions {
