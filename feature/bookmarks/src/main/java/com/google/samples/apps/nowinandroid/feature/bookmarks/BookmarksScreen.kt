@@ -84,12 +84,13 @@ internal fun BookmarksRoute(
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onBrowseTopic: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
         is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(feedState, removeFromBookmarks, modifier)
+            BookmarksGrid(feedState, removeFromBookmarks, onBrowseTopic, modifier)
         } else {
             EmptyState(modifier)
         }
@@ -129,6 +130,7 @@ private fun BookmarksGrid(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+            onBrowseTopic = onBrowseTopic
         )
         item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
@@ -191,7 +193,8 @@ private fun BookmarksGridPreview() {
                     SaveableNewsResource(it, false)
                 }
             ),
-            removeFromBookmarks = {}
+            removeFromBookmarks = {},
+            onBrowseTopic = {}
         )
     }
 }
