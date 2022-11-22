@@ -21,6 +21,10 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.wear.news"
+
+    defaultConfig {
+        minSdk = 26
+    }
 }
 
 dependencies {
@@ -30,6 +34,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.material)
-    implementation(libs.androidx.wear.compose.navigation)
     implementation(libs.kotlinx.datetime)
 }
