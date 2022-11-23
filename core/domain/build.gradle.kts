@@ -19,6 +19,10 @@ plugins {
     kotlin("kapt")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.domain"
+}
+
 dependencies {
 
     implementation(project(":core:data"))
