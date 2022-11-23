@@ -132,6 +132,7 @@ internal fun ForYouScreen(
     // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
     // This code should be called when the UI is ready for use
     // and relates to Time To Full Display.
+    // TODO replace with ReportDrawnWhen { } once androidx.activity-compose 1.7.0 is used (currently alpha)
     if (!isSyncing && !onboardingLoading && !feedLoading) {
         val localView = LocalView.current
         // We use Unit to call reportFullyDrawn only on the first recomposition,
