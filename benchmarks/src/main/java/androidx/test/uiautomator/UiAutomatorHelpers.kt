@@ -35,7 +35,7 @@ fun untilHasChildren(
             return when (op) {
                 AT_LEAST -> element.childCount >= childCount
                 EXACTLY -> element.childCount == childCount
-                AT_MOST -> element.childCount < childCount
+                AT_MOST -> element.childCount <= childCount
             }
         }
     }
