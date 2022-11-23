@@ -60,8 +60,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
-            //  FIXME enabling minification breaks access to demo backend.
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             applicationIdSuffix = NiABuildType.BENCHMARK.applicationIdSuffix
         }
     }
