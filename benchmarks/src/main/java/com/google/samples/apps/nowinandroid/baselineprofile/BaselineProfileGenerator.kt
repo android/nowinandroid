@@ -48,7 +48,7 @@ class BaselineProfileGenerator {
 
             // Scroll the feed critical user journey
             forYouWaitForContent()
-            forYouSelectAuthors()
+            forYouSelectAuthors(true)
             forYouScrollFeedDownUp()
 
             // Navigate to saved screen
