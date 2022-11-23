@@ -31,11 +31,19 @@ fun MacrobenchmarkScope.forYouWaitForContent() {
 
 fun MacrobenchmarkScope.forYouSelectAuthors() {
     val authors = device.findObject(By.res("forYou:authors"))
-    // select some authors to show some feed content
-    repeat(3) { index ->
-        val author = authors.children[index % authors.childCount]
+
+    // set gesture margin from sides not to trigger system gesture navigation
+    val horizontalMargin = 10 * authors.visibleBounds.width() / 100
+    authors.setGestureMargins(horizontalMargin, 0, horizontalMargin, 0)
+
+    // select some random authors to show some feed content
+    repeat(3) {
+        // picks randomly from visible authors
+        val randomChild = nextInt(0, authors.childCount)
+        val author = authors.children[randomChild]
         author.click()
         device.waitForIdle()
+        authors.fling(RIGHT)
     }
 }
 
