@@ -19,12 +19,16 @@ package com.google.samples.apps.nowinandroid.foryou
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction.RIGHT
+import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 import kotlin.random.Random.Default.nextInt
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if authors are loaded
+    device.wait(Until.gone(By.res("forYou:loadingWheel")), 5_000)
+    // Sometimes, the loading wheel is gone, but the content is not loaded yet
+    // So we'll wait here for authors to be sure
     val obj = device.findObject(By.res("forYou:authors"))
     obj.wait(untilHasChildren(), 30_000)
 }
