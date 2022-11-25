@@ -6,6 +6,7 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
 import org.gradle.api.Project
 
+@Suppress("EnumEntryName")
 enum class FlavorDimension {
     contentType
 }
@@ -13,9 +14,10 @@ enum class FlavorDimension {
 // The content for the app can either come from local static data which is useful for demo
 // purposes, or from a production backend server which supplies up-to-date, real content.
 // These two product flavors reflect this behaviour.
+@Suppress("EnumEntryName")
 enum class NiAFlavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
-    DEMO(FlavorDimension.contentType),
-    PROD(FlavorDimension.contentType, ".prod")
+    demo(FlavorDimension.contentType),
+    prod(FlavorDimension.contentType, ".prod")
 }
 
 fun Project.configureFlavors(
