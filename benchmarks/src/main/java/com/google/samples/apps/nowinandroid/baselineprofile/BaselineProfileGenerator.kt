@@ -54,8 +54,8 @@ class BaselineProfileGenerator {
             // Navigate to saved screen
             device.findObject(By.text("Saved")).click()
             device.waitForIdle()
-
-            bookmarksScrollFeedDownUp()
+            // TODO: we need to implement adding stuff to bookmarks before able to scroll it
+            // bookmarksScrollFeedDownUp()
 
             // Navigate to interests screen
             device.findObject(By.text("Interests")).click()
