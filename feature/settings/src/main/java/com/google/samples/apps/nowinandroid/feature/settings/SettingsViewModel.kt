@@ -21,6 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
@@ -37,30 +38,38 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepository.userDataStream
-            .map { userData ->
-                Success(
-                    settings = UserEditableSettings(
-                        brand = userData.themeBrand,
-                        darkThemeConfig = userData.darkThemeConfig
-                    )
-                )
-            }.stateInScope(viewModelScope, SharingStarted.Eagerly, Loading)
+            .map { userData -> mapToSuccess(userData) }
+            .stateInScope(
+                viewModelScope,
+                /**
+                 * Starting eagerly means the user data is ready when the SettingsDialog is laid out
+                 * for the first time. Without this, due to b/221643630 the layout is done using the
+                 * "Loading" text, then replaced with the user editable fields once loaded, however,
+                 * the layout height doesn't change meaning all the fields are squashed into a small
+                 * scrollable column.
+                 * TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
+                 */
+                SharingStarted.Eagerly, Loading
+            )
 
-    /**
-     * Starting eagerly means the user data is ready when the SettingsDialog is laid out
-     * for the first time. Without this, due to b/221643630 the layout is done using the
-     * "Loading" text, then replaced with the user editable fields once loaded, however,
-     * the layout height doesn't change meaning all the fields are squashed into a small
-     * scrollable column.
-     * TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
-     */
+    private fun mapToSuccess(userData: UserData) =
+        Success(
+            settings = UserEditableSettings(
+                brand = userData.themeBrand,
+                darkThemeConfig = userData.darkThemeConfig
+            )
+        )
 
-    fun updateThemeBrand(themeBrand: ThemeBrand) = viewModelScope.launch {
-        userDataRepository.setThemeBrand(themeBrand)
+    fun updateThemeBrand(themeBrand: ThemeBrand) {
+        viewModelScope.launch {
+            userDataRepository.setThemeBrand(themeBrand)
+        }
     }
 
-    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) = viewModelScope.launch {
-        userDataRepository.setDarkThemeConfig(darkThemeConfig)
+    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        viewModelScope.launch {
+            userDataRepository.setDarkThemeConfig(darkThemeConfig)
+        }
     }
 }
 

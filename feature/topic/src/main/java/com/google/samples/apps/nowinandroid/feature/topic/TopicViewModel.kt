@@ -64,12 +64,16 @@ class TopicViewModel @Inject constructor(
         getSaveableNewsResourcesStream = getSaveableNewsResourcesStream
     ).stateInScope(viewModelScope, initialValue = NewsUiState.Loading)
 
-    fun followTopicToggle(followed: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedTopicId(topicArgs.topicId, followed)
+    fun followTopicToggle(followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedTopicId(topicArgs.topicId, followed)
+        }
     }
 
-    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) = viewModelScope.launch {
-        userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+        }
     }
 }
 

@@ -93,12 +93,16 @@ class ForYouViewModel @Inject constructor(
             }
         }.stateInScope(viewModelScope, initialValue = OnboardingUiState.Loading)
 
-    fun updateTopicSelection(topicId: String, isChecked: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedTopicId(topicId, isChecked)
+    fun updateTopicSelection(topicId: String, isChecked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedTopicId(topicId, isChecked)
+        }
     }
 
-    fun updateAuthorSelection(authorId: String, isChecked: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
+    fun updateAuthorSelection(authorId: String, isChecked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
+        }
     }
 
     fun updateNewsResourceSaved(newsResourceId: String, isChecked: Boolean) {
@@ -107,8 +111,10 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun dismissOnboarding() = viewModelScope.launch {
-        userDataRepository.setShouldHideOnboarding(true)
+    fun dismissOnboarding() {
+        viewModelScope.launch {
+            userDataRepository.setShouldHideOnboarding(true)
+        }
     }
 }
 

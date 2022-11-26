@@ -62,12 +62,16 @@ class AuthorViewModel @Inject constructor(
         .newsUiStateStream(authorId = authorArgs.authorId)
         .stateInScope(viewModelScope, initialValue = NewsUiState.Loading)
 
-    fun followAuthorToggle(followed: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
+    fun followAuthorToggle(followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
+        }
     }
 
-    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) = viewModelScope.launch {
-        userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+    fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+        }
     }
 
     private fun authorUiStateStream(

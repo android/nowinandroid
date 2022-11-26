@@ -55,12 +55,16 @@ class InterestsViewModel @Inject constructor(
         InterestsUiState::Interests
     ).stateInScope(viewModelScope, initialValue = InterestsUiState.Loading)
 
-    fun followTopic(followedTopicId: String, followed: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
+    fun followTopic(followedTopicId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
+        }
     }
 
-    fun followAuthor(followedAuthorId: String, followed: Boolean) = viewModelScope.launch {
-        userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
+    fun followAuthor(followedAuthorId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
+        }
     }
 
     fun switchTab(newIndex: Int) {

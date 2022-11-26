@@ -45,7 +45,9 @@ class BookmarksViewModel @Inject constructor(
         .onStart { emit(Loading) }
         .stateInScope(viewModelScope, initialValue = Loading)
 
-    fun removeFromSavedResources(newsResourceId: String) = viewModelScope.launch {
-        userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
+    fun removeFromSavedResources(newsResourceId: String) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
+        }
     }
 }
