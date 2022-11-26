@@ -22,7 +22,7 @@ import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
+import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +34,7 @@ class MainActivityViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
         Success(it)
-    }.stateInViewModelScope(viewModelScope, initialValue = Loading)
+    }.stateInScope(viewModelScope, initialValue = Loading)
 }
 
 sealed interface MainActivityUiState {

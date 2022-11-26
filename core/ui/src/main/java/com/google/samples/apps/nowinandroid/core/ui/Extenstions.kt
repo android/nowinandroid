@@ -23,23 +23,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * This is a helper extension function to make it easier to use [Flow.stateIn] within a ViewModel.
+ * This is a helper extension function for making it easier to use [Flow.stateIn] within a ViewModel or etc.
  * @Returns a [StateFlow] that shares the latest value emitted by the original [Flow] and starts
  * with the [initialValue].
  */
-fun <T> Flow<T>.stateInViewModelScope(
-    viewModelScope: CoroutineScope,
+fun <T> Flow<T>.stateInScope(
+    coroutineScope: CoroutineScope,
     started: SharingStarted = SharingStarted.WhileSubscribed(5_000),
     initialValue: T
-): StateFlow<T> = stateIn(viewModelScope, started, initialValue)
-
-/**
- * This is a helper extension function to make it easier to use [Flow.stateIn] within a [CoroutineScope].
- * @Returns a [StateFlow] that shares the latest value emitted by the original [Flow] and starts
- * with the [initialValue].
- */
-fun <T> Flow<T>.stateInCoroutineScope(
-    viewModelScope: CoroutineScope,
-    started: SharingStarted = SharingStarted.WhileSubscribed(5_000),
-    initialValue: T
-): StateFlow<T> = stateIn(viewModelScope, started, initialValue)
+): StateFlow<T> = stateIn(coroutineScope, started, initialValue)

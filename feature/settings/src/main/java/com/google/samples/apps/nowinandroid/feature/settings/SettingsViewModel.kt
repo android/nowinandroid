@@ -21,7 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
+import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
                         darkThemeConfig = userData.darkThemeConfig
                     )
                 )
-            }.stateInViewModelScope(viewModelScope, SharingStarted.Eagerly, Loading)
+            }.stateInScope(viewModelScope, SharingStarted.Eagerly, Loading)
 
     /**
      * Starting eagerly means the user data is ready when the SettingsDialog is laid out

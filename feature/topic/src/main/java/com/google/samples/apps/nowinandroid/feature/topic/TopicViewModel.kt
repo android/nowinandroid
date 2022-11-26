@@ -31,7 +31,7 @@ import com.google.samples.apps.nowinandroid.core.result.Result.Error
 import com.google.samples.apps.nowinandroid.core.result.Result.Loading
 import com.google.samples.apps.nowinandroid.core.result.Result.Success
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
+import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -56,13 +56,13 @@ class TopicViewModel @Inject constructor(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository
-    ).stateInViewModelScope(viewModelScope, initialValue = TopicUiState.Loading)
+    ).stateInScope(viewModelScope, initialValue = TopicUiState.Loading)
 
     val newUiState: StateFlow<NewsUiState> = newsUiStateStream(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         getSaveableNewsResourcesStream = getSaveableNewsResourcesStream
-    ).stateInViewModelScope(viewModelScope, initialValue = NewsUiState.Loading)
+    ).stateInScope(viewModelScope, initialValue = NewsUiState.Loading)
 
     fun followTopicToggle(followed: Boolean) = viewModelScope.launch {
         userDataRepository.toggleFollowedTopicId(topicArgs.topicId, followed)
@@ -140,12 +140,12 @@ private fun newsUiStateStream(
         .asResult()
         .map { newsToBookmarksResult ->
             when (newsToBookmarksResult) {
-                is Result.Success -> {
+                is Success -> {
                     val (news, bookmarks) = newsToBookmarksResult.data
                     NewsUiState.Success(news)
                 }
-                is Result.Loading -> NewsUiState.Loading
-                is Result.Error -> NewsUiState.Error
+                is Loading -> NewsUiState.Loading
+                is Error -> NewsUiState.Error
             }
         }
 }

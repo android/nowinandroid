@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAutho
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
+import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +53,7 @@ class InterestsViewModel @Inject constructor(
         getSortedFollowableAuthorsStream(),
         getFollowableTopicsStream(sortBy = TopicSortField.NAME),
         InterestsUiState::Interests
-    ).stateInViewModelScope(viewModelScope, initialValue = InterestsUiState.Loading)
+    ).stateInScope(viewModelScope, initialValue = InterestsUiState.Loading)
 
     fun followTopic(followedTopicId: String, followed: Boolean) = viewModelScope.launch {
         userDataRepository.toggleFollowedTopicId(followedTopicId, followed)

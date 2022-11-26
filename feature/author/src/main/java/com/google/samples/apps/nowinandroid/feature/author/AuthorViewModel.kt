@@ -31,7 +31,7 @@ import com.google.samples.apps.nowinandroid.core.result.Result.Error
 import com.google.samples.apps.nowinandroid.core.result.Result.Loading
 import com.google.samples.apps.nowinandroid.core.result.Result.Success
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.core.ui.stateInViewModelScope
+import com.google.samples.apps.nowinandroid.core.ui.stateInScope
 import com.google.samples.apps.nowinandroid.feature.author.navigation.AuthorArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -56,11 +56,11 @@ class AuthorViewModel @Inject constructor(
         authorId = authorArgs.authorId,
         userDataRepository = userDataRepository,
         authorsRepository = authorsRepository
-    ).stateInViewModelScope(viewModelScope, initialValue = AuthorUiState.Loading)
+    ).stateInScope(viewModelScope, initialValue = AuthorUiState.Loading)
 
     val newsUiState: StateFlow<NewsUiState> = getSaveableNewsResourcesStream
         .newsUiStateStream(authorId = authorArgs.authorId)
-        .stateInViewModelScope(viewModelScope, initialValue = NewsUiState.Loading)
+        .stateInScope(viewModelScope, initialValue = NewsUiState.Loading)
 
     fun followAuthorToggle(followed: Boolean) = viewModelScope.launch {
         userDataRepository.toggleFollowedAuthorId(authorArgs.authorId, followed)
