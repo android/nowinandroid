@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
  * Returns `true` if the Android theme should be used, as a function of the [uiState].
  */
 @Composable
-fun shouldUseAndroidTheme(
+private fun shouldUseAndroidTheme(
     uiState: MainActivityUiState,
 ): Boolean = when (uiState) {
     Loading -> false
@@ -146,7 +146,7 @@ fun shouldUseAndroidTheme(
  * current system context.
  */
 @Composable
-fun shouldUseDarkTheme(
+private fun shouldUseDarkTheme(
     uiState: MainActivityUiState,
 ): Boolean = when (uiState) {
     Loading -> isSystemInDarkTheme()
