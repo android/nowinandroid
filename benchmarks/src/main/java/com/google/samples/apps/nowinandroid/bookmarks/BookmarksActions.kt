@@ -18,11 +18,9 @@ package com.google.samples.apps.nowinandroid.bookmarks
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
+import com.google.samples.apps.nowinandroid.flingElementDownUp
 
 fun MacrobenchmarkScope.bookmarksScrollFeedDownUp() {
     val feedList = device.findObject(By.res("bookmarks:feed"))
-    feedList.fling(Direction.DOWN)
-    device.waitForIdle()
-    feedList.fling(Direction.UP)
+    device.flingElementDownUp(feedList)
 }
