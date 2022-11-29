@@ -90,32 +90,3 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         forYouWaitForContent()
     }
 }
-
-class StartupBenchmark {
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
-
-    @Test
-    fun startupNoCompilation() = startup(CompilationMode.None())
-
-    @Test
-    fun startupBaselineProfile() = startup(CompilationMode.Partial(baselineProfileMode = Require))
-
-    @Test
-    fun startupFullCompilation() = startup(CompilationMode.Full())
-
-    private fun startup(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
-        packageName = PACKAGE_NAME,
-        metrics = listOf(StartupTimingMetric()),
-        compilationMode = compilationMode,
-        iterations = 30,
-        startupMode = COLD,
-        setupBlock = {
-            pressHome()
-        }
-    ) {
-        startActivityAndWait()
-        // Waits until the content is ready to capture Time To Full Display
-        forYouWaitForContent()
-    }
-}
