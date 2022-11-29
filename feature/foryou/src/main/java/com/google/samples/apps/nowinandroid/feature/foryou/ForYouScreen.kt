@@ -126,14 +126,14 @@ internal fun ForYouScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val onboardingLoading = onboardingUiState is OnboardingUiState.Loading
-    val feedLoading = feedState is NewsFeedUiState.Loading
+    val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
+    val isFeedLoading = feedState is NewsFeedUiState.Loading
 
     // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
     // This code should be called when the UI is ready for use
     // and relates to Time To Full Display.
     // TODO replace with ReportDrawnWhen { } once androidx.activity-compose 1.7.0 is used (currently alpha)
-    if (!isSyncing && !onboardingLoading && !feedLoading) {
+    if (!isSyncing && !isOnboardingLoading && !isFeedLoading) {
         val localView = LocalView.current
         // We use Unit to call reportFullyDrawn only on the first recomposition,
         // however it will be called again if this composable goes out of scope.
@@ -195,7 +195,7 @@ internal fun ForYouScreen(
         }
     }
     AnimatedVisibility(
-        visible = isSyncing || feedLoading || onboardingLoading,
+        visible = isSyncing || isFeedLoading || isOnboardingLoading,
         enter = slideInVertically(
             initialOffsetY = { fullHeight -> -fullHeight },
         ) + fadeIn(),
