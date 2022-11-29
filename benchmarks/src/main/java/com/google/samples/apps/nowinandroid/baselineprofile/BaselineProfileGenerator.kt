@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.baselineprofile
 
+import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
@@ -30,6 +31,7 @@ import org.junit.Test
 /**
  * Generates a baseline profile which can be copied to `app/src/main/baseline-prof.txt`.
  */
+@ExperimentalBaselineProfilesApi
 class BaselineProfileGenerator {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
