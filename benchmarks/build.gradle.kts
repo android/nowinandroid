@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import com.android.build.api.dsl.ManagedVirtualDevice
-import com.google.samples.apps.nowinandroid.NiABuildType
+import com.google.samples.apps.nowinandroid.NiaBuildType
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
@@ -47,7 +47,7 @@ android {
             buildConfigField(
                 "String",
                 "APP_BUILD_TYPE_SUFFIX",
-                "\"${NiABuildType.BENCHMARK.applicationIdSuffix ?: ""}\""
+                "\"${NiaBuildType.BENCHMARK.applicationIdSuffix ?: ""}\""
             )
         }
     }
