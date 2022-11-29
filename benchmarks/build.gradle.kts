@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import com.android.build.api.dsl.ManagedVirtualDevice
+import com.google.samples.apps.nowinandroid.NiaBuildType
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
@@ -26,6 +27,8 @@ android {
     defaultConfig {
         minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
     }
 
     buildFeatures {
@@ -41,13 +44,24 @@ android {
             isDebuggable = true
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
+            buildConfigField(
+                "String",
+                "APP_BUILD_TYPE_SUFFIX",
+                "\"${NiaBuildType.BENCHMARK.applicationIdSuffix ?: ""}\""
+            )
         }
     }
 
     // Use the same flavor dimensions as the application to allow generating Baseline Profiles on prod,
     // which is more close to what will be shipped to users (no fake data), but has ability to run the
     // benchmarks on demo, so we benchmark on stable data. 
-    configureFlavors(this)
+    configureFlavors(this) { flavor ->
+        buildConfigField(
+            "String",
+            "APP_FLAVOR_SUFFIX",
+            "\"${flavor.applicationIdSuffix ?: ""}\""
+        )
+    }
 
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
@@ -73,7 +87,6 @@ dependencies {
     implementation(libs.androidx.test.rules)
     implementation(libs.androidx.test.uiautomator)
     implementation(libs.androidx.benchmark.macro)
-    implementation(libs.androidx.profileinstaller)
 }
 
 androidComponents {
