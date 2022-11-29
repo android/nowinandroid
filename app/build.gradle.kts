@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.samples.apps.nowinandroid.NiABuildType
+import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
     id("nowinandroid.android.application")
@@ -39,11 +39,11 @@ android {
 
     buildTypes {
         val debug by getting {
-            applicationIdSuffix = NiABuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
             isMinifyEnabled = true
-            applicationIdSuffix = NiABuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
@@ -60,7 +60,7 @@ android {
             // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
             isMinifyEnabled = true
-            applicationIdSuffix = NiABuildType.BENCHMARK.applicationIdSuffix
+            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
