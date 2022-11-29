@@ -30,6 +30,10 @@ class NiaPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
 
+    companion object {
+        private const val TAG = "NiaPreferences"
+    }
+
     val userDataStream = userPreferences.data
         .map {
             UserData(
@@ -67,7 +71,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -84,7 +88,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -98,7 +102,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -115,7 +119,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -155,7 +159,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -190,7 +194,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 }
             }
         } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+            Log.e(TAG, "Failed to update user preferences", ioException)
         }
     }
 
@@ -204,7 +208,6 @@ class NiaPreferencesDataSource @Inject constructor(
 }
 
 private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
-
     if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
         shouldHideOnboarding = false
     }
