@@ -16,22 +16,25 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.content.Intent
+import android.content.Context
 import android.net.Uri
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
@@ -51,13 +54,13 @@ fun LazyGridScope.newsFeed(
                 val resourceUrl by remember {
                     mutableStateOf(Uri.parse(saveableNewsResource.newsResource.url))
                 }
-                val launchResourceIntent = Intent(Intent.ACTION_VIEW, resourceUrl)
                 val context = LocalContext.current
+                val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
                 NewsResourceCardExpanded(
                     newsResource = saveableNewsResource.newsResource,
                     isBookmarked = saveableNewsResource.isSaved,
-                    onClick = { ContextCompat.startActivity(context, launchResourceIntent, null) },
+                    onClick = { launchCustomChromeTab(context, resourceUrl, backgroundColor) },
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
                             saveableNewsResource.newsResource.id,
@@ -68,6 +71,16 @@ fun LazyGridScope.newsFeed(
             }
         }
     }
+}
+
+private fun launchCustomChromeTab(context: Context, uri: Uri, toolbarColor: Int) {
+    val customTabBarColor = CustomTabColorSchemeParams.Builder()
+        .setToolbarColor(toolbarColor).build()
+    val customTabsIntent = CustomTabsIntent.Builder()
+        .setDefaultColorSchemeParams(customTabBarColor)
+        .build()
+
+    customTabsIntent.launchUrl(context, uri)
 }
 
 /**
