@@ -70,10 +70,10 @@ class OfflineFirstTopicsRepositoryTest {
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
         runTest {
             assertEquals(
-                topicDao.getTopicEntitiesStream()
+                topicDao.getTopicEntities()
                     .first()
                     .map(TopicEntity::asExternalModel),
-                subject.getTopicsStream()
+                subject.getTopics()
                     .first()
             )
         }
@@ -86,7 +86,7 @@ class OfflineFirstTopicsRepositoryTest {
             val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
 
             assertEquals(
@@ -116,7 +116,7 @@ class OfflineFirstTopicsRepositoryTest {
                 // Drop 10 to simulate the first 10 items being unchanged
                 .drop(10)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
 
             assertEquals(
@@ -155,7 +155,7 @@ class OfflineFirstTopicsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
                 .map(TopicEntity::asExternalModel)
 

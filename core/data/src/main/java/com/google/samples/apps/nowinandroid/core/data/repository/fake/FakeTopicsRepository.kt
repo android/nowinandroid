@@ -40,7 +40,7 @@ class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val datasource: FakeNiaNetworkDataSource
 ) : TopicsRepository {
-    override fun getTopicsStream(): Flow<List<Topic>> = flow {
+    override fun getTopics(): Flow<List<Topic>> = flow {
         emit(
             datasource.getTopics().map {
                 Topic(
@@ -56,7 +56,7 @@ class FakeTopicsRepository @Inject constructor(
     }.flowOn(ioDispatcher)
 
     override fun getTopic(id: String): Flow<Topic> {
-        return getTopicsStream().map { it.first { topic -> topic.id == id } }
+        return getTopics().map { it.first { topic -> topic.id == id } }
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true

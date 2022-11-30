@@ -42,7 +42,7 @@ class TestUserDataRepository : UserDataRepository {
 
     private val currentUserData get() = _userData.replayCache.firstOrNull() ?: emptyUserData
 
-    override val userDataStream: Flow<UserData> = _userData.filterNotNull()
+    override val userData: Flow<UserData> = _userData.filterNotNull()
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
         _userData.tryEmit(currentUserData.copy(followedTopics = followedTopicIds))

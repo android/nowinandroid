@@ -120,7 +120,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td>When data changes in <code>NewsResourceDao</code> it is emitted into the news resources data stream (which is a <a href="https://developer.android.com/kotlin/flow">Flow</a>).
    </td>
-   <td><code>NewsResourceDao.getNewsResourcesStream</code>
+   <td><code>NewsResourceDao.getNewsResources</code>
    </td>
   </tr>
   <tr>
@@ -128,7 +128,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td><code>OfflineFirstNewsRepository</code> acts as an <a href="https://developer.android.com/kotlin/flow#modify">intermediate operator</a> on this stream, transforming the incoming <code>PopulatedNewsResource</code> (a database model, internal to the data layer) to the public <code>NewsResource</code> model which is consumed by other layers.
    </td>
-   <td><code>OfflineFirstNewsRepository.getNewsResourcesStream</code>
+   <td><code>OfflineFirstNewsRepository.getNewsResources</code>
    </td>
   </tr>
   <tr>
@@ -167,7 +167,7 @@ Reads are performed from local storage as the source of truth, therefore errors 
 
 _Example: Read a list of authors_
 
-A list of Authors can be obtained by subscribing to `AuthorsRepository::getAuthorsStream` flow which emits `List<Authors>`.
+A list of Authors can be obtained by subscribing to `AuthorsRepository::getAuthors` flow which emits `List<Authors>`.
 
 Whenever the list of authors changes (for example, when a new author is added), the updated `List<Author>` is emitted into the stream.
 
@@ -280,7 +280,7 @@ The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. T
 
 
 
-*   List of authors (`getAuthorsStream`)
+*   List of authors (`getAuthors`)
 *   List of author IDs which the current user is following
 *   List of topics
 *   List of topic IDs which the current user is following

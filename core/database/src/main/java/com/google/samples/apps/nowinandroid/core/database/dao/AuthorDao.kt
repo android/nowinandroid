@@ -36,10 +36,10 @@ interface AuthorDao {
         WHERE id = :authorId
     """
     )
-    fun getAuthorEntityStream(authorId: String): Flow<AuthorEntity>
+    fun getAuthorEntity(authorId: String): Flow<AuthorEntity>
 
     @Query(value = "SELECT * FROM authors")
-    fun getAuthorEntitiesStream(): Flow<List<AuthorEntity>>
+    fun getAuthorEntities(): Flow<List<AuthorEntity>>
 
     /**
      * Inserts [authorEntities] into the db if they don't exist, and ignores those that do

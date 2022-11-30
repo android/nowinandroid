@@ -77,7 +77,7 @@ class NewsResourceDaoTest {
             newsResourceEntities
         )
 
-        val savedNewsResourceEntities = newsResourceDao.getNewsResourcesStream()
+        val savedNewsResourceEntities = newsResourceDao.getNewsResources()
             .first()
 
         assertEquals(
@@ -135,7 +135,7 @@ class NewsResourceDaoTest {
             newsResourceTopicCrossRefEntities
         )
 
-        val filteredNewsResources = newsResourceDao.getNewsResourcesStream(
+        val filteredNewsResources = newsResourceDao.getNewsResources(
             filterTopicIds = topicEntities
                 .map(TopicEntity::id)
                 .toSet(),
@@ -188,7 +188,7 @@ class NewsResourceDaoTest {
         newsResourceDao.upsertNewsResources(newsResourceEntities)
         newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(newsResourceAuthorCrossRefEntities)
 
-        val filteredNewsResources = newsResourceDao.getNewsResourcesStream(
+        val filteredNewsResources = newsResourceDao.getNewsResources(
             filterAuthorIds = authorEntities
                 .map(AuthorEntity::id)
                 .toSet()
@@ -268,7 +268,7 @@ class NewsResourceDaoTest {
             newsResourceDao.insertOrIgnoreTopicCrossRefEntities(newsResourceTopicCrossRefEntities)
             newsResourceDao.insertOrIgnoreAuthorCrossRefEntities(newsResourceAuthorCrossRefEntities)
 
-            val filteredNewsResources = newsResourceDao.getNewsResourcesStream(
+            val filteredNewsResources = newsResourceDao.getNewsResources(
                 filterTopicIds = topicEntities
                     .map(TopicEntity::id)
                     .toSet(),
@@ -315,7 +315,7 @@ class NewsResourceDaoTest {
             assertEquals(
                 toKeep.map(NewsResourceEntity::id)
                     .toSet(),
-                newsResourceDao.getNewsResourcesStream().first()
+                newsResourceDao.getNewsResources().first()
                     .map { it.entity.id }
                     .toSet()
             )

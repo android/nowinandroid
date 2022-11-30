@@ -26,7 +26,7 @@ interface UserDataRepository {
     /**
      * Stream of [UserData]
      */
-    val userDataStream: Flow<UserData>
+    val userData: Flow<UserData>
 
     /**
      * Sets the user's currently followed topics

@@ -27,7 +27,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class GetSortedFollowableAuthorsStreamUseCaseTest {
+class GetSortedFollowableAuthorsUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -35,7 +35,7 @@ class GetSortedFollowableAuthorsStreamUseCaseTest {
     private val authorsRepository = TestAuthorsRepository()
     private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetSortedFollowableAuthorsStreamUseCase(
+    val useCase = GetSortedFollowableAuthorsUseCase(
         authorsRepository = authorsRepository,
         userDataRepository = userDataRepository
     )
@@ -47,14 +47,14 @@ class GetSortedFollowableAuthorsStreamUseCaseTest {
         userDataRepository.setFollowedAuthorIds(setOf(sampleAuthor1.id))
 
         // Obtain the stream of authors, specifying their followed state.
-        val followableAuthorsStream = useCase()
+        val followableAuthors = useCase()
 
         // Supply some authors.
         authorsRepository.sendAuthors(sampleAuthors)
 
         // Check that the authors have been sorted, and that the followed state is correct.
         assertEquals(
-            followableAuthorsStream.first(),
+            followableAuthors.first(),
             listOf(
                 FollowableAuthor(sampleAuthor2, false),
                 FollowableAuthor(sampleAuthor1, true),

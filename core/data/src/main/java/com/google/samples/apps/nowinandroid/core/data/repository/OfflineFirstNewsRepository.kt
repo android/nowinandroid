@@ -49,14 +49,14 @@ class OfflineFirstNewsRepository @Inject constructor(
     private val network: NiaNetworkDataSource,
 ) : NewsRepository {
 
-    override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
-        newsResourceDao.getNewsResourcesStream()
+    override fun getNewsResources(): Flow<List<NewsResource>> =
+        newsResourceDao.getNewsResources()
             .map { it.map(PopulatedNewsResource::asExternalModel) }
 
-    override fun getNewsResourcesStream(
+    override fun getNewsResources(
         filterAuthorIds: Set<String>,
         filterTopicIds: Set<String>
-    ): Flow<List<NewsResource>> = newsResourceDao.getNewsResourcesStream(
+    ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
         filterAuthorIds = filterAuthorIds,
         filterTopicIds = filterTopicIds
     )
