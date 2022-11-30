@@ -28,7 +28,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class GetFollowableTopicsStreamUseCaseTest {
+class GetFollowableTopicsUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -36,7 +36,7 @@ class GetFollowableTopicsStreamUseCaseTest {
     private val topicsRepository = TestTopicsRepository()
     private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetFollowableTopicsStreamUseCase(
+    val useCase = GetFollowableTopicsUseCase(
         topicsRepository,
         userDataRepository
     )

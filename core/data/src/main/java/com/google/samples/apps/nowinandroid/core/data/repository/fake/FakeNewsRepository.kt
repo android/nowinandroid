@@ -43,7 +43,7 @@ class FakeNewsRepository @Inject constructor(
     private val datasource: FakeNiaNetworkDataSource
 ) : NewsRepository {
 
-    override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
+    override fun getNewsResources(): Flow<List<NewsResource>> =
         flow {
             emit(
                 datasource.getNewsResources()
@@ -52,7 +52,7 @@ class FakeNewsRepository @Inject constructor(
             )
         }.flowOn(ioDispatcher)
 
-    override fun getNewsResourcesStream(
+    override fun getNewsResources(
         filterAuthorIds: Set<String>,
         filterTopicIds: Set<String>,
     ): Flow<List<NewsResource>> =

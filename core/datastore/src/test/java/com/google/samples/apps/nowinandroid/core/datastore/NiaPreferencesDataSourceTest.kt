@@ -41,13 +41,13 @@ class NiaPreferencesDataSourceTest {
 
     @Test
     fun shouldHideOnboardingIsFalseByDefault() = runTest {
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
     fun userShouldHideOnboardingIsTrueWhenSet() = runTest {
         subject.setShouldHideOnboarding(true)
-        assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+        assertTrue(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -61,7 +61,7 @@ class NiaPreferencesDataSourceTest {
         subject.toggleFollowedAuthorId("1", false)
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -75,7 +75,7 @@ class NiaPreferencesDataSourceTest {
         subject.toggleFollowedTopicId("1", false)
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -89,7 +89,7 @@ class NiaPreferencesDataSourceTest {
         subject.setFollowedAuthorIds(emptySet())
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -103,7 +103,7 @@ class NiaPreferencesDataSourceTest {
         subject.setFollowedTopicIds(emptySet())
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -118,7 +118,7 @@ class NiaPreferencesDataSourceTest {
             subject.setFollowedTopicIds(emptySet())
 
             // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+            assertTrue(subject.userData.first().shouldHideOnboarding)
         }
 
     @Test
@@ -133,6 +133,6 @@ class NiaPreferencesDataSourceTest {
             subject.setFollowedAuthorIds(emptySet())
 
             // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+            assertTrue(subject.userData.first().shouldHideOnboarding)
         }
 }

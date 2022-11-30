@@ -39,13 +39,13 @@ class OfflineFirstAuthorsRepository @Inject constructor(
     private val network: NiaNetworkDataSource,
 ) : AuthorsRepository {
 
-    override fun getAuthorStream(id: String): Flow<Author> =
-        authorDao.getAuthorEntityStream(id).map {
+    override fun getAuthor(id: String): Flow<Author> =
+        authorDao.getAuthorEntity(id).map {
             it.asExternalModel()
         }
 
-    override fun getAuthorsStream(): Flow<List<Author>> =
-        authorDao.getAuthorEntitiesStream()
+    override fun getAuthors(): Flow<List<Author>> =
+        authorDao.getAuthorEntities()
             .map { it.map(AuthorEntity::asExternalModel) }
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =

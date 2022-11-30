@@ -40,10 +40,10 @@ class TestAuthorDao : AuthorDao {
         )
     )
 
-    override fun getAuthorEntitiesStream(): Flow<List<AuthorEntity>> =
+    override fun getAuthorEntities(): Flow<List<AuthorEntity>> =
         entitiesStateFlow
 
-    override fun getAuthorEntityStream(authorId: String): Flow<AuthorEntity> {
+    override fun getAuthorEntity(authorId: String): Flow<AuthorEntity> {
         throw NotImplementedError("Unused in tests")
     }
 

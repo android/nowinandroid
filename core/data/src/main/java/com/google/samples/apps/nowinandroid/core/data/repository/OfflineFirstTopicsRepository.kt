@@ -39,8 +39,8 @@ class OfflineFirstTopicsRepository @Inject constructor(
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
 
-    override fun getTopicsStream(): Flow<List<Topic>> =
-        topicDao.getTopicEntitiesStream()
+    override fun getTopics(): Flow<List<Topic>> =
+        topicDao.getTopicEntities()
             .map { it.map(TopicEntity::asExternalModel) }
 
     override fun getTopic(id: String): Flow<Topic> =

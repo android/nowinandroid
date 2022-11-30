@@ -56,16 +56,16 @@ class TestNewsResourceDao : NewsResourceDao {
 
     internal var authorCrossReferences: List<NewsResourceAuthorCrossRef> = listOf()
 
-    override fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>> =
+    override fun getNewsResources(): Flow<List<PopulatedNewsResource>> =
         entitiesStateFlow.map {
             it.map(NewsResourceEntity::asPopulatedNewsResource)
         }
 
-    override fun getNewsResourcesStream(
+    override fun getNewsResources(
         filterAuthorIds: Set<String>,
         filterTopicIds: Set<String>
     ): Flow<List<PopulatedNewsResource>> =
-        getNewsResourcesStream()
+        getNewsResources()
             .map { resources ->
                 resources.filter { resource ->
                     resource.topics.any { it.id in filterTopicIds } ||

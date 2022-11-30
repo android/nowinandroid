@@ -30,7 +30,7 @@ class NiaPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
 
-    val userDataStream = userPreferences.data
+    val userData = userPreferences.data
         .map {
             UserData(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,

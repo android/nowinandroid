@@ -24,12 +24,11 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 
 /**
  * A use case which obtains a list of topics with their followed state.
  */
-class GetFollowableTopicsStreamUseCase @Inject constructor(
+class GetFollowableTopicsUseCase @Inject constructor(
     private val topicsRepository: TopicsRepository,
     private val userDataRepository: UserDataRepository
 ) {
@@ -40,8 +39,8 @@ class GetFollowableTopicsStreamUseCase @Inject constructor(
      */
     operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<FollowableTopic>> {
         return combine(
-            userDataRepository.userDataStream,
-            topicsRepository.getTopicsStream()
+            userDataRepository.userData,
+            topicsRepository.getTopics()
         ) { userData, topics ->
             val followedTopics = topics
                 .map { topic ->
