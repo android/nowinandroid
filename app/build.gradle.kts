@@ -98,8 +98,10 @@ dependencies {
     androidTestImplementation(project(":core:data-test"))
     androidTestImplementation(project(":core:network"))
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(kotlin("test"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(project(":ui-test-hilt-manifest"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
