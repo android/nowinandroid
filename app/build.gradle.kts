@@ -20,8 +20,8 @@ plugins {
     id("nowinandroid.android.application.compose")
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
+    id("nowinandroid.firebase")
     id("jacoco")
-    id("nowinandroid.firebase-perf")
 }
 
 android {

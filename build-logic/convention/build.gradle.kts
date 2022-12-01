@@ -68,9 +68,9 @@ gradlePlugin {
             id = "nowinandroid.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
-        register("firebase-perf") {
-            id = "nowinandroid.firebase-perf"
-            implementationClass = "FirebasePerfConventionPlugin"
+        register("firebase") {
+            id = "nowinandroid.firebase"
+            implementationClass = "FirebaseConventionPlugin"
         }
     }
 }
