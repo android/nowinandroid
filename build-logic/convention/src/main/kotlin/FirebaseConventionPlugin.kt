@@ -20,24 +20,26 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-class AndroidHiltConventionPlugin : Plugin<Project> {
+class FirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
+        // Only apply this to Google Play releases.
+        if (!target.hasProperty("use-google-services"))
+            return
         with(target) {
             with(pluginManager) {
-                apply("dagger.hilt.android.plugin")
-                // KAPT must go last to avoid build warnings.
-                // See: https://stackoverflow.com/questions/70550883/warning-the-following-options-were-not-recognized-by-any-processor-dagger-f
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.gms.google-services")
+                apply("com.google.firebase.firebase-perf")
+                apply("com.google.firebase.crashlytics")
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
-                "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
-                "kaptAndroidTest"(libs.findLibrary("hilt.compiler").get())
+                val bom = libs.findLibrary("firebase-bom").get()
+                add("releaseImplementation", platform(bom))
+                "releaseImplementation"(libs.findLibrary("firebase.analytics").get())
+                "releaseImplementation"(libs.findLibrary("firebase.crashlytics").get())
+                "releaseImplementation"(libs.findLibrary("firebase.performance").get())
             }
-
         }
     }
-
 }
