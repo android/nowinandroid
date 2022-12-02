@@ -1,0 +1,58 @@
+name: Generate Baseline Profile for Demo build type
+
+on:
+  # every day at 00:23
+  schedule:
+    - cron: '23 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  baseline-profile:
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3   
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: Build app
+        run: ./gradlew assembleDemoBenchmark
+
+      - name: Run benchmark
+        run: > 
+              ./gradlew pixel6Api31DemoBenchmarkAndroidTest
+              -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.baselineprofile.BaselineProfileGenerator
+              -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
+      - name: Commit Baseline Profile onto main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git pull
+          # Sort the baseline profile, saving it to app/
+          sort -o app/src/main/baseline-prof.txt ./benchmarks/build/outputs/managed_device_android_test_additional_output/flavors/demo/pixel6Api31/BaselineProfileGenerator_generate-baseline-prof.txt
+          # If the baseline profile has changed, commit it
+          if [[ $(git diff --stat app/src/main/baseline-prof.txt) != '' ]]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add app/src/main/baseline-prof.txt
+            git commit -m "Update app baseline profile"
+            git push
+          fi
+      # Upload the entire generated folder and attach it to the CI run
+      - name: Attach baseline profile
+        uses: actions/upload-artifact@v3
+        with:
+          name: Baseline profile output
+          path: ./benchmarks/build/outputs/managed_device_android_test_additional_output/*-baseline-prof.txt
