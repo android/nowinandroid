@@ -1,6 +1,8 @@
 name: Generate Baseline Profile for Demo build type
 
 on:
+  push:
+    branches: [automatedBlp]
   # every day at 00:23
   schedule:
     - cron: '23 0 * * *'
