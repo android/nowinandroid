@@ -41,9 +41,9 @@ fun TopicsTabContent(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 24.dp)
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(top = 8.dp)
+        contentPadding = PaddingValues(vertical = 16.dp)
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id
@@ -74,9 +74,9 @@ fun AuthorsTabContent(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 24.dp)
             .testTag("interests:people"),
-        contentPadding = PaddingValues(top = 8.dp)
+        contentPadding = PaddingValues(vertical = 16.dp)
     ) {
         authors.forEach { followableAuthor ->
             item {

@@ -74,7 +74,7 @@ fun AuthorsCarousel(
 
     LazyRow(
         modifier = modifier.testTag(tag),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         state = lazyListState
     ) {
@@ -117,7 +117,7 @@ fun AuthorItem(
                 indication = rememberRipple(bounded = false),
                 onValueChange = { newFollowing -> onAuthorClick(newFollowing) },
             )
-            .padding(8.dp)
+            .padding(horizontal = 8.dp)
             .sizeIn(maxWidth = 48.dp)
             .semantics(mergeDescendants = true) {
                 // Add information for A11y services, explaining what each state means and
