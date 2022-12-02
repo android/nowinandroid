@@ -73,7 +73,7 @@ fun LazyGridScope.newsFeed(
     }
 }
 
-private fun launchCustomChromeTab(context: Context, uri: Uri, toolbarColor: Int) {
+fun launchCustomChromeTab(context: Context, uri: Uri, toolbarColor: Int) {
     val customTabBarColor = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(toolbarColor).build()
     val customTabsIntent = CustomTabsIntent.Builder()
