@@ -30,12 +30,12 @@ import kotlinx.coroutines.flow.map
  * A use case responsible for obtaining news resources with their associated bookmarked (also known
  * as "saved") state.
  */
-class GetSaveableNewsResourcesStreamUseCase @Inject constructor(
+class GetSaveableNewsResourcesUseCase @Inject constructor(
     private val newsRepository: NewsRepository,
     userDataRepository: UserDataRepository
 ) {
 
-    private val bookmarkedNewsResourcesStream = userDataRepository.userDataStream.map {
+    private val bookmarkedNewsResources = userDataRepository.userData.map {
         it.bookmarkedNewsResources
     }
 
@@ -54,20 +54,20 @@ class GetSaveableNewsResourcesStreamUseCase @Inject constructor(
         filterAuthorIds: Set<String> = emptySet()
     ): Flow<List<SaveableNewsResource>> =
         if (filterTopicIds.isEmpty() && filterAuthorIds.isEmpty()) {
-            newsRepository.getNewsResourcesStream()
+            newsRepository.getNewsResources()
         } else {
-            newsRepository.getNewsResourcesStream(
+            newsRepository.getNewsResources(
                 filterTopicIds = filterTopicIds,
                 filterAuthorIds = filterAuthorIds
             )
-        }.mapToSaveableNewsResources(bookmarkedNewsResourcesStream)
+        }.mapToSaveableNewsResources(bookmarkedNewsResources)
 }
 
 private fun Flow<List<NewsResource>>.mapToSaveableNewsResources(
-    savedNewsResourceIdsStream: Flow<Set<String>>
+    savedNewsResourceIds: Flow<Set<String>>
 ): Flow<List<SaveableNewsResource>> =
     filterNot { it.isEmpty() }
-        .combine(savedNewsResourceIdsStream) { newsResources, savedNewsResourceIds ->
+        .combine(savedNewsResourceIds) { newsResources, savedNewsResourceIds ->
             newsResources.map { newsResource ->
                 SaveableNewsResource(
                     newsResource = newsResource,

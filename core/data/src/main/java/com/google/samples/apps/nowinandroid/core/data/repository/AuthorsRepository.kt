@@ -24,10 +24,10 @@ interface AuthorsRepository : Syncable {
     /**
      * Gets the available Authors as a stream
      */
-    fun getAuthorsStream(): Flow<List<Author>>
+    fun getAuthors(): Flow<List<Author>>
 
     /**
      * Gets data for a specific author
      */
-    fun getAuthorStream(id: String): Flow<Author>
+    fun getAuthor(id: String): Flow<Author>
 }

@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.combine
  * A use case which obtains a list of authors sorted alphabetically by name with their followed
  * state.
  */
-class GetSortedFollowableAuthorsStreamUseCase @Inject constructor(
+class GetSortedFollowableAuthorsUseCase @Inject constructor(
     private val authorsRepository: AuthorsRepository,
     private val userDataRepository: UserDataRepository
 ) {
@@ -36,8 +36,8 @@ class GetSortedFollowableAuthorsStreamUseCase @Inject constructor(
      */
     operator fun invoke(): Flow<List<FollowableAuthor>> =
         combine(
-            authorsRepository.getAuthorsStream(),
-            userDataRepository.userDataStream
+            authorsRepository.getAuthors(),
+            userDataRepository.userData
         ) { authors, userData ->
             authors.map { author ->
                 FollowableAuthor(

@@ -22,7 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Author
@@ -45,12 +45,12 @@ class AuthorViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     authorsRepository: AuthorsRepository,
-    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
+    getSaveableNewsResources: GetSaveableNewsResourcesUseCase
 ) : ViewModel() {
 
     private val authorArgs: AuthorArgs = AuthorArgs(savedStateHandle, stringDecoder)
 
-    val authorUiState: StateFlow<AuthorUiState> = authorUiStateStream(
+    val authorUiState: StateFlow<AuthorUiState> = authorUiState(
         authorId = authorArgs.authorId,
         userDataRepository = userDataRepository,
         authorsRepository = authorsRepository
@@ -62,7 +62,7 @@ class AuthorViewModel @Inject constructor(
         )
 
     val newsUiState: StateFlow<NewsUiState> =
-        getSaveableNewsResourcesStream.newsUiStateStream(authorId = authorArgs.authorId)
+        getSaveableNewsResources.newsUiState(authorId = authorArgs.authorId)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -82,24 +82,24 @@ class AuthorViewModel @Inject constructor(
     }
 }
 
-private fun authorUiStateStream(
+private fun authorUiState(
     authorId: String,
     userDataRepository: UserDataRepository,
     authorsRepository: AuthorsRepository,
 ): Flow<AuthorUiState> {
     // Observe the followed authors, as they could change over time.
-    val followedAuthorIdsStream: Flow<Set<String>> =
-        userDataRepository.userDataStream
+    val followedAuthorIds: Flow<Set<String>> =
+        userDataRepository.userData
             .map { it.followedAuthors }
 
     // Observe author information
-    val authorStream: Flow<Author> = authorsRepository.getAuthorStream(
+    val author: Flow<Author> = authorsRepository.getAuthor(
         id = authorId
     )
 
     return combine(
-        followedAuthorIdsStream,
-        authorStream,
+        followedAuthorIds,
+        author,
         ::Pair
     )
         .asResult()
@@ -125,7 +125,7 @@ private fun authorUiStateStream(
         }
 }
 
-private fun GetSaveableNewsResourcesStreamUseCase.newsUiStateStream(
+private fun GetSaveableNewsResourcesUseCase.newsUiState(
     authorId: String
 ): Flow<NewsUiState> {
     // Observe news

@@ -31,7 +31,7 @@ import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
 
-class GetSaveableNewsResourcesStreamUseCaseTest {
+class GetSaveableNewsResourcesUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -39,7 +39,7 @@ class GetSaveableNewsResourcesStreamUseCaseTest {
     private val newsRepository = TestNewsRepository()
     private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetSaveableNewsResourcesStreamUseCase(newsRepository, userDataRepository)
+    val useCase = GetSaveableNewsResourcesUseCase(newsRepository, userDataRepository)
 
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {

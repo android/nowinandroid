@@ -88,10 +88,10 @@ class OfflineFirstNewsRepositoryTest {
     fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesStream()
+                newsResourceDao.getNewsResources()
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResourcesStream()
+                subject.getNewsResources()
                     .first()
             )
         }
@@ -100,12 +100,12 @@ class OfflineFirstNewsRepositoryTest {
     fun offlineFirstNewsRepository_news_resources_for_topic_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesStream(
+                newsResourceDao.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
                 )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResourcesStream(
+                subject.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
                 )
                     .first()
@@ -113,7 +113,7 @@ class OfflineFirstNewsRepositoryTest {
 
             assertEquals(
                 emptyList(),
-                subject.getNewsResourcesStream(
+                subject.getNewsResources(
                     filterTopicIds = nonPresentInterestsIds,
                 )
                     .first()
@@ -124,12 +124,12 @@ class OfflineFirstNewsRepositoryTest {
     fun offlineFirstNewsRepository_news_resources_for_author_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResourcesStream(
+                newsResourceDao.getNewsResources(
                     filterAuthorIds = filteredInterestsIds
                 )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResourcesStream(
+                subject.getNewsResources(
                     filterAuthorIds = filteredInterestsIds
                 )
                     .first()
@@ -137,7 +137,7 @@ class OfflineFirstNewsRepositoryTest {
 
             assertEquals(
                 emptyList(),
-                subject.getNewsResourcesStream(
+                subject.getNewsResources(
                     filterAuthorIds = nonPresentInterestsIds
                 )
                     .first()
@@ -153,7 +153,7 @@ class OfflineFirstNewsRepositoryTest {
                 .map(NetworkNewsResource::asEntity)
                 .map(NewsResourceEntity::asExternalModel)
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResourcesStream()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources()
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
@@ -193,7 +193,7 @@ class OfflineFirstNewsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResourcesStream()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources()
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
@@ -233,7 +233,7 @@ class OfflineFirstNewsRepositoryTest {
                 .map(NewsResourceEntity::asExternalModel)
                 .filter { it.id in changeListIds }
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResourcesStream()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources()
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
@@ -259,7 +259,7 @@ class OfflineFirstNewsRepositoryTest {
                     .map(NetworkNewsResource::topicEntityShells)
                     .flatten()
                     .distinctBy(TopicEntity::id),
-                topicDao.getTopicEntitiesStream()
+                topicDao.getTopicEntities()
                     .first()
             )
         }
@@ -274,7 +274,7 @@ class OfflineFirstNewsRepositoryTest {
                     .map(NetworkNewsResource::authorEntityShells)
                     .flatten()
                     .distinctBy(AuthorEntity::id),
-                authorDao.getAuthorEntitiesStream()
+                authorDao.getAuthorEntities()
                     .first()
             )
         }

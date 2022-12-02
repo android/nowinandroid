@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.author
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -54,7 +54,7 @@ class AuthorViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val authorsRepository = TestAuthorsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
@@ -71,7 +71,7 @@ class AuthorViewModelTest {
             stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             authorsRepository = authorsRepository,
-            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
+            getSaveableNewsResources = getSaveableNewsResourcesUseCase
         )
     }
 
@@ -86,7 +86,7 @@ class AuthorViewModelTest {
         val item = viewModel.authorUiState.value
         assertIs<AuthorUiState.Success>(item)
 
-        val authorFromRepository = authorsRepository.getAuthorStream(
+        val authorFromRepository = authorsRepository.getAuthor(
             id = testInputAuthors[0].author.id
         ).first()
 

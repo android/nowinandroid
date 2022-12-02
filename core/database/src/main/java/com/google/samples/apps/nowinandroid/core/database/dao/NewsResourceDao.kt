@@ -42,7 +42,7 @@ interface NewsResourceDao {
             ORDER BY publish_date DESC
     """
     )
-    fun getNewsResourcesStream(): Flow<List<PopulatedNewsResource>>
+    fun getNewsResources(): Flow<List<PopulatedNewsResource>>
 
     @Transaction
     @Query(
@@ -61,7 +61,7 @@ interface NewsResourceDao {
             ORDER BY publish_date DESC
     """
     )
-    fun getNewsResourcesStream(
+    fun getNewsResources(
         filterAuthorIds: Set<String> = emptySet(),
         filterTopicIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>

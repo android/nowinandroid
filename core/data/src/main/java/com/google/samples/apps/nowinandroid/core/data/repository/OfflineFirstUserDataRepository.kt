@@ -27,8 +27,8 @@ class OfflineFirstUserDataRepository @Inject constructor(
     private val niaPreferencesDataSource: NiaPreferencesDataSource
 ) : UserDataRepository {
 
-    override val userDataStream: Flow<UserData> =
-        niaPreferencesDataSource.userDataStream
+    override val userData: Flow<UserData> =
+        niaPreferencesDataSource.userData
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
         niaPreferencesDataSource.setFollowedTopicIds(followedTopicIds)
