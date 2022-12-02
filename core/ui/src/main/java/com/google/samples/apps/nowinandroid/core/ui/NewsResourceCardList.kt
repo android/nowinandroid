@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -24,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
 /**
