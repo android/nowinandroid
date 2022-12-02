@@ -45,11 +45,11 @@ class TestTopicDao : TopicDao {
         throw NotImplementedError("Unused in tests")
     }
 
-    override fun getTopicEntitiesStream(): Flow<List<TopicEntity>> =
+    override fun getTopicEntities(): Flow<List<TopicEntity>> =
         entitiesStateFlow
 
-    override fun getTopicEntitiesStream(ids: Set<String>): Flow<List<TopicEntity>> =
-        getTopicEntitiesStream()
+    override fun getTopicEntities(ids: Set<String>): Flow<List<TopicEntity>> =
+        getTopicEntities()
             .map { topics -> topics.filter { it.id in ids } }
 
     override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {

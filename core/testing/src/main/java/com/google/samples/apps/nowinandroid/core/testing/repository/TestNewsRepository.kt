@@ -34,13 +34,13 @@ class TestNewsRepository : NewsRepository {
     private val newsResourcesFlow: MutableSharedFlow<List<NewsResource>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getNewsResourcesStream(): Flow<List<NewsResource>> = newsResourcesFlow
+    override fun getNewsResources(): Flow<List<NewsResource>> = newsResourcesFlow
 
-    override fun getNewsResourcesStream(
+    override fun getNewsResources(
         filterAuthorIds: Set<String>,
         filterTopicIds: Set<String>
     ): Flow<List<NewsResource>> =
-        getNewsResourcesStream().map { newsResources ->
+        getNewsResources().map { newsResources ->
             newsResources
                 .filter {
                     it.authors.map(Author::id).intersect(filterAuthorIds).isNotEmpty() ||

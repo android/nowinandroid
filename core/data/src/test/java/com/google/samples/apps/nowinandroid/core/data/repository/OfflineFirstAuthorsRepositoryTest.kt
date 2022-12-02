@@ -69,10 +69,10 @@ class OfflineFirstAuthorsRepositoryTest {
     fun offlineFirstAuthorsRepository_Authors_stream_is_backed_by_Authors_dao() =
         runTest {
             assertEquals(
-                authorDao.getAuthorEntitiesStream()
+                authorDao.getAuthorEntities()
                     .first()
                     .map(AuthorEntity::asExternalModel),
-                subject.getAuthorsStream()
+                subject.getAuthors()
                     .first()
             )
         }
@@ -85,7 +85,7 @@ class OfflineFirstAuthorsRepositoryTest {
             val networkAuthors = network.getAuthors()
                 .map(NetworkAuthor::asEntity)
 
-            val dbAuthors = authorDao.getAuthorEntitiesStream()
+            val dbAuthors = authorDao.getAuthorEntities()
                 .first()
 
             assertEquals(
@@ -122,7 +122,7 @@ class OfflineFirstAuthorsRepositoryTest {
                 .map(NetworkAuthor::asEntity)
                 .filter { it.id in changeListIds }
 
-            val db = authorDao.getAuthorEntitiesStream()
+            val db = authorDao.getAuthorEntities()
                 .first()
 
             assertEquals(
@@ -161,7 +161,7 @@ class OfflineFirstAuthorsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val dbAuthors = authorDao.getAuthorEntitiesStream()
+            val dbAuthors = authorDao.getAuthorEntities()
                 .first()
                 .map(AuthorEntity::asExternalModel)
 

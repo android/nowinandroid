@@ -31,9 +31,9 @@ class TestAuthorsRepository : AuthorsRepository {
     private val authorsFlow: MutableSharedFlow<List<Author>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getAuthorsStream(): Flow<List<Author>> = authorsFlow
+    override fun getAuthors(): Flow<List<Author>> = authorsFlow
 
-    override fun getAuthorStream(id: String): Flow<Author> {
+    override fun getAuthor(id: String): Flow<Author> {
         return authorsFlow.map { authors -> authors.find { it.id == id }!! }
     }
 

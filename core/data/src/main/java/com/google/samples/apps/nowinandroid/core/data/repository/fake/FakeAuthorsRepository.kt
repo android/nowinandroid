@@ -40,7 +40,7 @@ class FakeAuthorsRepository @Inject constructor(
     private val datasource: FakeNiaNetworkDataSource
 ) : AuthorsRepository {
 
-    override fun getAuthorsStream(): Flow<List<Author>> = flow {
+    override fun getAuthors(): Flow<List<Author>> = flow {
         emit(
             datasource.getAuthors().map {
                 Author(
@@ -55,8 +55,8 @@ class FakeAuthorsRepository @Inject constructor(
         )
     }.flowOn(ioDispatcher)
 
-    override fun getAuthorStream(id: String): Flow<Author> {
-        return getAuthorsStream().map { it.first { author -> author.id == id } }
+    override fun getAuthor(id: String): Flow<Author> {
+        return getAuthors().map { it.first { author -> author.id == id } }
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true

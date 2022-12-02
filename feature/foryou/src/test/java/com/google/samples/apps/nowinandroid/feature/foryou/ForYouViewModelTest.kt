@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
@@ -59,15 +59,15 @@ class ForYouViewModelTest {
     private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
-    private val getSortedFollowableAuthorsStream = GetSortedFollowableAuthorsStreamUseCase(
+    private val getSortedFollowableAuthors = GetSortedFollowableAuthorsUseCase(
         authorsRepository = authorsRepository,
         userDataRepository = userDataRepository
     )
-    private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
+    private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository
     )
@@ -78,9 +78,9 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase,
-            getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream,
-            getFollowableTopicsStream = getFollowableTopicsStreamUseCase
+            getSaveableNewsResources = getSaveableNewsResourcesUseCase,
+            getSortedFollowableAuthors = getSortedFollowableAuthors,
+            getFollowableTopics = getFollowableTopicsUseCase
         )
     }
 
