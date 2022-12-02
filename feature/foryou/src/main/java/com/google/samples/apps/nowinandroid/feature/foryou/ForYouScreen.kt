@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -247,14 +248,13 @@ private fun LazyGridScope.onboarding(
                         text = stringResource(R.string.onboarding_guidance_subtitle),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                            .padding(top = 8.dp, start = 24.dp, end = 24.dp),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     TopicSelection(
                         onboardingUiState,
                         onTopicCheckedChanged,
-                        Modifier.padding(bottom = 8.dp),
                     )
                     // Done button
                     Row(
@@ -265,8 +265,9 @@ private fun LazyGridScope.onboarding(
                             onClick = saveFollowedTopics,
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
-                                .padding(horizontal = 40.dp)
-                                .width(364.dp),
+                                .padding(horizontal = 24.dp)
+                                .widthIn(max = 364.dp)
+                                .fillMaxWidth(),
                         ) {
                             Text(
                                 text = stringResource(R.string.done),
@@ -390,9 +391,7 @@ fun TopicIcon(
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
         imageUrl = imageUrl,
         contentDescription = null, // decorative
-        modifier = modifier
-            .padding(10.dp)
-            .size(32.dp),
+        modifier = modifier.size(32.dp),
     )
 }
 
