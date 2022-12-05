@@ -109,7 +109,6 @@ class MainActivity : ComponentActivity() {
                 androidTheme = shouldUseAndroidTheme(uiState)
             ) {
                 NiaApp(
-                    networkMonitor = networkMonitor,
                     windowSizeClass = calculateWindowSizeClass(this),
                 )
             }

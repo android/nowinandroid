@@ -31,15 +31,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -51,11 +48,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
@@ -66,10 +60,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -80,23 +74,19 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 @Composable
 fun NiaApp(
     windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
     appState: NiaAppState = rememberNiaAppState(
-        networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass
     ),
 ) {
     val background: @Composable (@Composable () -> Unit) -> Unit =
         when (appState.currentTopLevelDestination) {
-            TopLevelDestination.FOR_YOU -> {
-                content ->
+            TopLevelDestination.FOR_YOU -> { content ->
                 NiaGradientBackground(content = content)
             }
             else -> { content -> NiaBackground(content = content) }
         }
 
     background {
-
         val snackbarHostState = remember { SnackbarHostState() }
 
         Scaffold(
@@ -141,17 +131,6 @@ fun NiaApp(
             }
         ) { padding ->
 
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-            // If user is not connected to the internet show a snack bar to inform them.
-            val notConnected = stringResource(R.string.not_connected)
-            LaunchedEffect(isOffline) {
-                if (isOffline) snackbarHostState.showSnackbar(
-                    message = notConnected,
-                    duration = Indefinite
-                )
-            }
-
             if (appState.shouldShowSettingsDialog) {
                 SettingsDialog(
                     onDismiss = { appState.setShowSettingsDialog(false) }
@@ -181,14 +160,10 @@ fun NiaApp(
                 NiaNavHost(
                     navController = appState.navController,
                     onBackClick = appState::onBackClick,
-
                     modifier = Modifier
                         .padding(padding)
                         .consumedWindowInsets(padding)
                 )
-
-                // TODO: We may want to add padding or spacer when the snackbar is shown so that
-                //  content doesn't display behind it.
             }
         }
     }
