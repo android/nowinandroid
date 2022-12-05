@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouSelectAuthors
@@ -51,7 +52,7 @@ class BaselineProfileGenerator {
             forYouScrollFeedDownUp()
 
             // Navigate to saved screen
-            device.findObject(By.text("Saved")).click()
+            device.wait(Until.findObject(By.text("Saved")), 5_000).click()
             device.waitForIdle()
             // TODO: we need to implement adding stuff to bookmarks before able to scroll it
             // bookmarksScrollFeedDownUp()
