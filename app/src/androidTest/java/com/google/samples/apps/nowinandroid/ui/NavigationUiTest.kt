@@ -25,12 +25,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import javax.inject.Inject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -62,9 +60,6 @@ class NavigationUiTest {
     @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
-
     @Before
     fun setup() {
         hiltRule.inject()
@@ -78,8 +73,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -97,8 +91,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -116,8 +109,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -135,8 +127,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -154,8 +145,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -173,8 +163,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -192,8 +181,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -211,8 +199,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -230,8 +217,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
