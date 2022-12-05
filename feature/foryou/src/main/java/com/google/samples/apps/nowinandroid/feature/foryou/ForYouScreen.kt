@@ -85,7 +85,7 @@ internal fun ForYouScreen(
     isSyncing: Boolean,
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
-    isOffline: Boolean = false,
+    isOffline: Boolean,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -163,6 +163,7 @@ internal fun ForYouScreen(
     if (isOffline) {
         OfflineScreen()
     }
+    println("isOffline $isOffline")
 
     AnimatedVisibility(
         visible = isSyncing || isFeedLoading || isOnboardingLoading,
