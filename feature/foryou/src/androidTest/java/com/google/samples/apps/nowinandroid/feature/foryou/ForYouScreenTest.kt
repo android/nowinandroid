@@ -56,6 +56,7 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -79,6 +80,7 @@ class ForYouScreenTest {
                     isSyncing = true,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Success(emptyList()),
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -108,6 +110,7 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -160,6 +163,7 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -212,6 +216,7 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -259,6 +264,7 @@ class ForYouScreenTest {
                         authors = testAuthors
                     ),
                     feedState = NewsFeedUiState.Loading,
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -282,6 +288,7 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Loading,
+                    isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
                     onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
@@ -308,6 +315,7 @@ class ForYouScreenTest {
                         SaveableNewsResource(it, false)
                     }
                 ),
+                isOffline = false,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
