@@ -80,7 +80,8 @@ class ForYouViewModelTest {
             userDataRepository = userDataRepository,
             getSaveableNewsResources = getSaveableNewsResourcesUseCase,
             getSortedFollowableAuthors = getSortedFollowableAuthors,
-            getFollowableTopics = getFollowableTopicsUseCase
+            getFollowableTopics = getFollowableTopicsUseCase,
+            networkMonitor = networkMonitor
         )
     }
 
