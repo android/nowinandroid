@@ -30,4 +30,8 @@
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
 
+    <!-- No internet -->
+    <string name="error_title">Error</string>
+    <string name="not_connected">You aren’t connected to the internet</string>
+
 </resources>
