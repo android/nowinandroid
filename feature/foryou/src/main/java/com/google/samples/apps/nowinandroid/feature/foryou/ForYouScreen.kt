@@ -1,17 +1,17 @@
 /*
  * Copyright 2022 The Android Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *       https://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
 
 package com.google.samples.apps.nowinandroid.feature.foryou
@@ -36,95 +36,60 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
+import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.trace
 import androidx.core.view.doOnPreDraw
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
-import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
-
-@OptIn(ExperimentalLifecycleComposeApi::class)
-@Composable
-internal fun ForYouRoute(
-    modifier: Modifier = Modifier,
-    viewModel: ForYouViewModel = hiltViewModel()
-) {
-    val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
-    val feedState by viewModel.feedState.collectAsStateWithLifecycle()
-    val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
-
-    ForYouScreen(
-        isSyncing = isSyncing,
-        onboardingUiState = onboardingUiState,
-        feedState = feedState,
-        onTopicCheckedChanged = viewModel::updateTopicSelection,
-        onAuthorCheckedChanged = viewModel::updateAuthorSelection,
-        saveFollowedTopics = viewModel::dismissOnboarding,
-        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
-        modifier = modifier
-    )
-}
+import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.NotShown
+import com.google.samples.apps.nowinandroid.feature.foryou.R.string
+import com.google.samples.apps.nowinandroid.feature.foryou.components.AuthorsCarousel
+import com.google.samples.apps.nowinandroid.feature.foryou.components.SingleTopicButton
 
 @Composable
 internal fun ForYouScreen(
+    modifier: Modifier = Modifier,
     isSyncing: Boolean,
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
+    isOffline: Boolean = false,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onAuthorCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
@@ -179,21 +144,26 @@ internal fun ForYouScreen(
             }
         )
 
-        newsFeed(
-            feedState = feedState,
-            onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-        )
+        if (!isOffline) {
+            newsFeed(
+                feedState = feedState,
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+            )
 
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                // Add space for the content to clear the "offline" snackbar.
-                // TODO: Check that the Scaffold handles this correctly in NiaApp
-                // if (isOffline) Spacer(modifier = Modifier.height(48.dp))
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // TODO: Check that the Scaffold handles this correctly in NiaApp
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                }
             }
         }
     }
+
+    if (isOffline) {
+        OfflineScreen()
+    }
+
     AnimatedVisibility(
         visible = isSyncing || isFeedLoading || isOnboardingLoading,
         enter = slideInVertically(
@@ -203,7 +173,7 @@ internal fun ForYouScreen(
             targetOffsetY = { fullHeight -> -fullHeight },
         ) + fadeOut(),
     ) {
-        val loadingContentDescription = stringResource(id = R.string.for_you_loading)
+        val loadingContentDescription = stringResource(id = string.for_you_loading)
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -232,13 +202,13 @@ private fun LazyGridScope.onboarding(
     when (onboardingUiState) {
         OnboardingUiState.Loading,
         OnboardingUiState.LoadFailed,
-        OnboardingUiState.NotShown -> Unit
+        NotShown -> Unit
 
         is OnboardingUiState.Shown -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(modifier = interestsItemModifier) {
                     Text(
-                        text = stringResource(R.string.onboarding_guidance_title),
+                        text = stringResource(string.onboarding_guidance_title),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -246,7 +216,7 @@ private fun LazyGridScope.onboarding(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = stringResource(R.string.onboarding_guidance_subtitle),
+                        text = stringResource(string.onboarding_guidance_subtitle),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp, start = 16.dp, end = 16.dp),
@@ -278,7 +248,7 @@ private fun LazyGridScope.onboarding(
                                 .width(364.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.done)
+                                text = stringResource(string.done)
                             )
                         }
                     }
@@ -299,7 +269,7 @@ private fun TopicSelection(
 
     LazyHorizontalGrid(
         state = lazyGridState,
-        rows = GridCells.Fixed(3),
+        rows = Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(24.dp),
@@ -328,178 +298,20 @@ private fun TopicSelection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SingleTopicButton(
-    name: String,
-    topicId: String,
-    imageUrl: String,
-    isSelected: Boolean,
-    onClick: (String, Boolean) -> Unit
-) = trace("SingleTopicButton") {
-    Surface(
-        modifier = Modifier
-            .width(312.dp)
-            .heightIn(min = 56.dp),
-        shape = RoundedCornerShape(corner = CornerSize(8.dp)),
-        color = MaterialTheme.colorScheme.surface,
-        selected = isSelected,
-        onClick = {
-            onClick(topicId, !isSelected)
-        }
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 12.dp, end = 8.dp)
-        ) {
-            TopicIcon(
-                imageUrl = imageUrl
-            )
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .weight(1f),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            NiaToggleButton(
-                checked = isSelected,
-                onCheckedChange = { checked -> onClick(topicId, checked) },
-                icon = {
-                    Icon(
-                        imageVector = NiaIcons.Add,
-                        contentDescription = name
-                    )
-                },
-                checkedIcon = {
-                    Icon(
-                        imageVector = NiaIcons.Check,
-                        contentDescription = name
-                    )
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun TopicIcon(
-    imageUrl: String,
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        // TODO b/228077205, show loading image visual instead of static placeholder
-        placeholder = painterResource(R.drawable.ic_icon_placeholder),
-        model = imageUrl,
-        contentDescription = null, // decorative
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-        modifier = modifier
-            .padding(10.dp)
-            .size(32.dp)
-    )
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedFeed() {
+@Preview
+fun ShowForYouScreenPreview() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                onboardingUiState = OnboardingUiState.NotShown,
-                feedState = NewsFeedUiState.Success(
+                onboardingUiState = NotShown,
+                feedState = Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
                     }
                 ),
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenOfflinePopulatedFeed() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                isSyncing = false,
-                onboardingUiState = OnboardingUiState.NotShown,
-                feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
-                ),
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenTopicSelection() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                isSyncing = false,
-                onboardingUiState = OnboardingUiState.Shown(
-                    topics = previewTopics.map { FollowableTopic(it, false) },
-                    authors = previewAuthors.map { FollowableAuthor(it, false) }
-                ),
-                feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
-                ),
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenLoading() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                isSyncing = false,
-                onboardingUiState = OnboardingUiState.Loading,
-                feedState = NewsFeedUiState.Loading,
-                onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
-                saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedAndLoading() {
-    BoxWithConstraints {
-        NiaTheme {
-            ForYouScreen(
-                isSyncing = true,
-                onboardingUiState = OnboardingUiState.Loading,
-                feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
-                ),
+                isOffline = false,
                 onTopicCheckedChanged = { _, _ -> },
                 onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
