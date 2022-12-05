@@ -47,7 +47,7 @@ class ForYouViewModel @Inject constructor(
     getSortedFollowableAuthors: GetSortedFollowableAuthorsUseCase,
     getFollowableTopics: GetFollowableTopicsUseCase,
     networkMonitor: NetworkMonitor
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userData.map { !it.shouldHideOnboarding }
