@@ -50,7 +50,6 @@ class ScrollForYouFeedBenchmark {
         }
     ) {
         forYouWaitForContent()
-        forYouSelectAuthors()
         forYouScrollFeedDownUp()
     }
 }

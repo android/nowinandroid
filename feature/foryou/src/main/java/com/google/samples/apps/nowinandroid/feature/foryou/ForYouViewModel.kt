@@ -22,7 +22,6 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +42,6 @@ class ForYouViewModel @Inject constructor(
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
     private val getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
-    getSortedFollowableAuthors: GetSortedFollowableAuthorsUseCase,
     getFollowableTopics: GetFollowableTopicsUseCase
 ) : ViewModel() {
 
@@ -64,14 +62,12 @@ class ForYouViewModel @Inject constructor(
                 // show an empty news list to clearly demonstrate that their selections affect the
                 // news articles they will see.
                 if (!userData.shouldHideOnboarding &&
-                    userData.followedAuthors.isEmpty() &&
                     userData.followedTopics.isEmpty()
                 ) {
                     flowOf(NewsFeedUiState.Success(emptyList()))
                 } else {
                     getSaveableNewsResources(
-                        filterTopicIds = userData.followedTopics,
-                        filterAuthorIds = userData.followedAuthors
+                        filterTopicIds = userData.followedTopics
                     ).mapToFeedState()
                 }
             }
@@ -88,14 +84,10 @@ class ForYouViewModel @Inject constructor(
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(
             shouldShowOnboarding,
-            getFollowableTopics(),
-            getSortedFollowableAuthors()
-        ) { shouldShowOnboarding, topics, authors ->
+            getFollowableTopics()
+        ) { shouldShowOnboarding, topics ->
             if (shouldShowOnboarding) {
-                OnboardingUiState.Shown(
-                    topics = topics,
-                    authors = authors
-                )
+                OnboardingUiState.Shown(topics = topics)
             } else {
                 OnboardingUiState.NotShown
             }
@@ -109,12 +101,6 @@ class ForYouViewModel @Inject constructor(
     fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         viewModelScope.launch {
             userDataRepository.toggleFollowedTopicId(topicId, isChecked)
-        }
-    }
-
-    fun updateAuthorSelection(authorId: String, isChecked: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
         }
     }
 

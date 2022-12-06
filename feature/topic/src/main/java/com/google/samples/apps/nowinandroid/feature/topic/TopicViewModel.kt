@@ -136,7 +136,6 @@ private fun newsUiState(
 ): Flow<NewsUiState> {
     // Observe news
     val news: Flow<List<SaveableNewsResource>> = getSaveableNewsResources(
-        filterAuthorIds = emptySet(),
         filterTopicIds = setOf(element = topicId),
     )
 

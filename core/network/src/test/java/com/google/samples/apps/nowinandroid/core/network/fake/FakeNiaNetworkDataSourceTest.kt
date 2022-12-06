@@ -72,7 +72,6 @@ class FakeNiaNetworkDataSourceTest {
                 content = "We released the first two units of Android Basics with Compose, our first free course that teaches Android Development with Jetpack Compose to anyone; you do not need any prior programming experience other than basic computer literacy to get started. ",
                 url = "https://android-developers.googleblog.com/2022/05/new-android-basics-with-compose-course.html",
                 headerImageUrl = "https://developer.android.com/images/hero-assets/android-basics-compose.svg",
-                authors = listOf("25"),
                 publishDate = LocalDateTime(
                     year = 2022,
                     monthNumber = 5,

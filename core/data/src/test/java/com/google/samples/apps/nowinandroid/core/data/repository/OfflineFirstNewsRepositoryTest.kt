@@ -18,18 +18,14 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
-import com.google.samples.apps.nowinandroid.core.data.model.authorCrossReferences
-import com.google.samples.apps.nowinandroid.core.data.model.authorEntityShells
 import com.google.samples.apps.nowinandroid.core.data.model.topicCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.topicEntityShells
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.CollectionType
-import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestAuthorDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNewsResourceDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestTopicDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.filteredInterestsIds
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.nonPresentInterestsIds
-import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
@@ -53,8 +49,6 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var newsResourceDao: TestNewsResourceDao
 
-    private lateinit var authorDao: TestAuthorDao
-
     private lateinit var topicDao: TestTopicDao
 
     private lateinit var network: TestNiaNetworkDataSource
@@ -67,7 +61,6 @@ class OfflineFirstNewsRepositoryTest {
     @Before
     fun setup() {
         newsResourceDao = TestNewsResourceDao()
-        authorDao = TestAuthorDao()
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         synchronizer = TestSynchronizer(
@@ -78,7 +71,6 @@ class OfflineFirstNewsRepositoryTest {
 
         subject = OfflineFirstNewsRepository(
             newsResourceDao = newsResourceDao,
-            authorDao = authorDao,
             topicDao = topicDao,
             network = network,
         )
@@ -115,30 +107,6 @@ class OfflineFirstNewsRepositoryTest {
                 emptyList(),
                 subject.getNewsResources(
                     filterTopicIds = nonPresentInterestsIds,
-                )
-                    .first()
-            )
-        }
-
-    @Test
-    fun offlineFirstNewsRepository_news_resources_for_author_is_backed_by_news_resource_dao() =
-        runTest {
-            assertEquals(
-                newsResourceDao.getNewsResources(
-                    filterAuthorIds = filteredInterestsIds
-                )
-                    .first()
-                    .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResources(
-                    filterAuthorIds = filteredInterestsIds
-                )
-                    .first()
-            )
-
-            assertEquals(
-                emptyList(),
-                subject.getNewsResources(
-                    filterAuthorIds = nonPresentInterestsIds
                 )
                     .first()
             )
@@ -265,21 +233,6 @@ class OfflineFirstNewsRepositoryTest {
         }
 
     @Test
-    fun offlineFirstNewsRepository_sync_saves_shell_author_entities() =
-        runTest {
-            subject.syncWith(synchronizer)
-
-            assertEquals(
-                network.getNewsResources()
-                    .map(NetworkNewsResource::authorEntityShells)
-                    .flatten()
-                    .distinctBy(AuthorEntity::id),
-                authorDao.getAuthorEntities()
-                    .first()
-            )
-        }
-
-    @Test
     fun offlineFirstNewsRepository_sync_saves_topic_cross_references() =
         runTest {
             subject.syncWith(synchronizer)
@@ -290,20 +243,6 @@ class OfflineFirstNewsRepositoryTest {
                     .distinct()
                     .flatten(),
                 newsResourceDao.topicCrossReferences
-            )
-        }
-
-    @Test
-    fun offlineFirstNewsRepository_sync_saves_author_cross_references() =
-        runTest {
-            subject.syncWith(synchronizer)
-
-            assertEquals(
-                network.getNewsResources()
-                    .map(NetworkNewsResource::authorCrossReferences)
-                    .distinct()
-                    .flatten(),
-                newsResourceDao.authorCrossReferences
             )
         }
 }
