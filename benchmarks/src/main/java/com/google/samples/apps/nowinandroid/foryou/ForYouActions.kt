@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.flingElementDownUp
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
-    device.wait(Until.gone(By.res("forYou:loadingWheel")), 5_000)
+    device.wait(Until.gone(By.res("loadingWheel")), 5_000)
     // Sometimes, the loading wheel is gone, but the content is not loaded yet
     // So we'll wait here for topics to be sure
     val obj = device.findObject(By.res("forYou:topicSelection"))
