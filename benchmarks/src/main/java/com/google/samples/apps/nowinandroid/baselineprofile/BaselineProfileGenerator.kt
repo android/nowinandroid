@@ -23,7 +23,7 @@ import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
-import com.google.samples.apps.nowinandroid.interests.interestsScrollPeopleDownUp
+import com.google.samples.apps.nowinandroid.interests.goToInterestsScreen
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
 import org.junit.Rule
 import org.junit.Test
@@ -57,15 +57,7 @@ class BaselineProfileGenerator {
             // bookmarksScrollFeedDownUp()
 
             // Navigate to interests screen
-            device.findObject(By.text("Interests")).click()
-            device.waitForIdle()
-
+            goToInterestsScreen()
             interestsScrollTopicsDownUp()
-
-            // Navigate to people tab
-            device.findObject(By.text("People")).click()
-            device.waitForIdle()
-
-            interestsScrollPeopleDownUp()
         }
 }
