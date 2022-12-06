@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 import android.content.Context
 import android.net.Uri
+import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.lazy.LazyListScope
@@ -73,7 +74,7 @@ fun LazyGridScope.newsFeed(
     }
 }
 
-fun launchCustomChromeTab(context: Context, uri: Uri, toolbarColor: Int) {
+fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int) {
     val customTabBarColor = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(toolbarColor).build()
     val customTabsIntent = CustomTabsIntent.Builder()
