@@ -45,11 +45,14 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
 
     // Select some topics to show some feed content
     repeat(3) { index ->
-        val topic = topics.children[index % topics.childCount]
+        // Selecting topics that are in the first column
+        val topic = topics.children[(2 * index) % topics.childCount]
+        // Find the checkable element to figure out whether it's checked or not
+        val topicCheckIcon = topic.findObject(By.checkable(true))
 
         when {
             // Topic wasn't checked, so just do that
-            !topic.isChecked -> {
+            !topicCheckIcon.isChecked -> {
                 topic.click()
                 device.waitForIdle()
             }
