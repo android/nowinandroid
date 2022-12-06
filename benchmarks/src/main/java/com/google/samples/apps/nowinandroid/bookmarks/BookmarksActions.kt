@@ -25,6 +25,7 @@ fun MacrobenchmarkScope.goToBookmarksScreen() {
     device.findObject(By.text("Saved")).click()
     device.waitForIdle()
     // Wait until saved title are shown on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
     val topAppBar = device.findObject(By.res("niaTopAppBar"))
     topAppBar.wait(Until.hasObject(By.text("Saved")), 2_000)
 }

@@ -25,8 +25,10 @@ fun MacrobenchmarkScope.goToInterestsScreen() {
     device.findObject(By.text("Interests")).click()
     device.waitForIdle()
     // Wait until interests are shown on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
     val topAppBar = device.findObject(By.res("niaTopAppBar"))
     topAppBar.wait(Until.hasObject(By.text("Interests")), 2_000)
+
     // Wait until content is loaded by checking if interests are loaded
     device.wait(Until.gone(By.res("loadingWheel")), 5_000)
 }
