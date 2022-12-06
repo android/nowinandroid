@@ -40,26 +40,18 @@ class GetSaveableNewsResourcesUseCase @Inject constructor(
     }
 
     /**
-     * Returns a list of SaveableNewsResources which match the supplied set of topic ids or author
-     * ids.
+     * Returns a list of SaveableNewsResources which match the supplied set of topic ids.
      *
      * @param filterTopicIds - A set of topic ids used to filter the list of news resources. If
-     * this is empty AND filterAuthorIds is empty the list of news resources will not be filtered.
-     * @param filterAuthorIds - A set of author ids used to filter the list of news resources. If
-     * this is empty AND filterTopicIds is empty the list of news resources will not be filtered.
-     *
+     * this is empty the list of news resources will not be filtered.
      */
     operator fun invoke(
-        filterTopicIds: Set<String> = emptySet(),
-        filterAuthorIds: Set<String> = emptySet()
+        filterTopicIds: Set<String> = emptySet()
     ): Flow<List<SaveableNewsResource>> =
-        if (filterTopicIds.isEmpty() && filterAuthorIds.isEmpty()) {
+        if (filterTopicIds.isEmpty()) {
             newsRepository.getNewsResources()
         } else {
-            newsRepository.getNewsResources(
-                filterTopicIds = filterTopicIds,
-                filterAuthorIds = filterAuthorIds
-            )
+            newsRepository.getNewsResources(filterTopicIds = filterTopicIds)
         }.mapToSaveableNewsResources(bookmarkedNewsResources)
 }
 

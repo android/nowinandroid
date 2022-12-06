@@ -58,7 +58,6 @@ class OfflineFirstUserDataRepositoryTest {
                 UserData(
                     bookmarkedNewsResources = emptySet(),
                     followedTopics = emptySet(),
-                    followedAuthors = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
                     shouldHideOnboarding = false

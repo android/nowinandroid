@@ -50,4 +50,14 @@ object DatabaseMigrations {
         )
     )
     class Schema10to11 : AutoMigrationSpec
+
+    @DeleteTable.Entries(
+        DeleteTable(
+            tableName = "news_resources_authors"
+        ),
+        DeleteTable(
+            tableName = "authors"
+        )
+    )
+    class Schema11to12 : AutoMigrationSpec
 }

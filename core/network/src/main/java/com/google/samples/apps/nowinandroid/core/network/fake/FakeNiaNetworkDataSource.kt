@@ -20,7 +20,6 @@ import JvmUnitTestFakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -58,17 +57,8 @@ class FakeNiaNetworkDataSource @Inject constructor(
             assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
         }
 
-    @OptIn(ExperimentalSerializationApi::class)
-    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
-        withContext(ioDispatcher) {
-            assets.open(AUTHORS_ASSET).use(networkJson::decodeFromStream)
-        }
-
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
         getTopics().mapToChangeList(NetworkTopic::id)
-
-    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
-        getAuthors().mapToChangeList(NetworkAuthor::id)
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
