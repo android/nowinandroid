@@ -204,8 +204,7 @@ internal fun ForYouScreen(
         ) {
             NiaOverlayLoadingWheel(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .testTag("forYou:loadingWheel"),
+                    .align(Alignment.Center),
                 contentDesc = loadingContentDescription
             )
         }
