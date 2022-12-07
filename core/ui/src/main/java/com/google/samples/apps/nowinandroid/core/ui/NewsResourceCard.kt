@@ -57,6 +57,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopic
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
@@ -109,7 +110,7 @@ fun NewsResourceCardExpanded(
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceDate(newsResource.publishDate)
+                    NewsResourceDateAndNewsType(newsResource.publishDate, newsResource.type)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -195,10 +196,22 @@ private fun dateFormatted(publishDate: Instant): String {
 }
 
 @Composable
-fun NewsResourceDate(
-    publishDate: Instant
+fun NewsResourceDateAndNewsType(
+    publishDate: Instant,
+    resourceType: NewsResourceType
+
 ) {
-    Text(dateFormatted(publishDate), style = MaterialTheme.typography.labelSmall)
+    val date = dateFormatted(publishDate)
+
+    if (resourceType != NewsResourceType.Unknown) {
+        Text(
+            "$date • ${resourceType.displayText}", style = MaterialTheme.typography.labelSmall
+        )
+    } else {
+        Text(
+            date, style = MaterialTheme.typography.labelSmall
+        )
+    }
 }
 
 @Composable
