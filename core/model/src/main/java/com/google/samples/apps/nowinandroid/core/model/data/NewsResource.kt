@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.model.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -82,6 +83,17 @@ val previewNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
+        topics = listOf(previewTopics[2])
+    ),
+    NewsResource(
+        id = "4",
+        title = "New Jetpack Release",
+        content = "New Jetpack release includes updates to libraries such as CameraX, Benchmark, and" +
+            "more!",
+        url = "https://developer.android.com/jetpack/androidx/versions/all-channel",
+        headerImageUrl = "",
+        publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
+        type = Unknown,
         topics = listOf(previewTopics[2])
     )
 )
