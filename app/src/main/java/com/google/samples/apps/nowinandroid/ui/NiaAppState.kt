@@ -34,7 +34,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
@@ -47,20 +46,16 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
-    return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
-        NiaAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
+    return remember(navController, coroutineScope, windowSizeClass) {
+        NiaAppState(navController, coroutineScope, windowSizeClass)
     }
 }
 
@@ -68,8 +63,7 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
+    val windowSizeClass: WindowSizeClass
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -92,14 +86,6 @@ class NiaAppState(
 
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
-
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the

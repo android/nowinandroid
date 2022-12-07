@@ -179,9 +179,7 @@ internal fun ForYouScreen(
         }
     }
 
-    /**
-     * Show the Offline Screen if there is no internet connection.
-     */
+    // Show the Offline Screen if there is no internet connection.
     if (isOffline) {
         OfflineScreen()
     }
@@ -196,9 +194,9 @@ internal fun ForYouScreen(
         ) + fadeOut(),
     ) {
         val loadingContentDescription = stringResource(id = R.string.for_you_loading)
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = modifier.fillMaxWidth()) {
             NiaOverlayLoadingWheel(
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.Center)
                     .testTag("forYou:loadingWheel"),
                 contentDesc = loadingContentDescription
@@ -275,7 +273,7 @@ fun ForYouScreenPopulatedFeed() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                onboardingUiState = OnboardingUiState.NotShown,
+                onboardingUiState = NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)
@@ -297,7 +295,7 @@ fun ForYouScreenOfflinePopulatedFeed() {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
-                onboardingUiState = OnboardingUiState.NotShown,
+                onboardingUiState = NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
                         SaveableNewsResource(it, false)

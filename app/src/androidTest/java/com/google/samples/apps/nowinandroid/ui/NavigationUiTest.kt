@@ -78,8 +78,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -97,8 +96,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -116,8 +114,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -135,8 +132,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -154,8 +150,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -173,8 +168,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -192,8 +186,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -211,8 +204,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
@@ -230,8 +222,7 @@ class NavigationUiTest {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
                             DpSize(maxWidth, maxHeight)
-                        ),
-                        networkMonitor = networkMonitor
+                        )
                     )
                 }
             }
