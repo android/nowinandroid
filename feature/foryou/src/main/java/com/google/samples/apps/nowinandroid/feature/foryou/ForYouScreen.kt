@@ -112,7 +112,6 @@ internal fun ForYouScreen(
 ) {
     val isOnboardingLoading = onboardingUiState is Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
-    val isOnboardingNotShown = onboardingUiState is NotShown
 
     // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
     // This code should be called when the UI is ready for use
