@@ -37,7 +37,6 @@ data class NetworkNewsResource(
     val publishDate: Instant,
     @Serializable(NewsResourceTypeSerializer::class)
     val type: NewsResourceType,
-    val authors: List<String> = listOf(),
     val topics: List<String> = listOf(),
 )
 
@@ -55,6 +54,5 @@ data class NetworkNewsResourceExpanded(
     val publishDate: Instant,
     @Serializable(NewsResourceTypeSerializer::class)
     val type: NewsResourceType,
-    val authors: List<NetworkAuthor> = listOf(),
     val topics: List<NetworkTopic> = listOf(),
 )

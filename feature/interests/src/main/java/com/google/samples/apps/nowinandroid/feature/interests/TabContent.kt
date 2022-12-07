@@ -23,13 +23,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 
 @Composable
@@ -55,38 +52,6 @@ fun TopicsTabContent(
                     topicImageUrl = followableTopic.topic.imageUrl,
                     onClick = { onTopicClick(topicId) },
                     onFollowButtonClick = { onFollowButtonClick(topicId, it) }
-                )
-            }
-        }
-
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-        }
-    }
-}
-
-@Composable
-fun AuthorsTabContent(
-    authors: List<FollowableAuthor>,
-    onAuthorClick: (String) -> Unit,
-    onFollowButtonClick: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .testTag("interests:people"),
-        contentPadding = PaddingValues(top = 8.dp)
-    ) {
-        authors.forEach { followableAuthor ->
-            item {
-                InterestsItem(
-                    name = followableAuthor.author.name,
-                    following = followableAuthor.isFollowed,
-                    topicImageUrl = followableAuthor.author.imageUrl,
-                    onClick = { onAuthorClick(followableAuthor.author.id) },
-                    onFollowButtonClick = { onFollowButtonClick(followableAuthor.author.id, it) },
-                    iconModifier = Modifier.clip(CircleShape)
                 )
             }
         }

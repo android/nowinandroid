@@ -143,12 +143,12 @@ Using the above modularization strategy, the Now in Android app has the followin
    <td>Functionality associated with a specific feature or user journey. Typically contains UI components and ViewModels which read data from other modules.<br>
    Examples include:<br>
    <ul>
-      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/author"><code>feature:author</code></a> displays information about an author on the AuthorScreen.</li>
+      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/topic"><code>feature:topic</code></a> displays information about a topic on the TopicScreen.</li>
       <li><a href="https://github.com/android/nowinandroid/tree/main/feature/foryou"><code>feature:foryou</code></a> which displays the user's news feed, and onboarding during first run, on the For You screen.</li>
       </ul>
    </td>
-   <td><code>AuthorScreen</code><br>
-   <code>AuthorViewModel</code>
+   <td><code>TopicScreen</code><br>
+   <code>TopicViewModel</code>
    </td>
   </tr>
   <tr>
@@ -157,7 +157,6 @@ Using the above modularization strategy, the Now in Android app has the followin
    <td>Fetching app data from multiple sources, shared by different features.
    </td>
    <td><code>TopicsRepository</code><br>
-   <code>AuthorsRepository</code>
    </td>
   </tr>
   <tr>
@@ -219,7 +218,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
    <td>Model classes used throughout the app.
    </td>
-   <td><code>Author</code><br>
+   <td><code>Topic</code><br>
    <code>Episode</code><br>
    <code>NewsResource</code>
    </td>

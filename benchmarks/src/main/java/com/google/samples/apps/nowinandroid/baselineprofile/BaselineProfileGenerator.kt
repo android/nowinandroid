@@ -21,7 +21,6 @@ import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
-import com.google.samples.apps.nowinandroid.foryou.forYouSelectAuthors
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import com.google.samples.apps.nowinandroid.interests.interestsScrollPeopleDownUp
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
@@ -47,7 +46,6 @@ class BaselineProfileGenerator {
 
             // Scroll the feed critical user journey
             forYouWaitForContent()
-            forYouSelectAuthors(true)
             forYouScrollFeedDownUp()
 
             // Navigate to saved screen

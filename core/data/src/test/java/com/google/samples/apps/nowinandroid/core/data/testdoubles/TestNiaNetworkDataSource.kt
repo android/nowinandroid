@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -28,7 +27,6 @@ import kotlinx.serialization.json.Json
 
 enum class CollectionType {
     Topics,
-    Authors,
     NewsResources
 }
 
@@ -37,19 +35,18 @@ enum class CollectionType {
  */
 class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
-    private val source = FakeNiaNetworkDataSource(UnconfinedTestDispatcher(), Json)
+    private val source = FakeNiaNetworkDataSource(
+        UnconfinedTestDispatcher(),
+        Json { ignoreUnknownKeys = true }
+    )
 
     private val allTopics = runBlocking { source.getTopics() }
-
-    private val allAuthors = runBlocking { source.getAuthors() }
 
     private val allNewsResources = runBlocking { source.getNewsResources() }
 
     private val changeLists: MutableMap<CollectionType, List<NetworkChangeList>> = mutableMapOf(
         CollectionType.Topics to allTopics
             .mapToChangeList(idGetter = NetworkTopic::id),
-        CollectionType.Authors to allAuthors
-            .mapToChangeList(idGetter = NetworkAuthor::id),
         CollectionType.NewsResources to allNewsResources
             .mapToChangeList(idGetter = NetworkNewsResource::id),
     )
@@ -60,12 +57,6 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
             idGetter = NetworkTopic::id
         )
 
-    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
-        allAuthors.matchIds(
-            ids = ids,
-            idGetter = NetworkAuthor::id
-        )
-
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         allNewsResources.matchIds(
             ids = ids,
@@ -74,9 +65,6 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
         changeLists.getValue(CollectionType.Topics).after(after)
-
-    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
-        changeLists.getValue(CollectionType.Authors).after(after)
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         changeLists.getValue(CollectionType.NewsResources).after(after)

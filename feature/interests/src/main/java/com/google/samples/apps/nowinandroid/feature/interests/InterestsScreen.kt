@@ -29,57 +29,34 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.previewAuthors
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun InterestsRoute(
-    navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val tabState by viewModel.tabState.collectAsStateWithLifecycle()
 
     InterestsScreen(
         uiState = uiState,
-        tabState = tabState,
         followTopic = viewModel::followTopic,
-        followAuthor = viewModel::followAuthor,
-        navigateToAuthor = navigateToAuthor,
         navigateToTopic = navigateToTopic,
-        switchTab = viewModel::switchTab,
         modifier = modifier
     )
-
-    TrackDisposableJank(tabState) { metricsHolder ->
-        metricsHolder.state?.putState("Interests:TabState", "currentIndex:${tabState.currentIndex}")
-
-        onDispose {
-            metricsHolder.state?.removeState("Interests:TabState")
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InterestsScreen(
     uiState: InterestsUiState,
-    tabState: InterestsTabState,
-    followAuthor: (String, Boolean) -> Unit,
     followTopic: (String, Boolean) -> Unit,
-    navigateToAuthor: (String) -> Unit,
     navigateToTopic: (String) -> Unit,
-    switchTab: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -93,56 +70,13 @@ internal fun InterestsScreen(
                     contentDesc = stringResource(id = R.string.interests_loading),
                 )
             is InterestsUiState.Interests ->
-                InterestsContent(
-                    tabState = tabState,
-                    switchTab = switchTab,
-                    uiState = uiState,
-                    navigateToTopic = navigateToTopic,
-                    followTopic = followTopic,
-                    navigateToAuthor = navigateToAuthor,
-                    followAuthor = followAuthor
-                )
-            is InterestsUiState.Empty -> InterestsEmptyScreen()
-        }
-    }
-}
-
-@Composable
-private fun InterestsContent(
-    tabState: InterestsTabState,
-    switchTab: (Int) -> Unit,
-    uiState: InterestsUiState.Interests,
-    navigateToTopic: (String) -> Unit,
-    followTopic: (String, Boolean) -> Unit,
-    navigateToAuthor: (String) -> Unit,
-    followAuthor: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        NiaTabRow(selectedTabIndex = tabState.currentIndex) {
-            tabState.titles.forEachIndexed { index, titleId ->
-                NiaTab(
-                    selected = index == tabState.currentIndex,
-                    onClick = { switchTab(index) },
-                    text = { Text(text = stringResource(id = titleId)) }
-                )
-            }
-        }
-        when (tabState.currentIndex) {
-            0 -> {
                 TopicsTabContent(
                     topics = uiState.topics,
                     onTopicClick = navigateToTopic,
                     onFollowButtonClick = followTopic,
+                    modifier = modifier,
                 )
-            }
-            1 -> {
-                AuthorsTabContent(
-                    authors = uiState.authors,
-                    onAuthorClick = navigateToAuthor,
-                    onFollowButtonClick = followAuthor,
-                )
-            }
+            is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
 }
@@ -159,18 +93,10 @@ fun InterestsScreenPopulated() {
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
-                    authors = previewAuthors.map { FollowableAuthor(it, false) },
                     topics = previewTopics.map { FollowableTopic(it, false) }
                 ),
-                tabState = InterestsTabState(
-                    titles = listOf(R.string.interests_topics, R.string.interests_people),
-                    currentIndex = 0
-                ),
-                followAuthor = { _, _ -> },
                 followTopic = { _, _ -> },
-                navigateToAuthor = {},
                 navigateToTopic = {},
-                switchTab = {}
             )
         }
     }
@@ -183,15 +109,8 @@ fun InterestsScreenLoading() {
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Loading,
-                tabState = InterestsTabState(
-                    titles = listOf(R.string.interests_topics, R.string.interests_people),
-                    currentIndex = 0
-                ),
-                followAuthor = { _, _ -> },
                 followTopic = { _, _ -> },
-                navigateToAuthor = {},
                 navigateToTopic = {},
-                switchTab = {},
             )
         }
     }
@@ -204,15 +123,8 @@ fun InterestsScreenEmpty() {
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Empty,
-                tabState = InterestsTabState(
-                    titles = listOf(R.string.interests_topics, R.string.interests_people),
-                    currentIndex = 0
-                ),
-                followAuthor = { _, _ -> },
                 followTopic = { _, _ -> },
-                navigateToAuthor = {},
                 navigateToTopic = {},
-                switchTab = {}
             )
         }
     }

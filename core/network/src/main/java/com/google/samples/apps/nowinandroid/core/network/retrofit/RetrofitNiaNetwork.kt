@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.network.retrofit
 
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -44,11 +43,6 @@ private interface RetrofitNiaNetworkApi {
         @Query("id") ids: List<String>?,
     ): NetworkResponse<List<NetworkTopic>>
 
-    @GET(value = "authors")
-    suspend fun getAuthors(
-        @Query("id") ids: List<String>?,
-    ): NetworkResponse<List<NetworkAuthor>>
-
     @GET(value = "newsresources")
     suspend fun getNewsResources(
         @Query("id") ids: List<String>?,
@@ -56,11 +50,6 @@ private interface RetrofitNiaNetworkApi {
 
     @GET(value = "changelists/topics")
     suspend fun getTopicChangeList(
-        @Query("after") after: Int?,
-    ): List<NetworkChangeList>
-
-    @GET(value = "changelists/authors")
-    suspend fun getAuthorsChangeList(
         @Query("after") after: Int?,
     ): List<NetworkChangeList>
 
@@ -110,17 +99,11 @@ class RetrofitNiaNetwork @Inject constructor(
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data
 
-    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
-        networkApi.getAuthors(ids = ids).data
-
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         networkApi.getNewsResources(ids = ids).data
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
         networkApi.getTopicChangeList(after = after)
-
-    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
-        networkApi.getAuthorsChangeList(after = after)
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         networkApi.getNewsResourcesChangeList(after = after)

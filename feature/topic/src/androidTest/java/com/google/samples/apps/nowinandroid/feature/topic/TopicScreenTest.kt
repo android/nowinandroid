@@ -209,7 +209,6 @@ private val sampleNewsResources = listOf(
                 url = "",
                 imageUrl = ""
             )
-        ),
-        authors = emptyList()
+        )
     )
 )
