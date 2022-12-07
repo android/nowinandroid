@@ -136,7 +136,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td><code>When ForYouViewModel</code> receives the news resources it updates the feed state to <code>Success</code>.  <code>ForYouScreen</code> then uses the news resources in the state to render the screen.
 <p>
-The screen shows the newly retrieved news resources (as long as the user has chosen at least one topic or author).
+The screen shows the newly retrieved news resources (as long as the user has chosen at least one topic).
    </td>
    <td>Search for instances of <code>NewsFeedUiState.Success</code>
    </td>
@@ -165,11 +165,11 @@ Data is exposed as data streams. This means each client of the repository must b
 
 Reads are performed from local storage as the source of truth, therefore errors are not expected when reading from `Repository` instances. However, errors may occur when trying to reconcile data in local storage with remote sources. For more on error reconciliation, check the data synchronization section below.
 
-_Example: Read a list of authors_
+_Example: Read a list of topics_
 
-A list of Authors can be obtained by subscribing to `AuthorsRepository::getAuthors` flow which emits `List<Authors>`.
+A list of Topics can be obtained by subscribing to `TopicsRepository::getTopics` flow which emits `List<Topic>`.
 
-Whenever the list of authors changes (for example, when a new author is added), the updated `List<Author>` is emitted into the stream.
+Whenever the list of topics changes (for example, when a new topic is added), the updated `List<Topic>` is emitted into the stream.
 
 
 ### Writing data
@@ -274,20 +274,18 @@ The `feedState` is passed to the `ForYouScreen` composable, which handles both o
 
 View models receive streams of data as cold [flows](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html) from one or more repositories. These are [combined](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/combine.html) together to produce a single flow of UI state. This single flow is then converted to a hot flow using [stateIn](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/state-in.html). The conversion to a state flow enables UI elements to read the last known state from the flow.
 
-**Example: Displaying followed topics and authors**
+**Example: Displaying followed topics**
 
-The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. This hot flow is created by combining four data streams:
+The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. This hot flow is created by combining two data streams:
 
 
 
-*   List of authors (`getAuthors`)
-*   List of author IDs which the current user is following
 *   List of topics
 *   List of topic IDs which the current user is following
 
-The list of `Author`s is mapped to a new list of `FollowableAuthor`s. `FollowableAuthor` is a wrapper for `Author` which also indicates whether the current user is following that author. The same transformation is applied for the list of `Topic`s.
+The list of `Topic`s is mapped to a new list of `FollowableTopic`s. `FollowableTopic` is a wrapper for `Topic` which also indicates whether the current user is following that topic.
 
-The two new lists are used to create a `InterestsUiState.Interests` state which is exposed to the UI.
+The new list is used to create a `InterestsUiState.Interests` state which is exposed to the UI.
 
 
 ### Processing user interactions

@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
@@ -36,16 +35,11 @@ class TestNewsRepository : NewsRepository {
 
     override fun getNewsResources(): Flow<List<NewsResource>> = newsResourcesFlow
 
-    override fun getNewsResources(
-        filterAuthorIds: Set<String>,
-        filterTopicIds: Set<String>
-    ): Flow<List<NewsResource>> =
+    override fun getNewsResources(filterTopicIds: Set<String>): Flow<List<NewsResource>> =
         getNewsResources().map { newsResources ->
-            newsResources
-                .filter {
-                    it.authors.map(Author::id).intersect(filterAuthorIds).isNotEmpty() ||
-                        it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty()
-                }
+            newsResources.filter {
+                it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty()
+            }
         }
 
     /**

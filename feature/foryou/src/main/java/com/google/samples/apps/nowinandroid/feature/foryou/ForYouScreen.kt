@@ -163,7 +163,6 @@ internal fun ForYouScreen(
     if (isOffline) {
         OfflineScreen()
     }
-    println("isOffline $isOffline")
 
     AnimatedVisibility(
         visible = isSyncing || isFeedLoading || isOnboardingLoading,

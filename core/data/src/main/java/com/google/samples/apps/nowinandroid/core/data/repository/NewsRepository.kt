@@ -30,10 +30,9 @@ interface NewsRepository : Syncable {
     fun getNewsResources(): Flow<List<NewsResource>>
 
     /**
-     * Returns available news resources as a stream filtered by authors or topics.
+     * Returns available news resources as a stream filtered by topics.
      */
     fun getNewsResources(
-        filterAuthorIds: Set<String> = emptySet(),
         filterTopicIds: Set<String> = emptySet(),
     ): Flow<List<NewsResource>>
 }

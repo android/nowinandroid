@@ -28,10 +28,8 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -58,7 +56,6 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Loading,
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -82,7 +79,6 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(emptyList()),
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -97,7 +93,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun topicSelector_whenNoTopicsSelected_showsAuthorAndTopicChipsAndDisabledDoneButton() {
+    fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -105,25 +101,16 @@ class ForYouScreenTest {
                     onboardingUiState =
                     OnboardingUiState.Shown(
                         topics = testTopics,
-                        authors = testAuthors
                     ),
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
             }
-        }
-
-        testAuthors.forEach { testAuthor ->
-            composeTestRule
-                .onNodeWithText(testAuthor.author.name)
-                .assertExists()
-                .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
@@ -147,7 +134,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun topicSelector_whenSomeTopicsSelected_showsAuthorAndTopicChipsAndEnabledDoneButton() {
+    fun topicSelector_whenSomeTopicsSelected_showsTopicChipsAndEnabledDoneButton() {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -157,8 +144,7 @@ class ForYouScreenTest {
                         // Follow one topic
                         topics = testTopics.mapIndexed { index, testTopic ->
                             testTopic.copy(isFollowed = index == 1)
-                        },
-                        authors = testAuthors
+                        }
                     ),
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
@@ -170,13 +156,6 @@ class ForYouScreenTest {
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
             }
-        }
-
-        testAuthors.forEach { testAuthor ->
-            composeTestRule
-                .onNodeWithText(testAuthor.author.name)
-                .assertExists()
-                .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
@@ -208,28 +187,17 @@ class ForYouScreenTest {
                     onboardingUiState =
                     OnboardingUiState.Shown(
                         // Follow one topic
-                        topics = testTopics,
-                        authors = testAuthors.mapIndexed { index, testAuthor ->
-                            testAuthor.copy(isFollowed = index == 1)
-                        }
+                        topics = testTopics
                     ),
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList()
                     ),
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
             }
-        }
-
-        testAuthors.forEach { testAuthor ->
-            composeTestRule
-                .onNodeWithText(testAuthor.author.name)
-                .assertExists()
-                .assertHasClickAction()
         }
 
         testTopics.forEach { testTopic ->
@@ -259,14 +227,10 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                    OnboardingUiState.Shown(
-                        topics = testTopics,
-                        authors = testAuthors
-                    ),
+                    OnboardingUiState.Shown(topics = testTopics),
                     feedState = NewsFeedUiState.Loading,
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -290,7 +254,6 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Loading,
                     isOffline = false,
                     onTopicCheckedChanged = { _, _ -> },
-                    onAuthorCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> }
                 )
@@ -317,7 +280,6 @@ class ForYouScreenTest {
                 ),
                 isOffline = false,
                 onTopicCheckedChanged = { _, _ -> },
-                onAuthorCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )
@@ -357,14 +319,6 @@ private val testTopic = Topic(
     url = "",
     imageUrl = ""
 )
-private val testAuthor = Author(
-    id = "",
-    name = "",
-    imageUrl = "",
-    twitter = "",
-    mediumPage = "",
-    bio = ""
-)
 private val testTopics = listOf(
     FollowableTopic(
         topic = testTopic.copy(id = "0", name = "Headlines"),
@@ -376,16 +330,6 @@ private val testTopics = listOf(
     ),
     FollowableTopic(
         topic = testTopic.copy(id = "2", name = "Tools"),
-        isFollowed = false
-    ),
-)
-private val testAuthors = listOf(
-    FollowableAuthor(
-        author = testAuthor.copy(id = "0", name = "Android Dev"),
-        isFollowed = false
-    ),
-    FollowableAuthor(
-        author = testAuthor.copy(id = "1", name = "Android Dev 2"),
         isFollowed = false
     ),
 )

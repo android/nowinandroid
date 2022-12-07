@@ -16,9 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
-import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
@@ -39,11 +37,6 @@ interface DataModule {
     fun bindsTopicRepository(
         topicsRepository: OfflineFirstTopicsRepository
     ): TopicsRepository
-
-    @Binds
-    fun bindsAuthorsRepository(
-        authorsRepository: OfflineFirstAuthorsRepository
-    ): AuthorsRepository
 
     @Binds
     fun bindsNewsResourceRepository(
