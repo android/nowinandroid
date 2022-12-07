@@ -20,6 +20,9 @@ plugins {
 }
 
 android {
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
     namespace = "com.google.samples.apps.nowinandroid.core.ui"
 }
 
@@ -44,4 +47,7 @@ dependencies {
     api(libs.androidx.compose.runtime.livedata)
     api(libs.androidx.metrics)
     api(libs.androidx.tracing.ktx)
+
+    testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing"))
 }

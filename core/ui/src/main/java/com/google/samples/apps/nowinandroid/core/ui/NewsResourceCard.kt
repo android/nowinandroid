@@ -176,7 +176,7 @@ fun BookmarkButton(
 }
 
 @Composable
-private fun dateFormatted(publishDate: Instant): String {
+fun dateFormatted(publishDate: Instant): String {
     var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
 
     val context = LocalContext.current
@@ -199,19 +199,16 @@ private fun dateFormatted(publishDate: Instant): String {
 fun NewsResourceDateAndType(
     publishDate: Instant,
     resourceType: NewsResourceType
-
 ) {
-    val date = dateFormatted(publishDate)
-
-    if (resourceType != NewsResourceType.Unknown) {
-        Text(
-            "$date • ${resourceType.displayText}", style = MaterialTheme.typography.labelSmall
-        )
-    } else {
-        Text(
-            date, style = MaterialTheme.typography.labelSmall
-        )
-    }
+    val formattedDate = dateFormatted(publishDate)
+    Text(
+        if (resourceType != NewsResourceType.Unknown) {
+            stringResource(R.string.card_meta_data_text, formattedDate, resourceType.displayText)
+        } else {
+            formattedDate
+        },
+        style = MaterialTheme.typography.labelSmall
+    )
 }
 
 @Composable
