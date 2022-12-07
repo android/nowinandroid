@@ -110,7 +110,7 @@ fun NewsResourceCardExpanded(
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceDateAndNewsType(newsResource.publishDate, newsResource.type)
+                    NewsResourceDateAndType(newsResource.publishDate, newsResource.type)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -196,7 +196,7 @@ private fun dateFormatted(publishDate: Instant): String {
 }
 
 @Composable
-fun NewsResourceDateAndNewsType(
+fun NewsResourceDateAndType(
     publishDate: Instant,
     resourceType: NewsResourceType
 
