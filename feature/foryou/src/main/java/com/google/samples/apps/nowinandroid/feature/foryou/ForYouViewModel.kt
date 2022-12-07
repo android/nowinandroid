@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
@@ -42,7 +43,8 @@ class ForYouViewModel @Inject constructor(
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
     private val getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
-    getFollowableTopics: GetFollowableTopicsUseCase
+    getFollowableTopics: GetFollowableTopicsUseCase,
+    networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
     private val shouldShowOnboarding: Flow<Boolean> =
@@ -97,6 +99,14 @@ class ForYouViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = OnboardingUiState.Loading
             )
+
+    val isOffline = networkMonitor.isOnline
+        .map(Boolean::not)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         viewModelScope.launch {

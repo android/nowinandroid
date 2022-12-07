@@ -70,7 +70,8 @@ class ForYouViewModelTest {
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
             getSaveableNewsResources = getSaveableNewsResourcesUseCase,
-            getFollowableTopics = getFollowableTopicsUseCase
+            getFollowableTopics = getFollowableTopicsUseCase,
+            networkMonitor = networkMonitor
         )
     }
 
