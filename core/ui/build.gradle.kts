@@ -48,6 +48,5 @@ dependencies {
     api(libs.androidx.metrics)
     api(libs.androidx.tracing.ktx)
 
-    testImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:testing"))
 }
