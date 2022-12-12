@@ -4,6 +4,7 @@ androidDesugarJdkLibs = "1.2.0"
 androidGradlePlugin = "7.3.1"
 androidxActivity = "1.6.1"
 androidxAppCompat = "1.5.1"
+androidxBrowser = "1.4.0"
 androidxComposeBom = "2022.11.00"
 androidxComposeCompiler = "1.3.2"
 androidxComposeRuntimeTracing = "1.0.0-alpha01"
@@ -54,6 +55,7 @@ android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
