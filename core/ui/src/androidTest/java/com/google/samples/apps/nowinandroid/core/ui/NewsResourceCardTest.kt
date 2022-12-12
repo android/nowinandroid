@@ -16,8 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import org.junit.Rule
@@ -25,41 +26,49 @@ import org.junit.Test
 
 class NewsResourceCardTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun testMetaDataDisplay() {
-        // Resource with known resource type
-        val newsResource = previewNewsResources[0]
+    fun testMetaDataDisplay_withCodelabResource() {
+        val newsWithKnownResourceType = previewNewsResources[0]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsResource,
+                newsResource = newsWithKnownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
             )
 
-            dateFormatted = dateFormatted(publishDate = newsResource.publishDate)
+            dateFormatted = dateFormatted(publishDate = newsWithKnownResourceType.publishDate)
         }
 
         composeTestRule
-            .onNodeWithText(dateFormatted + " • " + newsResource.type.displayText)
-            .assertIsDisplayed()
+            .onNodeWithText(
+                composeTestRule.activity.getString(
+                    R.string.card_meta_data_text,
+                    dateFormatted,
+                    newsWithKnownResourceType.type.displayText
+                )
+            )
+            .assertExists()
+    }
 
-        // Resource with Unknown resource type
-        val newsResource2 = previewNewsResources[4]
+    @Test
+    fun testMetaDataDisplay_withUnknownResource() {
+        val newsWithUnknownResourceType = previewNewsResources[3]
+        var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsResource2,
+                newsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
             )
 
-            dateFormatted = dateFormatted(publishDate = newsResource.publishDate)
+            dateFormatted = dateFormatted(publishDate = newsWithUnknownResourceType.publishDate)
         }
 
         composeTestRule
