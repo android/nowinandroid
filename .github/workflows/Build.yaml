@@ -13,7 +13,7 @@ jobs:
             - uses: actions/setup-java@v3
               with:
                   distribution: temurin
-                  java-version: 19
+                  java-version: 17
 
             - uses: sdkman/sdkman-action@master
               id: sdkman
@@ -45,7 +45,7 @@ jobs:
             - uses: actions/setup-java@v3
               with:
                   distribution: temurin
-                  java-version: 17
+                  java-version: 19
 
             - uses: sdkman/sdkman-action@master
               id: sdkman
