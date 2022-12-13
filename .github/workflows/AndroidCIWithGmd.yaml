@@ -22,5 +22,5 @@ jobs:
       uses: android-actions/setup-android@v2
 
     - name: Run instrumented tests with GMD
-      run: ./gradlew pixel4Api30DemoDebugAndroidTest  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+      run: ./gradlew cleanManagedDevices --unused-only && ./gradlew pixel4api30DemoDebugAndroidTest -Dorg.gradle.workers.max=1  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
