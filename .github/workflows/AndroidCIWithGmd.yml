@@ -1,0 +1,25 @@
+name: Android CI with GMD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  android-ci:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - uses: actions/checkout@v2
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Run instrumented tests with GMD
+        run: ./gradlew pixel6Api31DemoDebugAndroidTest  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
