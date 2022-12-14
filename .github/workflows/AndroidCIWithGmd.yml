@@ -23,3 +23,8 @@ jobs:
 
       - name: Run instrumented tests with GMD
         run: ./gradlew pixel6Api31DemoDebugAndroidTest  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+      - name: Upload Gradle Managed device test results
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: testResults
+          path: app/build/reports/androidTests/managedDevice/allDevices/index.html
