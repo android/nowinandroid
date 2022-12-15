@@ -52,7 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -156,7 +156,7 @@ fun BookmarkButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NiaToggleButton(
+    NiaIconToggleButton(
         checked = isBookmarked,
         onCheckedChange = { onClick() },
         modifier = modifier,
@@ -242,7 +242,7 @@ fun NewsResourceTopics(
             NiaTopicTag(
                 expanded = expandedTopicId == topic.id,
                 followed = true, // ToDo: Check if topic is followed
-                onDropMenuToggle = { show ->
+                onDropdownMenuToggle = { show ->
                     expandedTopicId = if (show) topic.id else null
                 },
                 onFollowClick = { }, // ToDo

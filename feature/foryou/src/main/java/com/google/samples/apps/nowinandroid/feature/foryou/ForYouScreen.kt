@@ -77,9 +77,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
@@ -257,7 +257,7 @@ private fun LazyGridScope.onboarding(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        NiaFilledButton(
+                        NiaButton(
                             onClick = saveFollowedTopics,
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
@@ -350,7 +350,7 @@ private fun SingleTopicButton(
                     .weight(1f),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            NiaToggleButton(
+            NiaIconToggleButton(
                 checked = isSelected,
                 onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
