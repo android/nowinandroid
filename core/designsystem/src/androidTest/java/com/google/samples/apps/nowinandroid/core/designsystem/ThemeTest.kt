@@ -212,7 +212,7 @@ class ThemeTest {
                 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     dynamicLightColorScheme(LocalContext.current)
                 } else {
-                    LightAndroidColorScheme
+                    LightDefaultColorScheme
                 }
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
                 val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -241,7 +241,7 @@ class ThemeTest {
                 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     dynamicDarkColorScheme(LocalContext.current)
                 } else {
-                    DarkAndroidColorScheme
+                    DarkDefaultColorScheme
                 }
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
                 val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
