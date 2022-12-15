@@ -78,8 +78,8 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
