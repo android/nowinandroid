@@ -45,6 +45,7 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
     override fun createUastHandler(context: JavaContext): UElementHandler {
         return object : UElementHandler() {
             override fun visitCallExpression(node: UCallExpression) {
+                if (context.getLocation(node).file.path.contains("designsystem")) return
                 val name = node.methodName ?: return
                 val preferredName = METHOD_NAMES[name] ?: return
                 reportIssue(context, node, name, preferredName)
