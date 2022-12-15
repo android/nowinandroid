@@ -25,10 +25,9 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 data class GradientColors(
-    val primary: Color = Color.Unspecified,
-    val secondary: Color = Color.Unspecified,
-    val tertiary: Color = Color.Unspecified,
-    val neutral: Color = Color.Unspecified
+    val top: Color = Color.Unspecified,
+    val bottom: Color = Color.Unspecified,
+    val container: Color = Color.Unspecified
 )
 
 /**

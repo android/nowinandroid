@@ -16,16 +16,25 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 
 /**
@@ -56,17 +65,34 @@ fun <T> NiaDropdownMenuButton(
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
-        NiaOutlinedButton(
+        OutlinedButton(
             onClick = { expanded = true },
             enabled = enabled,
-            text = text,
-            trailingIcon = {
-                Icon(
-                    imageVector = if (expanded) NiaIcons.ArrowDropUp else NiaIcons.ArrowDropDown,
-                    contentDescription = null
-                )
-            }
-        )
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ),
+            border = BorderStroke(
+                width = NiaDropdownMenuDefaults.DropdownMenuButtonBorderWidth,
+                color = if (enabled) {
+                    MaterialTheme.colorScheme.outline
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = NiaDropdownMenuDefaults.DisabledDropdownMenuButtonBorderAlpha
+                    )
+                }
+            ),
+            contentPadding = NiaDropdownMenuDefaults.DropdownMenuButtonContentPadding
+        ) {
+            NiaDropdownMenuButtonContent(
+                text = text,
+                trailingIcon = {
+                    Icon(
+                        imageVector = if (expanded) NiaIcons.ArrowDropUp else NiaIcons.ArrowDropDown,
+                        contentDescription = null
+                    )
+                }
+            )
+        }
         NiaDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -77,6 +103,39 @@ fun <T> NiaDropdownMenuButton(
             itemLeadingIcon = itemLeadingIcon,
             itemTrailingIcon = itemTrailingIcon
         )
+    }
+}
+
+/**
+ * Internal Now in Android dropdown menu button content layout for arranging the text label and
+ * trailing icon.
+ *
+ * @param text The button text label content.
+ * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
+ */
+@Composable
+private fun NiaDropdownMenuButtonContent(
+    text: @Composable () -> Unit,
+    trailingIcon: @Composable (() -> Unit)?,
+) {
+    Box(
+        Modifier
+            .padding(
+                end = if (trailingIcon != null) {
+                    ButtonDefaults.IconSpacing
+                } else {
+                    0.dp
+                }
+            )
+    ) {
+        ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+            text()
+        }
+    }
+    if (trailingIcon != null) {
+        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
+            trailingIcon()
+        }
     }
 }
 
@@ -129,4 +188,25 @@ fun <T> NiaDropdownMenu(
             )
         }
     }
+}
+
+/**
+ * Now in Android dropdown menu default values.
+ */
+object NiaDropdownMenuDefaults {
+    // TODO: File bug
+    // OutlinedButton border color doesn't respect disabled state by default
+    const val DisabledDropdownMenuButtonBorderAlpha = 0.12f
+    // TODO: File bug
+    // OutlinedButton default border width isn't exposed via ButtonDefaults
+    val DropdownMenuButtonBorderWidth = 1.dp
+    // TODO: File bug
+    // Various default button padding values aren't exposed via ButtonDefaults
+    val DropdownMenuButtonContentPadding =
+        PaddingValues(
+            start = 24.dp,
+            top = 8.dp,
+            end = 16.dp,
+            bottom = 8.dp
+        )
 }

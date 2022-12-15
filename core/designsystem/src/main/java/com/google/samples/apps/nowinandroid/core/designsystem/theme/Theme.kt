@@ -58,6 +58,8 @@ val LightDefaultColorScheme = lightColorScheme(
     onSurface = DarkPurpleGray10,
     surfaceVariant = PurpleGray90,
     onSurfaceVariant = PurpleGray30,
+    inverseSurface = DarkPurpleGray20,
+    inverseOnSurface = DarkPurpleGray95,
     outline = PurpleGray50
 )
 
@@ -88,6 +90,8 @@ val DarkDefaultColorScheme = darkColorScheme(
     onSurface = DarkPurpleGray90,
     surfaceVariant = PurpleGray30,
     onSurfaceVariant = PurpleGray80,
+    inverseSurface = DarkPurpleGray90,
+    inverseOnSurface = DarkPurpleGray10,
     outline = PurpleGray60
 )
 
@@ -118,6 +122,8 @@ val LightAndroidColorScheme = lightColorScheme(
     onSurface = DarkGreenGray10,
     surfaceVariant = GreenGray90,
     onSurfaceVariant = GreenGray30,
+    inverseSurface = DarkGreenGray20,
+    inverseOnSurface = DarkGreenGray95,
     outline = GreenGray50
 )
 
@@ -148,17 +154,9 @@ val DarkAndroidColorScheme = darkColorScheme(
     onSurface = DarkGreenGray90,
     surfaceVariant = GreenGray30,
     onSurfaceVariant = GreenGray80,
+    inverseSurface = DarkGreenGray90,
+    inverseOnSurface = DarkGreenGray10,
     outline = GreenGray60
-)
-
-/**
- * Light default gradient colors
- */
-val LightDefaultGradientColors = GradientColors(
-    primary = Purple95,
-    secondary = Orange95,
-    tertiary = Blue95,
-    neutral = DarkPurpleGray95
 )
 
 /**
@@ -207,22 +205,38 @@ internal fun NiaTheme(
     disableDynamicTheming: Boolean,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (androidTheme) {
-        if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
-    } else if (!disableDynamicTheming && supportsDynamicTheming()) {
-        val context = LocalContext.current
-        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else {
-        if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
+    // Color scheme
+    val colorScheme = when {
+        !disableDynamicTheming -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            } else {
+                if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
+            }
+        }
+        androidTheme -> if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
+        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
-
-    val defaultGradientColors = GradientColors()
-    val gradientColors = if (androidTheme || (!disableDynamicTheming && supportsDynamicTheming())) {
-        defaultGradientColors
-    } else {
-        if (darkTheme) defaultGradientColors else LightDefaultGradientColors
+    // Gradient colors
+    val emptyGradientColors = GradientColors()
+    val defaultGradientColors = GradientColors(
+        top = colorScheme.inverseOnSurface,
+        bottom = colorScheme.primaryContainer,
+        container = colorScheme.surface
+    )
+    val gradientColors = when {
+        !disableDynamicTheming -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                emptyGradientColors
+            } else {
+                defaultGradientColors
+            }
+        }
+        androidTheme -> emptyGradientColors
+        else -> defaultGradientColors
     }
-
+    // Background theme
     val defaultBackgroundTheme = BackgroundTheme(
         color = colorScheme.surface,
         tonalElevation = 2.dp
@@ -232,7 +246,7 @@ internal fun NiaTheme(
     } else {
         defaultBackgroundTheme
     }
-
+    // Composition locals
     CompositionLocalProvider(
         LocalGradientColors provides gradientColors,
         LocalBackgroundTheme provides backgroundTheme
