@@ -87,7 +87,11 @@ fun <T> NiaDropdownMenuButton(
                 text = text,
                 trailingIcon = {
                     Icon(
-                        imageVector = if (expanded) NiaIcons.ArrowDropUp else NiaIcons.ArrowDropDown,
+                        imageVector = if (expanded) {
+                            NiaIcons.ArrowDropUp
+                        } else {
+                            NiaIcons.ArrowDropDown
+                        },
                         contentDescription = null
                     )
                 }
