@@ -17,8 +17,6 @@
 <resources>
     <!-- TODO: Remove the redundant "interests" prefix -->
     <string name="interests">Interests</string>
-    <string name="interests_topics">Topics</string>
-    <string name="interests_people">People</string>
     <string name="interests_loading">Loading data</string>
     <string name="interests_empty_header">"No available data"</string>
     <string name="interests_card_follow_button_content_desc">Follow interest button</string>
