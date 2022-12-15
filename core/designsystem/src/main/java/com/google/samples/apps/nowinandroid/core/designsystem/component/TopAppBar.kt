@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.annotation.StringRes
