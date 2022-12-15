@@ -234,12 +234,12 @@ fun NiaTextButton(
  * Internal Now in Android button content layout for arranging the text label and leading icon.
  *
  * @param text The button text label content.
- * @param leadingIcon The button leading icon content. Pass `null` here for no leading icon.
+ * @param leadingIcon The button leading icon content. Default is `null` for no leading icon.Ï
  */
 @Composable
 private fun NiaButtonContent(
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)?
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     if (leadingIcon != null) {
         Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {

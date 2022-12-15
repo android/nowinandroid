@@ -21,6 +21,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
@@ -62,16 +63,9 @@ class ThemeTest {
             ) {
                 val colorScheme = LightDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors(
-                    top = colorScheme.inverseOnSurface,
-                    bottom = colorScheme.primaryContainer,
-                    container = colorScheme.surface
-                )
+                val gradientColors = defaultGradientColors(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -87,16 +81,9 @@ class ThemeTest {
             ) {
                 val colorScheme = DarkDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors(
-                    top = colorScheme.inverseOnSurface,
-                    bottom = colorScheme.primaryContainer,
-                    container = colorScheme.surface
-                )
+                val gradientColors = defaultGradientColors(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -109,26 +96,11 @@ class ThemeTest {
                 darkTheme = false,
                 androidTheme = false
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicLightColorScheme(LocalContext.current)
-                } else {
-                    LightDefaultColorScheme
-                }
+                val colorScheme = dynamicLightColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    GradientColors()
-                } else {
-                    GradientColors(
-                        top = colorScheme.inverseOnSurface,
-                        bottom = colorScheme.primaryContainer,
-                        container = colorScheme.surface
-                    )
-                }
+                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -141,26 +113,11 @@ class ThemeTest {
                 darkTheme = true,
                 androidTheme = false
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicDarkColorScheme(LocalContext.current)
-                } else {
-                    DarkDefaultColorScheme
-                }
+                val colorScheme = dynamicDarkColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    GradientColors()
-                } else {
-                    GradientColors(
-                        top = colorScheme.inverseOnSurface,
-                        bottom = colorScheme.primaryContainer,
-                        container = colorScheme.surface
-                    )
-                }
+                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = BackgroundTheme(
-                    color = colorScheme.surface,
-                    tonalElevation = 2.dp
-                )
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -176,7 +133,7 @@ class ThemeTest {
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = emptyGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -194,7 +151,7 @@ class ThemeTest {
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = emptyGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -209,23 +166,11 @@ class ThemeTest {
                 darkTheme = false,
                 androidTheme = true
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicLightColorScheme(LocalContext.current)
-                } else {
-                    LightDefaultColorScheme
-                }
+                val colorScheme = dynamicLightColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    GradientColors()
-                } else {
-                    GradientColors(
-                        top = colorScheme.inverseOnSurface,
-                        bottom = colorScheme.primaryContainer,
-                        container = colorScheme.surface
-                    )
-                }
+                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = LightAndroidBackgroundTheme
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -238,26 +183,57 @@ class ThemeTest {
                 darkTheme = true,
                 androidTheme = true
             ) {
-                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    dynamicDarkColorScheme(LocalContext.current)
-                } else {
-                    DarkDefaultColorScheme
-                }
+                val colorScheme = dynamicDarkColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    GradientColors()
-                } else {
-                    GradientColors(
-                        top = colorScheme.inverseOnSurface,
-                        bottom = colorScheme.primaryContainer,
-                        container = colorScheme.surface
-                    )
-                }
+                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = DarkAndroidBackgroundTheme
+                val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
+    }
+
+    @Composable
+    private fun dynamicLightColorSchemeWithFallback(): ColorScheme {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            dynamicLightColorScheme(LocalContext.current)
+        } else {
+            LightDefaultColorScheme
+        }
+    }
+
+    @Composable
+    private fun dynamicDarkColorSchemeWithFallback(): ColorScheme {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            dynamicDarkColorScheme(LocalContext.current)
+        } else {
+            DarkDefaultColorScheme
+        }
+    }
+
+    private val emptyGradientColors = GradientColors()
+
+    private fun defaultGradientColors(colorScheme: ColorScheme): GradientColors {
+        return GradientColors(
+            top = colorScheme.inverseOnSurface,
+            bottom = colorScheme.primaryContainer,
+            container = colorScheme.surface
+        )
+    }
+
+    private fun dynamicGradientColorsWithFallback(colorScheme: ColorScheme): GradientColors {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            emptyGradientColors
+        } else {
+            defaultGradientColors(colorScheme)
+        }
+    }
+
+    private fun defaultBackgroundTheme(colorScheme: ColorScheme): BackgroundTheme {
+        return BackgroundTheme(
+            color = colorScheme.surface,
+            tonalElevation = 2.dp
+        )
     }
 
     /**
