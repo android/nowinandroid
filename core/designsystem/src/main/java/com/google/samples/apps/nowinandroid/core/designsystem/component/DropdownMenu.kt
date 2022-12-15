@@ -115,12 +115,12 @@ fun <T> NiaDropdownMenuButton(
  * trailing icon.
  *
  * @param text The button text label content.
- * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
+ * @param trailingIcon The button trailing icon content. Default is `null` for no trailing icon.
  */
 @Composable
 private fun NiaDropdownMenuButtonContent(
     text: @Composable () -> Unit,
-    trailingIcon: @Composable (() -> Unit)?,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     Box(
         Modifier

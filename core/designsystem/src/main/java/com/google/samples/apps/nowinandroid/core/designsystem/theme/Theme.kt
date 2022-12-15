@@ -241,10 +241,10 @@ internal fun NiaTheme(
         color = colorScheme.surface,
         tonalElevation = 2.dp
     )
-    val backgroundTheme = if (androidTheme) {
-        if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
-    } else {
-        defaultBackgroundTheme
+    val backgroundTheme = when {
+        !disableDynamicTheming -> defaultBackgroundTheme
+        androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
+        else -> defaultBackgroundTheme
     }
     // Composition locals
     CompositionLocalProvider(
