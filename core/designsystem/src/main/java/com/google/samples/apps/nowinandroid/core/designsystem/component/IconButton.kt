@@ -23,8 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
-import androidx.compose.ui.unit.dp
 
 /**
  * Now in Android toggle button with icon and checked icon content slots. Wraps Material 3
