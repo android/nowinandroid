@@ -32,7 +32,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColo
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroidBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroidColorScheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightDefaultColorScheme
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightDefaultGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -63,7 +62,11 @@ class ThemeTest {
             ) {
                 val colorScheme = LightDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = LightDefaultGradientColors
+                val gradientColors = GradientColors(
+                    top = colorScheme.inverseOnSurface,
+                    bottom = colorScheme.primaryContainer,
+                    container = colorScheme.surface
+                )
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = BackgroundTheme(
                     color = colorScheme.surface,
@@ -84,7 +87,11 @@ class ThemeTest {
             ) {
                 val colorScheme = DarkDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = GradientColors(
+                    top = colorScheme.inverseOnSurface,
+                    bottom = colorScheme.primaryContainer,
+                    container = colorScheme.surface
+                )
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = BackgroundTheme(
                     color = colorScheme.surface,
@@ -111,7 +118,11 @@ class ThemeTest {
                 val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     GradientColors()
                 } else {
-                    LightDefaultGradientColors
+                    GradientColors(
+                        top = colorScheme.inverseOnSurface,
+                        bottom = colorScheme.primaryContainer,
+                        container = colorScheme.surface
+                    )
                 }
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = BackgroundTheme(
@@ -136,7 +147,15 @@ class ThemeTest {
                     DarkDefaultColorScheme
                 }
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    GradientColors()
+                } else {
+                    GradientColors(
+                        top = colorScheme.inverseOnSurface,
+                        bottom = colorScheme.primaryContainer,
+                        container = colorScheme.surface
+                    )
+                }
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = BackgroundTheme(
                     color = colorScheme.surface,
@@ -192,7 +211,15 @@ class ThemeTest {
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    GradientColors()
+                } else {
+                    GradientColors(
+                        top = colorScheme.inverseOnSurface,
+                        bottom = colorScheme.primaryContainer,
+                        container = colorScheme.surface
+                    )
+                }
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -209,7 +236,15 @@ class ThemeTest {
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = GradientColors()
+                val gradientColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    GradientColors()
+                } else {
+                    GradientColors(
+                        top = colorScheme.inverseOnSurface,
+                        bottom = colorScheme.primaryContainer,
+                        container = colorScheme.surface
+                    )
+                }
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -249,6 +284,8 @@ class ThemeTest {
         assertEquals(expectedColorScheme.onSurface, actualColorScheme.onSurface)
         assertEquals(expectedColorScheme.surfaceVariant, actualColorScheme.surfaceVariant)
         assertEquals(expectedColorScheme.onSurfaceVariant, actualColorScheme.onSurfaceVariant)
+        assertEquals(expectedColorScheme.inverseSurface, actualColorScheme.inverseSurface)
+        assertEquals(expectedColorScheme.inverseOnSurface, actualColorScheme.inverseOnSurface)
         assertEquals(expectedColorScheme.outline, actualColorScheme.outline)
     }
 }
