@@ -57,6 +57,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopic
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
@@ -109,7 +110,7 @@ fun NewsResourceCardExpanded(
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceDate(newsResource.publishDate)
+                    NewsResourceMetaData(newsResource.publishDate, newsResource.type)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(newsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -175,7 +176,7 @@ fun BookmarkButton(
 }
 
 @Composable
-private fun dateFormatted(publishDate: Instant): String {
+fun dateFormatted(publishDate: Instant): String {
     var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
 
     val context = LocalContext.current
@@ -195,10 +196,19 @@ private fun dateFormatted(publishDate: Instant): String {
 }
 
 @Composable
-fun NewsResourceDate(
-    publishDate: Instant
+fun NewsResourceMetaData(
+    publishDate: Instant,
+    resourceType: NewsResourceType
 ) {
-    Text(dateFormatted(publishDate), style = MaterialTheme.typography.labelSmall)
+    val formattedDate = dateFormatted(publishDate)
+    Text(
+        if (resourceType != NewsResourceType.Unknown) {
+            stringResource(R.string.card_meta_data_text, formattedDate, resourceType.displayText)
+        } else {
+            formattedDate
+        },
+        style = MaterialTheme.typography.labelSmall
+    )
 }
 
 @Composable
