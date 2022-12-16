@@ -45,9 +45,8 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
 
     // Select some topics to show some feed content
     repeat(3) { index ->
-        // Selecting topics that are in the first column. The visible topics are indexed horizontally first,
-        // so if we want to select the items in the column, we need to select the 0th, 2th, 4th index.
-        val topic = topics.children[(2 * index) % topics.childCount]
+        // Selecting some topics, which will populate items in the feed.
+        val topic = topics.children[index % topics.childCount]
         // Find the checkable element to figure out whether it's checked or not
         val topicCheckIcon = topic.findObject(By.checkable(true))
 
