@@ -21,6 +21,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -28,10 +29,12 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.BackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.DarkAndroidBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.DarkAndroidColorScheme
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.DarkAndroidGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.DarkDefaultColorScheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroidBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroidColorScheme
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroidGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightDefaultColorScheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
@@ -42,7 +45,7 @@ import org.junit.Test
 
 /**
  * Tests [NiaTheme] using different combinations of the theme mode parameters:
- * darkTheme, dynamicColor, and androidTheme.
+ * darkTheme, disableDynamicTheming, and androidTheme.
  *
  * It verifies that the various composition locals — [MaterialTheme], [LocalGradientColors] and
  * [LocalBackgroundTheme] — have the expected values for a given theme mode, as specified by the
@@ -133,7 +136,7 @@ class ThemeTest {
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = emptyGradientColors
+                val gradientColors = LightAndroidGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -151,7 +154,7 @@ class ThemeTest {
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = emptyGradientColors
+                val gradientColors = DarkAndroidGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
@@ -166,11 +169,11 @@ class ThemeTest {
                 darkTheme = false,
                 androidTheme = true
             ) {
-                val colorScheme = dynamicLightColorSchemeWithFallback()
+                val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
+                val gradientColors = LightAndroidGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = defaultBackgroundTheme(colorScheme)
+                val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -183,11 +186,11 @@ class ThemeTest {
                 darkTheme = true,
                 androidTheme = true
             ) {
-                val colorScheme = dynamicDarkColorSchemeWithFallback()
+                val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
-                val gradientColors = dynamicGradientColorsWithFallback(colorScheme)
+                val gradientColors = DarkAndroidGradientColors
                 assertEquals(gradientColors, LocalGradientColors.current)
-                val backgroundTheme = defaultBackgroundTheme(colorScheme)
+                val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
             }
         }
@@ -211,7 +214,9 @@ class ThemeTest {
         }
     }
 
-    private val emptyGradientColors = GradientColors()
+    private fun emptyGradientColors(colorScheme: ColorScheme): GradientColors {
+        return GradientColors(container = colorScheme.surfaceColorAtElevation(2.dp))
+    }
 
     private fun defaultGradientColors(colorScheme: ColorScheme): GradientColors {
         return GradientColors(
@@ -223,7 +228,7 @@ class ThemeTest {
 
     private fun dynamicGradientColorsWithFallback(colorScheme: ColorScheme): GradientColors {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            emptyGradientColors
+            emptyGradientColors(colorScheme)
         } else {
             defaultGradientColors(colorScheme)
         }
