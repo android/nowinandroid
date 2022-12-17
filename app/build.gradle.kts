@@ -22,6 +22,7 @@ plugins {
     id("nowinandroid.android.hilt")
     id("jacoco")
     id("nowinandroid.firebase-perf")
+    id("idea")
 }
 
 android {
@@ -126,5 +127,12 @@ configurations.configureEach {
         force(libs.junit4)
         // Temporary workaround for https://issuetracker.google.com/174733673
         force("org.objenesis:objenesis:2.6")
+    }
+}
+
+// Exclude baseline-prof.txt from indexing
+idea {
+    module {
+        excludeDirs = excludeDirs + file("src/main/baseline-prof.txt")
     }
 }
