@@ -35,7 +35,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithKnownResourceType,
+                userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
@@ -62,7 +62,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithUnknownResourceType,
+                userNewsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
