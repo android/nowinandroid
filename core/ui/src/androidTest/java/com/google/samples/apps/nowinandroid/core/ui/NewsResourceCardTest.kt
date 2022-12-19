@@ -20,7 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,7 +30,7 @@ class NewsResourceCardTest {
 
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
-        val newsWithKnownResourceType = previewNewsResources[0]
+        val newsWithKnownResourceType = previewUserNewsResources[0]
         var dateFormatted = ""
 
         composeTestRule.setContent {
@@ -57,7 +57,7 @@ class NewsResourceCardTest {
 
     @Test
     fun testMetaDataDisplay_withUnknownResource() {
-        val newsWithUnknownResourceType = previewNewsResources[3]
+        val newsWithUnknownResourceType = previewUserNewsResources[3]
         var dateFormatted = ""
 
         composeTestRule.setContent {

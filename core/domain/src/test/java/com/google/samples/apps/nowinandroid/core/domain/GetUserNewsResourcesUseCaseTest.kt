@@ -70,7 +70,8 @@ class GetUserNewsResourcesUseCaseTest {
                             isFollowed = false
                         )
                     },
-                    true),
+                    true
+                ),
                 UserNewsResource(
                     sampleNewsResources[1].id,
                     sampleNewsResources[1].title,
@@ -85,7 +86,8 @@ class GetUserNewsResourcesUseCaseTest {
                             isFollowed = false
                         )
                     },
-                    false),
+                    false
+                ),
                 UserNewsResource(
                     sampleNewsResources[2].id,
                     sampleNewsResources[2].title,
@@ -97,10 +99,11 @@ class GetUserNewsResourcesUseCaseTest {
                     sampleNewsResources[2].topics.map { topic ->
                         FollowableTopic(
                             topic = topic,
-                            isFollowed = true
+                            isFollowed = false
                         )
                     },
-                    true),
+                    true
+                ),
             ),
             saveableNewsResources.first()
         )
@@ -120,21 +123,24 @@ class GetUserNewsResourcesUseCaseTest {
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .map { UserNewsResource(
-                    id = it.id,
-                    title = it.title,
-                    content = it.content,
-                    url = it.url,
-                    headerImageUrl = it.headerImageUrl,
-                    publishDate = it.publishDate,
-                    type = it.type,
-                    topics = it.topics.map { topic ->
-                       FollowableTopic(
-                           topic = topic,
-                           isFollowed = false
-                       )
-                    },
-                    isSaved = false) },
+                .map {
+                    UserNewsResource(
+                        id = it.id,
+                        title = it.title,
+                        content = it.content,
+                        url = it.url,
+                        headerImageUrl = it.headerImageUrl,
+                        publishDate = it.publishDate,
+                        type = it.type,
+                        topics = it.topics.map { topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
+                        isSaved = false
+                    )
+                },
             saveableNewsResources.first()
         )
     }

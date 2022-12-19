@@ -263,7 +263,9 @@ class ForYouViewModelTest {
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("0", "1"))
+
+        val followedTopicIds = setOf("0", "1")
+        userDataRepository.setFollowedTopicIds(followedTopicIds)
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -290,10 +292,10 @@ class ForYouViewModelTest {
                         headerImageUrl = it.headerImageUrl,
                         publishDate = it.publishDate,
                         type = it.type,
-                        topics = it.topics.map{ topic ->
+                        topics = it.topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
-                                isFollowed = false
+                                isFollowed = followedTopicIds.contains(topic.id)
                             )
                         },
                         isSaved = false
@@ -319,41 +321,9 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map {
+                    FollowableTopic(it, false)
+                }
             ),
             viewModel.onboardingUiState.value
         )
@@ -364,45 +334,14 @@ class ForYouViewModelTest {
             viewModel.feedState.value
         )
 
-        viewModel.updateTopicSelection("1", isChecked = true)
+        val followedTopicId = sampleTopics[1].id
+        viewModel.updateTopicSelection(followedTopicId, isChecked = true)
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = true
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map {
+                    FollowableTopic(it, it.id == followedTopicId)
+                }
             ),
             viewModel.onboardingUiState.value
         )
@@ -417,10 +356,10 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[1].headerImageUrl,
                         publishDate = sampleNewsResources[1].publishDate,
                         type = sampleNewsResources[1].type,
-                        topics = sampleNewsResources[1].topics.map{ topic ->
+                        topics = sampleNewsResources[1].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
-                                isFollowed = false
+                                isFollowed = topic.id == followedTopicId
                             )
                         },
                         isSaved = false
@@ -433,10 +372,10 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[2].headerImageUrl,
                         publishDate = sampleNewsResources[2].publishDate,
                         type = sampleNewsResources[2].type,
-                        topics = sampleNewsResources[2].topics.map{ topic ->
+                        topics = sampleNewsResources[2].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
-                                isFollowed = false
+                                isFollowed = topic.id == followedTopicId
                             )
                         },
                         isSaved = false
@@ -520,8 +459,10 @@ class ForYouViewModelTest {
             launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
+        val followedTopicIds = setOf("1")
+
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("1"))
+        userDataRepository.setFollowedTopicIds(followedTopicIds)
         userDataRepository.setShouldHideOnboarding(true)
         newsRepository.sendNewsResources(sampleNewsResources)
         viewModel.updateNewsResourceSaved("2", true)
@@ -541,10 +482,10 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[1].headerImageUrl,
                         publishDate = sampleNewsResources[1].publishDate,
                         type = sampleNewsResources[1].type,
-                        topics = sampleNewsResources[1].topics.map{ topic ->
+                        topics = sampleNewsResources[1].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
-                                isFollowed = false
+                                isFollowed = followedTopicIds.contains(topic.id)
                             )
                         },
                         isSaved = true
@@ -557,10 +498,10 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[2].headerImageUrl,
                         publishDate = sampleNewsResources[2].publishDate,
                         type = sampleNewsResources[2].type,
-                        topics = sampleNewsResources[2].topics.map{ topic ->
+                        topics = sampleNewsResources[2].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
-                                isFollowed = false
+                                isFollowed = followedTopicIds.contains(topic.id)
                             )
                         },
                         isSaved = false
