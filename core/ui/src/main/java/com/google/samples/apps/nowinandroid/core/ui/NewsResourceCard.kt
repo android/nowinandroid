@@ -56,9 +56,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconT
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -73,7 +75,7 @@ import kotlinx.datetime.toJavaInstant
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
-    newsResource: NewsResource,
+    userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
@@ -91,9 +93,9 @@ fun NewsResourceCardExpanded(
         }
     ) {
         Column {
-            if (!newsResource.headerImageUrl.isNullOrEmpty()) {
+            if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
                 Row {
-                    NewsResourceHeaderImage(newsResource.headerImageUrl)
+                    NewsResourceHeaderImage(userNewsResource.headerImageUrl)
                 }
             }
             Box(
@@ -103,18 +105,18 @@ fun NewsResourceCardExpanded(
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
                         NewsResourceTitle(
-                            newsResource.title,
+                            userNewsResource.title,
                             modifier = Modifier.fillMaxWidth((.8f))
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceMetaData(newsResource.publishDate, newsResource.type)
+                    NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceShortDescription(newsResource.content)
+                    NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceTopics(newsResource.topics)
+                    NewsResourceTopics(userNewsResource.topics)
                 }
             }
         }
@@ -227,7 +229,7 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    topics: List<Topic>,
+    topics: List<FollowableTopic>,
     modifier: Modifier = Modifier
 ) {
     // Store the ID of the Topic which has its "following" menu expanded, if any.
@@ -238,17 +240,17 @@ fun NewsResourceTopics(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        for (topic in topics) {
+        for (followableTopic in topics) {
             NiaTopicTag(
-                expanded = expandedTopicId == topic.id,
+                expanded = expandedTopicId == followableTopic.topic.id,
                 followed = true, // ToDo: Check if topic is followed
                 onDropdownMenuToggle = { show ->
-                    expandedTopicId = if (show) topic.id else null
+                    expandedTopicId = if (show) followableTopic.topic.id else null
                 },
                 onFollowClick = { }, // ToDo
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo
-                text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
+                text = { Text(text = followableTopic.topic.name.uppercase(Locale.getDefault())) }
             )
         }
     }
@@ -280,7 +282,7 @@ fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
             NewsResourceCardExpanded(
-                newsResource = previewNewsResources[0],
+                userNewsResource = previewUserNewsResources[0],
                 isBookmarked = true,
                 onToggleBookmark = {},
                 onClick = {}

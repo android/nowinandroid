@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
 /**
@@ -37,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
  */
 fun <T> LazyListScope.newsResourceCardItems(
     items: List<T>,
-    newsResourceMapper: (item: T) -> NewsResource,
+    newsResourceMapper: (item: T) -> UserNewsResource, //TODO remove this?
     isBookmarkedMapper: (item: T) -> Boolean,
     onToggleBookmark: (item: T) -> Unit,
     onItemClick: ((item: T) -> Unit)? = null,
@@ -52,7 +53,7 @@ fun <T> LazyListScope.newsResourceCardItems(
         val context = LocalContext.current
 
         NewsResourceCardExpanded(
-            newsResource = newsResource,
+            userNewsResource = newsResource,
             isBookmarked = isBookmarkedMapper(item),
             onToggleBookmark = { onToggleBookmark(item) },
             onClick = {

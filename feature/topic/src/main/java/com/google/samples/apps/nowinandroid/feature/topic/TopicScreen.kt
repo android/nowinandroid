@@ -54,6 +54,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
@@ -182,9 +183,9 @@ private fun LazyListScope.TopicCards(
         is NewsUiState.Success -> {
             newsResourceCardItems(
                 items = news.news,
-                newsResourceMapper = { it.newsResource },
+                newsResourceMapper = { it },
                 isBookmarkedMapper = { it.isSaved },
-                onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
+                onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -257,12 +258,7 @@ fun TopicScreenPopulated() {
             TopicScreen(
                 topicUiState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
                 newsUiState = NewsUiState.Success(
-                    previewNewsResources.mapIndexed { index, newsResource ->
-                        UserNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
+                    previewUserNewsResources
                 ),
                 onBackClick = {},
                 onFollowClick = {},
