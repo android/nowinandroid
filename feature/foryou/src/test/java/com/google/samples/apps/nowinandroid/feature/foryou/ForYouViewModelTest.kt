@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -54,7 +54,7 @@ class ForYouViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
+    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
@@ -69,7 +69,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getSaveableNewsResourcesUseCase,
+            getSaveableNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase
         )
     }
@@ -283,7 +283,19 @@ class ForYouViewModelTest {
                 feed =
                 sampleNewsResources.map {
                     UserNewsResource(
-                        newsResource = it,
+                        id = it.id,
+                        title = it.title,
+                        content = it.content,
+                        url = it.url,
+                        headerImageUrl = it.headerImageUrl,
+                        publishDate = it.publishDate,
+                        type = it.type,
+                        topics = it.topics.map{ topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
                         isSaved = false
                     )
                 }
@@ -398,11 +410,35 @@ class ForYouViewModelTest {
             NewsFeedUiState.Success(
                 feed = listOf(
                     UserNewsResource(
-                        newsResource = sampleNewsResources[1],
+                        id = sampleNewsResources[1].id,
+                        title = sampleNewsResources[1].title,
+                        content = sampleNewsResources[1].content,
+                        url = sampleNewsResources[1].url,
+                        headerImageUrl = sampleNewsResources[1].headerImageUrl,
+                        publishDate = sampleNewsResources[1].publishDate,
+                        type = sampleNewsResources[1].type,
+                        topics = sampleNewsResources[1].topics.map{ topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
                         isSaved = false
                     ),
                     UserNewsResource(
-                        newsResource = sampleNewsResources[2],
+                        id = sampleNewsResources[2].id,
+                        title = sampleNewsResources[2].title,
+                        content = sampleNewsResources[2].content,
+                        url = sampleNewsResources[2].url,
+                        headerImageUrl = sampleNewsResources[2].headerImageUrl,
+                        publishDate = sampleNewsResources[2].publishDate,
+                        type = sampleNewsResources[2].type,
+                        topics = sampleNewsResources[2].topics.map{ topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
                         isSaved = false
                     )
                 )
@@ -498,13 +534,37 @@ class ForYouViewModelTest {
             NewsFeedUiState.Success(
                 feed = listOf(
                     UserNewsResource(
-                        newsResource = sampleNewsResources[1],
+                        id = sampleNewsResources[1].id,
+                        title = sampleNewsResources[1].title,
+                        content = sampleNewsResources[1].content,
+                        url = sampleNewsResources[1].url,
+                        headerImageUrl = sampleNewsResources[1].headerImageUrl,
+                        publishDate = sampleNewsResources[1].publishDate,
+                        type = sampleNewsResources[1].type,
+                        topics = sampleNewsResources[1].topics.map{ topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
                         isSaved = true
                     ),
                     UserNewsResource(
-                        newsResource = sampleNewsResources[2],
+                        id = sampleNewsResources[2].id,
+                        title = sampleNewsResources[2].title,
+                        content = sampleNewsResources[2].content,
+                        url = sampleNewsResources[2].url,
+                        headerImageUrl = sampleNewsResources[2].headerImageUrl,
+                        publishDate = sampleNewsResources[2].publishDate,
+                        type = sampleNewsResources[2].type,
+                        topics = sampleNewsResources[2].topics.map{ topic ->
+                            FollowableTopic(
+                                topic = topic,
+                                isFollowed = false
+                            )
+                        },
                         isSaved = false
-                    )
+                    ),
                 )
             ),
             viewModel.feedState.value
