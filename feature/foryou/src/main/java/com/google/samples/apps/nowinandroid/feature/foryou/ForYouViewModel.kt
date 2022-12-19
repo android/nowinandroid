@@ -22,7 +22,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -117,6 +117,6 @@ class ForYouViewModel @Inject constructor(
     }
 }
 
-private fun Flow<List<SaveableNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
-    map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+private fun Flow<List<UserNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
+    map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
         .onStart { emit(NewsFeedUiState.Loading) }

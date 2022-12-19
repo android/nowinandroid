@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +47,7 @@ class GetSaveableNewsResourcesUseCase @Inject constructor(
      */
     operator fun invoke(
         filterTopicIds: Set<String> = emptySet()
-    ): Flow<List<SaveableNewsResource>> =
+    ): Flow<List<UserNewsResource>> =
         if (filterTopicIds.isEmpty()) {
             newsRepository.getNewsResources()
         } else {
@@ -57,11 +57,11 @@ class GetSaveableNewsResourcesUseCase @Inject constructor(
 
 private fun Flow<List<NewsResource>>.mapToSaveableNewsResources(
     savedNewsResourceIds: Flow<Set<String>>
-): Flow<List<SaveableNewsResource>> =
+): Flow<List<UserNewsResource>> =
     filterNot { it.isEmpty() }
         .combine(savedNewsResourceIds) { newsResources, savedNewsResourceIds ->
             newsResources.map { newsResource ->
-                SaveableNewsResource(
+                UserNewsResource(
                     newsResource = newsResource,
                     isSaved = savedNewsResourceIds.contains(newsResource.id)
                 )
