@@ -29,7 +29,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -226,7 +226,7 @@ class ForYouScreenTest {
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
                     feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
+                        UserNewsResource(it, false)
                     }
                 ),
                 onTopicCheckedChanged = { _, _ -> },

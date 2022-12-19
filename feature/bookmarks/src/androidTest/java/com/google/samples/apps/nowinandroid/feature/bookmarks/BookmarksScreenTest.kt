@@ -31,7 +31,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlin.test.assertEquals
@@ -71,7 +71,7 @@ class BookmarksScreenTest {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
                     previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                        .map { UserNewsResource(it, true) }
                 ),
                 removeFromBookmarks = { }
             )
@@ -110,7 +110,7 @@ class BookmarksScreenTest {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
                     previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                        .map { UserNewsResource(it, true) }
                 ),
                 removeFromBookmarks = { newsResourceId ->
                     assertEquals(previewNewsResources[0].id, newsResourceId)

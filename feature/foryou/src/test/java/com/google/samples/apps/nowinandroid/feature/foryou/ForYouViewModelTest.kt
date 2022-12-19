@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -282,7 +282,7 @@ class ForYouViewModelTest {
             NewsFeedUiState.Success(
                 feed =
                 sampleNewsResources.map {
-                    SaveableNewsResource(
+                    UserNewsResource(
                         newsResource = it,
                         isSaved = false
                     )
@@ -397,11 +397,11 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[1],
                         isSaved = false
                     ),
-                    SaveableNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[2],
                         isSaved = false
                     )
@@ -497,11 +497,11 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[1],
                         isSaved = true
                     ),
-                    SaveableNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[2],
                         isSaved = false
                     )
