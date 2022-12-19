@@ -22,7 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -46,7 +46,7 @@ class TopicViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
     // newsRepository: NewsRepository,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase
+    getSaveableNewsResources: GetUserNewsResourcesUseCase
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
@@ -131,7 +131,7 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
+    getSaveableNewsResources: GetUserNewsResourcesUseCase,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news

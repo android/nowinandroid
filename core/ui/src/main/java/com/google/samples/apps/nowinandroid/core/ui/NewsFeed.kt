@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 
 /**
  * An extension on [LazyListScope] defining a feed with news resources.
@@ -51,21 +51,21 @@ fun LazyGridScope.newsFeed(
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
         is NewsFeedUiState.Success -> {
-            items(feedState.feed, key = { it.newsResource.id }) { saveableNewsResource ->
+            items(feedState.feed, key = { it.id }) { userNewsResource ->
                 val resourceUrl by remember {
-                    mutableStateOf(Uri.parse(saveableNewsResource.newsResource.url))
+                    mutableStateOf(Uri.parse(userNewsResource.url))
                 }
                 val context = LocalContext.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
                 NewsResourceCardExpanded(
-                    newsResource = saveableNewsResource.newsResource,
-                    isBookmarked = saveableNewsResource.isSaved,
+                    userNewsResource = userNewsResource,
+                    isBookmarked = userNewsResource.isSaved,
                     onClick = { launchCustomChromeTab(context, resourceUrl, backgroundColor) },
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
-                            saveableNewsResource.newsResource.id,
-                            !saveableNewsResource.isSaved
+                            userNewsResource.id,
+                            !userNewsResource.isSaved
                         )
                     }
                 )
@@ -125,12 +125,7 @@ fun NewsFeedContentPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Success(
-                    previewNewsResources.map {
-                        UserNewsResource(
-                            it,
-                            false
-                        )
-                    }
+                    previewUserNewsResources
                 ),
                 onNewsResourcesCheckedChanged = { _, _ -> }
             )

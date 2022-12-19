@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -38,7 +39,7 @@ class GetUserNewsResourcesUseCaseTest {
     private val newsRepository = TestNewsRepository()
     private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetSaveableNewsResourcesUseCase(newsRepository, userDataRepository)
+    val useCase = GetUserNewsResourcesUseCase(newsRepository, userDataRepository)
 
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
@@ -55,9 +56,51 @@ class GetUserNewsResourcesUseCaseTest {
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
             listOf(
-                UserNewsResource(sampleNewsResources[0], true),
-                UserNewsResource(sampleNewsResources[1], false),
-                UserNewsResource(sampleNewsResources[2], true)
+                UserNewsResource(
+                    sampleNewsResources[0].id,
+                    sampleNewsResources[0].title,
+                    sampleNewsResources[0].content,
+                    sampleNewsResources[0].url,
+                    sampleNewsResources[0].headerImageUrl,
+                    sampleNewsResources[0].publishDate,
+                    sampleNewsResources[0].type,
+                    sampleNewsResources[0].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = false
+                        )
+                    },
+                    true),
+                UserNewsResource(
+                    sampleNewsResources[1].id,
+                    sampleNewsResources[1].title,
+                    sampleNewsResources[1].content,
+                    sampleNewsResources[1].url,
+                    sampleNewsResources[1].headerImageUrl,
+                    sampleNewsResources[1].publishDate,
+                    sampleNewsResources[1].type,
+                    sampleNewsResources[1].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = false
+                        )
+                    },
+                    false),
+                UserNewsResource(
+                    sampleNewsResources[2].id,
+                    sampleNewsResources[2].title,
+                    sampleNewsResources[2].content,
+                    sampleNewsResources[2].url,
+                    sampleNewsResources[2].headerImageUrl,
+                    sampleNewsResources[2].publishDate,
+                    sampleNewsResources[2].type,
+                    sampleNewsResources[2].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = true
+                        )
+                    },
+                    true),
             ),
             saveableNewsResources.first()
         )
@@ -77,7 +120,21 @@ class GetUserNewsResourcesUseCaseTest {
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .map { UserNewsResource(it, false) },
+                .map { UserNewsResource(
+                    id = it.id,
+                    title = it.title,
+                    content = it.content,
+                    url = it.url,
+                    headerImageUrl = it.headerImageUrl,
+                    publishDate = it.publishDate,
+                    type = it.type,
+                    topics = it.topics.map { topic ->
+                       FollowableTopic(
+                           topic = topic,
+                           isFollowed = false
+                       )
+                    },
+                    isSaved = false) },
             saveableNewsResources.first()
         )
     }
