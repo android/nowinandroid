@@ -204,8 +204,7 @@ internal fun ForYouScreen(
         ) {
             NiaOverlayLoadingWheel(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .testTag("forYou:loadingWheel"),
+                    .align(Alignment.Center),
                 contentDesc = loadingContentDescription
             )
         }
@@ -282,7 +281,9 @@ private fun TopicSelection(
     modifier: Modifier = Modifier
 ) = trace("TopicSelection") {
     val lazyGridState = rememberLazyGridState()
-    TrackScrollJank(scrollableState = lazyGridState, stateName = "forYou:TopicSelection")
+    val topicSelectionTestTag = "forYou:topicSelection"
+
+    TrackScrollJank(scrollableState = lazyGridState, stateName = topicSelectionTestTag)
 
     LazyHorizontalGrid(
         state = lazyGridState,
@@ -302,6 +303,7 @@ private fun TopicSelection(
             // The maximum of these two bounds is therefore a valid upper bound in all cases.
             .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
             .fillMaxWidth()
+            .testTag(topicSelectionTestTag)
     ) {
         items(onboardingUiState.topics) {
             SingleTopicButton(

@@ -23,12 +23,53 @@ import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
-    // Wait until content is loaded by checking if authors are loaded
-    device.wait(Until.gone(By.res("forYou:loadingWheel")), 5_000)
+    // Wait until content is loaded by checking if topics are loaded
+    device.wait(Until.gone(By.res("loadingWheel")), 5_000)
     // Sometimes, the loading wheel is gone, but the content is not loaded yet
-    // So we'll wait here for authors to be sure
-    val obj = device.findObject(By.res("forYou:authors"))
-    obj.wait(untilHasChildren(), 30_000)
+    // So we'll wait here for topics to be sure
+    val obj = device.findObject(By.res("forYou:topicSelection"))
+    // Timeout here is quite big, because sometimes data loading takes a long time!
+    obj.wait(untilHasChildren(), 60_000)
+}
+
+/**
+ * Selects some topics, which will show the feed content for them.
+ * [recheckTopicsIfChecked] Topics may be already checked from the previous iteration.
+ */
+fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = false) {
+    val topics = device.findObject(By.res("forYou:topicSelection"))
+
+    // Set gesture margin from sides not to trigger system gesture navigation
+    val horizontalMargin = 10 * topics.visibleBounds.width() / 100
+    topics.setGestureMargins(horizontalMargin, 0, horizontalMargin, 0)
+
+    // Select some topics to show some feed content
+    repeat(3) { index ->
+        // Selecting some topics, which will populate items in the feed.
+        val topic = topics.children[index % topics.childCount]
+        // Find the checkable element to figure out whether it's checked or not
+        val topicCheckIcon = topic.findObject(By.checkable(true))
+
+        when {
+            // Topic wasn't checked, so just do that
+            !topicCheckIcon.isChecked -> {
+                topic.click()
+                device.waitForIdle()
+            }
+
+            // Topic was checked already and we want to recheck it, so just do it twice
+            recheckTopicsIfChecked -> {
+                repeat(2) {
+                    topic.click()
+                    device.waitForIdle()
+                }
+            }
+
+            else -> {
+                // Topic is checked, but we don't recheck it
+            }
+        }
+    }
 }
 
 fun MacrobenchmarkScope.forYouScrollFeedDownUp() {
