@@ -26,7 +26,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
@@ -99,14 +98,7 @@ class TopicScreenTest {
         composeTestRule.setContent {
             TopicScreen(
                 topicUiState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        UserNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
-                ),
+                newsUiState = NewsUiState.Success(sampleUserNewsResources),
                 onBackClick = { },
                 onFollowClick = { },
                 onBookmarkChanged = { _, _ -> },
@@ -126,12 +118,7 @@ class TopicScreenTest {
             TopicScreen(
                 topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Success(
-                    sampleNewsResources.mapIndexed { index, newsResource ->
-                        UserNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
+                    sampleUserNewsResources
                 ),
                 onBackClick = { },
                 onFollowClick = { },
@@ -143,7 +130,7 @@ class TopicScreenTest {
         composeTestRule
             .onAllNodes(hasScrollToNodeAction())
             .onFirst()
-            .performScrollToNode(hasText(sampleNewsResources.first().title))
+            .performScrollToNode(hasText(sampleUserNewsResources.first().title))
     }
 }
 
@@ -188,8 +175,8 @@ private val testTopics = listOf(
     )
 )
 
-private val sampleNewsResources = listOf(
-    NewsResource(
+private val sampleUserNewsResources = listOf(
+    UserNewsResource(
         id = "1",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -201,14 +188,18 @@ private val sampleNewsResources = listOf(
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
         topics = listOf(
-            Topic(
-                id = "0",
-                name = "Headlines",
-                shortDescription = "",
-                longDescription = TOPIC_DESC,
-                url = "",
-                imageUrl = ""
+            FollowableTopic(
+                topic = Topic(
+                    id = "0",
+                    name = "Headlines",
+                    shortDescription = "",
+                    longDescription = TOPIC_DESC,
+                    url = "",
+                    imageUrl = ""
+                ),
+                isFollowed = false
             )
-        )
+        ),
+        isSaved = true
     )
 )

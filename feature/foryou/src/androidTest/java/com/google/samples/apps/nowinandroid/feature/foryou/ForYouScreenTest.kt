@@ -29,9 +29,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import org.junit.Rule
 import org.junit.Test
@@ -225,9 +224,7 @@ class ForYouScreenTest {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        UserNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -237,7 +234,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[0].title,
+                previewUserNewsResources[0].title,
                 substring = true
             )
             .assertExists()
@@ -246,14 +243,14 @@ class ForYouScreenTest {
         composeTestRule.onNode(hasScrollToNodeAction())
             .performScrollToNode(
                 hasText(
-                    previewNewsResources[1].title,
+                    previewUserNewsResources[1].title,
                     substring = true
                 )
             )
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[1].title,
+                previewUserNewsResources[1].title,
                 substring = true
             )
             .assertExists()
