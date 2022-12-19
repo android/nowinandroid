@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
@@ -135,7 +135,7 @@ private fun newsUiState(
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val news: Flow<List<SaveableNewsResource>> = getSaveableNewsResources(
+    val news: Flow<List<UserNewsResource>> = getSaveableNewsResources(
         filterTopicIds = setOf(element = topicId),
     )
 
@@ -172,7 +172,7 @@ sealed interface TopicUiState {
 }
 
 sealed interface NewsUiState {
-    data class Success(val news: List<SaveableNewsResource>) : NewsUiState
+    data class Success(val news: List<UserNewsResource>) : NewsUiState
     object Error : NewsUiState
     object Loading : NewsUiState
 }

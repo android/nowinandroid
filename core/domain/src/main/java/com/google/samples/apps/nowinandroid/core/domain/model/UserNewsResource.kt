@@ -21,7 +21,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 /**
  * A [NewsResource] with the additional information for whether it is saved.
  */
-data class SaveableNewsResource(
+data class UserNewsResource(
     val newsResource: NewsResource,
     val isSaved: Boolean,
 )

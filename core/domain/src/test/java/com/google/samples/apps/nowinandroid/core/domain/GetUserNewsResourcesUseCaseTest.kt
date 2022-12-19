@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -30,7 +30,7 @@ import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
 
-class GetSaveableNewsResourcesUseCaseTest {
+class GetUserNewsResourcesUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -55,9 +55,9 @@ class GetSaveableNewsResourcesUseCaseTest {
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
             listOf(
-                SaveableNewsResource(sampleNewsResources[0], true),
-                SaveableNewsResource(sampleNewsResources[1], false),
-                SaveableNewsResource(sampleNewsResources[2], true)
+                UserNewsResource(sampleNewsResources[0], true),
+                UserNewsResource(sampleNewsResources[1], false),
+                UserNewsResource(sampleNewsResources[2], true)
             ),
             saveableNewsResources.first()
         )
@@ -77,7 +77,7 @@ class GetSaveableNewsResourcesUseCaseTest {
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .map { SaveableNewsResource(it, false) },
+                .map { UserNewsResource(it, false) },
             saveableNewsResources.first()
         )
     }
