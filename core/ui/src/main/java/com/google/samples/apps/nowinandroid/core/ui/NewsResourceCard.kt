@@ -61,7 +61,6 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
