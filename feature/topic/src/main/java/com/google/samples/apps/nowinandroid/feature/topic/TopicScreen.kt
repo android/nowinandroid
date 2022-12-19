@@ -53,7 +53,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadi
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
@@ -258,7 +258,7 @@ fun TopicScreenPopulated() {
                 topicUiState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
                 newsUiState = NewsUiState.Success(
                     previewNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
+                        UserNewsResource(
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )

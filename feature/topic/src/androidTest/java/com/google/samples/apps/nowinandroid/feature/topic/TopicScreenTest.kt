@@ -25,7 +25,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -101,7 +101,7 @@ class TopicScreenTest {
                 topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Success(
                     sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
+                        UserNewsResource(
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )
@@ -127,7 +127,7 @@ class TopicScreenTest {
                 topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Success(
                     sampleNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
+                        UserNewsResource(
                             newsResource = newsResource,
                             isSaved = index % 2 == 0,
                         )

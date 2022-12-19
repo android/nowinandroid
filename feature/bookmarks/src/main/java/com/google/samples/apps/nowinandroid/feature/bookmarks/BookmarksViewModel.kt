@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +41,8 @@ class BookmarksViewModel @Inject constructor(
 
     val feedUiState: StateFlow<NewsFeedUiState> = getSaveableNewsResources()
         .filterNot { it.isEmpty() }
-        .map { newsResources -> newsResources.filter(SaveableNewsResource::isSaved) } // Only show bookmarked news resources.
-        .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+        .map { newsResources -> newsResources.filter(UserNewsResource::isSaved) } // Only show bookmarked news resources.
+        .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
         .onStart { emit(Loading) }
         .stateIn(
             scope = viewModelScope,
