@@ -21,11 +21,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+
+/* ktlint-disable max-line-length */
 
 /**
  * A [NewsResource] with the additional user information.
