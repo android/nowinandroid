@@ -242,7 +242,7 @@ fun NewsResourceTopics(
         for (followableTopic in topics) {
             NiaTopicTag(
                 expanded = expandedTopicId == followableTopic.topic.id,
-                followed = true, // ToDo: Check if topic is followed
+                followed = followableTopic.isFollowed,
                 onDropdownMenuToggle = { show ->
                     expandedTopicId = if (show) followableTopic.topic.id else null
                 },
