@@ -41,7 +41,7 @@ import kotlin.math.tan
 
 /**
  * The main background for the app.
- * Uses [LocalBackgroundTheme] to set the color and tonal elevation of a [Box].
+ * Uses [LocalBackgroundTheme] to set the color and tonal elevation of a [Surface].
  *
  * @param modifier Modifier to be applied to the background.
  * @param content The background content.
@@ -66,23 +66,28 @@ fun NiaBackground(
 
 /**
  * A gradient background for select screens. Uses [LocalBackgroundTheme] to set the gradient colors
- * of a [Box].
+ * of a [Box] within a [Surface].
  *
  * @param modifier Modifier to be applied to the background.
  * @param topColor The top gradient color to be rendered.
  * @param bottomColor The bottom gradient color to be rendered.
+ * @param containerColor The container color over which the gradient will be rendered.
  * @param content The background content.
  */
 @Composable
 fun NiaGradientBackground(
     modifier: Modifier = Modifier,
-    topColor: Color = LocalGradientColors.current.primary,
-    bottomColor: Color = LocalGradientColors.current.secondary,
+    topColor: Color = LocalGradientColors.current.top,
+    bottomColor: Color = LocalGradientColors.current.bottom,
+    containerColor: Color = LocalGradientColors.current.container,
     content: @Composable () -> Unit
 ) {
     val currentTopColor by rememberUpdatedState(topColor)
     val currentBottomColor by rememberUpdatedState(bottomColor)
-    NiaBackground(modifier) {
+    Surface(
+        color = if (containerColor == Color.Unspecified) Color.Transparent else containerColor,
+        modifier = modifier.fillMaxSize()
+    ) {
         Box(
             Modifier
                 .fillMaxSize()

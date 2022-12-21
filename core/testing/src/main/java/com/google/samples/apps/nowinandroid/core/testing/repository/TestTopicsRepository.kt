@@ -31,7 +31,7 @@ class TestTopicsRepository : TopicsRepository {
     private val topicsFlow: MutableSharedFlow<List<Topic>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getTopicsStream(): Flow<List<Topic>> = topicsFlow
+    override fun getTopics(): Flow<List<Topic>> = topicsFlow
 
     override fun getTopic(id: String): Flow<Topic> {
         return topicsFlow.map { topics -> topics.find { it.id == id }!! }

@@ -58,12 +58,11 @@ class OfflineFirstUserDataRepositoryTest {
                 UserData(
                     bookmarkedNewsResources = emptySet(),
                     followedTopics = emptySet(),
-                    followedAuthors = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
                     shouldHideOnboarding = false
                 ),
-                subject.userDataStream.first()
+                subject.userData.first()
             )
         }
 
@@ -74,7 +73,7 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -83,16 +82,16 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -105,16 +104,16 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("1", "2"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -127,7 +126,7 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
@@ -136,16 +135,16 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.bookmarkedNewsResources }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
@@ -158,14 +157,14 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 ThemeBrand.ANDROID,
-                subject.userDataStream
+                subject.userData
                     .map { it.themeBrand }
                     .first()
             )
             assertEquals(
                 ThemeBrand.ANDROID,
                 niaPreferencesDataSource
-                    .userDataStream
+                    .userData
                     .map { it.themeBrand }
                     .first()
             )
@@ -178,14 +177,14 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 DarkThemeConfig.DARK,
-                subject.userDataStream
+                subject.userData
                     .map { it.darkThemeConfig }
                     .first()
             )
             assertEquals(
                 DarkThemeConfig.DARK,
                 niaPreferencesDataSource
-                    .userDataStream
+                    .userData
                     .map { it.darkThemeConfig }
                     .first()
             )
@@ -196,9 +195,9 @@ class OfflineFirstUserDataRepositoryTest {
         runTest {
             subject.setFollowedTopicIds(setOf("1"))
             subject.setShouldHideOnboarding(true)
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+            assertTrue(subject.userData.first().shouldHideOnboarding)
 
             subject.setFollowedTopicIds(emptySet())
-            assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+            assertFalse(subject.userData.first().shouldHideOnboarding)
         }
 }

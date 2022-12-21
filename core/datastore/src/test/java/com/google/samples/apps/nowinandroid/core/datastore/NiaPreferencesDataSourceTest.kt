@@ -41,27 +41,13 @@ class NiaPreferencesDataSourceTest {
 
     @Test
     fun shouldHideOnboardingIsFalseByDefault() = runTest {
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
     fun userShouldHideOnboardingIsTrueWhenSet() = runTest {
         subject.setShouldHideOnboarding(true)
-        assertTrue(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsLastAuthor_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting a single author.
-        subject.toggleFollowedAuthorId("1", true)
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow that author.
-        subject.toggleFollowedAuthorId("1", false)
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertTrue(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -75,21 +61,7 @@ class NiaPreferencesDataSourceTest {
         subject.toggleFollowedTopicId("1", false)
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllAuthors_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting several authors.
-        subject.setFollowedAuthorIds(setOf("1", "2"))
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow those authors.
-        subject.setFollowedAuthorIds(emptySet())
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
@@ -103,36 +75,6 @@ class NiaPreferencesDataSourceTest {
         subject.setFollowedTopicIds(emptySet())
 
         // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllTopicsButNotAuthors_shouldHideOnboardingIsTrue() =
-        runTest {
-            // Given: user completes onboarding by selecting several topics and authors.
-            subject.setFollowedTopicIds(setOf("1", "2"))
-            subject.setFollowedAuthorIds(setOf("3", "4"))
-            subject.setShouldHideOnboarding(true)
-
-            // When: they unfollow just the topics.
-            subject.setFollowedTopicIds(emptySet())
-
-            // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
-        }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllAuthorsButNotTopics_shouldHideOnboardingIsTrue() =
-        runTest {
-            // Given: user completes onboarding by selecting several topics and authors.
-            subject.setFollowedTopicIds(setOf("1", "2"))
-            subject.setFollowedAuthorIds(setOf("3", "4"))
-            subject.setShouldHideOnboarding(true)
-
-            // When: they unfollow just the authors.
-            subject.setFollowedAuthorIds(emptySet())
-
-            // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
-        }
 }

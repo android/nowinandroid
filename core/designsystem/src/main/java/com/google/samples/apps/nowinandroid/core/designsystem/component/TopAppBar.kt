@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.annotation.StringRes
@@ -102,7 +104,7 @@ fun NiaTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
 @Composable
-fun NiaTopAppBarPreview() {
+private fun NiaTopAppBarPreview() {
     NiaTopAppBar(
         titleRes = android.R.string.untitled,
         navigationIcon = NiaIcons.Search,

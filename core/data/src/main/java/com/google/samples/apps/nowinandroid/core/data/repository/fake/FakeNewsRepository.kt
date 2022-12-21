@@ -43,7 +43,7 @@ class FakeNewsRepository @Inject constructor(
     private val datasource: FakeNiaNetworkDataSource
 ) : NewsRepository {
 
-    override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
+    override fun getNewsResources(): Flow<List<NewsResource>> =
         flow {
             emit(
                 datasource.getNewsResources()
@@ -52,20 +52,17 @@ class FakeNewsRepository @Inject constructor(
             )
         }.flowOn(ioDispatcher)
 
-    override fun getNewsResourcesStream(
-        filterAuthorIds: Set<String>,
+    override fun getNewsResources(
         filterTopicIds: Set<String>,
     ): Flow<List<NewsResource>> =
         flow {
             emit(
                 datasource
                     .getNewsResources()
-                    .filter {
-                        it.authors.intersect(filterAuthorIds).isNotEmpty() ||
-                            it.topics.intersect(filterTopicIds).isNotEmpty()
-                    }
+                    .filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
                     .map(NetworkNewsResource::asEntity)
                     .map(NewsResourceEntity::asExternalModel)
+
             )
         }.flowOn(ioDispatcher)
 

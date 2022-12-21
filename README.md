@@ -22,7 +22,7 @@ The app is currently in development. The `demoRelease` variant is [available on 
 **Now in Android** displays content from the
 [Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
 links to recent videos, articles and other content. Users can also follow topics they are interested
-in or follow specific authors.
+in.
 
 ## Screenshots
 

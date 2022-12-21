@@ -20,9 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,13 +41,12 @@ import kotlinx.coroutines.launch
 class ForYouViewModel @Inject constructor(
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
-    private val getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase,
-    getSortedFollowableAuthorsStream: GetSortedFollowableAuthorsStreamUseCase,
-    getFollowableTopicsStream: GetFollowableTopicsStreamUseCase
+    private val getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
+    getFollowableTopics: GetFollowableTopicsUseCase
 ) : ViewModel() {
 
     private val shouldShowOnboarding: Flow<Boolean> =
-        userDataRepository.userDataStream.map { !it.shouldHideOnboarding }
+        userDataRepository.userData.map { !it.shouldHideOnboarding }
 
     val isSyncing = syncStatusMonitor.isSyncing
         .stateIn(
@@ -58,20 +56,18 @@ class ForYouViewModel @Inject constructor(
         )
 
     val feedState: StateFlow<NewsFeedUiState> =
-        userDataRepository.userDataStream
+        userDataRepository.userData
             .map { userData ->
                 // If the user hasn't completed the onboarding and hasn't selected any interests
                 // show an empty news list to clearly demonstrate that their selections affect the
                 // news articles they will see.
                 if (!userData.shouldHideOnboarding &&
-                    userData.followedAuthors.isEmpty() &&
                     userData.followedTopics.isEmpty()
                 ) {
                     flowOf(NewsFeedUiState.Success(emptyList()))
                 } else {
-                    getSaveableNewsResourcesStream(
-                        filterTopicIds = userData.followedTopics,
-                        filterAuthorIds = userData.followedAuthors
+                    getSaveableNewsResources(
+                        filterTopicIds = userData.followedTopics
                     ).mapToFeedState()
                 }
             }
@@ -88,14 +84,10 @@ class ForYouViewModel @Inject constructor(
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(
             shouldShowOnboarding,
-            getFollowableTopicsStream(),
-            getSortedFollowableAuthorsStream()
-        ) { shouldShowOnboarding, topics, authors ->
+            getFollowableTopics()
+        ) { shouldShowOnboarding, topics ->
             if (shouldShowOnboarding) {
-                OnboardingUiState.Shown(
-                    topics = topics,
-                    authors = authors
-                )
+                OnboardingUiState.Shown(topics = topics)
             } else {
                 OnboardingUiState.NotShown
             }
@@ -109,12 +101,6 @@ class ForYouViewModel @Inject constructor(
     fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         viewModelScope.launch {
             userDataRepository.toggleFollowedTopicId(topicId, isChecked)
-        }
-    }
-
-    fun updateAuthorSelection(authorId: String, isChecked: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(authorId, isChecked)
         }
     }
 

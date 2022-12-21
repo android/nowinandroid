@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
-import com.google.samples.apps.nowinandroid.core.database.dao.AuthorDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import dagger.Module
@@ -27,11 +26,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object DaosModule {
-    @Provides
-    fun providesAuthorDao(
-        database: NiaDatabase,
-    ): AuthorDao = database.authorDao()
-
     @Provides
     fun providesTopicsDao(
         database: NiaDatabase,

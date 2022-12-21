@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.bookmarks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
@@ -36,10 +36,10 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
-    getSaveableNewsResourcesStream: GetSaveableNewsResourcesStreamUseCase
+    getSaveableNewsResources: GetSaveableNewsResourcesUseCase
 ) : ViewModel() {
 
-    val feedUiState: StateFlow<NewsFeedUiState> = getSaveableNewsResourcesStream()
+    val feedUiState: StateFlow<NewsFeedUiState> = getSaveableNewsResources()
         .filterNot { it.isEmpty() }
         .map { newsResources -> newsResources.filter(SaveableNewsResource::isSaved) } // Only show bookmarked news resources.
         .map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)

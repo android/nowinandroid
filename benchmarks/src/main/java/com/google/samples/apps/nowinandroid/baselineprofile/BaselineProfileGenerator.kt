@@ -20,9 +20,7 @@ import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.uiautomator.By
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.bookmarks.bookmarksScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
-import com.google.samples.apps.nowinandroid.foryou.forYouSelectAuthors
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import com.google.samples.apps.nowinandroid.interests.interestsScrollPeopleDownUp
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
@@ -48,14 +46,13 @@ class BaselineProfileGenerator {
 
             // Scroll the feed critical user journey
             forYouWaitForContent()
-            forYouSelectAuthors()
             forYouScrollFeedDownUp()
 
             // Navigate to saved screen
             device.findObject(By.text("Saved")).click()
             device.waitForIdle()
-
-            bookmarksScrollFeedDownUp()
+            // TODO: we need to implement adding stuff to bookmarks before able to scroll it
+            // bookmarksScrollFeedDownUp()
 
             // Navigate to interests screen
             device.findObject(By.text("Interests")).click()

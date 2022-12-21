@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.data.model
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -26,23 +25,6 @@ import kotlinx.datetime.Instant
 import org.junit.Test
 
 class NetworkEntityKtTest {
-
-    @Test
-    fun network_author_can_be_mapped_to_author_entity() {
-        val networkModel = NetworkAuthor(
-            id = "0",
-            name = "Test",
-            imageUrl = "something",
-            twitter = "twitter",
-            mediumPage = "mediumPage",
-            bio = "bio",
-        )
-        val entity = networkModel.asEntity()
-
-        assertEquals("0", entity.id)
-        assertEquals("Test", entity.name)
-        assertEquals("something", entity.imageUrl)
-    }
 
     @Test
     fun network_topic_can_be_mapped_to_topic_entity() {

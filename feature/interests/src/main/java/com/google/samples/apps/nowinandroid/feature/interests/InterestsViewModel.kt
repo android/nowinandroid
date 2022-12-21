@@ -19,78 +19,43 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class InterestsViewModel @Inject constructor(
     val userDataRepository: UserDataRepository,
-    getFollowableTopicsStream: GetFollowableTopicsStreamUseCase,
-    getSortedFollowableAuthorsStream: GetSortedFollowableAuthorsStreamUseCase
+    getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
-    private val _tabState = MutableStateFlow(
-        InterestsTabState(
-            titles = listOf(R.string.interests_topics, R.string.interests_people),
-            currentIndex = 0
+    val uiState: StateFlow<InterestsUiState> =
+        getFollowableTopics(sortBy = TopicSortField.NAME).map(
+            InterestsUiState::Interests
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = InterestsUiState.Loading
         )
-    )
-    val tabState: StateFlow<InterestsTabState> = _tabState.asStateFlow()
-
-    val uiState: StateFlow<InterestsUiState> = combine(
-        getSortedFollowableAuthorsStream(),
-        getFollowableTopicsStream(sortBy = TopicSortField.NAME),
-        InterestsUiState::Interests
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = InterestsUiState.Loading
-    )
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
             userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
         }
     }
-
-    fun followAuthor(followedAuthorId: String, followed: Boolean) {
-        viewModelScope.launch {
-            userDataRepository.toggleFollowedAuthorId(followedAuthorId, followed)
-        }
-    }
-
-    fun switchTab(newIndex: Int) {
-        if (newIndex != tabState.value.currentIndex) {
-            _tabState.update {
-                it.copy(currentIndex = newIndex)
-            }
-        }
-    }
 }
-
-data class InterestsTabState(
-    val titles: List<Int>,
-    val currentIndex: Int
-)
 
 sealed interface InterestsUiState {
     object Loading : InterestsUiState
 
     data class Interests(
-        val authors: List<FollowableAuthor>,
         val topics: List<FollowableTopic>
     ) : InterestsUiState
 

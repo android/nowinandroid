@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
     id("nowinandroid.android.application")
@@ -38,10 +39,11 @@ android {
 
     buildTypes {
         val debug by getting {
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
             isMinifyEnabled = true
+            applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
@@ -57,9 +59,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
-            //  FIXME enabling minification breaks access to demo backend.
-            isMinifyEnabled = false
-            applicationIdSuffix = ".benchmark"
+            isMinifyEnabled = true
+            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
@@ -77,7 +78,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:author"))
     implementation(project(":feature:interests"))
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
@@ -97,8 +97,10 @@ dependencies {
     androidTestImplementation(project(":core:data-test"))
     androidTestImplementation(project(":core:network"))
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(kotlin("test"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(project(":ui-test-hilt-manifest"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)

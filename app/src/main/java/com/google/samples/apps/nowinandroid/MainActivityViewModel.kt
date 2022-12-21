@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.stateIn
 class MainActivityViewModel @Inject constructor(
     userDataRepository: UserDataRepository
 ) : ViewModel() {
-    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userDataStream.map {
+    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
         Success(it)
     }.stateIn(
         scope = viewModelScope,
