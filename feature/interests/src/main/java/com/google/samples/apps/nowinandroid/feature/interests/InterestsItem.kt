@@ -66,7 +66,7 @@ fun InterestsItem(
                 .padding(vertical = itemSeparation)
         ) {
             InterestsIcon(topicImageUrl, iconModifier.size(64.dp))
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(24.dp))
             InterestContent(name, description)
         }
         NiaIconToggleButton(
