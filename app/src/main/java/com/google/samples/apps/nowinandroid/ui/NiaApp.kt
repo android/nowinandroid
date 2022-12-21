@@ -101,10 +101,10 @@ fun NiaApp(
         val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
         // If user is not connected to the internet show a snack bar to inform them.
-        val notConnected = stringResource(R.string.not_connected)
+        val notConnectedMessage = stringResource(R.string.not_connected)
         LaunchedEffect(isOffline) {
             if (isOffline) snackbarHostState.showSnackbar(
-                message = notConnected,
+                message = notConnectedMessage,
                 duration = Indefinite
             )
         }
