@@ -66,6 +66,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
@@ -91,20 +92,10 @@ fun NiaApp(
 
     NiaBackground {
         NiaGradientBackground(
-            topColor = if (showGradientBackground) {
-                LocalGradientColors.current.top
+            gradientColors = if (showGradientBackground) {
+                LocalGradientColors.current
             } else {
-                Color.Unspecified
-            },
-            bottomColor = if (showGradientBackground) {
-                LocalGradientColors.current.bottom
-            } else {
-                Color.Unspecified
-            },
-            containerColor = if (showGradientBackground) {
-                LocalGradientColors.current.container
-            } else {
-                Color.Unspecified
+                GradientColors()
             },
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
