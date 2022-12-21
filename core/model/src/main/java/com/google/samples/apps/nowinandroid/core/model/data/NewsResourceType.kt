@@ -16,59 +16,61 @@
 
 package com.google.samples.apps.nowinandroid.core.model.data
 
+import com.google.samples.apps.nowinandroid.core.model.R
+import com.google.samples.apps.nowinandroid.core.uitext.UiText
+
 /**
  * Type for [NewsResource]
  */
 enum class NewsResourceType(
     val serializedName: String,
     val displayText: String,
-    // TODO: descriptions should probably be string resources
-    val description: String
+    val description: UiText
 ) {
     Video(
         serializedName = "Video 📺",
         displayText = "Video 📺",
-        description = "A video published on YouTube"
+        description = UiText.StringResource(R.string.video)
     ),
     APIChange(
         serializedName = "API change",
         displayText = "API change",
-        description = "An addition, deprecation or change to the Android platform APIs."
+        description = UiText.StringResource(R.string.apiChange)
     ),
     Article(
         serializedName = "Article 📚",
         displayText = "Article 📚",
-        description = "An article, typically on Medium or the official Android blog"
+        description = UiText.StringResource(R.string.article)
     ),
     Codelab(
         serializedName = "Codelab",
         displayText = "Codelab",
-        description = "A new or updated codelab"
+        description = UiText.StringResource(R.string.codeLab)
     ),
     Podcast(
         serializedName = "Podcast 🎙",
         displayText = "Podcast 🎙",
-        description = "A podcast"
+        description = UiText.StringResource(R.string.podcast)
     ),
     Docs(
         serializedName = "Docs 📑",
         displayText = "Docs 📑",
-        description = "A new or updated piece of documentation"
+        description = UiText.StringResource(R.string.docs)
     ),
     Event(
         serializedName = "Event 📆",
         displayText = "Event 📆",
-        description = "Information about a developer event e.g. Android Developer Summit"
+        description = UiText.StringResource(R.string.event)
     ),
     DAC(
         serializedName = "DAC",
         displayText = "DAC",
-        description = "Android version features - Information about features in an Android"
+        description = UiText.StringResource(R.string.dac)
     ),
     Unknown(
         serializedName = "Unknown",
         displayText = "Unknown",
-        description = "Unknown"
+        description = UiText.StringResource(R.string.unknown)
     )
 }
 
