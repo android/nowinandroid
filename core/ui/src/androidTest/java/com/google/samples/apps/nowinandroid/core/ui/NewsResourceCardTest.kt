@@ -75,4 +75,20 @@ class NewsResourceCardTest {
             .onNodeWithText(dateFormatted)
             .assertIsDisplayed()
     }
+
+    // Test that chip color is different if topic is followed
+    @Test
+    fun testChipColor() {
+        val newsWithUnknownResourceType = previewUserNewsResources[1]
+
+        composeTestRule.setContent {
+            NewsResourceTopics(topics = newsWithUnknownResourceType.topics)
+        }
+
+        composeTestRule
+            .onNodeWithText("UI")
+        //figure out how to get the color of the chip and compare it to
+        // MaterialTheme.colorScheme.primaryContainer
+
+    }
 }

@@ -144,6 +144,20 @@ class GetUserNewsResourcesUseCaseTest {
             saveableNewsResources.first()
         )
     }
+
+    //verify that news resources contain the correct FollowedTopics
+    @Test
+    fun newsResourcesContainCorrectFollowedTopics() = runTest {
+        assertEquals(
+            sampleNewsResources[0].topics, listOf(sampleTopic1)
+        )
+        assertEquals(
+            sampleNewsResources[1].topics, listOf(sampleTopic1, sampleTopic2)
+        )
+        assertEquals(
+            sampleNewsResources[2].topics, listOf(sampleTopic2)
+        )
+    }
 }
 
 private val sampleTopic1 = Topic(
