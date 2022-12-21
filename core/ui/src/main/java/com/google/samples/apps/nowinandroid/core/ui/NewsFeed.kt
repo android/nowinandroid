@@ -21,6 +21,7 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
@@ -67,7 +69,8 @@ fun LazyGridScope.newsFeed(
                             saveableNewsResource.newsResource.id,
                             !saveableNewsResource.isSaved
                         )
-                    }
+                    },
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
             }
         }
