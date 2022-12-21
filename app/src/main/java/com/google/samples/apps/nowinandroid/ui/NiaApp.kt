@@ -87,21 +87,22 @@ fun NiaApp(
         windowSizeClass = windowSizeClass
     ),
 ) {
-    val showGradientBackground = appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
+    val shouldShowGradientBackground =
+        appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
 
     NiaBackground {
         NiaGradientBackground(
-            topColor = if (showGradientBackground) {
+            topColor = if (shouldShowGradientBackground) {
                 LocalGradientColors.current.top
             } else {
                 Color.Unspecified
             },
-            bottomColor = if (showGradientBackground) {
+            bottomColor = if (shouldShowGradientBackground) {
                 LocalGradientColors.current.bottom
             } else {
                 Color.Unspecified
             },
-            containerColor = if (showGradientBackground) {
+            containerColor = if (shouldShowGradientBackground) {
                 LocalGradientColors.current.container
             } else {
                 Color.Unspecified
