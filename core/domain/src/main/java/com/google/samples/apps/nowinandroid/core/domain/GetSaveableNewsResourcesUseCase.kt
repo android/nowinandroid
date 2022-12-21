@@ -56,10 +56,10 @@ class GetSaveableNewsResourcesUseCase @Inject constructor(
 }
 
 private fun Flow<List<NewsResource>>.mapToSaveableNewsResources(
-    savedNewsResourceIds: Flow<Set<String>>
+    savedNewsResourceIdsStream: Flow<Set<String>>
 ): Flow<List<SaveableNewsResource>> =
     filterNot { it.isEmpty() }
-        .combine(savedNewsResourceIds) { newsResources, savedNewsResourceIds ->
+        .combine(savedNewsResourceIdsStream) { newsResources, savedNewsResourceIds ->
             newsResources.map { newsResource ->
                 SaveableNewsResource(
                     newsResource = newsResource,
