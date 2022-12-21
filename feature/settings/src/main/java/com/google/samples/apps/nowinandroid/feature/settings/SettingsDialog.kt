@@ -255,7 +255,7 @@ private fun TextLink(text: String, url: String) {
 
 @Preview
 @Composable
-fun PreviewSettingsDialog() {
+private fun PreviewSettingsDialog() {
     NiaTheme {
         SettingsDialog(
             onDismiss = {},
@@ -273,7 +273,7 @@ fun PreviewSettingsDialog() {
 
 @Preview
 @Composable
-fun PreviewSettingsDialogLoading() {
+private fun PreviewSettingsDialogLoading() {
     NiaTheme {
         SettingsDialog(
             onDismiss = {},
