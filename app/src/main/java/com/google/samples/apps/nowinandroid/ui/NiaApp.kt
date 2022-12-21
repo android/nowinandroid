@@ -66,6 +66,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
@@ -86,101 +88,103 @@ fun NiaApp(
         windowSizeClass = windowSizeClass
     ),
 ) {
-    val background: @Composable (@Composable () -> Unit) -> Unit =
-        when (appState.currentTopLevelDestination) {
-            TopLevelDestination.FOR_YOU -> {
-                content ->
-                NiaGradientBackground(content = content)
-            }
-            else -> { content -> NiaBackground(content = content) }
-        }
+    val shouldShowGradientBackground =
+        appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
 
-    background {
-        val snackbarHostState = remember { SnackbarHostState() }
-
-        val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-        // If user is not connected to the internet show a snack bar to inform them.
-        val notConnectedMessage = stringResource(R.string.not_connected)
-        LaunchedEffect(isOffline) {
-            if (isOffline) snackbarHostState.showSnackbar(
-                message = notConnectedMessage,
-                duration = Indefinite
-            )
-        }
-
-        if (appState.shouldShowSettingsDialog) {
-            SettingsDialog(
-                onDismiss = { appState.setShowSettingsDialog(false) }
-            )
-        }
-
-        Scaffold(
-            modifier = Modifier.semantics {
-                testTagsAsResourceId = true
+    NiaBackground {
+        NiaGradientBackground(
+            gradientColors = if (shouldShowGradientBackground) {
+                LocalGradientColors.current
+            } else {
+                GradientColors()
             },
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            bottomBar = {
-                if (appState.shouldShowBottomBar) {
-                    NiaBottomBar(
-                        destinations = appState.topLevelDestinations,
-                        onNavigateToDestination = appState::navigateToTopLevelDestination,
-                        currentDestination = appState.currentDestination,
-                        modifier = Modifier.testTag("NiaBottomBar")
-                    )
-                }
-            }
-        ) { padding ->
-            Row(
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .consumedWindowInsets(padding)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal
-                        )
-                    )
-            ) {
-                if (appState.shouldShowNavRail) {
-                    NiaNavRail(
-                        destinations = appState.topLevelDestinations,
-                        onNavigateToDestination = appState::navigateToTopLevelDestination,
-                        currentDestination = appState.currentDestination,
-                        modifier = Modifier
-                            .testTag("NiaNavRail")
-                            .safeDrawingPadding()
-                    )
-                }
+        ) {
+            val snackbarHostState = remember { SnackbarHostState() }
 
-                Column(Modifier.fillMaxSize()) {
-                    // Show the top app bar on top level destinations.
-                    val destination = appState.currentTopLevelDestination
-                    if (destination != null) {
-                        NiaTopAppBar(
-                            titleRes = destination.titleTextId,
-                            actionIcon = NiaIcons.Settings,
-                            actionIconContentDescription = stringResource(
-                                id = settingsR.string.top_app_bar_action_icon_description
-                            ),
-                            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                containerColor = Color.Transparent
-                            ),
-                            onActionClick = { appState.setShowSettingsDialog(true) }
+            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+
+            // If user is not connected to the internet show a snack bar to inform them.
+            val notConnectedMessage = stringResource(R.string.not_connected)
+            LaunchedEffect(isOffline) {
+                if (isOffline) snackbarHostState.showSnackbar(
+                    message = notConnectedMessage,
+                    duration = Indefinite
+                )
+            }
+
+            if (appState.shouldShowSettingsDialog) {
+                SettingsDialog(
+                    onDismiss = { appState.setShowSettingsDialog(false) }
+                )
+            }
+
+            Scaffold(
+                modifier = Modifier.semantics {
+                    testTagsAsResourceId = true
+                },
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+                bottomBar = {
+                    if (appState.shouldShowBottomBar) {
+                        NiaBottomBar(
+                            destinations = appState.topLevelDestinations,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination,
+                            currentDestination = appState.currentDestination,
+                            modifier = Modifier.testTag("NiaBottomBar")
+                        )
+                    }
+                }
+            ) { padding ->
+                Row(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .consumedWindowInsets(padding)
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Horizontal
+                            )
+                        )
+                ) {
+                    if (appState.shouldShowNavRail) {
+                        NiaNavRail(
+                            destinations = appState.topLevelDestinations,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination,
+                            currentDestination = appState.currentDestination,
+                            modifier = Modifier
+                                .testTag("NiaNavRail")
+                                .safeDrawingPadding()
                         )
                     }
 
-                    NiaNavHost(
-                        navController = appState.navController,
-                        onBackClick = appState::onBackClick
-                    )
-                }
+                    Column(Modifier.fillMaxSize()) {
+                        // Show the top app bar on top level destinations.
+                        val destination = appState.currentTopLevelDestination
+                        if (destination != null) {
+                            NiaTopAppBar(
+                                titleRes = destination.titleTextId,
+                                actionIcon = NiaIcons.Settings,
+                                actionIconContentDescription = stringResource(
+                                    id = settingsR.string.top_app_bar_action_icon_description
+                                ),
+                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                    containerColor = Color.Transparent
+                                ),
+                                onActionClick = { appState.setShowSettingsDialog(true) }
+                            )
+                        }
 
-                // TODO: We may want to add padding or spacer when the snackbar is shown so that
-                //  content doesn't display behind it.
+                        NiaNavHost(
+                            navController = appState.navController,
+                            onBackClick = appState::onBackClick
+                        )
+                    }
+
+                    // TODO: We may want to add padding or spacer when the snackbar is shown so that
+                    //  content doesn't display behind it.
+                }
             }
         }
     }
