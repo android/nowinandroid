@@ -145,7 +145,6 @@ class GetUserNewsResourcesUseCaseTest {
         )
     }
 
-    //whenTopicFollowed_UserNewsResources
     @Test
     fun checkNewsResourcesContainCorrectFollowedTopics() = runTest {
 
