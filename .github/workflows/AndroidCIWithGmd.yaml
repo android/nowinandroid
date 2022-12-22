@@ -25,6 +25,9 @@ jobs:
       continue-on-error: true
       run: ./gradlew cleanManagedDevices --unused-only && ./gradlew pixel4api30DemoDebugAndroidTest -Dorg.gradle.workers.max=1  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true --info
 
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
+
     - name: Upload test reports
       if: success() || failure()
       uses: actions/upload-artifact@v3
