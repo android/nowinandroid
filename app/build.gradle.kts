@@ -75,23 +75,11 @@ android {
         }
         managedDevices {
             devices {
-                maybeCreate<com.android.build.api.dsl.ManagedVirtualDevice>("pixel4api27").apply {
-                    device = "Pixel 4"
-                    apiLevel = 27
-                    systemImageSource = "aosp"
-                }
-
                 maybeCreate<com.android.build.api.dsl.ManagedVirtualDevice>("pixel4api30").apply {
                     device = "Pixel 4"
                     apiLevel = 30
                     // ATDs currently support only API level 30.
                     systemImageSource = "aosp-atd"
-                }
-            }
-            groups {
-                maybeCreate("pixelDevices").apply {
-                    targetDevices.add(devices["pixel4api27"])
-                    targetDevices.add(devices["pixel4api30"])
                 }
             }
         }
