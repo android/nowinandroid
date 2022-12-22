@@ -22,5 +22,13 @@ jobs:
       uses: android-actions/setup-android@v2
 
     - name: Run instrumented tests with GMD
+      continue-on-error: true
       run: ./gradlew cleanManagedDevices --unused-only && ./gradlew pixel4api30DemoDebugAndroidTest -Dorg.gradle.workers.max=1  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true --info
 
+    - name: Upload test reports
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: |
+            '**/build/outputs/androidTest-results/'
