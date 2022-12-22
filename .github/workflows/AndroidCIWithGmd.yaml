@@ -31,4 +31,4 @@ jobs:
       with:
         name: test-reports
         path: |
-          '**/build/outputs/androidTest-results/'
+          '**/build/reports/androidTest-results/'
