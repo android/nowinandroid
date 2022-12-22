@@ -26,8 +26,9 @@ jobs:
       run: ./gradlew cleanManagedDevices --unused-only && ./gradlew pixel4api30DemoDebugAndroidTest -Dorg.gradle.workers.max=1  -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true --info
 
     - name: Upload test reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-reports
-          path: |
-            '**/build/outputs/androidTest-results/'
+      if: success() || failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports
+        path: |
+          '**/build/outputs/androidTest-results/'
