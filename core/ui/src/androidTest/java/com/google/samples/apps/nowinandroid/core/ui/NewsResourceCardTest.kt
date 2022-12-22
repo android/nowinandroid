@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -76,19 +77,16 @@ class NewsResourceCardTest {
             .assertIsDisplayed()
     }
 
-    // Test that chip color is different if topic is followed
     @Test
-    fun testChipColor() {
-        val newsWithUnknownResourceType = previewUserNewsResources[1]
+    fun testTopicsChipColorBackground_matchesFollowedState() {
+        val followableTopics = previewUserNewsResources[1].topics
 
         composeTestRule.setContent {
-            NewsResourceTopics(topics = newsWithUnknownResourceType.topics)
+            NewsResourceTopics(topics = followableTopics)
         }
 
         composeTestRule
-            .onNodeWithText("UI")
-        //figure out how to get the color of the chip and compare it to
-        // MaterialTheme.colorScheme.primaryContainer
-
+            .onNodeWithText(followableTopics[1].topic.name)
+            .assertContentDescriptionEquals("UI is followed")
     }
 }

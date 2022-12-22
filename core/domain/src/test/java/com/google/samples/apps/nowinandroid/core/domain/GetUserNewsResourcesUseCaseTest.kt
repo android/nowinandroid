@@ -145,17 +145,72 @@ class GetUserNewsResourcesUseCaseTest {
         )
     }
 
-    //verify that news resources contain the correct FollowedTopics
+    //whenTopicFollowed_UserNewsResources
     @Test
-    fun newsResourcesContainCorrectFollowedTopics() = runTest {
+    fun checkNewsResourcesContainCorrectFollowedTopics() = runTest {
+
+        // Obtain the saveable news resources stream.
+        val saveableNewsResources = useCase()
+
+        // Send some news resources.
+        newsRepository.sendNewsResources(sampleNewsResources)
+
+        // Set a followed topic for the user.
+        userDataRepository.setFollowedTopicIds(setOf(sampleTopic1.id))
+
+        // Check that the followed topic is marked followed in the UserNewsResources
         assertEquals(
-            sampleNewsResources[0].topics, listOf(sampleTopic1)
-        )
-        assertEquals(
-            sampleNewsResources[1].topics, listOf(sampleTopic1, sampleTopic2)
-        )
-        assertEquals(
-            sampleNewsResources[2].topics, listOf(sampleTopic2)
+            listOf(
+                UserNewsResource(
+                    sampleNewsResources[0].id,
+                    sampleNewsResources[0].title,
+                    sampleNewsResources[0].content,
+                    sampleNewsResources[0].url,
+                    sampleNewsResources[0].headerImageUrl,
+                    sampleNewsResources[0].publishDate,
+                    sampleNewsResources[0].type,
+                    sampleNewsResources[0].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = topic.id == sampleTopic1.id
+                        )
+                    },
+                    false
+                ),
+                UserNewsResource(
+                    sampleNewsResources[1].id,
+                    sampleNewsResources[1].title,
+                    sampleNewsResources[1].content,
+                    sampleNewsResources[1].url,
+                    sampleNewsResources[1].headerImageUrl,
+                    sampleNewsResources[1].publishDate,
+                    sampleNewsResources[1].type,
+                    sampleNewsResources[1].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = topic.id == sampleTopic1.id
+                        )
+                    },
+                    false
+                ),
+                UserNewsResource(
+                    sampleNewsResources[2].id,
+                    sampleNewsResources[2].title,
+                    sampleNewsResources[2].content,
+                    sampleNewsResources[2].url,
+                    sampleNewsResources[2].headerImageUrl,
+                    sampleNewsResources[2].publishDate,
+                    sampleNewsResources[2].type,
+                    sampleNewsResources[2].topics.map { topic ->
+                        FollowableTopic(
+                            topic = topic,
+                            isFollowed = topic.id == sampleTopic1.id
+                        )
+                    },
+                    false
+                ),
+            ),
+            saveableNewsResources.first()
         )
     }
 }
