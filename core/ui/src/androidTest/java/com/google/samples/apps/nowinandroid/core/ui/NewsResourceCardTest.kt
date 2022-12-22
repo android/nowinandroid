@@ -89,4 +89,5 @@ class NewsResourceCardTest {
             .onNodeWithText(followableTopics[1].topic.name)
             .assertContentDescriptionEquals("UI is followed")
     }
+    //TODO add a test for not followed - figure out whether to put it here or to make a new test
 }
