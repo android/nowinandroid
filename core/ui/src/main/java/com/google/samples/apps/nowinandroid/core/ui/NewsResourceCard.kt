@@ -215,6 +215,7 @@ fun NewsResourceMetaData(
 
 @Composable
 fun NewsResourceLink(
+    @Suppress("UNUSED_PARAMETER")
     newsResource: NewsResource
 ) {
     TODO()
@@ -266,7 +267,7 @@ fun NewsResourceTopics(
 
 @Preview("Bookmark Button")
 @Composable
-fun BookmarkButtonPreview() {
+private fun BookmarkButtonPreview() {
     NiaTheme {
         Surface {
             BookmarkButton(isBookmarked = false, onClick = { })
@@ -276,7 +277,7 @@ fun BookmarkButtonPreview() {
 
 @Preview("Bookmark Button Bookmarked")
 @Composable
-fun BookmarkButtonBookmarkedPreview() {
+private fun BookmarkButtonBookmarkedPreview() {
     NiaTheme {
         Surface {
             BookmarkButton(isBookmarked = true, onClick = { })
@@ -286,7 +287,7 @@ fun BookmarkButtonBookmarkedPreview() {
 
 @Preview("NewsResourceCardExpanded")
 @Composable
-fun ExpandedNewsResourcePreview() {
+private fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
             NewsResourceCardExpanded(

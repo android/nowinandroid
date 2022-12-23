@@ -192,7 +192,7 @@ private fun BookmarksGridPreview() {
 
 @Preview
 @Composable
-fun EmptyStatePreview() {
+private fun EmptyStatePreview() {
     NiaTheme {
         EmptyState()
     }
