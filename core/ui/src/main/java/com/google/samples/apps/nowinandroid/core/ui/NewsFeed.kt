@@ -106,7 +106,7 @@ sealed interface NewsFeedUiState {
 
 @Preview
 @Composable
-fun NewsFeedLoadingPreview() {
+private fun NewsFeedLoadingPreview() {
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
@@ -120,7 +120,7 @@ fun NewsFeedLoadingPreview() {
 @Preview
 @Preview(device = Devices.TABLET)
 @Composable
-fun NewsFeedContentPreview() {
+private fun NewsFeedContentPreview() {
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(

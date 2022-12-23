@@ -104,7 +104,7 @@ fun NiaTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
 @Composable
-fun NiaTopAppBarPreview() {
+private fun NiaTopAppBarPreview() {
     NiaTopAppBar(
         titleRes = android.R.string.untitled,
         navigationIcon = NiaIcons.Search,

@@ -45,7 +45,6 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    // newsRepository: NewsRepository,
     getSaveableNewsResources: GetUserNewsResourcesUseCase
 ) : ViewModel() {
 
@@ -97,13 +96,13 @@ private fun topicUiState(
             .map { it.followedTopics }
 
     // Observe topic information
-    val topic: Flow<Topic> = topicsRepository.getTopic(
+    val topicStream: Flow<Topic> = topicsRepository.getTopic(
         id = topicId
     )
 
     return combine(
         followedTopicIds,
-        topic,
+        topicStream,
         ::Pair
     )
         .asResult()
@@ -135,7 +134,7 @@ private fun newsUiState(
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val news: Flow<List<UserNewsResource>> = getSaveableNewsResources(
+    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
         filterTopicIds = setOf(element = topicId),
     )
 
@@ -144,7 +143,7 @@ private fun newsUiState(
         .map { it.bookmarkedNewsResources }
 
     return combine(
-        news,
+        newsStream,
         bookmark,
         ::Pair
     )
@@ -152,7 +151,7 @@ private fun newsUiState(
         .map { newsToBookmarksResult ->
             when (newsToBookmarksResult) {
                 is Result.Success -> {
-                    val (news, bookmarks) = newsToBookmarksResult.data
+                    val news = newsToBookmarksResult.data.first
                     NewsUiState.Success(news)
                 }
                 is Result.Loading -> {
