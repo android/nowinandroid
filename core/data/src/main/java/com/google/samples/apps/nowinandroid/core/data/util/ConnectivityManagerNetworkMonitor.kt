@@ -35,18 +35,30 @@ import kotlinx.coroutines.flow.conflate
 class ConnectivityManagerNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context
 ) : NetworkMonitor {
-    override val isOnline: Flow<Boolean> = callbackFlow<Boolean> {
+    override val isOnline: Flow<Boolean> = callbackFlow {
+        val connectivityManager = context.getSystemService<ConnectivityManager>()
+
+        /**
+         * The callback's methods are invoked on changes to *any* network, not just the active
+         * network. So to check for network connectivity, one must query the active network of the
+         * ConnectivityManager.
+         */
         val callback = object : NetworkCallback() {
             override fun onAvailable(network: Network) {
-                channel.trySend(true)
+                channel.trySend(connectivityManager.isCurrentlyConnected())
             }
 
             override fun onLost(network: Network) {
-                channel.trySend(false)
+                channel.trySend(connectivityManager.isCurrentlyConnected())
+            }
+
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                channel.trySend(connectivityManager.isCurrentlyConnected())
             }
         }
-
-        val connectivityManager = context.getSystemService<ConnectivityManager>()
 
         connectivityManager?.registerNetworkCallback(
             Builder()

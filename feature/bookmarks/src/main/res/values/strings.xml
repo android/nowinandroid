@@ -17,7 +17,9 @@
 <resources>
     <string name="saved">Saved</string>
     <string name="saved_loading">Loading saved…</string>
-    <string name="top_app_bar_title_saved">Saved</string>
+    <string name="top_app_bar_title">Saved</string>
     <string name="top_app_bar_action_search">Search</string>
     <string name="top_app_bar_action_menu">Menu</string>
+    <string name="bookmarks_empty_error">No saved updates</string>
+    <string name="bookmarks_empty_description">Updates you save will be stored here\nto read later</string>
 </resources>

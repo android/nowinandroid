@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +28,9 @@ import kotlinx.coroutines.flow.filterNotNull
 private val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
     followedTopics = emptySet(),
-    followedAuthors = emptySet()
+    themeBrand = ThemeBrand.DEFAULT,
+    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+    shouldHideOnboarding = false
 )
 
 class TestUserDataRepository : UserDataRepository {
@@ -37,7 +41,7 @@ class TestUserDataRepository : UserDataRepository {
 
     private val currentUserData get() = _userData.replayCache.firstOrNull() ?: emptyUserData
 
-    override val userDataStream: Flow<UserData> = _userData.filterNotNull()
+    override val userData: Flow<UserData> = _userData.filterNotNull()
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
         _userData.tryEmit(currentUserData.copy(followedTopics = followedTopicIds))
@@ -52,25 +56,30 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    override suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>) {
-        _userData.tryEmit(currentUserData.copy(followedAuthors = followedAuthorIds))
-    }
-
-    override suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean) {
-        currentUserData.let { current ->
-            val followedAuthors = if (followed) current.followedAuthors + followedAuthorId
-            else current.followedAuthors - followedAuthorId
-
-            _userData.tryEmit(current.copy(followedAuthors = followedAuthors))
-        }
-    }
-
     override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
         currentUserData.let { current ->
             val bookmarkedNews = if (bookmarked) current.bookmarkedNewsResources + newsResourceId
             else current.bookmarkedNewsResources - newsResourceId
 
             _userData.tryEmit(current.copy(bookmarkedNewsResources = bookmarkedNews))
+        }
+    }
+
+    override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(themeBrand = themeBrand))
+        }
+    }
+
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(darkThemeConfig = darkThemeConfig))
+        }
+    }
+
+    override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
         }
     }
 
@@ -89,10 +98,4 @@ class TestUserDataRepository : UserDataRepository {
      */
     fun getCurrentFollowedTopics(): Set<String>? =
         _userData.replayCache.firstOrNull()?.followedTopics
-
-    /**
-     * A test-only API to allow querying the current followed authors.
-     */
-    fun getCurrentFollowedAuthors(): Set<String>? =
-        _userData.replayCache.firstOrNull()?.followedAuthors
 }

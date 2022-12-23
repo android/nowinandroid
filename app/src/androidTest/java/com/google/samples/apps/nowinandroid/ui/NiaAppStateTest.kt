@@ -30,9 +30,14 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -48,10 +53,14 @@ class NiaAppStateTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    // Create the test dependencies.
+    private val networkMonitor = TestNetworkMonitor()
+
+    // Subject under test.
     private lateinit var state: NiaAppState
 
     @Test
-    fun niaAppState_currentDestination() {
+    fun niaAppState_currentDestination() = runTest {
         var currentDestination: String? = null
 
         composeTestRule.setContent {
@@ -59,7 +68,9 @@ class NiaAppStateTest {
             state = remember(navController) {
                 NiaAppState(
                     windowSizeClass = getCompactWindowClass(),
-                    navController = navController
+                    navController = navController,
+                    networkMonitor = networkMonitor,
+                    coroutineScope = backgroundScope
                 )
             }
 
@@ -76,23 +87,28 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_destinations() {
+    fun niaAppState_destinations() = runTest {
         composeTestRule.setContent {
-            state = rememberNiaAppState(getCompactWindowClass())
+            state = rememberNiaAppState(
+                windowSizeClass = getCompactWindowClass(),
+                networkMonitor = networkMonitor
+            )
         }
 
         assertEquals(3, state.topLevelDestinations.size)
-        assertTrue(state.topLevelDestinations[0].destination.contains("for_you"))
-        assertTrue(state.topLevelDestinations[1].destination.contains("bookmarks"))
-        assertTrue(state.topLevelDestinations[2].destination.contains("interests"))
+        assertTrue(state.topLevelDestinations[0].name.contains("for_you", true))
+        assertTrue(state.topLevelDestinations[1].name.contains("bookmarks", true))
+        assertTrue(state.topLevelDestinations[2].name.contains("interests", true))
     }
 
     @Test
-    fun niaAppState_showBottomBar_compact() {
+    fun niaAppState_showBottomBar_compact() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = getCompactWindowClass(),
-                navController = NavHostController(LocalContext.current)
+                navController = NavHostController(LocalContext.current),
+                networkMonitor = networkMonitor,
+                coroutineScope = backgroundScope
             )
         }
 
@@ -101,11 +117,13 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_showNavRail_medium() {
+    fun niaAppState_showNavRail_medium() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
-                navController = NavHostController(LocalContext.current)
+                navController = NavHostController(LocalContext.current),
+                networkMonitor = networkMonitor,
+                coroutineScope = backgroundScope
             )
         }
 
@@ -114,16 +132,39 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_showNavRail_large() {
+    fun niaAppState_showNavRail_large() = runTest {
+
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
-                navController = NavHostController(LocalContext.current)
+                navController = NavHostController(LocalContext.current),
+                networkMonitor = networkMonitor,
+                coroutineScope = backgroundScope
             )
         }
 
         assertTrue(state.shouldShowNavRail)
         assertFalse(state.shouldShowBottomBar)
+    }
+
+    @Test
+    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
+
+        composeTestRule.setContent {
+            state = NiaAppState(
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                navController = NavHostController(LocalContext.current),
+                networkMonitor = networkMonitor,
+                coroutineScope = backgroundScope
+            )
+        }
+
+        backgroundScope.launch { state.isOffline.collect() }
+        networkMonitor.setConnected(false)
+        assertEquals(
+            true,
+            state.isOffline.value
+        )
     }
 
     private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))

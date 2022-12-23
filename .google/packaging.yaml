@@ -18,10 +18,31 @@
 # End users may safely ignore this file. It has no relevance to other systems.
 ---
 status:       PUBLISHED
-technologies: [Android]
-categories:   [Architecture]
+technologies: [Android, JetpackCompose, Coroutines]
+categories:
+  - AndroidTesting
+  - AndroidArchitecture
+  - AndroidArchitectureUILayer
+  - AndroidArchitectureDomainLayer
+  - AndroidArchitectureDataLayer
+  - AndroidArchitectureStateProduction
+  - AndroidArchitectureStateHolder
+  - JetpackComposeTesting
+  - JetpackComposeA11y
+  - JetpackComposeArchitectureAndState
+  - JetpackComposeDesignSystems
+  - JetpackComposeNavigation
+  - JetpackComposeAnimation
+solutions:
+  - Mobile
+  - Flow
+  - JetpackHilt
+  - JetpackDataStore
+  - JetpackRoom
+  - JetpackNavigation
+  - JetpackWorkManager
+  - JetpackLifecycle
 languages:    [Kotlin]
-solutions:    [Mobile]
 github:       android/nowinandroid
 level:        ADVANCED
 license: apache2

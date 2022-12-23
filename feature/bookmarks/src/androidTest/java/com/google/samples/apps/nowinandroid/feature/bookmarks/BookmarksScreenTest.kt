@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.filter
@@ -34,8 +33,8 @@ import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -65,8 +64,6 @@ class BookmarksScreenTest {
 
     @Test
     fun feed_whenHasBookmarks_showsBookmarks() {
-        lateinit var windowSizeClass: WindowSizeClass
-
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
@@ -137,5 +134,27 @@ class BookmarksScreenTest {
             .performClick()
 
         assertTrue(removeFromBookmarksCalled)
+    }
+
+    @Test
+    fun feed_whenHasNoBookmarks_showsEmptyState() {
+        composeTestRule.setContent {
+            BookmarksScreen(
+                feedState = NewsFeedUiState.Success(emptyList()),
+                removeFromBookmarks = { }
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(R.string.bookmarks_empty_error)
+            )
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(R.string.bookmarks_empty_description)
+            )
+            .assertExists()
     }
 }

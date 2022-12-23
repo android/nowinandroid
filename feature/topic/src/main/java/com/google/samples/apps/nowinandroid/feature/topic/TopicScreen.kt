@@ -31,8 +31,6 @@ import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons.Filled
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +50,7 @@ import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
@@ -64,7 +64,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun TopicRoute(
+internal fun TopicRoute(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
@@ -109,6 +109,7 @@ internal fun TopicScreen(
                     contentDesc = stringResource(id = string.topic_loading),
                 )
             }
+
             TopicUiState.Error -> TODO()
             is TopicUiState.Success -> {
                 item {
@@ -156,6 +157,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(216.dp)
@@ -186,9 +188,11 @@ private fun LazyListScope.TopicCards(
                 itemModifier = Modifier.padding(24.dp)
             )
         }
+
         is NewsUiState.Loading -> item {
             NiaLoadingWheel(contentDesc = "Loading news") // TODO
         }
+
         else -> item {
             Text("Error") // TODO
         }
@@ -224,7 +228,7 @@ private fun TopicToolbar(
     ) {
         IconButton(onClick = { onBackClick() }) {
             Icon(
-                imageVector = Filled.ArrowBack,
+                imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
                     id = com.google.samples.apps.nowinandroid.core.ui.R.string.back
                 )

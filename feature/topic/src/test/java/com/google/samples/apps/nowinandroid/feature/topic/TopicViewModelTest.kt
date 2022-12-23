@@ -17,16 +17,19 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicIdArg
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -34,8 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +53,7 @@ class TopicViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
@@ -61,11 +62,11 @@ class TopicViewModelTest {
     @Before
     fun setup() {
         viewModel = TopicViewModel(
-            savedStateHandle =
-            SavedStateHandle(mapOf(TopicDestination.topicIdArg to testInputTopics[0].topic.id)),
+            savedStateHandle = SavedStateHandle(mapOf(topicIdArg to testInputTopics[0].topic.id)),
+            stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
-            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
+            getSaveableNewsResources = getSaveableNewsResourcesUseCase
         )
     }
 
@@ -76,14 +77,13 @@ class TopicViewModelTest {
         topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         val item = viewModel.topicUiState.value
-        assertTrue(item is TopicUiState.Success)
+        assertIs<TopicUiState.Success>(item)
 
-        val successTopicState = item as TopicUiState.Success
         val topicFromRepository = topicsRepository.getTopic(
             testInputTopics[0].topic.id
         ).first()
 
-        assertEquals(topicFromRepository, successTopicState.followableTopic.topic)
+        assertEquals(topicFromRepository, item.followableTopic.topic)
 
         collectJob.cancel()
     }
@@ -118,8 +118,8 @@ class TopicViewModelTest {
             val topicUiState = viewModel.topicUiState.value
             val newsUiState = viewModel.newUiState.value
 
-            assertTrue(topicUiState is TopicUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Loading)
+            assertIs<TopicUiState.Success>(topicUiState)
+            assertIs<NewsUiState.Loading>(newsUiState)
 
             collectJob.cancel()
         }
@@ -140,8 +140,8 @@ class TopicViewModelTest {
             val topicUiState = viewModel.topicUiState.value
             val newsUiState = viewModel.newUiState.value
 
-            assertTrue(topicUiState is TopicUiState.Success)
-            assertTrue(newsUiState is NewsUiState.Success)
+            assertIs<TopicUiState.Success>(topicUiState)
+            assertIs<NewsUiState.Success>(newsUiState)
 
             collectJob.cancel()
         }
@@ -267,6 +267,5 @@ private val sampleNewsResources = listOf(
                 imageUrl = "image URL",
             )
         ),
-        authors = emptyList()
     )
 )

@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import java.io.IOException
 import javax.inject.Inject
@@ -28,12 +30,29 @@ class NiaPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
 
-    val userDataStream = userPreferences.data
+    val userData = userPreferences.data
         .map {
             UserData(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
                 followedTopics = it.followedTopicIdsMap.keys,
-                followedAuthors = it.followedAuthorIdsMap.keys,
+                themeBrand = when (it.themeBrand) {
+                    null,
+                    ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
+                    ThemeBrandProto.UNRECOGNIZED,
+                    ThemeBrandProto.THEME_BRAND_DEFAULT -> ThemeBrand.DEFAULT
+                    ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
+                },
+                darkThemeConfig = when (it.darkThemeConfig) {
+                    null,
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
+                    DarkThemeConfigProto.UNRECOGNIZED,
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM ->
+                        DarkThemeConfig.FOLLOW_SYSTEM
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT ->
+                        DarkThemeConfig.LIGHT
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
+                },
+                shouldHideOnboarding = it.shouldHideOnboarding
             )
         }
 
@@ -43,6 +62,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 it.copy {
                     followedTopicIds.clear()
                     followedTopicIds.putAll(topicIds.associateWith { true })
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -59,6 +79,7 @@ class NiaPreferencesDataSource @Inject constructor(
                     } else {
                         followedTopicIds.remove(topicId)
                     }
+                    updateShouldHideOnboardingIfNecessary()
                 }
             }
         } catch (ioException: IOException) {
@@ -66,32 +87,27 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setFollowedAuthorIds(authorIds: Set<String>) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    followedAuthorIds.clear()
-                    followedAuthorIds.putAll(authorIds.associateWith { true })
+    suspend fun setThemeBrand(themeBrand: ThemeBrand) {
+        userPreferences.updateData {
+            it.copy {
+                this.themeBrand = when (themeBrand) {
+                    ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
+                    ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
                 }
             }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
         }
     }
 
-    suspend fun toggleFollowedAuthorId(authorId: String, followed: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (followed) {
-                        followedAuthorIds.put(authorId, true)
-                    } else {
-                        followedAuthorIds.remove(authorId)
-                    }
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        userPreferences.updateData {
+            it.copy {
+                this.darkThemeConfig = when (darkThemeConfig) {
+                    DarkThemeConfig.FOLLOW_SYSTEM ->
+                        DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
+                    DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
+                    DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
                 }
             }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
         }
     }
 
@@ -115,7 +131,6 @@ class NiaPreferencesDataSource @Inject constructor(
         .map {
             ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
-                authorVersion = it.authorChangeListVersion,
                 newsResourceVersion = it.newsResourceChangeListVersion,
             )
         }
@@ -130,19 +145,32 @@ class NiaPreferencesDataSource @Inject constructor(
                 val updatedChangeListVersions = update(
                     ChangeListVersions(
                         topicVersion = currentPreferences.topicChangeListVersion,
-                        authorVersion = currentPreferences.authorChangeListVersion,
                         newsResourceVersion = currentPreferences.newsResourceChangeListVersion
                     )
                 )
 
                 currentPreferences.copy {
                     topicChangeListVersion = updatedChangeListVersions.topicVersion
-                    authorChangeListVersion = updatedChangeListVersions.authorVersion
                     newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
                 }
             }
         } catch (ioException: IOException) {
             Log.e("NiaPreferences", "Failed to update user preferences", ioException)
         }
+    }
+
+    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+        userPreferences.updateData {
+            it.copy {
+                this.shouldHideOnboarding = shouldHideOnboarding
+            }
+        }
+    }
+}
+
+private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
+
+    if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
+        shouldHideOnboarding = false
     }
 }

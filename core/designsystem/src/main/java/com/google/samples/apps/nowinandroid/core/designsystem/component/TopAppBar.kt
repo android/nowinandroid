@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,19 +97,19 @@ fun NiaTopAppBar(
             }
         },
         colors = colors,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
 @Composable
-fun NiaTopAppBarPreview() {
+private fun NiaTopAppBarPreview() {
     NiaTopAppBar(
         titleRes = android.R.string.untitled,
-        navigationIcon = Icons.Default.Search,
+        navigationIcon = NiaIcons.Search,
         navigationIconContentDescription = "Navigation icon",
-        actionIcon = Icons.Default.MoreVert,
+        actionIcon = NiaIcons.MoreVert,
         actionIconContentDescription = "Action icon"
     )
 }

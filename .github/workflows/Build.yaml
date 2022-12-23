@@ -34,16 +34,16 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache --stacktrace
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
       - name: Check lint
-        run: ./gradlew lintDemoDebug --stacktrace
+        run: ./gradlew lintDemoDebug
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew assemble --stacktrace
+        run: ./gradlew assemble
 
       - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug --stacktrace
+        run: ./gradlew testDemoDebug testProdDebug
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
@@ -64,7 +64,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [23, 26, 30]
+        api-level: [26, 30]
 
     steps:
       - name: Checkout
@@ -88,9 +88,9 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
-          disk-size: 2000M
+          disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest --stacktrace
+          script: ./gradlew connectedProdDebugAndroidTest -x :benchmark:connectedProdBenchmarkAndroidTest
 
       - name: Upload test reports
         if: always()

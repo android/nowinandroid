@@ -25,12 +25,9 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsTabState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.R
 import org.junit.Before
@@ -55,30 +52,19 @@ class InterestsScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            interestsLoading = getString(R.string.interests_loading)
-            interestsEmptyHeader = getString(R.string.interests_empty_header)
+            interestsLoading = getString(R.string.loading)
+            interestsEmptyHeader = getString(R.string.empty_header)
             interestsTopicCardFollowButton =
-                getString(R.string.interests_card_follow_button_content_desc)
+                getString(R.string.card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =
-                getString(R.string.interests_card_unfollow_button_content_desc)
+                getString(R.string.card_unfollow_button_content_desc)
         }
     }
 
     @Test
     fun niaLoadingWheel_inTopics_whenScreenIsLoading_showLoading() {
         composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Loading, tabIndex = 0)
-        }
-
-        composeTestRule
-            .onNodeWithContentDescription(interestsLoading)
-            .assertExists()
-    }
-
-    @Test
-    fun niaLoadingWheel_inAuthors_whenScreenIsLoading_showLoading() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Loading, tabIndex = 1)
+            InterestsScreen(uiState = InterestsUiState.Loading)
         }
 
         composeTestRule
@@ -90,8 +76,7 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = testTopics, authors = listOf()),
-                tabIndex = 0
+                uiState = InterestsUiState.Interests(topics = testTopics)
             )
         }
 
@@ -112,55 +97,12 @@ class InterestsScreenTest {
         composeTestRule
             .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
             .assertCountEquals(numberOfUnfollowedTopics)
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardUnfollowButton)
-            .assertCountEquals(testAuthors.filter { it.isFollowed }.size)
-    }
-
-    @Test
-    fun interestsWithTopics_whenAuthorsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
-        composeTestRule.setContent {
-            InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = listOf(), authors = testAuthors),
-                tabIndex = 1
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("Android Dev")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("Android Dev 2")
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText("Android Dev 3")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
-            .assertCountEquals(numberOfUnfollowedAuthors)
-
-        composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardUnfollowButton)
-            .assertCountEquals(testTopics.filter { it.isFollowed }.size)
     }
 
     @Test
     fun topicsEmpty_whenDataIsEmptyOccurs_thenShowEmptyScreen() {
         composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Empty, tabIndex = 0)
-        }
-
-        composeTestRule
-            .onNodeWithText(interestsEmptyHeader)
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun authorsEmpty_whenDataIsEmptyOccurs_thenShowEmptyScreen() {
-        composeTestRule.setContent {
-            InterestsScreen(uiState = InterestsUiState.Empty, tabIndex = 1)
+            InterestsScreen(uiState = InterestsUiState.Empty)
         }
 
         composeTestRule
@@ -169,18 +111,11 @@ class InterestsScreenTest {
     }
 
     @Composable
-    private fun InterestsScreen(uiState: InterestsUiState, tabIndex: Int = 0) {
+    private fun InterestsScreen(uiState: InterestsUiState) {
         InterestsScreen(
             uiState = uiState,
-            tabState = InterestsTabState(
-                titles = listOf(R.string.interests_topics, R.string.interests_people),
-                currentIndex = tabIndex
-            ),
-            followAuthor = { _, _ -> },
             followTopic = { _, _ -> },
-            navigateToAuthor = {},
-            navigateToTopic = {},
-            switchTab = {},
+            navigateToTopic = {}
         )
     }
 }
@@ -229,41 +164,4 @@ private val testTopics = listOf(
     )
 )
 
-private val testAuthors = listOf(
-    FollowableAuthor(
-        Author(
-            id = "0",
-            name = "Android Dev",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "1",
-            name = "Android Dev 2",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = false
-    ),
-    FollowableAuthor(
-        Author(
-            id = "2",
-            name = "Android Dev 3",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = false
-    )
-)
-
 private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size
-private val numberOfUnfollowedAuthors = testAuthors.filter { !it.isFollowed }.size

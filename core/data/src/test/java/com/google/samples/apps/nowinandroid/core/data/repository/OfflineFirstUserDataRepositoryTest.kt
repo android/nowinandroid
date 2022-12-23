@@ -18,10 +18,15 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -47,13 +52,28 @@ class OfflineFirstUserDataRepositoryTest {
     }
 
     @Test
+    fun offlineFirstUserDataRepository_default_user_data_is_correct() =
+        runTest {
+            assertEquals(
+                UserData(
+                    bookmarkedNewsResources = emptySet(),
+                    followedTopics = emptySet(),
+                    themeBrand = ThemeBrand.DEFAULT,
+                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                    shouldHideOnboarding = false
+                ),
+                subject.userData.first()
+            )
+        }
+
+    @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
         runTest {
             subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -62,16 +82,16 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -84,16 +104,16 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("1", "2"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
                     .first()
             )
@@ -106,7 +126,7 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
@@ -115,18 +135,69 @@ class OfflineFirstUserDataRepositoryTest {
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.bookmarkedNewsResources }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
                     .first()
             )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_theme_brand_delegates_to_nia_preferences() =
+        runTest {
+            subject.setThemeBrand(ThemeBrand.ANDROID)
+
+            assertEquals(
+                ThemeBrand.ANDROID,
+                subject.userData
+                    .map { it.themeBrand }
+                    .first()
+            )
+            assertEquals(
+                ThemeBrand.ANDROID,
+                niaPreferencesDataSource
+                    .userData
+                    .map { it.themeBrand }
+                    .first()
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_dark_theme_config_delegates_to_nia_preferences() =
+        runTest {
+            subject.setDarkThemeConfig(DarkThemeConfig.DARK)
+
+            assertEquals(
+                DarkThemeConfig.DARK,
+                subject.userData
+                    .map { it.darkThemeConfig }
+                    .first()
+            )
+            assertEquals(
+                DarkThemeConfig.DARK,
+                niaPreferencesDataSource
+                    .userData
+                    .map { it.darkThemeConfig }
+                    .first()
+            )
+        }
+
+    @Test
+    fun whenUserCompletesOnboarding_thenRemovesAllInterests_shouldHideOnboardingIsFalse() =
+        runTest {
+            subject.setFollowedTopicIds(setOf("1"))
+            subject.setShouldHideOnboarding(true)
+            assertTrue(subject.userData.first().shouldHideOnboarding)
+
+            subject.setFollowedTopicIds(emptySet())
+            assertFalse(subject.userData.first().shouldHideOnboarding)
         }
 }

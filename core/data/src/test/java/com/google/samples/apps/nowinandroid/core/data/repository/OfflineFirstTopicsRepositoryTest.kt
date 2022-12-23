@@ -28,9 +28,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSou
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,11 +69,11 @@ class OfflineFirstTopicsRepositoryTest {
     @Test
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
         runTest {
-            Assert.assertEquals(
-                topicDao.getTopicEntitiesStream()
+            assertEquals(
+                topicDao.getTopicEntities()
                     .first()
                     .map(TopicEntity::asExternalModel),
-                subject.getTopicsStream()
+                subject.getTopics()
                     .first()
             )
         }
@@ -86,16 +86,16 @@ class OfflineFirstTopicsRepositoryTest {
             val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
 
-            Assert.assertEquals(
+            assertEquals(
                 networkTopics.map(TopicEntity::id),
                 dbTopics.map(TopicEntity::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
                 synchronizer.getChangeListVersions().topicVersion
             )
@@ -116,16 +116,16 @@ class OfflineFirstTopicsRepositoryTest {
                 // Drop 10 to simulate the first 10 items being unchanged
                 .drop(10)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
 
-            Assert.assertEquals(
+            assertEquals(
                 networkTopics.map(TopicEntity::id),
                 dbTopics.map(TopicEntity::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
                 synchronizer.getChangeListVersions().topicVersion
             )
@@ -155,18 +155,18 @@ class OfflineFirstTopicsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val dbTopics = topicDao.getTopicEntitiesStream()
+            val dbTopics = topicDao.getTopicEntities()
                 .first()
                 .map(TopicEntity::asExternalModel)
 
             // Assert that items marked deleted on the network have been deleted locally
-            Assert.assertEquals(
+            assertEquals(
                 networkTopics.map(Topic::id) - deletedItems,
                 dbTopics.map(Topic::id)
             )
 
             // After sync version should be updated
-            Assert.assertEquals(
+            assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
                 synchronizer.getChangeListVersions().topicVersion
             )

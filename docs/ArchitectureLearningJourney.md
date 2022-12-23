@@ -18,7 +18,7 @@ The goals for the app architecture are:
 
 ## Architecture overview
 
-The app architecture has two layers: a [data layer](https://developer.android.com/jetpack/guide/data-layer) and [UI layer](https://developer.android.com/jetpack/guide/ui-layer) (a third, [the domain layer](https://developer.android.com/jetpack/guide/domain-layer), is currently in development).
+The app architecture has three layers: a [data layer](https://developer.android.com/jetpack/guide/data-layer), a [domain layer](https://developer.android.com/jetpack/guide/domain-layer) and a [UI layer](https://developer.android.com/jetpack/guide/ui-layer).
 
 
 <center>
@@ -39,7 +39,7 @@ The data flow is achieved using streams, implemented using [Kotlin Flows](https:
 
 ### Example: Displaying news on the For You screen
 
-When the app is first run it will attempt to load a list of news resources from a remote server (when the `staging` or `release` build variant is selected, `debug` builds will use local data). Once loaded, these are shown to the user based on the interests they choose.
+When the app is first run it will attempt to load a list of news resources from a remote server (when the `prod` build flavor is selected, `demo` builds will use local data). Once loaded, these are shown to the user based on the interests they choose.
 
 The following diagram shows the events which occur and how data flows from the relevant objects to achieve this.
 
@@ -70,7 +70,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
   <tr>
    <td>2
    </td>
-   <td>The initial news feed state is set to <code>Loading</code>, which causes the UI to show a loading spinner on the screen.
+   <td>The <code>ForYouViewModel</code> calls <code>GetSaveableNewsResourcesUseCase</code> to obtain a stream of news resources with their bookmarked/saved state. No items will be emitted into this stream until both the user and news repositories emit an item. While waiting, the feed state is set to <code>Loading</code>.
    </td>
    <td>Search for usages of <code>NewsFeedUiState.Loading</code>
    </td>
@@ -78,13 +78,21 @@ Here's what's happening in each step. The easiest way to find the associated cod
   <tr>
    <td>3
    </td>
+   <td>The user data repository obtains a stream of <code>UserData</code> objects from a local data source backed by Proto DataStore.
+   </td>
+   <td><code>NiaPreferencesDataSource.userData</code>
+   </td>
+  </tr>
+  <tr>
+   <td>4
+   </td>
    <td>WorkManager executes the sync job which calls <code>OfflineFirstNewsRepository</code> to start synchronizing data with the remote data source.
    </td>
    <td><code>SyncWorker.doWork</code>
    </td>
   </tr>
   <tr>
-   <td>4
+   <td>5
    </td>
    <td><code>OfflineFirstNewsRepository</code> calls <code>RetrofitNiaNetwork</code> to execute the actual API request using <a href="https://square.github.io/retrofit/">Retrofit</a>.
    </td>
@@ -92,7 +100,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
   </tr>
   <tr>
-   <td>5
+   <td>6
    </td>
    <td><code>RetrofitNiaNetwork</code> calls the REST API on the remote server.
    </td>
@@ -100,7 +108,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
   </tr>
   <tr>
-   <td>6
+   <td>7
    </td>
    <td><code>RetrofitNiaNetwork</code> receives the network response from the remote server.
    </td>
@@ -108,7 +116,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
   </tr>
   <tr>
-   <td>7
+   <td>8
    </td>
    <td><code>OfflineFirstNewsRepository</code> syncs the remote data with <code>NewsResourceDao</code> by inserting, updating or deleting data in a local <a href="https://developer.android.com/training/data-storage/room">Room database</a>.
    </td>
@@ -116,27 +124,35 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
   </tr>
   <tr>
-   <td>8
+   <td>9
    </td>
    <td>When data changes in <code>NewsResourceDao</code> it is emitted into the news resources data stream (which is a <a href="https://developer.android.com/kotlin/flow">Flow</a>).
    </td>
-   <td><code>NewsResourceDao.getNewsResourcesStream</code>
-   </td>
-  </tr>
-  <tr>
-   <td>9
-   </td>
-   <td><code>OfflineFirstNewsRepository</code> acts as an <a href="https://developer.android.com/kotlin/flow#modify">intermediate operator</a> on this stream, transforming the incoming <code>PopulatedNewsResource</code> (a database model, internal to the data layer) to the public <code>NewsResource</code> model which is consumed by other layers.
-   </td>
-   <td><code>OfflineFirstNewsRepository.getNewsResourcesStream</code>
+   <td><code>NewsResourceDao.getNewsResources</code>
    </td>
   </tr>
   <tr>
    <td>10
    </td>
-   <td><code>When ForYouViewModel</code> receives the news resources it updates the feed state to <code>Success</code>.  <code>ForYouScreen</code> then uses the news resources in the state to render the screen.
-<p>
-The screen shows the newly retrieved news resources (as long as the user has chosen at least one topic or author).
+   <td><code>OfflineFirstNewsRepository</code> acts as an <a href="https://developer.android.com/kotlin/flow#modify">intermediate operator</a> on this stream, transforming the incoming <code>PopulatedNewsResource</code> (a database model, internal to the data layer) to the public <code>NewsResource</code> model which is consumed by other layers.
+   </td>
+   <td><code>OfflineFirstNewsRepository.getNewsResources</code>
+   </td>
+  </tr>
+  <tr>
+   <td>11
+   </td>
+   <td><code>GetSaveableNewsResourcesUseCase</code> combines the list of news resources with the user data to emit a list of <code>SaveableNewsResource</code>s.  
+   </td>
+   <td><code>GetSaveableNewsResourcesUseCase.invoke</code>
+   </td>
+  </tr>
+  <tr>
+   <td>12
+   </td>
+   <td>When <code>ForYouViewModel</code> receives the saveable news resources it updates the feed state to <code>Success</code>.
+
+  <code>ForYouScreen</code> then uses the saveable news resources in the state to render the screen.
    </td>
    <td>Search for instances of <code>NewsFeedUiState.Success</code>
    </td>
@@ -165,11 +181,11 @@ Data is exposed as data streams. This means each client of the repository must b
 
 Reads are performed from local storage as the source of truth, therefore errors are not expected when reading from `Repository` instances. However, errors may occur when trying to reconcile data in local storage with remote sources. For more on error reconciliation, check the data synchronization section below.
 
-_Example: Read a list of authors_
+_Example: Read a list of topics_
 
-A list of Authors can be obtained by subscribing to `AuthorsRepository::getAuthorsStream` flow which emits `List<Authors>`.
+A list of Topics can be obtained by subscribing to `TopicsRepository::getTopics` flow which emits `List<Topic>`.
 
-Whenever the list of authors changes (for example, when a new author is added), the updated `List<Author>` is emitted into the stream.
+Whenever the list of topics changes (for example, when a new topic is added), the updated `List<Topic>` is emitted into the stream.
 
 
 ### Writing data
@@ -233,6 +249,14 @@ In the case of errors during data synchronization, an exponential backoff strate
 
 See the `OfflineFirstNewsRepository.syncWith` for an example of data synchronization.
 
+## Domain layer
+The [domain layer](https://developer.android.com/topic/architecture/domain-layer) contains use cases. These are classes which have a single invocable method (`operator fun invoke`) containing business logic. 
+
+These use cases are used to simplify and remove duplicate logic from ViewModels. They typically combine and transform data from repositories. 
+
+For example, `GetSaveableNewsResourcesUseCase` combines a stream (implemented using `Flow`) of `NewsResource`s from a `NewsRepository` with a stream of `UserData` objects from a `UserDataRepository` to create a stream of `SaveableNewsResource`s. This stream is used by various ViewModels to display news resources on screen with their bookmarked state.  
+
+Notably, the domain layer in Now in Android _does not_ (for now) contain any use cases for event handling. Events are handled by the UI layer calling methods on repositories directly.
 
 ## UI Layer
 
@@ -243,7 +267,7 @@ The [UI layer](https://developer.android.com/topic/architecture/ui-layer) compri
 *   UI elements built using [Jetpack Compose](https://developer.android.com/jetpack/compose)
 *   [Android ViewModels](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
-The ViewModels receive streams of data from repositories and transform them into UI state. The UI elements reflect this state, and provide ways for the user to interact with the app. These interactions are passed as events to the view model where they are processed.
+The ViewModels receive streams of data from use cases and repositories, and transforms them into UI state. The UI elements reflect this state, and provide ways for the user to interact with the app. These interactions are passed as events to the ViewModel where they are processed.
 
 
 ![Diagram showing the UI layer architecture](images/architecture-4-ui-layer.png "Diagram showing the UI layer architecture")
@@ -272,31 +296,20 @@ The `feedState` is passed to the `ForYouScreen` composable, which handles both o
 
 ### Transforming streams into UI state
 
-View models receive streams of data as cold [flows](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html) from one or more repositories. These are [combined](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/combine.html) together to produce a single flow of UI state. This single flow is then converted to a hot flow using [stateIn](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/state-in.html). The conversion to a state flow enables UI elements to read the last known state from the flow.
+ViewModels receive streams of data as cold [flows](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html) from one or more use cases or repositories. These are [combined](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/combine.html) together, or simply [mapped](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/map.html), to produce a single flow of UI state. This single flow is then converted to a hot flow using [stateIn](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/state-in.html). The conversion to a state flow enables UI elements to read the last known state from the flow.
 
-**Example: Displaying followed topics and authors**
+**Example: Displaying followed topics**
 
-The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. This hot flow is created by combining four data streams:
-
-
-
-*   List of authors (`getAuthorsStream`)
-*   List of author IDs which the current user is following
-*   List of topics
-*   List of topic IDs which the current user is following
-
-The list of `Author`s is mapped to a new list of `FollowableAuthor`s. `FollowableAuthor` is a wrapper for `Author` which also indicates whether the current user is following that author. The same transformation is applied for the list of `Topic`s.
-
-The two new lists are used to create a `InterestsUiState.Interests` state which is exposed to the UI.
+The `InterestsViewModel` exposes `uiState` as a `StateFlow<InterestsUiState>`. This hot flow is created by obtaining the cold flow of `List<FollowableTopic>` provided by `GetFollowableTopicsUseCase`. Each time a new list is emitted, it is converted into an `InterestsUiState.Interests` state which is exposed to the UI.
 
 
 ### Processing user interactions
 
-User actions are communicated from UI elements to view models using regular method invocations. These methods are passed to the UI elements as lambda expressions.
+User actions are communicated from UI elements to ViewModels using regular method invocations. These methods are passed to the UI elements as lambda expressions.
 
 **Example: Following a topic**
 
-The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The view model then processes this action by informing the topics repository.
+The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the topics repository.
 
 
 ## Further reading

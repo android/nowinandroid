@@ -1,33 +1,32 @@
 ![Now in Android](docs/images/nia-splash.jpg "Now in Android")
 
-Now in Android App [Work in progress 🚧]
+<a href="https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
+
+Now in Android App
 ==================
 
-**Learn how this app was designed by reading the [architecture](docs/ArchitectureLearningJourney.md) and [modularization](docs/ModularizationLearningJourney.md) learning journeys.**
+**Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
 
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
-app.
+app. It is a **work in progress** 🚧.
 
 **Now in Android** is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
 follows Android design and development best practices and is intended to be a useful reference
 for developers. As a running app, it's intended to help developers keep up-to-date with the world
 of Android development by providing regular news updates.
 
-The app is currently in early stage development and is not yet available on the Play Store.
+The app is currently in development. The `demoRelease` variant is [available on the Play Store in open beta](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
 
 # Features
 
 **Now in Android** displays content from the
 [Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
 links to recent videos, articles and other content. Users can also follow topics they are interested
-in or follow specific authors.
+in.
 
 ## Screenshots
 
-![Screenshot showing For You screen](docs/images/screenshot-1-foryou.png "Screenshot showing For You screen") 
-![Screenshot showing Interests screen](docs/images/screenshot-2-interests.png "Screenshot showing Interests screen") 
-![Screenshot showing Topic detail screen](docs/images/screenshot-3-topicdetail.png "Screenshot showing Topic detail screen")
-
+![Screenshot showing For You screen, Interests screen and Topic detail screen](docs/images/screenshots.png "Screenshot showing For You screen, Interests screen and Topic detail screen")
 
 # Development Environment
 
@@ -110,9 +109,10 @@ Examples:
   checking that specific repository methods were called.
 
 # UI
+The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
+obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma) (design assets [also available as a PDF](docs/Now-In-Android-Design-File.pdf)).
 
-UI components are designed according to [Material 3 guidelines](https://m3.material.io/) and built
-entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
+The Screens and UI elements are built entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
 
 The app has two themes: 
 

@@ -16,18 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -35,13 +30,13 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -57,17 +52,13 @@ class ForYouViewModelTest {
     private val networkMonitor = TestNetworkMonitor()
     private val syncStatusMonitor = TestSyncStatusMonitor()
     private val userDataRepository = TestUserDataRepository()
-    private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
-    private val getSortedFollowableAuthorsStream = GetSortedFollowableAuthorsStreamUseCase(
-        authorsRepository = authorsRepository
-    )
-    private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
+    private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository
     )
@@ -76,21 +67,18 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
-            networkMonitor = networkMonitor,
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase,
-            getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream,
-            getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
-            savedStateHandle = SavedStateHandle()
+            getSaveableNewsResources = getSaveableNewsResourcesUseCase,
+            getFollowableTopics = getFollowableTopicsUseCase
         )
     }
 
     @Test
     fun stateIsInitiallyLoading() = runTest {
         assertEquals(
-            ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.Loading,
+            viewModel.onboardingUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
     }
@@ -98,14 +86,14 @@ class ForYouViewModelTest {
     @Test
     fun stateIsLoadingWhenFollowedTopicsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.Loading,
+            viewModel.onboardingUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -129,34 +117,16 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsLoadingWhenFollowedAuthorsAreLoading() = runTest {
+    fun onboardingStateIsLoadingWhenTopicsAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        authorsRepository.sendAuthors(sampleAuthors)
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun stateIsLoadingWhenTopicsAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
 
         assertEquals(
-            ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.Loading,
+            viewModel.onboardingUiState.value
         )
         assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
@@ -165,36 +135,16 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsLoadingWhenAuthorsAreLoading() = runTest {
+    fun onboardingIsShownWhenNewsResourcesAreLoading() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        userDataRepository.setFollowedAuthorIds(emptySet())
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.Loading,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun stateIsInterestsSelectionWhenNewsResourcesAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
 
         assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
+            OnboardingUiState.Shown(
                 topics = listOf(
                     FollowableTopic(
                         topic = Topic(
@@ -230,43 +180,8 @@ class ForYouViewModelTest {
                         isFollowed = false
                     ),
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
             ),
-            viewModel.interestsSelectionUiState.value
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -280,19 +195,17 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsInterestsSelectionAfterLoadingEmptyFollowedTopicsAndAuthors() = runTest {
+    fun onboardingIsShownAfterLoadingEmptyFollowedTopics() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
-        authorsRepository.sendAuthors(sampleAuthors)
         userDataRepository.setFollowedTopicIds(emptySet())
-        userDataRepository.setFollowedAuthorIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
+            OnboardingUiState.Shown(
                 topics = listOf(
                     FollowableTopic(
                         topic = Topic(
@@ -328,43 +241,8 @@ class ForYouViewModelTest {
                         isFollowed = false
                     ),
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
             ),
-            viewModel.interestsSelectionUiState.value
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -379,27 +257,26 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsWithoutInterestsSelectionAfterLoadingFollowedTopics() = runTest {
+    fun onboardingIsNotShownAfterUserDismissesOnboarding() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(setOf("0", "1"))
+        viewModel.dismissOnboarding()
 
         assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.NotShown,
+            viewModel.onboardingUiState.value
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
         newsRepository.sendNewsResources(sampleNewsResources)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.NotShown,
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -419,61 +296,17 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun stateIsWithoutInterestsSelectionAfterLoadingFollowedAuthors() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(setOf("0", "1"))
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Loading,
-            viewModel.feedState.value
-        )
-
-        newsRepository.sendNewsResources(sampleNewsResources)
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = sampleNewsResources.map {
-                    SaveableNewsResource(
-                        newsResource = it,
-                        isSaved = false
-                    )
-                }
-            ),
-            viewModel.feedState.value
-        )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
     fun topicSelectionUpdatesAfterSelectingTopic() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
+            OnboardingUiState.Shown(
                 topics = listOf(
                     FollowableTopic(
                         topic = Topic(
@@ -509,43 +342,8 @@ class ForYouViewModelTest {
                         isFollowed = false
                     )
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
             ),
-            viewModel.interestsSelectionUiState.value
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -557,7 +355,7 @@ class ForYouViewModelTest {
         viewModel.updateTopicSelection("1", isChecked = true)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
+            OnboardingUiState.Shown(
                 topics = listOf(
                     FollowableTopic(
                         topic = Topic(
@@ -593,234 +391,8 @@ class ForYouViewModelTest {
                         isFollowed = false
                     )
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
             ),
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
-                )
-            ),
-            viewModel.feedState.value
-        )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionUpdatesAfterSelectingAuthor() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-            ),
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList(),
-            ),
-            viewModel.feedState.value
-        )
-
-        viewModel.updateAuthorSelection("1", isChecked = true)
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = true
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-            ),
-            viewModel.interestsSelectionUiState.value
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -845,20 +417,18 @@ class ForYouViewModelTest {
     @Test
     fun topicSelectionUpdatesAfterUnselectingTopic() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
         viewModel.updateTopicSelection("1", isChecked = true)
         viewModel.updateTopicSelection("1", isChecked = false)
 
         advanceUntilIdle()
         assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
+            OnboardingUiState.Shown(
                 topics = listOf(
                     FollowableTopic(
                         topic = Topic(
@@ -894,468 +464,8 @@ class ForYouViewModelTest {
                         isFollowed = false
                     )
                 ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
             ),
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
-            viewModel.feedState.value
-        )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionUpdatesAfterUnselectingAuthor() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateAuthorSelection("1", isChecked = true)
-        viewModel.updateAuthorSelection("1", isChecked = false)
-
-        assertEquals(
-
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-            ),
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
-            viewModel.feedState.value
-        )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionUpdatesAfterSavingTopicsOnly() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateTopicSelection("1", isChecked = true)
-
-        viewModel.saveFollowedInterests()
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false,
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false,
-                    )
-                )
-            ),
-            viewModel.feedState.value
-        )
-        assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
-        assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedAuthors())
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionUpdatesAfterSavingAuthorsOnly() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateAuthorSelection("0", isChecked = true)
-
-        viewModel.saveFollowedInterests()
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[0],
-                        isSaved = false
-                    ),
-                )
-            ),
-            viewModel.feedState.value
-        )
-        assertEquals(emptySet<Int>(), userDataRepository.getCurrentFollowedTopics())
-        assertEquals(setOf("0"), userDataRepository.getCurrentFollowedAuthors())
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionUpdatesAfterSavingAuthorsAndTopics() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateAuthorSelection("1", isChecked = true)
-        viewModel.updateTopicSelection("1", isChecked = true)
-
-        viewModel.saveFollowedInterests()
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
-                )
-            ),
-            viewModel.feedState.value
-        )
-        assertEquals(setOf("1"), userDataRepository.getCurrentFollowedTopics())
-        assertEquals(setOf("1"), userDataRepository.getCurrentFollowedAuthors())
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun topicSelectionIsResetAfterSavingTopicsAndRemovingThem() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateTopicSelection("1", isChecked = true)
-        viewModel.saveFollowedInterests()
-
-        userDataRepository.setFollowedTopicIds(emptySet())
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                )
-            ),
-            viewModel.interestsSelectionUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
-            viewModel.feedState.value
-        )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
-    }
-
-    @Test
-    fun authorSelectionIsResetAfterSavingAuthorsAndRemovingThem() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
-
-        topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateAuthorSelection("1", isChecked = true)
-        viewModel.saveFollowedInterests()
-
-        userDataRepository.setFollowedAuthorIds(emptySet())
-
-        assertEquals(
-            ForYouInterestsSelectionUiState.WithInterestsSelection(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
-                authors = listOf(
-                    FollowableAuthor(
-                        author = Author(
-                            id = "0",
-                            name = "Android Dev",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "1",
-                            name = "Android Dev 2",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableAuthor(
-                        author = Author(
-                            id = "2",
-                            name = "Android Dev 3",
-                            imageUrl = "",
-                            twitter = "",
-                            mediumPage = "",
-                            bio = "",
-                        ),
-                        isFollowed = false
-                    )
-                )
-            ),
-            viewModel.interestsSelectionUiState.value
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1371,19 +481,18 @@ class ForYouViewModelTest {
     @Test
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
         val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.interestsSelectionUiState.collect() }
+            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(setOf("1"))
-        authorsRepository.sendAuthors(sampleAuthors)
-        userDataRepository.setFollowedAuthorIds(setOf("1"))
+        userDataRepository.setShouldHideOnboarding(true)
         newsRepository.sendNewsResources(sampleNewsResources)
         viewModel.updateNewsResourceSaved("2", true)
 
         assertEquals(
-            ForYouInterestsSelectionUiState.NoInterestsSelection,
-            viewModel.interestsSelectionUiState.value
+            OnboardingUiState.NotShown,
+            viewModel.onboardingUiState.value
         )
         assertEquals(
             NewsFeedUiState.Success(
@@ -1404,49 +513,7 @@ class ForYouViewModelTest {
         collectJob1.cancel()
         collectJob2.cancel()
     }
-
-    @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.isOffline.collect() }
-
-        networkMonitor.setConnected(false)
-
-        assertEquals(
-            true,
-            viewModel.isOffline.value
-        )
-
-        collectJob.cancel()
-    }
 }
-
-private val sampleAuthors = listOf(
-    Author(
-        id = "0",
-        name = "Android Dev",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    ),
-    Author(
-        id = "1",
-        name = "Android Dev 2",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    ),
-    Author(
-        id = "2",
-        name = "Android Dev 3",
-        imageUrl = "",
-        twitter = "",
-        mediumPage = "",
-        bio = "",
-    )
-)
 
 private val sampleTopics = listOf(
     Topic(
@@ -1497,16 +564,6 @@ private val sampleNewsResources = listOf(
                 imageUrl = "image URL",
             )
         ),
-        authors = listOf(
-            Author(
-                id = "0",
-                name = "Android Dev",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
     ),
     NewsResource(
         id = "2",
@@ -1528,16 +585,6 @@ private val sampleNewsResources = listOf(
                 imageUrl = "image URL",
             ),
         ),
-        authors = listOf(
-            Author(
-                id = "1",
-                name = "Android Dev 2",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
     ),
     NewsResource(
         id = "3",
@@ -1557,15 +604,5 @@ private val sampleNewsResources = listOf(
                 imageUrl = "image URL",
             ),
         ),
-        authors = listOf(
-            Author(
-                id = "1",
-                name = "Android Dev 2",
-                imageUrl = "",
-                twitter = "",
-                mediumPage = "",
-                bio = "",
-            )
-        )
     ),
 )

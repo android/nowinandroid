@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.model.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -36,7 +37,6 @@ data class NewsResource(
     val headerImageUrl: String?,
     val publishDate: Instant,
     val type: NewsResourceType,
-    val authors: List<Author>,
     val topics: List<Topic>
 )
 
@@ -47,7 +47,6 @@ val previewNewsResources = listOf(
         content = "We released the first two units of Android Basics with Compose, our first free course that teaches Android Development with Jetpack Compose to anyone; you do not need any prior programming experience other than basic computer literacy to get started. You’ll learn the fundamentals of programming in Kotlin while building Android apps using Jetpack Compose, Android’s modern toolkit that simplifies and accelerates native UI development. These two units are just the beginning; more will be coming soon. Check out Android Basics with Compose to get started on your Android development journey",
         url = "https://android-developers.googleblog.com/2022/05/new-android-basics-with-compose-course.html",
         headerImageUrl = "https://developer.android.com/images/hero-assets/android-basics-compose.svg",
-        authors = listOf(previewAuthors[0]),
         publishDate = LocalDateTime(
             year = 2022,
             monthNumber = 5,
@@ -71,7 +70,6 @@ val previewNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        authors = listOf(previewAuthors[1]),
         topics = listOf(previewTopics[0], previewTopics[1])
     ),
     NewsResource(
@@ -85,7 +83,17 @@ val previewNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
-        authors = listOf(previewAuthors[0], previewAuthors[1]),
+        topics = listOf(previewTopics[2])
+    ),
+    NewsResource(
+        id = "4",
+        title = "New Jetpack Release",
+        content = "New Jetpack release includes updates to libraries such as CameraX, Benchmark, and" +
+            "more!",
+        url = "https://developer.android.com/jetpack/androidx/versions/all-channel",
+        headerImageUrl = "",
+        publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
+        type = Unknown,
         topics = listOf(previewTopics[2])
     )
 )

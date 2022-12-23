@@ -16,18 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationDestination
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
 
-object BookmarksDestination : NiaNavigationDestination {
-    override val route = "bookmarks_route"
-    override val destination = "bookmarks_destination"
+const val bookmarksRoute = "bookmarks_route"
+
+fun NavController.navigateToBookmarks(navOptions: NavOptions? = null) {
+    this.navigate(bookmarksRoute, navOptions)
 }
 
-fun NavGraphBuilder.bookmarksGraph() {
-    composable(route = BookmarksDestination.route) {
+fun NavGraphBuilder.bookmarksScreen() {
+    composable(route = bookmarksRoute) {
         BookmarksRoute()
     }
 }

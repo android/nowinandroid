@@ -21,6 +21,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.kotlin
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -44,10 +45,11 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:designsystem"))
                 add("implementation", project(":core:data"))
                 add("implementation", project(":core:common"))
-                add("implementation", project(":core:navigation"))
                 add("implementation", project(":core:domain"))
 
+                add("testImplementation", kotlin("test"))
                 add("testImplementation", project(":core:testing"))
+                add("androidTestImplementation", kotlin("test"))
                 add("androidTestImplementation", project(":core:testing"))
 
                 add("implementation", libs.findLibrary("coil.kt").get())
@@ -58,13 +60,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
 
                 add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
-
-                // TODO : Remove this dependency once we upgrade to Android Studio Dolphin b/228889042
-                // These dependencies are currently necessary to render Compose previews
-                add(
-                    "debugImplementation",
-                    libs.findLibrary("androidx.customview.poolingcontainer").get()
-                )
             }
         }
     }
