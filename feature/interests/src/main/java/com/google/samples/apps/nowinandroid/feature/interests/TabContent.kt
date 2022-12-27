@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.disableSplitMotionEvents
 
 @Composable
 fun TopicsTabContent(
@@ -39,6 +40,7 @@ fun TopicsTabContent(
     LazyColumn(
         modifier = modifier
             .padding(horizontal = 16.dp)
+            .disableSplitMotionEvents()
             .testTag("interests:topics"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
