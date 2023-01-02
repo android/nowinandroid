@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
      Copyright 2022 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,6 @@
 -->
 <resources>
     <string name="top_app_bar_action_icon_description">Settings</string>
-    <string name="top_app_bar_navigation_icon_description">Codebase</string>
     <string name="settings_title">Settings</string>
     <string name="loading">Loading...</string>
     <string name="privacy_policy">Privacy policy</string>
