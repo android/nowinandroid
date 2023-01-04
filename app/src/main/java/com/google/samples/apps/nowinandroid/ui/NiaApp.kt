@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -45,11 +47,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -68,10 +72,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVec
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -90,6 +94,7 @@ fun NiaApp(
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
+    val context = LocalContext.current
 
     NiaBackground {
         NiaGradientBackground(
@@ -165,6 +170,10 @@ fun NiaApp(
                         if (destination != null) {
                             NiaTopAppBar(
                                 titleRes = destination.titleTextId,
+                                navigationIcon = NiaIcons.Codebase,
+                                navigationIconContentDescription = stringResource(
+                                    id = settingsR.string.top_app_bar_navigation_icon_description
+                                ),
                                 actionIcon = NiaIcons.Settings,
                                 actionIconContentDescription = stringResource(
                                     id = settingsR.string.top_app_bar_action_icon_description
@@ -172,7 +181,12 @@ fun NiaApp(
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent
                                 ),
-                                onActionClick = { appState.setShowSettingsDialog(true) }
+                                onNavigationClick = {
+                                    val launchResourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse(
+                                        CODEBASE_URL))
+                                    ContextCompat.startActivity(context, launchResourceIntent, null)
+                                },
+                                onActionClick = { appState.setShowSettingsDialog(true) },
                             )
                         }
 
@@ -269,3 +283,5 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLev
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
+
+private const val CODEBASE_URL = "https://github.com/android/nowinandroid"

@@ -26,11 +26,11 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Grid3x3
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShortText
@@ -63,8 +63,8 @@ object NiaIcons {
     val MenuBookBorder = R.drawable.ic_menu_book_border
     val MoreVert = Icons.Default.MoreVert
     val Person = Icons.Rounded.Person
-    val PlayArrow = Icons.Rounded.PlayArrow
     val Search = Icons.Rounded.Search
+    val Codebase = Icons.Rounded.Code
     val Settings = Icons.Rounded.Settings
     val ShortText = Icons.Rounded.ShortText
     val Tag = Icons.Rounded.Tag
