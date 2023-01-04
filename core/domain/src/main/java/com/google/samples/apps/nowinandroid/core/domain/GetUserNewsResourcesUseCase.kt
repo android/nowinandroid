@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
@@ -48,30 +47,15 @@ class GetUserNewsResourcesUseCase @Inject constructor(
             newsRepository.getNewsResources()
         } else {
             newsRepository.getNewsResources(filterTopicIds = filterTopicIds)
-        }.mapToSaveableNewsResources(userDataRepository.userData)
+        }.mapToUserNewsResources(userDataRepository.userData)
 }
 
-private fun Flow<List<NewsResource>>.mapToSaveableNewsResources(
-    userData: Flow<UserData>
+private fun Flow<List<NewsResource>>.mapToUserNewsResources(
+    userDataStream: Flow<UserData>
 ): Flow<List<UserNewsResource>> =
     filterNot { it.isEmpty() }
-        .combine(userData) { newsResources, userData ->
+        .combine(userDataStream) { newsResources, userData ->
             newsResources.map { newsResource ->
-                UserNewsResource(
-                    id = newsResource.id,
-                    title = newsResource.title,
-                    content = newsResource.content,
-                    url = newsResource.url,
-                    headerImageUrl = newsResource.headerImageUrl,
-                    publishDate = newsResource.publishDate,
-                    type = newsResource.type,
-                    topics = newsResource.topics.map { topic ->
-                        FollowableTopic(
-                            topic = topic,
-                            isFollowed = userData.followedTopics.contains(topic.id)
-                        )
-                    },
-                    isSaved = userData.bookmarkedNewsResources.contains(newsResource.id)
-                )
+                UserNewsResource.from(newsResource, userData)
             }
         }

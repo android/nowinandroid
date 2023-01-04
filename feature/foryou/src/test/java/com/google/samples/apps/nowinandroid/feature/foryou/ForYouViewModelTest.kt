@@ -292,7 +292,7 @@ class ForYouViewModelTest {
                         headerImageUrl = it.headerImageUrl,
                         publishDate = it.publishDate,
                         type = it.type,
-                        topics = it.topics.map { topic ->
+                        followableTopics = it.topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
                                 isFollowed = followedTopicIds.contains(topic.id)
@@ -356,7 +356,7 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[1].headerImageUrl,
                         publishDate = sampleNewsResources[1].publishDate,
                         type = sampleNewsResources[1].type,
-                        topics = sampleNewsResources[1].topics.map { topic ->
+                        followableTopics = sampleNewsResources[1].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
                                 isFollowed = topic.id == followedTopicId
@@ -372,7 +372,7 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[2].headerImageUrl,
                         publishDate = sampleNewsResources[2].publishDate,
                         type = sampleNewsResources[2].type,
-                        topics = sampleNewsResources[2].topics.map { topic ->
+                        followableTopics = sampleNewsResources[2].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
                                 isFollowed = topic.id == followedTopicId
@@ -482,7 +482,7 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[1].headerImageUrl,
                         publishDate = sampleNewsResources[1].publishDate,
                         type = sampleNewsResources[1].type,
-                        topics = sampleNewsResources[1].topics.map { topic ->
+                        followableTopics = sampleNewsResources[1].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
                                 isFollowed = followedTopicIds.contains(topic.id)
@@ -498,7 +498,7 @@ class ForYouViewModelTest {
                         headerImageUrl = sampleNewsResources[2].headerImageUrl,
                         publishDate = sampleNewsResources[2].publishDate,
                         type = sampleNewsResources[2].type,
-                        topics = sampleNewsResources[2].topics.map { topic ->
+                        followableTopics = sampleNewsResources[2].topics.map { topic ->
                             FollowableTopic(
                                 topic = topic,
                                 isFollowed = followedTopicIds.contains(topic.id)

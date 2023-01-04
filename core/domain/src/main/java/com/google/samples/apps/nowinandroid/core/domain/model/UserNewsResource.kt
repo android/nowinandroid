@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -39,9 +40,30 @@ data class UserNewsResource(
     val headerImageUrl: String?,
     val publishDate: Instant,
     val type: NewsResourceType,
-    val topics: List<FollowableTopic>,
+    val followableTopics: List<FollowableTopic>,
     val isSaved: Boolean
-)
+) {
+    companion object {
+        fun from(newsResource: NewsResource, userData: UserData): UserNewsResource {
+            return UserNewsResource(
+                id = newsResource.id,
+                title = newsResource.title,
+                content = newsResource.content,
+                url = newsResource.url,
+                headerImageUrl = newsResource.headerImageUrl,
+                publishDate = newsResource.publishDate,
+                type = newsResource.type,
+                followableTopics = newsResource.topics.map { topic ->
+                    FollowableTopic(
+                        topic = topic,
+                        isFollowed = userData.followedTopics.contains(topic.id)
+                    )
+                },
+                isSaved = userData.bookmarkedNewsResources.contains(newsResource.id)
+            )
+        }
+    }
+}
 
 val previewUserNewsResources = listOf(
     UserNewsResource(
@@ -60,7 +82,7 @@ val previewUserNewsResources = listOf(
             nanosecond = 0
         ).toInstant(TimeZone.UTC),
         type = Codelab,
-        topics = listOf(previewFollowableTopics[1]),
+        followableTopics = listOf(previewFollowableTopics[1]),
         isSaved = true
     ),
     UserNewsResource(
@@ -74,7 +96,7 @@ val previewUserNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        topics = listOf(previewFollowableTopics[0], previewFollowableTopics[1]),
+        followableTopics = listOf(previewFollowableTopics[0], previewFollowableTopics[1]),
         isSaved = false
     ),
     UserNewsResource(
@@ -88,7 +110,7 @@ val previewUserNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
-        topics = listOf(previewFollowableTopics[2]),
+        followableTopics = listOf(previewFollowableTopics[2]),
         isSaved = false
     ),
     UserNewsResource(
@@ -100,7 +122,7 @@ val previewUserNewsResources = listOf(
         headerImageUrl = "",
         publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
         type = Unknown,
-        topics = listOf(previewFollowableTopics[2]),
+        followableTopics = listOf(previewFollowableTopics[2]),
         isSaved = true
     )
 )
