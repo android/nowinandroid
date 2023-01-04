@@ -98,4 +98,11 @@ class TestUserDataRepository : UserDataRepository {
      */
     fun getCurrentFollowedTopics(): Set<String>? =
         _userData.replayCache.firstOrNull()?.followedTopics
+
+    /**
+     * A test-only API to allow setting of user data directly.
+     */
+    fun setUserData(userData: UserData) {
+        _userData.tryEmit(userData)
+    }
 }

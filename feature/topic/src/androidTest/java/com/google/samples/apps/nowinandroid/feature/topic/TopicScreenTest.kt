@@ -187,7 +187,7 @@ private val sampleUserNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        topics = listOf(
+        followableTopics = listOf(
             FollowableTopic(
                 topic = Topic(
                     id = "0",
