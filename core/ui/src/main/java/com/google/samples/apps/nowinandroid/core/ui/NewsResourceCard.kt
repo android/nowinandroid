@@ -258,7 +258,7 @@ fun NewsResourceTopics(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
                         modifier = Modifier.semantics {
 
-                            contentDescription = followableTopic.topic.name +
+                            contentDescription = followableTopic.topic.name + " " +
                                 if (followableTopic.isFollowed) isFollowed
                                 else isNotFollowed
                         }
