@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -60,11 +60,7 @@ class GetUserNewsResourcesUseCaseTest {
 
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
-            listOf(
-                UserNewsResource(sampleNewsResources[0], userData),
-                UserNewsResource(sampleNewsResources[1], userData),
-                UserNewsResource(sampleNewsResources[2], userData),
-            ),
+            sampleNewsResources.mapToUserNewsResources(userData),
             userNewsResources.first()
         )
     }
@@ -83,9 +79,7 @@ class GetUserNewsResourcesUseCaseTest {
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .map {
-                    UserNewsResource(it, emptyUserData)
-                },
+                .mapToUserNewsResources(emptyUserData),
             userNewsResources.first()
         )
     }

@@ -57,7 +57,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsRes
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
+import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -145,7 +145,7 @@ private fun LazyListScope.TopicBody(
         TopicHeader(name, description, imageUrl)
     }
 
-    TopicCards(news, onBookmarkChanged)
+    userNewsResourceCards(news, onBookmarkChanged)
 }
 
 @Composable
@@ -173,16 +173,15 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
     }
 }
 
-private fun LazyListScope.TopicCards(
+// TODO: Could/should this be replaced with [LazyGridScope.newsFeed]?
+private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit
 ) {
     when (news) {
         is NewsUiState.Success -> {
-            newsResourceCardItems(
+            userNewsResourceCardItems(
                 items = news.news,
-                newsResourceMapper = { it },
-                isBookmarkedMapper = { it.isSaved },
                 onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
                 itemModifier = Modifier.padding(24.dp)
             )

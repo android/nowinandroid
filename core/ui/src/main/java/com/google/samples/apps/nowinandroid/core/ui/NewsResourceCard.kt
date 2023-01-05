@@ -236,8 +236,6 @@ fun NewsResourceTopics(
     // Store the ID of the Topic which has its "following" menu expanded, if any.
     // To avoid UI confusion, only one topic can have an expanded menu at a time.
     var expandedTopicId by remember { mutableStateOf<String?>(null) }
-    val isFollowed = stringResource(R.string.topic_is_followed)
-    val isNotFollowed = stringResource(R.string.topic_is_not_followed)
 
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
@@ -254,13 +252,21 @@ fun NewsResourceTopics(
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo
                 text = {
+                    val contentDescription = if (followableTopic.isFollowed) {
+                        stringResource(
+                            R.string.topic_chip_content_description_when_followed,
+                            followableTopic.topic.name
+                        )
+                    } else {
+                        stringResource(
+                            R.string.topic_chip_content_description_when_not_followed,
+                            followableTopic.topic.name
+                        )
+                    }
                     Text(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
                         modifier = Modifier.semantics {
-
-                            contentDescription = followableTopic.topic.name + " " +
-                                if (followableTopic.isFollowed) isFollowed
-                                else isNotFollowed
+                            this.contentDescription = contentDescription
                         }
                     )
                 }
