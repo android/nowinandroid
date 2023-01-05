@@ -66,9 +66,9 @@ class GetUserNewsResourcesUseCaseTest {
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
             listOf(
-                UserNewsResource.from(sampleNewsResources[0], userData),
-                UserNewsResource.from(sampleNewsResources[1], userData),
-                UserNewsResource.from(sampleNewsResources[2], userData),
+                UserNewsResource(sampleNewsResources[0], userData),
+                UserNewsResource(sampleNewsResources[1], userData),
+                UserNewsResource(sampleNewsResources[2], userData),
             ),
             userNewsResources.first()
         )
@@ -96,7 +96,7 @@ class GetUserNewsResourcesUseCaseTest {
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
                 .map {
-                    UserNewsResource.from(it, userData)
+                    UserNewsResource(it, userData)
                 },
             userNewsResources.first()
         )

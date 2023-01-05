@@ -56,6 +56,6 @@ private fun Flow<List<NewsResource>>.mapToUserNewsResources(
     filterNot { it.isEmpty() }
         .combine(userDataStream) { newsResources, userData ->
             newsResources.map { newsResource ->
-                UserNewsResource.from(newsResource, userData)
+                UserNewsResource(newsResource, userData)
             }
         }

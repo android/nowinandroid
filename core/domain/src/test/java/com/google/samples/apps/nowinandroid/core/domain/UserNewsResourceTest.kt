@@ -75,7 +75,7 @@ class UserNewsResourceTest {
             shouldHideOnboarding = true
         )
 
-        val userNewsResource = UserNewsResource.from(newsResource1, userData)
+        val userNewsResource = UserNewsResource(newsResource1, userData)
 
         // Check that the simple field mappings have been done correctly.
         assertEquals(newsResource1.id, userNewsResource.id)

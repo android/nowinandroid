@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-private val emptyUserData = UserData(
+val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
     followedTopics = emptySet(),
     themeBrand = ThemeBrand.DEFAULT,
