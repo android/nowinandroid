@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.domain
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import javax.inject.Inject
@@ -55,7 +56,5 @@ private fun Flow<List<NewsResource>>.mapToUserNewsResources(
 ): Flow<List<UserNewsResource>> =
     filterNot { it.isEmpty() }
         .combine(userDataStream) { newsResources, userData ->
-            newsResources.map { newsResource ->
-                UserNewsResource(newsResource, userData)
-            }
+            newsResources.mapToUserNewsResources(userData)
         }
