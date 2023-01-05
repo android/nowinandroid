@@ -29,7 +29,6 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import kotlinx.datetime.Instant
 import org.junit.Before
@@ -181,26 +180,28 @@ private val testTopics = listOf(
 private val sampleUserNewsResources = listOf(
     UserNewsResource(
         newsResource =
-            NewsResource(
-                id = "1",
-                title = "Thanks for helping us reach 1M YouTube Subscribers",
-                content = "Thank you everyone for following the Now in Android series and everything the " +
-                    "Android Developers YouTube channel has to offer. During the Android Developer " +
-                    "Summit, our YouTube channel reached 1 million subscribers! Here’s a small video to " +
-                    "thank you all.",
-                url = "https://youtu.be/-fJ6poHQrjM",
-                headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-                publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-                type = Video,
-                topics = listOf (Topic(
+        NewsResource(
+            id = "1",
+            title = "Thanks for helping us reach 1M YouTube Subscribers",
+            content = "Thank you everyone for following the Now in Android series and" +
+                " everything the Android Developers YouTube channel has to offer. During the " +
+                "Android Developer Summit, our YouTube channel reached 1 million subscribers!" +
+                " Here’s a small video to thank you all.",
+            url = "https://youtu.be/-fJ6poHQrjM",
+            headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
+            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
+            type = Video,
+            topics = listOf(
+                Topic(
                     id = "0",
                     name = "Headlines",
                     shortDescription = "",
                     longDescription = TOPIC_DESC,
                     url = "",
                     imageUrl = ""
-                ))
-            ),
+                )
+            )
+        ),
         userData = emptyUserData.copy(bookmarkedNewsResources = setOf("1"))
     )
 )

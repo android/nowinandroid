@@ -84,7 +84,7 @@ class NewsResourceCardTest {
             NewsResourceTopics(topics = previewFollowableTopics)
         }
 
-        for(followableTopic in previewFollowableTopics){
+        for (followableTopic in previewFollowableTopics) {
             val topicName = followableTopic.topic.name
             val expectedContentDescription = if (followableTopic.isFollowed) {
                 "$topicName is followed"
