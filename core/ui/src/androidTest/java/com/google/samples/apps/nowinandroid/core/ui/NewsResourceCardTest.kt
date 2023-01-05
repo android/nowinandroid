@@ -79,7 +79,7 @@ class NewsResourceCardTest {
 
     @Test
     fun testTopicsChipColorBackground_matchesFollowedState() {
-        val followableTopics = previewUserNewsResources[1].topics
+        val followableTopics = previewUserNewsResources[1].followableTopics
 
         composeTestRule.setContent {
             NewsResourceTopics(topics = followableTopics)

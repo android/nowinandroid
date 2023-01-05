@@ -116,7 +116,7 @@ fun NewsResourceCardExpanded(
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceTopics(userNewsResource.topics)
+                    NewsResourceTopics(userNewsResource.followableTopics)
                 }
             }
         }

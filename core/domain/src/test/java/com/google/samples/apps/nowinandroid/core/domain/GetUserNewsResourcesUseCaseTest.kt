@@ -16,11 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
@@ -44,107 +46,59 @@ class GetUserNewsResourcesUseCaseTest {
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
 
-        // Obtain the saveable news resources stream.
-        val saveableNewsResources = useCase()
+        // Obtain the user news resources stream.
+        val userNewsResources = useCase()
 
-        // Send some news resources and bookmarks.
+        // Send some news resources and user data into the data repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setNewsResourceBookmarks(
-            setOf(sampleNewsResources[0].id, sampleNewsResources[2].id)
+
+        // Construct the test user data with bookmarks and followed topics.
+        val userData = UserData(
+            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
+            followedTopics = setOf(sampleTopic1.id),
+            themeBrand = DEFAULT,
+            darkThemeConfig = FOLLOW_SYSTEM,
+            shouldHideOnboarding = false
         )
 
-        // Set a followed topic for the user.
-        userDataRepository.setFollowedTopicIds(setOf(sampleTopic1.id))
+        userDataRepository.setUserData(userData)
 
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
             listOf(
-                UserNewsResource(
-                    sampleNewsResources[0].id,
-                    sampleNewsResources[0].title,
-                    sampleNewsResources[0].content,
-                    sampleNewsResources[0].url,
-                    sampleNewsResources[0].headerImageUrl,
-                    sampleNewsResources[0].publishDate,
-                    sampleNewsResources[0].type,
-                    sampleNewsResources[0].topics.map { topic ->
-                        FollowableTopic(
-                            topic = topic,
-                            isFollowed = topic.id == sampleTopic1.id
-                        )
-                    },
-                    true
-                ),
-                UserNewsResource(
-                    sampleNewsResources[1].id,
-                    sampleNewsResources[1].title,
-                    sampleNewsResources[1].content,
-                    sampleNewsResources[1].url,
-                    sampleNewsResources[1].headerImageUrl,
-                    sampleNewsResources[1].publishDate,
-                    sampleNewsResources[1].type,
-                    sampleNewsResources[1].topics.map { topic ->
-                        FollowableTopic(
-                            topic = topic,
-                            isFollowed = topic.id == sampleTopic1.id
-                        )
-                    },
-                    false
-                ),
-                UserNewsResource(
-                    sampleNewsResources[2].id,
-                    sampleNewsResources[2].title,
-                    sampleNewsResources[2].content,
-                    sampleNewsResources[2].url,
-                    sampleNewsResources[2].headerImageUrl,
-                    sampleNewsResources[2].publishDate,
-                    sampleNewsResources[2].type,
-                    sampleNewsResources[2].topics.map { topic ->
-                        FollowableTopic(
-                            topic = topic,
-                            isFollowed = topic.id == sampleTopic1.id
-                        )
-                    },
-                    true
-                ),
+                UserNewsResource(sampleNewsResources[0], userData),
+                UserNewsResource(sampleNewsResources[1], userData),
+                UserNewsResource(sampleNewsResources[2], userData),
             ),
-            saveableNewsResources.first()
+            userNewsResources.first()
         )
     }
 
     @Test
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
 
-        // Obtain a stream of saveable news resources for the given topic id.
-        val saveableNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
+        // Obtain a stream of user news resources for the given topic id.
+        val userNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
 
-        // Send some news resources and bookmarks.
+        // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setNewsResourceBookmarks(setOf())
+        val userData = UserData(
+            bookmarkedNewsResources = emptySet(),
+            followedTopics = emptySet(),
+            themeBrand = DEFAULT,
+            darkThemeConfig = FOLLOW_SYSTEM,
+            shouldHideOnboarding = false
+        )
+        userDataRepository.setUserData(userData)
 
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
                 .map {
-                    UserNewsResource(
-                        id = it.id,
-                        title = it.title,
-                        content = it.content,
-                        url = it.url,
-                        headerImageUrl = it.headerImageUrl,
-                        publishDate = it.publishDate,
-                        type = it.type,
-                        topics = it.topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = false
-                            )
-                        },
-                        isSaved = false
-                    )
+                    UserNewsResource(it, userData)
                 },
-            saveableNewsResources.first()
+            userNewsResources.first()
         )
     }
 }
