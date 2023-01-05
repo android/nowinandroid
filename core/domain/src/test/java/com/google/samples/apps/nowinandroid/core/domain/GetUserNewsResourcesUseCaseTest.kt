@@ -17,14 +17,12 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
@@ -53,12 +51,9 @@ class GetUserNewsResourcesUseCaseTest {
         newsRepository.sendNewsResources(sampleNewsResources)
 
         // Construct the test user data with bookmarks and followed topics.
-        val userData = UserData(
+        val userData = emptyUserData.copy(
             bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
-            followedTopics = setOf(sampleTopic1.id),
-            themeBrand = DEFAULT,
-            darkThemeConfig = FOLLOW_SYSTEM,
-            shouldHideOnboarding = false
+            followedTopics = setOf(sampleTopic1.id)
         )
 
         userDataRepository.setUserData(userData)
@@ -82,21 +77,14 @@ class GetUserNewsResourcesUseCaseTest {
 
         // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        val userData = UserData(
-            bookmarkedNewsResources = emptySet(),
-            followedTopics = emptySet(),
-            themeBrand = DEFAULT,
-            darkThemeConfig = FOLLOW_SYSTEM,
-            shouldHideOnboarding = false
-        )
-        userDataRepository.setUserData(userData)
+        userDataRepository.setUserData(emptyUserData)
 
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
                 .map {
-                    UserNewsResource(it, userData)
+                    UserNewsResource(it, emptyUserData)
                 },
             userNewsResources.first()
         )
