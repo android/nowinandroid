@@ -20,12 +20,14 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCa
 import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
@@ -265,7 +267,8 @@ class ForYouViewModelTest {
         topicsRepository.sendTopics(sampleTopics)
 
         val followedTopicIds = setOf("0", "1")
-        userDataRepository.setFollowedTopicIds(followedTopicIds)
+        val userData = emptyUserData.copy(followedTopics = followedTopicIds)
+        userDataRepository.setUserData(userData)
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -282,25 +285,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed =
-                sampleNewsResources.map {
-                    UserNewsResource(
-                        id = it.id,
-                        title = it.title,
-                        content = it.content,
-                        url = it.url,
-                        headerImageUrl = it.headerImageUrl,
-                        publishDate = it.publishDate,
-                        type = it.type,
-                        followableTopics = it.topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = followedTopicIds.contains(topic.id)
-                            )
-                        },
-                        isSaved = false
-                    )
-                }
+                feed = sampleNewsResources.mapToUserNewsResources(userData)
             ),
             viewModel.feedState.value
         )
@@ -345,41 +330,14 @@ class ForYouViewModelTest {
             ),
             viewModel.onboardingUiState.value
         )
+
+        val userData = emptyUserData.copy(followedTopics = setOf(followedTopicId))
+
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    UserNewsResource(
-                        id = sampleNewsResources[1].id,
-                        title = sampleNewsResources[1].title,
-                        content = sampleNewsResources[1].content,
-                        url = sampleNewsResources[1].url,
-                        headerImageUrl = sampleNewsResources[1].headerImageUrl,
-                        publishDate = sampleNewsResources[1].publishDate,
-                        type = sampleNewsResources[1].type,
-                        followableTopics = sampleNewsResources[1].topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = topic.id == followedTopicId
-                            )
-                        },
-                        isSaved = false
-                    ),
-                    UserNewsResource(
-                        id = sampleNewsResources[2].id,
-                        title = sampleNewsResources[2].title,
-                        content = sampleNewsResources[2].content,
-                        url = sampleNewsResources[2].url,
-                        headerImageUrl = sampleNewsResources[2].headerImageUrl,
-                        publishDate = sampleNewsResources[2].publishDate,
-                        type = sampleNewsResources[2].type,
-                        followableTopics = sampleNewsResources[2].topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = topic.id == followedTopicId
-                            )
-                        },
-                        isSaved = false
-                    )
+                    UserNewsResource(sampleNewsResources[1], userData),
+                    UserNewsResource(sampleNewsResources[2], userData),
                 )
             ),
             viewModel.feedState.value
@@ -460,12 +418,24 @@ class ForYouViewModelTest {
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         val followedTopicIds = setOf("1")
+        val userData = emptyUserData.copy(
+            followedTopics = followedTopicIds,
+            shouldHideOnboarding = true
+        )
 
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(followedTopicIds)
-        userDataRepository.setShouldHideOnboarding(true)
+        userDataRepository.setUserData(userData)
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateNewsResourceSaved("2", true)
+
+        val bookmarkedNewsResourceId = "2"
+        viewModel.updateNewsResourceSaved(
+            newsResourceId = bookmarkedNewsResourceId,
+            isChecked = true
+        )
+
+        val userDataExpected = userData.copy(
+            bookmarkedNewsResources = setOf(bookmarkedNewsResourceId)
+        )
 
         assertEquals(
             OnboardingUiState.NotShown,
@@ -474,38 +444,8 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    UserNewsResource(
-                        id = sampleNewsResources[1].id,
-                        title = sampleNewsResources[1].title,
-                        content = sampleNewsResources[1].content,
-                        url = sampleNewsResources[1].url,
-                        headerImageUrl = sampleNewsResources[1].headerImageUrl,
-                        publishDate = sampleNewsResources[1].publishDate,
-                        type = sampleNewsResources[1].type,
-                        followableTopics = sampleNewsResources[1].topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = followedTopicIds.contains(topic.id)
-                            )
-                        },
-                        isSaved = true
-                    ),
-                    UserNewsResource(
-                        id = sampleNewsResources[2].id,
-                        title = sampleNewsResources[2].title,
-                        content = sampleNewsResources[2].content,
-                        url = sampleNewsResources[2].url,
-                        headerImageUrl = sampleNewsResources[2].headerImageUrl,
-                        publishDate = sampleNewsResources[2].publishDate,
-                        type = sampleNewsResources[2].type,
-                        followableTopics = sampleNewsResources[2].topics.map { topic ->
-                            FollowableTopic(
-                                topic = topic,
-                                isFollowed = followedTopicIds.contains(topic.id)
-                            )
-                        },
-                        isSaved = false
-                    ),
+                    UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
+                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected)
                 )
             ),
             viewModel.feedState.value
