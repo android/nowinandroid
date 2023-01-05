@@ -23,6 +23,7 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.topic"
 
     testOptions {
+        // TODO: Convert it as a convention plugin once Flamingo goes out (b/242515648)
         managedDevices {
             devices {
                 maybeCreate<com.android.build.api.dsl.ManagedVirtualDevice>("pixel4api30").apply {
