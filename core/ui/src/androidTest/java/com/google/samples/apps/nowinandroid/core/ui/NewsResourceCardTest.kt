@@ -21,6 +21,7 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.google.samples.apps.nowinandroid.core.domain.model.previewFollowableTopics
 import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import org.junit.Rule
 import org.junit.Test
@@ -79,15 +80,20 @@ class NewsResourceCardTest {
 
     @Test
     fun testTopicsChipColorBackground_matchesFollowedState() {
-        val followableTopics = previewUserNewsResources[1].followableTopics
-
         composeTestRule.setContent {
-            NewsResourceTopics(topics = followableTopics)
+            NewsResourceTopics(topics = previewFollowableTopics)
         }
 
-        composeTestRule
-            .onNodeWithText(followableTopics[1].topic.name)
-            .assertContentDescriptionEquals("UI is followed")
+        for(followableTopic in previewFollowableTopics){
+            val topicName = followableTopic.topic.name
+            val expectedContentDescription = if (followableTopic.isFollowed) {
+                "$topicName is followed"
+            } else {
+                "$topicName is not followed"
+            }
+            composeTestRule
+                .onNodeWithText(topicName.uppercase())
+                .assertContentDescriptionEquals(expectedContentDescription)
+        }
     }
-    // TODO add a test for not followed - figure out whether to put it here or to make a new test
 }
