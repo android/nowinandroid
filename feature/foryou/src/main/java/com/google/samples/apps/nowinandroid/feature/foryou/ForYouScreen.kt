@@ -83,8 +83,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverl
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -396,9 +395,7 @@ fun ForYouScreenPopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -417,9 +414,7 @@ fun ForYouScreenOfflinePopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -440,9 +435,7 @@ fun ForYouScreenTopicSelection() {
                     topics = previewTopics.map { FollowableTopic(it, false) },
                 ),
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -478,9 +471,7 @@ fun ForYouScreenPopulatedAndLoading() {
                 isSyncing = true,
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
