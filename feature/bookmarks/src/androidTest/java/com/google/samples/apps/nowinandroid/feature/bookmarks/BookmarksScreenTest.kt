@@ -30,8 +30,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -67,8 +66,7 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                    previewUserNewsResources.take(2)
                 ),
                 removeFromBookmarks = { }
             )
@@ -76,7 +74,7 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[0].title,
+                previewUserNewsResources[0].title,
                 substring = true
             )
             .assertExists()
@@ -85,14 +83,14 @@ class BookmarksScreenTest {
         composeTestRule.onNode(hasScrollToNodeAction())
             .performScrollToNode(
                 hasText(
-                    previewNewsResources[1].title,
+                    previewUserNewsResources[1].title,
                     substring = true
                 )
             )
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[1].title,
+                previewUserNewsResources[1].title,
                 substring = true
             )
             .assertExists()
@@ -106,11 +104,10 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                    previewUserNewsResources.take(2)
                 ),
                 removeFromBookmarks = { newsResourceId ->
-                    assertEquals(previewNewsResources[0].id, newsResourceId)
+                    assertEquals(previewUserNewsResources[0].id, newsResourceId)
                     removeFromBookmarksCalled = true
                 }
             )
@@ -124,7 +121,7 @@ class BookmarksScreenTest {
             ).filter(
                 hasAnyAncestor(
                     hasText(
-                        previewNewsResources[0].title,
+                        previewUserNewsResources[0].title,
                         substring = true
                     )
                 )
