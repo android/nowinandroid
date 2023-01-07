@@ -302,7 +302,10 @@ private fun TopicSelection(
             .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
             .fillMaxWidth()
     ) {
-        items(onboardingUiState.topics) {
+        items(
+            items = onboardingUiState.topics,
+            key = { it.topic.id }
+        ) {
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
