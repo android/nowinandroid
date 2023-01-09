@@ -27,4 +27,5 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.androidx.activity.compose)
 }

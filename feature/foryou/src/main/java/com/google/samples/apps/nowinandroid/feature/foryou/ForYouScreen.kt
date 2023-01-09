@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.app.Activity
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -123,24 +124,10 @@ internal fun ForYouScreen(
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
-
-    // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-    // This code should be called when the UI is ready for use
-    // and relates to Time To Full Display.
-    // TODO replace with ReportDrawnWhen { } once androidx.activity-compose 1.7.0 is used (currently alpha)
-    if (!isSyncing && !isOnboardingLoading && !isFeedLoading) {
-        val localView = LocalView.current
-        // We use Unit to call reportFullyDrawn only on the first recomposition,
-        // however it will be called again if this composable goes out of scope.
-        // Activity.reportFullyDrawn() has its own check for this
-        // and is safe to call multiple times though.
-        LaunchedEffect(Unit) {
-            // We're leveraging the fact, that the current view is directly set as content of Activity.
-            val activity = localView.context as? Activity ?: return@LaunchedEffect
-            // To be sure not to call in the middle of a frame draw.
-            localView.doOnPreDraw { activity.reportFullyDrawn() }
-        }
-    }
+    
+    // Reports when the UI is fully drawn and usable by users.
+    // It relates to Time To Full Display in benchmarks.
+    ReportDrawnWhen { !isSyncing && !isOnboardingLoading && !isFeedLoading }
 
     val state = rememberLazyGridState()
     TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
