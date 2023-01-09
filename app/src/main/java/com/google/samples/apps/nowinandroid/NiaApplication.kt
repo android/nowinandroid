@@ -39,7 +39,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
      * format. During Coil's initialization it will call `applicationContext.newImageLoader()` to
      * obtain an ImageLoader.
      *
-     * @see https://github.com/coil-kt/coil/blob/main/coil-singleton/src/main/java/coil/Coil.kt#L63
+     * @see <a href="https://github.com/coil-kt/coil/blob/main/coil-singleton/src/main/java/coil/Coil.kt">Coil</a>
      */
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this)
