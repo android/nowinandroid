@@ -25,8 +25,11 @@ export JAVA_HOME="$(cd $DIR/../../../prebuilts/studio/jdk/jdk11/linux && pwd )"
 echo "JAVA_HOME=$JAVA_HOME"
 
 export ANDROID_HOME="$(cd $DIR/../../../prebuilts/fullsdk/linux && pwd )"
-
 echo "ANDROID_HOME=$ANDROID_HOME"
+
+echo "Copying google-services.json"
+cp $DIR/../nowinandroid-prebuilts/google-services.json $DIR/app
+
 cd $DIR
 
 # Build
