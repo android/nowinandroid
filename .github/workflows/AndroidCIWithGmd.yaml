@@ -16,7 +16,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '11'
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Run instrumented tests with GMD
       continue-on-error: true
