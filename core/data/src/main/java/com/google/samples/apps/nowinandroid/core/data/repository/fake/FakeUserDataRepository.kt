@@ -47,6 +47,9 @@ class FakeUserDataRepository @Inject constructor(
         niaPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)
     }
 
+    override suspend fun updateNewsResourceViewed(newsResourceId: String, viewed: Boolean) =
+        niaPreferencesDataSource.toggleNewsResourceViewed(newsResourceId, viewed)
+
     override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         niaPreferencesDataSource.setThemeBrand(themeBrand)
     }

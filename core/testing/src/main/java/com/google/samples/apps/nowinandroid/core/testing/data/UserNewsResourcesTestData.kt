@@ -30,6 +30,7 @@ import kotlinx.datetime.toInstant
 /* ktlint-disable max-line-length */
 val userNewsResourcesTestData: List<UserNewsResource> = UserData(
     bookmarkedNewsResources = setOf("1", "4"),
+    viewedNewsResources = setOf("1", "2", "4"),
     followedTopics = emptySet(),
     themeBrand = ThemeBrand.ANDROID,
     darkThemeConfig = DarkThemeConfig.DARK,
