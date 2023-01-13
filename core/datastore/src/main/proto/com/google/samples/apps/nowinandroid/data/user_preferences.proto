@@ -40,6 +40,7 @@ message UserPreferences {
     map<string, bool> followed_topic_ids = 13;
     map<string, bool> followed_author_ids = 14;
     map<string, bool> bookmarked_news_resource_ids = 15;
+    map<string, bool> viewed_news_resource_ids = 20;
 
     ThemeBrandProto theme_brand = 16;
     DarkThemeConfigProto dark_theme_config = 17;
@@ -47,4 +48,6 @@ message UserPreferences {
     bool should_hide_onboarding = 18;
 
     bool use_dynamic_color = 19;
+
+    // NEXT AVAILABLE ID: 21
 }

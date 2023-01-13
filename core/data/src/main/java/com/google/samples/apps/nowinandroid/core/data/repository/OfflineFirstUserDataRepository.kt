@@ -50,6 +50,9 @@ class OfflineFirstUserDataRepository @Inject constructor(
         )
     }
 
+    override suspend fun updateNewsResourceViewed(newsResourceId: String, viewed: Boolean) =
+        niaPreferencesDataSource.toggleNewsResourceViewed(newsResourceId, viewed)
+
     override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         niaPreferencesDataSource.setThemeBrand(themeBrand)
         analyticsHelper.logThemeChanged(themeBrand.name)

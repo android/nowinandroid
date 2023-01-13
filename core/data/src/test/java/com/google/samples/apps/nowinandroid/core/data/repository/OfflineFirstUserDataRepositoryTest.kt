@@ -66,6 +66,7 @@ class OfflineFirstUserDataRepositoryTest {
             assertEquals(
                 UserData(
                     bookmarkedNewsResources = emptySet(),
+                    viewedNewsResources = emptySet(),
                     followedTopics = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
@@ -156,6 +157,37 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
                 subject.userData
                     .map { it.bookmarkedNewsResources }
+                    .first(),
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_update_viewed_news_resources_delegates_to_nia_preferences() =
+        runTest {
+            subject.updateNewsResourceViewed(newsResourceId = "0", viewed = true)
+
+            assertEquals(
+                setOf("0"),
+                subject.userData
+                    .map { it.viewedNewsResources }
+                    .first(),
+            )
+
+            subject.updateNewsResourceViewed(newsResourceId = "1", viewed = true)
+
+            assertEquals(
+                setOf("0", "1"),
+                subject.userData
+                    .map { it.viewedNewsResources }
+                    .first(),
+            )
+
+            assertEquals(
+                niaPreferencesDataSource.userData
+                    .map { it.viewedNewsResources }
+                    .first(),
+                subject.userData
+                    .map { it.viewedNewsResources }
                     .first(),
             )
         }

@@ -35,6 +35,7 @@ data class UserNewsResource internal constructor(
     val type: NewsResourceType,
     val followableTopics: List<FollowableTopic>,
     val isSaved: Boolean,
+    val isViewed: Boolean,
 ) {
     constructor(newsResource: NewsResource, userData: UserData) : this(
         id = newsResource.id,
@@ -51,6 +52,7 @@ data class UserNewsResource internal constructor(
             )
         },
         isSaved = userData.bookmarkedNewsResources.contains(newsResource.id),
+        isViewed = userData.viewedNewsResources.contains(newsResource.id),
     )
 }
 

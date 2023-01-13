@@ -68,6 +68,7 @@ class UserNewsResourceTest {
 
         val userData = UserData(
             bookmarkedNewsResources = setOf("N1"),
+            viewedNewsResources = setOf("N1"),
             followedTopics = setOf("T1"),
             themeBrand = DEFAULT,
             darkThemeConfig = FOLLOW_SYSTEM,
