@@ -22,9 +22,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
@@ -45,7 +45,7 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase
+    getSaveableNewsResources: GetUserNewsResourcesUseCase
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
@@ -130,11 +130,11 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
+    getSaveableNewsResources: GetUserNewsResourcesUseCase,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<SaveableNewsResource>> = getSaveableNewsResources(
+    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
         filterTopicIds = setOf(element = topicId),
     )
 
@@ -171,7 +171,7 @@ sealed interface TopicUiState {
 }
 
 sealed interface NewsUiState {
-    data class Success(val news: List<SaveableNewsResource>) : NewsUiState
+    data class Success(val news: List<UserNewsResource>) : NewsUiState
     object Error : NewsUiState
     object Loading : NewsUiState
 }
