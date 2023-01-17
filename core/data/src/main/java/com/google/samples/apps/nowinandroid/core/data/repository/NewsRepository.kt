@@ -21,18 +21,23 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.coroutines.flow.Flow
 
 /**
+ * Query parameters for fetching news resources
+ */
+data class NewsResourceQuery(
+    /**
+     * Topics to filter the fetched news resources by, or null for no filtering.
+     */
+    val filterTopicIds: Set<String>? = null
+)
+
+/**
  * Data layer implementation for [NewsResource]
  */
 interface NewsRepository : Syncable {
     /**
      * Returns available news resources as a stream.
      */
-    fun getNewsResources(): Flow<List<NewsResource>>
-
-    /**
-     * Returns available news resources as a stream filtered by topics.
-     */
     fun getNewsResources(
-        filterTopicIds: Set<String> = emptySet(),
+        query: NewsResourceQuery,
     ): Flow<List<NewsResource>>
 }

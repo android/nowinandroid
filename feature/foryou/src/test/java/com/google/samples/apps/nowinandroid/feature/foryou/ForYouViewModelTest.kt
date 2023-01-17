@@ -29,9 +29,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRe
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -51,7 +49,6 @@ class ForYouViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val networkMonitor = TestNetworkMonitor()
     private val syncStatusMonitor = TestSyncStatusMonitor()
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
@@ -71,7 +68,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase,
+            getUserNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase
         )
     }
@@ -79,28 +76,29 @@ class ForYouViewModelTest {
     @Test
     fun stateIsInitiallyLoading() = runTest {
         assertEquals(
-            OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            expected = listOf(
+                ForYouItem.OnBoarding(OnboardingUiState.Loading),
+                ForYouItem.News.Loading,
+            ),
+            actual = viewModel.forYouItems.value
         )
-        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
     }
 
     @Test
     fun stateIsLoadingWhenFollowedTopicsAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
         assertEquals(
-            OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            expected = listOf(
+                ForYouItem.OnBoarding(OnboardingUiState.Loading),
+                ForYouItem.News.Loading
+            ),
+            actual = viewModel.forYouItems.value
         )
-        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
@@ -111,8 +109,8 @@ class ForYouViewModelTest {
             launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
 
         assertEquals(
-            true,
-            viewModel.isSyncing.value
+            expected = true,
+            actual = viewModel.isSyncing.value
         )
 
         collectJob.cancel()
@@ -120,149 +118,77 @@ class ForYouViewModelTest {
 
     @Test
     fun onboardingStateIsLoadingWhenTopicsAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
 
         assertEquals(
-            OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            expected = listOf(
+                ForYouItem.OnBoarding(OnboardingUiState.Loading),
+            ),
+            actual = viewModel.forYouItems.value
         )
-        assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
-    fun onboardingIsShownWhenNewsResourcesAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+    fun onboardingIsShownWhenTopicsArePresent() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
+        advanceUntilIdle()
 
         assertEquals(
-            OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
+            expected = listOf(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(
+                                topic = it,
+                                isFollowed = false
+                            )
+                        },
+                    )
                 ),
             ),
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
-            viewModel.feedState.value
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
-    fun onboardingIsShownAfterLoadingEmptyFollowedTopics() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+    fun onboardingIsShownWithNoNewsResourcesAfterLoadingEmptyFollowedTopics() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
 
         assertEquals(
-            OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
+            expected = listOf(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(
+                                topic = it,
+                                isFollowed = false
+                            )
+                        }
+                    )
                 ),
             ),
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-
-            ),
-            viewModel.feedState.value
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
     fun onboardingIsNotShownAfterUserDismissesOnboarding() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
@@ -270,152 +196,139 @@ class ForYouViewModelTest {
         val userData = emptyUserData.copy(followedTopics = followedTopicIds)
         userDataRepository.setUserData(userData)
         viewModel.dismissOnboarding()
+        advanceUntilIdle()
 
         assertEquals(
-            OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
+            expected = listOf<ForYouItem>(ForYouItem.News.Loading),
+            actual = viewModel.forYouItems.value
         )
-        assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
         newsRepository.sendNewsResources(sampleNewsResources)
+        advanceUntilIdle()
 
         assertEquals(
-            OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = sampleNewsResources.mapToUserNewsResources(userData)
-            ),
-            viewModel.feedState.value
+            expected = sampleNewsResources
+                .mapToUserNewsResources(userData)
+                .map<UserNewsResource, ForYouItem>(ForYouItem.News::Loaded),
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
     fun topicSelectionUpdatesAfterSelectingTopic() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
         newsRepository.sendNewsResources(sampleNewsResources)
+        advanceUntilIdle()
 
         assertEquals(
-            OnboardingUiState.Shown(
-                topics = sampleTopics.map {
-                    FollowableTopic(it, false)
-                }
+            expected = listOf(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(
+                                it, false
+                            )
+                        }
+                    )
+                ),
             ),
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList(),
-            ),
-            viewModel.feedState.value
+            actual = viewModel.forYouItems.value
         )
 
         val followedTopicId = sampleTopics[1].id
         viewModel.updateTopicSelection(followedTopicId, isChecked = true)
-
-        assertEquals(
-            OnboardingUiState.Shown(
-                topics = sampleTopics.map {
-                    FollowableTopic(it, it.id == followedTopicId)
-                }
-            ),
-            viewModel.onboardingUiState.value
-        )
+        advanceUntilIdle()
 
         val userData = emptyUserData.copy(followedTopics = setOf(followedTopicId))
 
         assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
+            expected = listOf(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(it, it.id == followedTopicId)
+                        },
+                    )
+                ),
+                ForYouItem.News.Loaded(
                     UserNewsResource(sampleNewsResources[1], userData),
+                ),
+                ForYouItem.News.Loaded(
                     UserNewsResource(sampleNewsResources[2], userData),
-                )
+                ),
             ),
-            viewModel.feedState.value
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
     fun topicSelectionUpdatesAfterUnselectingTopic() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
+        val followedTopicId = "1"
+        val userData = emptyUserData.copy(
+            followedTopics = setOf(followedTopicId)
+        )
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(emptySet())
+        userDataRepository.setUserData(userData)
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateTopicSelection("1", isChecked = true)
-        viewModel.updateTopicSelection("1", isChecked = false)
-
         advanceUntilIdle()
+
         assertEquals(
-            OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
+            expected = listOf<ForYouItem>(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(
+                                topic = it,
+                                isFollowed = it.id == followedTopicId
+                            )
+                        },
+                    )
+                ),
+            ) + sampleNewsResources
+                .filter { newsResource ->
+                    newsResource.topics
+                        .map(Topic::id)
+                        .contains(followedTopicId)
+                }
+                .mapToUserNewsResources(userData)
+                .map(ForYouItem.News::Loaded),
+            actual = viewModel.forYouItems.value
+        )
+
+        viewModel.updateTopicSelection("1", isChecked = false)
+        advanceUntilIdle()
+
+        assertEquals(
+            expected = listOf<ForYouItem>(
+                ForYouItem.OnBoarding(
+                    OnboardingUiState.Shown(
+                        topics = sampleTopics.map {
+                            FollowableTopic(
+                                topic = it,
+                                isFollowed = false
+                            )
+                        },
                     )
                 ),
             ),
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = emptyList()
-            ),
-            viewModel.feedState.value
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 
     @Test
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.forYouItems.collect() }
 
         val followedTopicIds = setOf("1")
         val userData = emptyUserData.copy(
@@ -436,23 +349,18 @@ class ForYouViewModelTest {
         val userDataExpected = userData.copy(
             bookmarkedNewsResources = setOf(bookmarkedNewsResourceId)
         )
+        advanceUntilIdle()
 
         assertEquals(
-            OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
-        )
-        assertEquals(
-            NewsFeedUiState.Success(
-                feed = listOf(
-                    UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
-                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected)
-                )
-            ),
-            viewModel.feedState.value
+            expected = listOf(
+                UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
+                UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected),
+
+            ).map<UserNewsResource, ForYouItem>(ForYouItem.News::Loaded),
+            actual = viewModel.forYouItems.value
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+        collectJob.cancel()
     }
 }
 

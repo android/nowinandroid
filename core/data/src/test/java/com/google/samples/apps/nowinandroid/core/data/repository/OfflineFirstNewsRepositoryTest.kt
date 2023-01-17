@@ -80,10 +80,15 @@ class OfflineFirstNewsRepositoryTest {
     fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResources()
+                newsResourceDao.getNewsResources(
+                    filterTopicIds = emptySet(),
+                    useFilterTopicIds = false,
+                )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResources()
+                subject.getNewsResources(
+                    NewsResourceQuery()
+                )
                     .first()
             )
         }
@@ -94,11 +99,14 @@ class OfflineFirstNewsRepositoryTest {
             assertEquals(
                 newsResourceDao.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
+                    useFilterTopicIds = true,
                 )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
                 subject.getNewsResources(
-                    filterTopicIds = filteredInterestsIds,
+                    NewsResourceQuery(
+                        filterTopicIds = filteredInterestsIds,
+                    )
                 )
                     .first()
             )
@@ -106,7 +114,9 @@ class OfflineFirstNewsRepositoryTest {
             assertEquals(
                 emptyList(),
                 subject.getNewsResources(
-                    filterTopicIds = nonPresentInterestsIds,
+                    NewsResourceQuery(
+                        filterTopicIds = nonPresentInterestsIds,
+                    )
                 )
                     .first()
             )
@@ -121,7 +131,10 @@ class OfflineFirstNewsRepositoryTest {
                 .map(NetworkNewsResource::asEntity)
                 .map(NewsResourceEntity::asExternalModel)
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResources()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources(
+                filterTopicIds = emptySet(),
+                useFilterTopicIds = false,
+            )
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
@@ -161,7 +174,10 @@ class OfflineFirstNewsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResources()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources(
+                filterTopicIds = emptySet(),
+                useFilterTopicIds = false,
+            )
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 
@@ -201,7 +217,10 @@ class OfflineFirstNewsRepositoryTest {
                 .map(NewsResourceEntity::asExternalModel)
                 .filter { it.id in changeListIds }
 
-            val newsResourcesFromDb = newsResourceDao.getNewsResources()
+            val newsResourcesFromDb = newsResourceDao.getNewsResources(
+                filterTopicIds = emptySet(),
+                useFilterTopicIds = false,
+            )
                 .first()
                 .map(PopulatedNewsResource::asExternalModel)
 

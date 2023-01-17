@@ -73,7 +73,10 @@ class NewsResourceDaoTest {
             newsResourceEntities
         )
 
-        val savedNewsResourceEntities = newsResourceDao.getNewsResources()
+        val savedNewsResourceEntities = newsResourceDao.getNewsResources(
+            filterTopicIds = emptySet(),
+            useFilterTopicIds = false
+        )
             .first()
 
         assertEquals(
@@ -135,6 +138,7 @@ class NewsResourceDaoTest {
             filterTopicIds = topicEntities
                 .map(TopicEntity::id)
                 .toSet(),
+            useFilterTopicIds = true,
         ).first()
 
         assertEquals(
@@ -175,7 +179,10 @@ class NewsResourceDaoTest {
             assertEquals(
                 toKeep.map(NewsResourceEntity::id)
                     .toSet(),
-                newsResourceDao.getNewsResources().first()
+                newsResourceDao.getNewsResources(
+                    filterTopicIds = emptySet(),
+                    useFilterTopicIds = false,
+                ).first()
                     .map { it.entity.id }
                     .toSet()
             )

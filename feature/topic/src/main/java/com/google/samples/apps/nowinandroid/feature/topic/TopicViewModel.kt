@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
@@ -64,7 +65,7 @@ class TopicViewModel @Inject constructor(
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        getSaveableNewsResources = getSaveableNewsResources
+        getUserNewsResources = getSaveableNewsResources
     )
         .stateIn(
             scope = viewModelScope,
@@ -130,12 +131,14 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase,
+    getUserNewsResources: GetUserNewsResourcesUseCase,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
-        filterTopicIds = setOf(element = topicId),
+    val newsStream: Flow<List<UserNewsResource>> = getUserNewsResources(
+        NewsResourceQuery(
+            filterTopicIds = setOf(element = topicId)
+        ),
     )
 
     // Observe bookmarks

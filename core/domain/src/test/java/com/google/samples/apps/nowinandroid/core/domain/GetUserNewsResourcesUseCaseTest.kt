@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -45,7 +46,7 @@ class GetUserNewsResourcesUseCaseTest {
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
 
         // Obtain the user news resources stream.
-        val userNewsResources = useCase()
+        val userNewsResources = useCase(NewsResourceQuery())
 
         // Send some news resources and user data into the data repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
@@ -69,7 +70,11 @@ class GetUserNewsResourcesUseCaseTest {
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
 
         // Obtain a stream of user news resources for the given topic id.
-        val userNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
+        val userNewsResources = useCase(
+            NewsResourceQuery(
+                filterTopicIds = setOf(sampleTopic1.id),
+            )
+        )
 
         // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)

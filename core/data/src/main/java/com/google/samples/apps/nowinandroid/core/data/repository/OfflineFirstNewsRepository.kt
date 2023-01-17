@@ -43,17 +43,12 @@ class OfflineFirstNewsRepository @Inject constructor(
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
 ) : NewsRepository {
-
-    override fun getNewsResources(): Flow<List<NewsResource>> =
-        newsResourceDao.getNewsResources()
+    override fun getNewsResources(query: NewsResourceQuery): Flow<List<NewsResource>> =
+        newsResourceDao.getNewsResources(
+            filterTopicIds = query.filterTopicIds ?: emptySet(),
+            useFilterTopicIds = query.filterTopicIds != null
+        )
             .map { it.map(PopulatedNewsResource::asExternalModel) }
-
-    override fun getNewsResources(
-        filterTopicIds: Set<String>
-    ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
-        filterTopicIds = filterTopicIds
-    )
-        .map { it.map(PopulatedNewsResource::asExternalModel) }
 
     override suspend fun syncWith(synchronizer: Synchronizer) =
         synchronizer.changeListSync(

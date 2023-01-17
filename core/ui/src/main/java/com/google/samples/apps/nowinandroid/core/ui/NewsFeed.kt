@@ -21,9 +21,7 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
@@ -41,37 +40,32 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 
 /**
- * An extension on [LazyListScope] defining a feed with news resources.
- * Depending on the [feedState], this might emit no items.
+ * Renders a [UserNewsResource] as a clickable card.
  */
-fun LazyGridScope.newsFeed(
-    feedState: NewsFeedUiState,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+@Composable
+fun NewsItem(
+    userNewsResource: UserNewsResource,
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    when (feedState) {
-        NewsFeedUiState.Loading -> Unit
-        is NewsFeedUiState.Success -> {
-            items(feedState.feed, key = { it.id }) { userNewsResource ->
-                val resourceUrl by remember {
-                    mutableStateOf(Uri.parse(userNewsResource.url))
-                }
-                val context = LocalContext.current
-                val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
-
-                NewsResourceCardExpanded(
-                    userNewsResource = userNewsResource,
-                    isBookmarked = userNewsResource.isSaved,
-                    onClick = { launchCustomChromeTab(context, resourceUrl, backgroundColor) },
-                    onToggleBookmark = {
-                        onNewsResourcesCheckedChanged(
-                            userNewsResource.id,
-                            !userNewsResource.isSaved
-                        )
-                    }
-                )
-            }
-        }
+    val resourceUrl by remember {
+        mutableStateOf(Uri.parse(userNewsResource.url))
     }
+    val context = LocalContext.current
+    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+
+    NewsResourceCardExpanded(
+        modifier = modifier,
+        userNewsResource = userNewsResource,
+        isBookmarked = userNewsResource.isSaved,
+        onClick = { launchCustomChromeTab(context, resourceUrl, backgroundColor) },
+        onToggleBookmark = {
+            onNewsResourcesCheckedChanged(
+                userNewsResource.id,
+                !userNewsResource.isSaved
+            )
+        }
+    )
 }
 
 fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int) {
@@ -84,50 +78,20 @@ fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: In
     customTabsIntent.launchUrl(context, uri)
 }
 
-/**
- * A sealed hierarchy describing the state of the feed of news resources.
- */
-sealed interface NewsFeedUiState {
-    /**
-     * The feed is still loading.
-     */
-    object Loading : NewsFeedUiState
-
-    /**
-     * The feed is loaded with the given list of news resources.
-     */
-    data class Success(
-        /**
-         * The list of news resources contained in this feed.
-         */
-        val feed: List<UserNewsResource>
-    ) : NewsFeedUiState
-}
-
-@Preview
-@Composable
-private fun NewsFeedLoadingPreview() {
-    NiaTheme {
-        LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
-            newsFeed(
-                feedState = NewsFeedUiState.Loading,
-                onNewsResourcesCheckedChanged = { _, _ -> }
-            )
-        }
-    }
-}
-
 @Preview
 @Preview(device = Devices.TABLET)
 @Composable
 private fun NewsFeedContentPreview() {
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
-            newsFeed(
-                feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources
-                ),
-                onNewsResourcesCheckedChanged = { _, _ -> }
+            items(
+                items = previewUserNewsResources,
+                itemContent = { userNewsResource ->
+                    NewsItem(
+                        userNewsResource = userNewsResource,
+                        onNewsResourcesCheckedChanged = { _, _ -> },
+                    )
+                }
             )
         }
     }

@@ -21,8 +21,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
@@ -53,31 +51,34 @@ class BookmarksViewModelTest {
     fun setup() {
         viewModel = BookmarksViewModel(
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase
+            getUserNewsResources = getUserNewsResourcesUseCase
         )
     }
 
     @Test
     fun stateIsInitiallyLoading() = runTest {
-        assertEquals(Loading, viewModel.feedUiState.value)
+        assertEquals(
+            expected = listOf(BookmarkItem.Loading),
+            actual = viewModel.bookmarkItems.value
+        )
     }
 
     @Test
     fun oneBookmark_showsInFeed() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.bookmarkItems.collect() }
 
         newsRepository.sendNewsResources(previewNewsResources)
         userDataRepository.updateNewsResourceBookmark(previewNewsResources[0].id, true)
-        val item = viewModel.feedUiState.value
-        assertIs<Success>(item)
-        assertEquals(item.feed.size, 1)
+        val item = viewModel.bookmarkItems.value.first()
+        assertIs<BookmarkItem.News>(item)
+        assertEquals(viewModel.bookmarkItems.value.size, 1)
 
         collectJob.cancel()
     }
 
     @Test
     fun oneBookmark_whenRemoving_removesFromFeed() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.bookmarkItems.collect() }
         // Set the news resources to be used by this test
         newsRepository.sendNewsResources(previewNewsResources)
         // Start with the resource saved
@@ -85,9 +86,10 @@ class BookmarksViewModelTest {
         // Use viewModel to remove saved resource
         viewModel.removeFromSavedResources(previewNewsResources[0].id)
         // Verify list of saved resources is now empty
-        val item = viewModel.feedUiState.value
-        assertIs<Success>(item)
-        assertEquals(item.feed.size, 0)
+        assertEquals(
+            expected = emptyList(),
+            actual = viewModel.bookmarkItems.value
+        )
 
         collectJob.cancel()
     }

@@ -31,7 +31,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Rule
@@ -49,7 +48,7 @@ class BookmarksScreenTest {
     fun loading_showsLoadingSpinner() {
         composeTestRule.setContent {
             BookmarksScreen(
-                feedState = NewsFeedUiState.Loading,
+                bookmarkItems = listOf(BookmarkItem.Loading),
                 removeFromBookmarks = { }
             )
         }
@@ -65,9 +64,9 @@ class BookmarksScreenTest {
     fun feed_whenHasBookmarks_showsBookmarks() {
         composeTestRule.setContent {
             BookmarksScreen(
-                feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources.take(2)
-                ),
+                bookmarkItems = previewUserNewsResources
+                    .take(2)
+                    .map(BookmarkItem::News),
                 removeFromBookmarks = { }
             )
         }
@@ -103,9 +102,9 @@ class BookmarksScreenTest {
 
         composeTestRule.setContent {
             BookmarksScreen(
-                feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources.take(2)
-                ),
+                bookmarkItems = previewUserNewsResources
+                    .take(2)
+                    .map(BookmarkItem::News),
                 removeFromBookmarks = { newsResourceId ->
                     assertEquals(previewUserNewsResources[0].id, newsResourceId)
                     removeFromBookmarksCalled = true
@@ -137,7 +136,7 @@ class BookmarksScreenTest {
     fun feed_whenHasNoBookmarks_showsEmptyState() {
         composeTestRule.setContent {
             BookmarksScreen(
-                feedState = NewsFeedUiState.Success(emptyList()),
+                bookmarkItems = emptyList(),
                 removeFromBookmarks = { }
             )
         }
