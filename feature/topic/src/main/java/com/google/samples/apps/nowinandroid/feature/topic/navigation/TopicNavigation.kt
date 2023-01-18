@@ -42,6 +42,7 @@ fun NavController.navigateToTopic(topicId: String) {
 
 fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
 ) {
     composable(
         route = "topic_route/{$topicIdArg}",
@@ -49,6 +50,6 @@ fun NavGraphBuilder.topicScreen(
             navArgument(topicIdArg) { type = NavType.StringType },
         ),
     ) {
-        TopicRoute(onBackClick = onBackClick)
+        TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
     }
 }
