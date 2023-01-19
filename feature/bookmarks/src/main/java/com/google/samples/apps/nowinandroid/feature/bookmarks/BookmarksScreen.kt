@@ -65,13 +65,13 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 @Composable
 internal fun BookmarksRoute(
     modifier: Modifier = Modifier,
-    viewModel: BookmarksViewModel = hiltViewModel()
+    viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
     val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -83,7 +83,7 @@ internal fun BookmarksRoute(
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
@@ -110,7 +110,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyGridState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
@@ -122,7 +122,7 @@ private fun BookmarksGrid(
         state = scrollableState,
         modifier = modifier
             .fillMaxSize()
-            .testTag("bookmarks:feed")
+            .testTag("bookmarks:feed"),
     ) {
         newsFeed(
             feedState = feedState,
@@ -142,14 +142,14 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .testTag("bookmarks:empty"),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.img_empty_bookmarks),
             colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
-            contentDescription = null
+            contentDescription = null,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -159,7 +159,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -168,7 +168,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             text = stringResource(id = R.string.bookmarks_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
@@ -187,9 +187,9 @@ private fun BookmarksGridPreview() {
     NiaTheme {
         BookmarksGrid(
             feedState = Success(
-                previewUserNewsResources
+                previewUserNewsResources,
             ),
-            removeFromBookmarks = {}
+            removeFromBookmarks = {},
         )
     }
 }

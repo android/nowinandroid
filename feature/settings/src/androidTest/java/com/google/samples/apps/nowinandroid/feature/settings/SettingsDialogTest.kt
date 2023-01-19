@@ -37,14 +37,13 @@ class SettingsDialogTest {
 
     @Test
     fun whenLoading_showsLoadingText() {
-
         composeTestRule.setContent {
             SettingsDialog(
                 settingsUiState = Loading,
                 onDismiss = {},
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 
@@ -61,13 +60,13 @@ class SettingsDialogTest {
                     UserEditableSettings(
                         brand = ANDROID,
                         useDynamicColor = false,
-                        darkThemeConfig = DARK
-                    )
+                        darkThemeConfig = DARK,
+                    ),
                 ),
                 onDismiss = { },
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 
@@ -75,7 +74,7 @@ class SettingsDialogTest {
         composeTestRule.onNodeWithText(getString(R.string.brand_default)).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.brand_android)).assertExists()
         composeTestRule.onNodeWithText(
-            getString(R.string.dark_mode_config_system_default)
+            getString(R.string.dark_mode_config_system_default),
         ).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_light)).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.dark_mode_config_dark)).assertExists()
@@ -94,13 +93,13 @@ class SettingsDialogTest {
                         brand = DEFAULT,
                         darkThemeConfig = DARK,
                         useDynamicColor = false,
-                    )
+                    ),
                 ),
                 supportDynamicColor = true,
                 onDismiss = {},
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 
@@ -121,12 +120,12 @@ class SettingsDialogTest {
                         brand = ANDROID,
                         darkThemeConfig = DARK,
                         useDynamicColor = false,
-                    )
+                    ),
                 ),
                 onDismiss = {},
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 
@@ -145,12 +144,12 @@ class SettingsDialogTest {
                         brand = ANDROID,
                         darkThemeConfig = DARK,
                         useDynamicColor = false,
-                    )
+                    ),
                 ),
                 onDismiss = {},
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 
@@ -169,12 +168,12 @@ class SettingsDialogTest {
                         brand = ANDROID,
                         darkThemeConfig = DARK,
                         useDynamicColor = false,
-                    )
+                    ),
                 ),
                 onDismiss = {},
                 onChangeDynamicColorPreference = {},
                 onChangeThemeBrand = {},
-                onChangeDarkThemeConfig = {}
+                onChangeDarkThemeConfig = {},
             )
         }
 

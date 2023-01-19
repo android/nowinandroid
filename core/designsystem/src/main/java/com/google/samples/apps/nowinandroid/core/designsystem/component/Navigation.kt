@@ -54,7 +54,7 @@ fun RowScope.NiaNavigationBarItem(
     selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
     label: @Composable (() -> Unit)? = null,
-    alwaysShowLabel: Boolean = true
+    alwaysShowLabel: Boolean = true,
 ) {
     NavigationBarItem(
         selected = selected,
@@ -69,8 +69,8 @@ fun RowScope.NiaNavigationBarItem(
             unselectedIconColor = NiaNavigationDefaults.navigationContentColor(),
             selectedTextColor = NiaNavigationDefaults.navigationSelectedItemColor(),
             unselectedTextColor = NiaNavigationDefaults.navigationContentColor(),
-            indicatorColor = NiaNavigationDefaults.navigationIndicatorColor()
-        )
+            indicatorColor = NiaNavigationDefaults.navigationIndicatorColor(),
+        ),
     )
 }
 
@@ -84,13 +84,13 @@ fun RowScope.NiaNavigationBarItem(
 @Composable
 fun NiaNavigationBar(
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     NavigationBar(
         modifier = modifier,
         contentColor = NiaNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
-        content = content
+        content = content,
     )
 }
 
@@ -118,7 +118,7 @@ fun NiaNavigationRailItem(
     selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
     label: @Composable (() -> Unit)? = null,
-    alwaysShowLabel: Boolean = true
+    alwaysShowLabel: Boolean = true,
 ) {
     NavigationRailItem(
         selected = selected,
@@ -133,8 +133,8 @@ fun NiaNavigationRailItem(
             unselectedIconColor = NiaNavigationDefaults.navigationContentColor(),
             selectedTextColor = NiaNavigationDefaults.navigationSelectedItemColor(),
             unselectedTextColor = NiaNavigationDefaults.navigationContentColor(),
-            indicatorColor = NiaNavigationDefaults.navigationIndicatorColor()
-        )
+            indicatorColor = NiaNavigationDefaults.navigationIndicatorColor(),
+        ),
     )
 }
 
@@ -150,14 +150,14 @@ fun NiaNavigationRailItem(
 fun NiaNavigationRail(
     modifier: Modifier = Modifier,
     header: @Composable (ColumnScope.() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     NavigationRail(
         modifier = modifier,
         containerColor = Color.Transparent,
         contentColor = NiaNavigationDefaults.navigationContentColor(),
         header = header,
-        content = content
+        content = content,
     )
 }
 
@@ -167,8 +167,10 @@ fun NiaNavigationRail(
 object NiaNavigationDefaults {
     @Composable
     fun navigationContentColor() = MaterialTheme.colorScheme.onSurfaceVariant
+
     @Composable
     fun navigationSelectedItemColor() = MaterialTheme.colorScheme.onPrimaryContainer
+
     @Composable
     fun navigationIndicatorColor() = MaterialTheme.colorScheme.primaryContainer
 }

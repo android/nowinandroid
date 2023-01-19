@@ -95,7 +95,7 @@ internal fun TopicScreen(
     LazyColumn(
         state = state,
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         item {
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
@@ -122,7 +122,7 @@ internal fun TopicScreen(
                     description = topicUiState.followableTopic.topic.longDescription,
                     news = newsUiState,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
-                    onBookmarkChanged = onBookmarkChanged
+                    onBookmarkChanged = onBookmarkChanged,
                 )
             }
         }
@@ -137,7 +137,7 @@ private fun LazyListScope.TopicBody(
     description: String,
     news: NewsUiState,
     imageUrl: String,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
 ) {
     // TODO: Show icon if available
     item {
@@ -150,7 +150,7 @@ private fun LazyListScope.TopicBody(
 @Composable
 private fun TopicHeader(name: String, description: String, imageUrl: String) {
     Column(
-        modifier = Modifier.padding(horizontal = 24.dp)
+        modifier = Modifier.padding(horizontal = 24.dp),
     ) {
         DynamicAsyncImage(
             imageUrl = imageUrl,
@@ -158,14 +158,14 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(216.dp)
-                .padding(bottom = 12.dp)
+                .padding(bottom = 12.dp),
         )
         Text(name, style = MaterialTheme.typography.displayMedium)
         if (description.isNotEmpty()) {
             Text(
                 description,
                 modifier = Modifier.padding(top = 24.dp),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
     }
@@ -174,14 +174,14 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
 // TODO: Could/should this be replaced with [LazyGridScope.newsFeed]?
 private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit
+    onBookmarkChanged: (String, Boolean) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
             userNewsResourceCardItems(
                 items = news.news,
                 onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
-                itemModifier = Modifier.padding(24.dp)
+                itemModifier = Modifier.padding(24.dp),
             )
         }
 
@@ -201,8 +201,11 @@ private fun TopicBodyPreview() {
     NiaTheme {
         LazyColumn {
             TopicBody(
-                "Jetpack Compose", "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()), "", { _, _ -> }
+                "Jetpack Compose",
+                "Lorem ipsum maximum",
+                NewsUiState.Success(emptyList()),
+                "",
+                { _, _ -> },
             )
         }
     }
@@ -220,21 +223,21 @@ private fun TopicToolbar(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 32.dp)
+            .padding(bottom = 32.dp),
     ) {
         IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
-                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back
-                )
+                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back,
+                ),
             )
         }
         val selected = uiState.isFollowed
         NiaFilterChip(
             selected = selected,
             onSelectedChange = onFollowClick,
-            modifier = Modifier.padding(end = 24.dp)
+            modifier = Modifier.padding(end = 24.dp),
         ) {
             if (selected) {
                 Text("FOLLOWING")
@@ -253,7 +256,7 @@ fun TopicScreenPopulated() {
             TopicScreen(
                 topicUiState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
                 newsUiState = NewsUiState.Success(
-                    previewUserNewsResources
+                    previewUserNewsResources,
                 ),
                 onBackClick = {},
                 onFollowClick = {},

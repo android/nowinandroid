@@ -21,9 +21,6 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
@@ -31,6 +28,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class OfflineFirstUserDataRepositoryTest {
     private lateinit var subject: OfflineFirstUserDataRepository
@@ -43,11 +43,11 @@ class OfflineFirstUserDataRepositoryTest {
     @Before
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore()
+            tmpFolder.testUserPreferencesDataStore(),
         )
 
         subject = OfflineFirstUserDataRepository(
-            niaPreferencesDataSource = niaPreferencesDataSource
+            niaPreferencesDataSource = niaPreferencesDataSource,
         )
     }
 
@@ -61,9 +61,9 @@ class OfflineFirstUserDataRepositoryTest {
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
                     useDynamicColor = false,
-                    shouldHideOnboarding = false
+                    shouldHideOnboarding = false,
                 ),
-                subject.userData.first()
+                subject.userData.first(),
             )
         }
 
@@ -76,7 +76,7 @@ class OfflineFirstUserDataRepositoryTest {
                 setOf("0"),
                 subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             subject.toggleFollowedTopicId(followedTopicId = "1", followed = true)
@@ -85,7 +85,7 @@ class OfflineFirstUserDataRepositoryTest {
                 setOf("0", "1"),
                 subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
@@ -94,7 +94,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
                 subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
         }
 
@@ -107,7 +107,7 @@ class OfflineFirstUserDataRepositoryTest {
                 setOf("1", "2"),
                 subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
@@ -116,7 +116,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
                 subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
         }
 
@@ -129,7 +129,7 @@ class OfflineFirstUserDataRepositoryTest {
                 setOf("0"),
                 subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
 
             subject.updateNewsResourceBookmark(newsResourceId = "1", bookmarked = true)
@@ -138,7 +138,7 @@ class OfflineFirstUserDataRepositoryTest {
                 setOf("0", "1"),
                 subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
@@ -147,7 +147,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
                 subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
         }
 
@@ -160,14 +160,14 @@ class OfflineFirstUserDataRepositoryTest {
                 ThemeBrand.ANDROID,
                 subject.userData
                     .map { it.themeBrand }
-                    .first()
+                    .first(),
             )
             assertEquals(
                 ThemeBrand.ANDROID,
                 niaPreferencesDataSource
                     .userData
                     .map { it.themeBrand }
-                    .first()
+                    .first(),
             )
         }
 
@@ -180,14 +180,14 @@ class OfflineFirstUserDataRepositoryTest {
                 true,
                 subject.userData
                     .map { it.useDynamicColor }
-                    .first()
+                    .first(),
             )
             assertEquals(
                 true,
                 niaPreferencesDataSource
                     .userData
                     .map { it.useDynamicColor }
-                    .first()
+                    .first(),
             )
         }
 
@@ -200,14 +200,14 @@ class OfflineFirstUserDataRepositoryTest {
                 DarkThemeConfig.DARK,
                 subject.userData
                     .map { it.darkThemeConfig }
-                    .first()
+                    .first(),
             )
             assertEquals(
                 DarkThemeConfig.DARK,
                 niaPreferencesDataSource
                     .userData
                     .map { it.darkThemeConfig }
-                    .first()
+                    .first(),
             )
         }
 

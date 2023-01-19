@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ListToMapMigrationTest {
 
@@ -32,7 +32,7 @@ class ListToMapMigrationTest {
         // Assert that there are no topic ids in the map yet
         assertEquals(
             emptyMap<String, Boolean>(),
-            preMigrationUserPreferences.followedTopicIdsMap
+            preMigrationUserPreferences.followedTopicIdsMap,
         )
 
         // Run the migration
@@ -42,7 +42,7 @@ class ListToMapMigrationTest {
         // Assert the deprecated topic ids have been migrated to the topic ids map
         assertEquals(
             mapOf("1" to true, "2" to true, "3" to true),
-            postMigrationUserPreferences.followedTopicIdsMap
+            postMigrationUserPreferences.followedTopicIdsMap,
         )
 
         // Assert that the migration has been marked complete
@@ -58,7 +58,7 @@ class ListToMapMigrationTest {
         // Assert that there are no author ids in the map yet
         assertEquals(
             emptyMap<String, Boolean>(),
-            preMigrationUserPreferences.followedAuthorIdsMap
+            preMigrationUserPreferences.followedAuthorIdsMap,
         )
 
         // Run the migration
@@ -68,7 +68,7 @@ class ListToMapMigrationTest {
         // Assert the deprecated author ids have been migrated to the author ids map
         assertEquals(
             mapOf("4" to true, "5" to true, "6" to true),
-            postMigrationUserPreferences.followedAuthorIdsMap
+            postMigrationUserPreferences.followedAuthorIdsMap,
         )
 
         // Assert that the migration has been marked complete
@@ -84,7 +84,7 @@ class ListToMapMigrationTest {
         // Assert that there are no bookmarks in the map yet
         assertEquals(
             emptyMap<String, Boolean>(),
-            preMigrationUserPreferences.bookmarkedNewsResourceIdsMap
+            preMigrationUserPreferences.bookmarkedNewsResourceIdsMap,
         )
 
         // Run the migration
@@ -94,7 +94,7 @@ class ListToMapMigrationTest {
         // Assert the deprecated bookmarks have been migrated to the bookmarks map
         assertEquals(
             mapOf("7" to true, "8" to true, "9" to true),
-            postMigrationUserPreferences.bookmarkedNewsResourceIdsMap
+            postMigrationUserPreferences.bookmarkedNewsResourceIdsMap,
         )
 
         // Assert that the migration has been marked complete

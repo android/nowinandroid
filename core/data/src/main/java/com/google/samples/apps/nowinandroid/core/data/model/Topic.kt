@@ -25,5 +25,5 @@ fun NetworkTopic.asEntity() = TopicEntity(
     shortDescription = shortDescription,
     longDescription = longDescription,
     url = url,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
 )

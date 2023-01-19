@@ -17,14 +17,14 @@
 package com.google.samples.apps.nowinandroid.core.datastore
 
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class NiaPreferencesDataSourceTest {
     private lateinit var subject: NiaPreferencesDataSource
@@ -35,7 +35,7 @@ class NiaPreferencesDataSourceTest {
     @Before
     fun setup() {
         subject = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore()
+            tmpFolder.testUserPreferencesDataStore(),
         )
     }
 
@@ -52,7 +52,6 @@ class NiaPreferencesDataSourceTest {
 
     @Test
     fun userShouldHideOnboarding_unfollowsLastTopic_shouldHideOnboardingIsFalse() = runTest {
-
         // Given: user completes onboarding by selecting a single topic.
         subject.toggleFollowedTopicId("1", true)
         subject.setShouldHideOnboarding(true)
@@ -66,7 +65,6 @@ class NiaPreferencesDataSourceTest {
 
     @Test
     fun userShouldHideOnboarding_unfollowsAllTopics_shouldHideOnboardingIsFalse() = runTest {
-
         // Given: user completes onboarding by selecting several topics.
         subject.setFollowedTopicIds(setOf("1", "2"))
         subject.setShouldHideOnboarding(true)

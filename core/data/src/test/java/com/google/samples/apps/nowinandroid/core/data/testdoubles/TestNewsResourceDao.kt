@@ -46,8 +46,8 @@ class TestNewsResourceDao : NewsResourceDao {
                 headerImageUrl = "headerImageUrl",
                 type = Video,
                 publishDate = Instant.fromEpochMilliseconds(1),
-            )
-        )
+            ),
+        ),
     )
 
     internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
@@ -58,7 +58,7 @@ class TestNewsResourceDao : NewsResourceDao {
         }
 
     override fun getNewsResources(
-        filterTopicIds: Set<String>
+        filterTopicIds: Set<String>,
     ): Flow<List<PopulatedNewsResource>> =
         getNewsResources()
             .map { resources ->
@@ -68,7 +68,7 @@ class TestNewsResourceDao : NewsResourceDao {
             }
 
     override suspend fun insertOrIgnoreNewsResources(
-        entities: List<NewsResourceEntity>
+        entities: List<NewsResourceEntity>,
     ): List<Long> {
         entitiesStateFlow.value = entities
         // Assume no conflicts on insert
@@ -84,7 +84,7 @@ class TestNewsResourceDao : NewsResourceDao {
     }
 
     override suspend fun insertOrIgnoreTopicCrossRefEntities(
-        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>
+        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
     ) {
         topicCrossReferences = newsResourceTopicCrossReferences
     }
@@ -107,6 +107,6 @@ private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource
             longDescription = "long description",
             url = "URL",
             imageUrl = "image URL",
-        )
+        ),
     ),
 )
