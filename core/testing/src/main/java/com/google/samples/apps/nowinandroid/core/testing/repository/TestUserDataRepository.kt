@@ -30,6 +30,7 @@ val emptyUserData = UserData(
     followedTopics = emptySet(),
     themeBrand = ThemeBrand.DEFAULT,
     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+    useDynamicColor = false,
     shouldHideOnboarding = false
 )
 
@@ -74,6 +75,12 @@ class TestUserDataRepository : UserDataRepository {
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(darkThemeConfig = darkThemeConfig))
+        }
+    }
+
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(useDynamicColor = useDynamicColor))
         }
     }
 
