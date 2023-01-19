@@ -148,7 +148,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.img_empty_bookmarks),
-            colorFilter = if(iconTint != null) ColorFilter.tint(iconTint) else null,
+            colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
             contentDescription = null
         )
 

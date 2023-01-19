@@ -130,7 +130,8 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.dynamic_color_preference)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(R.string.dynamic_color_preference))
+            .assertDoesNotExist()
         composeTestRule.onNodeWithText(getString(R.string.dynamic_color_yes)).assertDoesNotExist()
         composeTestRule.onNodeWithText(getString(R.string.dynamic_color_no)).assertDoesNotExist()
     }
@@ -153,7 +154,8 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.dynamic_color_preference)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(R.string.dynamic_color_preference))
+            .assertDoesNotExist()
         composeTestRule.onNodeWithText(getString(R.string.dynamic_color_yes)).assertDoesNotExist()
         composeTestRule.onNodeWithText(getString(R.string.dynamic_color_no)).assertDoesNotExist()
     }
