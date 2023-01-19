@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaDropdownMenuButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
@@ -167,23 +166,6 @@ fun NiaCatalog() {
                     }
                 }
                 item { Text("Dropdown menus", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaDropdownMenuButton(
-                            text = { Text("Enabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) },
-                        )
-                        NiaDropdownMenuButton(
-                            text = { Text("Disabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) },
-                            enabled = false,
-                        )
-                    }
-                }
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
