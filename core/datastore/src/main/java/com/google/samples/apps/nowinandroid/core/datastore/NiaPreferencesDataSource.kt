@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.map
 class NiaPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
-
     val userData = userPreferences.data
         .map {
             UserData(
@@ -52,6 +51,7 @@ class NiaPreferencesDataSource @Inject constructor(
                         DarkThemeConfig.LIGHT
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
+                useDynamicColor = it.useDynamicColor,
                 shouldHideOnboarding = it.shouldHideOnboarding
             )
         }
@@ -94,6 +94,14 @@ class NiaPreferencesDataSource @Inject constructor(
                     ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
                     ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
                 }
+            }
+        }
+    }
+
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        userPreferences.updateData {
+            it.copy {
+                this.useDynamicColor = useDynamicColor
             }
         }
     }
