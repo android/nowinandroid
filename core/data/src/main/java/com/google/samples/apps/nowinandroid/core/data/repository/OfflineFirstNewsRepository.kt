@@ -30,9 +30,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Disk storage backed implementation of the [NewsRepository].
@@ -49,9 +49,9 @@ class OfflineFirstNewsRepository @Inject constructor(
             .map { it.map(PopulatedNewsResource::asExternalModel) }
 
     override fun getNewsResources(
-        filterTopicIds: Set<String>
+        filterTopicIds: Set<String>,
     ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
-        filterTopicIds = filterTopicIds
+        filterTopicIds = filterTopicIds,
     )
         .map { it.map(PopulatedNewsResource::asExternalModel) }
 
@@ -74,18 +74,18 @@ class OfflineFirstNewsRepository @Inject constructor(
                     topicEntities = networkNewsResources
                         .map(NetworkNewsResource::topicEntityShells)
                         .flatten()
-                        .distinctBy(TopicEntity::id)
+                        .distinctBy(TopicEntity::id),
                 )
                 newsResourceDao.upsertNewsResources(
                     newsResourceEntities = networkNewsResources
-                        .map(NetworkNewsResource::asEntity)
+                        .map(NetworkNewsResource::asEntity),
                 )
                 newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
                     newsResourceTopicCrossReferences = networkNewsResources
                         .map(NetworkNewsResource::topicCrossReferences)
                         .distinct()
-                        .flatten()
+                        .flatten(),
                 )
-            }
+            },
         )
 }

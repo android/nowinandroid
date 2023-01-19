@@ -43,10 +43,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
             NiaTheme(
                 darkTheme = darkTheme,
                 androidTheme = shouldUseAndroidTheme(uiState),
-                disableDynamicTheming = shouldDisableDynamicTheming(uiState)
+                disableDynamicTheming = shouldDisableDynamicTheming(uiState),
             ) {
                 NiaApp(
                     networkMonitor = networkMonitor,

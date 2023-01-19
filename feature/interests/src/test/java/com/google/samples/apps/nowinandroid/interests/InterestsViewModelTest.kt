@@ -24,7 +24,6 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -32,6 +31,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -46,7 +46,7 @@ class InterestsViewModelTest {
     private val topicsRepository = TestTopicsRepository()
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
-        userDataRepository = userDataRepository
+        userDataRepository = userDataRepository,
     )
     private lateinit var viewModel: InterestsViewModel
 
@@ -84,17 +84,17 @@ class InterestsViewModelTest {
         assertEquals(
             false,
             (viewModel.uiState.value as InterestsUiState.Interests)
-                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
         viewModel.followTopic(
             followedTopicId = toggleTopicId,
-            true
+            true,
         )
 
         assertEquals(
             InterestsUiState.Interests(topics = testOutputTopics),
-            viewModel.uiState.value
+            viewModel.uiState.value,
         )
 
         collectJob.cancel()
@@ -108,23 +108,23 @@ class InterestsViewModelTest {
 
         topicsRepository.sendTopics(testOutputTopics.map { it.topic })
         userDataRepository.setFollowedTopicIds(
-            setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
+            setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id),
         )
 
         assertEquals(
             true,
             (viewModel.uiState.value as InterestsUiState.Interests)
-                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
         viewModel.followTopic(
             followedTopicId = toggleTopicId,
-            false
+            false,
         )
 
         assertEquals(
             InterestsUiState.Interests(topics = testInputTopics),
-            viewModel.uiState.value
+            viewModel.uiState.value,
         )
 
         collectJob.cancel()
@@ -149,7 +149,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -160,7 +160,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         Topic(
@@ -171,8 +171,8 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val testOutputTopics = listOf(
@@ -185,7 +185,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -196,7 +196,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -207,6 +207,6 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )

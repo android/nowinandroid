@@ -76,7 +76,7 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = testTopics)
+                uiState = InterestsUiState.Interests(topics = testTopics),
             )
         }
 
@@ -115,7 +115,7 @@ class InterestsScreenTest {
         InterestsScreen(
             uiState = uiState,
             followTopic = { _, _ -> },
-            navigateToTopic = {}
+            navigateToTopic = {},
         )
     }
 }
@@ -138,7 +138,7 @@ private val testTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -149,7 +149,7 @@ private val testTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         Topic(
@@ -160,8 +160,8 @@ private val testTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size

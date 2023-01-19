@@ -23,12 +23,12 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCa
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class InterestsViewModel @Inject constructor(
@@ -38,11 +38,11 @@ class InterestsViewModel @Inject constructor(
 
     val uiState: StateFlow<InterestsUiState> =
         getFollowableTopics(sortBy = TopicSortField.NAME).map(
-            InterestsUiState::Interests
+            InterestsUiState::Interests,
         ).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = InterestsUiState.Loading
+            initialValue = InterestsUiState.Loading,
         )
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
@@ -56,7 +56,7 @@ sealed interface InterestsUiState {
     object Loading : InterestsUiState
 
     data class Interests(
-        val topics: List<FollowableTopic>
+        val topics: List<FollowableTopic>,
     ) : InterestsUiState
 
     object Empty : InterestsUiState

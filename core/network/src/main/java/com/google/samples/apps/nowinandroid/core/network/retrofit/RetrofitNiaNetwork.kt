@@ -22,8 +22,6 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -33,6 +31,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Retrofit API declaration for NIA Network API
@@ -66,7 +66,7 @@ private const val NiaBaseUrl = BuildConfig.BACKEND_URL
  */
 @Serializable
 private data class NetworkResponse<T>(
-    val data: T
+    val data: T,
 )
 
 /**
@@ -74,7 +74,7 @@ private data class NetworkResponse<T>(
  */
 @Singleton
 class RetrofitNiaNetwork @Inject constructor(
-    networkJson: Json
+    networkJson: Json,
 ) : NiaNetworkDataSource {
 
     private val networkApi = Retrofit.Builder()
@@ -85,13 +85,13 @@ class RetrofitNiaNetwork @Inject constructor(
                     // TODO: Decide logging logic
                     HttpLoggingInterceptor().apply {
                         setLevel(HttpLoggingInterceptor.Level.BODY)
-                    }
+                    },
                 )
-                .build()
+                .build(),
         )
         .addConverterFactory(
             @OptIn(ExperimentalSerializationApi::class)
-            networkJson.asConverterFactory("application/json".toMediaType())
+            networkJson.asConverterFactory("application/json".toMediaType()),
         )
         .build()
         .create(RetrofitNiaNetworkApi::class.java)

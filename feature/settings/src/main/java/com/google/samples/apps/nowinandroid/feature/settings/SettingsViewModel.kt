@@ -24,12 +24,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -42,8 +42,8 @@ class SettingsViewModel @Inject constructor(
                     settings = UserEditableSettings(
                         brand = userData.themeBrand,
                         useDynamicColor = userData.useDynamicColor,
-                        darkThemeConfig = userData.darkThemeConfig
-                    )
+                        darkThemeConfig = userData.darkThemeConfig,
+                    ),
                 )
             }
             .stateIn(
@@ -55,7 +55,7 @@ class SettingsViewModel @Inject constructor(
                 // scrollable column.
                 // TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
                 started = SharingStarted.Eagerly,
-                initialValue = Loading
+                initialValue = Loading,
             )
 
     fun updateThemeBrand(themeBrand: ThemeBrand) {
@@ -83,7 +83,7 @@ class SettingsViewModel @Inject constructor(
 data class UserEditableSettings(
     val brand: ThemeBrand,
     val useDynamicColor: Boolean,
-    val darkThemeConfig: DarkThemeConfig
+    val darkThemeConfig: DarkThemeConfig,
 )
 
 sealed interface SettingsUiState {

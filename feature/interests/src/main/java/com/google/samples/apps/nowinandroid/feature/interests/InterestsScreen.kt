@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 internal fun InterestsRoute(
     navigateToTopic: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InterestsViewModel = hiltViewModel()
+    viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -46,7 +46,7 @@ internal fun InterestsRoute(
         uiState = uiState,
         followTopic = viewModel::followTopic,
         navigateToTopic = navigateToTopic,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -59,7 +59,7 @@ internal fun InterestsScreen(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         when (uiState) {
             InterestsUiState.Loading ->
@@ -91,7 +91,7 @@ fun InterestsScreenPopulated() {
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
-                    topics = previewTopics.map { FollowableTopic(it, false) }
+                    topics = previewTopics.map { FollowableTopic(it, false) },
                 ),
                 followTopic = { _, _ -> },
                 navigateToTopic = {},

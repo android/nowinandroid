@@ -41,9 +41,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.TintTheme
-import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  * Tests [NiaTheme] using different combinations of the theme mode parameters:
@@ -64,7 +64,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = true,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = LightDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -84,7 +84,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = true,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = DarkDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -104,7 +104,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = false,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = dynamicLightColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -124,7 +124,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = false,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = dynamicDarkColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -144,7 +144,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = true,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -164,7 +164,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = true,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -184,7 +184,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = false,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -204,7 +204,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = false,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -244,7 +244,7 @@ class ThemeTest {
         return GradientColors(
             top = colorScheme.inverseOnSurface,
             bottom = colorScheme.primaryContainer,
-            container = colorScheme.surface
+            container = colorScheme.surface,
         )
     }
 
@@ -259,7 +259,7 @@ class ThemeTest {
     private fun defaultBackgroundTheme(colorScheme: ColorScheme): BackgroundTheme {
         return BackgroundTheme(
             color = colorScheme.surface,
-            tonalElevation = 2.dp
+            tonalElevation = 2.dp,
         )
     }
 
@@ -280,7 +280,7 @@ class ThemeTest {
      */
     private fun assertColorSchemesEqual(
         expectedColorScheme: ColorScheme,
-        actualColorScheme: ColorScheme
+        actualColorScheme: ColorScheme,
     ) {
         assertEquals(expectedColorScheme.primary, actualColorScheme.primary)
         assertEquals(expectedColorScheme.onPrimary, actualColorScheme.onPrimary)
@@ -291,7 +291,7 @@ class ThemeTest {
         assertEquals(expectedColorScheme.secondaryContainer, actualColorScheme.secondaryContainer)
         assertEquals(
             expectedColorScheme.onSecondaryContainer,
-            actualColorScheme.onSecondaryContainer
+            actualColorScheme.onSecondaryContainer,
         )
         assertEquals(expectedColorScheme.tertiary, actualColorScheme.tertiary)
         assertEquals(expectedColorScheme.onTertiary, actualColorScheme.onTertiary)

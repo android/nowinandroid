@@ -51,7 +51,7 @@ class TopicsScreenRecompositionBenchmark {
                 // Navigate to interests screen
                 device.findObject(By.text("Interests")).click()
                 device.waitForIdle()
-            }
+            },
         ) {
             interestsWaitForTopics()
             repeat(3) {
