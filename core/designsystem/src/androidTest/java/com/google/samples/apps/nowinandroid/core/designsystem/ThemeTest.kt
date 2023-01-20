@@ -112,7 +112,7 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
-                val tintTheme = dynamicTintTheme(colorScheme)
+                val tintTheme = dynamicTintThemeWithFallback(colorScheme)
                 assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
@@ -132,7 +132,7 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
-                val tintTheme = dynamicTintTheme(colorScheme)
+                val tintTheme = dynamicTintThemeWithFallback(colorScheme)
                 assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
@@ -267,7 +267,7 @@ class ThemeTest {
         return TintTheme()
     }
 
-    private fun dynamicTintTheme(colorScheme: ColorScheme): TintTheme {
+    private fun dynamicTintThemeWithFallback(colorScheme: ColorScheme): TintTheme {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             TintTheme(colorScheme.primary)
         } else {

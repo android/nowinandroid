@@ -98,7 +98,7 @@ fun SettingsDialog(
      * height recalculation during recomposition. This, however, causes
      * Dialog's to occupy full width in Compact mode. Therefore max width
      * is configured below. This should be removed when there's fix to
-     * b/221643630
+     * https://issuetracker.google.com/issues/221643630
      */
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -174,12 +174,12 @@ private fun SettingsPanel(
         Column(Modifier.selectableGroup()) {
             SettingsDialogThemeChooserRow(
                 text = stringResource(string.dynamic_color_yes),
-                selected = settings.useDynamicColor == true,
+                selected = settings.useDynamicColor,
                 onClick = { onChangeDynamicColorPreference(true) }
             )
             SettingsDialogThemeChooserRow(
                 text = stringResource(string.dynamic_color_no),
-                selected = settings.useDynamicColor == false,
+                selected = !settings.useDynamicColor,
                 onClick = { onChangeDynamicColorPreference(false) }
             )
         }
