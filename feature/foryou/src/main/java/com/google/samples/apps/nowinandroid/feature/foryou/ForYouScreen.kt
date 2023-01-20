@@ -107,6 +107,7 @@ internal fun ForYouRoute(
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+        onNewsResourcesViewedChanged = viewModel::updateNewsResourceViewed,
         modifier = modifier,
     )
 }
@@ -120,6 +121,7 @@ internal fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
@@ -177,6 +179,7 @@ internal fun ForYouScreen(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+            onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
             onTopicClick = onTopicClick,
         )
 
@@ -413,6 +416,7 @@ fun ForYouScreenPopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -436,6 +440,7 @@ fun ForYouScreenOfflinePopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -461,6 +466,7 @@ fun ForYouScreenTopicSelection(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -479,6 +485,7 @@ fun ForYouScreenLoading() {
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -502,6 +509,7 @@ fun ForYouScreenPopulatedAndLoading(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }

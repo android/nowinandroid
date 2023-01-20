@@ -52,6 +52,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Loading,
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourcesViewedChanged = { _, _ -> },
             )
         }
 
@@ -71,6 +72,7 @@ class BookmarksScreenTest {
                 ),
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourcesViewedChanged = { _, _ -> },
             )
         }
 
@@ -113,6 +115,7 @@ class BookmarksScreenTest {
                     removeFromBookmarksCalled = true
                 },
                 onTopicClick = {},
+                onNewsResourcesViewedChanged = { _, _ -> },
             )
         }
 
@@ -143,6 +146,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Success(emptyList()),
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourcesViewedChanged = { _, _ -> },
             )
         }
 

@@ -55,4 +55,10 @@ class BookmarksViewModel @Inject constructor(
             userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
         }
     }
+
+    fun updateNewsResourceViewed(newsResourceId: String, isViewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceViewed(newsResourceId, isViewed)
+        }
+    }
 }

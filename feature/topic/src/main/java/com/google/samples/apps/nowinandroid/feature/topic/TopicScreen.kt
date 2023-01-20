@@ -79,6 +79,7 @@ internal fun TopicRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
+        onNewsResourcesViewedChanged = viewModel::updateNewsResourceViewed,
         onTopicClick = onTopicClick,
     )
 }
@@ -92,6 +93,7 @@ internal fun TopicScreen(
     onFollowClick: (Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
@@ -127,6 +129,7 @@ internal fun TopicScreen(
                     news = newsUiState,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged,
+                    onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
                     onTopicClick = onTopicClick,
                 )
             }
@@ -143,6 +146,7 @@ private fun LazyListScope.TopicBody(
     news: NewsUiState,
     imageUrl: String,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     // TODO: Show icon if available
@@ -150,7 +154,7 @@ private fun LazyListScope.TopicBody(
         TopicHeader(name, description, imageUrl)
     }
 
-    userNewsResourceCards(news, onBookmarkChanged, onTopicClick)
+    userNewsResourceCards(news, onBookmarkChanged, onNewsResourcesViewedChanged, onTopicClick)
 }
 
 @Composable
@@ -181,6 +185,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
 private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     when (news) {
@@ -188,6 +193,7 @@ private fun LazyListScope.userNewsResourceCards(
             userNewsResourceCardItems(
                 items = news.news,
                 onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
+                onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
                 onTopicClick = onTopicClick,
                 itemModifier = Modifier.padding(24.dp),
             )
@@ -214,6 +220,7 @@ private fun TopicBodyPreview() {
                 news = NewsUiState.Success(emptyList()),
                 imageUrl = "",
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -271,6 +278,7 @@ fun TopicScreenPopulated(
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -288,6 +296,7 @@ fun TopicScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }

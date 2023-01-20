@@ -95,6 +95,12 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
+    fun updateNewsResourceViewed(newsResourceId: String, isViewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceViewed(newsResourceId, isViewed)
+        }
+    }
+
     fun dismissOnboarding() {
         viewModelScope.launch {
             userDataRepository.setShouldHideOnboarding(true)
