@@ -73,6 +73,7 @@ internal fun BookmarksRoute(
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
+        onNewsResourcesViewedChanged = viewModel::updateNewsResourceViewed,
         onTopicClick = onTopicClick,
         modifier = modifier,
     )
@@ -86,13 +87,14 @@ internal fun BookmarksRoute(
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
         is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(feedState, removeFromBookmarks, onTopicClick, modifier)
+            BookmarksGrid(feedState, removeFromBookmarks, onNewsResourcesViewedChanged, onTopicClick, modifier)
         } else {
             EmptyState(modifier)
         }
@@ -115,6 +117,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -133,6 +136,7 @@ private fun BookmarksGrid(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+            onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
             onTopicClick = onTopicClick,
         )
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -198,6 +202,7 @@ private fun BookmarksGridPreview(
         BookmarksGrid(
             feedState = Success(userNewsResources),
             removeFromBookmarks = {},
+            onNewsResourcesViewedChanged = { _, _ -> },
             onTopicClick = {},
         )
     }

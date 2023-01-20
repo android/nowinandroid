@@ -86,6 +86,12 @@ class TopicViewModel @Inject constructor(
             userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
         }
     }
+
+    fun updateNewsResourceViewed(newsResourceId: String, isViewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.updateNewsResourceViewed(newsResourceId, isViewed)
+        }
+    }
 }
 
 private fun topicUiState(

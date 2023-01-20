@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -40,7 +42,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -77,6 +81,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 fun NewsResourceCardExpanded(
     userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
+    isViewed: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
     onTopicClick: (String) -> Unit,
@@ -113,7 +118,16 @@ fun NewsResourceCardExpanded(
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (!isViewed) {
+                            Dot(
+                                color = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.size(8.dp),
+                            )
+                            Spacer(modifier = Modifier.size(6.dp))
+                        }
+                        NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -176,6 +190,24 @@ fun BookmarkButton(
             Icon(
                 painter = painterResource(NiaIcons.Bookmark),
                 contentDescription = stringResource(R.string.unbookmark),
+            )
+        },
+    )
+}
+
+@Composable
+fun Dot(
+    color: Color,
+    modifier: Modifier = Modifier,
+) {
+    val description = stringResource(R.string.unread_resource_dot_content_description)
+    Canvas(
+        modifier = modifier
+            .semantics { contentDescription = description },
+        onDraw = {
+            drawCircle(
+                color,
+                radius = size.minDimension / 2,
             )
         },
     )
@@ -301,6 +333,7 @@ private fun ExpandedNewsResourcePreview(
             NewsResourceCardExpanded(
                 userNewsResource = userNewsResources[0],
                 isBookmarked = true,
+                isViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},

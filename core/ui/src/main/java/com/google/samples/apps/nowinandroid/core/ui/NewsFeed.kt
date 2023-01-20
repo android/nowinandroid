@@ -48,6 +48,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     when (feedState) {
@@ -70,7 +71,9 @@ fun LazyGridScope.newsFeed(
                             newsResourceTitle = userNewsResource.title,
                         )
                         launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                        onNewsResourcesViewedChanged(userNewsResource.id, true)
                     },
+                    isViewed = userNewsResource.isViewed,
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
                             userNewsResource.id,
@@ -122,6 +125,7 @@ private fun NewsFeedLoadingPreview() {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }
@@ -140,6 +144,7 @@ private fun NewsFeedContentPreview(
             newsFeed(
                 feedState = NewsFeedUiState.Success(userNewsResources),
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourcesViewedChanged = { _, _ -> },
                 onTopicClick = {},
             )
         }

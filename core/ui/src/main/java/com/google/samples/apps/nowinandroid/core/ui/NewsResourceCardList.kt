@@ -37,6 +37,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
     onToggleBookmark: (item: UserNewsResource) -> Unit,
+    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
     onItemClick: ((item: UserNewsResource) -> Unit)? = null,
     onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
@@ -52,6 +53,7 @@ fun LazyListScope.userNewsResourceCardItems(
         NewsResourceCardExpanded(
             userNewsResource = userNewsResource,
             isBookmarked = userNewsResource.isSaved,
+            isViewed = userNewsResource.isViewed,
             onToggleBookmark = { onToggleBookmark(userNewsResource) },
             onClick = {
                 analyticsHelper.logNewsResourceOpened(
@@ -59,7 +61,10 @@ fun LazyListScope.userNewsResourceCardItems(
                     newsResourceTitle = userNewsResource.title,
                 )
                 when (onItemClick) {
-                    null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                    null -> {
+                        launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                        onNewsResourcesViewedChanged(userNewsResource.id, true)
+                    }
                     else -> onItemClick(userNewsResource)
                 }
             },
