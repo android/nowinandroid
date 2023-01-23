@@ -44,11 +44,20 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
     topics.setGestureMargins(horizontalMargin, 0, horizontalMargin, 0)
 
     // Select some topics to show some feed content
-    repeat(3) { index ->
+    var index = 0
+    var visited = 0
+
+    while (visited < 3) {
         // Selecting some topics, which will populate items in the feed.
         val topic = topics.children[index % topics.childCount]
         // Find the checkable element to figure out whether it's checked or not
         val topicCheckIcon = topic.findObject(By.checkable(true))
+        // Topic icon may not be visible if it's out of the screen boundaries
+        // If that's the case, let's try another index
+        if (topicCheckIcon == null) {
+            index++
+            continue
+        }
 
         when {
             // Topic wasn't checked, so just do that
@@ -69,6 +78,9 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
                 // Topic is checked, but we don't recheck it
             }
         }
+
+        index++
+        visited++
     }
 }
 
