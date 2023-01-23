@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.feature.interests.R.string
@@ -69,14 +69,14 @@ fun InterestsItem(
             Spacer(modifier = Modifier.width(16.dp))
             InterestContent(name, description)
         }
-        NiaToggleButton(
+        NiaIconToggleButton(
             checked = following,
             onCheckedChange = onFollowButtonClick,
             icon = {
                 Icon(
                     imageVector = NiaIcons.Add,
                     contentDescription = stringResource(
-                        id = string.interests_card_follow_button_content_desc
+                        id = string.card_follow_button_content_desc
                     )
                 )
             },
@@ -84,7 +84,7 @@ fun InterestsItem(
                 Icon(
                     imageVector = NiaIcons.Check,
                     contentDescription = stringResource(
-                        id = string.interests_card_unfollow_button_content_desc
+                        id = string.card_unfollow_button_content_desc
                     )
                 )
             }

@@ -128,7 +128,7 @@ class NavigationUiTest {
     }
 
     @Test
-    fun compcatWidth_mediumHeight_showsNavigationBar() {
+    fun compactWidth_mediumHeight_showsNavigationBar() {
         composeTestRule.setContent {
             TestHarness(size = DpSize(400.dp, 500.dp)) {
                 BoxWithConstraints {

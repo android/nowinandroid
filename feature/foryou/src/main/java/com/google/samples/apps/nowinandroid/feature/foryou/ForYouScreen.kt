@@ -77,14 +77,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -256,7 +255,7 @@ private fun LazyGridScope.onboarding(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        NiaFilledButton(
+                        NiaButton(
                             onClick = saveFollowedTopics,
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
@@ -352,7 +351,7 @@ private fun SingleTopicButton(
                     .weight(1f),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            NiaToggleButton(
+            NiaIconToggleButton(
                 checked = isSelected,
                 onCheckedChange = { checked -> onClick(topicId, checked) },
                 icon = {
@@ -398,9 +397,7 @@ fun ForYouScreenPopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -419,9 +416,7 @@ fun ForYouScreenOfflinePopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -442,9 +437,7 @@ fun ForYouScreenTopicSelection() {
                     topics = previewTopics.map { FollowableTopic(it, false) },
                 ),
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -480,9 +473,7 @@ fun ForYouScreenPopulatedAndLoading() {
                 isSyncing = true,
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},

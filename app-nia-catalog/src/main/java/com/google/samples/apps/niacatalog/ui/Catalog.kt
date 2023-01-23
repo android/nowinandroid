@@ -37,16 +37,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaDropdownMenuButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilledButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOutlinedButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaViewToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -77,7 +77,7 @@ fun NiaCatalog() {
                 item { Text("Buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(onClick = {}) {
+                        NiaButton(onClick = {}) {
                             Text(text = "Enabled")
                         }
                         NiaOutlinedButton(onClick = {}) {
@@ -91,7 +91,7 @@ fun NiaCatalog() {
                 item { Text("Disabled buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
+                        NiaButton(
                             onClick = {},
                             enabled = false
                         ) {
@@ -114,7 +114,7 @@ fun NiaCatalog() {
                 item { Text("Buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
+                        NiaButton(
                             onClick = {},
                             text = { Text(text = "Enabled") },
                             leadingIcon = {
@@ -140,7 +140,7 @@ fun NiaCatalog() {
                 item { Text("Disabled buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
+                        NiaButton(
                             onClick = {},
                             enabled = false,
                             text = { Text(text = "Disabled") },
@@ -166,250 +166,23 @@ fun NiaCatalog() {
                         )
                     }
                 }
-                item { Text("Buttons with trailing icons", Modifier.padding(top = 16.dp)) }
+                item { Text("Dropdown menus", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                        NiaDropdownMenuButton(
+                            text = { Text("Enabled") },
+                            items = listOf("Item 1", "Item 2", "Item 3"),
+                            onItemClick = {},
+                            itemText = { item -> Text(item) }
                         )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                        NiaDropdownMenuButton(
+                            text = { Text("Disabled") },
+                            items = listOf("Item 1", "Item 2", "Item 3"),
+                            onItemClick = {},
+                            itemText = { item -> Text(item) },
+                            enabled = false
                         )
                     }
-                }
-                item { Text("Disabled buttons with trailing icons", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                    }
-                }
-                item { Text("Small buttons", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            small = true
-                        ) {
-                            Text(text = "Enabled")
-                        }
-                        NiaOutlinedButton(
-                            onClick = {},
-                            small = true
-                        ) {
-                            Text(text = "Enabled")
-                        }
-                        NiaTextButton(
-                            onClick = {},
-                            small = true
-                        ) {
-                            Text(text = "Enabled")
-                        }
-                    }
-                }
-                item { Text("Disabled small buttons", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true
-                        ) {
-                            Text(text = "Disabled")
-                        }
-                        NiaOutlinedButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true
-                        ) {
-                            Text(text = "Disabled")
-                        }
-                        NiaTextButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true
-                        ) {
-                            Text(text = "Disabled")
-                        }
-                    }
-                }
-                item { Text("Small buttons with leading icons", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                    }
-                }
-                item {
-                    Text(
-                        "Disabled small buttons with leading icons",
-                        Modifier.padding(top = 16.dp)
-                    )
-                }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                    }
-                }
-                item { Text("Small buttons with trailing icons", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            small = true,
-                            text = { Text(text = "Enabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                    }
-                }
-                item {
-                    Text(
-                        "Disabled small buttons with trailing icons",
-                        Modifier.padding(top = 16.dp)
-                    )
-                }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaFilledButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                        NiaTextButton(
-                            onClick = {},
-                            enabled = false,
-                            small = true,
-                            text = { Text(text = "Disabled") },
-                            trailingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
-                        )
-                    }
-                }
-                item { Text("Dropdown menu", Modifier.padding(top = 16.dp)) }
-                item {
-                    NiaDropdownMenuButton(
-                        text = { Text("Newest first") },
-                        items = listOf("Item 1", "Item 2", "Item 3"),
-                        onItemClick = {},
-                        itemText = { item -> Text(item) }
-                    )
                 }
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
@@ -418,28 +191,33 @@ fun NiaCatalog() {
                         NiaFilterChip(
                             selected = firstChecked,
                             onSelectedChange = { checked -> firstChecked = checked },
-                            label = { Text(text = "Enabled".uppercase()) }
+                            label = { Text(text = "Enabled") }
                         )
                         var secondChecked by remember { mutableStateOf(true) }
                         NiaFilterChip(
                             selected = secondChecked,
                             onSelectedChange = { checked -> secondChecked = checked },
-                            label = { Text(text = "Enabled".uppercase()) }
+                            label = { Text(text = "Enabled") }
                         )
-                        var thirdChecked by remember { mutableStateOf(true) }
                         NiaFilterChip(
-                            selected = thirdChecked,
-                            onSelectedChange = { checked -> thirdChecked = checked },
+                            selected = false,
+                            onSelectedChange = {},
                             enabled = false,
-                            label = { Text(text = "Disabled".uppercase()) }
+                            label = { Text(text = "Disabled") }
+                        )
+                        NiaFilterChip(
+                            selected = true,
+                            onSelectedChange = {},
+                            enabled = false,
+                            label = { Text(text = "Disabled") }
                         )
                     }
                 }
-                item { Text("Toggle buttons", Modifier.padding(top = 16.dp)) }
+                item { Text("Icon buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
                         var firstChecked by remember { mutableStateOf(false) }
-                        NiaToggleButton(
+                        NiaIconToggleButton(
                             checked = firstChecked,
                             onCheckedChange = { checked -> firstChecked = checked },
                             icon = {
@@ -456,7 +234,7 @@ fun NiaCatalog() {
                             }
                         )
                         var secondChecked by remember { mutableStateOf(true) }
-                        NiaToggleButton(
+                        NiaIconToggleButton(
                             checked = secondChecked,
                             onCheckedChange = { checked -> secondChecked = checked },
                             icon = {
@@ -472,27 +250,39 @@ fun NiaCatalog() {
                                 )
                             }
                         )
-                        var thirdChecked by remember { mutableStateOf(false) }
-                        NiaToggleButton(
-                            checked = thirdChecked,
-                            onCheckedChange = { checked -> thirdChecked = checked },
+                        NiaIconToggleButton(
+                            checked = false,
+                            onCheckedChange = {},
                             icon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
+                                Icon(
+                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    contentDescription = null
+                                )
                             },
                             checkedIcon = {
-                                Icon(imageVector = NiaIcons.Check, contentDescription = null)
-                            }
+                                Icon(
+                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    contentDescription = null
+                                )
+                            },
+                            enabled = false
                         )
-                        var fourthChecked by remember { mutableStateOf(true) }
-                        NiaToggleButton(
-                            checked = fourthChecked,
-                            onCheckedChange = { checked -> fourthChecked = checked },
+                        NiaIconToggleButton(
+                            checked = true,
+                            onCheckedChange = {},
                             icon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
+                                Icon(
+                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    contentDescription = null
+                                )
                             },
                             checkedIcon = {
-                                Icon(imageVector = NiaIcons.Check, contentDescription = null)
-                            }
+                                Icon(
+                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    contentDescription = null
+                                )
+                            },
+                            enabled = false
                         )
                     }
                 }
@@ -513,6 +303,13 @@ fun NiaCatalog() {
                             compactText = { Text(text = "Compact view") },
                             expandedText = { Text(text = "Expanded view") }
                         )
+                        NiaViewToggleButton(
+                            expanded = false,
+                            onExpandedChange = {},
+                            compactText = { Text(text = "Disabled") },
+                            expandedText = { Text(text = "Disabled") },
+                            enabled = false
+                        )
                     }
                 }
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
@@ -524,7 +321,7 @@ fun NiaCatalog() {
                         NiaTopicTag(
                             expanded = expandedTopicId == "Topic 1",
                             followed = firstFollowed,
-                            onDropMenuToggle = { show ->
+                            onDropdownMenuToggle = { show ->
                                 expandedTopicId = if (show) "Topic 1" else null
                             },
                             onFollowClick = { firstFollowed = true },
@@ -539,7 +336,7 @@ fun NiaCatalog() {
                         NiaTopicTag(
                             expanded = expandedTopicId == "Topic 2",
                             followed = secondFollowed,
-                            onDropMenuToggle = { show ->
+                            onDropdownMenuToggle = { show ->
                                 expandedTopicId = if (show) "Topic 2" else null
                             },
                             onFollowClick = { secondFollowed = true },
@@ -549,6 +346,16 @@ fun NiaCatalog() {
                             followText = { Text(text = "Follow") },
                             unFollowText = { Text(text = "Unfollow") },
                             browseText = { Text(text = "Browse topic") }
+                        )
+                        NiaTopicTag(
+                            expanded = false,
+                            followed = false,
+                            onDropdownMenuToggle = {},
+                            onFollowClick = {},
+                            onUnfollowClick = {},
+                            onBrowseClick = {},
+                            text = { Text(text = "Disabled".uppercase()) },
+                            enabled = false
                         )
                     }
                 }

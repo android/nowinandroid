@@ -24,10 +24,8 @@ import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -37,14 +35,6 @@ class InterestsViewModel @Inject constructor(
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
-
-    private val _tabState = MutableStateFlow(
-        InterestsTabState(
-            titles = listOf(R.string.interests_topics, R.string.interests_people),
-            currentIndex = 0
-        )
-    )
-    val tabState: StateFlow<InterestsTabState> = _tabState.asStateFlow()
 
     val uiState: StateFlow<InterestsUiState> =
         getFollowableTopics(sortBy = TopicSortField.NAME).map(
@@ -61,11 +51,6 @@ class InterestsViewModel @Inject constructor(
         }
     }
 }
-
-data class InterestsTabState(
-    val titles: List<Int>,
-    val currentIndex: Int
-)
 
 sealed interface InterestsUiState {
     object Loading : InterestsUiState

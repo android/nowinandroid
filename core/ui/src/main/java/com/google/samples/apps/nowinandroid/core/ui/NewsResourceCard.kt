@@ -46,19 +46,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaToggleButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -72,7 +75,7 @@ import kotlinx.datetime.toJavaInstant
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
-    newsResource: NewsResource,
+    userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
@@ -90,9 +93,9 @@ fun NewsResourceCardExpanded(
         }
     ) {
         Column {
-            if (!newsResource.headerImageUrl.isNullOrEmpty()) {
+            if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
                 Row {
-                    NewsResourceHeaderImage(newsResource.headerImageUrl)
+                    NewsResourceHeaderImage(userNewsResource.headerImageUrl)
                 }
             }
             Box(
@@ -102,18 +105,18 @@ fun NewsResourceCardExpanded(
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
                         NewsResourceTitle(
-                            newsResource.title,
+                            userNewsResource.title,
                             modifier = Modifier.fillMaxWidth((.8f))
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceDate(newsResource.publishDate)
+                    NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceShortDescription(newsResource.content)
+                    NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceTopics(newsResource.topics)
+                    NewsResourceTopics(userNewsResource.followableTopics)
                 }
             }
         }
@@ -155,7 +158,7 @@ fun BookmarkButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NiaToggleButton(
+    NiaIconToggleButton(
         checked = isBookmarked,
         onCheckedChange = { onClick() },
         modifier = modifier,
@@ -175,7 +178,7 @@ fun BookmarkButton(
 }
 
 @Composable
-private fun dateFormatted(publishDate: Instant): String {
+fun dateFormatted(publishDate: Instant): String {
     var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
 
     val context = LocalContext.current
@@ -195,14 +198,24 @@ private fun dateFormatted(publishDate: Instant): String {
 }
 
 @Composable
-fun NewsResourceDate(
-    publishDate: Instant
+fun NewsResourceMetaData(
+    publishDate: Instant,
+    resourceType: NewsResourceType
 ) {
-    Text(dateFormatted(publishDate), style = MaterialTheme.typography.labelSmall)
+    val formattedDate = dateFormatted(publishDate)
+    Text(
+        if (resourceType != NewsResourceType.Unknown) {
+            stringResource(R.string.card_meta_data_text, formattedDate, resourceType.displayText)
+        } else {
+            formattedDate
+        },
+        style = MaterialTheme.typography.labelSmall
+    )
 }
 
 @Composable
 fun NewsResourceLink(
+    @Suppress("UNUSED_PARAMETER")
     newsResource: NewsResource
 ) {
     TODO()
@@ -217,7 +230,7 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    topics: List<Topic>,
+    topics: List<FollowableTopic>,
     modifier: Modifier = Modifier
 ) {
     // Store the ID of the Topic which has its "following" menu expanded, if any.
@@ -228,17 +241,35 @@ fun NewsResourceTopics(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        for (topic in topics) {
+        for (followableTopic in topics) {
             NiaTopicTag(
-                expanded = expandedTopicId == topic.id,
-                followed = true, // ToDo: Check if topic is followed
-                onDropMenuToggle = { show ->
-                    expandedTopicId = if (show) topic.id else null
+                expanded = expandedTopicId == followableTopic.topic.id,
+                followed = followableTopic.isFollowed,
+                onDropdownMenuToggle = { show ->
+                    expandedTopicId = if (show) followableTopic.topic.id else null
                 },
                 onFollowClick = { }, // ToDo
                 onUnfollowClick = { }, // ToDo
                 onBrowseClick = { }, // ToDo
-                text = { Text(text = topic.name.uppercase(Locale.getDefault())) }
+                text = {
+                    val contentDescription = if (followableTopic.isFollowed) {
+                        stringResource(
+                            R.string.topic_chip_content_description_when_followed,
+                            followableTopic.topic.name
+                        )
+                    } else {
+                        stringResource(
+                            R.string.topic_chip_content_description_when_not_followed,
+                            followableTopic.topic.name
+                        )
+                    }
+                    Text(
+                        text = followableTopic.topic.name.uppercase(Locale.getDefault()),
+                        modifier = Modifier.semantics {
+                            this.contentDescription = contentDescription
+                        }
+                    )
+                }
             )
         }
     }
@@ -246,7 +277,7 @@ fun NewsResourceTopics(
 
 @Preview("Bookmark Button")
 @Composable
-fun BookmarkButtonPreview() {
+private fun BookmarkButtonPreview() {
     NiaTheme {
         Surface {
             BookmarkButton(isBookmarked = false, onClick = { })
@@ -256,7 +287,7 @@ fun BookmarkButtonPreview() {
 
 @Preview("Bookmark Button Bookmarked")
 @Composable
-fun BookmarkButtonBookmarkedPreview() {
+private fun BookmarkButtonBookmarkedPreview() {
     NiaTheme {
         Surface {
             BookmarkButton(isBookmarked = true, onClick = { })
@@ -266,11 +297,11 @@ fun BookmarkButtonBookmarkedPreview() {
 
 @Preview("NewsResourceCardExpanded")
 @Composable
-fun ExpandedNewsResourcePreview() {
+private fun ExpandedNewsResourcePreview() {
     NiaTheme {
         Surface {
             NewsResourceCardExpanded(
-                newsResource = previewNewsResources[0],
+                userNewsResource = previewUserNewsResources[0],
                 isBookmarked = true,
                 onToggleBookmark = {},
                 onClick = {}
