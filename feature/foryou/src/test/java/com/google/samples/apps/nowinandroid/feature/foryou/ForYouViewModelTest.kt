@@ -17,15 +17,17 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
@@ -54,7 +56,7 @@ class ForYouViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesUseCase = GetSaveableNewsResourcesUseCase(
+    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository
     )
@@ -69,7 +71,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getSaveableNewsResourcesUseCase,
+            getSaveableNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase
         )
     }
@@ -263,7 +265,10 @@ class ForYouViewModelTest {
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("0", "1"))
+
+        val followedTopicIds = setOf("0", "1")
+        val userData = emptyUserData.copy(followedTopics = followedTopicIds)
+        userDataRepository.setUserData(userData)
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -280,13 +285,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed =
-                sampleNewsResources.map {
-                    SaveableNewsResource(
-                        newsResource = it,
-                        isSaved = false
-                    )
-                }
+                feed = sampleNewsResources.mapToUserNewsResources(userData)
             ),
             viewModel.feedState.value
         )
@@ -307,41 +306,9 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map {
+                    FollowableTopic(it, false)
+                }
             ),
             viewModel.onboardingUiState.value
         )
@@ -352,59 +319,25 @@ class ForYouViewModelTest {
             viewModel.feedState.value
         )
 
-        viewModel.updateTopicSelection("1", isChecked = true)
+        val followedTopicId = sampleTopics[1].id
+        viewModel.updateTopicSelection(followedTopicId, isChecked = true)
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "0",
-                            name = "Headlines",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "1",
-                            name = "UI",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = true
-                    ),
-                    FollowableTopic(
-                        topic = Topic(
-                            id = "2",
-                            name = "Tools",
-                            shortDescription = "",
-                            longDescription = "long description",
-                            url = "URL",
-                            imageUrl = "image URL",
-                        ),
-                        isFollowed = false
-                    )
-                ),
+                topics = sampleTopics.map {
+                    FollowableTopic(it, it.id == followedTopicId)
+                }
             ),
             viewModel.onboardingUiState.value
         )
+
+        val userData = emptyUserData.copy(followedTopics = setOf(followedTopicId))
+
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = false
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
+                    UserNewsResource(sampleNewsResources[1], userData),
+                    UserNewsResource(sampleNewsResources[2], userData),
                 )
             ),
             viewModel.feedState.value
@@ -484,11 +417,25 @@ class ForYouViewModelTest {
             launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
+        val followedTopicIds = setOf("1")
+        val userData = emptyUserData.copy(
+            followedTopics = followedTopicIds,
+            shouldHideOnboarding = true
+        )
+
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setFollowedTopicIds(setOf("1"))
-        userDataRepository.setShouldHideOnboarding(true)
+        userDataRepository.setUserData(userData)
         newsRepository.sendNewsResources(sampleNewsResources)
-        viewModel.updateNewsResourceSaved("2", true)
+
+        val bookmarkedNewsResourceId = "2"
+        viewModel.updateNewsResourceSaved(
+            newsResourceId = bookmarkedNewsResourceId,
+            isChecked = true
+        )
+
+        val userDataExpected = userData.copy(
+            bookmarkedNewsResources = setOf(bookmarkedNewsResourceId)
+        )
 
         assertEquals(
             OnboardingUiState.NotShown,
@@ -497,14 +444,8 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[1],
-                        isSaved = true
-                    ),
-                    SaveableNewsResource(
-                        newsResource = sampleNewsResources[2],
-                        isSaved = false
-                    )
+                    UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
+                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected)
                 )
             ),
             viewModel.feedState.value

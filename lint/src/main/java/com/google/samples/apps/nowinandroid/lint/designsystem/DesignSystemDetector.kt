@@ -80,7 +80,7 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
         // instead of hardcoded names.
         val METHOD_NAMES = mapOf(
             "MaterialTheme" to "NiaTheme",
-            "Button" to "NiaFilledButton",
+            "Button" to "NiaButton",
             "OutlinedButton" to "NiaOutlinedButton",
             "TextButton" to "NiaTextButton",
             "FilterChip" to "NiaFilterChip",
@@ -92,10 +92,10 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
             "NavigationRailItem" to "NiaNavigationRailItem",
             "TabRow" to "NiaTabRow",
             "Tab" to "NiaTab",
-            "IconToggleButton" to "NiaToggleButton",
-            "FilledIconToggleButton" to "NiaToggleButton",
-            "FilledTonalIconToggleButton" to "NiaToggleButton",
-            "OutlinedIconToggleButton" to "NiaToggleButton",
+            "IconToggleButton" to "NiaIconToggleButton",
+            "FilledIconToggleButton" to "NiaIconToggleButton",
+            "FilledTonalIconToggleButton" to "NiaIconToggleButton",
+            "OutlinedIconToggleButton" to "NiaIconToggleButton",
             "CenterAlignedTopAppBar" to "NiaTopAppBar",
             "SmallTopAppBar" to "NiaTopAppBar",
             "MediumTopAppBar" to "NiaTopAppBar",

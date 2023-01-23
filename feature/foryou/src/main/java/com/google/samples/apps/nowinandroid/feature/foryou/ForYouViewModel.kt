@@ -21,8 +21,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 class ForYouViewModel @Inject constructor(
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
-    private val getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
+    private val getSaveableNewsResources: GetUserNewsResourcesUseCase,
     getFollowableTopics: GetFollowableTopicsUseCase
 ) : ViewModel() {
 
@@ -117,6 +117,6 @@ class ForYouViewModel @Inject constructor(
     }
 }
 
-private fun Flow<List<SaveableNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
-    map<List<SaveableNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+private fun Flow<List<UserNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
+    map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
         .onStart { emit(NewsFeedUiState.Loading) }

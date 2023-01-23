@@ -15,15 +15,12 @@
      limitations under the License.
 -->
 <resources>
-    <!-- TODO: Remove the redundant "interests" prefix -->
     <string name="interests">Interests</string>
-    <string name="interests_topics">Topics</string>
-    <string name="interests_people">People</string>
-    <string name="interests_loading">Loading data</string>
-    <string name="interests_empty_header">"No available data"</string>
-    <string name="interests_card_follow_button_content_desc">Follow interest button</string>
-    <string name="interests_card_unfollow_button_content_desc">Unfollow interest button</string>
-    <string name="interests_top_app_bar_title">Interests</string>
-    <string name="interests_top_app_bar_action_menu">Menu</string>
-    <string name="interests_top_app_bar_action_seearch">Search</string>
+    <string name="loading">Loading data</string>
+    <string name="empty_header">"No available data"</string>
+    <string name="card_follow_button_content_desc">Follow interest button</string>
+    <string name="card_unfollow_button_content_desc">Unfollow interest button</string>
+    <string name="top_app_bar_title">Interests</string>
+    <string name="top_app_bar_action_menu">Menu</string>
+    <string name="top_app_bar_action_search">Search</string>
 </resources>
