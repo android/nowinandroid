@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,15 +30,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -58,6 +66,8 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -111,6 +121,9 @@ private fun BookmarksGrid(
     modifier: Modifier = Modifier
 ) {
     val scrollableState = rememberLazyGridState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
     LazyVerticalGrid(
         columns = Adaptive(300.dp),
@@ -124,11 +137,24 @@ private fun BookmarksGrid(
     ) {
         newsFeed(
             feedState = feedState,
-            onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+            onNewsResourcesCheckedChanged = { id, _ ->
+                removeFromBookmarks(id)
+                showSnackBar(scope, snackbarHostState)
+            },
         )
         item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
+    }
+}
+
+internal fun showSnackBar(scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
+    Log.i("Caren", "Show snack bar")
+    scope.launch {
+        snackbarHostState.showSnackbar(
+            message = "Bookmark removed",
+            actionLabel = "Undo"
+        )
     }
 }
 
