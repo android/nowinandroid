@@ -34,13 +34,13 @@ fun TopicsTabContent(
     topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier
             .padding(horizontal = 16.dp)
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(top = 8.dp)
+        contentPadding = PaddingValues(top = 8.dp),
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id
@@ -51,7 +51,7 @@ fun TopicsTabContent(
                     description = followableTopic.topic.shortDescription,
                     topicImageUrl = followableTopic.topic.imageUrl,
                     onClick = { onTopicClick(topicId) },
-                    onFollowButtonClick = { onFollowButtonClick(topicId, it) }
+                    onFollowButtonClick = { onFollowButtonClick(topicId, it) },
                 )
             }
         }

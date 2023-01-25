@@ -20,9 +20,9 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Art
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import kotlin.test.assertEquals
 import kotlinx.datetime.Instant
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class NetworkEntityKtTest {
 

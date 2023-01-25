@@ -35,6 +35,6 @@ class DesignSystemIssueRegistry : IssueRegistry() {
     override val vendor: Vendor = Vendor(
         vendorName = "Now in Android",
         feedbackUrl = "https://github.com/android/nowinandroid/issues",
-        contact = "https://github.com/android/nowinandroid"
+        contact = "https://github.com/android/nowinandroid",
     )
 }

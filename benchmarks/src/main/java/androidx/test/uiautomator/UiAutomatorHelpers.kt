@@ -28,7 +28,7 @@ import androidx.test.uiautomator.HasChildrenOp.EXACTLY
  */
 fun untilHasChildren(
     childCount: Int = 1,
-    op: HasChildrenOp = AT_LEAST
+    op: HasChildrenOp = AT_LEAST,
 ): UiObject2Condition<Boolean> {
     return object : UiObject2Condition<Boolean>() {
         override fun apply(element: UiObject2): Boolean {
@@ -44,5 +44,5 @@ fun untilHasChildren(
 enum class HasChildrenOp {
     AT_LEAST,
     EXACTLY,
-    AT_MOST
+    AT_MOST,
 }
