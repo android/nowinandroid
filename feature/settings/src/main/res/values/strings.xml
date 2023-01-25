@@ -25,8 +25,12 @@
     <string name="theme">Theme</string>
     <string name="brand_default">Default</string>
     <string name="brand_android">Android</string>
+    <string name="dark_mode_preference">Dark mode preference</string>
     <string name="dark_mode_config_system_default">System default</string>
     <string name="dark_mode_config_light">Light</string>
     <string name="dark_mode_config_dark">Dark</string>
+    <string name="dynamic_color_preference">Use Dynamic Color</string>
+    <string name="dynamic_color_yes">Yes</string>
+    <string name="dynamic_color_no">No</string>
     <string name="dismiss_dialog_button_text">OK</string>
 </resources>

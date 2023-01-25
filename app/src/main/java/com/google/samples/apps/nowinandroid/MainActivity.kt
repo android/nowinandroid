@@ -106,7 +106,8 @@ class MainActivity : ComponentActivity() {
 
             NiaTheme(
                 darkTheme = darkTheme,
-                androidTheme = shouldUseAndroidTheme(uiState)
+                androidTheme = shouldUseAndroidTheme(uiState),
+                disableDynamicTheming = shouldDisableDynamicTheming(uiState)
             ) {
                 NiaApp(
                     networkMonitor = networkMonitor,
@@ -139,6 +140,17 @@ private fun shouldUseAndroidTheme(
         ThemeBrand.DEFAULT -> false
         ThemeBrand.ANDROID -> true
     }
+}
+
+/**
+ * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
+ */
+@Composable
+private fun shouldDisableDynamicTheming(
+    uiState: MainActivityUiState,
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> !uiState.userData.useDynamicColor
 }
 
 /**

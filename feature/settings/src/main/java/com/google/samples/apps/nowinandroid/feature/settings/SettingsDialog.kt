@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -38,17 +39,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
@@ -71,19 +76,33 @@ fun SettingsDialog(
         onDismiss = onDismiss,
         settingsUiState = settingsUiState,
         onChangeThemeBrand = viewModel::updateThemeBrand,
+        onChangeDynamicColorPreference = viewModel::updateDynamicColorPreference,
         onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingsDialog(
     settingsUiState: SettingsUiState,
+    supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
+    onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
 ) {
+    val configuration = LocalConfiguration.current
 
+    /**
+     * usePlatformDefaultWidth = false is use as a temporary fix to allow
+     * height recalculation during recomposition. This, however, causes
+     * Dialog's to occupy full width in Compact mode. Therefore max width
+     * is configured below. This should be removed when there's fix to
+     * https://issuetracker.google.com/issues/221643630
+     */
     AlertDialog(
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(
@@ -101,10 +120,13 @@ fun SettingsDialog(
                             modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
+
                     is Success -> {
                         SettingsPanel(
                             settings = settingsUiState.settings,
+                            supportDynamicColor = supportDynamicColor,
                             onChangeThemeBrand = onChangeThemeBrand,
+                            onChangeDynamicColorPreference = onChangeDynamicColorPreference,
                             onChangeDarkThemeConfig = onChangeDarkThemeConfig
                         )
                     }
@@ -129,7 +151,9 @@ fun SettingsDialog(
 @Composable
 private fun SettingsPanel(
     settings: UserEditableSettings,
+    supportDynamicColor: Boolean,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
+    onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit
 ) {
     SettingsDialogSectionTitle(text = stringResource(string.theme))
@@ -145,7 +169,22 @@ private fun SettingsPanel(
             onClick = { onChangeThemeBrand(ANDROID) }
         )
     }
-    SettingsDialogSectionTitle(text = "Dark mode preference")
+    if (settings.brand == DEFAULT && supportDynamicColor) {
+        SettingsDialogSectionTitle(text = stringResource(R.string.dynamic_color_preference))
+        Column(Modifier.selectableGroup()) {
+            SettingsDialogThemeChooserRow(
+                text = stringResource(string.dynamic_color_yes),
+                selected = settings.useDynamicColor,
+                onClick = { onChangeDynamicColorPreference(true) }
+            )
+            SettingsDialogThemeChooserRow(
+                text = stringResource(string.dynamic_color_no),
+                selected = !settings.useDynamicColor,
+                onClick = { onChangeDynamicColorPreference(false) }
+            )
+        }
+    }
+    SettingsDialogSectionTitle(text = stringResource(R.string.dark_mode_preference))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
             text = stringResource(string.dark_mode_config_system_default),
@@ -262,11 +301,13 @@ private fun PreviewSettingsDialog() {
             settingsUiState = Success(
                 UserEditableSettings(
                     brand = DEFAULT,
-                    darkThemeConfig = FOLLOW_SYSTEM
+                    darkThemeConfig = FOLLOW_SYSTEM,
+                    useDynamicColor = false
                 )
             ),
-            onChangeThemeBrand = { },
-            onChangeDarkThemeConfig = { }
+            onChangeThemeBrand = {},
+            onChangeDynamicColorPreference = {},
+            onChangeDarkThemeConfig = {}
         )
     }
 }
@@ -278,14 +319,17 @@ private fun PreviewSettingsDialogLoading() {
         SettingsDialog(
             onDismiss = {},
             settingsUiState = Loading,
-            onChangeThemeBrand = { },
-            onChangeDarkThemeConfig = { }
+            onChangeThemeBrand = {},
+            onChangeDynamicColorPreference = {},
+            onChangeDarkThemeConfig = {}
         )
     }
 }
 
 /* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
-private const val LICENSES_URL = "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
-private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
+private const val LICENSES_URL =
+    "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
+private const val BRAND_GUIDELINES_URL =
+    "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
 private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"
