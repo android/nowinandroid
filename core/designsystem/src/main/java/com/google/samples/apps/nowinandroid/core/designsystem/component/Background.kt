@@ -50,7 +50,7 @@ import kotlin.math.tan
 @Composable
 fun NiaBackground(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
@@ -77,7 +77,7 @@ fun NiaBackground(
 fun NiaGradientBackground(
     modifier: Modifier = Modifier,
     gradientColors: GradientColors = LocalGradientColors.current,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val currentTopColor by rememberUpdatedState(gradientColors.top)
     val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
@@ -87,7 +87,7 @@ fun NiaGradientBackground(
         } else {
             gradientColors.container
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Box(
             Modifier
@@ -98,7 +98,7 @@ fun NiaGradientBackground(
                     val offset = size.height * tan(
                         Math
                             .toRadians(11.06)
-                            .toFloat()
+                            .toFloat(),
                     )
 
                     val start = Offset(size.width / 2 + offset / 2, 0f)
@@ -132,7 +132,7 @@ fun NiaGradientBackground(
                         drawRect(topGradient)
                         drawRect(bottomGradient)
                     }
-                }
+                },
         ) {
             content()
         }

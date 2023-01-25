@@ -26,11 +26,11 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [NewsRepository] that retrieves the news resources from a JSON String.
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.flowOn
  */
 class FakeNewsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val datasource: FakeNiaNetworkDataSource
+    private val datasource: FakeNiaNetworkDataSource,
 ) : NewsRepository {
 
     override fun getNewsResources(): Flow<List<NewsResource>> =
@@ -48,7 +48,7 @@ class FakeNewsRepository @Inject constructor(
             emit(
                 datasource.getNewsResources()
                     .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel)
+                    .map(NewsResourceEntity::asExternalModel),
             )
         }.flowOn(ioDispatcher)
 
@@ -61,7 +61,7 @@ class FakeNewsRepository @Inject constructor(
                     .getNewsResources()
                     .filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
                     .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel)
+                    .map(NewsResourceEntity::asExternalModel),
 
             )
         }.flowOn(ioDispatcher)

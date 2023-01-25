@@ -31,7 +31,7 @@ object NewsResourceTypeSerializer : KSerializer<NewsResourceType> {
 
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
         serialName = "type",
-        kind = STRING
+        kind = STRING,
     )
 
     override fun serialize(encoder: Encoder, value: NewsResourceType) =

@@ -24,12 +24,12 @@ import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSou
  * Test synchronizer that delegates to [NiaPreferencesDataSource]
  */
 class TestSynchronizer(
-    private val niaPreferences: NiaPreferencesDataSource
+    private val niaPreferences: NiaPreferencesDataSource,
 ) : Synchronizer {
     override suspend fun getChangeListVersions(): ChangeListVersions =
         niaPreferences.getChangeListVersions()
 
     override suspend fun updateChangeListVersions(
-        update: ChangeListVersions.() -> ChangeListVersions
+        update: ChangeListVersions.() -> ChangeListVersions,
     ) = niaPreferences.updateChangeListVersion(update)
 }

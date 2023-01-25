@@ -30,21 +30,21 @@ object ListToMapMigration : DataMigration<UserPreferences> {
             // Migrate topic id lists
             followedTopicIds.clear()
             followedTopicIds.putAll(
-                currentData.deprecatedFollowedTopicIdsList.associateWith { true }
+                currentData.deprecatedFollowedTopicIdsList.associateWith { true },
             )
             deprecatedFollowedTopicIds.clear()
 
             // Migrate author ids
             followedAuthorIds.clear()
             followedAuthorIds.putAll(
-                currentData.deprecatedFollowedAuthorIdsList.associateWith { true }
+                currentData.deprecatedFollowedAuthorIdsList.associateWith { true },
             )
             deprecatedFollowedAuthorIds.clear()
 
             // Migrate bookmarks
             bookmarkedNewsResourceIds.clear()
             bookmarkedNewsResourceIds.putAll(
-                currentData.deprecatedBookmarkedNewsResourceIdsList.associateWith { true }
+                currentData.deprecatedBookmarkedNewsResourceIdsList.associateWith { true },
             )
             deprecatedBookmarkedNewsResourceIds.clear()
 

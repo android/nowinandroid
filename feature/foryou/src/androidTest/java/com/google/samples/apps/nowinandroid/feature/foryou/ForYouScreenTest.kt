@@ -41,7 +41,7 @@ class ForYouScreenTest {
 
     private val doneButtonMatcher by lazy {
         hasText(
-            composeTestRule.activity.resources.getString(R.string.done)
+            composeTestRule.activity.resources.getString(R.string.done),
         )
     }
 
@@ -55,14 +55,14 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+                composeTestRule.activity.resources.getString(R.string.for_you_loading),
             )
             .assertExists()
     }
@@ -77,14 +77,14 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(emptyList()),
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+                composeTestRule.activity.resources.getString(R.string.for_you_loading),
             )
             .assertExists()
     }
@@ -100,11 +100,11 @@ class ForYouScreenTest {
                         topics = testTopics,
                     ),
                     feedState = NewsFeedUiState.Success(
-                        feed = emptyList()
+                        feed = emptyList(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
@@ -140,14 +140,14 @@ class ForYouScreenTest {
                         // Follow one topic
                         topics = testTopics.mapIndexed { index, testTopic ->
                             testTopic.copy(isFollowed = index == 1)
-                        }
+                        },
                     ),
                     feedState = NewsFeedUiState.Success(
-                        feed = emptyList()
+                        feed = emptyList(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
@@ -183,14 +183,14 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+                composeTestRule.activity.resources.getString(R.string.for_you_loading),
             )
             .assertExists()
     }
@@ -205,14 +205,14 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     saveFollowedTopics = {},
-                    onNewsResourcesCheckedChanged = { _, _ -> }
+                    onNewsResourcesCheckedChanged = { _, _ -> },
                 )
             }
         }
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading)
+                composeTestRule.activity.resources.getString(R.string.for_you_loading),
             )
             .assertExists()
     }
@@ -224,18 +224,18 @@ class ForYouScreenTest {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewUserNewsResources
+                    feed = previewUserNewsResources,
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
 
         composeTestRule
             .onNodeWithText(
                 previewUserNewsResources[0].title,
-                substring = true
+                substring = true,
             )
             .assertExists()
             .assertHasClickAction()
@@ -244,14 +244,14 @@ class ForYouScreenTest {
             .performScrollToNode(
                 hasText(
                     previewUserNewsResources[1].title,
-                    substring = true
-                )
+                    substring = true,
+                ),
             )
 
         composeTestRule
             .onNodeWithText(
                 previewUserNewsResources[1].title,
-                substring = true
+                substring = true,
             )
             .assertExists()
             .assertHasClickAction()
@@ -264,19 +264,19 @@ private val testTopic = Topic(
     shortDescription = "",
     longDescription = "",
     url = "",
-    imageUrl = ""
+    imageUrl = "",
 )
 private val testTopics = listOf(
     FollowableTopic(
         topic = testTopic.copy(id = "0", name = "Headlines"),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         topic = testTopic.copy(id = "1", name = "UI"),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         topic = testTopic.copy(id = "2", name = "Tools"),
-        isFollowed = false
+        isFollowed = false,
     ),
 )

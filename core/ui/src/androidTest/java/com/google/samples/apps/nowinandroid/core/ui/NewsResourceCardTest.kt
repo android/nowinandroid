@@ -40,7 +40,7 @@ class NewsResourceCardTest {
                 userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
             )
 
             dateFormatted = dateFormatted(publishDate = newsWithKnownResourceType.publishDate)
@@ -51,8 +51,8 @@ class NewsResourceCardTest {
                 composeTestRule.activity.getString(
                     R.string.card_meta_data_text,
                     dateFormatted,
-                    newsWithKnownResourceType.type.displayText
-                )
+                    newsWithKnownResourceType.type.displayText,
+                ),
             )
             .assertExists()
     }
@@ -67,7 +67,7 @@ class NewsResourceCardTest {
                 userNewsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
             )
 
             dateFormatted = dateFormatted(publishDate = newsWithUnknownResourceType.publishDate)

@@ -24,20 +24,20 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
  */
 data class FollowableTopic( // TODO consider changing to UserTopic and flattening
     val topic: Topic,
-    val isFollowed: Boolean
+    val isFollowed: Boolean,
 )
 
 val previewFollowableTopics = listOf(
     FollowableTopic(
         previewTopics[0],
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         previewTopics[1],
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         previewTopics[2],
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )

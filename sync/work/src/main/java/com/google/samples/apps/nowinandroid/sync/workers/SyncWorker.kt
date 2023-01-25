@@ -65,8 +65,11 @@ class SyncWorker @AssistedInject constructor(
                 async { newsRepository.sync() },
             ).all { it }
 
-            if (syncedSuccessfully) Result.success()
-            else Result.retry()
+            if (syncedSuccessfully) {
+                Result.success()
+            } else {
+                Result.retry()
+            }
         }
     }
 
@@ -74,7 +77,7 @@ class SyncWorker @AssistedInject constructor(
         niaPreferences.getChangeListVersions()
 
     override suspend fun updateChangeListVersions(
-        update: ChangeListVersions.() -> ChangeListVersions
+        update: ChangeListVersions.() -> ChangeListVersions,
     ) = niaPreferences.updateChangeListVersion(update)
 
     companion object {
