@@ -17,10 +17,12 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewFollowableTopics
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,12 +32,12 @@ class NewsResourceCardTest {
 
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
-        val newsWithKnownResourceType = previewNewsResources[0]
+        val newsWithKnownResourceType = previewUserNewsResources[0]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithKnownResourceType,
+                userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
@@ -57,12 +59,12 @@ class NewsResourceCardTest {
 
     @Test
     fun testMetaDataDisplay_withUnknownResource() {
-        val newsWithUnknownResourceType = previewNewsResources[3]
+        val newsWithUnknownResourceType = previewUserNewsResources[3]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithUnknownResourceType,
+                userNewsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {}
@@ -74,5 +76,24 @@ class NewsResourceCardTest {
         composeTestRule
             .onNodeWithText(dateFormatted)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun testTopicsChipColorBackground_matchesFollowedState() {
+        composeTestRule.setContent {
+            NewsResourceTopics(topics = previewFollowableTopics)
+        }
+
+        for (followableTopic in previewFollowableTopics) {
+            val topicName = followableTopic.topic.name
+            val expectedContentDescription = if (followableTopic.isFollowed) {
+                "$topicName is followed"
+            } else {
+                "$topicName is not followed"
+            }
+            composeTestRule
+                .onNodeWithText(topicName.uppercase())
+                .assertContentDescriptionEquals(expectedContentDescription)
+        }
     }
 }

@@ -77,4 +77,15 @@ class NiaPreferencesDataSourceTest {
         // Then: onboarding should be shown again
         assertFalse(subject.userData.first().shouldHideOnboarding)
     }
+
+    @Test
+    fun shouldUseDynamicColorFalseByDefault() = runTest {
+        assertFalse(subject.userData.first().useDynamicColor)
+    }
+
+    @Test
+    fun userShouldUseDynamicColorIsTrueWhenSet() = runTest {
+        subject.setDynamicColorPreference(true)
+        assertTrue(subject.userData.first().useDynamicColor)
+    }
 }

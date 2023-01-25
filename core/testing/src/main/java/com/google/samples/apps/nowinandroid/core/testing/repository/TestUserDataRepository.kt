@@ -25,11 +25,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-private val emptyUserData = UserData(
+val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
     followedTopics = emptySet(),
     themeBrand = ThemeBrand.DEFAULT,
     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+    useDynamicColor = false,
     shouldHideOnboarding = false
 )
 
@@ -77,6 +78,12 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        currentUserData.let { current ->
+            _userData.tryEmit(current.copy(useDynamicColor = useDynamicColor))
+        }
+    }
+
     override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
@@ -98,4 +105,11 @@ class TestUserDataRepository : UserDataRepository {
      */
     fun getCurrentFollowedTopics(): Set<String>? =
         _userData.replayCache.firstOrNull()?.followedTopics
+
+    /**
+     * A test-only API to allow setting of user data directly.
+     */
+    fun setUserData(userData: UserData) {
+        _userData.tryEmit(userData)
+    }
 }

@@ -39,26 +39,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import com.google.samples.apps.nowinandroid.core.ui.newsResourceCardItems
+import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
@@ -146,7 +144,7 @@ private fun LazyListScope.TopicBody(
         TopicHeader(name, description, imageUrl)
     }
 
-    TopicCards(news, onBookmarkChanged)
+    userNewsResourceCards(news, onBookmarkChanged)
 }
 
 @Composable
@@ -154,10 +152,9 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
     Column(
         modifier = Modifier.padding(horizontal = 24.dp)
     ) {
-        AsyncImage(
-            model = imageUrl,
+        DynamicAsyncImage(
+            imageUrl = imageUrl,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(216.dp)
@@ -174,17 +171,16 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
     }
 }
 
-private fun LazyListScope.TopicCards(
+// TODO: Could/should this be replaced with [LazyGridScope.newsFeed]?
+private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit
 ) {
     when (news) {
         is NewsUiState.Success -> {
-            newsResourceCardItems(
+            userNewsResourceCardItems(
                 items = news.news,
-                newsResourceMapper = { it.newsResource },
-                isBookmarkedMapper = { it.isSaved },
-                onToggleBookmark = { onBookmarkChanged(it.newsResource.id, !it.isSaved) },
+                onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
                 itemModifier = Modifier.padding(24.dp)
             )
         }
@@ -257,12 +253,7 @@ fun TopicScreenPopulated() {
             TopicScreen(
                 topicUiState = TopicUiState.Success(FollowableTopic(previewTopics[0], false)),
                 newsUiState = NewsUiState.Success(
-                    previewNewsResources.mapIndexed { index, newsResource ->
-                        SaveableNewsResource(
-                            newsResource = newsResource,
-                            isSaved = index % 2 == 0,
-                        )
-                    }
+                    previewUserNewsResources
                 ),
                 onBackClick = {},
                 onFollowClick = {},

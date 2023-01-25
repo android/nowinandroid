@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.designsystem.theme
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
 /**
- * A [NewsResource] with the additional information for whether it is saved.
+ * A class to model background color and tonal elevation values for Now in Android.
  */
-data class SaveableNewsResource(
-    val newsResource: NewsResource,
-    val isSaved: Boolean,
+@Immutable
+data class TintTheme(
+    val iconTint: Color? = null,
 )
+
+/**
+ * A composition local for [TintTheme].
+ */
+val LocalTintTheme = staticCompositionLocalOf { TintTheme() }

@@ -60,7 +60,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -76,15 +75,14 @@ import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -204,8 +202,7 @@ internal fun ForYouScreen(
         ) {
             NiaOverlayLoadingWheel(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .testTag("forYou:loadingWheel"),
+                    .align(Alignment.Center),
                 contentDesc = loadingContentDescription
             )
         }
@@ -282,7 +279,9 @@ private fun TopicSelection(
     modifier: Modifier = Modifier
 ) = trace("TopicSelection") {
     val lazyGridState = rememberLazyGridState()
-    TrackScrollJank(scrollableState = lazyGridState, stateName = "forYou:TopicSelection")
+    val topicSelectionTestTag = "forYou:topicSelection"
+
+    TrackScrollJank(scrollableState = lazyGridState, stateName = topicSelectionTestTag)
 
     LazyHorizontalGrid(
         state = lazyGridState,
@@ -302,8 +301,12 @@ private fun TopicSelection(
             // The maximum of these two bounds is therefore a valid upper bound in all cases.
             .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
             .fillMaxWidth()
+            .testTag(topicSelectionTestTag)
     ) {
-        items(onboardingUiState.topics) {
+        items(
+            items = onboardingUiState.topics,
+            key = { it.topic.id }
+        ) {
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
@@ -375,12 +378,11 @@ fun TopicIcon(
     imageUrl: String,
     modifier: Modifier = Modifier
 ) {
-    AsyncImage(
+    DynamicAsyncImage(
         // TODO b/228077205, show loading image visual instead of static placeholder
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
-        model = imageUrl,
+        imageUrl = imageUrl,
         contentDescription = null, // decorative
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         modifier = modifier
             .padding(10.dp)
             .size(32.dp)
@@ -396,9 +398,7 @@ fun ForYouScreenPopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -417,9 +417,7 @@ fun ForYouScreenOfflinePopulatedFeed() {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -440,9 +438,7 @@ fun ForYouScreenTopicSelection() {
                     topics = previewTopics.map { FollowableTopic(it, false) },
                 ),
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -478,9 +474,7 @@ fun ForYouScreenPopulatedAndLoading() {
                 isSyncing = true,
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Success(
-                    feed = previewNewsResources.map {
-                        SaveableNewsResource(it, false)
-                    }
+                    feed = previewUserNewsResources
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
