@@ -303,7 +303,10 @@ private fun TopicSelection(
             .fillMaxWidth()
             .testTag(topicSelectionTestTag)
     ) {
-        items(onboardingUiState.topics) {
+        items(
+            items = onboardingUiState.topics,
+            key = { it.topic.id }
+        ) {
             SingleTopicButton(
                 name = it.topic.name,
                 topicId = it.topic.id,
