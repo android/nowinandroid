@@ -158,7 +158,7 @@ fun BackgroundDefault() {
 @ThemePreviews
 @Composable
 fun BackgroundDynamic() {
-    NiaTheme {
+    NiaTheme(disableDynamicTheming = false) {
         NiaBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -182,7 +182,7 @@ fun GradientBackgroundDefault() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDynamic() {
-    NiaTheme {
+    NiaTheme(disableDynamicTheming = false) {
         NiaGradientBackground(Modifier.size(100.dp), content = {})
     }
 }

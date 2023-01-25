@@ -72,6 +72,7 @@ class UserNewsResourceTest {
             followedTopics = setOf("T1"),
             themeBrand = DEFAULT,
             darkThemeConfig = FOLLOW_SYSTEM,
+            useDynamicColor = false,
             shouldHideOnboarding = true
         )
 

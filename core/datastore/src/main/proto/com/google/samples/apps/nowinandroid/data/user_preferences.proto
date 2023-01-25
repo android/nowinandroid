@@ -45,4 +45,6 @@ message UserPreferences {
     DarkThemeConfigProto dark_theme_config = 17;
 
     bool should_hide_onboarding = 18;
+
+    bool use_dynamic_color = 19;
 }
