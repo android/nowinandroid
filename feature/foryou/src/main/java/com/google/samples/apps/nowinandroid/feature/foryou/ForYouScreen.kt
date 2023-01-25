@@ -60,7 +60,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -76,7 +75,7 @@ import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
@@ -376,12 +375,11 @@ fun TopicIcon(
     imageUrl: String,
     modifier: Modifier = Modifier
 ) {
-    AsyncImage(
+    DynamicAsyncImage(
         // TODO b/228077205, show loading image visual instead of static placeholder
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
-        model = imageUrl,
+        imageUrl = imageUrl,
         contentDescription = null, // decorative
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         modifier = modifier
             .padding(10.dp)
             .size(32.dp)
