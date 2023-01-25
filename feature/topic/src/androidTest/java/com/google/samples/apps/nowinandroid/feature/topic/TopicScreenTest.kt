@@ -120,7 +120,7 @@ class TopicScreenTest {
             TopicScreen(
                 topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Success(
-                    sampleUserNewsResources
+                    sampleUserNewsResources,
                 ),
                 onBackClick = { },
                 onFollowClick = { },
@@ -149,9 +149,9 @@ private val testTopics = listOf(
             shortDescription = "",
             longDescription = TOPIC_DESC,
             url = "",
-            imageUrl = ""
+            imageUrl = "",
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -160,9 +160,9 @@ private val testTopics = listOf(
             shortDescription = "",
             longDescription = TOPIC_DESC,
             url = "",
-            imageUrl = ""
+            imageUrl = "",
         ),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         Topic(
@@ -171,10 +171,10 @@ private val testTopics = listOf(
             shortDescription = "",
             longDescription = TOPIC_DESC,
             url = "",
-            imageUrl = ""
+            imageUrl = "",
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val sampleUserNewsResources = listOf(
@@ -198,10 +198,10 @@ private val sampleUserNewsResources = listOf(
                     shortDescription = "",
                     longDescription = TOPIC_DESC,
                     url = "",
-                    imageUrl = ""
-                )
-            )
+                    imageUrl = "",
+                ),
+            ),
         ),
-        userData = emptyUserData.copy(bookmarkedNewsResources = setOf("1"))
-    )
+        userData = emptyUserData.copy(bookmarkedNewsResources = setOf("1")),
+    ),
 )

@@ -49,25 +49,25 @@ fun NiaViewToggleButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     compactText: @Composable () -> Unit,
-    expandedText: @Composable () -> Unit
+    expandedText: @Composable () -> Unit,
 ) {
     TextButton(
         onClick = { onExpandedChange(!expanded) },
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
+            contentColor = MaterialTheme.colorScheme.onBackground,
         ),
-        contentPadding = NiaViewToggleDefaults.ViewToggleButtonContentPadding
+        contentPadding = NiaViewToggleDefaults.ViewToggleButtonContentPadding,
     ) {
         NiaViewToggleButtonContent(
             text = if (expanded) expandedText else compactText,
             trailingIcon = {
                 Icon(
                     imageVector = if (expanded) NiaIcons.ViewDay else NiaIcons.ShortText,
-                    contentDescription = null
+                    contentDescription = null,
                 )
-            }
+            },
         )
     }
 }
@@ -91,8 +91,8 @@ private fun NiaViewToggleButtonContent(
                     ButtonDefaults.IconSpacing
                 } else {
                     0.dp
-                }
-            )
+                },
+            ),
     ) {
         ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
             text()
@@ -116,6 +116,6 @@ object NiaViewToggleDefaults {
             start = 16.dp,
             top = 8.dp,
             end = 12.dp,
-            bottom = 8.dp
+            bottom = 8.dp,
         )
 }

@@ -41,15 +41,14 @@ fun NiaTopicTag(
     text: @Composable () -> Unit,
     followText: @Composable () -> Unit = { Text(stringResource(R.string.follow)) },
     unFollowText: @Composable () -> Unit = { Text(stringResource(R.string.unfollow)) },
-    browseText: @Composable () -> Unit = { Text(stringResource(R.string.browse_topic)) }
+    browseText: @Composable () -> Unit = { Text(stringResource(R.string.browse_topic)) },
 ) {
-
     Box(modifier = modifier) {
         val containerColor = if (followed) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(
-                alpha = NiaTagDefaults.UnfollowedTopicTagContainerAlpha
+                alpha = NiaTagDefaults.UnfollowedTopicTagContainerAlpha,
             )
         }
         TextButton(
@@ -59,9 +58,9 @@ fun NiaTopicTag(
                 containerColor = containerColor,
                 contentColor = contentColorFor(backgroundColor = containerColor),
                 disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaTagDefaults.DisabledTopicTagContainerAlpha
-                )
-            )
+                    alpha = NiaTagDefaults.DisabledTopicTagContainerAlpha,
+                ),
+            ),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 text()
@@ -84,7 +83,7 @@ fun NiaTopicTag(
                     UNFOLLOW -> unFollowText()
                     BROWSE -> browseText()
                 }
-            }
+            },
         )
     }
 }
@@ -94,6 +93,7 @@ fun NiaTopicTag(
  */
 object NiaTagDefaults {
     const val UnfollowedTopicTagContainerAlpha = 0.5f
+
     // TODO: File bug
     // Button disabled container alpha value not exposed by ButtonDefaults
     const val DisabledTopicTagContainerAlpha = 0.12f

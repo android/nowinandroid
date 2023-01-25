@@ -56,7 +56,7 @@ fun LazyListScope.userNewsResourceCardItems(
                     else -> onItemClick(userNewsResource)
                 }
             },
-            modifier = itemModifier
+            modifier = itemModifier,
         )
     },
 )

@@ -39,7 +39,7 @@ interface NewsResourceDao {
         value = """
             SELECT * FROM news_resources
             ORDER BY publish_date DESC
-    """
+    """,
     )
     fun getNewsResources(): Flow<List<PopulatedNewsResource>>
 
@@ -53,7 +53,7 @@ interface NewsResourceDao {
                 WHERE topic_id IN (:filterTopicIds)
             )
             ORDER BY publish_date DESC
-    """
+    """,
     )
     fun getNewsResources(
         filterTopicIds: Set<String> = emptySet(),
@@ -79,7 +79,7 @@ interface NewsResourceDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreTopicCrossRefEntities(
-        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>
+        newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
     )
 
     /**
@@ -89,7 +89,7 @@ interface NewsResourceDao {
         value = """
             DELETE FROM news_resources
             WHERE id in (:ids)
-        """
+        """,
     )
     suspend fun deleteNewsResources(ids: List<String>)
 }

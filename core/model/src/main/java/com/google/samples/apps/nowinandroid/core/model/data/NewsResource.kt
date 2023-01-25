@@ -37,7 +37,7 @@ data class NewsResource(
     val headerImageUrl: String?,
     val publishDate: Instant,
     val type: NewsResourceType,
-    val topics: List<Topic>
+    val topics: List<Topic>,
 )
 
 val previewNewsResources = listOf(
@@ -54,10 +54,10 @@ val previewNewsResources = listOf(
             hour = 23,
             minute = 0,
             second = 0,
-            nanosecond = 0
+            nanosecond = 0,
         ).toInstant(TimeZone.UTC),
         type = Codelab,
-        topics = listOf(previewTopics[1])
+        topics = listOf(previewTopics[1]),
     ),
     NewsResource(
         id = "2",
@@ -70,7 +70,7 @@ val previewNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        topics = listOf(previewTopics[0], previewTopics[1])
+        topics = listOf(previewTopics[0], previewTopics[1]),
     ),
     NewsResource(
         id = "3",
@@ -83,7 +83,7 @@ val previewNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
-        topics = listOf(previewTopics[2])
+        topics = listOf(previewTopics[2]),
     ),
     NewsResource(
         id = "4",
@@ -94,6 +94,6 @@ val previewNewsResources = listOf(
         headerImageUrl = "",
         publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
         type = Unknown,
-        topics = listOf(previewTopics[2])
-    )
+        topics = listOf(previewTopics[2]),
+    ),
 )

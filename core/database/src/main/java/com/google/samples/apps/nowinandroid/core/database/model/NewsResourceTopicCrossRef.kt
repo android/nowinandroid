@@ -32,13 +32,13 @@ import androidx.room.Index
             entity = NewsResourceEntity::class,
             parentColumns = ["id"],
             childColumns = ["news_resource_id"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         ),
         ForeignKey(
             entity = TopicEntity::class,
             parentColumns = ["id"],
             childColumns = ["topic_id"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         ),
     ],
     indices = [

@@ -30,14 +30,14 @@ object IntToStringIdsMigration : DataMigration<UserPreferences> {
             // Migrate topic ids
             deprecatedFollowedTopicIds.clear()
             deprecatedFollowedTopicIds.addAll(
-                currentData.deprecatedIntFollowedTopicIdsList.map(Int::toString)
+                currentData.deprecatedIntFollowedTopicIdsList.map(Int::toString),
             )
             deprecatedIntFollowedTopicIds.clear()
 
             // Migrate author ids
             deprecatedFollowedAuthorIds.clear()
             deprecatedFollowedAuthorIds.addAll(
-                currentData.deprecatedIntFollowedAuthorIdsList.map(Int::toString)
+                currentData.deprecatedIntFollowedAuthorIdsList.map(Int::toString),
             )
             deprecatedIntFollowedAuthorIds.clear()
 

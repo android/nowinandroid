@@ -43,7 +43,7 @@ fun NiaIconToggleButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: @Composable () -> Unit,
-    checkedIcon: @Composable () -> Unit = icon
+    checkedIcon: @Composable () -> Unit = icon,
 ) {
     // TODO: File bug
     // Can't use regular IconToggleButton as it doesn't include a shape (appears square)
@@ -57,12 +57,12 @@ fun NiaIconToggleButton(
             checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             disabledContainerColor = if (checked) {
                 MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = NiaIconButtonDefaults.DisabledIconButtonContainerAlpha
+                    alpha = NiaIconButtonDefaults.DisabledIconButtonContainerAlpha,
                 )
             } else {
                 Color.Transparent
-            }
-        )
+            },
+        ),
     ) {
         if (checked) checkedIcon() else icon()
     }

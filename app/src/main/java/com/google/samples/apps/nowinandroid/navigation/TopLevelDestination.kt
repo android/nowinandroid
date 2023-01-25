@@ -34,24 +34,24 @@ enum class TopLevelDestination(
     val selectedIcon: Icon,
     val unselectedIcon: Icon,
     val iconTextId: Int,
-    val titleTextId: Int
+    val titleTextId: Int,
 ) {
     FOR_YOU(
         selectedIcon = DrawableResourceIcon(NiaIcons.Upcoming),
         unselectedIcon = DrawableResourceIcon(NiaIcons.UpcomingBorder),
         iconTextId = forYouR.string.for_you,
-        titleTextId = R.string.app_name
+        titleTextId = R.string.app_name,
     ),
     BOOKMARKS(
         selectedIcon = DrawableResourceIcon(NiaIcons.Bookmarks),
         unselectedIcon = DrawableResourceIcon(NiaIcons.BookmarksBorder),
         iconTextId = bookmarksR.string.saved,
-        titleTextId = bookmarksR.string.saved
+        titleTextId = bookmarksR.string.saved,
     ),
     INTERESTS(
         selectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
         unselectedIcon = ImageVectorIcon(NiaIcons.Grid3x3),
         iconTextId = interestsR.string.interests,
-        titleTextId = interestsR.string.interests
-    )
+        titleTextId = interestsR.string.interests,
+    ),
 }
