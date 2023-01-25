@@ -61,7 +61,7 @@ fun <T> NiaDropdownMenuButton(
     text: @Composable () -> Unit,
     itemText: @Composable (item: T) -> Unit,
     itemLeadingIcon: @Composable ((item: T) -> Unit)? = null,
-    itemTrailingIcon: @Composable ((item: T) -> Unit)? = null
+    itemTrailingIcon: @Composable ((item: T) -> Unit)? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
@@ -69,7 +69,7 @@ fun <T> NiaDropdownMenuButton(
             onClick = { expanded = true },
             enabled = enabled,
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.onBackground
+                contentColor = MaterialTheme.colorScheme.onBackground,
             ),
             border = BorderStroke(
                 width = NiaDropdownMenuDefaults.DropdownMenuButtonBorderWidth,
@@ -77,11 +77,11 @@ fun <T> NiaDropdownMenuButton(
                     MaterialTheme.colorScheme.outline
                 } else {
                     MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = NiaDropdownMenuDefaults.DisabledDropdownMenuButtonBorderAlpha
+                        alpha = NiaDropdownMenuDefaults.DisabledDropdownMenuButtonBorderAlpha,
                     )
-                }
+                },
             ),
-            contentPadding = NiaDropdownMenuDefaults.DropdownMenuButtonContentPadding
+            contentPadding = NiaDropdownMenuDefaults.DropdownMenuButtonContentPadding,
         ) {
             NiaDropdownMenuButtonContent(
                 text = text,
@@ -92,9 +92,9 @@ fun <T> NiaDropdownMenuButton(
                         } else {
                             NiaIcons.ArrowDropDown
                         },
-                        contentDescription = null
+                        contentDescription = null,
                     )
-                }
+                },
             )
         }
         NiaDropdownMenu(
@@ -105,7 +105,7 @@ fun <T> NiaDropdownMenuButton(
             dismissOnItemClick = dismissOnItemClick,
             itemText = itemText,
             itemLeadingIcon = itemLeadingIcon,
-            itemTrailingIcon = itemTrailingIcon
+            itemTrailingIcon = itemTrailingIcon,
         )
     }
 }
@@ -129,8 +129,8 @@ private fun NiaDropdownMenuButtonContent(
                     ButtonDefaults.IconSpacing
                 } else {
                     0.dp
-                }
-            )
+                },
+            ),
     ) {
         ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
             text()
@@ -166,11 +166,11 @@ fun <T> NiaDropdownMenu(
     dismissOnItemClick: Boolean = true,
     itemText: @Composable (item: T) -> Unit,
     itemLeadingIcon: @Composable ((item: T) -> Unit)? = null,
-    itemTrailingIcon: @Composable ((item: T) -> Unit)? = null
+    itemTrailingIcon: @Composable ((item: T) -> Unit)? = null,
 ) {
     DropdownMenu(
         expanded = expanded,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     ) {
         items.forEach { item ->
             DropdownMenuItem(
@@ -188,7 +188,7 @@ fun <T> NiaDropdownMenu(
                     { itemTrailingIcon(item) }
                 } else {
                     null
-                }
+                },
             )
         }
     }
@@ -201,9 +201,11 @@ object NiaDropdownMenuDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default
     const val DisabledDropdownMenuButtonBorderAlpha = 0.12f
+
     // TODO: File bug
     // OutlinedButton default border width isn't exposed via ButtonDefaults
     val DropdownMenuButtonBorderWidth = 1.dp
+
     // TODO: File bug
     // Various default button padding values aren't exposed via ButtonDefaults
     val DropdownMenuButtonContentPadding =
@@ -211,6 +213,6 @@ object NiaDropdownMenuDefaults {
             start = 24.dp,
             top = 8.dp,
             end = 16.dp,
-            bottom = 8.dp
+            bottom = 8.dp,
         )
 }

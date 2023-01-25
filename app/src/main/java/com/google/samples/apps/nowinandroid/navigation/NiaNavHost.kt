@@ -39,7 +39,7 @@ fun NiaNavHost(
     navController: NavHostController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = forYouNavigationRoute
+    startDestination: String = forYouNavigationRoute,
 ) {
     NavHost(
         navController = navController,
@@ -54,7 +54,7 @@ fun NiaNavHost(
             },
             nestedGraphs = {
                 topicScreen(onBackClick)
-            }
+            },
         )
     }
 }

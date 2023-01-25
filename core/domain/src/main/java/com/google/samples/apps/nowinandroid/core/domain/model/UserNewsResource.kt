@@ -42,7 +42,7 @@ data class UserNewsResource internal constructor(
     val publishDate: Instant,
     val type: NewsResourceType,
     val followableTopics: List<FollowableTopic>,
-    val isSaved: Boolean
+    val isSaved: Boolean,
 ) {
     constructor(newsResource: NewsResource, userData: UserData) : this(
         id = newsResource.id,
@@ -55,10 +55,10 @@ data class UserNewsResource internal constructor(
         followableTopics = newsResource.topics.map { topic ->
             FollowableTopic(
                 topic = topic,
-                isFollowed = userData.followedTopics.contains(topic.id)
+                isFollowed = userData.followedTopics.contains(topic.id),
             )
         },
-        isSaved = userData.bookmarkedNewsResources.contains(newsResource.id)
+        isSaved = userData.bookmarkedNewsResources.contains(newsResource.id),
     )
 }
 
@@ -80,11 +80,11 @@ val previewUserNewsResources = listOf(
             hour = 23,
             minute = 0,
             second = 0,
-            nanosecond = 0
+            nanosecond = 0,
         ).toInstant(TimeZone.UTC),
         type = Codelab,
         followableTopics = listOf(previewFollowableTopics[1]),
-        isSaved = true
+        isSaved = true,
     ),
     UserNewsResource(
         id = "2",
@@ -98,7 +98,7 @@ val previewUserNewsResources = listOf(
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
         followableTopics = listOf(previewFollowableTopics[0], previewFollowableTopics[1]),
-        isSaved = false
+        isSaved = false,
     ),
     UserNewsResource(
         id = "3",
@@ -112,7 +112,7 @@ val previewUserNewsResources = listOf(
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
         followableTopics = listOf(previewFollowableTopics[2]),
-        isSaved = false
+        isSaved = false,
     ),
     UserNewsResource(
         id = "4",
@@ -124,6 +124,6 @@ val previewUserNewsResources = listOf(
         publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
         type = Unknown,
         followableTopics = listOf(previewFollowableTopics[2]),
-        isSaved = true
-    )
+        isSaved = true,
+    ),
 )

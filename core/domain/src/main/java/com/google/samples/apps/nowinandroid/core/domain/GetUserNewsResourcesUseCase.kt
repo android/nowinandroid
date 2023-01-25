@@ -22,10 +22,10 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNot
+import javax.inject.Inject
 
 /**
  * A use case responsible for obtaining news resources with their associated bookmarked (also known
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.filterNot
  */
 class GetUserNewsResourcesUseCase @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
 ) {
     /**
      * Returns a list of UserNewsResources which match the supplied set of topic ids.
@@ -42,7 +42,7 @@ class GetUserNewsResourcesUseCase @Inject constructor(
      * this is empty the list of news resources will not be filtered.
      */
     operator fun invoke(
-        filterTopicIds: Set<String> = emptySet()
+        filterTopicIds: Set<String> = emptySet(),
     ): Flow<List<UserNewsResource>> =
         if (filterTopicIds.isEmpty()) {
             newsRepository.getNewsResources()
@@ -52,7 +52,7 @@ class GetUserNewsResourcesUseCase @Inject constructor(
 }
 
 private fun Flow<List<NewsResource>>.mapToUserNewsResources(
-    userDataStream: Flow<UserData>
+    userDataStream: Flow<UserData>,
 ): Flow<List<UserNewsResource>> =
     filterNot { it.isEmpty() }
         .combine(userDataStream) { newsResources, userData ->

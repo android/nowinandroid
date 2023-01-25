@@ -29,10 +29,6 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
-import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -40,6 +36,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
+import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.
@@ -57,7 +57,8 @@ class NavigationTest {
      * Create a temporary folder used to create a Data Store file. This guarantees that
      * the file is removed in between each test, preventing a crash.
      */
-    @BindValue @get:Rule(order = 1)
+    @BindValue
+    @get:Rule(order = 1)
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     /**
@@ -165,7 +166,6 @@ class NavigationTest {
     @Test
     fun topLevelDestinations_showTopBarWithTitle() {
         composeTestRule.apply {
-
             // Verify that the top bar contains the app name on the first screen.
             onNodeWithText(appName).assertExists()
 
@@ -207,7 +207,6 @@ class NavigationTest {
     @Test
     fun whenSettingsDialogDismissed_previousScreenIsDisplayed() {
         composeTestRule.apply {
-
             // Navigate to the saved screen, open the settings dialog, then close it.
             onNodeWithText(saved).performClick()
             onNodeWithContentDescription(settings).performClick()

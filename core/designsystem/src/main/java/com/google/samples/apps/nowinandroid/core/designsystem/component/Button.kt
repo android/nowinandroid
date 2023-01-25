@@ -48,17 +48,17 @@ fun NiaButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onBackground
+            containerColor = MaterialTheme.colorScheme.onBackground,
         ),
         contentPadding = contentPadding,
-        content = content
+        content = content,
     )
 }
 
@@ -78,7 +78,7 @@ fun NiaButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     NiaButton(
         onClick = onClick,
@@ -88,11 +88,11 @@ fun NiaButton(
             ButtonDefaults.ButtonWithIconContentPadding
         } else {
             ButtonDefaults.ContentPadding
-        }
+        },
     ) {
         NiaButtonContent(
             text = text,
-            leadingIcon = leadingIcon
+            leadingIcon = leadingIcon,
         )
     }
 }
@@ -114,14 +114,14 @@ fun NiaOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
+            contentColor = MaterialTheme.colorScheme.onBackground,
         ),
         border = BorderStroke(
             width = NiaButtonDefaults.OutlinedButtonBorderWidth,
@@ -129,12 +129,12 @@ fun NiaOutlinedButton(
                 MaterialTheme.colorScheme.outline
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaButtonDefaults.DisabledOutlinedButtonBorderAlpha
+                    alpha = NiaButtonDefaults.DisabledOutlinedButtonBorderAlpha,
                 )
-            }
+            },
         ),
         contentPadding = contentPadding,
-        content = content
+        content = content,
     )
 }
 
@@ -154,7 +154,7 @@ fun NiaOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     NiaOutlinedButton(
         onClick = onClick,
@@ -164,11 +164,11 @@ fun NiaOutlinedButton(
             ButtonDefaults.ButtonWithIconContentPadding
         } else {
             ButtonDefaults.ContentPadding
-        }
+        },
     ) {
         NiaButtonContent(
             text = text,
-            leadingIcon = leadingIcon
+            leadingIcon = leadingIcon,
         )
     }
 }
@@ -187,16 +187,16 @@ fun NiaTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     TextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
+            contentColor = MaterialTheme.colorScheme.onBackground,
         ),
-        content = content
+        content = content,
     )
 }
 
@@ -216,16 +216,16 @@ fun NiaTextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     NiaTextButton(
         onClick = onClick,
         modifier = modifier,
-        enabled = enabled
+        enabled = enabled,
     ) {
         NiaButtonContent(
             text = text,
-            leadingIcon = leadingIcon
+            leadingIcon = leadingIcon,
         )
     }
 }
@@ -239,7 +239,7 @@ fun NiaTextButton(
 @Composable
 private fun NiaButtonContent(
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     if (leadingIcon != null) {
         Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
@@ -253,8 +253,8 @@ private fun NiaButtonContent(
                     ButtonDefaults.IconSpacing
                 } else {
                     0.dp
-                }
-            )
+                },
+            ),
     ) {
         text()
     }
@@ -267,6 +267,7 @@ object NiaButtonDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default
     const val DisabledOutlinedButtonBorderAlpha = 0.12f
+
     // TODO: File bug
     // OutlinedButton default border width isn't exposed via ButtonDefaults
     val OutlinedButtonBorderWidth = 1.dp

@@ -37,8 +37,8 @@ class TestTopicDao : TopicDao {
                 longDescription = "long description",
                 url = "URL",
                 imageUrl = "image URL",
-            )
-        )
+            ),
+        ),
     )
 
     override fun getTopicEntity(topicId: String): Flow<TopicEntity> {

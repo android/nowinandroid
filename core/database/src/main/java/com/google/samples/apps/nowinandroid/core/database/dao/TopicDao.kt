@@ -34,7 +34,7 @@ interface TopicDao {
         value = """
         SELECT * FROM topics
         WHERE id = :topicId
-    """
+    """,
     )
     fun getTopicEntity(topicId: String): Flow<TopicEntity>
 
@@ -45,7 +45,7 @@ interface TopicDao {
         value = """
         SELECT * FROM topics
         WHERE id IN (:ids)
-    """
+    """,
     )
     fun getTopicEntities(ids: Set<String>): Flow<List<TopicEntity>>
 
@@ -74,7 +74,7 @@ interface TopicDao {
         value = """
             DELETE FROM topics
             WHERE id in (:ids)
-        """
+        """,
     )
     suspend fun deleteTopics(ids: List<String>)
 }

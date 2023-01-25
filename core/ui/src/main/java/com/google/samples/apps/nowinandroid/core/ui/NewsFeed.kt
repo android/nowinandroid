@@ -46,7 +46,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsRes
  */
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -65,9 +65,9 @@ fun LazyGridScope.newsFeed(
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
                             userNewsResource.id,
-                            !userNewsResource.isSaved
+                            !userNewsResource.isSaved,
                         )
-                    }
+                    },
                 )
             }
         }
@@ -100,7 +100,7 @@ sealed interface NewsFeedUiState {
         /**
          * The list of news resources contained in this feed.
          */
-        val feed: List<UserNewsResource>
+        val feed: List<UserNewsResource>,
     ) : NewsFeedUiState
 }
 
@@ -111,7 +111,7 @@ private fun NewsFeedLoadingPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
     }
@@ -125,9 +125,9 @@ private fun NewsFeedContentPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources
+                    previewUserNewsResources,
                 ),
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
     }
