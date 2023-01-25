@@ -45,6 +45,9 @@ class OfflineFirstUserDataRepository @Inject constructor(
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) =
         niaPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
 
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) =
+        niaPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
+
     override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) =
         niaPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
 }

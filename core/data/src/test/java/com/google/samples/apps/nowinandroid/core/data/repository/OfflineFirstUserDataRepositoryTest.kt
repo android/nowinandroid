@@ -60,6 +60,7 @@ class OfflineFirstUserDataRepositoryTest {
                     followedTopics = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                    useDynamicColor = false,
                     shouldHideOnboarding = false
                 ),
                 subject.userData.first()
@@ -166,6 +167,26 @@ class OfflineFirstUserDataRepositoryTest {
                 niaPreferencesDataSource
                     .userData
                     .map { it.themeBrand }
+                    .first()
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_dynamic_color_delegates_to_nia_preferences() =
+        runTest {
+            subject.setDynamicColorPreference(true)
+
+            assertEquals(
+                true,
+                subject.userData
+                    .map { it.useDynamicColor }
+                    .first()
+            )
+            assertEquals(
+                true,
+                niaPreferencesDataSource
+                    .userData
+                    .map { it.useDynamicColor }
                     .first()
             )
         }

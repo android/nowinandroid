@@ -63,7 +63,8 @@ class SettingsViewModelTest {
             Success(
                 UserEditableSettings(
                     brand = ANDROID,
-                    darkThemeConfig = DARK
+                    darkThemeConfig = DARK,
+                    useDynamicColor = false
                 )
             ),
             viewModel.settingsUiState.value
