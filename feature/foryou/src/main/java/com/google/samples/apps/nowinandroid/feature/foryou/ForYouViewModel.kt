@@ -68,13 +68,15 @@ class ForYouViewModel @Inject constructor(
                 } else {
                     getSaveableNewsResources(
                         filterTopicIds = userData.followedTopics,
-                    ).mapToFeedState()
+                    )
+                        .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
                 }
             }
             // Flatten the feed flows.
             // As the selected topics and topic state changes, this will cancel the old feed
             // monitoring and start the new one.
             .flatMapLatest { it }
+            .onStart { emit(NewsFeedUiState.Loading) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -116,7 +118,3 @@ class ForYouViewModel @Inject constructor(
         }
     }
 }
-
-private fun Flow<List<UserNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
-    map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
-        .onStart { emit(NewsFeedUiState.Loading) }
