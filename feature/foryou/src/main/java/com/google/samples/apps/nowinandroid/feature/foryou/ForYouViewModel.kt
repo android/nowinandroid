@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -68,7 +67,8 @@ class ForYouViewModel @Inject constructor(
                 } else {
                     getSaveableNewsResources(
                         filterTopicIds = userData.followedTopics,
-                    ).mapToFeedState()
+                    )
+                        .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
                 }
             }
             // Flatten the feed flows.
@@ -116,7 +116,3 @@ class ForYouViewModel @Inject constructor(
         }
     }
 }
-
-private fun Flow<List<UserNewsResource>>.mapToFeedState(): Flow<NewsFeedUiState> =
-    map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
-        .onStart { emit(NewsFeedUiState.Loading) }
