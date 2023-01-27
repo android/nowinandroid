@@ -60,16 +60,30 @@ class GetFollowedUserNewsResourcesUseCase @Inject constructor(
     val getUserNewsResources: GetUserNewsResourcesUseCase,
 ) {
     /**
-     * Returns a list of UserNewsResources which the user is following
+     * Returns a list of UserNewsResources for topics which the user is following
      */
     operator fun invoke(): Flow<List<UserNewsResource>> =
-        userDataRepository.userData.map { userData ->
-            if (shouldShowEmptyFeed(userData)) {
-                null
-            } else {
-                userData.followedTopics
+
+        /**
+         * This sequence of flow transformation functions does the following:
+         *
+         * - map: maps the user data into a set of followed topic IDs or null if we should return
+         * an empty list
+         * - distinctUntilChanged: will only emit a set of followed topic IDs if it's changed. This
+         * avoids calling potentially expensive operations (like setting up a new flow) when nothing
+         * has changed.
+         * - flatMapLatest: getUserNewsResources returns a flow, so we end up with a flow inside a
+         * flow. flatMapLatest solves this and cancels any previous flows created by
+         * getUserNewsResources. 
+         */
+        userDataRepository.userData
+            .map { userData ->
+                if (shouldShowEmptyFeed(userData)) {
+                    null
+                } else {
+                    userData.followedTopics
+                }
             }
-        }
             .distinctUntilChanged()
             .flatMapLatest { followedTopics ->
                 if (followedTopics == null) {
