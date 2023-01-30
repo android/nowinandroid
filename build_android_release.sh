@@ -33,9 +33,12 @@ cp $DIR/../nowinandroid-prebuilts/google-services.json $DIR/app
 cd $DIR
 
 # Build
-GRADLE_PARAMS=" --stacktrace -Puse-google-services"
+GRADLE_PARAMS=" --stacktrace"
 $DIR/gradlew :app:clean :app:assemble ${GRADLE_PARAMS}
 BUILD_RESULT=$?
+
+GRADLE_RELEASE_PARAMS="$GRADLE_PARAMS -Puse-google-services"
+$DIR/gradlew :app:assembleDemoRelease :app:assembleProdRelease ${GRADLE_RELEASE_PARAMS}
 
 # Demo debug
 cp $APP_OUT/apk/demo/debug/app-demo-debug.apk $DIST_DIR
