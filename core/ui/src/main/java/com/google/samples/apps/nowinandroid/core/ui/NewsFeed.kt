@@ -35,10 +35,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 
 /**
  * An extension on [LazyListScope] defining a feed with news resources.
@@ -120,13 +120,14 @@ private fun NewsFeedLoadingPreview() {
 @Preview
 @Preview(device = Devices.TABLET)
 @Composable
-private fun NewsFeedContentPreview() {
+private fun NewsFeedContentPreview(
+    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+    userNewsResources: List<UserNewsResource>,
+) {
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
-                feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources,
-                ),
+                feedState = NewsFeedUiState.Success(userNewsResources),
                 onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
