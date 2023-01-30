@@ -42,7 +42,7 @@ import javax.inject.Inject
 class ForYouViewModel @Inject constructor(
     syncStatusMonitor: SyncStatusMonitor,
     private val userDataRepository: UserDataRepository,
-    private val getUserNewsResources: GetUserNewsResourcesUseCase,
+    getUserNewsResources: GetUserNewsResourcesUseCase,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
@@ -56,13 +56,14 @@ class ForYouViewModel @Inject constructor(
             initialValue = false,
         )
 
-    val feedState: StateFlow<NewsFeedUiState> = getFollowedUserNewsResources()
-        .map(NewsFeedUiState::Success)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsFeedUiState.Loading,
-        )
+    val feedState: StateFlow<NewsFeedUiState> =
+        userDataRepository.getFollowedUserNewsResources(getUserNewsResources)
+            .map(NewsFeedUiState::Success)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = NewsFeedUiState.Loading,
+            )
 
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(
@@ -98,50 +99,30 @@ class ForYouViewModel @Inject constructor(
             userDataRepository.setShouldHideOnboarding(true)
         }
     }
-
-    /**
-     * This sequence of flow transformation functions does the following:
-     *
-     * - map: maps the user data into a set of followed topic IDs or null if we should return
-     * an empty list
-     * - distinctUntilChanged: will only emit a set of followed topic IDs if it's changed. This
-     * avoids calling potentially expensive operations (like setting up a new flow) when nothing
-     * has changed.
-     * - flatMapLatest: getUserNewsResources returns a flow, so we have a flow inside a
-     * flow. flatMapLatest moves the inner flow (the one we want to return) to the outer flow
-     * and cancels any previous flows created by getUserNewsResources.
-     */
-    private fun getFollowedUserNewsResources(): Flow<List<UserNewsResource>> =
-        userDataRepository.userData
-            .map { userData ->
-                if (userData.shouldShowEmptyFeed()) {
-                    null
-                } else {
-                    userData.followedTopics
-                }
-            }
-            .distinctUntilChanged()
-            .flatMapLatest { followedTopics ->
-                if (followedTopics == null) {
-                    flowOf(emptyList())
-                } else {
-                    getUserNewsResources(filterTopicIds = followedTopics)
-                }
-            }
 }
 
-// Alternative approach (not currently being called)
-private fun Flow<UserData>.getFollowedUserNewsResources(
+/**
+ * Obtain a flow of user news resources whose topics match those the user is following.
+ *
+ * getUserNewsResources: The `UseCase` used to obtain the flow of user news resources.
+ */
+private fun UserDataRepository.getFollowedUserNewsResources(
     getUserNewsResources: GetUserNewsResourcesUseCase,
-): Flow<List<UserNewsResource>> =
-    map { userData ->
+): Flow<List<UserNewsResource>> = userData
+    // Map the user data into a set of followed topic IDs or null if we should return an empty list.
+    .map { userData ->
         if (userData.shouldShowEmptyFeed()) {
             null
         } else {
             userData.followedTopics
         }
     }
+    // Only emit a set of followed topic IDs if it's changed. This avoids calling potentially
+    // expensive operations (like setting up a new flow) when nothing has changed.
     .distinctUntilChanged()
+    // getUserNewsResources returns a flow, so we have a flow inside a flow. flatMapLatest moves
+    // the inner flow (the one we want to return) to the outer flow and cancels any previous flows
+    // created by getUserNewsResources.
     .flatMapLatest { followedTopics ->
         if (followedTopics == null) {
             flowOf(emptyList())
