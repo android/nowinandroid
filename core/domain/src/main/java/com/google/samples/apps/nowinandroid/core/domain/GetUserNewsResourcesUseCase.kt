@@ -24,11 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -53,56 +49,6 @@ class GetUserNewsResourcesUseCase @Inject constructor(
         } else {
             newsRepository.getNewsResources(filterTopicIds = filterTopicIds)
         }.mapToUserNewsResources(userDataRepository.userData)
-}
-
-class GetFollowedUserNewsResourcesUseCase @Inject constructor(
-    private val userDataRepository: UserDataRepository,
-    val getUserNewsResources: GetUserNewsResourcesUseCase,
-) {
-    /**
-     * Returns a list of UserNewsResources for topics which the user is following
-     */
-    operator fun invoke(): Flow<List<UserNewsResource>> =
-        /**
-         * This sequence of flow transformation functions does the following:
-         *
-         * - map: maps the user data into a set of followed topic IDs or null if we should return
-         * an empty list
-         * - distinctUntilChanged: will only emit a set of followed topic IDs if it's changed. This
-         * avoids calling potentially expensive operations (like setting up a new flow) when nothing
-         * has changed.
-         * - flatMapLatest: getUserNewsResources returns a flow, so we have a flow inside a
-         * flow. flatMapLatest moves the inner flow (the one we want to return) to the outer flow
-         * and cancels any previous flows created by getUserNewsResources.
-         */
-        userDataRepository.userData
-            .map { userData ->
-                if (shouldShowEmptyFeed(userData)) {
-                    null
-                } else {
-                    userData.followedTopics
-                }
-            }
-            .distinctUntilChanged()
-            .flatMapLatest { followedTopics ->
-                if (followedTopics == null) {
-                    flowOf(emptyList())
-                } else {
-                    getUserNewsResources(filterTopicIds = followedTopics)
-                }
-            }
-
-    /**
-     * If the user hasn't completed the onboarding and hasn't selected any interests
-     * show an empty news list to clearly demonstrate that their selections affect the
-     * news articles they will see.
-     *
-     * Note: It should not be possible for the user to get into a state where the onboarding
-     * is not displayed AND they haven't followed any topics, however, this method is to safeguard
-     * against that scenario in future.
-     */
-    private fun shouldShowEmptyFeed(userData: UserData) =
-        !userData.shouldHideOnboarding && userData.followedTopics.isEmpty()
 }
 
 private fun Flow<List<NewsResource>>.mapToUserNewsResources(

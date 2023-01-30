@@ -52,9 +52,7 @@ class ForYouViewModel @Inject constructor(
         )
 
     val feedState: StateFlow<NewsFeedUiState> =
-        getFollowedUserNewsResources().map {
-            NewsFeedUiState.Success(it)
-        }
+        getFollowedUserNewsResources().map(NewsFeedUiState::Success)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),

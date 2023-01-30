@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,54 +31,51 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class GetUserNewsResourcesUseCaseTest {
+class GetFollowedUserNewsResourcesUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val newsRepository = TestNewsRepository()
     private val userDataRepository = TestUserDataRepository()
+    private val getUserNewsResourcesUseCase =
+        GetUserNewsResourcesUseCase(newsRepository, userDataRepository)
 
-    val useCase = GetUserNewsResourcesUseCase(newsRepository, userDataRepository)
+    val useCase =
+        GetFollowedUserNewsResourcesUseCase(userDataRepository, getUserNewsResourcesUseCase)
 
     @Test
-    fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
-        // Obtain the user news resources stream.
-        val userNewsResources = useCase()
+    fun whenOnboardingShownAndNoTopicsFollowed_emptyListIsReturned() = runTest {
+        val followedNewsResources = useCase()
 
-        // Send some news resources and user data into the data repositories.
+        // Send some news resources and empty user data
         newsRepository.sendNewsResources(sampleNewsResources)
+        userDataRepository.setUserData(emptyUserData)
 
-        // Construct the test user data with bookmarks and followed topics.
-        val userData = emptyUserData.copy(
-            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
-            followedTopics = setOf(sampleTopic1.id),
-        )
-
-        userDataRepository.setUserData(userData)
-
-        // Check that the correct news resources are returned with their bookmarked state.
+        // Check that an empty list is returned
         assertEquals(
-            sampleNewsResources.mapToUserNewsResources(userData),
-            userNewsResources.first(),
+            emptyList(),
+            followedNewsResources.first(),
         )
     }
 
     @Test
-    fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
-        // Obtain a stream of user news resources for the given topic id.
-        val userNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
+    fun whenTopicsAreFollowed_correctNewsResourcesAreReturned() = runTest {
+        val followedNewsResources = useCase()
 
-        // Send test data into the repositories.
+        // Send some news resources and user data with a followed topic
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setUserData(emptyUserData)
 
-        // Check that only news resources with the given topic id are returned.
+        val userData = emptyUserData.copy(
+            followedTopics = setOf(sampleTopic1.id),
+        )
+        userDataRepository.setUserData(userData)
+
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .mapToUserNewsResources(emptyUserData),
-            userNewsResources.first(),
+                .mapToUserNewsResources(userData),
+            followedNewsResources.first(),
         )
     }
 }
