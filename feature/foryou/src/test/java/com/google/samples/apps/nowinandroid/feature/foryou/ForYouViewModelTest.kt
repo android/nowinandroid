@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowedUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
@@ -61,10 +60,6 @@ class ForYouViewModelTest {
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
-    private val getFollowedUserNewsResourcesUseCase = GetFollowedUserNewsResourcesUseCase(
-        userDataRepository = userDataRepository,
-        getUserNewsResources = getUserNewsResourcesUseCase,
-    )
 
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
@@ -77,7 +72,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getFollowedUserNewsResources = getFollowedUserNewsResourcesUseCase,
+            getUserNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
     }
