@@ -254,7 +254,7 @@ The [domain layer](https://developer.android.com/topic/architecture/domain-layer
 
 These use cases are used to simplify and remove duplicate logic from ViewModels. They typically combine and transform data from repositories. 
 
-For example, `GetUserNewsResourcesUseCase` combines a stream (implemented using `Flow`) of `NewsResource`s from a `NewsRepository` with a stream of `UserData` objects from a `UserDataRepository` to create a stream of `SaveableNewsResource`s. This stream is used by various ViewModels to display news resources on screen with their bookmarked state.  
+For example, `GetUserNewsResourcesUseCase` combines a stream (implemented using `Flow`) of `NewsResource`s from a `NewsRepository` with a stream of `UserData` objects from a `UserDataRepository` to create a stream of `UserNewsResource`s. This stream is used by various ViewModels to display news resources on screen with their bookmarked state.  
 
 Notably, the domain layer in Now in Android _does not_ (for now) contain any use cases for event handling. Events are handled by the UI layer calling methods on repositories directly.
 
