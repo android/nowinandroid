@@ -83,6 +83,55 @@ class GetUserNewsResourcesUseCaseTest {
     }
 }
 
+class GetFollowedUserNewsResourcesUseCaseTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private val newsRepository = TestNewsRepository()
+    private val userDataRepository = TestUserDataRepository()
+    private val getUserNewsResourcesUseCase =
+        GetUserNewsResourcesUseCase(newsRepository, userDataRepository)
+
+    val useCase =
+        GetFollowedUserNewsResourcesUseCase(userDataRepository, getUserNewsResourcesUseCase)
+
+    @Test
+    fun whenOnboardingShownAndNoTopicsFollowed_emptyListIsReturned() = runTest {
+        val followedNewsResources = useCase()
+
+        // Send some news resources and empty user data
+        newsRepository.sendNewsResources(sampleNewsResources)
+        userDataRepository.setUserData(emptyUserData)
+
+        // Check that an empty list is returned
+        assertEquals(
+            emptyList(),
+            followedNewsResources.first(),
+        )
+    }
+
+    @Test
+    fun whenTopicsAreFollowed_correctNewsResourcesAreReturned() = runTest {
+        val followedNewsResources = useCase()
+
+        // Send some news resources and user data with a followed topic
+        newsRepository.sendNewsResources(sampleNewsResources)
+
+        val userData = emptyUserData.copy(
+            followedTopics = setOf(sampleTopic1.id),
+        )
+        userDataRepository.setUserData(userData)
+
+        assertEquals(
+            sampleNewsResources
+                .filter { it.topics.contains(sampleTopic1) }
+                .mapToUserNewsResources(userData),
+            followedNewsResources.first(),
+        )
+    }
+}
+
 private val sampleTopic1 = Topic(
     id = "Topic1",
     name = "Headlines",

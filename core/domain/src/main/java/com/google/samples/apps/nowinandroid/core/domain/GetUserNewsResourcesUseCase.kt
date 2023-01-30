@@ -63,7 +63,6 @@ class GetFollowedUserNewsResourcesUseCase @Inject constructor(
      * Returns a list of UserNewsResources for topics which the user is following
      */
     operator fun invoke(): Flow<List<UserNewsResource>> =
-
         /**
          * This sequence of flow transformation functions does the following:
          *
@@ -72,9 +71,9 @@ class GetFollowedUserNewsResourcesUseCase @Inject constructor(
          * - distinctUntilChanged: will only emit a set of followed topic IDs if it's changed. This
          * avoids calling potentially expensive operations (like setting up a new flow) when nothing
          * has changed.
-         * - flatMapLatest: getUserNewsResources returns a flow, so we end up with a flow inside a
-         * flow. flatMapLatest solves this and cancels any previous flows created by
-         * getUserNewsResources. 
+         * - flatMapLatest: getUserNewsResources returns a flow, so we have a flow inside a
+         * flow. flatMapLatest moves the inner flow (the one we want to return) to the outer flow
+         * and cancels any previous flows created by getUserNewsResources.
          */
         userDataRepository.userData
             .map { userData ->
