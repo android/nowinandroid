@@ -142,7 +142,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
   <tr>
    <td>11
    </td>
-   <td><code>GetUserNewsResourcesUseCase</code> combines the list of news resources with the user data to emit a list of <code>SaveableNewsResource</code>s.  
+   <td><code>GetUserNewsResourcesUseCase</code> combines the list of news resources with the user data to emit a list of <code>UserNewsResource</code>s.  
    </td>
    <td><code>GetUserNewsResourcesUseCase.invoke</code>
    </td>
