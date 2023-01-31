@@ -25,9 +25,12 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun TopicsTabContent(
@@ -39,7 +42,8 @@ fun TopicsTabContent(
     LazyColumn(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .testTag("interests:topics"),
+            .testTag("interests:topics")
+            .disableSplitMotionEvents(),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
@@ -61,3 +65,22 @@ fun TopicsTabContent(
         }
     }
 }
+
+fun Modifier.disableSplitMotionEvents() =
+    pointerInput(Unit) {
+        coroutineScope {
+            var currentId: Long = -1L
+            awaitPointerEventScope {
+                while (true) {
+                    awaitPointerEvent(PointerEventPass.Initial).changes.forEach { pointerInfo ->
+                        when {
+                            pointerInfo.pressed && currentId == -1L -> currentId = pointerInfo.id.value
+                            pointerInfo.pressed.not() && currentId == pointerInfo.id.value -> currentId = -1
+                            pointerInfo.id.value != currentId && currentId != -1L -> pointerInfo.consume()
+                            else -> Unit
+                        }
+                    }
+                }
+            }
+        }
+    }
