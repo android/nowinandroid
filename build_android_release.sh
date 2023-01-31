@@ -32,13 +32,10 @@ cp $DIR/../nowinandroid-prebuilts/google-services.json $DIR/app
 
 cd $DIR
 
-# Build
-GRADLE_PARAMS=" --stacktrace"
-$DIR/gradlew :app:clean :app:assemble ${GRADLE_PARAMS}
+# Build the prodRelease variant
+GRADLE_PARAMS=" --stacktrace -Puse-google-services"
+$DIR/gradlew :app:clean :app:assembleProdRelease :app:bundleProdRelease ${GRADLE_PARAMS}
 BUILD_RESULT=$?
-
-GRADLE_RELEASE_PARAMS="$GRADLE_PARAMS -Puse-google-services"
-$DIR/gradlew :app:assembleDemoRelease :app:assembleProdRelease :app:bundleDemoRelease :app:bundleProdRelease ${GRADLE_RELEASE_PARAMS}
 
 # Demo debug
 cp $APP_OUT/apk/demo/debug/app-demo-debug.apk $DIST_DIR
@@ -57,18 +54,19 @@ cp $APP_OUT/apk/prod/release/app-prod-release.apk $DIST_DIR/app-prod-release.apk
 # Don't clean here, otherwise all apks are gone.
 $DIR/gradlew :app:bundle ${GRADLE_PARAMS}
 
-# Demo debug
-cp $APP_OUT/bundle/demoDebug/app-demo-debug.aab $DIST_DIR/app-demo-debug.aab
-
-# Demo release
-cp $APP_OUT/bundle/demoRelease/app-demo-release.aab $DIST_DIR/app-demo-release.aab
-
 # Prod debug
 cp $APP_OUT/bundle/prodDebug/app-prod-debug.aab $DIST_DIR/app-prod-debug.aab
 
 # Prod release
 cp $APP_OUT/bundle/prodRelease/app-prod-release.aab $DIST_DIR/app-prod-release.aab
 #cp $APP_OUT/mapping/prodRelease/mapping.txt $DIST_DIR/mobile-release-aab-mapping.txt
-BUILD_RESULT=$?
+COPY_RESULT=$?
 
-exit $BUILD_RESULT
+if [ $BUILD_RESULT -eq 0 ] && [ $RELEASE_BUILD_RESULT -eq 0 ] && [ $COPY_RESULT -eq 0 ]
+then
+  echo "All parts successful"
+  exit 0
+else
+  echo "Something failed. Check logs for details."
+  exit 1
+fi
