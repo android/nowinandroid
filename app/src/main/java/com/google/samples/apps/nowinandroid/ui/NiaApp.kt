@@ -72,10 +72,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVec
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -171,19 +171,23 @@ fun NiaApp(
                             NiaTopAppBar(
                                 titleRes = destination.titleTextId,
                                 navigationIcon = NiaIcons.Codebase,
-                                navigationIconContentDescription = stringResource(
-                                    id = settingsR.string.top_app_bar_navigation_icon_description
+                                navigationIconContentDescription =
+                                stringResource(
+                                    id =
+                                    settingsR.string.top_app_bar_navigation_icon_description
                                 ),
                                 actionIcon = NiaIcons.Settings,
-                                actionIconContentDescription = stringResource(
-                                    id = settingsR.string.top_app_bar_action_icon_description
+                                actionIconContentDescription =
+                                stringResource(
+                                    id =
+                                    settingsR.string.top_app_bar_action_icon_description
                                 ),
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent
                                 ),
                                 onNavigationClick = {
-                                    val launchResourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse(
-                                        CODEBASE_URL))
+                                    val launchResourceIntent =
+                                        Intent(Intent.ACTION_VIEW, Uri.parse(CODEBASE_URL))
                                     ContextCompat.startActivity(context, launchResourceIntent, null)
                                 },
                                 onActionClick = { appState.setShowSettingsDialog(true) },
