@@ -30,6 +30,9 @@ echo "ANDROID_HOME=$ANDROID_HOME"
 echo "Copying google-services.json"
 cp $DIR/../nowinandroid-prebuilts/google-services.json $DIR/app
 
+echo "Copying local.properties"
+cp $DIR/../nowinandroid-prebuilts/local.properties $DIR
+
 cd $DIR
 
 # Build the prodRelease variant
