@@ -60,6 +60,7 @@ class ForYouViewModelTest {
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
+
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository,
@@ -71,7 +72,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase,
+            getUserNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
     }
