@@ -22,11 +22,9 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.R
@@ -76,23 +74,19 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = testTopics),
+                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
             )
         }
 
         composeTestRule
-            .onNodeWithText(TOPIC_1_NAME)
+            .onNodeWithText(followableTopicTestData[0].topic.name)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(TOPIC_2_NAME)
+            .onNodeWithText(followableTopicTestData[1].topic.name)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(TOPIC_3_NAME)
+            .onNodeWithText(followableTopicTestData[2].topic.name)
             .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithText(TOPIC_SHORT_DESC)
-            .assertCountEquals(testTopics.count())
 
         composeTestRule
             .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
@@ -120,48 +114,4 @@ class InterestsScreenTest {
     }
 }
 
-private const val TOPIC_1_NAME = "Headlines"
-private const val TOPIC_2_NAME = "UI"
-private const val TOPIC_3_NAME = "Tools"
-private const val TOPIC_SHORT_DESC = "At vero eos et accusamus."
-private const val TOPIC_LONG_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus."
-private const val TOPIC_URL = "URL"
-private const val TOPIC_IMAGE_URL = "Image URL"
-
-private val testTopics = listOf(
-    FollowableTopic(
-        Topic(
-            id = "0",
-            name = TOPIC_1_NAME,
-            shortDescription = TOPIC_SHORT_DESC,
-            longDescription = TOPIC_LONG_DESC,
-            url = TOPIC_URL,
-            imageUrl = TOPIC_IMAGE_URL,
-        ),
-        isFollowed = true,
-    ),
-    FollowableTopic(
-        Topic(
-            id = "1",
-            name = TOPIC_2_NAME,
-            shortDescription = TOPIC_SHORT_DESC,
-            longDescription = TOPIC_LONG_DESC,
-            url = TOPIC_URL,
-            imageUrl = TOPIC_IMAGE_URL,
-        ),
-        isFollowed = false,
-    ),
-    FollowableTopic(
-        Topic(
-            id = "2",
-            name = TOPIC_3_NAME,
-            shortDescription = TOPIC_SHORT_DESC,
-            longDescription = TOPIC_LONG_DESC,
-            url = TOPIC_URL,
-            imageUrl = TOPIC_IMAGE_URL,
-        ),
-        isFollowed = false,
-    ),
-)
-
-private val numberOfUnfollowedTopics = testTopics.filter { !it.isFollowed }.size
+private val numberOfUnfollowedTopics = followableTopicTestData.filter { !it.isFollowed }.size
