@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.domain.model
 
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 
 /**
  * A [topic] with the additional information for whether or not it is followed.
@@ -25,19 +24,4 @@ import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 data class FollowableTopic( // TODO consider changing to UserTopic and flattening
     val topic: Topic,
     val isFollowed: Boolean,
-)
-
-val previewFollowableTopics = listOf(
-    FollowableTopic(
-        previewTopics[0],
-        isFollowed = false,
-    ),
-    FollowableTopic(
-        previewTopics[1],
-        isFollowed = true,
-    ),
-    FollowableTopic(
-        previewTopics[2],
-        isFollowed = false,
-    ),
 )
