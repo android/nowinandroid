@@ -40,36 +40,11 @@ GRADLE_PARAMS=" --stacktrace -Puse-google-services"
 $DIR/gradlew :app:clean :app:assembleProdRelease :app:bundleProdRelease ${GRADLE_PARAMS}
 BUILD_RESULT=$?
 
-# Demo debug
-cp $APP_OUT/apk/demo/debug/app-demo-debug.apk $DIST_DIR
-
-# Demo release
-cp $APP_OUT/apk/demo/release/app-demo-release.apk $DIST_DIR
-
-# Prod debug
-cp $APP_OUT/apk/prod/debug/app-prod-debug.apk $DIST_DIR/app-prod-debug.apk
-
-# Prod release
+# Prod release apk
 cp $APP_OUT/apk/prod/release/app-prod-release.apk $DIST_DIR/app-prod-release.apk
-#cp $APP_OUT/mapping/release/mapping.txt $DIST_DIR/mobile-release-apk-mapping.txt
-
-# Build App Bundles
-# Don't clean here, otherwise all apks are gone.
-$DIR/gradlew :app:bundle ${GRADLE_PARAMS}
-
-# Prod debug
-cp $APP_OUT/bundle/prodDebug/app-prod-debug.aab $DIST_DIR/app-prod-debug.aab
-
-# Prod release
+# Prod release bundle
 cp $APP_OUT/bundle/prodRelease/app-prod-release.aab $DIST_DIR/app-prod-release.aab
-#cp $APP_OUT/mapping/prodRelease/mapping.txt $DIST_DIR/mobile-release-aab-mapping.txt
-COPY_RESULT=$?
+# Prod release bundle mapping
+cp $APP_OUT/mapping/prodRelease/mapping.txt $DIST_DIR/mobile-release-aab-mapping.txt
 
-if [ $BUILD_RESULT -eq 0 ] && [ $RELEASE_BUILD_RESULT -eq 0 ] && [ $COPY_RESULT -eq 0 ]
-then
-  echo "All parts successful"
-  exit 0
-else
-  echo "Something failed. Check logs for details."
-  exit 1
-fi
+exit $BUILD_RESULT
