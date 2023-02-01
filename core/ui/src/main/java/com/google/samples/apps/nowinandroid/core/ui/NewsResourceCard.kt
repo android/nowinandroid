@@ -50,6 +50,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -58,7 +59,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import kotlinx.datetime.Instant
@@ -297,11 +297,14 @@ private fun BookmarkButtonBookmarkedPreview() {
 
 @Preview("NewsResourceCardExpanded")
 @Composable
-private fun ExpandedNewsResourcePreview() {
+private fun ExpandedNewsResourcePreview(
+    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+    userNewsResources: List<UserNewsResource>,
+) {
     NiaTheme {
         Surface {
             NewsResourceCardExpanded(
-                userNewsResource = previewUserNewsResources[0],
+                userNewsResource = userNewsResources[0],
                 isBookmarked = true,
                 onToggleBookmark = {},
                 onClick = {},
