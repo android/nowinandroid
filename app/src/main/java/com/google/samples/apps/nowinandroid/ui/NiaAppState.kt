@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -87,8 +86,7 @@ class NiaAppState(
         private set
 
     val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
-            windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
