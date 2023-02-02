@@ -91,7 +91,7 @@ class NavigationUiTest {
     }
 
     @Test
-    fun mediumWidth_compactHeight_showsNavigationBar() {
+    fun mediumWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
             TestHarness(size = DpSize(610.dp, 400.dp)) {
                 BoxWithConstraints {
@@ -105,12 +105,12 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
     }
 
     @Test
-    fun expandedWidth_compactHeight_showsNavigationBar() {
+    fun expandedWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
             TestHarness(size = DpSize(900.dp, 400.dp)) {
                 BoxWithConstraints {
@@ -124,8 +124,8 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
     }
 
     @Test
