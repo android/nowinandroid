@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-12
     strategy:
       matrix:
-        device-config: [ "pixel4api30aospatd" ]
+        device-config: [ "pixel4api30aospatd", "pixelcapi30aospatd" ]
 
     steps:
       - uses: actions/setup-java@v3
