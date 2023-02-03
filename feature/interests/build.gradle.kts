@@ -23,18 +23,4 @@ plugins {
 }
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests"
-
-    testOptions {
-        // TODO: Convert it as a convention plugin once Flamingo goes out (https://github.com/android/nowinandroid/issues/523)
-        managedDevices {
-            devices {
-                maybeCreate<ManagedVirtualDevice>("pixel4api30").apply {
-                    device = "Pixel 4"
-                    apiLevel = 30
-                    // ATDs currently support only API level 30.
-                    systemImageSource = "aosp-atd"
-                }
-            }
-        }
-    }
 }
