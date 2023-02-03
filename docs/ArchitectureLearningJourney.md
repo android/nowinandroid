@@ -192,9 +192,9 @@ Whenever the list of topics changes (for example, when a new topic is added), th
 
 To write data, the repository provides suspend functions. It is up to the caller to ensure that their execution is suitably scoped.
 
-_Example: Follow a topic_
+_Example: Follow a set of topics_
 
-Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
+Simply call `UserDataRepository.setFollowedTopicIds` with the set of IDs of the topics the user wishes to follow.
 
 
 ### Data sources
