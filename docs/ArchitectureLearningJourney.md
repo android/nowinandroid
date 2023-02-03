@@ -309,7 +309,7 @@ User actions are communicated from UI elements to ViewModels using regular metho
 
 **Example: Following a topic**
 
-The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the topics repository.
+The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the user data repository.
 
 
 ## Further reading
