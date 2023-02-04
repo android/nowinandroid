@@ -41,13 +41,13 @@ fun NavController.navigateToTopic(topicId: String) {
 }
 
 fun NavGraphBuilder.topicScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     composable(
         route = "topic_route/{$topicIdArg}",
         arguments = listOf(
-            navArgument(topicIdArg) { type = NavType.StringType }
-        )
+            navArgument(topicIdArg) { type = NavType.StringType },
+        ),
     ) {
         TopicRoute(onBackClick = onBackClick)
     }

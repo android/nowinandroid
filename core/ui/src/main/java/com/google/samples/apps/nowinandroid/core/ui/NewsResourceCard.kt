@@ -50,23 +50,23 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
+import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved
@@ -79,7 +79,7 @@ fun NewsResourceCardExpanded(
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
     Card(
@@ -90,7 +90,7 @@ fun NewsResourceCardExpanded(
         // Pass null for action to only override the label and not the actual action.
         modifier = modifier.semantics {
             onClick(label = clickActionLabel, action = null)
-        }
+        },
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
@@ -99,14 +99,14 @@ fun NewsResourceCardExpanded(
                 }
             }
             Box(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(12.dp))
                     Row {
                         NewsResourceTitle(
                             userNewsResource.title,
-                            modifier = Modifier.fillMaxWidth((.8f))
+                            modifier = Modifier.fillMaxWidth((.8f)),
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
@@ -125,7 +125,7 @@ fun NewsResourceCardExpanded(
 
 @Composable
 fun NewsResourceHeaderImage(
-    headerImageUrl: String?
+    headerImageUrl: String?,
 ) {
     AsyncImage(
         placeholder = if (LocalInspectionMode.current) {
@@ -140,14 +140,14 @@ fun NewsResourceHeaderImage(
         contentScale = ContentScale.Crop,
         model = headerImageUrl,
         // TODO b/226661685: Investigate using alt text of  image to populate content description
-        contentDescription = null // decorative image
+        contentDescription = null, // decorative image
     )
 }
 
 @Composable
 fun NewsResourceTitle(
     newsResourceTitle: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(newsResourceTitle, style = MaterialTheme.typography.headlineSmall, modifier = modifier)
 }
@@ -156,7 +156,7 @@ fun NewsResourceTitle(
 fun BookmarkButton(
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NiaIconToggleButton(
         checked = isBookmarked,
@@ -165,15 +165,15 @@ fun BookmarkButton(
         icon = {
             Icon(
                 painter = painterResource(NiaIcons.BookmarkBorder),
-                contentDescription = stringResource(R.string.bookmark)
+                contentDescription = stringResource(R.string.bookmark),
             )
         },
         checkedIcon = {
             Icon(
                 painter = painterResource(NiaIcons.Bookmark),
-                contentDescription = stringResource(R.string.unbookmark)
+                contentDescription = stringResource(R.string.unbookmark),
             )
-        }
+        },
     )
 }
 
@@ -185,7 +185,7 @@ fun dateFormatted(publishDate: Instant): String {
 
     DisposableEffect(context) {
         val receiver = TimeZoneBroadcastReceiver(
-            onTimeZoneChanged = { zoneId = ZoneId.systemDefault() }
+            onTimeZoneChanged = { zoneId = ZoneId.systemDefault() },
         )
         receiver.register(context)
         onDispose {
@@ -200,7 +200,7 @@ fun dateFormatted(publishDate: Instant): String {
 @Composable
 fun NewsResourceMetaData(
     publishDate: Instant,
-    resourceType: NewsResourceType
+    resourceType: NewsResourceType,
 ) {
     val formattedDate = dateFormatted(publishDate)
     Text(
@@ -209,21 +209,21 @@ fun NewsResourceMetaData(
         } else {
             formattedDate
         },
-        style = MaterialTheme.typography.labelSmall
+        style = MaterialTheme.typography.labelSmall,
     )
 }
 
 @Composable
 fun NewsResourceLink(
     @Suppress("UNUSED_PARAMETER")
-    newsResource: NewsResource
+    newsResource: NewsResource,
 ) {
     TODO()
 }
 
 @Composable
 fun NewsResourceShortDescription(
-    newsResourceShortDescription: String
+    newsResourceShortDescription: String,
 ) {
     Text(newsResourceShortDescription, style = MaterialTheme.typography.bodyLarge)
 }
@@ -231,7 +231,7 @@ fun NewsResourceShortDescription(
 @Composable
 fun NewsResourceTopics(
     topics: List<FollowableTopic>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     // Store the ID of the Topic which has its "following" menu expanded, if any.
     // To avoid UI confusion, only one topic can have an expanded menu at a time.
@@ -255,21 +255,21 @@ fun NewsResourceTopics(
                     val contentDescription = if (followableTopic.isFollowed) {
                         stringResource(
                             R.string.topic_chip_content_description_when_followed,
-                            followableTopic.topic.name
+                            followableTopic.topic.name,
                         )
                     } else {
                         stringResource(
                             R.string.topic_chip_content_description_when_not_followed,
-                            followableTopic.topic.name
+                            followableTopic.topic.name,
                         )
                     }
                     Text(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
                         modifier = Modifier.semantics {
                             this.contentDescription = contentDescription
-                        }
+                        },
                     )
-                }
+                },
             )
         }
     }
@@ -297,14 +297,17 @@ private fun BookmarkButtonBookmarkedPreview() {
 
 @Preview("NewsResourceCardExpanded")
 @Composable
-private fun ExpandedNewsResourcePreview() {
+private fun ExpandedNewsResourcePreview(
+    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+    userNewsResources: List<UserNewsResource>,
+) {
     NiaTheme {
         Surface {
             NewsResourceCardExpanded(
-                userNewsResource = previewUserNewsResources[0],
+                userNewsResource = userNewsResources[0],
                 isBookmarked = true,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
             )
         }
     }

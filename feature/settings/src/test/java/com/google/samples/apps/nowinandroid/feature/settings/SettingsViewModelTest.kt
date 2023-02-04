@@ -22,7 +22,6 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -30,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class SettingsViewModelTest {
 
@@ -52,7 +52,6 @@ class SettingsViewModelTest {
 
     @Test
     fun stateIsSuccessAfterUserDataLoaded() = runTest {
-
         val collectJob =
             launch(UnconfinedTestDispatcher()) { viewModel.settingsUiState.collect() }
 
@@ -63,10 +62,11 @@ class SettingsViewModelTest {
             Success(
                 UserEditableSettings(
                     brand = ANDROID,
-                    darkThemeConfig = DARK
-                )
+                    darkThemeConfig = DARK,
+                    useDynamicColor = false,
+                ),
             ),
-            viewModel.settingsUiState.value
+            viewModel.settingsUiState.value,
         )
 
         collectJob.cancel()

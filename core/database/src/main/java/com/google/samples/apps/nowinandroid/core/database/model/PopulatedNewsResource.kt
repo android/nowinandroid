@@ -34,9 +34,9 @@ data class PopulatedNewsResource(
             value = NewsResourceTopicCrossRef::class,
             parentColumn = "news_resource_id",
             entityColumn = "topic_id",
-        )
+        ),
     )
-    val topics: List<TopicEntity>
+    val topics: List<TopicEntity>,
 )
 
 fun PopulatedNewsResource.asExternalModel() = NewsResource(
@@ -47,5 +47,5 @@ fun PopulatedNewsResource.asExternalModel() = NewsResource(
     headerImageUrl = entity.headerImageUrl,
     publishDate = entity.publishDate,
     type = entity.type,
-    topics = topics.map(TopicEntity::asExternalModel)
+    topics = topics.map(TopicEntity::asExternalModel),
 )

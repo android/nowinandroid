@@ -35,10 +35,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
 
 /**
  * An extension on [LazyListScope] defining a feed with news resources.
@@ -46,7 +46,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsRes
  */
 fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -65,9 +65,9 @@ fun LazyGridScope.newsFeed(
                     onToggleBookmark = {
                         onNewsResourcesCheckedChanged(
                             userNewsResource.id,
-                            !userNewsResource.isSaved
+                            !userNewsResource.isSaved,
                         )
-                    }
+                    },
                 )
             }
         }
@@ -100,7 +100,7 @@ sealed interface NewsFeedUiState {
         /**
          * The list of news resources contained in this feed.
          */
-        val feed: List<UserNewsResource>
+        val feed: List<UserNewsResource>,
     ) : NewsFeedUiState
 }
 
@@ -111,7 +111,7 @@ private fun NewsFeedLoadingPreview() {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
     }
@@ -120,14 +120,15 @@ private fun NewsFeedLoadingPreview() {
 @Preview
 @Preview(device = Devices.TABLET)
 @Composable
-private fun NewsFeedContentPreview() {
+private fun NewsFeedContentPreview(
+    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+    userNewsResources: List<UserNewsResource>,
+) {
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
-                feedState = NewsFeedUiState.Success(
-                    previewUserNewsResources
-                ),
-                onNewsResourcesCheckedChanged = { _, _ -> }
+                feedState = NewsFeedUiState.Success(userNewsResources),
+                onNewsResourcesCheckedChanged = { _, _ -> },
             )
         }
     }

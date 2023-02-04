@@ -30,11 +30,11 @@ import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActi
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import javax.inject.Inject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import javax.inject.Inject
 
 /**
  * Tests that the navigation UI is rendered correctly on different screen sizes.
@@ -53,7 +53,8 @@ class NavigationUiTest {
      * Create a temporary folder used to create a Data Store file. This guarantees that
      * the file is removed in between each test, preventing a crash.
      */
-    @BindValue @get:Rule(order = 1)
+    @BindValue
+    @get:Rule(order = 1)
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     /**
@@ -77,9 +78,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -90,41 +91,41 @@ class NavigationUiTest {
     }
 
     @Test
-    fun mediumWidth_compactHeight_showsNavigationBar() {
+    fun mediumWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
             TestHarness(size = DpSize(610.dp, 400.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
     }
 
     @Test
-    fun expandedWidth_compactHeight_showsNavigationBar() {
+    fun expandedWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
             TestHarness(size = DpSize(900.dp, 400.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
     }
 
     @Test
@@ -134,9 +135,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -153,9 +154,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -172,9 +173,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -191,9 +192,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -210,9 +211,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }
@@ -229,9 +230,9 @@ class NavigationUiTest {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight)
+                            DpSize(maxWidth, maxHeight),
                         ),
-                        networkMonitor = networkMonitor
+                        networkMonitor = networkMonitor,
                     )
                 }
             }

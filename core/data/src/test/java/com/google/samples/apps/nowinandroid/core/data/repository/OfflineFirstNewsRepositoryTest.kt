@@ -35,13 +35,13 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertEquals
 
 class OfflineFirstNewsRepositoryTest {
 
@@ -65,8 +65,8 @@ class OfflineFirstNewsRepositoryTest {
         network = TestNiaNetworkDataSource()
         synchronizer = TestSynchronizer(
             NiaPreferencesDataSource(
-                tmpFolder.testUserPreferencesDataStore()
-            )
+                tmpFolder.testUserPreferencesDataStore(),
+            ),
         )
 
         subject = OfflineFirstNewsRepository(
@@ -84,7 +84,7 @@ class OfflineFirstNewsRepositoryTest {
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
                 subject.getNewsResources()
-                    .first()
+                    .first(),
             )
         }
 
@@ -100,7 +100,7 @@ class OfflineFirstNewsRepositoryTest {
                 subject.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
                 )
-                    .first()
+                    .first(),
             )
 
             assertEquals(
@@ -108,7 +108,7 @@ class OfflineFirstNewsRepositoryTest {
                 subject.getNewsResources(
                     filterTopicIds = nonPresentInterestsIds,
                 )
-                    .first()
+                    .first(),
             )
         }
 
@@ -127,13 +127,13 @@ class OfflineFirstNewsRepositoryTest {
 
             assertEquals(
                 newsResourcesFromNetwork.map(NewsResource::id),
-                newsResourcesFromDb.map(NewsResource::id)
+                newsResourcesFromDb.map(NewsResource::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 network.latestChangeListVersion(CollectionType.NewsResources),
-                synchronizer.getChangeListVersions().newsResourceVersion
+                synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -155,7 +155,7 @@ class OfflineFirstNewsRepositoryTest {
                 network.editCollection(
                     collectionType = CollectionType.NewsResources,
                     id = it,
-                    isDelete = true
+                    isDelete = true,
                 )
             }
 
@@ -168,13 +168,13 @@ class OfflineFirstNewsRepositoryTest {
             // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
                 newsResourcesFromNetwork.map(NewsResource::id) - deletedItems,
-                newsResourcesFromDb.map(NewsResource::id)
+                newsResourcesFromDb.map(NewsResource::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 network.latestChangeListVersion(CollectionType.NewsResources),
-                synchronizer.getChangeListVersions().newsResourceVersion
+                synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -190,7 +190,7 @@ class OfflineFirstNewsRepositoryTest {
 
             val changeList = network.changeListsAfter(
                 CollectionType.NewsResources,
-                version = 7
+                version = 7,
             )
             val changeListIds = changeList
                 .map(NetworkChangeList::id)
@@ -207,13 +207,13 @@ class OfflineFirstNewsRepositoryTest {
 
             assertEquals(
                 newsResourcesFromNetwork.map(NewsResource::id),
-                newsResourcesFromDb.map(NewsResource::id)
+                newsResourcesFromDb.map(NewsResource::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 changeList.last().changeListVersion,
-                synchronizer.getChangeListVersions().newsResourceVersion
+                synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -228,7 +228,7 @@ class OfflineFirstNewsRepositoryTest {
                     .flatten()
                     .distinctBy(TopicEntity::id),
                 topicDao.getTopicEntities()
-                    .first()
+                    .first(),
             )
         }
 
@@ -242,7 +242,7 @@ class OfflineFirstNewsRepositoryTest {
                     .map(NetworkNewsResource::topicCrossReferences)
                     .distinct()
                     .flatten(),
-                newsResourceDao.topicCrossReferences
+                newsResourceDao.topicCrossReferences,
             )
         }
 }

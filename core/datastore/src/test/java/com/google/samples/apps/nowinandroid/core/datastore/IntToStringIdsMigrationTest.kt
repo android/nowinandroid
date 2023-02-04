@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Unit test for [IntToStringIdsMigration]
@@ -35,7 +35,7 @@ class IntToStringIdsMigrationTest {
         // Assert that there are no string topic ids yet
         assertEquals(
             emptyList<String>(),
-            preMigrationUserPreferences.deprecatedFollowedTopicIdsList
+            preMigrationUserPreferences.deprecatedFollowedTopicIdsList,
         )
 
         // Run the migration
@@ -48,7 +48,7 @@ class IntToStringIdsMigrationTest {
                 deprecatedFollowedTopicIds.addAll(listOf("1", "2", "3"))
                 hasDoneIntToStringIdMigration = true
             },
-            postMigrationUserPreferences
+            postMigrationUserPreferences,
         )
 
         // Assert that the migration has been marked complete
@@ -64,7 +64,7 @@ class IntToStringIdsMigrationTest {
         // Assert that there are no string author ids yet
         assertEquals(
             emptyList<String>(),
-            preMigrationUserPreferences.deprecatedFollowedAuthorIdsList
+            preMigrationUserPreferences.deprecatedFollowedAuthorIdsList,
         )
 
         // Run the migration
@@ -77,7 +77,7 @@ class IntToStringIdsMigrationTest {
                 deprecatedFollowedAuthorIds.addAll(listOf("4", "5", "6"))
                 hasDoneIntToStringIdMigration = true
             },
-            postMigrationUserPreferences
+            postMigrationUserPreferences,
         )
 
         // Assert that the migration has been marked complete

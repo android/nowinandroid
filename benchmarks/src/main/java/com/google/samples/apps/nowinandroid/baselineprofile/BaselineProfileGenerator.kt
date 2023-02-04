@@ -18,11 +18,12 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.ExperimentalBaselineProfilesApi
 import androidx.benchmark.macro.junit4.BaselineProfileRule
-import androidx.test.uiautomator.By
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.bookmarks.goToBookmarksScreen
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
+import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
-import com.google.samples.apps.nowinandroid.interests.interestsScrollPeopleDownUp
+import com.google.samples.apps.nowinandroid.interests.goToInterestsScreen
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
 import org.junit.Rule
 import org.junit.Test
@@ -46,24 +47,16 @@ class BaselineProfileGenerator {
 
             // Scroll the feed critical user journey
             forYouWaitForContent()
+            forYouSelectTopics(true)
             forYouScrollFeedDownUp()
 
             // Navigate to saved screen
-            device.findObject(By.text("Saved")).click()
-            device.waitForIdle()
+            goToBookmarksScreen()
             // TODO: we need to implement adding stuff to bookmarks before able to scroll it
             // bookmarksScrollFeedDownUp()
 
             // Navigate to interests screen
-            device.findObject(By.text("Interests")).click()
-            device.waitForIdle()
-
+            goToInterestsScreen()
             interestsScrollTopicsDownUp()
-
-            // Navigate to people tab
-            device.findObject(By.text("People")).click()
-            device.waitForIdle()
-
-            interestsScrollPeopleDownUp()
         }
 }
