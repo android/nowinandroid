@@ -74,7 +74,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.trace
 import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
@@ -89,7 +88,6 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun ForYouRoute(
     modifier: Modifier = Modifier,
