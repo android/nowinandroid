@@ -19,6 +19,10 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.uitesthiltmanifest"
+}
+
 dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
