@@ -35,21 +35,21 @@ interface DataModule {
 
     @Binds
     fun bindsTopicRepository(
-        topicsRepository: OfflineFirstTopicsRepository
+        topicsRepository: OfflineFirstTopicsRepository,
     ): TopicsRepository
 
     @Binds
     fun bindsNewsResourceRepository(
-        newsRepository: OfflineFirstNewsRepository
+        newsRepository: OfflineFirstNewsRepository,
     ): NewsRepository
 
     @Binds
     fun bindsUserDataRepository(
-        userDataRepository: OfflineFirstUserDataRepository
+        userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository
 
     @Binds
     fun bindsNetworkMonitor(
-        networkMonitor: ConnectivityManagerNetworkMonitor
+        networkMonitor: ConnectivityManagerNetworkMonitor,
     ): NetworkMonitor
 }

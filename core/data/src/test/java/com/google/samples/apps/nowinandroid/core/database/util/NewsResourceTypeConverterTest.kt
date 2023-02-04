@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.database.util
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import kotlin.test.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class NewsResourceTypeConverterTest {
 
@@ -26,7 +26,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_video() {
         assertEquals(
             NewsResourceType.Video,
-            NewsResourceTypeConverter().stringToNewsResourceType("Video 📺")
+            NewsResourceTypeConverter().stringToNewsResourceType("Video 📺"),
         )
     }
 
@@ -34,7 +34,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_article() {
         assertEquals(
             NewsResourceType.Article,
-            NewsResourceTypeConverter().stringToNewsResourceType("Article 📚")
+            NewsResourceTypeConverter().stringToNewsResourceType("Article 📚"),
         )
     }
 
@@ -42,7 +42,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_api_change() {
         assertEquals(
             NewsResourceType.APIChange,
-            NewsResourceTypeConverter().stringToNewsResourceType("API change")
+            NewsResourceTypeConverter().stringToNewsResourceType("API change"),
         )
     }
 
@@ -50,7 +50,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_codelab() {
         assertEquals(
             NewsResourceType.Codelab,
-            NewsResourceTypeConverter().stringToNewsResourceType("Codelab")
+            NewsResourceTypeConverter().stringToNewsResourceType("Codelab"),
         )
     }
 
@@ -58,7 +58,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_podcast() {
         assertEquals(
             NewsResourceType.Podcast,
-            NewsResourceTypeConverter().stringToNewsResourceType("Podcast 🎙")
+            NewsResourceTypeConverter().stringToNewsResourceType("Podcast 🎙"),
         )
     }
 
@@ -66,7 +66,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_docs() {
         assertEquals(
             NewsResourceType.Docs,
-            NewsResourceTypeConverter().stringToNewsResourceType("Docs 📑")
+            NewsResourceTypeConverter().stringToNewsResourceType("Docs 📑"),
         )
     }
 
@@ -74,7 +74,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_event() {
         assertEquals(
             NewsResourceType.Event,
-            NewsResourceTypeConverter().stringToNewsResourceType("Event 📆")
+            NewsResourceTypeConverter().stringToNewsResourceType("Event 📆"),
         )
     }
 
@@ -82,7 +82,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_dac() {
         assertEquals(
             NewsResourceType.DAC,
-            NewsResourceTypeConverter().stringToNewsResourceType("DAC")
+            NewsResourceTypeConverter().stringToNewsResourceType("DAC"),
         )
     }
 
@@ -90,7 +90,7 @@ class NewsResourceTypeConverterTest {
     fun test_room_news_resource_type_converter_for_umm() {
         assertEquals(
             NewsResourceType.Unknown,
-            NewsResourceTypeConverter().stringToNewsResourceType("umm")
+            NewsResourceTypeConverter().stringToNewsResourceType("umm"),
         )
     }
 }

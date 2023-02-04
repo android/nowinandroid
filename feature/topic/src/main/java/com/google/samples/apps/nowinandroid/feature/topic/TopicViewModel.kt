@@ -30,7 +30,6 @@ import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +37,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class TopicViewModel @Inject constructor(
@@ -45,7 +45,7 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase
+    getSaveableNewsResources: GetUserNewsResourcesUseCase,
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
@@ -53,23 +53,23 @@ class TopicViewModel @Inject constructor(
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        topicsRepository = topicsRepository
+        topicsRepository = topicsRepository,
     )
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading
+            initialValue = TopicUiState.Loading,
         )
 
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        getSaveableNewsResources = getSaveableNewsResources
+        getSaveableNewsResources = getSaveableNewsResources,
     )
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading
+            initialValue = NewsUiState.Loading,
         )
 
     fun followTopicToggle(followed: Boolean) {
@@ -97,13 +97,13 @@ private fun topicUiState(
 
     // Observe topic information
     val topicStream: Flow<Topic> = topicsRepository.getTopic(
-        id = topicId
+        id = topicId,
     )
 
     return combine(
         followedTopicIds,
         topicStream,
-        ::Pair
+        ::Pair,
     )
         .asResult()
         .map { followedTopicToTopicResult ->
@@ -114,8 +114,8 @@ private fun topicUiState(
                     TopicUiState.Success(
                         followableTopic = FollowableTopic(
                             topic = topic,
-                            isFollowed = followed
-                        )
+                            isFollowed = followed,
+                        ),
                     )
                 }
                 is Result.Loading -> {
@@ -145,7 +145,7 @@ private fun newsUiState(
     return combine(
         newsStream,
         bookmark,
-        ::Pair
+        ::Pair,
     )
         .asResult()
         .map { newsToBookmarksResult ->

@@ -21,8 +21,8 @@ import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSou
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [UserDataRepository] that returns hardcoded user data.
@@ -53,6 +53,10 @@ class FakeUserDataRepository @Inject constructor(
 
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         niaPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
+    }
+
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        niaPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
     }
 
     override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {

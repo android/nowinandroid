@@ -24,12 +24,12 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class GetUserNewsResourcesUseCaseTest {
 
@@ -43,7 +43,6 @@ class GetUserNewsResourcesUseCaseTest {
 
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
-
         // Obtain the user news resources stream.
         val userNewsResources = useCase()
 
@@ -53,7 +52,7 @@ class GetUserNewsResourcesUseCaseTest {
         // Construct the test user data with bookmarks and followed topics.
         val userData = emptyUserData.copy(
             bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
-            followedTopics = setOf(sampleTopic1.id)
+            followedTopics = setOf(sampleTopic1.id),
         )
 
         userDataRepository.setUserData(userData)
@@ -61,13 +60,12 @@ class GetUserNewsResourcesUseCaseTest {
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
             sampleNewsResources.mapToUserNewsResources(userData),
-            userNewsResources.first()
+            userNewsResources.first(),
         )
     }
 
     @Test
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
-
         // Obtain a stream of user news resources for the given topic id.
         val userNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
 
@@ -80,7 +78,7 @@ class GetUserNewsResourcesUseCaseTest {
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
                 .mapToUserNewsResources(emptyUserData),
-            userNewsResources.first()
+            userNewsResources.first(),
         )
     }
 }
@@ -115,7 +113,7 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic1)
+        topics = listOf(sampleTopic1),
     ),
     NewsResource(
         id = "2",
@@ -127,7 +125,7 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic1, sampleTopic2)
+        topics = listOf(sampleTopic1, sampleTopic2),
     ),
     NewsResource(
         id = "3",
@@ -137,6 +135,6 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic2)
+        topics = listOf(sampleTopic2),
     ),
 )
