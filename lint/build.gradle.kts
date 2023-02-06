@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    id 'java-library'
-    id 'kotlin'
-    id 'com.android.lint'
+    `java-library`
+    kotlin("jvm")
+    id("com.android.lint")
 }
 
 java {
@@ -25,6 +25,6 @@ java {
 }
 
 dependencies {
-    compileOnly libs.kotlin.stdlib
-    compileOnly libs.lint.api
+    compileOnly(libs.kotlin.stdlib)
+    compileOnly(libs.lint.api)
 }
