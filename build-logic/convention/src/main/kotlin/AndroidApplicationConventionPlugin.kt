@@ -14,9 +14,8 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.dsl.ApplicationExtension
-import com.google.samples.apps.nowinandroid.configureFlavors
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import org.gradle.api.Plugin
@@ -34,7 +33,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 33
-                configureFlavors(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
