@@ -33,6 +33,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -78,6 +79,7 @@ internal fun InterestsScreen(
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
+    TrackScreenViewEvent(screenName = "Interests")
 }
 
 @Composable

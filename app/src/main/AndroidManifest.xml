@@ -39,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Disable Firebase analytics by default. This setting is overwritten for the `prod`
+        flavor -->
+        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
     </application>
 
 </manifest>

@@ -19,10 +19,11 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
+    id("nowinandroid.android.application.flavors")
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
-    id("nowinandroid.firebase")
     id("jacoco")
+    id("nowinandroid.android.application.firebase")
 }
 
 android {
@@ -101,6 +102,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":sync:work"))
 
