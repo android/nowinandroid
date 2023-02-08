@@ -194,7 +194,7 @@ To write data, the repository provides suspend functions. It is up to the caller
 
 _Example: Follow a topic_
 
-Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
+Simply call `UserDataRepository.toggleFollowedTopicId` with the ID of the topic the user wishes to follow and `followed=true` to indicate that the topic should be followed (use `false` to unfollow a topic).
 
 
 ### Data sources
@@ -309,7 +309,7 @@ User actions are communicated from UI elements to ViewModels using regular metho
 
 **Example: Following a topic**
 
-The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the topics repository.
+The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the user data repository.
 
 
 ## Further reading
