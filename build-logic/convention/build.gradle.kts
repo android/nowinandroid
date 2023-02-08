@@ -28,6 +28,7 @@ java {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 gradlePlugin {
@@ -67,6 +68,10 @@ gradlePlugin {
         register("androidHilt") {
             id = "nowinandroid.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "nowinandroid.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
         }
         register("firebase-perf") {
             id = "nowinandroid.firebase-perf"
