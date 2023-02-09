@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaDropdownMenuButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
@@ -167,23 +166,6 @@ fun NiaCatalog() {
                     }
                 }
                 item { Text("Dropdown menus", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaDropdownMenuButton(
-                            text = { Text("Enabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) },
-                        )
-                        NiaDropdownMenuButton(
-                            text = { Text("Disabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) },
-                            enabled = false,
-                        )
-                    }
-                }
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
@@ -315,45 +297,19 @@ fun NiaCatalog() {
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        var expandedTopicId by remember { mutableStateOf<String?>(null) }
-
-                        var firstFollowed by remember { mutableStateOf(false) }
                         NiaTopicTag(
-                            expanded = expandedTopicId == "Topic 1",
-                            followed = firstFollowed,
-                            onDropdownMenuToggle = { show ->
-                                expandedTopicId = if (show) "Topic 1" else null
-                            },
-                            onFollowClick = { firstFollowed = true },
-                            onUnfollowClick = { firstFollowed = false },
-                            onBrowseClick = {},
+                            followed = true,
+                            onClick = {},
                             text = { Text(text = "Topic 1".uppercase()) },
-                            followText = { Text(text = "Follow") },
-                            unFollowText = { Text(text = "Unfollow") },
-                            browseText = { Text(text = "Browse topic") },
-                        )
-                        var secondFollowed by remember { mutableStateOf(true) }
-                        NiaTopicTag(
-                            expanded = expandedTopicId == "Topic 2",
-                            followed = secondFollowed,
-                            onDropdownMenuToggle = { show ->
-                                expandedTopicId = if (show) "Topic 2" else null
-                            },
-                            onFollowClick = { secondFollowed = true },
-                            onUnfollowClick = { secondFollowed = false },
-                            onBrowseClick = {},
-                            text = { Text(text = "Topic 2".uppercase()) },
-                            followText = { Text(text = "Follow") },
-                            unFollowText = { Text(text = "Unfollow") },
-                            browseText = { Text(text = "Browse topic") },
                         )
                         NiaTopicTag(
-                            expanded = false,
                             followed = false,
-                            onDropdownMenuToggle = {},
-                            onFollowClick = {},
-                            onUnfollowClick = {},
-                            onBrowseClick = {},
+                            onClick = {},
+                            text = { Text(text = "Topic 2".uppercase()) },
+                        )
+                        NiaTopicTag(
+                            followed = false,
+                            onClick = {},
                             text = { Text(text = "Disabled".uppercase()) },
                             enabled = false,
                         )

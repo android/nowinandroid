@@ -92,6 +92,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun ForYouRoute(
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel(),
 ) {
@@ -104,6 +105,7 @@ internal fun ForYouRoute(
         onboardingUiState = onboardingUiState,
         feedState = feedState,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
+        onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         modifier = modifier,
@@ -116,6 +118,7 @@ internal fun ForYouScreen(
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -175,6 +178,7 @@ internal fun ForYouScreen(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+            onTopicClick = onTopicClick,
         )
 
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -407,6 +411,7 @@ fun ForYouScreenPopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -429,6 +434,7 @@ fun ForYouScreenOfflinePopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -453,6 +459,7 @@ fun ForYouScreenTopicSelection(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -470,6 +477,7 @@ fun ForYouScreenLoading() {
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -492,6 +500,7 @@ fun ForYouScreenPopulatedAndLoading(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
