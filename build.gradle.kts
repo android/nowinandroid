@@ -22,12 +22,6 @@ buildscript {
         // Android Build Server
         maven { url = uri("../nowinandroid-prebuilts/m2repository") }
     }
-
-        dependencies {
-            if (project.hasProperty("use-google-services")) {
-                classpath(libs.firebase.crashlytics.gradle)
-            }
-        }
 }
 
 // Lists all plugins used throughout the project without applying them.
