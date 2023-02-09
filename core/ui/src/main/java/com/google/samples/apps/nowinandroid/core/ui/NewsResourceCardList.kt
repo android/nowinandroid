@@ -38,6 +38,7 @@ fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
     onToggleBookmark: (item: UserNewsResource) -> Unit,
     onItemClick: ((item: UserNewsResource) -> Unit)? = null,
+    onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
 ) = items(
     items = items,
@@ -62,6 +63,7 @@ fun LazyListScope.userNewsResourceCardItems(
                     else -> onItemClick(userNewsResource)
                 }
             },
+            onTopicClick = onTopicClick,
             modifier = itemModifier,
         )
     },
