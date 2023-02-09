@@ -61,6 +61,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.LIGH
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.feature.settings.R.string
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
@@ -134,6 +135,7 @@ fun SettingsDialog(
                 Divider(Modifier.padding(top = 8.dp))
                 LinksPanel()
             }
+            TrackScreenViewEvent(screenName = "Settings")
         },
         confirmButton = {
             Text(
