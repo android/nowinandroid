@@ -19,6 +19,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+    Firebase automatically adds the AD_ID permission, even though we don't use it. If you use this
+    permission you must declare how you're using it to Google Play, otherwise the app will be
+    rejected when publishing it. To avoid this we remove the permission entirely.
+    -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
     <application
         android:name=".NiaApplication"
         android:allowBackup="true"
@@ -43,6 +50,8 @@
         <!-- Disable Firebase analytics by default. This setting is overwritten for the `prod`
         flavor -->
         <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+        <!-- Disable collection of AD_ID for all build variants -->
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     </application>
 
 </manifest>
