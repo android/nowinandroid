@@ -30,6 +30,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.firebase.performance.gradle)
     compileOnly(libs.firebase.crashlytics.gradle)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 gradlePlugin {
@@ -70,6 +71,10 @@ gradlePlugin {
             id = "nowinandroid.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidRoom") {
+            id = "nowinandroid.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
         register("androidFirebase") {
             id = "nowinandroid.android.application.firebase"
             implementationClass = "AndroidApplicationFirebaseConventionPlugin"
@@ -78,6 +83,5 @@ gradlePlugin {
             id = "nowinandroid.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
-
     }
 }
