@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -43,7 +44,8 @@ class BookmarksViewModelTest {
 
     private val userDataRepository = TestUserDataRepository()
     private val newsRepository = TestNewsRepository()
-    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
+    private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
+        coroutineScope = TestScope(UnconfinedTestDispatcher()),
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
@@ -53,7 +55,7 @@ class BookmarksViewModelTest {
     fun setup() {
         viewModel = BookmarksViewModel(
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase,
+            userNewsResourceRepository = userNewsResourceRepository,
         )
     }
 
