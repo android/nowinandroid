@@ -23,9 +23,9 @@ import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQue
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
@@ -46,7 +46,7 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase,
+    userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
@@ -67,7 +67,7 @@ class TopicViewModel @Inject constructor(
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        getSaveableNewsResources = getSaveableNewsResources,
+        userNewsResourceRepository = userNewsResourceRepository,
     )
         .stateIn(
             scope = viewModelScope,
@@ -135,14 +135,12 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase,
+    userNewsResourceRepository: UserNewsResourceRepository,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
-        NewsResourceQuery(
-            filterTopicIds = setOf(element = topicId),
-        ),
+    val newsStream: Flow<List<UserNewsResource>> = userNewsResourceRepository.getUserNewsResources(
+        NewsResourceQuery(filterTopicIds = setOf(element = topicId)),
     )
 
     // Observe bookmarks

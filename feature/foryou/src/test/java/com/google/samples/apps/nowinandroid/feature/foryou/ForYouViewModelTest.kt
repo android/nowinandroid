@@ -17,10 +17,10 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -34,6 +34,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMoni
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -56,7 +57,8 @@ class ForYouViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
+    private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
+        coroutineScope = TestScope(UnconfinedTestDispatcher()),
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
@@ -72,7 +74,7 @@ class ForYouViewModelTest {
         viewModel = ForYouViewModel(
             syncStatusMonitor = syncStatusMonitor,
             userDataRepository = userDataRepository,
-            getUserNewsResources = getUserNewsResourcesUseCase,
+            userNewsResourceRepository = userNewsResourceRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
     }

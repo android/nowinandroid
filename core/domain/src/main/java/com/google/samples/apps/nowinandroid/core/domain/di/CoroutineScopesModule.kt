@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.di
+package com.google.samples.apps.nowinandroid.core.domain.di
 
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import javax.inject.Qualifier
+import javax.inject.Singleton
 
-@Module
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope
+
 @InstallIn(SingletonComponent::class)
-object DispatchersModule {
-    @Provides
-    @Dispatcher(IO)
-    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+@Module
+object CoroutinesScopesModule {
 
+    @Singleton
+    @ApplicationScope
     @Provides
-    @Dispatcher(Default)
-    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+    fun providesCoroutineScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Default)
 }
