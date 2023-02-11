@@ -20,6 +20,7 @@ import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
+import com.google.samples.apps.nowinandroid.configureKotlinAndroidToolchain
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -37,6 +38,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
             }
 
+            configureKotlinAndroidToolchain()
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 33

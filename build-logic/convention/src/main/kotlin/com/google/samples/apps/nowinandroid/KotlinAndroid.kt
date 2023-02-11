@@ -21,9 +21,11 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 /**
@@ -73,4 +75,13 @@ internal fun Project.configureKotlinAndroid(
 
 fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlinOptions", block)
+}
+
+/**
+ * Configure Kotlin's jvm toolchain for Android projects
+ */
+internal fun Project.configureKotlinAndroidToolchain() {
+    extensions.configure<KotlinAndroidProjectExtension> {
+        jvmToolchain(11)
+    }
 }
