@@ -58,7 +58,7 @@ object NetworkModule {
                     if (BuildConfig.DEBUG) {
                         setLevel(HttpLoggingInterceptor.Level.BODY)
                     }
-                }
+                },
         )
         .build()
 
