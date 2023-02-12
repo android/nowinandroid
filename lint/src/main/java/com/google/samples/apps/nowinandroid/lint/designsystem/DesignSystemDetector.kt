@@ -85,7 +85,6 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
             "TextButton" to "NiaTextButton",
             "FilterChip" to "NiaFilterChip",
             "ElevatedFilterChip" to "NiaFilterChip",
-            "DropdownMenu" to "NiaDropdownMenu",
             "NavigationBar" to "NiaNavigationBar",
             "NavigationBarItem" to "NiaNavigationBarItem",
             "NavigationRail" to "NiaNavigationRail",

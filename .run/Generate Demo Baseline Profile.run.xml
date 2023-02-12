@@ -34,7 +34,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":benchmark:pixel6Api31DemoBenchmarkAndroidTest" />
+          <option value=":benchmark:pixel6Api31atdDemoBenchmarkAndroidTest" />
           <option value="--rerun" />
           <option value="--enable-display" />
         </list>
