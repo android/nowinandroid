@@ -53,6 +53,7 @@ class ForYouScreenTest {
                     onboardingUiState = OnboardingUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -75,6 +76,7 @@ class ForYouScreenTest {
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Success(emptyList()),
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -103,6 +105,7 @@ class ForYouScreenTest {
                         feed = emptyList(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -146,6 +149,7 @@ class ForYouScreenTest {
                         feed = emptyList(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -182,6 +186,7 @@ class ForYouScreenTest {
                     OnboardingUiState.Shown(topics = followableTopicTestData),
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -204,6 +209,7 @@ class ForYouScreenTest {
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
+                    onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                 )
@@ -227,6 +233,7 @@ class ForYouScreenTest {
                     feed = userNewsResourcesTestData,
                 ),
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
             )

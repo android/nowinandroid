@@ -178,10 +178,7 @@ fun NiaApp(
                             )
                         }
 
-                        NiaNavHost(
-                            navController = appState.navController,
-                            onBackClick = appState::onBackClick,
-                        )
+                        NiaNavHost(appState.navController)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that

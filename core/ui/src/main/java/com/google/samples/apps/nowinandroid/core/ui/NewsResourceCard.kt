@@ -80,6 +80,7 @@ fun NewsResourceCardExpanded(
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
@@ -117,7 +118,10 @@ fun NewsResourceCardExpanded(
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceTopics(userNewsResource.followableTopics)
+                    NewsResourceTopics(
+                        topics = userNewsResource.followableTopics,
+                        onTopicClick = onTopicClick,
+                    )
                 }
             }
         }
@@ -232,26 +236,17 @@ fun NewsResourceShortDescription(
 @Composable
 fun NewsResourceTopics(
     topics: List<FollowableTopic>,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Store the ID of the Topic which has its "following" menu expanded, if any.
-    // To avoid UI confusion, only one topic can have an expanded menu at a time.
-    var expandedTopicId by remember { mutableStateOf<String?>(null) }
-
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (followableTopic in topics) {
             NiaTopicTag(
-                expanded = expandedTopicId == followableTopic.topic.id,
                 followed = followableTopic.isFollowed,
-                onDropdownMenuToggle = { show ->
-                    expandedTopicId = if (show) followableTopic.topic.id else null
-                },
-                onFollowClick = { }, // ToDo
-                onUnfollowClick = { }, // ToDo
-                onBrowseClick = { }, // ToDo
+                onClick = { onTopicClick(followableTopic.topic.id) },
                 text = {
                     val contentDescription = if (followableTopic.isFollowed) {
                         stringResource(
@@ -303,7 +298,7 @@ private fun ExpandedNewsResourcePreview(
     userNewsResources: List<UserNewsResource>,
 ) {
     CompositionLocalProvider(
-        LocalInspectionMode provides true
+        LocalInspectionMode provides true,
     ) {
         NiaTheme {
             Surface {
@@ -312,6 +307,7 @@ private fun ExpandedNewsResourcePreview(
                     isBookmarked = true,
                     onToggleBookmark = {},
                     onClick = {},
+                    onTopicClick = {},
                 )
             }
         }

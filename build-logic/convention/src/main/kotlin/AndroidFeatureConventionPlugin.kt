@@ -14,7 +14,9 @@
  *   limitations under the License.
  */
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.LibraryExtension
+import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -35,6 +37,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                     testInstrumentationRunner =
                         "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
                 }
+                configureGradleManagedDevices(this)
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
