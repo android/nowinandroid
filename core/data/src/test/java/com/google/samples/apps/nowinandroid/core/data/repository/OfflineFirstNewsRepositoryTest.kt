@@ -92,13 +92,16 @@ class OfflineFirstNewsRepositoryTest {
     fun offlineFirstNewsRepository_news_resources_for_topic_is_backed_by_news_resource_dao() =
         runTest {
             assertEquals(
-                newsResourceDao.getNewsResources(
+                expected = newsResourceDao.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
+                    useFilterTopicIds = true,
                 )
                     .first()
                     .map(PopulatedNewsResource::asExternalModel),
-                subject.getNewsResources(
-                    filterTopicIds = filteredInterestsIds,
+                actual = subject.getNewsResources(
+                    query = NewsResourceQuery(
+                        filterTopicIds = filteredInterestsIds,
+                    ),
                 )
                     .first(),
             )
@@ -106,7 +109,9 @@ class OfflineFirstNewsRepositoryTest {
             assertEquals(
                 emptyList(),
                 subject.getNewsResources(
-                    filterTopicIds = nonPresentInterestsIds,
+                    query = NewsResourceQuery(
+                        filterTopicIds = nonPresentInterestsIds,
+                    ),
                 )
                     .first(),
             )
