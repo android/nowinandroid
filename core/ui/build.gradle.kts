@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+    implementation(project(":core:analytics"))
 
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)

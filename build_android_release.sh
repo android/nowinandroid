@@ -25,44 +25,26 @@ export JAVA_HOME="$(cd $DIR/../../../prebuilts/studio/jdk/jdk11/linux && pwd )"
 echo "JAVA_HOME=$JAVA_HOME"
 
 export ANDROID_HOME="$(cd $DIR/../../../prebuilts/fullsdk/linux && pwd )"
-
 echo "ANDROID_HOME=$ANDROID_HOME"
+
+echo "Copying google-services.json"
+cp $DIR/../nowinandroid-prebuilts/google-services.json $DIR/app
+
+echo "Copying local.properties"
+cp $DIR/../nowinandroid-prebuilts/local.properties $DIR
+
 cd $DIR
 
-# Build
-GRADLE_PARAMS=" --stacktrace"
-$DIR/gradlew :app:clean :app:assemble ${GRADLE_PARAMS}
+# Build the prodRelease variant
+GRADLE_PARAMS=" --stacktrace -Puse-google-services"
+$DIR/gradlew :app:clean :app:assembleProdRelease :app:bundleProdRelease ${GRADLE_PARAMS}
 BUILD_RESULT=$?
 
-# Demo debug
-cp $APP_OUT/apk/demo/debug/app-demo-debug.apk $DIST_DIR
-
-# Demo release
-cp $APP_OUT/apk/demo/release/app-demo-release.apk $DIST_DIR
-
-# Prod debug
-cp $APP_OUT/apk/prod/debug/app-prod-debug.apk $DIST_DIR/app-prod-debug.apk
-
-# Prod release
+# Prod release apk
 cp $APP_OUT/apk/prod/release/app-prod-release.apk $DIST_DIR/app-prod-release.apk
-#cp $APP_OUT/mapping/release/mapping.txt $DIST_DIR/mobile-release-apk-mapping.txt
-
-# Build App Bundles
-# Don't clean here, otherwise all apks are gone.
-$DIR/gradlew :app:bundle ${GRADLE_PARAMS}
-
-# Demo debug
-cp $APP_OUT/bundle/demoDebug/app-demo-debug.aab $DIST_DIR/app-demo-debug.aab
-
-# Demo release
-cp $APP_OUT/bundle/demoRelease/app-demo-release.aab $DIST_DIR/app-demo-release.aab
-
-# Prod debug
-cp $APP_OUT/bundle/prodDebug/app-prod-debug.aab $DIST_DIR/app-prod-debug.aab
-
-# Prod release
+# Prod release bundle
 cp $APP_OUT/bundle/prodRelease/app-prod-release.aab $DIST_DIR/app-prod-release.aab
-#cp $APP_OUT/mapping/prodRelease/mapping.txt $DIST_DIR/mobile-release-aab-mapping.txt
-BUILD_RESULT=$?
+# Prod release bundle mapping
+cp $APP_OUT/mapping/prodRelease/mapping.txt $DIST_DIR/mobile-release-aab-mapping.txt
 
 exit $BUILD_RESULT

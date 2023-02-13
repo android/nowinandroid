@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
+import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
@@ -37,6 +38,8 @@ class OfflineFirstUserDataRepositoryTest {
 
     private lateinit var niaPreferencesDataSource: NiaPreferencesDataSource
 
+    private val analyticsHelper = NoOpAnalyticsHelper()
+
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
@@ -48,6 +51,7 @@ class OfflineFirstUserDataRepositoryTest {
 
         subject = OfflineFirstUserDataRepository(
             niaPreferencesDataSource = niaPreferencesDataSource,
+            analyticsHelper,
         )
     }
 

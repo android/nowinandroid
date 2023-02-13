@@ -19,17 +19,18 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
+    id("nowinandroid.android.application.flavors")
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
     id("jacoco")
-    id("nowinandroid.firebase-perf")
+    id("nowinandroid.android.application.firebase")
 }
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
-        versionCode = 4
-        versionName = "0.0.4" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 5
+        versionName = "0.0.5" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
@@ -101,6 +102,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":sync:work"))
 
