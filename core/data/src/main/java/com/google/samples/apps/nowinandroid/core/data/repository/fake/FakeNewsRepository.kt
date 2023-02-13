@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -43,26 +44,28 @@ class FakeNewsRepository @Inject constructor(
     private val datasource: FakeNiaNetworkDataSource,
 ) : NewsRepository {
 
-    override fun getNewsResources(): Flow<List<NewsResource>> =
-        flow {
-            emit(
-                datasource.getNewsResources()
-                    .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel),
-            )
-        }.flowOn(ioDispatcher)
-
     override fun getNewsResources(
-        filterTopicIds: Set<String>,
+        query: NewsResourceQuery,
     ): Flow<List<NewsResource>> =
         flow {
             emit(
                 datasource
                     .getNewsResources()
-                    .filter { it.topics.intersect(filterTopicIds).isNotEmpty() }
+                    .filter { networkNewsResource ->
+                        // Filter out any news resources which don't match the current query.
+                        // If no query parameters (filterTopicIds or filterNewsIds) are specified
+                        // then the news resource is returned.
+                        listOfNotNull(
+                            true,
+                            query.filterNewsIds?.contains(networkNewsResource.id),
+                            query.filterTopicIds?.let { filterTopicIds ->
+                                networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
+                            },
+                        )
+                            .all(true::equals)
+                    }
                     .map(NetworkNewsResource::asEntity)
                     .map(NewsResourceEntity::asExternalModel),
-
             )
         }.flowOn(ioDispatcher)
 
