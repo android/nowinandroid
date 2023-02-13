@@ -225,7 +225,7 @@ fun SettingsDialogThemeChooserRow(
                 role = Role.RadioButton,
                 onClick = onClick,
             )
-            .padding(8.dp),
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(
@@ -283,6 +283,7 @@ private fun TextLink(text: String, url: String) {
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
+            .padding(vertical = 8.dp)
             .clickable {
                 ContextCompat.startActivity(context, launchResourceIntent, null)
             },
