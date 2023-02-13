@@ -63,6 +63,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 @Composable
 internal fun TopicRoute(
     onBackClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
@@ -76,6 +77,7 @@ internal fun TopicRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
+        onTopicClick = onTopicClick,
     )
 }
 
@@ -86,6 +88,7 @@ internal fun TopicScreen(
     newsUiState: NewsUiState,
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -122,6 +125,7 @@ internal fun TopicScreen(
                     news = newsUiState,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged,
+                    onTopicClick = onTopicClick,
                 )
             }
         }
@@ -137,13 +141,14 @@ private fun LazyListScope.TopicBody(
     news: NewsUiState,
     imageUrl: String,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
 ) {
     // TODO: Show icon if available
     item {
         TopicHeader(name, description, imageUrl)
     }
 
-    userNewsResourceCards(news, onBookmarkChanged)
+    userNewsResourceCards(news, onBookmarkChanged, onTopicClick)
 }
 
 @Composable
@@ -174,12 +179,14 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
 private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
 ) {
     when (news) {
         is NewsUiState.Success -> {
             userNewsResourceCardItems(
                 items = news.news,
                 onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
+                onTopicClick = onTopicClick,
                 itemModifier = Modifier.padding(24.dp),
             )
         }
@@ -200,11 +207,12 @@ private fun TopicBodyPreview() {
     NiaTheme {
         LazyColumn {
             TopicBody(
-                "Jetpack Compose",
-                "Lorem ipsum maximum",
-                NewsUiState.Success(emptyList()),
-                "",
-                { _, _ -> },
+                name = "Jetpack Compose",
+                description = "Lorem ipsum maximum",
+                news = NewsUiState.Success(emptyList()),
+                imageUrl = "",
+                onBookmarkChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -261,6 +269,7 @@ fun TopicScreenPopulated(
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
@@ -277,6 +286,7 @@ fun TopicScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onTopicClick = {},
             )
         }
     }
