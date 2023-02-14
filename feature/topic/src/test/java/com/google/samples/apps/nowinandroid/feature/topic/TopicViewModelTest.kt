@@ -71,6 +71,10 @@ class TopicViewModelTest {
     }
 
     @Test
+    fun topicId_matchesTopicIdFromSavedStateHandle() =
+        assertEquals(testInputTopics[0].topic.id, viewModel.topicId)
+
+    @Test
     fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
