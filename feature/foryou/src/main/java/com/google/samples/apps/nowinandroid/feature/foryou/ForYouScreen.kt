@@ -202,8 +202,9 @@ internal fun ForYouScreen(
     ) {
         val loadingContentDescription = stringResource(id = R.string.for_you_loading)
         Box(
-            modifier = Modifier.fillMaxWidth()
-            .padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
         ) {
             NiaOverlayLoadingWheel(
                 modifier = Modifier
