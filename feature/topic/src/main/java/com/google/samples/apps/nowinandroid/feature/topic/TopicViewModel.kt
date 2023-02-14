@@ -50,6 +50,8 @@ class TopicViewModel @Inject constructor(
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
 
+    val topicId = topicArgs.topicId
+
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
