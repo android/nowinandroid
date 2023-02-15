@@ -75,10 +75,6 @@ class TestNewsResourceDao : NewsResourceDao {
         return entities.map { it.id.toLong() }
     }
 
-    override suspend fun updateNewsResources(entities: List<NewsResourceEntity>) {
-        throw NotImplementedError("Unused in tests")
-    }
-
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         entitiesStateFlow.value = newsResourceEntities
     }
