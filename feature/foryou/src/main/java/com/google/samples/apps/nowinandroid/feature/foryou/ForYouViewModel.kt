@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
@@ -127,7 +128,11 @@ private fun UserDataRepository.getFollowedUserNewsResources(
         if (followedTopics == null) {
             flowOf(emptyList())
         } else {
-            getUserNewsResources(filterTopicIds = followedTopics)
+            getUserNewsResources(
+                NewsResourceQuery(
+                    filterTopicIds = followedTopics,
+                ),
+            )
         }
     }
 
