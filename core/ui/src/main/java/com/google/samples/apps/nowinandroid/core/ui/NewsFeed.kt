@@ -67,7 +67,6 @@ fun LazyGridScope.newsFeed(
                     onClick = {
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
-                            newsResourceTitle = userNewsResource.title,
                         )
                         launchCustomChromeTab(context, resourceUrl, backgroundColor)
                     },
