@@ -56,7 +56,6 @@ fun LazyListScope.userNewsResourceCardItems(
             onClick = {
                 analyticsHelper.logNewsResourceOpened(
                     newsResourceId = userNewsResource.id,
-                    newsResourceTitle = userNewsResource.title,
                 )
                 when (onItemClick) {
                     null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
