@@ -67,7 +67,7 @@ class OfflineFirstNewsRepository @Inject constructor(
             },
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
-                changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds
+                changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
                     val networkNewsResources = network.getNewsResources(ids = chunkedIds)
 
                     // Order of invocation matters to satisfy id and foreign key constraints!
@@ -80,7 +80,7 @@ class OfflineFirstNewsRepository @Inject constructor(
                     )
                     newsResourceDao.upsertNewsResources(
                         newsResourceEntities = networkNewsResources.map(
-                            NetworkNewsResource::asEntity
+                            NetworkNewsResource::asEntity,
                         ),
                     )
                     newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
