@@ -34,6 +34,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private const val SYNC_BATCH_SIZE = 40
+
 /**
  * Disk storage backed implementation of the [NewsRepository].
  * Reads are exclusively from local storage to support offline access.
@@ -65,26 +67,29 @@ class OfflineFirstNewsRepository @Inject constructor(
             },
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
-                val networkNewsResources = network.getNewsResources(ids = changedIds)
+                changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds
+                    val networkNewsResources = network.getNewsResources(ids = chunkedIds)
 
-                // Order of invocation matters to satisfy id and foreign key constraints!
+                    // Order of invocation matters to satisfy id and foreign key constraints!
 
-                topicDao.insertOrIgnoreTopics(
-                    topicEntities = networkNewsResources
-                        .map(NetworkNewsResource::topicEntityShells)
-                        .flatten()
-                        .distinctBy(TopicEntity::id),
-                )
-                newsResourceDao.upsertNewsResources(
-                    newsResourceEntities = networkNewsResources
-                        .map(NetworkNewsResource::asEntity),
-                )
-                newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
-                    newsResourceTopicCrossReferences = networkNewsResources
-                        .map(NetworkNewsResource::topicCrossReferences)
-                        .distinct()
-                        .flatten(),
-                )
+                    topicDao.insertOrIgnoreTopics(
+                        topicEntities = networkNewsResources
+                            .map(NetworkNewsResource::topicEntityShells)
+                            .flatten()
+                            .distinctBy(TopicEntity::id),
+                    )
+                    newsResourceDao.upsertNewsResources(
+                        newsResourceEntities = networkNewsResources.map(
+                            NetworkNewsResource::asEntity
+                        ),
+                    )
+                    newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
+                        newsResourceTopicCrossReferences = networkNewsResources
+                            .map(NetworkNewsResource::topicCrossReferences)
+                            .distinct()
+                            .flatten(),
+                    )
+                }
             },
         )
 }
