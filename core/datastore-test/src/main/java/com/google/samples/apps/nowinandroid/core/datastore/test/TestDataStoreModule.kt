@@ -50,7 +50,7 @@ object TestDataStoreModule {
         tmpFolder.testUserPreferencesDataStore(
             // TODO: Provide an application-wide CoroutineScope in the DI graph
             coroutineScope = CoroutineScope(SupervisorJob() + ioDispatcher),
-            userPreferencesSerializer = userPreferencesSerializer
+            userPreferencesSerializer = userPreferencesSerializer,
         )
 }
 
@@ -59,7 +59,7 @@ fun TemporaryFolder.testUserPreferencesDataStore(
     userPreferencesSerializer: UserPreferencesSerializer = UserPreferencesSerializer(),
 ) = DataStoreFactory.create(
     serializer = userPreferencesSerializer,
-    scope = coroutineScope
+    scope = coroutineScope,
 ) {
     newFile("user_preferences_test.pb")
 }
