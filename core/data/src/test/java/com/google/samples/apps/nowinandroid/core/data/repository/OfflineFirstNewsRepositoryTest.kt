@@ -36,6 +36,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -44,6 +46,8 @@ import org.junit.rules.TemporaryFolder
 import kotlin.test.assertEquals
 
 class OfflineFirstNewsRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
 
     private lateinit var subject: OfflineFirstNewsRepository
 
@@ -65,7 +69,7 @@ class OfflineFirstNewsRepositoryTest {
         network = TestNiaNetworkDataSource()
         synchronizer = TestSynchronizer(
             NiaPreferencesDataSource(
-                tmpFolder.testUserPreferencesDataStore(),
+                tmpFolder.testUserPreferencesDataStore(testScope),
             ),
         )
 
@@ -78,7 +82,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 newsResourceDao.getNewsResources()
                     .first()
@@ -90,7 +94,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_news_resources_for_topic_is_backed_by_news_resource_dao() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 expected = newsResourceDao.getNewsResources(
                     filterTopicIds = filteredInterestsIds,
@@ -119,7 +123,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             subject.syncWith(synchronizer)
 
             val newsResourcesFromNetwork = network.getNewsResources()
@@ -144,7 +148,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_sync_deletes_items_marked_deleted_on_network() =
-        runTest {
+        testScope.runTest {
             val newsResourcesFromNetwork = network.getNewsResources()
                 .map(NetworkNewsResource::asEntity)
                 .map(NewsResourceEntity::asExternalModel)
@@ -185,7 +189,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_incremental_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             // Set news version to 7
             synchronizer.updateChangeListVersions {
                 copy(newsResourceVersion = 7)
@@ -224,7 +228,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_sync_saves_shell_topic_entities() =
-        runTest {
+        testScope.runTest {
             subject.syncWith(synchronizer)
 
             assertEquals(
@@ -239,7 +243,7 @@ class OfflineFirstNewsRepositoryTest {
 
     @Test
     fun offlineFirstNewsRepository_sync_saves_topic_cross_references() =
-        runTest {
+        testScope.runTest {
             subject.syncWith(synchronizer)
 
             assertEquals(
