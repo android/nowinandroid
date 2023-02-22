@@ -34,6 +34,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+// Heuristic value to optimize for serialization and deserialization cost on client and server
+// for each news resource batch.
 private const val SYNC_BATCH_SIZE = 40
 
 /**
