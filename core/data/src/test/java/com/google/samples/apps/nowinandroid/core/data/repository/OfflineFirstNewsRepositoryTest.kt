@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestTopicDao
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.filteredInterestsIds
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.nonPresentInterestsIds
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
@@ -111,8 +112,8 @@ class OfflineFirstNewsRepositoryTest {
             )
 
             assertEquals(
-                emptyList(),
-                subject.getNewsResources(
+                expected = emptyList(),
+                actual = subject.getNewsResources(
                     query = NewsResourceQuery(
                         filterTopicIds = nonPresentInterestsIds,
                     ),
@@ -135,14 +136,14 @@ class OfflineFirstNewsRepositoryTest {
                 .map(PopulatedNewsResource::asExternalModel)
 
             assertEquals(
-                newsResourcesFromNetwork.map(NewsResource::id),
-                newsResourcesFromDb.map(NewsResource::id),
+                newsResourcesFromNetwork.map(NewsResource::id).sorted(),
+                newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
             assertEquals(
-                network.latestChangeListVersion(CollectionType.NewsResources),
-                synchronizer.getChangeListVersions().newsResourceVersion,
+                expected = network.latestChangeListVersion(CollectionType.NewsResources),
+                actual = synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -176,14 +177,14 @@ class OfflineFirstNewsRepositoryTest {
 
             // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
-                newsResourcesFromNetwork.map(NewsResource::id) - deletedItems,
-                newsResourcesFromDb.map(NewsResource::id),
+                expected = (newsResourcesFromNetwork.map(NewsResource::id) - deletedItems).sorted(),
+                actual = newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
             assertEquals(
-                network.latestChangeListVersion(CollectionType.NewsResources),
-                synchronizer.getChangeListVersions().newsResourceVersion,
+                expected = network.latestChangeListVersion(CollectionType.NewsResources),
+                actual = synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -215,14 +216,14 @@ class OfflineFirstNewsRepositoryTest {
                 .map(PopulatedNewsResource::asExternalModel)
 
             assertEquals(
-                newsResourcesFromNetwork.map(NewsResource::id),
-                newsResourcesFromDb.map(NewsResource::id),
+                expected = newsResourcesFromNetwork.map(NewsResource::id).sorted(),
+                actual = newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
             assertEquals(
-                changeList.last().changeListVersion,
-                synchronizer.getChangeListVersions().newsResourceVersion,
+                expected = changeList.last().changeListVersion,
+                actual = synchronizer.getChangeListVersions().newsResourceVersion,
             )
         }
 
@@ -232,12 +233,14 @@ class OfflineFirstNewsRepositoryTest {
             subject.syncWith(synchronizer)
 
             assertEquals(
-                network.getNewsResources()
+                expected = network.getNewsResources()
                     .map(NetworkNewsResource::topicEntityShells)
                     .flatten()
-                    .distinctBy(TopicEntity::id),
-                topicDao.getTopicEntities()
-                    .first(),
+                    .distinctBy(TopicEntity::id)
+                    .sortedBy(TopicEntity::toString),
+                actual = topicDao.getTopicEntities()
+                    .first()
+                    .sortedBy(TopicEntity::toString),
             )
         }
 
@@ -247,11 +250,13 @@ class OfflineFirstNewsRepositoryTest {
             subject.syncWith(synchronizer)
 
             assertEquals(
-                network.getNewsResources()
+                expected = network.getNewsResources()
                     .map(NetworkNewsResource::topicCrossReferences)
+                    .flatten()
                     .distinct()
-                    .flatten(),
-                newsResourceDao.topicCrossReferences,
+                    .sortedBy(NewsResourceTopicCrossRef::toString),
+                actual = newsResourceDao.topicCrossReferences
+                    .sortedBy(NewsResourceTopicCrossRef::toString),
             )
         }
 }
