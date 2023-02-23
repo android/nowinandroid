@@ -29,16 +29,7 @@ import kotlinx.coroutines.flow.update
 class TestTopicDao : TopicDao {
 
     private var entitiesStateFlow = MutableStateFlow(
-        listOf(
-            TopicEntity(
-                id = "1",
-                name = "Topic",
-                shortDescription = "short description",
-                longDescription = "long description",
-                url = "URL",
-                imageUrl = "image URL",
-            ),
-        ),
+        emptyList<TopicEntity>(),
     )
 
     override fun getTopicEntity(topicId: String): Flow<TopicEntity> {
@@ -53,8 +44,10 @@ class TestTopicDao : TopicDao {
             .map { topics -> topics.filter { it.id in ids } }
 
     override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
-        entitiesStateFlow.value = topicEntities
-        // Assume no conflicts on insert
+        // Keep old values over new values
+        entitiesStateFlow.update { oldValues ->
+            (oldValues + topicEntities).distinctBy(TopicEntity::id)
+        }
         return topicEntities.map { it.id.toLong() }
     }
 
@@ -63,7 +56,10 @@ class TestTopicDao : TopicDao {
     }
 
     override suspend fun upsertTopics(entities: List<TopicEntity>) {
-        entitiesStateFlow.value = entities
+        // Overwrite old values with new values
+        entitiesStateFlow.update { oldValues ->
+            (entities + oldValues).distinctBy(TopicEntity::id)
+        }
     }
 
     override suspend fun deleteTopics(ids: List<String>) {
