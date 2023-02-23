@@ -24,6 +24,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -34,6 +36,9 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class OfflineFirstUserDataRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
+
     private lateinit var subject: OfflineFirstUserDataRepository
 
     private lateinit var niaPreferencesDataSource: NiaPreferencesDataSource
@@ -46,7 +51,7 @@ class OfflineFirstUserDataRepositoryTest {
     @Before
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(),
+            tmpFolder.testUserPreferencesDataStore(testScope),
         )
 
         subject = OfflineFirstUserDataRepository(
@@ -57,7 +62,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_default_user_data_is_correct() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 UserData(
                     bookmarkedNewsResources = emptySet(),
@@ -73,7 +78,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
             assertEquals(
@@ -104,7 +109,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
 
             assertEquals(
@@ -126,7 +131,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_bookmark_news_resource_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.updateNewsResourceBookmark(newsResourceId = "0", bookmarked = true)
 
             assertEquals(
@@ -157,7 +162,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_set_theme_brand_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setThemeBrand(ThemeBrand.ANDROID)
 
             assertEquals(
@@ -177,7 +182,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_set_dynamic_color_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setDynamicColorPreference(true)
 
             assertEquals(
@@ -197,7 +202,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun offlineFirstUserDataRepository_set_dark_theme_config_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setDarkThemeConfig(DarkThemeConfig.DARK)
 
             assertEquals(
@@ -217,7 +222,7 @@ class OfflineFirstUserDataRepositoryTest {
 
     @Test
     fun whenUserCompletesOnboarding_thenRemovesAllInterests_shouldHideOnboardingIsFalse() =
-        runTest {
+        testScope.runTest {
             subject.setFollowedTopicIds(setOf("1"))
             subject.setShouldHideOnboarding(true)
             assertTrue(subject.userData.first().shouldHideOnboarding)
