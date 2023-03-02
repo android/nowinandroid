@@ -37,7 +37,6 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
     onToggleBookmark: (item: UserNewsResource) -> Unit,
-    onItemClick: ((item: UserNewsResource) -> Unit)? = null,
     onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
 ) = items(
@@ -58,10 +57,6 @@ fun LazyListScope.userNewsResourceCardItems(
                     newsResourceId = userNewsResource.id,
                     newsResourceTitle = userNewsResource.title,
                 )
-                when (onItemClick) {
-                    null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
-                    else -> onItemClick(userNewsResource)
-                }
             },
             onTopicClick = onTopicClick,
             modifier = itemModifier,
