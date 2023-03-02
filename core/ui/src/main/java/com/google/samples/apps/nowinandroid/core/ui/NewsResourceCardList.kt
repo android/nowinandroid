@@ -31,8 +31,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
  * [UserNewsResource]s.
  *
  * [onToggleBookmark] defines the action invoked when a user wishes to bookmark an item
- * [onItemClick] optional parameter for action to be performed when the card is clicked. The
- * default action launches an intent matching the card.
+ * The default action launches an intent matching the card.
  */
 fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
