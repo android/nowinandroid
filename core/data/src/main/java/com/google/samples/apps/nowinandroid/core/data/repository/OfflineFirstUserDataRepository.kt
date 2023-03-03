@@ -37,13 +37,13 @@ class OfflineFirstUserDataRepository @Inject constructor(
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
         niaPreferencesDataSource.setFollowedTopicIds(followedTopicIds)
 
-    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
-        niaPreferencesDataSource.toggleFollowedTopicId(followedTopicId, followed)
+    override suspend fun setTopicIdFollowed(followedTopicId: String, followed: Boolean) {
+        niaPreferencesDataSource.setTopicIdFollowed(followedTopicId, followed)
         analyticsHelper.logTopicFollowToggled(followedTopicId, followed)
     }
 
     override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
-        niaPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)
+        niaPreferencesDataSource.setNewsResourceBookmarked(newsResourceId, bookmarked)
         analyticsHelper.logNewsResourceBookmarkToggled(
             newsResourceId = newsResourceId,
             isBookmarked = bookmarked,

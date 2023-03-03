@@ -34,9 +34,9 @@ interface UserDataRepository {
     suspend fun setFollowedTopicIds(followedTopicIds: Set<String>)
 
     /**
-     * Toggles the user's newly followed/unfollowed topic
+     * Sets the user's newly followed/unfollowed topic
      */
-    suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean)
+    suspend fun setTopicIdFollowed(followedTopicId: String, followed: Boolean)
 
     /**
      * Updates the bookmarked status for a news resource
