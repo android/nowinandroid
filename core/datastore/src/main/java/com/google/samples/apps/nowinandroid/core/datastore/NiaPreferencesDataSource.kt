@@ -138,7 +138,7 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun toggleNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+    suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         userPreferences.updateData {
             it.copy {
                 if (viewed) {

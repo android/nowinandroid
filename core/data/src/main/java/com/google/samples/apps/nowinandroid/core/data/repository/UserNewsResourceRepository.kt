@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.repository
+package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -38,4 +37,9 @@ interface UserNewsResourceRepository {
      * Returns available news resources for the user's followed topics as a stream.
      */
     fun getUserNewsResourcesForFollowedTopics(): Flow<List<UserNewsResource>>
+
+    /**
+     *
+     */
+    fun getBookmarkedUserNewsResources(): Flow<List<UserNewsResource>>
 }

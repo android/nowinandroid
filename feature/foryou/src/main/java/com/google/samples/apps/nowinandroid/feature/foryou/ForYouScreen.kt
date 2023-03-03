@@ -81,7 +81,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconT
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
@@ -107,7 +107,7 @@ internal fun ForYouRoute(
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
-        onNewsResourcesViewedChanged = viewModel::updateNewsResourceViewed,
+        onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         modifier = modifier,
     )
 }
@@ -121,7 +121,7 @@ internal fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
-    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
@@ -179,7 +179,7 @@ internal fun ForYouScreen(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-            onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
+            onNewsResourceViewed = onNewsResourceViewed,
             onTopicClick = onTopicClick,
         )
 
@@ -416,7 +416,7 @@ fun ForYouScreenPopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -440,7 +440,7 @@ fun ForYouScreenOfflinePopulatedFeed(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -466,7 +466,7 @@ fun ForYouScreenTopicSelection(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -485,7 +485,7 @@ fun ForYouScreenLoading() {
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -509,7 +509,7 @@ fun ForYouScreenPopulatedAndLoading(
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }

@@ -164,7 +164,7 @@ class OfflineFirstUserDataRepositoryTest {
     @Test
     fun offlineFirstUserDataRepository_update_viewed_news_resources_delegates_to_nia_preferences() =
         runTest {
-            subject.updateNewsResourceViewed(newsResourceId = "0", viewed = true)
+            subject.setNewsResourceViewed(newsResourceId = "0", viewed = true)
 
             assertEquals(
                 setOf("0"),
@@ -173,7 +173,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
             )
 
-            subject.updateNewsResourceViewed(newsResourceId = "1", viewed = true)
+            subject.setNewsResourceViewed(newsResourceId = "1", viewed = true)
 
             assertEquals(
                 setOf("0", "1"),

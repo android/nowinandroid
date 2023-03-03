@@ -40,7 +40,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
-                isViewed = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},
@@ -69,7 +69,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
-                isViewed = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},
@@ -113,7 +113,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResource = unreadNews,
                 isBookmarked = false,
-                isViewed = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},
@@ -137,7 +137,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResource = readNews,
                 isBookmarked = false,
-                isViewed = true,
+                hasBeenViewed = true,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},

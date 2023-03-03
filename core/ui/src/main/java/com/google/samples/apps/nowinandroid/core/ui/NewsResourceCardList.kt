@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 
 /**
  * Extension function for displaying a [List] of [NewsResourceCardExpanded] backed by a list of
@@ -37,7 +37,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
     onToggleBookmark: (item: UserNewsResource) -> Unit,
-    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onItemClick: ((item: UserNewsResource) -> Unit)? = null,
     onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
@@ -53,7 +53,7 @@ fun LazyListScope.userNewsResourceCardItems(
         NewsResourceCardExpanded(
             userNewsResource = userNewsResource,
             isBookmarked = userNewsResource.isSaved,
-            isViewed = userNewsResource.isViewed,
+            hasBeenViewed = userNewsResource.hasBeenViewed,
             onToggleBookmark = { onToggleBookmark(userNewsResource) },
             onClick = {
                 analyticsHelper.logNewsResourceOpened(
@@ -61,12 +61,10 @@ fun LazyListScope.userNewsResourceCardItems(
                     newsResourceTitle = userNewsResource.title,
                 )
                 when (onItemClick) {
-                    null -> {
-                        launchCustomChromeTab(context, resourceUrl, backgroundColor)
-                        onNewsResourcesViewedChanged(userNewsResource.id, true)
-                    }
+                    null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
                     else -> onItemClick(userNewsResource)
                 }
+                onNewsResourceViewed(userNewsResource.id)
             },
             onTopicClick = onTopicClick,
             modifier = itemModifier,

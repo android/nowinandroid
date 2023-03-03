@@ -46,7 +46,7 @@ interface UserDataRepository {
     /**
      * Updates the viewed status for a news resource
      */
-    suspend fun updateNewsResourceViewed(newsResourceId: String, viewed: Boolean)
+    suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean)
 
     /**
      * Sets the desired theme brand.
