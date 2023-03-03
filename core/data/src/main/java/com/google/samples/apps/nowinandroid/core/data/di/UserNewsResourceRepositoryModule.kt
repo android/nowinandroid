@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.di
+package com.google.samples.apps.nowinandroid.core.data.di
 
-import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.UserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

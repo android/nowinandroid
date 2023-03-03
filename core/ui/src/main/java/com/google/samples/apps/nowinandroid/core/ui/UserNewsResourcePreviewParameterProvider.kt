@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
@@ -25,6 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Vid
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

@@ -25,16 +25,14 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.testharness.TestHarness
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,7 +67,6 @@ class NavigationUiTest {
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     val userNewsResourceRepository = CompositeUserNewsResourceRepository(
-        coroutineScope = TestScope(UnconfinedTestDispatcher()),
         newsRepository = TestNewsRepository(),
         userDataRepository = TestUserDataRepository(),
     )

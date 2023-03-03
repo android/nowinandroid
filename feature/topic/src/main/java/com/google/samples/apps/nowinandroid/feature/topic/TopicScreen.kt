@@ -51,8 +51,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilte
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
@@ -79,7 +79,7 @@ internal fun TopicRoute(
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
-        onNewsResourcesViewedChanged = viewModel::updateNewsResourceViewed,
+        onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         onTopicClick = onTopicClick,
     )
 }
@@ -93,7 +93,7 @@ internal fun TopicScreen(
     onFollowClick: (Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
-    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
@@ -129,7 +129,7 @@ internal fun TopicScreen(
                     news = newsUiState,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged,
-                    onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
+                    onNewsResourceViewed = onNewsResourceViewed,
                     onTopicClick = onTopicClick,
                 )
             }
@@ -146,7 +146,7 @@ private fun LazyListScope.TopicBody(
     news: NewsUiState,
     imageUrl: String,
     onBookmarkChanged: (String, Boolean) -> Unit,
-    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     // TODO: Show icon if available
@@ -154,7 +154,7 @@ private fun LazyListScope.TopicBody(
         TopicHeader(name, description, imageUrl)
     }
 
-    userNewsResourceCards(news, onBookmarkChanged, onNewsResourcesViewedChanged, onTopicClick)
+    userNewsResourceCards(news, onBookmarkChanged, onNewsResourceViewed, onTopicClick)
 }
 
 @Composable
@@ -185,7 +185,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
 private fun LazyListScope.userNewsResourceCards(
     news: NewsUiState,
     onBookmarkChanged: (String, Boolean) -> Unit,
-    onNewsResourcesViewedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     when (news) {
@@ -193,7 +193,7 @@ private fun LazyListScope.userNewsResourceCards(
             userNewsResourceCardItems(
                 items = news.news,
                 onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
-                onNewsResourcesViewedChanged = onNewsResourcesViewedChanged,
+                onNewsResourceViewed = onNewsResourceViewed,
                 onTopicClick = onTopicClick,
                 itemModifier = Modifier.padding(24.dp),
             )
@@ -220,7 +220,7 @@ private fun TopicBodyPreview() {
                 news = NewsUiState.Success(emptyList()),
                 imageUrl = "",
                 onBookmarkChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -278,7 +278,7 @@ fun TopicScreenPopulated(
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }
@@ -296,7 +296,7 @@ fun TopicScreenLoading() {
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
-                onNewsResourcesViewedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
                 onTopicClick = {},
             )
         }

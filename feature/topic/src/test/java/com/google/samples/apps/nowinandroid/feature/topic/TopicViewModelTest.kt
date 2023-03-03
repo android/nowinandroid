@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -55,7 +54,6 @@ class TopicViewModelTest {
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
-        coroutineScope = TestScope(UnconfinedTestDispatcher()),
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )

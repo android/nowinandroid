@@ -61,10 +61,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconT
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
@@ -81,7 +81,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 fun NewsResourceCardExpanded(
     userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
-    isViewed: Boolean,
+    hasBeenViewed: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
     onTopicClick: (String) -> Unit,
@@ -119,8 +119,8 @@ fun NewsResourceCardExpanded(
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (!isViewed) {
-                            Dot(
+                        if (!hasBeenViewed) {
+                            NotificationDot(
                                 color = MaterialTheme.colorScheme.tertiary,
                                 modifier = Modifier.size(8.dp),
                             )
@@ -196,7 +196,7 @@ fun BookmarkButton(
 }
 
 @Composable
-fun Dot(
+fun NotificationDot(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -333,7 +333,7 @@ private fun ExpandedNewsResourcePreview(
             NewsResourceCardExpanded(
                 userNewsResource = userNewsResources[0],
                 isBookmarked = true,
-                isViewed = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},

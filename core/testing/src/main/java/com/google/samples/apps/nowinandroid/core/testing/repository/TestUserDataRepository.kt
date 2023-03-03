@@ -73,7 +73,7 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    override suspend fun updateNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+    override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         currentUserData.let { current ->
             _userData.tryEmit(
                 current.copy(

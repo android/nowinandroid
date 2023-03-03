@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain
+package com.google.samples.apps.nowinandroid.core.data
 
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
-import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
-import com.google.samples.apps.nowinandroid.core.domain.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Test
@@ -39,7 +37,6 @@ class CompositeUserNewsResourceRepositoryTest {
     private val userDataRepository = TestUserDataRepository()
 
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
-        coroutineScope = TestScope(UnconfinedTestDispatcher()),
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
@@ -71,7 +68,13 @@ class CompositeUserNewsResourceRepositoryTest {
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
         // Obtain a stream of user news resources for the given topic id.
         val userNewsResources =
-            userNewsResourceRepository.getUserNewsResources(NewsResourceQuery(filterTopicIds = setOf(sampleTopic1.id)))
+            userNewsResourceRepository.getUserNewsResources(
+                NewsResourceQuery(
+                    filterTopicIds = setOf(
+                        sampleTopic1.id,
+                    ),
+                ),
+            )
 
         // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
@@ -104,6 +107,29 @@ class CompositeUserNewsResourceRepositoryTest {
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
                 .mapToUserNewsResources(userData),
+            userNewsResources.first(),
+        )
+    }
+
+    @Test
+    fun whenFilteredByBookmarkedResources_matchingNewsResourcesAreReturned() = runTest {
+        // Obtain the bookmarked user news resources flow.
+        val userNewsResources = userNewsResourceRepository.getBookmarkedUserNewsResources()
+
+        // Send some news resources and user data into the data repositories.
+        newsRepository.sendNewsResources(sampleNewsResources)
+
+        // Construct the test user data with bookmarks and followed topics.
+        val userData = emptyUserData.copy(
+            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
+            followedTopics = setOf(sampleTopic1.id),
+        )
+
+        userDataRepository.setUserData(userData)
+
+        // Check that the correct news resources are returned with their bookmarked state.
+        assertEquals(
+            listOf(sampleNewsResources[0], sampleNewsResources[2]).mapToUserNewsResources(userData),
             userNewsResources.first(),
         )
     }
