@@ -59,11 +59,11 @@ class NiaPreferencesDataSourceTest {
     fun userShouldHideOnboarding_unfollowsLastTopic_shouldHideOnboardingIsFalse() =
         testScope.runTest {
             // Given: user completes onboarding by selecting a single topic.
-            subject.toggleFollowedTopicId("1", true)
+            subject.setTopicIdFollowed("1", true)
             subject.setShouldHideOnboarding(true)
 
             // When: they unfollow that topic.
-            subject.toggleFollowedTopicId("1", false)
+            subject.setTopicIdFollowed("1", false)
 
             // Then: onboarding should be shown again
             assertFalse(subject.userData.first().shouldHideOnboarding)
