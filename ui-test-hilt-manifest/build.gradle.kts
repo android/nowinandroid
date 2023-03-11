@@ -20,4 +20,8 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.uitesthiltmanifest"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }

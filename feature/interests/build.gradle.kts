@@ -23,4 +23,8 @@ plugins {
 }
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }

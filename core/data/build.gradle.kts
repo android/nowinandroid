@@ -27,6 +27,10 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {

@@ -33,6 +33,10 @@ android {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
     namespace = "com.google.samples.apps.nowinandroid.core.datastore"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes

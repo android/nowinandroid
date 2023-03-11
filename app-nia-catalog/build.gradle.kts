@@ -62,6 +62,15 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+    flavorDimensions += listOf("contentType")
+    productFlavors {
+        create("demo") {
+            dimension = "contentType"
+        }
+        create("prod") {
+            dimension = "contentType"
+        }
+    }
 }
 
 dependencies {

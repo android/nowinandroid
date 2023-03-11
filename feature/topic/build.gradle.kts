@@ -24,6 +24,10 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.topic"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {

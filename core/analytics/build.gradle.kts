@@ -21,6 +21,10 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.analytics"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {

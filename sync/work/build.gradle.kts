@@ -24,6 +24,10 @@ android {
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
     namespace = "com.google.samples.apps.nowinandroid.sync"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {

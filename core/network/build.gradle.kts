@@ -32,6 +32,10 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 secrets {

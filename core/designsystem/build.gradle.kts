@@ -27,6 +27,10 @@ android {
         checkDependencies = true
     }
     namespace = "com.google.samples.apps.nowinandroid.core.designsystem"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {

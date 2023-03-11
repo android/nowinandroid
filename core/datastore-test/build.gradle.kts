@@ -20,6 +20,10 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.datastore.test"
+    buildTypes {
+        create("benchmark") {
+        }
+    }
 }
 
 dependencies {
