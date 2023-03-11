@@ -61,7 +61,7 @@ val LightDefaultColorScheme = lightColorScheme(
     onSurfaceVariant = PurpleGray30,
     inverseSurface = DarkPurpleGray20,
     inverseOnSurface = DarkPurpleGray95,
-    outline = PurpleGray50
+    outline = PurpleGray50,
 )
 
 /**
@@ -93,7 +93,7 @@ val DarkDefaultColorScheme = darkColorScheme(
     onSurfaceVariant = PurpleGray80,
     inverseSurface = DarkPurpleGray90,
     inverseOnSurface = DarkPurpleGray10,
-    outline = PurpleGray60
+    outline = PurpleGray60,
 )
 
 /**
@@ -125,7 +125,7 @@ val LightAndroidColorScheme = lightColorScheme(
     onSurfaceVariant = GreenGray30,
     inverseSurface = DarkGreenGray20,
     inverseOnSurface = DarkGreenGray95,
-    outline = GreenGray50
+    outline = GreenGray50,
 )
 
 /**
@@ -157,7 +157,7 @@ val DarkAndroidColorScheme = darkColorScheme(
     onSurfaceVariant = GreenGray80,
     inverseSurface = DarkGreenGray90,
     inverseOnSurface = DarkGreenGray10,
-    outline = GreenGray60
+    outline = GreenGray60,
 )
 
 /**
@@ -185,36 +185,16 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
  *
  * @param darkTheme Whether the theme should use a dark color scheme (follows system by default).
  * @param androidTheme Whether the theme should use the Android theme color scheme instead of the
- *        default theme. If this is `false`, then dynamic theming will be used when supported.
- */
-@Composable
-fun NiaTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    androidTheme: Boolean = false,
-    content: @Composable () -> Unit
-) = NiaTheme(
-    darkTheme = darkTheme,
-    androidTheme = androidTheme,
-    disableDynamicTheming = false,
-    content = content
-)
-
-/**
- * Now in Android theme. This is an internal only version, to allow disabling dynamic theming
- * in tests.
- *
- * @param darkTheme Whether the theme should use a dark color scheme (follows system by default).
- * @param androidTheme Whether the theme should use the Android theme color scheme instead of the
  *        default theme.
  * @param disableDynamicTheming If `true`, disables the use of dynamic theming, even when it is
  *        supported. This parameter has no effect if [androidTheme] is `true`.
  */
 @Composable
-internal fun NiaTheme(
+fun NiaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     androidTheme: Boolean = false,
-    disableDynamicTheming: Boolean,
-    content: @Composable () -> Unit
+    disableDynamicTheming: Boolean = true,
+    content: @Composable () -> Unit,
 ) {
     // Color scheme
     val colorScheme = when {
@@ -223,6 +203,7 @@ internal fun NiaTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
     // Gradient colors
@@ -230,7 +211,7 @@ internal fun NiaTheme(
     val defaultGradientColors = GradientColors(
         top = colorScheme.inverseOnSurface,
         bottom = colorScheme.primaryContainer,
-        container = colorScheme.surface
+        container = colorScheme.surface,
     )
     val gradientColors = when {
         androidTheme -> if (darkTheme) DarkAndroidGradientColors else LightAndroidGradientColors
@@ -240,24 +221,30 @@ internal fun NiaTheme(
     // Background theme
     val defaultBackgroundTheme = BackgroundTheme(
         color = colorScheme.surface,
-        tonalElevation = 2.dp
+        tonalElevation = 2.dp,
     )
     val backgroundTheme = when {
         androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
         else -> defaultBackgroundTheme
     }
+    val tintTheme = when {
+        androidTheme -> TintTheme()
+        !disableDynamicTheming && supportsDynamicTheming() -> TintTheme(colorScheme.primary)
+        else -> TintTheme()
+    }
     // Composition locals
     CompositionLocalProvider(
         LocalGradientColors provides gradientColors,
-        LocalBackgroundTheme provides backgroundTheme
+        LocalBackgroundTheme provides backgroundTheme,
+        LocalTintTheme provides tintTheme,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = NiaTypography,
-            content = content
+            content = content,
         )
     }
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-private fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S

@@ -28,6 +28,6 @@ import dagger.hilt.components.SingletonComponent
 interface SyncModule {
     @Binds
     fun bindsSyncStatusMonitor(
-        syncStatusMonitor: WorkManagerSyncStatusMonitor
+        syncStatusMonitor: WorkManagerSyncStatusMonitor,
     ): SyncStatusMonitor
 }

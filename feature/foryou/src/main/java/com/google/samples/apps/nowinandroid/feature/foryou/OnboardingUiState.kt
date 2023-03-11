@@ -41,7 +41,7 @@ sealed interface OnboardingUiState {
      * There is a onboarding state, with the given lists of topics.
      */
     data class Shown(
-        val topics: List<FollowableTopic>
+        val topics: List<FollowableTopic>,
     ) : OnboardingUiState {
         /**
          * True if the onboarding can be dismissed.

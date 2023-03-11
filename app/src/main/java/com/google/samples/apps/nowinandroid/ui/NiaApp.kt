@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -50,7 +50,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -68,16 +67,15 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVec
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class,
     ExperimentalComposeUiApi::class,
-    ExperimentalLifecycleComposeApi::class
 )
 @Composable
 fun NiaApp(
@@ -85,7 +83,7 @@ fun NiaApp(
     networkMonitor: NetworkMonitor,
     appState: NiaAppState = rememberNiaAppState(
         networkMonitor = networkMonitor,
-        windowSizeClass = windowSizeClass
+        windowSizeClass = windowSizeClass,
     ),
 ) {
     val shouldShowGradientBackground =
@@ -106,15 +104,17 @@ fun NiaApp(
             // If user is not connected to the internet show a snack bar to inform them.
             val notConnectedMessage = stringResource(R.string.not_connected)
             LaunchedEffect(isOffline) {
-                if (isOffline) snackbarHostState.showSnackbar(
-                    message = notConnectedMessage,
-                    duration = Indefinite
-                )
+                if (isOffline) {
+                    snackbarHostState.showSnackbar(
+                        message = notConnectedMessage,
+                        duration = Indefinite,
+                    )
+                }
             }
 
             if (appState.shouldShowSettingsDialog) {
                 SettingsDialog(
-                    onDismiss = { appState.setShowSettingsDialog(false) }
+                    onDismiss = { appState.setShowSettingsDialog(false) },
                 )
             }
 
@@ -132,21 +132,21 @@ fun NiaApp(
                             destinations = appState.topLevelDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
-                            modifier = Modifier.testTag("NiaBottomBar")
+                            modifier = Modifier.testTag("NiaBottomBar"),
                         )
                     }
-                }
+                },
             ) { padding ->
                 Row(
                     Modifier
                         .fillMaxSize()
                         .padding(padding)
-                        .consumedWindowInsets(padding)
+                        .consumeWindowInsets(padding)
                         .windowInsetsPadding(
                             WindowInsets.safeDrawing.only(
-                                WindowInsetsSides.Horizontal
-                            )
-                        )
+                                WindowInsetsSides.Horizontal,
+                            ),
+                        ),
                 ) {
                     if (appState.shouldShowNavRail) {
                         NiaNavRail(
@@ -155,7 +155,7 @@ fun NiaApp(
                             currentDestination = appState.currentDestination,
                             modifier = Modifier
                                 .testTag("NiaNavRail")
-                                .safeDrawingPadding()
+                                .safeDrawingPadding(),
                         )
                     }
 
@@ -167,19 +167,16 @@ fun NiaApp(
                                 titleRes = destination.titleTextId,
                                 actionIcon = NiaIcons.Settings,
                                 actionIconContentDescription = stringResource(
-                                    id = settingsR.string.top_app_bar_action_icon_description
+                                    id = settingsR.string.top_app_bar_action_icon_description,
                                 ),
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent
+                                    containerColor = Color.Transparent,
                                 ),
-                                onActionClick = { appState.setShowSettingsDialog(true) }
+                                onActionClick = { appState.setShowSettingsDialog(true) },
                             )
                         }
 
-                        NiaNavHost(
-                            navController = appState.navController,
-                            onBackClick = appState::onBackClick
-                        )
+                        NiaNavHost(appState.navController)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
@@ -212,15 +209,15 @@ private fun NiaNavRail(
                     when (icon) {
                         is ImageVectorIcon -> Icon(
                             imageVector = icon.imageVector,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         is DrawableResourceIcon -> Icon(
                             painter = painterResource(id = icon.id),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 },
-                label = { Text(stringResource(destination.iconTextId)) }
+                label = { Text(stringResource(destination.iconTextId)) },
             )
         }
     }
@@ -231,10 +228,10 @@ private fun NiaBottomBar(
     destinations: List<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NiaNavigationBar(
-        modifier = modifier
+        modifier = modifier,
     ) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
@@ -250,16 +247,16 @@ private fun NiaBottomBar(
                     when (icon) {
                         is ImageVectorIcon -> Icon(
                             imageVector = icon.imageVector,
-                            contentDescription = null
+                            contentDescription = null,
                         )
 
                         is DrawableResourceIcon -> Icon(
                             painter = painterResource(id = icon.id),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 },
-                label = { Text(stringResource(destination.iconTextId)) }
+                label = { Text(stringResource(destination.iconTextId)) },
             )
         }
     }

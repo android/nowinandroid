@@ -24,13 +24,8 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
-import kotlinx.datetime.Instant
+import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -60,8 +55,9 @@ class TopicScreenTest {
             TopicScreen(
                 topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
+                onBackClick = {},
+                onFollowClick = {},
+                onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
             )
         }
@@ -73,13 +69,14 @@ class TopicScreenTest {
 
     @Test
     fun topicTitle_whenTopicIsSuccess_isShown() {
-        val testTopic = testTopics.first()
+        val testTopic = followableTopicTestData.first()
         composeTestRule.setContent {
             TopicScreen(
                 topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Loading,
-                onBackClick = { },
-                onFollowClick = { },
+                onBackClick = {},
+                onFollowClick = {},
+                onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
             )
         }
@@ -100,9 +97,10 @@ class TopicScreenTest {
         composeTestRule.setContent {
             TopicScreen(
                 topicUiState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Success(sampleUserNewsResources),
-                onBackClick = { },
-                onFollowClick = { },
+                newsUiState = NewsUiState.Success(userNewsResourcesTestData),
+                onBackClick = {},
+                onFollowClick = {},
+                onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
             )
         }
@@ -115,15 +113,16 @@ class TopicScreenTest {
 
     @Test
     fun news_whenSuccessAndTopicIsSuccess_isShown() {
-        val testTopic = testTopics.first()
+        val testTopic = followableTopicTestData.first()
         composeTestRule.setContent {
             TopicScreen(
                 topicUiState = TopicUiState.Success(testTopic),
                 newsUiState = NewsUiState.Success(
-                    sampleUserNewsResources
+                    userNewsResourcesTestData,
                 ),
-                onBackClick = { },
-                onFollowClick = { },
+                onBackClick = {},
+                onFollowClick = {},
+                onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
             )
         }
@@ -132,76 +131,6 @@ class TopicScreenTest {
         composeTestRule
             .onAllNodes(hasScrollToNodeAction())
             .onFirst()
-            .performScrollToNode(hasText(sampleUserNewsResources.first().title))
+            .performScrollToNode(hasText(userNewsResourcesTestData.first().title))
     }
 }
-
-private const val TOPIC_1_NAME = "Headlines"
-private const val TOPIC_2_NAME = "UI"
-private const val TOPIC_3_NAME = "Tools"
-private const val TOPIC_DESC = "At vero eos et accusamus et iusto odio dignissimos ducimus qui."
-
-private val testTopics = listOf(
-    FollowableTopic(
-        Topic(
-            id = "0",
-            name = TOPIC_1_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = true
-    ),
-    FollowableTopic(
-        Topic(
-            id = "1",
-            name = TOPIC_2_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = false
-    ),
-    FollowableTopic(
-        Topic(
-            id = "2",
-            name = TOPIC_3_NAME,
-            shortDescription = "",
-            longDescription = TOPIC_DESC,
-            url = "",
-            imageUrl = ""
-        ),
-        isFollowed = false
-    )
-)
-
-private val sampleUserNewsResources = listOf(
-    UserNewsResource(
-        newsResource =
-        NewsResource(
-            id = "1",
-            title = "Thanks for helping us reach 1M YouTube Subscribers",
-            content = "Thank you everyone for following the Now in Android series and" +
-                " everything the Android Developers YouTube channel has to offer. During the " +
-                "Android Developer Summit, our YouTube channel reached 1 million subscribers!" +
-                " Here’s a small video to thank you all.",
-            url = "https://youtu.be/-fJ6poHQrjM",
-            headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
-            publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-            type = Video,
-            topics = listOf(
-                Topic(
-                    id = "0",
-                    name = "Headlines",
-                    shortDescription = "",
-                    longDescription = TOPIC_DESC,
-                    url = "",
-                    imageUrl = ""
-                )
-            )
-        ),
-        userData = emptyUserData.copy(bookmarkedNewsResources = setOf("1"))
-    )
-)

@@ -46,7 +46,7 @@ fun NiaFilterChip(
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    label: @Composable () -> Unit
+    label: @Composable () -> Unit,
 ) {
     FilterChip(
         selected = selected,
@@ -62,7 +62,7 @@ fun NiaFilterChip(
             {
                 Icon(
                     imageVector = NiaIcons.Check,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         } else {
@@ -73,33 +73,33 @@ fun NiaFilterChip(
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
             disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             disabledSelectedBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
-            selectedBorderWidth = NiaChipDefaults.ChipBorderWidth
+            selectedBorderWidth = NiaChipDefaults.ChipBorderWidth,
         ),
         colors = FilterChipDefaults.filterChipColors(
             labelColor = MaterialTheme.colorScheme.onBackground,
             iconColor = MaterialTheme.colorScheme.onBackground,
             disabledContainerColor = if (selected) {
                 MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = NiaChipDefaults.DisabledChipContainerAlpha
+                    alpha = NiaChipDefaults.DisabledChipContainerAlpha,
                 )
             } else {
                 Color.Transparent
             },
             disabledLabelColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             disabledLeadingIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedLabelColor = MaterialTheme.colorScheme.onBackground,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground
-        )
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+        ),
     )
 }
 

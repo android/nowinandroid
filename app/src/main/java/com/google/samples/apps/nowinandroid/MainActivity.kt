@@ -24,6 +24,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,16 +38,18 @@ import androidx.metrics.performance.JankStats
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
@@ -60,6 +63,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     val viewModel: MainActivityViewModel by viewModels()
 
@@ -104,14 +110,17 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
 
-            NiaTheme(
-                darkTheme = darkTheme,
-                androidTheme = shouldUseAndroidTheme(uiState)
-            ) {
-                NiaApp(
-                    networkMonitor = networkMonitor,
-                    windowSizeClass = calculateWindowSizeClass(this),
-                )
+            CompositionLocalProvider(LocalAnalyticsHelper provides analyticsHelper) {
+                NiaTheme(
+                    darkTheme = darkTheme,
+                    androidTheme = shouldUseAndroidTheme(uiState),
+                    disableDynamicTheming = shouldDisableDynamicTheming(uiState),
+                ) {
+                    NiaApp(
+                        networkMonitor = networkMonitor,
+                        windowSizeClass = calculateWindowSizeClass(this),
+                    )
+                }
             }
         }
     }
@@ -139,6 +148,17 @@ private fun shouldUseAndroidTheme(
         ThemeBrand.DEFAULT -> false
         ThemeBrand.ANDROID -> true
     }
+}
+
+/**
+ * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
+ */
+@Composable
+private fun shouldDisableDynamicTheming(
+    uiState: MainActivityUiState,
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> !uiState.userData.useDynamicColor
 }
 
 /**
