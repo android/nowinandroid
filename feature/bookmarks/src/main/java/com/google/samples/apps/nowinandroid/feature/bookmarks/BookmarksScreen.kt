@@ -67,8 +67,8 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 internal fun BookmarksRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
+    val viewModel: BookmarksViewModel = hiltViewModel()
     val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,

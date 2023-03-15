@@ -38,8 +38,8 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 internal fun InterestsRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InterestsViewModel = hiltViewModel(),
 ) {
+    val viewModel: InterestsViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     InterestsScreen(

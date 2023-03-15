@@ -68,8 +68,8 @@ import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Suc
 @Composable
 fun SettingsDialog(
     onDismiss: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
+    val viewModel: SettingsViewModel = hiltViewModel()
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
         onDismiss = onDismiss,

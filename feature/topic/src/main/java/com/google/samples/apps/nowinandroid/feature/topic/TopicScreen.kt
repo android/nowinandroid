@@ -66,8 +66,8 @@ internal fun TopicRoute(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel(),
 ) {
+    val viewModel: TopicViewModel = hiltViewModel()
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
     val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
 

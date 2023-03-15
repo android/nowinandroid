@@ -93,8 +93,8 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 internal fun ForYouRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ForYouViewModel = hiltViewModel(),
 ) {
+    val viewModel: ForYouViewModel = hiltViewModel()
     val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
