@@ -453,7 +453,8 @@ fun ForYouScreenTopicSelection(
             ForYouScreen(
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.Shown(
-                    topics = userNewsResources.flatMap { news -> news.followableTopics },
+                    topics = userNewsResources.flatMap { news -> news.followableTopics }
+                        .distinctBy { it.topic.id },
                 ),
                 feedState = NewsFeedUiState.Success(
                     feed = userNewsResources,
