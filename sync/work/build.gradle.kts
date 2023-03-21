@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)
+    implementation(libs.firebase.cloud.messaging)
     implementation(libs.hilt.ext.work)
     implementation(libs.kotlinx.coroutines.android)
 

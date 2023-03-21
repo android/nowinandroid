@@ -30,7 +30,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class ForYouViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val networkMonitor = TestNetworkMonitor()
-    private val syncStatusMonitor = TestSyncStatusMonitor()
+    private val syncManager = TestSyncManager()
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
@@ -70,7 +70,7 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
-            syncStatusMonitor = syncStatusMonitor,
+            syncManager = syncManager,
             userDataRepository = userDataRepository,
             getUserNewsResources = getUserNewsResourcesUseCase,
             getFollowableTopics = getFollowableTopicsUseCase,
@@ -106,7 +106,7 @@ class ForYouViewModelTest {
 
     @Test
     fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
-        syncStatusMonitor.setSyncing(true)
+        syncManager.setSyncing(true)
 
         val collectJob =
             launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }

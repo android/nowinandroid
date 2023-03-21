@@ -31,11 +31,8 @@
         </provider>
         <service
             android:name=".services.SyncNotificationsService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+            android:exported="false"
+            tools:node="remove" />
     </application>
 
 </manifest>
