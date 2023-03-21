@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.sync.test
+package com.google.samples.apps.nowinandroid.core.notifications
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.di.SyncModule
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
 
 @Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [SyncModule::class],
-)
-interface TestSyncModule {
+@InstallIn(SingletonComponent::class)
+abstract class NotificationsModule {
     @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncManager,
-    ): SyncManager
+    abstract fun bindNotifier(
+        notifier: NoOpNotifier,
+    ): Notifier
 }
