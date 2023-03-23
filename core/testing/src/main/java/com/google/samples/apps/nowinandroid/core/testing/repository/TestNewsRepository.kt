@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
@@ -33,13 +34,20 @@ class TestNewsRepository : NewsRepository {
     private val newsResourcesFlow: MutableSharedFlow<List<NewsResource>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getNewsResources(): Flow<List<NewsResource>> = newsResourcesFlow
-
-    override fun getNewsResources(filterTopicIds: Set<String>): Flow<List<NewsResource>> =
-        getNewsResources().map { newsResources ->
-            newsResources.filter {
-                it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty()
+    override fun getNewsResources(query: NewsResourceQuery): Flow<List<NewsResource>> =
+        newsResourcesFlow.map { newsResources ->
+            var result = newsResources
+            query.filterTopicIds?.let { filterTopicIds ->
+                result = newsResources.filter {
+                    it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty()
+                }
             }
+            query.filterNewsIds?.let { filterNewsIds ->
+                result = newsResources.filter {
+                    filterNewsIds.contains(it.id)
+                }
+            }
+            result
         }
 
     /**

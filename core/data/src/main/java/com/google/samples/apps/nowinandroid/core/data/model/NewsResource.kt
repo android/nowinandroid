@@ -62,6 +62,6 @@ fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> 
     topics.map { topicId ->
         NewsResourceTopicCrossRef(
             newsResourceId = id,
-            topicId = topicId
+            topicId = topicId,
         )
     }

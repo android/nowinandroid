@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id 'java-library'
-    id 'kotlin'
-    id 'com.android.lint'
-}
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+package com.google.samples.apps.nowinandroid.core.analytics
 
-dependencies {
-    compileOnly libs.kotlin.stdlib
-    compileOnly libs.lint.api
+/**
+ * Implementation of AnalyticsHelper which does nothing. Useful for tests and previews.
+ */
+class NoOpAnalyticsHelper : AnalyticsHelper {
+    override fun logEvent(event: AnalyticsEvent) = Unit
 }

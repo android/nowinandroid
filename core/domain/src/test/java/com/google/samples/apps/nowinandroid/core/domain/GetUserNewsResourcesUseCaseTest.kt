@@ -16,21 +16,23 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
+import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
-class GetSaveableNewsResourcesUseCaseTest {
+class GetUserNewsResourcesUseCaseTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -38,47 +40,50 @@ class GetSaveableNewsResourcesUseCaseTest {
     private val newsRepository = TestNewsRepository()
     private val userDataRepository = TestUserDataRepository()
 
-    val useCase = GetSaveableNewsResourcesUseCase(newsRepository, userDataRepository)
+    val useCase = GetUserNewsResourcesUseCase(newsRepository, userDataRepository)
 
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
+        // Obtain the user news resources stream.
+        val userNewsResources = useCase()
 
-        // Obtain the saveable news resources stream.
-        val saveableNewsResources = useCase()
-
-        // Send some news resources and bookmarks.
+        // Send some news resources and user data into the data repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setNewsResourceBookmarks(
-            setOf(sampleNewsResources[0].id, sampleNewsResources[2].id)
+
+        // Construct the test user data with bookmarks and followed topics.
+        val userData = emptyUserData.copy(
+            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
+            followedTopics = setOf(sampleTopic1.id),
         )
+
+        userDataRepository.setUserData(userData)
 
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
-            listOf(
-                SaveableNewsResource(sampleNewsResources[0], true),
-                SaveableNewsResource(sampleNewsResources[1], false),
-                SaveableNewsResource(sampleNewsResources[2], true)
-            ),
-            saveableNewsResources.first()
+            sampleNewsResources.mapToUserNewsResources(userData),
+            userNewsResources.first(),
         )
     }
 
     @Test
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
+        // Obtain a stream of user news resources for the given topic id.
+        val userNewsResources = useCase(
+            NewsResourceQuery(
+                filterTopicIds = setOf(sampleTopic1.id),
+            ),
+        )
 
-        // Obtain a stream of saveable news resources for the given topic id.
-        val saveableNewsResources = useCase(filterTopicIds = setOf(sampleTopic1.id))
-
-        // Send some news resources and bookmarks.
+        // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setNewsResourceBookmarks(setOf())
+        userDataRepository.setUserData(emptyUserData)
 
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
                 .filter { it.topics.contains(sampleTopic1) }
-                .map { SaveableNewsResource(it, false) },
-            saveableNewsResources.first()
+                .mapToUserNewsResources(emptyUserData),
+            userNewsResources.first(),
         )
     }
 }
@@ -113,7 +118,7 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic1)
+        topics = listOf(sampleTopic1),
     ),
     NewsResource(
         id = "2",
@@ -125,7 +130,7 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic1, sampleTopic2)
+        topics = listOf(sampleTopic1, sampleTopic2),
     ),
     NewsResource(
         id = "3",
@@ -135,6 +140,6 @@ private val sampleNewsResources = listOf(
         headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
         type = Video,
-        topics = listOf(sampleTopic2)
+        topics = listOf(sampleTopic2),
     ),
 )

@@ -20,7 +20,7 @@ set -e
 set -x
 
 deviceIds=${1:-'Nexus5,Pixel2,Pixel3,Nexus9'}
-osVersionIds=${2:-'23,27,30'}
+osVersionIds=${2:-'27,30'}
 
 GRADLE_FLAGS=()
 if [[ -n "$GRADLE_DEBUG" ]]; then
