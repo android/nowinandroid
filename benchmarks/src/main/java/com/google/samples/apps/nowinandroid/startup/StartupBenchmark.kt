@@ -66,7 +66,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
 
     @Test
     fun startupBaselineProfileDisabled() = startup(
-        CompilationMode.Partial(baselineProfileMode = Disable, warmupIterations = 1)
+        CompilationMode.Partial(baselineProfileMode = Disable, warmupIterations = 1),
     )
 
     @Test
@@ -83,7 +83,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         startupMode = startupMode,
         setupBlock = {
             pressHome()
-        }
+        },
     ) {
         startActivityAndWait()
         // Waits until the content is ready to capture Time To Full Display

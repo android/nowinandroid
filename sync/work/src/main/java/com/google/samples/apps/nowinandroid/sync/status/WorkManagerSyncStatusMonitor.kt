@@ -17,29 +17,27 @@
 package com.google.samples.apps.nowinandroid.sync.status
 
 import android.content.Context
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State
 import androidx.work.WorkManager
 import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncWorkName
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
+import javax.inject.Inject
 
 /**
  * [SyncStatusMonitor] backed by [WorkInfo] from [WorkManager]
  */
 class WorkManagerSyncStatusMonitor @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
 ) : SyncStatusMonitor {
     override val isSyncing: Flow<Boolean> =
-        Transformations.map(
-            WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SyncWorkName),
-            MutableList<WorkInfo>::anyRunning
-        )
+        WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SyncWorkName)
+            .map(MutableList<WorkInfo>::anyRunning)
             .asFlow()
             .conflate()
 }

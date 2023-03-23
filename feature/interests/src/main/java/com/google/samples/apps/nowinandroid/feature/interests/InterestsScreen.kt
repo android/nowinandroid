@@ -23,30 +23,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.previewTopics
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun InterestsRoute(
-    navigateToTopic: (String) -> Unit,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InterestsViewModel = hiltViewModel()
+    viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     InterestsScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
-        navigateToTopic = navigateToTopic,
-        modifier = modifier
+        onTopicClick = onTopicClick,
+        modifier = modifier,
     )
 }
 
@@ -54,12 +54,12 @@ internal fun InterestsRoute(
 internal fun InterestsScreen(
     uiState: InterestsUiState,
     followTopic: (String, Boolean) -> Unit,
-    navigateToTopic: (String) -> Unit,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         when (uiState) {
             InterestsUiState.Loading ->
@@ -70,13 +70,14 @@ internal fun InterestsScreen(
             is InterestsUiState.Interests ->
                 TopicsTabContent(
                     topics = uiState.topics,
-                    onTopicClick = navigateToTopic,
+                    onTopicClick = onTopicClick,
                     onFollowButtonClick = followTopic,
                     modifier = modifier,
                 )
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
+    TrackScreenViewEvent(screenName = "Interests")
 }
 
 @Composable
@@ -86,15 +87,18 @@ private fun InterestsEmptyScreen() {
 
 @DevicePreviews
 @Composable
-fun InterestsScreenPopulated() {
+fun InterestsScreenPopulated(
+    @PreviewParameter(FollowableTopicPreviewParameterProvider::class)
+    followableTopics: List<FollowableTopic>,
+) {
     NiaTheme {
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
-                    topics = previewTopics.map { FollowableTopic(it, false) }
+                    topics = followableTopics,
                 ),
                 followTopic = { _, _ -> },
-                navigateToTopic = {},
+                onTopicClick = {},
             )
         }
     }
@@ -108,7 +112,7 @@ fun InterestsScreenLoading() {
             InterestsScreen(
                 uiState = InterestsUiState.Loading,
                 followTopic = { _, _ -> },
-                navigateToTopic = {},
+                onTopicClick = {},
             )
         }
     }
@@ -122,7 +126,7 @@ fun InterestsScreenEmpty() {
             InterestsScreen(
                 uiState = InterestsUiState.Empty,
                 followTopic = { _, _ -> },
-                navigateToTopic = {},
+                onTopicClick = {},
             )
         }
     }

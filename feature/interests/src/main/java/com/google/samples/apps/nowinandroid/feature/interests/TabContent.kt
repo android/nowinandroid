@@ -34,7 +34,7 @@ fun TopicsTabContent(
     topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier
@@ -51,7 +51,7 @@ fun TopicsTabContent(
                     description = followableTopic.topic.shortDescription,
                     topicImageUrl = followableTopic.topic.imageUrl,
                     onClick = { onTopicClick(topicId) },
-                    onFollowButtonClick = { onFollowButtonClick(topicId, it) }
+                    onFollowButtonClick = { onFollowButtonClick(topicId, it) },
                 )
             }
         }

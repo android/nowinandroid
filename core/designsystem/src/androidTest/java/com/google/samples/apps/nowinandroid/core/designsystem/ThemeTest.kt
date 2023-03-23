@@ -38,10 +38,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightAndroid
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LightDefaultColorScheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import kotlin.test.assertEquals
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.TintTheme
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  * Tests [NiaTheme] using different combinations of the theme mode parameters:
@@ -62,7 +64,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = true,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = LightDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -70,6 +72,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -80,7 +84,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = true,
-                androidTheme = false
+                androidTheme = false,
             ) {
                 val colorScheme = DarkDefaultColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -88,6 +92,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -97,7 +103,8 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                androidTheme = false
+                disableDynamicTheming = false,
+                androidTheme = false,
             ) {
                 val colorScheme = dynamicLightColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -105,6 +112,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = dynamicTintThemeWithFallback(colorScheme)
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -114,7 +123,8 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                androidTheme = false
+                disableDynamicTheming = false,
+                androidTheme = false,
             ) {
                 val colorScheme = dynamicDarkColorSchemeWithFallback()
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -122,6 +132,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = defaultBackgroundTheme(colorScheme)
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = dynamicTintThemeWithFallback(colorScheme)
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -132,7 +144,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = false,
                 disableDynamicTheming = true,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -140,6 +152,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -150,7 +164,7 @@ class ThemeTest {
             NiaTheme(
                 darkTheme = true,
                 disableDynamicTheming = true,
-                androidTheme = true
+                androidTheme = true,
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -158,6 +172,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -167,7 +183,8 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = false,
-                androidTheme = true
+                disableDynamicTheming = false,
+                androidTheme = true,
             ) {
                 val colorScheme = LightAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -175,6 +192,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = LightAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -184,7 +203,8 @@ class ThemeTest {
         composeTestRule.setContent {
             NiaTheme(
                 darkTheme = true,
-                androidTheme = true
+                disableDynamicTheming = false,
+                androidTheme = true,
             ) {
                 val colorScheme = DarkAndroidColorScheme
                 assertColorSchemesEqual(colorScheme, MaterialTheme.colorScheme)
@@ -192,6 +212,8 @@ class ThemeTest {
                 assertEquals(gradientColors, LocalGradientColors.current)
                 val backgroundTheme = DarkAndroidBackgroundTheme
                 assertEquals(backgroundTheme, LocalBackgroundTheme.current)
+                val tintTheme = defaultTintTheme()
+                assertEquals(tintTheme, LocalTintTheme.current)
             }
         }
     }
@@ -222,7 +244,7 @@ class ThemeTest {
         return GradientColors(
             top = colorScheme.inverseOnSurface,
             bottom = colorScheme.primaryContainer,
-            container = colorScheme.surface
+            container = colorScheme.surface,
         )
     }
 
@@ -237,8 +259,20 @@ class ThemeTest {
     private fun defaultBackgroundTheme(colorScheme: ColorScheme): BackgroundTheme {
         return BackgroundTheme(
             color = colorScheme.surface,
-            tonalElevation = 2.dp
+            tonalElevation = 2.dp,
         )
+    }
+
+    private fun defaultTintTheme(): TintTheme {
+        return TintTheme()
+    }
+
+    private fun dynamicTintThemeWithFallback(colorScheme: ColorScheme): TintTheme {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            TintTheme(colorScheme.primary)
+        } else {
+            TintTheme()
+        }
     }
 
     /**
@@ -246,7 +280,7 @@ class ThemeTest {
      */
     private fun assertColorSchemesEqual(
         expectedColorScheme: ColorScheme,
-        actualColorScheme: ColorScheme
+        actualColorScheme: ColorScheme,
     ) {
         assertEquals(expectedColorScheme.primary, actualColorScheme.primary)
         assertEquals(expectedColorScheme.onPrimary, actualColorScheme.onPrimary)
@@ -257,7 +291,7 @@ class ThemeTest {
         assertEquals(expectedColorScheme.secondaryContainer, actualColorScheme.secondaryContainer)
         assertEquals(
             expectedColorScheme.onSecondaryContainer,
-            actualColorScheme.onSecondaryContainer
+            actualColorScheme.onSecondaryContainer,
         )
         assertEquals(expectedColorScheme.tertiary, actualColorScheme.tertiary)
         assertEquals(expectedColorScheme.onTertiary, actualColorScheme.onTertiary)

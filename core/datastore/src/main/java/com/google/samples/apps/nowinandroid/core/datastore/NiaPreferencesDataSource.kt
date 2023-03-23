@@ -21,15 +21,14 @@ import androidx.datastore.core.DataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import java.io.IOException
+import javax.inject.Inject
 
 class NiaPreferencesDataSource @Inject constructor(
-    private val userPreferences: DataStore<UserPreferences>
+    private val userPreferences: DataStore<UserPreferences>,
 ) {
-
     val userData = userPreferences.data
         .map {
             UserData(
@@ -39,20 +38,23 @@ class NiaPreferencesDataSource @Inject constructor(
                     null,
                     ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
                     ThemeBrandProto.UNRECOGNIZED,
-                    ThemeBrandProto.THEME_BRAND_DEFAULT -> ThemeBrand.DEFAULT
+                    ThemeBrandProto.THEME_BRAND_DEFAULT,
+                    -> ThemeBrand.DEFAULT
                     ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
                 },
                 darkThemeConfig = when (it.darkThemeConfig) {
                     null,
                     DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
                     DarkThemeConfigProto.UNRECOGNIZED,
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM ->
+                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM,
+                    ->
                         DarkThemeConfig.FOLLOW_SYSTEM
                     DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT ->
                         DarkThemeConfig.LIGHT
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
-                shouldHideOnboarding = it.shouldHideOnboarding
+                useDynamicColor = it.useDynamicColor,
+                shouldHideOnboarding = it.shouldHideOnboarding,
             )
         }
 
@@ -94,6 +96,14 @@ class NiaPreferencesDataSource @Inject constructor(
                     ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
                     ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
                 }
+            }
+        }
+    }
+
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        userPreferences.updateData {
+            it.copy {
+                this.useDynamicColor = useDynamicColor
             }
         }
     }
@@ -145,8 +155,8 @@ class NiaPreferencesDataSource @Inject constructor(
                 val updatedChangeListVersions = update(
                     ChangeListVersions(
                         topicVersion = currentPreferences.topicChangeListVersion,
-                        newsResourceVersion = currentPreferences.newsResourceChangeListVersion
-                    )
+                        newsResourceVersion = currentPreferences.newsResourceChangeListVersion,
+                    ),
                 )
 
                 currentPreferences.copy {
@@ -169,7 +179,6 @@ class NiaPreferencesDataSource @Inject constructor(
 }
 
 private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
-
     if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
         shouldHideOnboarding = false
     }

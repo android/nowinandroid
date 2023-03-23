@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 
 class TimeZoneBroadcastReceiver(
-    val onTimeZoneChanged: () -> Unit
+    val onTimeZoneChanged: () -> Unit,
 ) : BroadcastReceiver() {
     private var registered = false
 

@@ -17,11 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.datastore
 
 import androidx.datastore.core.CorruptionException
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
 
 class UserPreferencesSerializerTest {
     private val userPreferencesSerializer = UserPreferencesSerializer()
@@ -32,7 +32,7 @@ class UserPreferencesSerializerTest {
             userPreferences {
                 // Default value
             },
-            userPreferencesSerializer.defaultValue
+            userPreferencesSerializer.defaultValue,
         )
     }
 
@@ -53,7 +53,7 @@ class UserPreferencesSerializerTest {
 
         assertEquals(
             expectedUserPreferences,
-            actualUserPreferences
+            actualUserPreferences,
         )
     }
 
