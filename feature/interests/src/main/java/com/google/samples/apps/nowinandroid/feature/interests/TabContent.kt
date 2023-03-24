@@ -40,7 +40,7 @@ fun TopicsTabContent(
         modifier = modifier
             .padding(horizontal = 24.dp)
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(vertical = 16.dp)
+        contentPadding = PaddingValues(vertical = 16.dp),
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id

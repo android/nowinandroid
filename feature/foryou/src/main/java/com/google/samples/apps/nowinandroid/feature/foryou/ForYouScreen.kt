@@ -268,7 +268,7 @@ private fun LazyGridScope.onboarding(
                             modifier = Modifier
                                 .padding(horizontal = 24.dp)
                                 .widthIn(364.dp)
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
                         ) {
                             Text(
                                 text = stringResource(R.string.done),
