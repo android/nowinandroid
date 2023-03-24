@@ -80,7 +80,7 @@ fun LazyGridScope.newsFeed(
                         )
                     },
                     onTopicClick = onTopicClick,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp),
                 )
             }
         }
