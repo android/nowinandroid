@@ -25,7 +25,7 @@ import org.gradle.kotlin.dsl.invoke
  * Configure project for Gradle managed devices
  */
 internal fun configureGradleManagedDevices(
-    commonExtension: CommonExtension<*, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     val deviceConfigs = listOf(
         DeviceConfig("Pixel 4", 30, "aosp-atd"),
