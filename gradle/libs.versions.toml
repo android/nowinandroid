@@ -94,19 +94,20 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
-androidx-tracing-ktx = { group = "androidx.tracing", name="tracing-ktx", version.ref = "androidxTracing" }
+androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 androidx-window-manager = { module = "androidx.window:window", version.ref = "androidxWindowManager" }
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
-firebase-crashlytics-gradle = { group = "com.google.firebase", name="firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin"}
-firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx"}
-firebase-performance-gradle = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin"}
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
+firebase-performance-gradle = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -138,9 +139,9 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}
-firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin"}
-gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

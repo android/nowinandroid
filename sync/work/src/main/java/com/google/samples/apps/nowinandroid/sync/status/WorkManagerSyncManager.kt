@@ -19,27 +19,39 @@ package com.google.samples.apps.nowinandroid.sync.status
 import android.content.Context
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
+import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State
 import androidx.work.WorkManager
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncWorkName
+import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 import javax.inject.Inject
 
 /**
- * [SyncStatusMonitor] backed by [WorkInfo] from [WorkManager]
+ * [SyncManager] backed by [WorkInfo] from [WorkManager]
  */
-class WorkManagerSyncStatusMonitor @Inject constructor(
-    @ApplicationContext context: Context,
-) : SyncStatusMonitor {
+class WorkManagerSyncManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : SyncManager {
     override val isSyncing: Flow<Boolean> =
         WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData(SyncWorkName)
             .map(MutableList<WorkInfo>::anyRunning)
             .asFlow()
             .conflate()
+
+    override fun requestSync() {
+        val workManager = WorkManager.getInstance(context)
+        // Run sync on app startup and ensure only one sync worker runs at any time
+        workManager.enqueueUniqueWork(
+            SyncWorkName,
+            ExistingWorkPolicy.KEEP,
+            SyncWorker.startUpSyncWork(),
+        )
+    }
 }
 
 private val List<WorkInfo>.anyRunning get() = any { it.state == State.RUNNING }

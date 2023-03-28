@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
@@ -41,7 +41,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
-    syncStatusMonitor: SyncStatusMonitor,
+    syncManager: SyncManager,
     private val userDataRepository: UserDataRepository,
     getUserNewsResources: GetUserNewsResourcesUseCase,
     getFollowableTopics: GetFollowableTopicsUseCase,
@@ -50,7 +50,7 @@ class ForYouViewModel @Inject constructor(
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userData.map { !it.shouldHideOnboarding }
 
-    val isSyncing = syncStatusMonitor.isSyncing
+    val isSyncing = syncManager.isSyncing
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

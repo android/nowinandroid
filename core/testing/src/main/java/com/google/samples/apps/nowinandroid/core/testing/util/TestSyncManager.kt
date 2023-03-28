@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.sync.test
+package com.google.samples.apps.nowinandroid.core.testing.util
 
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.di.SyncModule
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
-@Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [SyncModule::class],
-)
-interface TestSyncModule {
-    @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncManager,
-    ): SyncManager
+class TestSyncManager : SyncManager {
+
+    private val syncStatusFlow = MutableStateFlow(false)
+
+    override val isSyncing: Flow<Boolean> = syncStatusFlow
+
+    override fun requestSync() {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * A test-only API to set the sync status from tests.
+     */
+    fun setSyncing(isSyncing: Boolean) {
+        syncStatusFlow.value = isSyncing
+    }
 }
