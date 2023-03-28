@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.util
+package com.google.samples.apps.nowinandroid.core.sync.test
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-class TestSyncStatusMonitor : SyncStatusMonitor {
-
-    private val syncStatusFlow = MutableStateFlow(false)
-
-    override val isSyncing: Flow<Boolean> = syncStatusFlow
-
-    /**
-     * A test-only API to set the sync status from tests.
-     */
-    fun setSyncing(isSyncing: Boolean) {
-        syncStatusFlow.value = isSyncing
-    }
+class NeverSyncingSyncManager @Inject constructor() : SyncManager {
+    override val isSyncing: Flow<Boolean> = flowOf(false)
+    override fun requestSync() = Unit
 }

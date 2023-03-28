@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.sync.test
+package com.google.samples.apps.nowinandroid.core.data.util
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.di.SyncModule
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
+import kotlinx.coroutines.flow.Flow
 
-@Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [SyncModule::class],
-)
-interface TestSyncModule {
-    @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncManager,
-    ): SyncManager
+/**
+ * Reports on if synchronization is in progress
+ */
+interface SyncManager {
+    val isSyncing: Flow<Boolean>
+    fun requestSync()
 }
