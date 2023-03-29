@@ -65,8 +65,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:ui"))
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.androidx.activity.compose)
 }

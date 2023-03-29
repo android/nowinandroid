@@ -23,6 +23,6 @@ android {
 }
 
 dependencies {
-    api(project(":core:data"))
-    implementation(project(":core:testing"))
+    api(projects.core.data)
+    implementation(projects.core.testing)
 }

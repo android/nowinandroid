@@ -27,11 +27,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:model"))
+    implementation(projects.core.analytics)
+    implementation(projects.core.common)
+    implementation(projects.core.data)
+    implementation(projects.core.datastore)
+    implementation(projects.core.model)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.tracing.ktx)
@@ -42,8 +42,8 @@ dependencies {
 
     kapt(libs.hilt.ext.compiler)
 
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.testing)
 
-    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.work.testing)
 }
