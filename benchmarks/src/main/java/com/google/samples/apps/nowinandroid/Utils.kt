@@ -16,16 +16,25 @@
 
 package com.google.samples.apps.nowinandroid
 
+import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import com.google.samples.apps.nowinandroid.benchmarks.BuildConfig
 
 /**
  * Convenience parameter to use proper package name with regards to build type and build flavor.
  */
-val PACKAGE_NAME = StringBuilder("com.google.samples.apps.nowinandroid").apply {
-    if (BuildConfig.FLAVOR != "prod") {
-        append(".${BuildConfig.FLAVOR}")
-    }
-    if (BuildConfig.BUILD_TYPE != "release") {
-        append(".${BuildConfig.BUILD_TYPE}")
-    }
-}.toString()
+val PACKAGE_NAME = buildString {
+    append("com.google.samples.apps.nowinandroid")
+    append(BuildConfig.APP_FLAVOR_SUFFIX)
+    append(BuildConfig.APP_BUILD_TYPE_SUFFIX)
+}
+
+fun UiDevice.flingElementDownUp(element: UiObject2) {
+    // Set some margin from the sides to prevent triggering system navigation
+    element.setGestureMargin(displayWidth / 5)
+
+    element.fling(Direction.DOWN)
+    waitForIdle()
+    element.fling(Direction.UP)
+}

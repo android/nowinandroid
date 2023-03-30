@@ -20,15 +20,15 @@ import JvmUnitTestFakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkAuthor
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import javax.inject.Inject
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
@@ -38,26 +38,27 @@ class FakeNiaNetworkDataSource @Inject constructor(
     private val networkJson: Json,
     private val assets: FakeAssetManager = JvmUnitTestFakeAssetManager,
 ) : NiaNetworkDataSource {
+
+    companion object {
+        private const val AUTHORS_ASSET = "authors.json"
+        private const val NEWS_ASSET = "news.json"
+        private const val TOPICS_ASSET = "topics.json"
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            assets.open(FakeDataSource.TOPICS).use(networkJson::decodeFromStream)
+            assets.open(TOPICS_ASSET).use(networkJson::decodeFromStream)
         }
 
+    @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            assets.open(FakeDataSource.DATA).use(networkJson::decodeFromStream)
-        }
-
-    override suspend fun getAuthors(ids: List<String>?): List<NetworkAuthor> =
-        withContext(ioDispatcher) {
-            assets.open(FakeDataSource.AUTHORS).use(networkJson::decodeFromStream)
+            assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
         }
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
         getTopics().mapToChangeList(NetworkTopic::id)
-
-    override suspend fun getAuthorChangeList(after: Int?): List<NetworkChangeList> =
-        getAuthors().mapToChangeList(NetworkAuthor::id)
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
@@ -68,7 +69,7 @@ class FakeNiaNetworkDataSource @Inject constructor(
  * [NetworkChangeList.id]
  */
 private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> String
+    idGetter: (T) -> String,
 ) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),

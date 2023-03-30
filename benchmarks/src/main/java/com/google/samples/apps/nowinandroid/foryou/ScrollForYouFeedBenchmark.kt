@@ -47,10 +47,10 @@ class ScrollForYouFeedBenchmark {
             // Start the app
             pressHome()
             startActivityAndWait()
-        }
+        },
     ) {
         forYouWaitForContent()
-        forYouSelectAuthors()
+        forYouSelectTopics()
         forYouScrollFeedDownUp()
     }
 }

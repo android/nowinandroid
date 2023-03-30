@@ -26,7 +26,7 @@ interface UserDataRepository {
     /**
      * Stream of [UserData]
      */
-    val userDataStream: Flow<UserData>
+    val userData: Flow<UserData>
 
     /**
      * Sets the user's currently followed topics
@@ -37,16 +37,6 @@ interface UserDataRepository {
      * Toggles the user's newly followed/unfollowed topic
      */
     suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean)
-
-    /**
-     * Sets the user's currently followed authors
-     */
-    suspend fun setFollowedAuthorIds(followedAuthorIds: Set<String>)
-
-    /**
-     * Toggles the user's newly followed/unfollowed author
-     */
-    suspend fun toggleFollowedAuthorId(followedAuthorId: String, followed: Boolean)
 
     /**
      * Updates the bookmarked status for a news resource
@@ -62,6 +52,11 @@ interface UserDataRepository {
      * Sets the desired dark theme config.
      */
     suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
+
+    /**
+     * Sets the preferred dynamic color config.
+     */
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean)
 
     /**
      * Sets whether the user has completed the onboarding process.

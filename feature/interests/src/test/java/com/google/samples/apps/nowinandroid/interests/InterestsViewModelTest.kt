@@ -16,19 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
-import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSortedFollowableAuthorsStreamUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -36,6 +31,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -47,25 +43,18 @@ class InterestsViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val userDataRepository = TestUserDataRepository()
-    private val authorsRepository = TestAuthorsRepository()
     private val topicsRepository = TestTopicsRepository()
-    private val getFollowableTopicsStreamUseCase = GetFollowableTopicsStreamUseCase(
+    private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
-        userDataRepository = userDataRepository
+        userDataRepository = userDataRepository,
     )
-    private val getSortedFollowableAuthorsStream =
-        GetSortedFollowableAuthorsStreamUseCase(
-            authorsRepository = authorsRepository,
-            userDataRepository = userDataRepository
-        )
     private lateinit var viewModel: InterestsViewModel
 
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
             userDataRepository = userDataRepository,
-            getFollowableTopicsStream = getFollowableTopicsStreamUseCase,
-            getSortedFollowableAuthorsStream = getSortedFollowableAuthorsStream
+            getFollowableTopics = getFollowableTopicsUseCase,
         )
     }
 
@@ -78,19 +67,7 @@ class InterestsViewModelTest {
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
-        userDataRepository.setFollowedAuthorIds(setOf("1"))
         userDataRepository.setFollowedTopicIds(emptySet())
-        assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
-
-        collectJob.cancel()
-    }
-
-    @Test
-    fun uiState_whenFollowedAuthorsAreLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-
-        userDataRepository.setFollowedAuthorIds(emptySet())
-        userDataRepository.setFollowedTopicIds(setOf("1"))
         assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
 
         collectJob.cancel()
@@ -101,47 +78,23 @@ class InterestsViewModelTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
         val toggleTopicId = testOutputTopics[1].topic.id
-        authorsRepository.sendAuthors(emptyList())
-        userDataRepository.setFollowedAuthorIds(emptySet())
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[0].topic.id))
 
         assertEquals(
             false,
             (viewModel.uiState.value as InterestsUiState.Interests)
-                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
         viewModel.followTopic(
             followedTopicId = toggleTopicId,
-            true
+            true,
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testOutputTopics, authors = emptyList()),
-            viewModel.uiState.value
-        )
-
-        collectJob.cancel()
-    }
-
-    @Test
-    fun uiState_whenFollowingNewAuthor_thenShowUpdatedAuthors() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-
-        authorsRepository.sendAuthors(testInputAuthors.map { it.author })
-        userDataRepository.setFollowedAuthorIds(setOf(testInputAuthors[0].author.id))
-        topicsRepository.sendTopics(listOf())
-        userDataRepository.setFollowedTopicIds(setOf())
-
-        viewModel.followAuthor(
-            followedAuthorId = testInputAuthors[1].author.id,
-            followed = true
-        )
-
-        assertEquals(
-            InterestsUiState.Interests(topics = emptyList(), authors = testOutputAuthors),
-            viewModel.uiState.value
+            InterestsUiState.Interests(topics = testOutputTopics),
+            viewModel.uiState.value,
         )
 
         collectJob.cancel()
@@ -153,51 +106,25 @@ class InterestsViewModelTest {
 
         val toggleTopicId = testOutputTopics[1].topic.id
 
-        authorsRepository.sendAuthors(emptyList())
-        userDataRepository.setFollowedAuthorIds(emptySet())
         topicsRepository.sendTopics(testOutputTopics.map { it.topic })
         userDataRepository.setFollowedTopicIds(
-            setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id)
+            setOf(testOutputTopics[0].topic.id, testOutputTopics[1].topic.id),
         )
 
         assertEquals(
             true,
             (viewModel.uiState.value as InterestsUiState.Interests)
-                .topics.first { it.topic.id == toggleTopicId }.isFollowed
+                .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
         viewModel.followTopic(
             followedTopicId = toggleTopicId,
-            false
+            false,
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testInputTopics, authors = emptyList()),
-            viewModel.uiState.value
-        )
-
-        collectJob.cancel()
-    }
-
-    @Test
-    fun uiState_whenUnfollowingAuthors_thenShowUpdatedAuthors() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-
-        authorsRepository.sendAuthors(testOutputAuthors.map { it.author })
-        userDataRepository.setFollowedAuthorIds(
-            setOf(testOutputAuthors[0].author.id, testOutputAuthors[1].author.id)
-        )
-        topicsRepository.sendTopics(listOf())
-        userDataRepository.setFollowedTopicIds(setOf())
-
-        viewModel.followAuthor(
-            followedAuthorId = testOutputAuthors[1].author.id,
-            followed = false
-        )
-
-        assertEquals(
-            InterestsUiState.Interests(topics = emptyList(), authors = testInputAuthors),
-            viewModel.uiState.value
+            InterestsUiState.Interests(topics = testInputTopics),
+            viewModel.uiState.value,
         )
 
         collectJob.cancel()
@@ -212,78 +139,6 @@ private const val TOPIC_LONG_DESC = "At vero eos et accusamus et iusto odio dign
 private const val TOPIC_URL = "URL"
 private const val TOPIC_IMAGE_URL = "Image URL"
 
-private val testInputAuthors = listOf(
-    FollowableAuthor(
-        Author(
-            id = "0",
-            name = "Android Dev",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "1",
-            name = "Android Dev 2",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = false
-    ),
-    FollowableAuthor(
-        Author(
-            id = "2",
-            name = "Android Dev 3",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = false
-    )
-)
-
-private val testOutputAuthors = listOf(
-    FollowableAuthor(
-        Author(
-            id = "0",
-            name = "Android Dev",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "1",
-            name = "Android Dev 2",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = true
-    ),
-    FollowableAuthor(
-        Author(
-            id = "2",
-            name = "Android Dev 3",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        ),
-        isFollowed = false
-    )
-)
-
 private val testInputTopics = listOf(
     FollowableTopic(
         Topic(
@@ -294,7 +149,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -305,7 +160,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         Topic(
@@ -316,8 +171,8 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val testOutputTopics = listOf(
@@ -330,7 +185,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -341,7 +196,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -352,6 +207,6 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )

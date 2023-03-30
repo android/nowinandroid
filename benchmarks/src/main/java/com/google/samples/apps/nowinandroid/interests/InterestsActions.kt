@@ -18,21 +18,24 @@ package com.google.samples.apps.nowinandroid.interests
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.Until
+import com.google.samples.apps.nowinandroid.flingElementDownUp
+
+fun MacrobenchmarkScope.goToInterestsScreen() {
+    device.findObject(By.text("Interests")).click()
+    device.waitForIdle()
+    // Wait until interests are shown on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
+    val topAppBar = device.findObject(By.res("niaTopAppBar"))
+    topAppBar.wait(Until.hasObject(By.text("Interests")), 2_000)
+
+    // Wait until content is loaded by checking if interests are loaded
+    device.wait(Until.gone(By.res("loadingWheel")), 5_000)
+}
 
 fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
     val topicsList = device.findObject(By.res("interests:topics"))
-    topicsList.fling(Direction.DOWN)
-    device.waitForIdle()
-    topicsList.fling(Direction.UP)
-}
-
-fun MacrobenchmarkScope.interestsScrollPeopleDownUp() {
-    val peopleList = device.findObject(By.res("interests:people"))
-    peopleList.fling(Direction.DOWN)
-    device.waitForIdle()
-    peopleList.fling(Direction.UP)
+    device.flingElementDownUp(topicsList)
 }
 
 fun MacrobenchmarkScope.interestsWaitForTopics() {

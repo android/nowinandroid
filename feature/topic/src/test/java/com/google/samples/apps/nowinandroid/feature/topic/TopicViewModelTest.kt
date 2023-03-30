@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesStreamUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
@@ -28,8 +28,6 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRe
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicIdArg
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -40,6 +38,8 @@ import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -53,9 +53,9 @@ class TopicViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getSaveableNewsResourcesStreamUseCase = GetSaveableNewsResourcesStreamUseCase(
+    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
         newsRepository = newsRepository,
-        userDataRepository = userDataRepository
+        userDataRepository = userDataRepository,
     )
     private lateinit var viewModel: TopicViewModel
 
@@ -66,9 +66,13 @@ class TopicViewModelTest {
             stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
-            getSaveableNewsResourcesStream = getSaveableNewsResourcesStreamUseCase
+            getSaveableNewsResources = getUserNewsResourcesUseCase,
         )
     }
+
+    @Test
+    fun topicId_matchesTopicIdFromSavedStateHandle() =
+        assertEquals(testInputTopics[0].topic.id, viewModel.topicId)
 
     @Test
     fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
@@ -80,7 +84,7 @@ class TopicViewModelTest {
         assertIs<TopicUiState.Success>(item)
 
         val topicFromRepository = topicsRepository.getTopic(
-            testInputTopics[0].topic.id
+            testInputTopics[0].topic.id,
         ).first()
 
         assertEquals(topicFromRepository, item.followableTopic.topic)
@@ -131,7 +135,7 @@ class TopicViewModelTest {
                 combine(
                     viewModel.topicUiState,
                     viewModel.newUiState,
-                    ::Pair
+                    ::Pair,
                 ).collect()
             }
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
@@ -158,7 +162,7 @@ class TopicViewModelTest {
 
         assertEquals(
             TopicUiState.Success(followableTopic = testOutputTopics[0]),
-            viewModel.topicUiState.value
+            viewModel.topicUiState.value,
         )
 
         collectJob.cancel()
@@ -183,7 +187,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -194,7 +198,7 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
+        isFollowed = false,
     ),
     FollowableTopic(
         Topic(
@@ -205,8 +209,8 @@ private val testInputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val testOutputTopics = listOf(
@@ -219,7 +223,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -230,7 +234,7 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = true
+        isFollowed = true,
     ),
     FollowableTopic(
         Topic(
@@ -241,8 +245,8 @@ private val testOutputTopics = listOf(
             url = TOPIC_URL,
             imageUrl = TOPIC_IMAGE_URL,
         ),
-        isFollowed = false
-    )
+        isFollowed = false,
+    ),
 )
 
 private val sampleNewsResources = listOf(
@@ -265,8 +269,7 @@ private val sampleNewsResources = listOf(
                 longDescription = "long description",
                 url = "URL",
                 imageUrl = "image URL",
-            )
+            ),
         ),
-        authors = emptyList()
-    )
+    ),
 )

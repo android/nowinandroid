@@ -16,8 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.data.model
 
-import com.google.samples.apps.nowinandroid.core.database.model.AuthorEntity
-import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceAuthorCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
@@ -45,22 +43,6 @@ fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
 )
 
 /**
- * A shell [AuthorEntity] to fulfill the foreign key constraint when inserting
- * a [NewsResourceEntity] into the DB
- */
-fun NetworkNewsResource.authorEntityShells() =
-    authors.map { authorId ->
-        AuthorEntity(
-            id = authorId,
-            name = "",
-            imageUrl = "",
-            twitter = "",
-            mediumPage = "",
-            bio = "",
-        )
-    }
-
-/**
  * A shell [TopicEntity] to fulfill the foreign key constraint when inserting
  * a [NewsResourceEntity] into the DB
  */
@@ -80,14 +62,6 @@ fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> 
     topics.map { topicId ->
         NewsResourceTopicCrossRef(
             newsResourceId = id,
-            topicId = topicId
-        )
-    }
-
-fun NetworkNewsResource.authorCrossReferences(): List<NewsResourceAuthorCrossRef> =
-    authors.map { authorId ->
-        NewsResourceAuthorCrossRef(
-            newsResourceId = id,
-            authorId = authorId
+            topicId = topicId,
         )
     }

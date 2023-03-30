@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableAuthor
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 
 /**
@@ -39,16 +38,14 @@ sealed interface OnboardingUiState {
     object NotShown : OnboardingUiState
 
     /**
-     * There is a onboarding state, with the given lists of topics and authors.
+     * There is a onboarding state, with the given lists of topics.
      */
     data class Shown(
         val topics: List<FollowableTopic>,
-        val authors: List<FollowableAuthor>
     ) : OnboardingUiState {
         /**
          * True if the onboarding can be dismissed.
          */
-        val isDismissable: Boolean get() =
-            topics.any { it.isFollowed } || authors.any { it.isFollowed }
+        val isDismissable: Boolean get() = topics.any { it.isFollowed }
     }
 }

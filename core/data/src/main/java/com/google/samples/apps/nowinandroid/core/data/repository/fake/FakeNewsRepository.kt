@@ -19,22 +19,19 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import java.io.InputStream
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [NewsRepository] that retrieves the news resources from a JSON String.
@@ -44,39 +41,33 @@ import kotlinx.serialization.json.decodeFromStream
  */
 class FakeNewsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val networkJson: Json,
-    private val assets: FakeAssetManager,
+    private val datasource: FakeNiaNetworkDataSource,
 ) : NewsRepository {
 
-    override fun getNewsResourcesStream(): Flow<List<NewsResource>> =
-        flow {
-            emit(
-                assets.open(FakeDataSource.DATA)
-                    .use<InputStream, List<NetworkNewsResource>>(networkJson::decodeFromStream)
-                    .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel)
-            )
-        }
-            .flowOn(ioDispatcher)
-
-    override fun getNewsResourcesStream(
-        filterAuthorIds: Set<String>,
-        filterTopicIds: Set<String>,
+    override fun getNewsResources(
+        query: NewsResourceQuery,
     ): Flow<List<NewsResource>> =
         flow {
             emit(
-                assets.open(FakeDataSource.DATA).use { stream ->
-                    networkJson.decodeFromStream<List<NetworkNewsResource>>(stream)
-                        .filter {
-                            it.authors.intersect(filterAuthorIds).isNotEmpty() ||
-                                it.topics.intersect(filterTopicIds).isNotEmpty()
-                        }
-                        .map(NetworkNewsResource::asEntity)
-                        .map(NewsResourceEntity::asExternalModel)
-                }
+                datasource
+                    .getNewsResources()
+                    .filter { networkNewsResource ->
+                        // Filter out any news resources which don't match the current query.
+                        // If no query parameters (filterTopicIds or filterNewsIds) are specified
+                        // then the news resource is returned.
+                        listOfNotNull(
+                            true,
+                            query.filterNewsIds?.contains(networkNewsResource.id),
+                            query.filterTopicIds?.let { filterTopicIds ->
+                                networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
+                            },
+                        )
+                            .all(true::equals)
+                    }
+                    .map(NetworkNewsResource::asEntity)
+                    .map(NewsResourceEntity::asExternalModel),
             )
-        }
-            .flowOn(ioDispatcher)
+        }.flowOn(ioDispatcher)
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

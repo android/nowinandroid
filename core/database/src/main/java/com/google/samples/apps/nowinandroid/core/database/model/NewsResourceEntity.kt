@@ -27,7 +27,7 @@ import kotlinx.datetime.Instant
  * Defines an NiA news resource.
  */
 @Entity(
-    tableName = "news_resources"
+    tableName = "news_resources",
 )
 data class NewsResourceEntity(
     @PrimaryKey
@@ -50,6 +50,5 @@ fun NewsResourceEntity.asExternalModel() = NewsResource(
     headerImageUrl = headerImageUrl,
     publishDate = publishDate,
     type = type,
-    authors = listOf(),
-    topics = listOf()
+    topics = listOf(),
 )

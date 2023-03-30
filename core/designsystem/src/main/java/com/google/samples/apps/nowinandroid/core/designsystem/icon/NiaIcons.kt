@@ -18,12 +18,12 @@ package com.google.samples.apps.nowinandroid.core.designsystem.icon
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ExpandLess
@@ -48,8 +48,8 @@ object NiaIcons {
     val AccountCircle = Icons.Outlined.AccountCircle
     val Add = Icons.Rounded.Add
     val ArrowBack = Icons.Rounded.ArrowBack
-    val ArrowDropDown = Icons.Rounded.ArrowDropDown
-    val ArrowDropUp = Icons.Rounded.ArrowDropUp
+    val ArrowDropDown = Icons.Default.ArrowDropDown
+    val ArrowDropUp = Icons.Default.ArrowDropUp
     val Bookmark = R.drawable.ic_bookmark
     val BookmarkBorder = R.drawable.ic_bookmark_border
     val Bookmarks = R.drawable.ic_bookmarks

@@ -21,33 +21,45 @@ import androidx.datastore.core.DataStoreFactory
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferencesSerializer
 import com.google.samples.apps.nowinandroid.core.datastore.di.DataStoreModule
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.junit.rules.TemporaryFolder
+import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [DataStoreModule::class]
+    replaces = [DataStoreModule::class],
 )
 object TestDataStoreModule {
 
     @Provides
     @Singleton
     fun providesUserPreferencesDataStore(
+        @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         userPreferencesSerializer: UserPreferencesSerializer,
-        tmpFolder: TemporaryFolder
+        tmpFolder: TemporaryFolder,
     ): DataStore<UserPreferences> =
-        tmpFolder.testUserPreferencesDataStore(userPreferencesSerializer)
+        tmpFolder.testUserPreferencesDataStore(
+            // TODO: Provide an application-wide CoroutineScope in the DI graph
+            coroutineScope = CoroutineScope(SupervisorJob() + ioDispatcher),
+            userPreferencesSerializer = userPreferencesSerializer,
+        )
 }
 
 fun TemporaryFolder.testUserPreferencesDataStore(
-    userPreferencesSerializer: UserPreferencesSerializer = UserPreferencesSerializer()
+    coroutineScope: CoroutineScope,
+    userPreferencesSerializer: UserPreferencesSerializer = UserPreferencesSerializer(),
 ) = DataStoreFactory.create(
     serializer = userPreferencesSerializer,
+    scope = coroutineScope,
 ) {
     newFile("user_preferences_test.pb")
 }

@@ -35,6 +35,6 @@ object DatabaseModule {
     ): NiaDatabase = Room.databaseBuilder(
         context,
         NiaDatabase::class.java,
-        "nia-database"
+        "nia-database",
     ).build()
 }

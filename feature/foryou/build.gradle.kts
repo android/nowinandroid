@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     id("nowinandroid.android.feature")
     id("nowinandroid.android.library.compose")
@@ -24,7 +27,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
-
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.kotlinx.datetime)
 }
