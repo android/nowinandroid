@@ -24,25 +24,26 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
-        userDataRepository.userDataStream
+        userDataRepository.userData
             .map { userData ->
                 Success(
                     settings = UserEditableSettings(
                         brand = userData.themeBrand,
-                        darkThemeConfig = userData.darkThemeConfig
-                    )
+                        useDynamicColor = userData.useDynamicColor,
+                        darkThemeConfig = userData.darkThemeConfig,
+                    ),
                 )
             }
             .stateIn(
@@ -54,7 +55,7 @@ class SettingsViewModel @Inject constructor(
                 // scrollable column.
                 // TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
                 started = SharingStarted.Eagerly,
-                initialValue = Loading
+                initialValue = Loading,
             )
 
     fun updateThemeBrand(themeBrand: ThemeBrand) {
@@ -68,12 +69,22 @@ class SettingsViewModel @Inject constructor(
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
         }
     }
+
+    fun updateDynamicColorPreference(useDynamicColor: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setDynamicColorPreference(useDynamicColor)
+        }
+    }
 }
 
 /**
  * Represents the settings which the user can edit within the app.
  */
-data class UserEditableSettings(val brand: ThemeBrand, val darkThemeConfig: DarkThemeConfig)
+data class UserEditableSettings(
+    val brand: ThemeBrand,
+    val useDynamicColor: Boolean,
+    val darkThemeConfig: DarkThemeConfig,
+)
 
 sealed interface SettingsUiState {
     object Loading : SettingsUiState

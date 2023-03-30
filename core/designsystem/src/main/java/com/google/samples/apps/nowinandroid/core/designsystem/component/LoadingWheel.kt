@@ -42,6 +42,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -51,12 +53,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun NiaLoadingWheel(
     contentDesc: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val infiniteTransition = rememberInfiniteTransition()
 
     // Specifies the float animation for slowly drawing out the lines on entering
-    val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(1F) } }
+    val startValue = if (LocalInspectionMode.current) 0F else 1F
+    val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(startValue) } }
     LaunchedEffect(floatAnimValues) {
         (0 until NUM_OF_LINES).map { index ->
             launch {
@@ -65,8 +68,8 @@ fun NiaLoadingWheel(
                     animationSpec = tween(
                         durationMillis = 100,
                         easing = FastOutSlowInEasing,
-                        delayMillis = 40 * index
-                    )
+                        delayMillis = 40 * index,
+                    ),
                 )
             }
         }
@@ -77,8 +80,8 @@ fun NiaLoadingWheel(
         initialValue = 0F,
         targetValue = 360F,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = ROTATION_TIME, easing = LinearEasing)
-        )
+            animation = tween(durationMillis = ROTATION_TIME, easing = LinearEasing),
+        ),
     )
 
     // Specifies the color animation for the base-to-progress line color change
@@ -95,8 +98,8 @@ fun NiaLoadingWheel(
                     baseLineColor at ROTATION_TIME / NUM_OF_LINES with LinearEasing
                 },
                 repeatMode = RepeatMode.Restart,
-                initialStartOffset = StartOffset(ROTATION_TIME / NUM_OF_LINES / 2 * index)
-            )
+                initialStartOffset = StartOffset(ROTATION_TIME / NUM_OF_LINES / 2 * index),
+            ),
         )
     }
 
@@ -107,6 +110,7 @@ fun NiaLoadingWheel(
             .padding(8.dp)
             .graphicsLayer { rotationZ = rotationAnim }
             .semantics { contentDescription = contentDesc }
+            .testTag("loadingWheel"),
     ) {
         repeat(NUM_OF_LINES) { index ->
             rotate(degrees = index * 30f) {
@@ -117,7 +121,7 @@ fun NiaLoadingWheel(
                     strokeWidth = 4F,
                     cap = StrokeCap.Round,
                     start = Offset(size.width / 2, size.height / 4),
-                    end = Offset(size.width / 2, floatAnimValues[index].value * size.height / 4)
+                    end = Offset(size.width / 2, floatAnimValues[index].value * size.height / 4),
                 )
             }
         }
@@ -127,7 +131,7 @@ fun NiaLoadingWheel(
 @Composable
 fun NiaOverlayLoadingWheel(
     contentDesc: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         shape = RoundedCornerShape(60.dp),

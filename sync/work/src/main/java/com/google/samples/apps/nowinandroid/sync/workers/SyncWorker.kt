@@ -24,8 +24,8 @@ import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkerParameters
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
-import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
@@ -52,8 +52,8 @@ class SyncWorker @AssistedInject constructor(
     private val niaPreferences: NiaPreferencesDataSource,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
-    private val authorsRepository: AuthorsRepository,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    private val analyticsHelper: AnalyticsHelper,
 ) : CoroutineWorker(appContext, workerParams), Synchronizer {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =
@@ -61,15 +61,21 @@ class SyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         traceAsync("Sync", 0) {
+            analyticsHelper.logSyncStarted()
+
             // First sync the repositories in parallel
             val syncedSuccessfully = awaitAll(
                 async { topicRepository.sync() },
-                async { authorsRepository.sync() },
                 async { newsRepository.sync() },
             ).all { it }
 
-            if (syncedSuccessfully) Result.success()
-            else Result.retry()
+            analyticsHelper.logSyncFinished(syncedSuccessfully)
+
+            if (syncedSuccessfully) {
+                Result.success()
+            } else {
+                Result.retry()
+            }
         }
     }
 
@@ -77,7 +83,7 @@ class SyncWorker @AssistedInject constructor(
         niaPreferences.getChangeListVersions()
 
     override suspend fun updateChangeListVersions(
-        update: ChangeListVersions.() -> ChangeListVersions
+        update: ChangeListVersions.() -> ChangeListVersions,
     ) = niaPreferences.updateChangeListVersion(update)
 
     companion object {

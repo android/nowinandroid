@@ -17,9 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.network.model.util
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import kotlin.test.assertEquals
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class NewsResourceTypeSerializerTest {
 
@@ -27,7 +27,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_video() {
         assertEquals(
             NewsResourceType.Video,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Video 📺"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Video 📺""""),
         )
     }
 
@@ -35,7 +35,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_article() {
         assertEquals(
             NewsResourceType.Article,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Article 📚"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Article 📚""""),
         )
     }
 
@@ -43,7 +43,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_api_change() {
         assertEquals(
             NewsResourceType.APIChange,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"API change"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"API change""""),
         )
     }
 
@@ -51,7 +51,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_codelab() {
         assertEquals(
             NewsResourceType.Codelab,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Codelab"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Codelab""""),
         )
     }
 
@@ -59,7 +59,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_podcast() {
         assertEquals(
             NewsResourceType.Podcast,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Podcast 🎙"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Podcast 🎙""""),
         )
     }
 
@@ -67,7 +67,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_docs() {
         assertEquals(
             NewsResourceType.Docs,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Docs 📑"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Docs 📑""""),
         )
     }
 
@@ -75,7 +75,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_event() {
         assertEquals(
             NewsResourceType.Event,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"Event 📆"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"Event 📆""""),
         )
     }
 
@@ -83,7 +83,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_dac() {
         assertEquals(
             NewsResourceType.DAC,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"DAC"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"DAC""""),
         )
     }
 
@@ -91,7 +91,7 @@ class NewsResourceTypeSerializerTest {
     fun test_news_resource_serializer_unknown() {
         assertEquals(
             NewsResourceType.Unknown,
-            Json.decodeFromString(NewsResourceTypeSerializer, """"umm"""")
+            Json.decodeFromString(NewsResourceTypeSerializer, """"umm""""),
         )
     }
 
@@ -100,7 +100,7 @@ class NewsResourceTypeSerializerTest {
         val json = Json.encodeToString(NewsResourceTypeSerializer, NewsResourceType.Video)
         assertEquals(
             NewsResourceType.Video,
-            Json.decodeFromString(NewsResourceTypeSerializer, json)
+            Json.decodeFromString(NewsResourceTypeSerializer, json),
         )
     }
 }

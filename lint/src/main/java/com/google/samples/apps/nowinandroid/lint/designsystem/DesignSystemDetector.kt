@@ -38,7 +38,7 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
     override fun getApplicableUastTypes(): List<Class<out UElement>> {
         return listOf(
             UCallExpression::class.java,
-            UQualifiedReferenceExpression::class.java
+            UQualifiedReferenceExpression::class.java,
         )
     }
 
@@ -71,8 +71,8 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
             severity = Severity.ERROR,
             implementation = Implementation(
                 DesignSystemDetector::class.java,
-                Scope.JAVA_FILE_SCOPE
-            )
+                Scope.JAVA_FILE_SCOPE,
+            ),
         )
 
         // Unfortunately :lint is a Java module and thus can't depend on the :core-designsystem
@@ -80,40 +80,41 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
         // instead of hardcoded names.
         val METHOD_NAMES = mapOf(
             "MaterialTheme" to "NiaTheme",
-            "Button" to "NiaFilledButton",
+            "Button" to "NiaButton",
             "OutlinedButton" to "NiaOutlinedButton",
             "TextButton" to "NiaTextButton",
             "FilterChip" to "NiaFilterChip",
             "ElevatedFilterChip" to "NiaFilterChip",
-            "DropdownMenu" to "NiaDropdownMenu",
             "NavigationBar" to "NiaNavigationBar",
             "NavigationBarItem" to "NiaNavigationBarItem",
             "NavigationRail" to "NiaNavigationRail",
             "NavigationRailItem" to "NiaNavigationRailItem",
             "TabRow" to "NiaTabRow",
             "Tab" to "NiaTab",
-            "IconToggleButton" to "NiaToggleButton",
-            "FilledIconToggleButton" to "NiaToggleButton",
-            "FilledTonalIconToggleButton" to "NiaToggleButton",
-            "OutlinedIconToggleButton" to "NiaToggleButton",
+            "IconToggleButton" to "NiaIconToggleButton",
+            "FilledIconToggleButton" to "NiaIconToggleButton",
+            "FilledTonalIconToggleButton" to "NiaIconToggleButton",
+            "OutlinedIconToggleButton" to "NiaIconToggleButton",
             "CenterAlignedTopAppBar" to "NiaTopAppBar",
             "SmallTopAppBar" to "NiaTopAppBar",
             "MediumTopAppBar" to "NiaTopAppBar",
-            "LargeTopAppBar" to "NiaTopAppBar"
+            "LargeTopAppBar" to "NiaTopAppBar",
         )
         val RECEIVER_NAMES = mapOf(
-            "Icons" to "NiaIcons"
+            "Icons" to "NiaIcons",
         )
 
         fun reportIssue(
             context: JavaContext,
             node: UElement,
             name: String,
-            preferredName: String
+            preferredName: String,
         ) {
             context.report(
-                ISSUE, node, context.getLocation(node),
-                "Using $name instead of $preferredName"
+                ISSUE,
+                node,
+                context.getLocation(node),
+                "Using $name instead of $preferredName",
             )
         }
     }

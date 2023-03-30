@@ -17,16 +17,21 @@
 package com.google.samples.apps.nowinandroid.core.datastore
 
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class NiaPreferencesDataSourceTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
+
     private lateinit var subject: NiaPreferencesDataSource
 
     @get:Rule
@@ -35,104 +40,57 @@ class NiaPreferencesDataSourceTest {
     @Before
     fun setup() {
         subject = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore()
+            tmpFolder.testUserPreferencesDataStore(testScope),
         )
     }
 
     @Test
-    fun shouldHideOnboardingIsFalseByDefault() = runTest {
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+    fun shouldHideOnboardingIsFalseByDefault() = testScope.runTest {
+        assertFalse(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
-    fun userShouldHideOnboardingIsTrueWhenSet() = runTest {
+    fun userShouldHideOnboardingIsTrueWhenSet() = testScope.runTest {
         subject.setShouldHideOnboarding(true)
-        assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+        assertTrue(subject.userData.first().shouldHideOnboarding)
     }
 
     @Test
-    fun userShouldHideOnboarding_unfollowsLastAuthor_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting a single author.
-        subject.toggleFollowedAuthorId("1", true)
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow that author.
-        subject.toggleFollowedAuthorId("1", false)
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsLastTopic_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting a single topic.
-        subject.toggleFollowedTopicId("1", true)
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow that topic.
-        subject.toggleFollowedTopicId("1", false)
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllAuthors_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting several authors.
-        subject.setFollowedAuthorIds(setOf("1", "2"))
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow those authors.
-        subject.setFollowedAuthorIds(emptySet())
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllTopics_shouldHideOnboardingIsFalse() = runTest {
-
-        // Given: user completes onboarding by selecting several topics.
-        subject.setFollowedTopicIds(setOf("1", "2"))
-        subject.setShouldHideOnboarding(true)
-
-        // When: they unfollow those topics.
-        subject.setFollowedTopicIds(emptySet())
-
-        // Then: onboarding should be shown again
-        assertFalse(subject.userDataStream.first().shouldHideOnboarding)
-    }
-
-    @Test
-    fun userShouldHideOnboarding_unfollowsAllTopicsButNotAuthors_shouldHideOnboardingIsTrue() =
-        runTest {
-            // Given: user completes onboarding by selecting several topics and authors.
-            subject.setFollowedTopicIds(setOf("1", "2"))
-            subject.setFollowedAuthorIds(setOf("3", "4"))
+    fun userShouldHideOnboarding_unfollowsLastTopic_shouldHideOnboardingIsFalse() =
+        testScope.runTest {
+            // Given: user completes onboarding by selecting a single topic.
+            subject.toggleFollowedTopicId("1", true)
             subject.setShouldHideOnboarding(true)
 
-            // When: they unfollow just the topics.
+            // When: they unfollow that topic.
+            subject.toggleFollowedTopicId("1", false)
+
+            // Then: onboarding should be shown again
+            assertFalse(subject.userData.first().shouldHideOnboarding)
+        }
+
+    @Test
+    fun userShouldHideOnboarding_unfollowsAllTopics_shouldHideOnboardingIsFalse() =
+        testScope.runTest {
+            // Given: user completes onboarding by selecting several topics.
+            subject.setFollowedTopicIds(setOf("1", "2"))
+            subject.setShouldHideOnboarding(true)
+
+            // When: they unfollow those topics.
             subject.setFollowedTopicIds(emptySet())
 
-            // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+            // Then: onboarding should be shown again
+            assertFalse(subject.userData.first().shouldHideOnboarding)
         }
 
     @Test
-    fun userShouldHideOnboarding_unfollowsAllAuthorsButNotTopics_shouldHideOnboardingIsTrue() =
-        runTest {
-            // Given: user completes onboarding by selecting several topics and authors.
-            subject.setFollowedTopicIds(setOf("1", "2"))
-            subject.setFollowedAuthorIds(setOf("3", "4"))
-            subject.setShouldHideOnboarding(true)
+    fun shouldUseDynamicColorFalseByDefault() = testScope.runTest {
+        assertFalse(subject.userData.first().useDynamicColor)
+    }
 
-            // When: they unfollow just the authors.
-            subject.setFollowedAuthorIds(emptySet())
-
-            // Then: onboarding should still be dismissed
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
-        }
+    @Test
+    fun userShouldUseDynamicColorIsTrueWhenSet() = testScope.runTest {
+        subject.setDynamicColorPreference(true)
+        assertTrue(subject.userData.first().useDynamicColor)
+    }
 }

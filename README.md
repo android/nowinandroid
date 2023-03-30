@@ -22,7 +22,7 @@ The app is currently in development. The `demoRelease` variant is [available on 
 **Now in Android** displays content from the
 [Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
 links to recent videos, articles and other content. Users can also follow topics they are interested
-in or follow specific authors.
+in.
 
 ## Screenshots
 
@@ -30,9 +30,15 @@ in or follow specific authors.
 
 # Development Environment
 
-**Now in Android** uses the Gradle build system and can be imported directly into the latest stable
-version of Android Studio (available [here](https://developer.android.com/studio)). The `debug`
-build can be built and run using the default configuration.
+**Now in Android** uses the Gradle build system and can be imported directly into Android Studio (make sure you are using the latest stable version available [here](https://developer.android.com/studio)). 
+
+Change the run configuration to `app`.
+
+![image](https://user-images.githubusercontent.com/873212/210559920-ef4a40c5-c8e0-478b-bb00-4879a8cf184a.png)
+
+The `demoDebug` and `demoRelease` build variants can be built and run (the `prod` variants use a backend server which is not currently publicly available).
+
+![image](https://user-images.githubusercontent.com/873212/210560507-44045dc5-b6d5-41ca-9746-f0f7acf22f8e.png)
 
 Once you're up and running, you can refer to the learning journeys below to get a better
 understanding of which libraries and tools are being used, the reasoning behind the approaches to

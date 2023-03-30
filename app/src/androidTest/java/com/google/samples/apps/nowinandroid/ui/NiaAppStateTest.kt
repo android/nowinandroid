@@ -31,15 +31,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
@@ -70,7 +70,7 @@ class NiaAppStateTest {
                     windowSizeClass = getCompactWindowClass(),
                     navController = navController,
                     networkMonitor = networkMonitor,
-                    coroutineScope = backgroundScope
+                    coroutineScope = backgroundScope,
                 )
             }
 
@@ -91,7 +91,7 @@ class NiaAppStateTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
                 windowSizeClass = getCompactWindowClass(),
-                networkMonitor = networkMonitor
+                networkMonitor = networkMonitor,
             )
         }
 
@@ -108,7 +108,7 @@ class NiaAppStateTest {
                 windowSizeClass = getCompactWindowClass(),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = backgroundScope
+                coroutineScope = backgroundScope,
             )
         }
 
@@ -123,7 +123,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = backgroundScope
+                coroutineScope = backgroundScope,
             )
         }
 
@@ -133,13 +133,12 @@ class NiaAppStateTest {
 
     @Test
     fun niaAppState_showNavRail_large() = runTest {
-
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = backgroundScope
+                coroutineScope = backgroundScope,
             )
         }
 
@@ -149,13 +148,12 @@ class NiaAppStateTest {
 
     @Test
     fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
-
         composeTestRule.setContent {
             state = NiaAppState(
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
                 networkMonitor = networkMonitor,
-                coroutineScope = backgroundScope
+                coroutineScope = backgroundScope,
             )
         }
 
@@ -163,7 +161,7 @@ class NiaAppStateTest {
         networkMonitor.setConnected(false)
         assertEquals(
             true,
-            state.isOffline.value
+            state.isOffline.value,
         )
     }
 

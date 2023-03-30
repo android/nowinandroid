@@ -21,18 +21,13 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import java.io.InputStream
-import javax.inject.Inject
+import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [TopicsRepository] that retrieves the topics from a JSON String, and
@@ -43,29 +38,25 @@ import kotlinx.serialization.json.decodeFromStream
  */
 class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val networkJson: Json,
-    private val assets: FakeAssetManager,
+    private val datasource: FakeNiaNetworkDataSource,
 ) : TopicsRepository {
-    override fun getTopicsStream(): Flow<List<Topic>> = flow {
+    override fun getTopics(): Flow<List<Topic>> = flow {
         emit(
-            assets.open(FakeDataSource.TOPICS)
-                .use<InputStream, List<NetworkTopic>>(networkJson::decodeFromStream)
-                .map {
-                    Topic(
-                        id = it.id,
-                        name = it.name,
-                        shortDescription = it.shortDescription,
-                        longDescription = it.longDescription,
-                        url = it.url,
-                        imageUrl = it.imageUrl
-                    )
-                }
+            datasource.getTopics().map {
+                Topic(
+                    id = it.id,
+                    name = it.name,
+                    shortDescription = it.shortDescription,
+                    longDescription = it.longDescription,
+                    url = it.url,
+                    imageUrl = it.imageUrl,
+                )
+            },
         )
-    }
-        .flowOn(ioDispatcher)
+    }.flowOn(ioDispatcher)
 
     override fun getTopic(id: String): Flow<Topic> {
-        return getTopicsStream().map { it.first { topic -> topic.id == id } }
+        return getTopics().map { it.first { topic -> topic.id == id } }
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true

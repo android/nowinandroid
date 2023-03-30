@@ -46,7 +46,7 @@ fun NiaFilterChip(
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    label: @Composable () -> Unit
+    label: @Composable () -> Unit,
 ) {
     FilterChip(
         selected = selected,
@@ -58,46 +58,48 @@ fun NiaFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        trailingIcon = {
-            Icon(
-                imageVector = NiaIcons.Check,
-                contentDescription = null
-            )
+        leadingIcon = if (selected) {
+            {
+                Icon(
+                    imageVector = NiaIcons.Check,
+                    contentDescription = null,
+                )
+            }
+        } else {
+            null
         },
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
             disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             disabledSelectedBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
-            borderWidth = NiaChipDefaults.ChipBorderWidth,
-            selectedBorderWidth = NiaChipDefaults.ChipBorderWidth
+            selectedBorderWidth = NiaChipDefaults.ChipBorderWidth,
         ),
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = Color.Transparent,
             labelColor = MaterialTheme.colorScheme.onBackground,
             iconColor = MaterialTheme.colorScheme.onBackground,
             disabledContainerColor = if (selected) {
                 MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = NiaChipDefaults.DisabledChipContainerAlpha
+                    alpha = NiaChipDefaults.DisabledChipContainerAlpha,
                 )
             } else {
                 Color.Transparent
             },
             disabledLabelColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             disabledLeadingIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DisabledChipContentAlpha
+                alpha = NiaChipDefaults.DisabledChipContentAlpha,
             ),
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedLabelColor = MaterialTheme.colorScheme.onBackground,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground
-        )
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+        ),
     )
 }
 
@@ -105,6 +107,8 @@ fun NiaFilterChip(
  * Now in Android chip default values.
  */
 object NiaChipDefaults {
+    // TODO: File bug
+    // FilterChip default values aren't exposed via FilterChipDefaults
     const val DisabledChipContainerAlpha = 0.12f
     const val DisabledChipContentAlpha = 0.38f
     val ChipBorderWidth = 1.dp

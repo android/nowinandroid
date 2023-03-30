@@ -24,7 +24,7 @@ interface TopicsRepository : Syncable {
     /**
      * Gets the available topics as a stream
      */
-    fun getTopicsStream(): Flow<List<Topic>>
+    fun getTopics(): Flow<List<Topic>>
 
     /**
      * Gets data for a specific topic

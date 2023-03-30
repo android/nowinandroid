@@ -16,13 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.core.database.model
 
-import com.google.samples.apps.nowinandroid.core.model.data.Author
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import kotlin.test.assertEquals
 import kotlinx.datetime.Instant
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class PopulatedNewsResourceKtTest {
     @Test
@@ -37,16 +36,6 @@ class PopulatedNewsResourceKtTest {
                 type = Video,
                 publishDate = Instant.fromEpochMilliseconds(1),
             ),
-            authors = listOf(
-                AuthorEntity(
-                    id = "2",
-                    name = "name",
-                    imageUrl = "imageUrl",
-                    twitter = "twitter",
-                    mediumPage = "mediumPage",
-                    bio = "bio",
-                )
-            ),
             topics = listOf(
                 TopicEntity(
                     id = "3",
@@ -55,7 +44,7 @@ class PopulatedNewsResourceKtTest {
                     longDescription = "long description",
                     url = "URL",
                     imageUrl = "image URL",
-                )
+                ),
             ),
         )
         val newsResource = populatedNewsResource.asExternalModel()
@@ -69,16 +58,6 @@ class PopulatedNewsResourceKtTest {
                 headerImageUrl = "headerImageUrl",
                 type = Video,
                 publishDate = Instant.fromEpochMilliseconds(1),
-                authors = listOf(
-                    Author(
-                        id = "2",
-                        name = "name",
-                        imageUrl = "imageUrl",
-                        twitter = "twitter",
-                        mediumPage = "mediumPage",
-                        bio = "bio",
-                    )
-                ),
                 topics = listOf(
                     Topic(
                         id = "3",
@@ -87,10 +66,10 @@ class PopulatedNewsResourceKtTest {
                         longDescription = "long description",
                         url = "URL",
                         imageUrl = "image URL",
-                    )
-                )
+                    ),
+                ),
             ),
-            newsResource
+            newsResource,
         )
     }
 }

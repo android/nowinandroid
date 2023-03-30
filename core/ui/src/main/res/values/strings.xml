@@ -20,4 +20,8 @@
     <string name="back">Back</string>
 
     <string name="card_tap_action">Open Resource Link</string>
+    <string name="card_meta_data_text">%1$s • %2$s</string>
+
+    <string name="topic_chip_content_description_when_followed">%1$s is followed</string>
+    <string name="topic_chip_content_description_when_not_followed">%1$s is not followed</string>
 </resources>

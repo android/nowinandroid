@@ -16,52 +16,55 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 
 /**
- * Extension function for displaying a [List] of [NewsResourceCardExpanded] backed by a generic
- * [List] [T].
+ * Extension function for displaying a [List] of [NewsResourceCardExpanded] backed by a list of
+ * [UserNewsResource]s.
  *
- * [newsResourceMapper] maps type [T] to a [NewsResource]
- * [isBookmarkedMapper] maps type [T] to whether the [NewsResource] is bookmarked
  * [onToggleBookmark] defines the action invoked when a user wishes to bookmark an item
  * [onItemClick] optional parameter for action to be performed when the card is clicked. The
  * default action launches an intent matching the card.
  */
-fun <T> LazyListScope.newsResourceCardItems(
-    items: List<T>,
-    newsResourceMapper: (item: T) -> NewsResource,
-    isBookmarkedMapper: (item: T) -> Boolean,
-    onToggleBookmark: (item: T) -> Unit,
-    onItemClick: ((item: T) -> Unit)? = null,
+fun LazyListScope.userNewsResourceCardItems(
+    items: List<UserNewsResource>,
+    onToggleBookmark: (item: UserNewsResource) -> Unit,
+    onItemClick: ((item: UserNewsResource) -> Unit)? = null,
+    onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
 ) = items(
     items = items,
-    key = { newsResourceMapper(it).id },
-    itemContent = { item ->
-        val newsResource = newsResourceMapper(item)
-        val launchResourceIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse(newsResource.url))
+    key = { it.id },
+    itemContent = { userNewsResource ->
+        val resourceUrl = Uri.parse(userNewsResource.url)
+        val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
         val context = LocalContext.current
+        val analyticsHelper = LocalAnalyticsHelper.current
 
         NewsResourceCardExpanded(
-            newsResource = newsResource,
-            isBookmarked = isBookmarkedMapper(item),
-            onToggleBookmark = { onToggleBookmark(item) },
+            userNewsResource = userNewsResource,
+            isBookmarked = userNewsResource.isSaved,
+            onToggleBookmark = { onToggleBookmark(userNewsResource) },
             onClick = {
+                analyticsHelper.logNewsResourceOpened(
+                    newsResourceId = userNewsResource.id,
+                    newsResourceTitle = userNewsResource.title,
+                )
                 when (onItemClick) {
-                    null -> ContextCompat.startActivity(context, launchResourceIntent, null)
-                    else -> onItemClick(item)
+                    null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                    else -> onItemClick(userNewsResource)
                 }
             },
-            modifier = itemModifier
+            onTopicClick = onTopicClick,
+            modifier = itemModifier,
         )
     },
 )

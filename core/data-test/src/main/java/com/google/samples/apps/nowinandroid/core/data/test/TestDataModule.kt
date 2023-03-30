@@ -17,11 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.data.test
 
 import com.google.samples.apps.nowinandroid.core.data.di.DataModule
-import com.google.samples.apps.nowinandroid.core.data.repository.AuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeAuthorsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeUserDataRepository
@@ -34,31 +32,26 @@ import dagger.hilt.testing.TestInstallIn
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [DataModule::class]
+    replaces = [DataModule::class],
 )
 interface TestDataModule {
     @Binds
     fun bindsTopicRepository(
-        fakeTopicsRepository: FakeTopicsRepository
+        fakeTopicsRepository: FakeTopicsRepository,
     ): TopicsRepository
 
     @Binds
-    fun bindsAuthorRepository(
-        fakeAuthorsRepository: FakeAuthorsRepository
-    ): AuthorsRepository
-
-    @Binds
     fun bindsNewsResourceRepository(
-        fakeNewsRepository: FakeNewsRepository
+        fakeNewsRepository: FakeNewsRepository,
     ): NewsRepository
 
     @Binds
     fun bindsUserDataRepository(
-        userDataRepository: FakeUserDataRepository
+        userDataRepository: FakeUserDataRepository,
     ): UserDataRepository
 
     @Binds
     fun bindsNetworkMonitor(
-        networkMonitor: AlwaysOnlineNetworkMonitor
+        networkMonitor: AlwaysOnlineNetworkMonitor,
     ): NetworkMonitor
 }

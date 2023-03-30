@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
+    id("nowinandroid.android.application.flavors")
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
     id("jacoco")
-    id("nowinandroid.firebase-perf")
+    id("nowinandroid.android.application.firebase")
 }
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
-        versionCode = 3
-        versionName = "0.0.3" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 5
+        versionName = "0.0.5" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
@@ -38,10 +40,11 @@ android {
 
     buildTypes {
         val debug by getting {
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
             isMinifyEnabled = true
+            applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
@@ -57,9 +60,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
-            //  FIXME enabling minification breaks access to demo backend.
-            isMinifyEnabled = false
-            applicationIdSuffix = ".benchmark"
+            isMinifyEnabled = true
+            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
@@ -77,7 +79,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:author"))
     implementation(project(":feature:interests"))
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
@@ -89,6 +90,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":sync:work"))
 
@@ -97,8 +99,10 @@ dependencies {
     androidTestImplementation(project(":core:data-test"))
     androidTestImplementation(project(":core:network"))
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(kotlin("test"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(project(":ui-test-hilt-manifest"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
@@ -115,7 +119,6 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
 
     implementation(libs.coil.kt)
-    implementation(libs.coil.kt.svg)
 }
 
 // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13

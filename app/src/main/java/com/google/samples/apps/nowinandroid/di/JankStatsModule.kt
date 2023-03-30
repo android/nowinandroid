@@ -47,7 +47,7 @@ object JankStatsModule {
     @Provides
     fun providesJankStats(
         window: Window,
-        frameListener: JankStats.OnFrameListener
+        frameListener: JankStats.OnFrameListener,
     ): JankStats {
         return JankStats.createAndTrack(window, frameListener)
     }

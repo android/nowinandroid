@@ -16,26 +16,34 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
+import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class OfflineFirstUserDataRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
+
     private lateinit var subject: OfflineFirstUserDataRepository
 
     private lateinit var niaPreferencesDataSource: NiaPreferencesDataSource
+
+    private val analyticsHelper = NoOpAnalyticsHelper()
 
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
@@ -43,162 +51,183 @@ class OfflineFirstUserDataRepositoryTest {
     @Before
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore()
+            tmpFolder.testUserPreferencesDataStore(testScope),
         )
 
         subject = OfflineFirstUserDataRepository(
-            niaPreferencesDataSource = niaPreferencesDataSource
+            niaPreferencesDataSource = niaPreferencesDataSource,
+            analyticsHelper,
         )
     }
 
     @Test
     fun offlineFirstUserDataRepository_default_user_data_is_correct() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 UserData(
                     bookmarkedNewsResources = emptySet(),
                     followedTopics = emptySet(),
-                    followedAuthors = emptySet(),
                     themeBrand = ThemeBrand.DEFAULT,
                     darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-                    shouldHideOnboarding = false
+                    useDynamicColor = false,
+                    shouldHideOnboarding = false,
                 ),
-                subject.userDataStream.first()
+                subject.userData.first(),
             )
         }
 
     @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             subject.toggleFollowedTopicId(followedTopicId = "1", followed = true)
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
         }
 
     @Test
     fun offlineFirstUserDataRepository_set_followed_topics_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setFollowedTopicIds(followedTopicIds = setOf("1", "2"))
 
             assertEquals(
                 setOf("1", "2"),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.followedTopics }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.followedTopics }
-                    .first()
+                    .first(),
             )
         }
 
     @Test
     fun offlineFirstUserDataRepository_bookmark_news_resource_logic_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.updateNewsResourceBookmark(newsResourceId = "0", bookmarked = true)
 
             assertEquals(
                 setOf("0"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
 
             subject.updateNewsResourceBookmark(newsResourceId = "1", bookmarked = true)
 
             assertEquals(
                 setOf("0", "1"),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
 
             assertEquals(
-                niaPreferencesDataSource.userDataStream
+                niaPreferencesDataSource.userData
                     .map { it.bookmarkedNewsResources }
                     .first(),
-                subject.userDataStream
+                subject.userData
                     .map { it.bookmarkedNewsResources }
-                    .first()
+                    .first(),
             )
         }
 
     @Test
     fun offlineFirstUserDataRepository_set_theme_brand_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setThemeBrand(ThemeBrand.ANDROID)
 
             assertEquals(
                 ThemeBrand.ANDROID,
-                subject.userDataStream
+                subject.userData
                     .map { it.themeBrand }
-                    .first()
+                    .first(),
             )
             assertEquals(
                 ThemeBrand.ANDROID,
                 niaPreferencesDataSource
-                    .userDataStream
+                    .userData
                     .map { it.themeBrand }
-                    .first()
+                    .first(),
+            )
+        }
+
+    @Test
+    fun offlineFirstUserDataRepository_set_dynamic_color_delegates_to_nia_preferences() =
+        testScope.runTest {
+            subject.setDynamicColorPreference(true)
+
+            assertEquals(
+                true,
+                subject.userData
+                    .map { it.useDynamicColor }
+                    .first(),
+            )
+            assertEquals(
+                true,
+                niaPreferencesDataSource
+                    .userData
+                    .map { it.useDynamicColor }
+                    .first(),
             )
         }
 
     @Test
     fun offlineFirstUserDataRepository_set_dark_theme_config_delegates_to_nia_preferences() =
-        runTest {
+        testScope.runTest {
             subject.setDarkThemeConfig(DarkThemeConfig.DARK)
 
             assertEquals(
                 DarkThemeConfig.DARK,
-                subject.userDataStream
+                subject.userData
                     .map { it.darkThemeConfig }
-                    .first()
+                    .first(),
             )
             assertEquals(
                 DarkThemeConfig.DARK,
                 niaPreferencesDataSource
-                    .userDataStream
+                    .userData
                     .map { it.darkThemeConfig }
-                    .first()
+                    .first(),
             )
         }
 
     @Test
     fun whenUserCompletesOnboarding_thenRemovesAllInterests_shouldHideOnboardingIsFalse() =
-        runTest {
+        testScope.runTest {
             subject.setFollowedTopicIds(setOf("1"))
             subject.setShouldHideOnboarding(true)
-            assertTrue(subject.userDataStream.first().shouldHideOnboarding)
+            assertTrue(subject.userData.first().shouldHideOnboarding)
 
             subject.setFollowedTopicIds(emptySet())
-            assertFalse(subject.userDataStream.first().shouldHideOnboarding)
+            assertFalse(subject.userData.first().shouldHideOnboarding)
         }
 }
