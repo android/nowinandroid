@@ -30,9 +30,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -42,6 +41,7 @@ import kotlinx.datetime.Instant
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -52,27 +52,28 @@ class ForYouViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val networkMonitor = TestNetworkMonitor()
-    private val syncStatusMonitor = TestSyncStatusMonitor()
+    private val syncManager = TestSyncManager()
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
     private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
         newsRepository = newsRepository,
-        userDataRepository = userDataRepository
+        userDataRepository = userDataRepository,
     )
+
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
-        userDataRepository = userDataRepository
+        userDataRepository = userDataRepository,
     )
     private lateinit var viewModel: ForYouViewModel
 
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
-            syncStatusMonitor = syncStatusMonitor,
+            syncManager = syncManager,
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase,
-            getFollowableTopics = getFollowableTopicsUseCase
+            getUserNewsResources = getUserNewsResourcesUseCase,
+            getFollowableTopics = getFollowableTopicsUseCase,
         )
     }
 
@@ -80,7 +81,7 @@ class ForYouViewModelTest {
     fun stateIsInitiallyLoading() = runTest {
         assertEquals(
             OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
     }
@@ -95,7 +96,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -105,14 +106,14 @@ class ForYouViewModelTest {
 
     @Test
     fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
-        syncStatusMonitor.setSyncing(true)
+        syncManager.setSyncing(true)
 
         val collectJob =
             launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
 
         assertEquals(
             true,
-            viewModel.isSyncing.value
+            viewModel.isSyncing.value,
         )
 
         collectJob.cancel()
@@ -128,7 +129,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Loading,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
 
@@ -157,7 +158,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -168,7 +169,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -179,17 +180,17 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                 ),
             ),
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList()
+                feed = emptyList(),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -218,7 +219,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -229,7 +230,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -240,18 +241,18 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                 ),
             ),
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList()
+                feed = emptyList(),
 
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -273,7 +274,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
@@ -281,13 +282,13 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = sampleNewsResources.mapToUserNewsResources(userData)
+                feed = sampleNewsResources.mapToUserNewsResources(userData),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -308,15 +309,15 @@ class ForYouViewModelTest {
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
                     FollowableTopic(it, false)
-                }
+                },
             ),
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
                 feed = emptyList(),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         val followedTopicId = sampleTopics[1].id
@@ -326,9 +327,9 @@ class ForYouViewModelTest {
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
                     FollowableTopic(it, it.id == followedTopicId)
-                }
+                },
             ),
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
 
         val userData = emptyUserData.copy(followedTopics = setOf(followedTopicId))
@@ -338,9 +339,9 @@ class ForYouViewModelTest {
                 feed = listOf(
                     UserNewsResource(sampleNewsResources[1], userData),
                     UserNewsResource(sampleNewsResources[2], userData),
-                )
+                ),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -372,7 +373,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -383,7 +384,7 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
+                        isFollowed = false,
                     ),
                     FollowableTopic(
                         topic = Topic(
@@ -394,17 +395,17 @@ class ForYouViewModelTest {
                             url = "URL",
                             imageUrl = "image URL",
                         ),
-                        isFollowed = false
-                    )
+                        isFollowed = false,
+                    ),
                 ),
             ),
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList()
+                feed = emptyList(),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -420,7 +421,7 @@ class ForYouViewModelTest {
         val followedTopicIds = setOf("1")
         val userData = emptyUserData.copy(
             followedTopics = followedTopicIds,
-            shouldHideOnboarding = true
+            shouldHideOnboarding = true,
         )
 
         topicsRepository.sendTopics(sampleTopics)
@@ -430,25 +431,25 @@ class ForYouViewModelTest {
         val bookmarkedNewsResourceId = "2"
         viewModel.updateNewsResourceSaved(
             newsResourceId = bookmarkedNewsResourceId,
-            isChecked = true
+            isChecked = true,
         )
 
         val userDataExpected = userData.copy(
-            bookmarkedNewsResources = setOf(bookmarkedNewsResourceId)
+            bookmarkedNewsResources = setOf(bookmarkedNewsResourceId),
         )
 
         assertEquals(
             OnboardingUiState.NotShown,
-            viewModel.onboardingUiState.value
+            viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
                     UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
-                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected)
-                )
+                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected),
+                ),
             ),
-            viewModel.feedState.value
+            viewModel.feedState.value,
         )
 
         collectJob1.cancel()
@@ -480,7 +481,7 @@ private val sampleTopics = listOf(
         longDescription = "long description",
         url = "URL",
         imageUrl = "image URL",
-    )
+    ),
 )
 
 private val sampleNewsResources = listOf(
@@ -503,7 +504,7 @@ private val sampleNewsResources = listOf(
                 longDescription = "long description",
                 url = "URL",
                 imageUrl = "image URL",
-            )
+            ),
         ),
     ),
     NewsResource(

@@ -28,15 +28,19 @@ import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSou
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.assertEquals
 
 class OfflineFirstTopicsRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
 
     private lateinit var subject: OfflineFirstTopicsRepository
 
@@ -56,31 +60,31 @@ class OfflineFirstTopicsRepositoryTest {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         niaPreferences = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore()
+            tmpFolder.testUserPreferencesDataStore(testScope),
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
         subject = OfflineFirstTopicsRepository(
             topicDao = topicDao,
-            network = network
+            network = network,
         )
     }
 
     @Test
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 topicDao.getTopicEntities()
                     .first()
                     .map(TopicEntity::asExternalModel),
                 subject.getTopics()
-                    .first()
+                    .first(),
             )
         }
 
     @Test
     fun offlineFirstTopicsRepository_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             subject.syncWith(synchronizer)
 
             val networkTopics = network.getTopics()
@@ -91,19 +95,19 @@ class OfflineFirstTopicsRepositoryTest {
 
             assertEquals(
                 networkTopics.map(TopicEntity::id),
-                dbTopics.map(TopicEntity::id)
+                dbTopics.map(TopicEntity::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
-                synchronizer.getChangeListVersions().topicVersion
+                synchronizer.getChangeListVersions().topicVersion,
             )
         }
 
     @Test
     fun offlineFirstTopicsRepository_incremental_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             // Set topics version to 10
             synchronizer.updateChangeListVersions {
                 copy(topicVersion = 10)
@@ -121,19 +125,19 @@ class OfflineFirstTopicsRepositoryTest {
 
             assertEquals(
                 networkTopics.map(TopicEntity::id),
-                dbTopics.map(TopicEntity::id)
+                dbTopics.map(TopicEntity::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
-                synchronizer.getChangeListVersions().topicVersion
+                synchronizer.getChangeListVersions().topicVersion,
             )
         }
 
     @Test
     fun offlineFirstTopicsRepository_sync_deletes_items_marked_deleted_on_network() =
-        runTest {
+        testScope.runTest {
             val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
                 .map(TopicEntity::asExternalModel)
@@ -149,7 +153,7 @@ class OfflineFirstTopicsRepositoryTest {
                 network.editCollection(
                     collectionType = CollectionType.Topics,
                     id = it,
-                    isDelete = true
+                    isDelete = true,
                 )
             }
 
@@ -162,13 +166,13 @@ class OfflineFirstTopicsRepositoryTest {
             // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
                 networkTopics.map(Topic::id) - deletedItems,
-                dbTopics.map(Topic::id)
+                dbTopics.map(Topic::id),
             )
 
             // After sync version should be updated
             assertEquals(
                 network.latestChangeListVersion(CollectionType.Topics),
-                synchronizer.getChangeListVersions().topicVersion
+                synchronizer.getChangeListVersions().topicVersion,
             )
         }
 }

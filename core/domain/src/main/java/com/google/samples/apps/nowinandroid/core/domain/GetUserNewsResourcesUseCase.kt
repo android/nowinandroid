@@ -17,15 +17,16 @@
 package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNot
+import javax.inject.Inject
 
 /**
  * A use case responsible for obtaining news resources with their associated bookmarked (also known
@@ -33,26 +34,23 @@ import kotlinx.coroutines.flow.filterNot
  */
 class GetUserNewsResourcesUseCase @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
 ) {
     /**
      * Returns a list of UserNewsResources which match the supplied set of topic ids.
      *
-     * @param filterTopicIds - A set of topic ids used to filter the list of news resources. If
-     * this is empty the list of news resources will not be filtered.
+     * @param query - Summary of query parameters for news resources.
      */
     operator fun invoke(
-        filterTopicIds: Set<String> = emptySet()
+        query: NewsResourceQuery = NewsResourceQuery(),
     ): Flow<List<UserNewsResource>> =
-        if (filterTopicIds.isEmpty()) {
-            newsRepository.getNewsResources()
-        } else {
-            newsRepository.getNewsResources(filterTopicIds = filterTopicIds)
-        }.mapToUserNewsResources(userDataRepository.userData)
+        newsRepository.getNewsResources(
+            query = query,
+        ).mapToUserNewsResources(userDataRepository.userData)
 }
 
 private fun Flow<List<NewsResource>>.mapToUserNewsResources(
-    userDataStream: Flow<UserData>
+    userDataStream: Flow<UserData>,
 ): Flow<List<UserNewsResource>> =
     filterNot { it.isEmpty() }
         .combine(userDataStream) { newsResources, userData ->

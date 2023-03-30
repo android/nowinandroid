@@ -22,11 +22,11 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class GetFollowableTopicsUseCaseTest {
 
@@ -38,12 +38,11 @@ class GetFollowableTopicsUseCaseTest {
 
     val useCase = GetFollowableTopicsUseCase(
         topicsRepository,
-        userDataRepository
+        userDataRepository,
     )
 
     @Test
     fun whenNoParams_followableTopicsAreReturnedWithNoSorting() = runTest {
-
         // Obtain a stream of followable topics.
         val followableTopics = useCase()
 
@@ -58,16 +57,15 @@ class GetFollowableTopicsUseCaseTest {
                 FollowableTopic(testTopics[1], false),
                 FollowableTopic(testTopics[2], true),
             ),
-            followableTopics.first()
+            followableTopics.first(),
         )
     }
 
     @Test
     fun whenSortOrderIsByName_topicsSortedByNameAreReturned() = runTest {
-
         // Obtain a stream of followable topics, sorted by name.
         val followableTopics = useCase(
-            sortBy = NAME
+            sortBy = NAME,
         )
 
         // Send some test topics and their followed state.
@@ -81,7 +79,7 @@ class GetFollowableTopicsUseCaseTest {
                 .sortedBy { it.name }
                 .map {
                     FollowableTopic(it, false)
-                }
+                },
         )
     }
 }

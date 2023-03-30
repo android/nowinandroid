@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaDropdownMenuButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
@@ -66,7 +65,7 @@ fun NiaCatalog() {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 item {
                     Text(
@@ -93,19 +92,19 @@ fun NiaCatalog() {
                     FlowRow(mainAxisSpacing = 16.dp) {
                         NiaButton(
                             onClick = {},
-                            enabled = false
+                            enabled = false,
                         ) {
                             Text(text = "Disabled")
                         }
                         NiaOutlinedButton(
                             onClick = {},
-                            enabled = false
+                            enabled = false,
                         ) {
                             Text(text = "Disabled")
                         }
                         NiaTextButton(
                             onClick = {},
-                            enabled = false
+                            enabled = false,
                         ) {
                             Text(text = "Disabled")
                         }
@@ -119,21 +118,21 @@ fun NiaCatalog() {
                             text = { Text(text = "Enabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                         NiaOutlinedButton(
                             onClick = {},
                             text = { Text(text = "Enabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                         NiaTextButton(
                             onClick = {},
                             text = { Text(text = "Enabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                     }
                 }
@@ -146,7 +145,7 @@ fun NiaCatalog() {
                             text = { Text(text = "Disabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                         NiaOutlinedButton(
                             onClick = {},
@@ -154,7 +153,7 @@ fun NiaCatalog() {
                             text = { Text(text = "Disabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                         NiaTextButton(
                             onClick = {},
@@ -162,28 +161,11 @@ fun NiaCatalog() {
                             text = { Text(text = "Disabled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            }
+                            },
                         )
                     }
                 }
                 item { Text("Dropdown menus", Modifier.padding(top = 16.dp)) }
-                item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
-                        NiaDropdownMenuButton(
-                            text = { Text("Enabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) }
-                        )
-                        NiaDropdownMenuButton(
-                            text = { Text("Disabled") },
-                            items = listOf("Item 1", "Item 2", "Item 3"),
-                            onItemClick = {},
-                            itemText = { item -> Text(item) },
-                            enabled = false
-                        )
-                    }
-                }
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
@@ -191,25 +173,25 @@ fun NiaCatalog() {
                         NiaFilterChip(
                             selected = firstChecked,
                             onSelectedChange = { checked -> firstChecked = checked },
-                            label = { Text(text = "Enabled") }
+                            label = { Text(text = "Enabled") },
                         )
                         var secondChecked by remember { mutableStateOf(true) }
                         NiaFilterChip(
                             selected = secondChecked,
                             onSelectedChange = { checked -> secondChecked = checked },
-                            label = { Text(text = "Enabled") }
+                            label = { Text(text = "Enabled") },
                         )
                         NiaFilterChip(
                             selected = false,
                             onSelectedChange = {},
                             enabled = false,
-                            label = { Text(text = "Disabled") }
+                            label = { Text(text = "Disabled") },
                         )
                         NiaFilterChip(
                             selected = true,
                             onSelectedChange = {},
                             enabled = false,
-                            label = { Text(text = "Disabled") }
+                            label = { Text(text = "Disabled") },
                         )
                     }
                 }
@@ -223,15 +205,15 @@ fun NiaCatalog() {
                             icon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.BookmarkBorder),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.Bookmark),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
-                            }
+                            },
                         )
                         var secondChecked by remember { mutableStateOf(true) }
                         NiaIconToggleButton(
@@ -240,15 +222,15 @@ fun NiaCatalog() {
                             icon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.BookmarkBorder),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.Bookmark),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
-                            }
+                            },
                         )
                         NiaIconToggleButton(
                             checked = false,
@@ -256,16 +238,16 @@ fun NiaCatalog() {
                             icon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.BookmarkBorder),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.Bookmark),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
-                            enabled = false
+                            enabled = false,
                         )
                         NiaIconToggleButton(
                             checked = true,
@@ -273,16 +255,16 @@ fun NiaCatalog() {
                             icon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.BookmarkBorder),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
                                     painter = painterResource(id = NiaIcons.Bookmark),
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             },
-                            enabled = false
+                            enabled = false,
                         )
                     }
                 }
@@ -294,68 +276,42 @@ fun NiaCatalog() {
                             expanded = firstExpanded,
                             onExpandedChange = { expanded -> firstExpanded = expanded },
                             compactText = { Text(text = "Compact view") },
-                            expandedText = { Text(text = "Expanded view") }
+                            expandedText = { Text(text = "Expanded view") },
                         )
                         var secondExpanded by remember { mutableStateOf(true) }
                         NiaViewToggleButton(
                             expanded = secondExpanded,
                             onExpandedChange = { expanded -> secondExpanded = expanded },
                             compactText = { Text(text = "Compact view") },
-                            expandedText = { Text(text = "Expanded view") }
+                            expandedText = { Text(text = "Expanded view") },
                         )
                         NiaViewToggleButton(
                             expanded = false,
                             onExpandedChange = {},
                             compactText = { Text(text = "Disabled") },
                             expandedText = { Text(text = "Disabled") },
-                            enabled = false
+                            enabled = false,
                         )
                     }
                 }
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(mainAxisSpacing = 16.dp) {
-                        var expandedTopicId by remember { mutableStateOf<String?>(null) }
-
-                        var firstFollowed by remember { mutableStateOf(false) }
                         NiaTopicTag(
-                            expanded = expandedTopicId == "Topic 1",
-                            followed = firstFollowed,
-                            onDropdownMenuToggle = { show ->
-                                expandedTopicId = if (show) "Topic 1" else null
-                            },
-                            onFollowClick = { firstFollowed = true },
-                            onUnfollowClick = { firstFollowed = false },
-                            onBrowseClick = {},
+                            followed = true,
+                            onClick = {},
                             text = { Text(text = "Topic 1".uppercase()) },
-                            followText = { Text(text = "Follow") },
-                            unFollowText = { Text(text = "Unfollow") },
-                            browseText = { Text(text = "Browse topic") }
-                        )
-                        var secondFollowed by remember { mutableStateOf(true) }
-                        NiaTopicTag(
-                            expanded = expandedTopicId == "Topic 2",
-                            followed = secondFollowed,
-                            onDropdownMenuToggle = { show ->
-                                expandedTopicId = if (show) "Topic 2" else null
-                            },
-                            onFollowClick = { secondFollowed = true },
-                            onUnfollowClick = { secondFollowed = false },
-                            onBrowseClick = {},
-                            text = { Text(text = "Topic 2".uppercase()) },
-                            followText = { Text(text = "Follow") },
-                            unFollowText = { Text(text = "Unfollow") },
-                            browseText = { Text(text = "Browse topic") }
                         )
                         NiaTopicTag(
-                            expanded = false,
                             followed = false,
-                            onDropdownMenuToggle = {},
-                            onFollowClick = {},
-                            onUnfollowClick = {},
-                            onBrowseClick = {},
+                            onClick = {},
+                            text = { Text(text = "Topic 2".uppercase()) },
+                        )
+                        NiaTopicTag(
+                            followed = false,
+                            onClick = {},
                             text = { Text(text = "Disabled".uppercase()) },
-                            enabled = false
+                            enabled = false,
                         )
                     }
                 }
@@ -368,7 +324,7 @@ fun NiaCatalog() {
                             NiaTab(
                                 selected = selectedTabIndex == index,
                                 onClick = { selectedTabIndex = index },
-                                text = { Text(text = title) }
+                                text = { Text(text = title) },
                             )
                         }
                     }
@@ -380,12 +336,12 @@ fun NiaCatalog() {
                     val icons = listOf(
                         NiaIcons.UpcomingBorder,
                         NiaIcons.MenuBookBorder,
-                        NiaIcons.BookmarksBorder
+                        NiaIcons.BookmarksBorder,
                     )
                     val selectedIcons = listOf(
                         NiaIcons.Upcoming,
                         NiaIcons.MenuBook,
-                        NiaIcons.Bookmarks
+                        NiaIcons.Bookmarks,
                     )
                     val tagIcon = NiaIcons.Tag
                     NiaNavigationBar {
@@ -397,7 +353,7 @@ fun NiaCatalog() {
                                     } else {
                                         Icon(
                                             painter = painterResource(id = icons[index]),
-                                            contentDescription = item
+                                            contentDescription = item,
                                         )
                                     }
                                 },
@@ -407,13 +363,13 @@ fun NiaCatalog() {
                                     } else {
                                         Icon(
                                             painter = painterResource(id = selectedIcons[index]),
-                                            contentDescription = item
+                                            contentDescription = item,
                                         )
                                     }
                                 },
                                 label = { Text(item) },
                                 selected = selectedItem == index,
-                                onClick = { selectedItem = index }
+                                onClick = { selectedItem = index },
                             )
                         }
                     }

@@ -47,31 +47,34 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.previewUserNewsResources
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
+import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun BookmarksRoute(
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: BookmarksViewModel = hiltViewModel()
+    viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
     val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
-        modifier = modifier
+        onTopicClick = onTopicClick,
+        modifier = modifier,
     )
 }
 
@@ -83,16 +86,18 @@ internal fun BookmarksRoute(
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onTopicClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
         is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(feedState, removeFromBookmarks, modifier)
+            BookmarksGrid(feedState, removeFromBookmarks, onTopicClick, modifier)
         } else {
             EmptyState(modifier)
         }
     }
+    TrackScreenViewEvent(screenName = "Saved")
 }
 
 @Composable
@@ -110,7 +115,8 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onTopicClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyGridState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
@@ -122,11 +128,12 @@ private fun BookmarksGrid(
         state = scrollableState,
         modifier = modifier
             .fillMaxSize()
-            .testTag("bookmarks:feed")
+            .testTag("bookmarks:feed"),
     ) {
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+            onTopicClick = onTopicClick,
         )
         item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
@@ -142,24 +149,24 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .testTag("bookmarks:empty"),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.img_empty_bookmarks),
             colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
-            contentDescription = null
+            contentDescription = null,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
         Text(
             text = stringResource(id = R.string.bookmarks_empty_error),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -168,7 +175,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             text = stringResource(id = R.string.bookmarks_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
@@ -183,13 +190,15 @@ private fun LoadingStatePreview() {
 
 @Preview
 @Composable
-private fun BookmarksGridPreview() {
+private fun BookmarksGridPreview(
+    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+    userNewsResources: List<UserNewsResource>,
+) {
     NiaTheme {
         BookmarksGrid(
-            feedState = Success(
-                previewUserNewsResources
-            ),
-            removeFromBookmarks = {}
+            feedState = Success(userNewsResources),
+            removeFromBookmarks = {},
+            onTopicClick = {},
         )
     }
 }

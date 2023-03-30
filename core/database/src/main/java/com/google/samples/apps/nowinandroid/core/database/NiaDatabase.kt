@@ -46,7 +46,7 @@ import com.google.samples.apps.nowinandroid.core.database.util.NewsResourceTypeC
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
         AutoMigration(from = 10, to = 11, spec = DatabaseMigrations.Schema10to11::class),
-        AutoMigration(from = 11, to = 12, spec = DatabaseMigrations.Schema11to12::class)
+        AutoMigration(from = 11, to = 12, spec = DatabaseMigrations.Schema11to12::class),
     ],
     exportSchema = true,
 )
