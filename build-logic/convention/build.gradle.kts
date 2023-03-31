@@ -27,9 +27,9 @@ java {
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradle)
     compileOnly(libs.firebase.crashlytics.gradle)
+    compileOnly(libs.firebase.performance.gradle)
+    compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
 }
 

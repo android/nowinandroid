@@ -36,6 +36,7 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.testing.notifications.TestNotifier
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -58,6 +59,8 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var network: TestNiaNetworkDataSource
 
+    private lateinit var notifier: TestNotifier
+
     private lateinit var synchronizer: Synchronizer
 
     @get:Rule
@@ -68,6 +71,7 @@ class OfflineFirstNewsRepositoryTest {
         newsResourceDao = TestNewsResourceDao()
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
+        notifier = TestNotifier()
         synchronizer = TestSynchronizer(
             NiaPreferencesDataSource(
                 tmpFolder.testUserPreferencesDataStore(testScope),
@@ -78,6 +82,7 @@ class OfflineFirstNewsRepositoryTest {
             newsResourceDao = newsResourceDao,
             topicDao = topicDao,
             network = network,
+            notifier = notifier,
         )
     }
 
@@ -145,6 +150,12 @@ class OfflineFirstNewsRepositoryTest {
                 expected = network.latestChangeListVersion(CollectionType.NewsResources),
                 actual = synchronizer.getChangeListVersions().newsResourceVersion,
             )
+
+            // Notifier should have been called with new news resources
+            assertEquals(
+                expected = newsResourcesFromDb.map(NewsResource::id).sorted(),
+                actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
+            )
         }
 
     @Test
@@ -186,6 +197,13 @@ class OfflineFirstNewsRepositoryTest {
                 expected = network.latestChangeListVersion(CollectionType.NewsResources),
                 actual = synchronizer.getChangeListVersions().newsResourceVersion,
             )
+
+            // Notifier should have been called with news resources from network that are not
+            // deleted
+            assertEquals(
+                expected = (newsResourcesFromNetwork.map(NewsResource::id) - deletedItems).sorted(),
+                actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
+            )
         }
 
     @Test
@@ -224,6 +242,12 @@ class OfflineFirstNewsRepositoryTest {
             assertEquals(
                 expected = changeList.last().changeListVersion,
                 actual = synchronizer.getChangeListVersions().newsResourceVersion,
+            )
+
+            // Notifier should have been called with only added news resources from network
+            assertEquals(
+                expected = newsResourcesFromNetwork.map(NewsResource::id).sorted(),
+                actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
             )
         }
 
