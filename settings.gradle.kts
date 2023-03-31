@@ -47,6 +47,7 @@ include(":core:network")
 include(":core:ui")
 include(":core:testing")
 include(":core:analytics")
+include(":core:notifications")
 
 include(":feature:foryou")
 include(":feature:interests")

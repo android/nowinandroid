@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.sync.test
+package com.google.samples.apps.nowinandroid.core.notifications
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-class NeverSyncingSyncStatusMonitor @Inject constructor() : SyncStatusMonitor {
-    override val isSyncing: Flow<Boolean> = flowOf(false)
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class NotificationsModule {
+    @Binds
+    abstract fun bindNotifier(
+        notifier: AndroidSystemNotifier,
+    ): Notifier
 }

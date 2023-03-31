@@ -30,7 +30,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.notifications.Notifier
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -46,6 +48,7 @@ class OfflineFirstNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
+    private val notifier: Notifier,
 ) : NewsRepository {
 
     override fun getNewsResources(
@@ -69,6 +72,16 @@ class OfflineFirstNewsRepository @Inject constructor(
             },
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
+                // TODO: Make this more efficient, there is no need to retrieve populated
+                //  news resources when all that's needed are the ids
+                val existingNewsResourceIds = newsResourceDao.getNewsResources(
+                    useFilterNewsIds = true,
+                    filterNewsIds = changedIds.toSet(),
+                )
+                    .first()
+                    .map { it.entity.id }
+                    .toSet()
+
                 changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
                     val networkNewsResources = network.getNewsResources(ids = chunkedIds)
 
@@ -92,6 +105,20 @@ class OfflineFirstNewsRepository @Inject constructor(
                             .flatten(),
                     )
                 }
+
+                val addedNewsResources = newsResourceDao.getNewsResources(
+                    useFilterNewsIds = true,
+                    filterNewsIds = changedIds.toSet(),
+                )
+                    .first()
+                    .filter { !existingNewsResourceIds.contains(it.entity.id) }
+                    .map(PopulatedNewsResource::asExternalModel)
+
+                // TODO: Define business logic for notifications on first time sync.
+                //  we probably do not want to send notifications on first install.
+                //  We can easily check if the change list version is 0 and not send notifications
+                // if it is.
+                if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
             },
         )
 }
