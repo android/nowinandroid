@@ -67,7 +67,7 @@ internal fun InterestsScreen(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.loading),
                 )
-            is InterestsUiState.Interests ->
+            is InterestsUiState.Success ->
                 TopicsTabContent(
                     topics = uiState.topics,
                     onTopicClick = onTopicClick,
@@ -94,7 +94,7 @@ fun InterestsScreenPopulated(
     NiaTheme {
         NiaBackground {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(
+                uiState = InterestsUiState.Success(
                     topics = followableTopics,
                 ),
                 followTopic = { _, _ -> },

@@ -74,7 +74,7 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
+                uiState = InterestsUiState.Success(topics = followableTopicTestData),
             )
         }
 

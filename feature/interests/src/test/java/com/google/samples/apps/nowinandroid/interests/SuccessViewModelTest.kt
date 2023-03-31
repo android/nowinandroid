@@ -83,7 +83,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             false,
-            (viewModel.uiState.value as InterestsUiState.Interests)
+            (viewModel.uiState.value as InterestsUiState.Success)
                 .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
@@ -93,7 +93,7 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testOutputTopics),
+            InterestsUiState.Success(topics = testOutputTopics),
             viewModel.uiState.value,
         )
 
@@ -113,7 +113,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             true,
-            (viewModel.uiState.value as InterestsUiState.Interests)
+            (viewModel.uiState.value as InterestsUiState.Success)
                 .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
@@ -123,7 +123,7 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testInputTopics),
+            InterestsUiState.Success(topics = testInputTopics),
             viewModel.uiState.value,
         )
 
