@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
@@ -45,6 +46,7 @@ private const val SYNC_BATCH_SIZE = 40
  * Reads are exclusively from local storage to support offline access.
  */
 class OfflineFirstNewsRepository @Inject constructor(
+    private val niaPreferencesDataSource: NiaPreferencesDataSource,
     private val newsResourceDao: NewsResourceDao,
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
@@ -72,15 +74,25 @@ class OfflineFirstNewsRepository @Inject constructor(
             },
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
+                val userData = niaPreferencesDataSource.userData.first()
+                val hasOnBoarded = userData.shouldHideOnboarding
+                val followedTopicIds = userData.followedTopics
+
                 // TODO: Make this more efficient, there is no need to retrieve populated
                 //  news resources when all that's needed are the ids
-                val existingNewsResourceIds = newsResourceDao.getNewsResources(
-                    useFilterNewsIds = true,
-                    filterNewsIds = changedIds.toSet(),
-                )
-                    .first()
-                    .map { it.entity.id }
-                    .toSet()
+                val existingFollowedChangedNewsResourceIds = when {
+                    hasOnBoarded -> newsResourceDao.getNewsResources(
+                        useFilterTopicIds = true,
+                        filterTopicIds = followedTopicIds,
+                        useFilterNewsIds = true,
+                        filterNewsIds = changedIds.toSet(),
+                    )
+                        .first()
+                        .map { it.entity.id }
+                        .toSet()
+                    // No need to retrieve anything if notifications won't be sent
+                    else -> emptySet()
+                }
 
                 changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
                     val networkNewsResources = network.getNewsResources(ids = chunkedIds)
@@ -106,19 +118,18 @@ class OfflineFirstNewsRepository @Inject constructor(
                     )
                 }
 
-                val addedNewsResources = newsResourceDao.getNewsResources(
-                    useFilterNewsIds = true,
-                    filterNewsIds = changedIds.toSet(),
-                )
-                    .first()
-                    .filter { !existingNewsResourceIds.contains(it.entity.id) }
-                    .map(PopulatedNewsResource::asExternalModel)
+                if (hasOnBoarded) {
+                    val addedNewsResources = newsResourceDao.getNewsResources(
+                        useFilterTopicIds = true,
+                        filterTopicIds = followedTopicIds,
+                        useFilterNewsIds = true,
+                        filterNewsIds = changedIds.toSet() - existingFollowedChangedNewsResourceIds,
+                    )
+                        .first()
+                        .map(PopulatedNewsResource::asExternalModel)
 
-                // TODO: Define business logic for notifications on first time sync.
-                //  we probably do not want to send notifications on first install.
-                //  We can easily check if the change list version is 0 and not send notifications
-                // if it is.
-                if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
+                    if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
+                }
             },
         )
 }
