@@ -50,6 +50,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -159,7 +160,11 @@ fun NiaApp(
                         )
                     }
 
-                    Column(Modifier.fillMaxSize()) {
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(bottom = if (isOffline) 60.dp else 0.dp)
+                    ) {
                         // Show the top app bar on top level destinations.
                         val destination = appState.currentTopLevelDestination
                         if (destination != null) {
@@ -181,9 +186,6 @@ fun NiaApp(
                             onBackClick = appState::onBackClick
                         )
                     }
-
-                    // TODO: We may want to add padding or spacer when the snackbar is shown so that
-                    //  content doesn't display behind it.
                 }
             }
         }
