@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.sync.di
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
-import com.google.samples.apps.nowinandroid.sync.status.WorkManagerSyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
+import com.google.samples.apps.nowinandroid.sync.status.WorkManagerSyncManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -28,6 +28,6 @@ import dagger.hilt.components.SingletonComponent
 interface SyncModule {
     @Binds
     fun bindsSyncStatusMonitor(
-        syncStatusMonitor: WorkManagerSyncStatusMonitor
-    ): SyncStatusMonitor
+        syncStatusMonitor: WorkManagerSyncManager,
+    ): SyncManager
 }

@@ -30,9 +30,15 @@ import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import javax.inject.Inject
+import com.google.samples.apps.nowinandroid.core.notifications.Notifier
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+
+// Heuristic value to optimize for serialization and deserialization cost on client and server
+// for each news resource batch.
+private const val SYNC_BATCH_SIZE = 40
 
 /**
  * Disk storage backed implementation of the [NewsRepository].
@@ -42,16 +48,16 @@ class OfflineFirstNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
+    private val notifier: Notifier,
 ) : NewsRepository {
 
-    override fun getNewsResources(): Flow<List<NewsResource>> =
-        newsResourceDao.getNewsResources()
-            .map { it.map(PopulatedNewsResource::asExternalModel) }
-
     override fun getNewsResources(
-        filterTopicIds: Set<String>
+        query: NewsResourceQuery,
     ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
-        filterTopicIds = filterTopicIds
+        useFilterTopicIds = query.filterTopicIds != null,
+        filterTopicIds = query.filterTopicIds ?: emptySet(),
+        useFilterNewsIds = query.filterNewsIds != null,
+        filterNewsIds = query.filterNewsIds ?: emptySet(),
     )
         .map { it.map(PopulatedNewsResource::asExternalModel) }
 
@@ -66,26 +72,53 @@ class OfflineFirstNewsRepository @Inject constructor(
             },
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
-                val networkNewsResources = network.getNewsResources(ids = changedIds)
+                // TODO: Make this more efficient, there is no need to retrieve populated
+                //  news resources when all that's needed are the ids
+                val existingNewsResourceIds = newsResourceDao.getNewsResources(
+                    useFilterNewsIds = true,
+                    filterNewsIds = changedIds.toSet(),
+                )
+                    .first()
+                    .map { it.entity.id }
+                    .toSet()
 
-                // Order of invocation matters to satisfy id and foreign key constraints!
+                changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
+                    val networkNewsResources = network.getNewsResources(ids = chunkedIds)
 
-                topicDao.insertOrIgnoreTopics(
-                    topicEntities = networkNewsResources
-                        .map(NetworkNewsResource::topicEntityShells)
-                        .flatten()
-                        .distinctBy(TopicEntity::id)
+                    // Order of invocation matters to satisfy id and foreign key constraints!
+
+                    topicDao.insertOrIgnoreTopics(
+                        topicEntities = networkNewsResources
+                            .map(NetworkNewsResource::topicEntityShells)
+                            .flatten()
+                            .distinctBy(TopicEntity::id),
+                    )
+                    newsResourceDao.upsertNewsResources(
+                        newsResourceEntities = networkNewsResources.map(
+                            NetworkNewsResource::asEntity,
+                        ),
+                    )
+                    newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
+                        newsResourceTopicCrossReferences = networkNewsResources
+                            .map(NetworkNewsResource::topicCrossReferences)
+                            .distinct()
+                            .flatten(),
+                    )
+                }
+
+                val addedNewsResources = newsResourceDao.getNewsResources(
+                    useFilterNewsIds = true,
+                    filterNewsIds = changedIds.toSet(),
                 )
-                newsResourceDao.upsertNewsResources(
-                    newsResourceEntities = networkNewsResources
-                        .map(NetworkNewsResource::asEntity)
-                )
-                newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
-                    newsResourceTopicCrossReferences = networkNewsResources
-                        .map(NetworkNewsResource::topicCrossReferences)
-                        .distinct()
-                        .flatten()
-                )
-            }
+                    .first()
+                    .filter { !existingNewsResourceIds.contains(it.entity.id) }
+                    .map(PopulatedNewsResource::asExternalModel)
+
+                // TODO: Define business logic for notifications on first time sync.
+                //  we probably do not want to send notifications on first install.
+                //  We can easily check if the change list version is 0 and not send notifications
+                // if it is.
+                if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
+            },
         )
 }

@@ -1,0 +1,38 @@
+name: Android CI with GMD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  android-ci:
+    runs-on: macos-12
+    strategy:
+      matrix:
+        device-config: [ "pixel4api30aospatd", "pixelcapi30aospatd" ]
+
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - uses: actions/checkout@v3
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Run instrumented tests with GMD
+        run: ./gradlew cleanManagedDevices --unused-only &&
+          ./gradlew ${{ matrix.device-config }}DemoDebugAndroidTest -Dorg.gradle.workers.max=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+
+      - name: Upload test reports
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: |
+            '**/*/build/reports/androidTests/'

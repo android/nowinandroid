@@ -27,7 +27,7 @@ import kotlinx.serialization.json.Json
 
 enum class CollectionType {
     Topics,
-    NewsResources
+    NewsResources,
 }
 
 /**
@@ -37,7 +37,7 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
     private val source = FakeNiaNetworkDataSource(
         UnconfinedTestDispatcher(),
-        Json { ignoreUnknownKeys = true }
+        Json { ignoreUnknownKeys = true },
     )
 
     private val allTopics = runBlocking { source.getTopics() }
@@ -54,13 +54,13 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         allTopics.matchIds(
             ids = ids,
-            idGetter = NetworkTopic::id
+            idGetter = NetworkTopic::id,
         )
 
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         allNewsResources.matchIds(
             ids = ids,
-            idGetter = NetworkNewsResource::id
+            idGetter = NetworkNewsResource::id,
         )
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
@@ -102,7 +102,7 @@ fun List<NetworkChangeList>.after(version: Int?): List<NetworkChangeList> =
  */
 private fun <T> List<T>.matchIds(
     ids: List<String>?,
-    idGetter: (T) -> String
+    idGetter: (T) -> String,
 ) = when (ids) {
     null -> this
     else -> ids.toSet().let { idSet -> this.filter { idSet.contains(idGetter(it)) } }
@@ -113,7 +113,7 @@ private fun <T> List<T>.matchIds(
  * [after] simulates which models have changed by excluding items before it
  */
 private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> String
+    idGetter: (T) -> String,
 ) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),

@@ -30,13 +30,12 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * UI tests for [BookmarksScreen] composable.
@@ -51,13 +50,14 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Loading,
-                removeFromBookmarks = { }
+                removeFromBookmarks = {},
+                onTopicClick = {},
             )
         }
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.saved_loading)
+                composeTestRule.activity.resources.getString(R.string.saved_loading),
             )
             .assertExists()
     }
@@ -67,17 +67,17 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                    userNewsResourcesTestData.take(2),
                 ),
-                removeFromBookmarks = { }
+                removeFromBookmarks = {},
+                onTopicClick = {},
             )
         }
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[0].title,
-                substring = true
+                userNewsResourcesTestData[0].title,
+                substring = true,
             )
             .assertExists()
             .assertHasClickAction()
@@ -85,15 +85,15 @@ class BookmarksScreenTest {
         composeTestRule.onNode(hasScrollToNodeAction())
             .performScrollToNode(
                 hasText(
-                    previewNewsResources[1].title,
-                    substring = true
-                )
+                    userNewsResourcesTestData[1].title,
+                    substring = true,
+                ),
             )
 
         composeTestRule
             .onNodeWithText(
-                previewNewsResources[1].title,
-                substring = true
+                userNewsResourcesTestData[1].title,
+                substring = true,
             )
             .assertExists()
             .assertHasClickAction()
@@ -106,28 +106,28 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    previewNewsResources.take(2)
-                        .map { SaveableNewsResource(it, true) }
+                    userNewsResourcesTestData.take(2),
                 ),
                 removeFromBookmarks = { newsResourceId ->
-                    assertEquals(previewNewsResources[0].id, newsResourceId)
+                    assertEquals(userNewsResourcesTestData[0].id, newsResourceId)
                     removeFromBookmarksCalled = true
-                }
+                },
+                onTopicClick = {},
             )
         }
 
         composeTestRule
             .onAllNodesWithContentDescription(
                 composeTestRule.activity.getString(
-                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark
-                )
+                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark,
+                ),
             ).filter(
                 hasAnyAncestor(
                     hasText(
-                        previewNewsResources[0].title,
-                        substring = true
-                    )
-                )
+                        userNewsResourcesTestData[0].title,
+                        substring = true,
+                    ),
+                ),
             )
             .assertCountEquals(1)
             .onFirst()
@@ -141,19 +141,20 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(emptyList()),
-                removeFromBookmarks = { }
+                removeFromBookmarks = {},
+                onTopicClick = {},
             )
         }
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.bookmarks_empty_error)
+                composeTestRule.activity.getString(R.string.bookmarks_empty_error),
             )
             .assertExists()
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.bookmarks_empty_description)
+                composeTestRule.activity.getString(R.string.bookmarks_empty_description),
             )
             .assertExists()
     }

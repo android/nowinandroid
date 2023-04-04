@@ -70,7 +70,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
   <tr>
    <td>2
    </td>
-   <td>The <code>ForYouViewModel</code> calls <code>GetSaveableNewsResourcesUseCase</code> to obtain a stream of news resources with their bookmarked/saved state. No items will be emitted into this stream until both the user and news repositories emit an item. While waiting, the feed state is set to <code>Loading</code>.
+   <td>The <code>ForYouViewModel</code> calls <code>GetUserNewsResourcesUseCase</code> to obtain a stream of news resources with their bookmarked/saved state. No items will be emitted into this stream until both the user and news repositories emit an item. While waiting, the feed state is set to <code>Loading</code>.
    </td>
    <td>Search for usages of <code>NewsFeedUiState.Loading</code>
    </td>
@@ -142,9 +142,9 @@ Here's what's happening in each step. The easiest way to find the associated cod
   <tr>
    <td>11
    </td>
-   <td><code>GetSaveableNewsResourcesUseCase</code> combines the list of news resources with the user data to emit a list of <code>SaveableNewsResource</code>s.  
+   <td><code>GetUserNewsResourcesUseCase</code> combines the list of news resources with the user data to emit a list of <code>UserNewsResource</code>s.  
    </td>
-   <td><code>GetSaveableNewsResourcesUseCase.invoke</code>
+   <td><code>GetUserNewsResourcesUseCase.invoke</code>
    </td>
   </tr>
   <tr>
@@ -194,7 +194,7 @@ To write data, the repository provides suspend functions. It is up to the caller
 
 _Example: Follow a topic_
 
-Simply call `TopicsRepository.setFollowedTopicId` with the ID of the topic which the user wishes to follow.
+Simply call `UserDataRepository.toggleFollowedTopicId` with the ID of the topic the user wishes to follow and `followed=true` to indicate that the topic should be followed (use `false` to unfollow a topic).
 
 
 ### Data sources
@@ -254,7 +254,7 @@ The [domain layer](https://developer.android.com/topic/architecture/domain-layer
 
 These use cases are used to simplify and remove duplicate logic from ViewModels. They typically combine and transform data from repositories. 
 
-For example, `GetSaveableNewsResourcesUseCase` combines a stream (implemented using `Flow`) of `NewsResource`s from a `NewsRepository` with a stream of `UserData` objects from a `UserDataRepository` to create a stream of `SaveableNewsResource`s. This stream is used by various ViewModels to display news resources on screen with their bookmarked state.  
+For example, `GetUserNewsResourcesUseCase` combines a stream (implemented using `Flow`) of `NewsResource`s from a `NewsRepository` with a stream of `UserData` objects from a `UserDataRepository` to create a stream of `UserNewsResource`s. This stream is used by various ViewModels to display news resources on screen with their bookmarked state.  
 
 Notably, the domain layer in Now in Android _does not_ (for now) contain any use cases for event handling. Events are handled by the UI layer calling methods on repositories directly.
 
@@ -309,7 +309,7 @@ User actions are communicated from UI elements to ViewModels using regular metho
 
 **Example: Following a topic**
 
-The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the topics repository.
+The `InterestsScreen` takes a lambda expression named `followTopic` which is supplied from `InterestsViewModel.followTopic`. Each time the user taps on a topic to follow this method is called. The ViewModel then processes this action by informing the user data repository.
 
 
 ## Further reading

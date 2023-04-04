@@ -31,12 +31,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -52,21 +51,21 @@ fun InterestsItem(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     description: String = "",
-    itemSeparation: Dp = 16.dp
+    itemSeparation: Dp = 16.dp,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .weight(1f)
                 .clickable { onClick() }
-                .padding(vertical = itemSeparation)
+                .padding(vertical = itemSeparation),
         ) {
             InterestsIcon(topicImageUrl, iconModifier.size(64.dp))
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(24.dp))
             InterestContent(name, description)
         }
         NiaIconToggleButton(
@@ -76,18 +75,18 @@ fun InterestsItem(
                 Icon(
                     imageVector = NiaIcons.Add,
                     contentDescription = stringResource(
-                        id = string.card_follow_button_content_desc
-                    )
+                        id = string.card_follow_button_content_desc,
+                    ),
                 )
             },
             checkedIcon = {
                 Icon(
                     imageVector = NiaIcons.Check,
                     contentDescription = stringResource(
-                        id = string.card_unfollow_button_content_desc
-                    )
+                        id = string.card_unfollow_button_content_desc,
+                    ),
                 )
-            }
+            },
         )
     }
 }
@@ -99,13 +98,13 @@ private fun InterestContent(name: String, description: String, modifier: Modifie
             text = name,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(
-                vertical = if (description.isEmpty()) 0.dp else 4.dp
-            )
+                vertical = if (description.isEmpty()) 0.dp else 4.dp,
+            ),
         )
         if (description.isNotEmpty()) {
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
@@ -122,11 +121,10 @@ private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) 
             contentDescription = null, // decorative image
         )
     } else {
-        AsyncImage(
-            model = topicImageUrl,
+        DynamicAsyncImage(
+            imageUrl = topicImageUrl,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
@@ -142,7 +140,7 @@ private fun InterestsCardPreview() {
                 following = false,
                 topicImageUrl = "",
                 onClick = { },
-                onFollowButtonClick = { }
+                onFollowButtonClick = { },
             )
         }
     }
@@ -159,7 +157,7 @@ private fun InterestsCardLongNamePreview() {
                 following = true,
                 topicImageUrl = "",
                 onClick = { },
-                onFollowButtonClick = { }
+                onFollowButtonClick = { },
             )
         }
     }
@@ -177,7 +175,7 @@ private fun InterestsCardLongDescriptionPreview() {
                 following = false,
                 topicImageUrl = "",
                 onClick = { },
-                onFollowButtonClick = { }
+                onFollowButtonClick = { },
             )
         }
     }
@@ -194,7 +192,7 @@ private fun InterestsCardWithEmptyDescriptionPreview() {
                 following = true,
                 topicImageUrl = "",
                 onClick = { },
-                onFollowButtonClick = { }
+                onFollowButtonClick = { },
             )
         }
     }

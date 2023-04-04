@@ -22,12 +22,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Fake implementation of the [TopicsRepository] that retrieves the topics from a JSON String, and
@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.map
  */
 class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val datasource: FakeNiaNetworkDataSource
+    private val datasource: FakeNiaNetworkDataSource,
 ) : TopicsRepository {
     override fun getTopics(): Flow<List<Topic>> = flow {
         emit(
@@ -49,9 +49,9 @@ class FakeTopicsRepository @Inject constructor(
                     shortDescription = it.shortDescription,
                     longDescription = it.longDescription,
                     url = it.url,
-                    imageUrl = it.imageUrl
+                    imageUrl = it.imageUrl,
                 )
-            }
+            },
         )
     }.flowOn(ioDispatcher)
 

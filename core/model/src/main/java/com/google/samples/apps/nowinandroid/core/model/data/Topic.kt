@@ -16,8 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.model.data
 
-/* ktlint-disable max-line-length */
-
 /**
  * External data layer representation of a NiA Topic
  */

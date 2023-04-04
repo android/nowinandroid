@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.core.data
 import android.util.Log
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Interface marker for a class that manages synchronization between local data and a remote
@@ -62,7 +62,7 @@ private suspend fun <T> suspendRunCatching(block: suspend () -> T): Result<T> = 
     Log.i(
         "suspendRunCatching",
         "Failed to evaluate a suspendRunCatchingBlock. Returning failure Result",
-        exception
+        exception,
     )
     Result.failure(exception)
 }
@@ -116,10 +116,10 @@ fun <T1, T2, T3, T4, T5, T6, R> combine(
     flow4: Flow<T4>,
     flow5: Flow<T5>,
     flow6: Flow<T6>,
-    transform: suspend (T1, T2, T3, T4, T5, T6) -> R
+    transform: suspend (T1, T2, T3, T4, T5, T6) -> R,
 ): Flow<R> = combine(
     combine(flow, flow2, flow3, ::Triple),
-    combine(flow4, flow5, flow6, ::Triple)
+    combine(flow4, flow5, flow6, ::Triple),
 ) { t1, t2 ->
     transform(
         t1.first,
@@ -127,6 +127,6 @@ fun <T1, T2, T3, T4, T5, T6, R> combine(
         t1.third,
         t2.first,
         t2.second,
-        t2.third
+        t2.third,
     )
 }

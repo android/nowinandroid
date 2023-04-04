@@ -19,18 +19,18 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetSaveableNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.SaveableNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class TopicViewModel @Inject constructor(
@@ -45,31 +46,33 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase
+    getSaveableNewsResources: GetUserNewsResourcesUseCase,
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
 
+    val topicId = topicArgs.topicId
+
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        topicsRepository = topicsRepository
+        topicsRepository = topicsRepository,
     )
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading
+            initialValue = TopicUiState.Loading,
         )
 
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        getSaveableNewsResources = getSaveableNewsResources
+        getSaveableNewsResources = getSaveableNewsResources,
     )
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading
+            initialValue = NewsUiState.Loading,
         )
 
     fun followTopicToggle(followed: Boolean) {
@@ -97,13 +100,13 @@ private fun topicUiState(
 
     // Observe topic information
     val topicStream: Flow<Topic> = topicsRepository.getTopic(
-        id = topicId
+        id = topicId,
     )
 
     return combine(
         followedTopicIds,
         topicStream,
-        ::Pair
+        ::Pair,
     )
         .asResult()
         .map { followedTopicToTopicResult ->
@@ -114,13 +117,15 @@ private fun topicUiState(
                     TopicUiState.Success(
                         followableTopic = FollowableTopic(
                             topic = topic,
-                            isFollowed = followed
-                        )
+                            isFollowed = followed,
+                        ),
                     )
                 }
+
                 is Result.Loading -> {
                     TopicUiState.Loading
                 }
+
                 is Result.Error -> {
                     TopicUiState.Error
                 }
@@ -130,12 +135,14 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetSaveableNewsResourcesUseCase,
+    getSaveableNewsResources: GetUserNewsResourcesUseCase,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<SaveableNewsResource>> = getSaveableNewsResources(
-        filterTopicIds = setOf(element = topicId),
+    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
+        NewsResourceQuery(
+            filterTopicIds = setOf(element = topicId),
+        ),
     )
 
     // Observe bookmarks
@@ -145,7 +152,7 @@ private fun newsUiState(
     return combine(
         newsStream,
         bookmark,
-        ::Pair
+        ::Pair,
     )
         .asResult()
         .map { newsToBookmarksResult ->
@@ -154,9 +161,11 @@ private fun newsUiState(
                     val news = newsToBookmarksResult.data.first
                     NewsUiState.Success(news)
                 }
+
                 is Result.Loading -> {
                     NewsUiState.Loading
                 }
+
                 is Result.Error -> {
                     NewsUiState.Error
                 }
@@ -171,7 +180,7 @@ sealed interface TopicUiState {
 }
 
 sealed interface NewsUiState {
-    data class Success(val news: List<SaveableNewsResource>) : NewsUiState
+    data class Success(val news: List<UserNewsResource>) : NewsUiState
     object Error : NewsUiState
     object Loading : NewsUiState
 }

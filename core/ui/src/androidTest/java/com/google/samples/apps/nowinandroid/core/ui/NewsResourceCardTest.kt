@@ -17,10 +17,12 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.model.data.previewNewsResources
+import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,15 +32,16 @@ class NewsResourceCardTest {
 
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
-        val newsWithKnownResourceType = previewNewsResources[0]
+        val newsWithKnownResourceType = userNewsResourcesTestData[0]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithKnownResourceType,
+                userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
+                onTopicClick = {},
             )
 
             dateFormatted = dateFormatted(publishDate = newsWithKnownResourceType.publishDate)
@@ -49,23 +52,24 @@ class NewsResourceCardTest {
                 composeTestRule.activity.getString(
                     R.string.card_meta_data_text,
                     dateFormatted,
-                    newsWithKnownResourceType.type.displayText
-                )
+                    newsWithKnownResourceType.type.displayText,
+                ),
             )
             .assertExists()
     }
 
     @Test
     fun testMetaDataDisplay_withUnknownResource() {
-        val newsWithUnknownResourceType = previewNewsResources[3]
+        val newsWithUnknownResourceType = userNewsResourcesTestData[3]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                newsResource = newsWithUnknownResourceType,
+                userNewsResource = newsWithUnknownResourceType,
                 isBookmarked = false,
                 onToggleBookmark = {},
-                onClick = {}
+                onClick = {},
+                onTopicClick = {},
             )
 
             dateFormatted = dateFormatted(publishDate = newsWithUnknownResourceType.publishDate)
@@ -74,5 +78,27 @@ class NewsResourceCardTest {
         composeTestRule
             .onNodeWithText(dateFormatted)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun testTopicsChipColorBackground_matchesFollowedState() {
+        composeTestRule.setContent {
+            NewsResourceTopics(
+                topics = followableTopicTestData,
+                onTopicClick = {},
+            )
+        }
+
+        for (followableTopic in followableTopicTestData) {
+            val topicName = followableTopic.topic.name
+            val expectedContentDescription = if (followableTopic.isFollowed) {
+                "$topicName is followed"
+            } else {
+                "$topicName is not followed"
+            }
+            composeTestRule
+                .onNodeWithText(topicName.uppercase())
+                .assertContentDescriptionEquals(expectedContentDescription)
+        }
     }
 }
