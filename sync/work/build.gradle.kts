@@ -33,7 +33,6 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:model"))
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.startup)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)
     implementation(libs.firebase.cloud.messaging)
