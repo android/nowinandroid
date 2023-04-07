@@ -79,7 +79,7 @@ internal fun SearchScreen(
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         SearchToolbar(
             onBackClick = onBackClick,
-            onSearchQueryChanged = onSearchQueryChanged
+            onSearchQueryChanged = onSearchQueryChanged,
         )
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
     }

@@ -177,7 +177,7 @@ fun NiaApp(
                                     containerColor = Color.Transparent,
                                 ),
                                 onActionClick = { appState.setShowSettingsDialog(true) },
-                                onNavigationClick = { appState.navigateToSearch() }
+                                onNavigationClick = { appState.navigateToSearch() },
                             )
                         }
 
