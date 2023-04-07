@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+<<<<<<< HEAD
      Copyright 2023 The Android Open Source Project
+=======
+     Copyright 2022 The Android Open Source Project
+>>>>>>> b23ba8b2 (Add UI skeleton for the search feature)
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
