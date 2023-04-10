@@ -16,5 +16,11 @@
 -->
 <resources>
     <string name="search">Search</string>
-    <string name="clear_search_text">Clear search text</string>
+    <string name="clear_search_text_content_desc">Clear search text</string>
+    <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
+    <string name="try_another_search">Try another search or explorer </string>
+    <string name="interests">Interests</string>
+    <string name="to_browse_topics"> to browse topics</string>
+    <string name="topics">Topics</string>
+    <string name="updates">Updates</string>
 </resources>

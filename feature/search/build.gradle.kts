@@ -26,3 +26,9 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.search"
 }
 
+dependencies {
+    implementation(project(":feature:foryou"))
+    implementation(project(":feature:interests"))
+    implementation(libs.kotlinx.datetime)
+}
+

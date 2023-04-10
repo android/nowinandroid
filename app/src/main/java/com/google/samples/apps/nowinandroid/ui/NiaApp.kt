@@ -181,7 +181,7 @@ fun NiaApp(
                             )
                         }
 
-                        NiaNavHost(appState.navController)
+                        NiaNavHost(appState)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that

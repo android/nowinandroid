@@ -16,24 +16,34 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,27 +51,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
+import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
+import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
+import com.google.samples.apps.nowinandroid.feature.interests.TopicsTabContent
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 @Composable
 internal fun SearchRoute(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    viewModel: SearchViewModel = hiltViewModel(),
+    onInterestsClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
+    interestsViewModel: InterestsViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {
     SearchScreen(
         modifier = modifier,
         onBackClick = onBackClick,
-        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onFollowButtonClick = interestsViewModel::followTopic,
+        onInterestsClick = onInterestsClick,
+        onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
+        onTopicClick = onTopicClick,
+        onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved
     )
 }
 
@@ -69,19 +103,152 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
+    onFollowButtonClick: (String, Boolean) -> Unit = {_, _ -> },
+    onInterestsClick: () -> Unit = {},
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = {_, _ -> },
     onSearchQueryChanged: (String) -> Unit = {},
+    onTopicClick: (String) -> Unit = {},
+    uiState: SearchResultUiState = SearchResultUiState.Loading,
 ) {
+    val searchQuery = remember { mutableStateOf("") }
     TrackScreenViewEvent(screenName = "Search")
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+    Column(modifier = modifier) {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         SearchToolbar(
             onBackClick = onBackClick,
             onSearchQueryChanged = onSearchQueryChanged,
+            searchQuery = searchQuery,
         )
+        when (uiState) {
+            SearchResultUiState.Loading -> Unit
+            is SearchResultUiState.Success -> {
+                if (uiState.isEmpty()) {
+                    EmptySearchResultBody(
+                        onInterestsClick = onInterestsClick,
+                        searchQuery = searchQuery,
+                    )
+                } else {
+                    SearchResultBody(
+                        topics = uiState.topics,
+                        onFollowButtonClick = onFollowButtonClick,
+                        onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                        onTopicClick = onTopicClick,
+                        newsResources = uiState.newsResources,
+                    )
+                }
+            }
+        }
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+    }
+}
+
+@Composable
+fun EmptySearchResultBody(
+    onInterestsClick: () -> Unit = {},
+    searchQuery: MutableState<String>,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        val queryValue = searchQuery.value
+        val message = stringResource(id = searchR.string.search_result_not_found, queryValue)
+        val start = message.indexOf(queryValue)
+        Text(
+            text = AnnotatedString(
+                text = message,
+                spanStyles = listOf(
+                    AnnotatedString.Range(
+                        SpanStyle(fontWeight = FontWeight.Bold),
+                        start = start,
+                        end = start + queryValue.length,
+                    ),
+                ),
+            ),
+            modifier = Modifier.padding(horizontal = 36.dp, vertical = 24.dp),
+        )
+        val interests = stringResource(id = searchR.string.interests)
+        val tryAnotherSearchString = buildAnnotatedString {
+            append(stringResource(id = searchR.string.try_another_search))
+            append(" ")
+            withStyle(
+                style = SpanStyle(
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold,
+                ),
+            ) {
+                pushStringAnnotation(tag = interests, annotation = interests)
+                append(interests)
+            }
+            append(" ")
+            append(stringResource(id = searchR.string.to_browse_topics))
+        }
+        ClickableText(
+            text = tryAnotherSearchString,
+            modifier = Modifier
+                .padding(start = 36.dp, end = 36.dp, bottom = 24.dp)
+                .clickable {},
+        ) { offset ->
+            tryAnotherSearchString.getStringAnnotations(start = offset, end = offset)
+                .firstOrNull()
+                ?.let {
+                    onInterestsClick()
+                }
+        }
+
+    }
+}
+
+@Composable
+private fun SearchResultBody(
+    topics: List<FollowableTopic>,
+    newsResources: List<UserNewsResource>,
+    onFollowButtonClick: (String, Boolean) -> Unit,
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = {_, _ -> },
+    onTopicClick: (String) -> Unit = {}
+) {
+    if (topics.isNotEmpty()) {
+        Text(
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(stringResource(id = searchR.string.topics))
+                }
+            },
+            modifier = Modifier.padding(16.dp),
+        )
+        TopicsTabContent(
+            topics = topics,
+            onTopicClick = onTopicClick,
+            onFollowButtonClick = onFollowButtonClick,
+            withBottomSpacer = false
+        )
+    }
+
+    if (newsResources.isNotEmpty()) {
+        Text(
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(stringResource(id = searchR.string.updates))
+                }
+            },
+            modifier = Modifier.padding(16.dp),
+        )
+
+        val state = rememberLazyGridState()
+        TrackScrollJank(scrollableState = state, stateName = "search:newsResource")
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("search:newsResources"),
+            state = state,
+        ) {
+            newsFeed(
+                feedState = NewsFeedUiState.Success(feed = newsResources),
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                onTopicClick = onTopicClick
+            )
+        }
     }
 }
 
@@ -90,6 +257,7 @@ private fun SearchToolbar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onSearchQueryChanged: (String) -> Unit = {},
+    searchQuery: MutableState<String> = mutableStateOf(""),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -103,14 +271,19 @@ private fun SearchToolbar(
                 ),
             )
         }
-        SearchTextField(onSearchQueryChanged = onSearchQueryChanged)
+        SearchTextField(
+            onSearchQueryChanged = onSearchQueryChanged,
+            searchQuery = searchQuery,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchTextField(onSearchQueryChanged: (String) -> Unit) {
-    val textState = remember { mutableStateOf("") }
+private fun SearchTextField(
+    onSearchQueryChanged: (String) -> Unit,
+    searchQuery: MutableState<String>,
+) {
     val focusRequester = remember { FocusRequester() }
     TextField(
         colors = TextFieldDefaults.textFieldColors(
@@ -128,26 +301,26 @@ private fun SearchTextField(onSearchQueryChanged: (String) -> Unit) {
             )
         },
         trailingIcon = {
-            IconButton(onClick = { textState.value = "" }) {
+            IconButton(onClick = { searchQuery.value = "" }) {
                 Icon(
                     imageVector = NiaIcons.Close,
                     contentDescription = stringResource(
-                        id = searchR.string.clear_search_text,
+                        id = searchR.string.clear_search_text_content_desc,
                     ),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
         },
         onValueChange = {
-            textState.value = it
+            searchQuery.value = it
             onSearchQueryChanged(it)
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(16.dp)
             .focusRequester(focusRequester),
         shape = RoundedCornerShape(32.dp),
-        value = textState.value,
+        value = searchQuery.value,
     )
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -162,10 +335,22 @@ private fun SearchToolbarPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun EmptySearchResultColumnPreview() {
+    NiaTheme {
+        val searchQuery = remember { mutableStateOf("C++") }
+        EmptySearchResultBody(searchQuery = searchQuery)
+    }
+}
+
 @DevicePreviews
 @Composable
-private fun SearchScreenPreview() {
+private fun SearchScreenPreview(
+    @PreviewParameter(SearchResultUiStatePreviewParameterProvider::class)
+    searchResultUiState: SearchResultUiState,
+) {
     NiaTheme {
-        SearchScreen()
+        SearchScreen(uiState = searchResultUiState)
     }
 }

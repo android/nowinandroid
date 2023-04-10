@@ -35,6 +35,7 @@ fun TopicsTabContent(
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    withBottomSpacer: Boolean = true
 ) {
     LazyColumn(
         modifier = modifier
@@ -56,8 +57,10 @@ fun TopicsTabContent(
             }
         }
 
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+        if (withBottomSpacer) {
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            }
         }
     }
 }
