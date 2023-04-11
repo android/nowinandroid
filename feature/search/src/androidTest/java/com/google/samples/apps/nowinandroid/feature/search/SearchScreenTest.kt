@@ -93,7 +93,7 @@ class SearchScreenTest {
     fun emptySearchResult_emptyScreenIsDisplayed() {
         composeTestRule.setContent {
             SearchScreen(
-                uiState = SearchResultUiState.Success()
+                uiState = SearchResultUiState.Success(),
             )
         }
 
@@ -135,11 +135,14 @@ class SearchScreenTest {
     fun searchResultWithNewsResources_firstNewsResourcesIsVisible() {
         composeTestRule.setContent {
             SearchScreen(
-                uiState = SearchResultUiState.Success(newsResources =  newsResourcesTestData.map {
-                    UserNewsResource(
-                        newsResource = it,
-                        userData = userData)
-                }),
+                uiState = SearchResultUiState.Success(
+                    newsResources = newsResourcesTestData.map {
+                        UserNewsResource(
+                            newsResource = it,
+                            userData = userData,
+                        )
+                    },
+                ),
             )
         }
 

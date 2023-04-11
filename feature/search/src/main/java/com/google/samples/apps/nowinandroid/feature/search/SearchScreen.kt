@@ -95,7 +95,7 @@ internal fun SearchRoute(
         onInterestsClick = onInterestsClick,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onTopicClick = onTopicClick,
-        onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved
+        onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
     )
 }
 
@@ -103,9 +103,9 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onFollowButtonClick: (String, Boolean) -> Unit = {_, _ -> },
+    onFollowButtonClick: (String, Boolean) -> Unit = { _, _ -> },
     onInterestsClick: () -> Unit = {},
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = {_, _ -> },
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = { _, _ -> },
     onSearchQueryChanged: (String) -> Unit = {},
     onTopicClick: (String) -> Unit = {},
     uiState: SearchResultUiState = SearchResultUiState.Loading,
@@ -192,7 +192,6 @@ fun EmptySearchResultBody(
                     onInterestsClick()
                 }
         }
-
     }
 }
 
@@ -201,8 +200,8 @@ private fun SearchResultBody(
     topics: List<FollowableTopic>,
     newsResources: List<UserNewsResource>,
     onFollowButtonClick: (String, Boolean) -> Unit,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = {_, _ -> },
-    onTopicClick: (String) -> Unit = {}
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = { _, _ -> },
+    onTopicClick: (String) -> Unit = {},
 ) {
     if (topics.isNotEmpty()) {
         Text(
@@ -217,7 +216,7 @@ private fun SearchResultBody(
             topics = topics,
             onTopicClick = onTopicClick,
             onFollowButtonClick = onFollowButtonClick,
-            withBottomSpacer = false
+            withBottomSpacer = false,
         )
     }
 
@@ -246,7 +245,7 @@ private fun SearchResultBody(
             newsFeed(
                 feedState = NewsFeedUiState.Success(feed = newsResources),
                 onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-                onTopicClick = onTopicClick
+                onTopicClick = onTopicClick,
             )
         }
     }
@@ -347,7 +346,7 @@ private fun EmptySearchResultColumnPreview() {
 @DevicePreviews
 @Composable
 private fun SearchScreenPreview(
-    @PreviewParameter(SearchResultUiStatePreviewParameterProvider::class)
+    @PreviewParameter(SearchUiStatePreviewParameterProvider::class)
     searchResultUiState: SearchResultUiState,
 ) {
     NiaTheme {
