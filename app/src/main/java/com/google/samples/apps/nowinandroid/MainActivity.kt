@@ -18,12 +18,10 @@ package com.google.samples.apps.nowinandroid
 
 import android.app.UiModeManager
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -46,6 +44,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.ui.NiaApp
+import com.google.samples.apps.nowinandroid.ui.checkAppThemeOnLaunch
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
@@ -99,31 +98,16 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
             val darkTheme = shouldUseDarkTheme(uiState)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                uiModeManager.setApplicationNightMode(
-                    when (darkTheme) {
-                        true -> UiModeManager.MODE_NIGHT_YES
-                        else -> UiModeManager.MODE_NIGHT_NO
-                    }
-                )
-            }
-            else {
-                AppCompatDelegate.setDefaultNightMode(
-                    when (darkTheme) {
-                        true -> AppCompatDelegate.MODE_NIGHT_YES
-                        else -> AppCompatDelegate.MODE_NIGHT_NO
-                    }
-                )
-            }
-
             val systemUiController = rememberSystemUiController()
 
             // Update the dark content of the system bars to match the theme
             DisposableEffect(systemUiController, darkTheme) {
                 systemUiController.systemBarsDarkContentEnabled = !darkTheme
+                checkAppThemeOnLaunch(
+                    getSystemService(Context.UI_MODE_SERVICE) as UiModeManager,
+                    darkTheme
+                )
                 onDispose {}
             }
 

@@ -16,6 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.app.UiModeManager
+import android.content.Context
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -163,4 +167,24 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
             navController.removeOnDestinationChangedListener(listener)
         }
     }
+}
+
+internal fun checkAppThemeOnLaunch(uiModeManager: UiModeManager, darkTheme: Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        uiModeManager.setApplicationNightMode(
+            when (darkTheme) {
+                true -> UiModeManager.MODE_NIGHT_YES
+                else -> UiModeManager.MODE_NIGHT_NO
+            }
+        )
+    }
+    else {
+        AppCompatDelegate.setDefaultNightMode(
+            when (darkTheme) {
+                true -> AppCompatDelegate.MODE_NIGHT_YES
+                else -> AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
+    }
+
 }
