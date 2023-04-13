@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -296,15 +297,19 @@ private fun ExpandedNewsResourcePreview(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
-    NiaTheme {
-        Surface {
-            NewsResourceCardExpanded(
-                userNewsResource = userNewsResources[0],
-                isBookmarked = true,
-                onToggleBookmark = {},
-                onClick = {},
-                onTopicClick = {},
-            )
+    CompositionLocalProvider(
+        LocalInspectionMode provides true,
+    ) {
+        NiaTheme {
+            Surface {
+                NewsResourceCardExpanded(
+                    userNewsResource = userNewsResources[0],
+                    isBookmarked = true,
+                    onToggleBookmark = {},
+                    onClick = {},
+                    onTopicClick = {},
+                )
+            }
         }
     }
 }
