@@ -49,7 +49,7 @@ internal fun Project.configureKotlinAndroid(
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            // Set JVM target to 11
+            // Set JVM target to 17
             jvmTarget = JavaVersion.VERSION_17.toString()
             // Treat all Kotlin warnings as errors (disabled by default)
             // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
