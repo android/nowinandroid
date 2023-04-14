@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.database.model.TopicsFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -60,4 +61,7 @@ class FakeTopicsRepository @Inject constructor(
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
+
+    override fun populateDataInTopicsFtsTable(topics: List<TopicsFtsEntity>) {
+    }
 }

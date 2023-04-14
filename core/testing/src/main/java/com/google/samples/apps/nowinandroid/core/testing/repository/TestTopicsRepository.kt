@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.database.model.TopicsFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -45,4 +46,7 @@ class TestTopicsRepository : TopicsRepository {
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
+
+    override fun populateDataInTopicsFtsTable(topics: List<TopicsFtsEntity>) {
+    }
 }

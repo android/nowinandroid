@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
@@ -58,4 +59,6 @@ class TestNewsRepository : NewsRepository {
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
+
+    override fun populateDataInNewsResourceFtsTable(newsResources: List<NewsResourceFtsEntity>) {}
 }

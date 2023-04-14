@@ -33,6 +33,7 @@ dependencies {
     api(libs.junit4)
     api(libs.kotlinx.coroutines.test)
     api(libs.turbine)
+    implementation(project(mapOf("path" to ":core:database")))
 
     debugApi(libs.androidx.compose.ui.testManifest)
 

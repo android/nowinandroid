@@ -22,7 +22,10 @@ import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.model.topicCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.topicEntityShells
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
+import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicsFtsDao
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
@@ -47,6 +50,8 @@ private const val SYNC_BATCH_SIZE = 40
 class OfflineFirstNewsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val topicDao: TopicDao,
+    private val newsResourceFtsDao: NewsResourceFtsDao,
+    private val topicsFtsDao: TopicsFtsDao,
     private val network: NiaNetworkDataSource,
     private val notifier: Notifier,
 ) : NewsRepository {
@@ -121,4 +126,8 @@ class OfflineFirstNewsRepository @Inject constructor(
                 if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
             },
         )
+
+    override fun populateDataInNewsResourceFtsTable(newsResources: List<NewsResourceFtsEntity>) {
+        newsResourceFtsDao.insertAll(newsResources)
+    }
 }

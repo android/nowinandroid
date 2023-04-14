@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -70,4 +71,6 @@ class FakeNewsRepository @Inject constructor(
         }.flowOn(ioDispatcher)
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
+
+    override fun populateDataInNewsResourceFtsTable(newsResources: List<NewsResourceFtsEntity>) {}
 }

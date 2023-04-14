@@ -20,7 +20,9 @@ import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.changeListSync
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicsFtsDao
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
+import com.google.samples.apps.nowinandroid.core.database.model.TopicsFtsEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -36,6 +38,7 @@ import javax.inject.Inject
  */
 class OfflineFirstTopicsRepository @Inject constructor(
     private val topicDao: TopicDao,
+    private val topicsFtsDao: TopicsFtsDao,
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
 
@@ -63,4 +66,8 @@ class OfflineFirstTopicsRepository @Inject constructor(
                 )
             },
         )
+
+    override fun populateDataInTopicsFtsTable(topics: List<TopicsFtsEntity>) {
+        topicsFtsDao.insertAll(topics)
+    }
 }

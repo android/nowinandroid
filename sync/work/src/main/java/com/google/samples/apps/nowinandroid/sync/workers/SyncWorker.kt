@@ -28,6 +28,8 @@ import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
+import com.google.samples.apps.nowinandroid.core.database.model.TopicsFtsEntity
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -39,6 +41,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 
 /**
@@ -72,6 +77,7 @@ class SyncWorker @AssistedInject constructor(
             analyticsHelper.logSyncFinished(syncedSuccessfully)
 
             if (syncedSuccessfully) {
+                populateDataInFtsTables()
                 Result.success()
             } else {
                 Result.retry()
@@ -95,5 +101,33 @@ class SyncWorker @AssistedInject constructor(
             .setConstraints(SyncConstraints)
             .setInputData(SyncWorker::class.delegatedData())
             .build()
+    }
+
+    private suspend fun populateDataInFtsTables() {
+        // Populate Data in Topics FTS Table
+        topicRepository.populateDataInTopicsFtsTable(
+            topicRepository.getTopics()
+                .flatMapConcat { it.asFlow() }.toList()
+                .map { TopicsFtsEntity(
+                    topicId = it.id,
+                    name = it.name,
+                    shortDescription = it.shortDescription,
+                    longDescription = it.longDescription
+                ) }
+        )
+
+        // Populate data in News Resources FTS Table
+        newsRepository.populateDataInNewsResourceFtsTable(
+            newsRepository.getNewsResources()
+                .flatMapConcat { it.asFlow() }.toList()
+                .map { NewsResourceFtsEntity(
+                    newsResourceId = it.id,
+                    title = it.title,
+                    content = it.content,
+                    url = it.url,
+                    publishDate = it.publishDate,
+                    type = it.type
+                ) }
+        )
     }
 }

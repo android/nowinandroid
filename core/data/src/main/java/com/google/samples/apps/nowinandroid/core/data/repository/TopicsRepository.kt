@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Syncable
+import com.google.samples.apps.nowinandroid.core.database.model.TopicsFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.flow.Flow
 
@@ -30,4 +31,9 @@ interface TopicsRepository : Syncable {
      * Gets data for a specific topic
      */
     fun getTopic(id: String): Flow<Topic>
+
+    /**
+     * Upload all data in FTS4 Virtual Table
+     * */
+    fun populateDataInTopicsFtsTable(topics: List<TopicsFtsEntity>)
 }

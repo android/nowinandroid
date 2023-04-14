@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.firebase.cloud.messaging)
     implementation(libs.hilt.ext.work)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(project(mapOf("path" to ":core:database")))
 
     kapt(libs.hilt.ext.compiler)
 

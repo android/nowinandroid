@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Syncable
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.coroutines.flow.Flow
 
@@ -47,4 +48,9 @@ interface NewsRepository : Syncable {
             filterNewsIds = null,
         ),
     ): Flow<List<NewsResource>>
+
+    /**
+     * Upload all data into FTS4 Virtual Table
+     * */
+    fun populateDataInNewsResourceFtsTable(newsResources: List<NewsResourceFtsEntity>)
 }
