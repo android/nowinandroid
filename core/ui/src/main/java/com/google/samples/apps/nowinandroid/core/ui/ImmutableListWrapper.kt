@@ -17,13 +17,17 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
 @JvmInline
-value class ImmutableWrapper<T>(val value: T) {
-    operator fun component1(): T = value
+value class ImmutableListWrapper<T>(val value: ImmutableList<T>) : ImmutableList<T> by value {
+    operator fun component1(): ImmutableList<T> = value
 }
 
-@Stable
-fun <T> T.toImmutableWrapper(): ImmutableWrapper<T> = ImmutableWrapper(this)
+fun <T> List<T>.toImmutableListWrapper(): ImmutableListWrapper<T> =
+    ImmutableListWrapper(this.toImmutableList())
+
+fun <T> immutableListWrapperOf(vararg elements: T): ImmutableListWrapper<T> =
+    ImmutableListWrapper(elements.asList().toImmutableList())
