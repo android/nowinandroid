@@ -37,7 +37,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = newsWithKnownResourceType,
+                userNewsResourceWrapper = newsWithKnownResourceType.toImmutableWrapper(),
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {},
@@ -65,7 +65,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = newsWithUnknownResourceType,
+                userNewsResourceWrapper = newsWithUnknownResourceType.toImmutableWrapper(),
                 isBookmarked = false,
                 onToggleBookmark = {},
                 onClick = {},
@@ -84,7 +84,7 @@ class NewsResourceCardTest {
     fun testTopicsChipColorBackground_matchesFollowedState() {
         composeTestRule.setContent {
             NewsResourceTopics(
-                topics = followableTopicTestData,
+                topics = followableTopicTestData.toImmutableListWrapper(),
                 onTopicClick = {},
             )
         }

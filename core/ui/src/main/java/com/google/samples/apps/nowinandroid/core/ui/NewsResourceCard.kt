@@ -76,13 +76,14 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
-    userNewsResource: UserNewsResource,
+    userNewsResourceWrapper: ImmutableWrapper<UserNewsResource>,
     isBookmarked: Boolean,
     onToggleBookmark: () -> Unit,
     onClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val (userNewsResource) = userNewsResourceWrapper
     val clickActionLabel = stringResource(R.string.card_tap_action)
     Card(
         onClick = onClick,
@@ -312,7 +313,7 @@ private fun ExpandedNewsResourcePreview(
         NiaTheme {
             Surface {
                 NewsResourceCardExpanded(
-                    userNewsResource = userNewsResources[0],
+                    userNewsResourceWrapper = userNewsResources[0].toImmutableWrapper(),
                     isBookmarked = true,
                     onToggleBookmark = {},
                     onClick = {},

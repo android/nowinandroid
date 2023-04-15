@@ -50,7 +50,7 @@ fun LazyListScope.userNewsResourceCardItems(
         val analyticsHelper = LocalAnalyticsHelper.current
 
         NewsResourceCardExpanded(
-            userNewsResource = userNewsResource,
+            userNewsResourceWrapper = userNewsResource.toImmutableWrapper(),
             isBookmarked = userNewsResource.isSaved,
             onToggleBookmark = { onToggleBookmark(userNewsResource) },
             onClick = {

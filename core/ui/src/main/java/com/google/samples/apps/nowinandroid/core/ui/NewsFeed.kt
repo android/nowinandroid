@@ -65,7 +65,7 @@ fun LazyGridScope.newsFeed(
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
                 NewsResourceCardExpanded(
-                    userNewsResource = userNewsResource,
+                    userNewsResourceWrapper = userNewsResource.toImmutableWrapper(),
                     isBookmarked = userNewsResource.isSaved,
                     onClick = {
                         analyticsHelper.logNewsResourceOpened(
