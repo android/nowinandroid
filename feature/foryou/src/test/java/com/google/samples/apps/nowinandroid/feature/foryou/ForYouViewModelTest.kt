@@ -32,6 +32,8 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -131,7 +133,7 @@ class ForYouViewModelTest {
             OnboardingUiState.Loading,
             viewModel.onboardingUiState.value,
         )
-        assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
+        assertEquals(NewsFeedUiState.Success(immutableListWrapperOf()), viewModel.feedState.value)
 
         collectJob1.cancel()
         collectJob2.cancel()
@@ -148,7 +150,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
+                topics = immutableListWrapperOf(
                     FollowableTopic(
                         topic = Topic(
                             id = "0",
@@ -188,7 +190,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList(),
+                feed = immutableListWrapperOf(),
             ),
             viewModel.feedState.value,
         )
@@ -209,7 +211,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
+                topics = immutableListWrapperOf(
                     FollowableTopic(
                         topic = Topic(
                             id = "0",
@@ -249,7 +251,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList(),
+                feed = immutableListWrapperOf(),
 
             ),
             viewModel.feedState.value,
@@ -286,7 +288,9 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = sampleNewsResources.mapToUserNewsResources(userData),
+                feed = sampleNewsResources
+                    .mapToUserNewsResources(userData)
+                    .toImmutableListWrapper(),
             ),
             viewModel.feedState.value,
         )
@@ -309,13 +313,13 @@ class ForYouViewModelTest {
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
                     FollowableTopic(it, false)
-                },
+                }.toImmutableListWrapper(),
             ),
             viewModel.onboardingUiState.value,
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList(),
+                feed = immutableListWrapperOf(),
             ),
             viewModel.feedState.value,
         )
@@ -327,7 +331,7 @@ class ForYouViewModelTest {
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
                     FollowableTopic(it, it.id == followedTopicId)
-                },
+                }.toImmutableListWrapper(),
             ),
             viewModel.onboardingUiState.value,
         )
@@ -336,7 +340,7 @@ class ForYouViewModelTest {
 
         assertEquals(
             NewsFeedUiState.Success(
-                feed = listOf(
+                feed = immutableListWrapperOf(
                     UserNewsResource(sampleNewsResources[1], userData),
                     UserNewsResource(sampleNewsResources[2], userData),
                 ),
@@ -363,7 +367,7 @@ class ForYouViewModelTest {
         advanceUntilIdle()
         assertEquals(
             OnboardingUiState.Shown(
-                topics = listOf(
+                topics = immutableListWrapperOf(
                     FollowableTopic(
                         topic = Topic(
                             id = "0",
@@ -403,7 +407,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = emptyList(),
+                feed = immutableListWrapperOf(),
             ),
             viewModel.feedState.value,
         )
@@ -444,7 +448,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = listOf(
+                feed = immutableListWrapperOf(
                     UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
                     UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected),
                 ),
