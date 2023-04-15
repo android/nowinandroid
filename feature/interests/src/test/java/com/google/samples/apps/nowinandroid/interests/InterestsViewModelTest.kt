@@ -22,6 +22,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
 import kotlinx.coroutines.flow.collect
@@ -139,7 +140,7 @@ private const val TOPIC_LONG_DESC = "At vero eos et accusamus et iusto odio dign
 private const val TOPIC_URL = "URL"
 private const val TOPIC_IMAGE_URL = "Image URL"
 
-private val testInputTopics = listOf(
+private val testInputTopics = immutableListWrapperOf(
     FollowableTopic(
         Topic(
             id = "0",
@@ -175,7 +176,7 @@ private val testInputTopics = listOf(
     ),
 )
 
-private val testOutputTopics = listOf(
+private val testOutputTopics = immutableListWrapperOf(
     FollowableTopic(
         Topic(
             id = "0",
