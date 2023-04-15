@@ -31,6 +31,8 @@ import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import org.junit.Rule
 import org.junit.Test
 
@@ -74,7 +76,7 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = true,
                     onboardingUiState = OnboardingUiState.NotShown,
-                    feedState = NewsFeedUiState.Success(emptyList()),
+                    feedState = NewsFeedUiState.Success(immutableListWrapperOf()),
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
@@ -92,7 +94,9 @@ class ForYouScreenTest {
 
     @Test
     fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
-        val testData = followableTopicTestData.map { it -> it.copy(isFollowed = false) }
+        val testData = followableTopicTestData
+            .map { it.copy(isFollowed = false) }
+            .toImmutableListWrapper()
 
         composeTestRule.setContent {
             BoxWithConstraints {
@@ -102,7 +106,7 @@ class ForYouScreenTest {
                         topics = testData,
                     ),
                     feedState = NewsFeedUiState.Success(
-                        feed = emptyList(),
+                        feed = immutableListWrapperOf(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
@@ -143,10 +147,10 @@ class ForYouScreenTest {
                         // Follow one topic
                         topics = followableTopicTestData.mapIndexed { index, testTopic ->
                             testTopic.copy(isFollowed = index == 1)
-                        },
+                        }.toImmutableListWrapper(),
                     ),
                     feedState = NewsFeedUiState.Success(
-                        feed = emptyList(),
+                        feed = immutableListWrapperOf(),
                     ),
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
@@ -183,7 +187,7 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                    OnboardingUiState.Shown(topics = followableTopicTestData),
+                    OnboardingUiState.Shown(topics = followableTopicTestData.toImmutableListWrapper()),
                     feedState = NewsFeedUiState.Loading,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
@@ -230,7 +234,7 @@ class ForYouScreenTest {
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = userNewsResourcesTestData,
+                    feed = userNewsResourcesTestData.toImmutableListWrapper(),
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 onTopicClick = {},

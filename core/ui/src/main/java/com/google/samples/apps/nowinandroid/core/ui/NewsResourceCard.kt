@@ -66,7 +66,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
 /**
@@ -114,12 +114,17 @@ fun NewsResourceCardExpanded(
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
+                    NewsResourceMetaData(
+                        publishDate = userNewsResource.publishDate.toImmutableWrapper(),
+                        resourceType = userNewsResource.type.toImmutableWrapper(),
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceTopics(
-                        topics = userNewsResource.followableTopics,
+                        topics = remember(userNewsResource.followableTopics) {
+                            userNewsResource.followableTopics.toImmutableListWrapper()
+                        },
                         onTopicClick = onTopicClick,
                     )
                 }
@@ -204,13 +209,17 @@ fun dateFormatted(publishDate: Instant): String {
 
 @Composable
 fun NewsResourceMetaData(
-    publishDate: Instant,
-    resourceType: NewsResourceType,
+    publishDate: ImmutableWrapper<Instant>,
+    resourceType: ImmutableWrapper<NewsResourceType>,
 ) {
-    val formattedDate = dateFormatted(publishDate)
+    val formattedDate = dateFormatted(publishDate.value)
     Text(
-        if (resourceType != NewsResourceType.Unknown) {
-            stringResource(R.string.card_meta_data_text, formattedDate, resourceType.displayText)
+        if (resourceType.value != NewsResourceType.Unknown) {
+            stringResource(
+                R.string.card_meta_data_text,
+                formattedDate,
+                resourceType.value.displayText,
+            )
         } else {
             formattedDate
         },
@@ -235,7 +244,7 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    topics: List<FollowableTopic>,
+    topics: ImmutableListWrapper<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

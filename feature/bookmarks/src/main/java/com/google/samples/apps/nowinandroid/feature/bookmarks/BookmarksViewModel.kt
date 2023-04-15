@@ -23,6 +23,8 @@ import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseC
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +44,7 @@ class BookmarksViewModel @Inject constructor(
     val feedUiState: StateFlow<NewsFeedUiState> = getSaveableNewsResources()
         .filterNot { it.isEmpty() }
         .map { newsResources -> newsResources.filter(UserNewsResource::isSaved) } // Only show bookmarked news resources.
-        .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+        .map<List<UserNewsResource>, NewsFeedUiState> { Success(it.toImmutableListWrapper()) }
         .onStart { emit(Loading) }
         .stateIn(
             scope = viewModelScope,

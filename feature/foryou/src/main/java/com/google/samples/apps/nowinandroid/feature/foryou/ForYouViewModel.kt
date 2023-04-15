@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseC
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,8 +59,9 @@ class ForYouViewModel @Inject constructor(
         )
 
     val feedState: StateFlow<NewsFeedUiState> =
-        userDataRepository.getFollowedUserNewsResources(getUserNewsResources)
-            .map(NewsFeedUiState::Success)
+        userDataRepository
+            .getFollowedUserNewsResources(getUserNewsResources)
+            .map { NewsFeedUiState.Success(it.toImmutableListWrapper()) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -72,7 +74,7 @@ class ForYouViewModel @Inject constructor(
             getFollowableTopics(),
         ) { shouldShowOnboarding, topics ->
             if (shouldShowOnboarding) {
-                OnboardingUiState.Shown(topics = topics)
+                OnboardingUiState.Shown(topics = topics.toImmutableListWrapper())
             } else {
                 OnboardingUiState.NotShown
             }

@@ -16,12 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,13 +40,13 @@ class InterestsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<InterestsUiState> =
-        getFollowableTopics(sortBy = TopicSortField.NAME).map(
-            InterestsUiState::Interests,
-        ).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = InterestsUiState.Loading,
-        )
+        getFollowableTopics(sortBy = TopicSortField.NAME)
+            .map { InterestsUiState.Interests(it.toImmutableListWrapper()) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = InterestsUiState.Loading,
+            )
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
@@ -52,11 +55,12 @@ class InterestsViewModel @Inject constructor(
     }
 }
 
+@Immutable
 sealed interface InterestsUiState {
     object Loading : InterestsUiState
 
     data class Interests(
-        val topics: List<FollowableTopic>,
+        val topics: ImmutableListWrapper<FollowableTopic>,
     ) : InterestsUiState
 
     object Empty : InterestsUiState

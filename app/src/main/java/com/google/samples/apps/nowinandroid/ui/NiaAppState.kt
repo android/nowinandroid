@@ -45,6 +45,8 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.adapters.ImmutableListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -103,7 +105,7 @@ class NiaAppState(
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
      * route.
      */
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    val topLevelDestinations: ImmutableList<TopLevelDestination> = ImmutableListAdapter(TopLevelDestination.values().asList())
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have

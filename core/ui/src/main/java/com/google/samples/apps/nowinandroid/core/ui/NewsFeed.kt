@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -99,6 +100,7 @@ fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: In
 /**
  * A sealed hierarchy describing the state of the feed of news resources.
  */
+@Immutable
 sealed interface NewsFeedUiState {
     /**
      * The feed is still loading.
@@ -112,7 +114,7 @@ sealed interface NewsFeedUiState {
         /**
          * The list of news resources contained in this feed.
          */
-        val feed: List<UserNewsResource>,
+        val feed: ImmutableListWrapper<UserNewsResource>,
     ) : NewsFeedUiState
 }
 
@@ -140,7 +142,7 @@ private fun NewsFeedContentPreview(
     NiaTheme {
         LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
             newsFeed(
-                feedState = NewsFeedUiState.Success(userNewsResources),
+                feedState = NewsFeedUiState.Success(userNewsResources.toImmutableListWrapper()),
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onTopicClick = {},
             )

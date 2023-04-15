@@ -58,6 +58,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
@@ -86,6 +87,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 
 @Composable
 internal fun ForYouRoute(
@@ -246,7 +248,7 @@ private fun LazyGridScope.onboarding(
                     ) {
                         NiaButton(
                             onClick = saveFollowedTopics,
-                            enabled = onboardingUiState.isDismissable,
+                            enabled = remember(onboardingUiState) { onboardingUiState.isDismissable },
                             modifier = Modifier
                                 .padding(horizontal = 24.dp)
                                 .widthIn(364.dp)
@@ -392,7 +394,7 @@ fun ForYouScreenPopulatedFeed(
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = userNewsResources,
+                    feed = userNewsResources.toImmutableListWrapper(),
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -415,7 +417,7 @@ fun ForYouScreenOfflinePopulatedFeed(
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.NotShown,
                 feedState = NewsFeedUiState.Success(
-                    feed = userNewsResources,
+                    feed = userNewsResources.toImmutableListWrapper(),
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -437,11 +439,13 @@ fun ForYouScreenTopicSelection(
             ForYouScreen(
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.Shown(
-                    topics = userNewsResources.flatMap { news -> news.followableTopics }
-                        .distinctBy { it.topic.id },
+                    topics = userNewsResources
+                        .flatMap { news -> news.followableTopics }
+                        .distinctBy { it.topic.id }
+                        .toImmutableListWrapper(),
                 ),
                 feedState = NewsFeedUiState.Success(
-                    feed = userNewsResources,
+                    feed = userNewsResources.toImmutableListWrapper(),
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
@@ -482,7 +486,7 @@ fun ForYouScreenPopulatedAndLoading(
                 isSyncing = true,
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Success(
-                    feed = userNewsResources,
+                    feed = userNewsResources.toImmutableListWrapper(),
                 ),
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},

@@ -16,11 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import androidx.compose.runtime.Immutable
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
 
 /**
  * A sealed hierarchy describing the onboarding state for the for you screen.
  */
+@Immutable
 sealed interface OnboardingUiState {
     /**
      * The onboarding state is loading.
@@ -41,7 +44,7 @@ sealed interface OnboardingUiState {
      * There is a onboarding state, with the given lists of topics.
      */
     data class Shown(
-        val topics: List<FollowableTopic>,
+        val topics: ImmutableListWrapper<FollowableTopic>,
     ) : OnboardingUiState {
         /**
          * True if the onboarding can be dismissed.

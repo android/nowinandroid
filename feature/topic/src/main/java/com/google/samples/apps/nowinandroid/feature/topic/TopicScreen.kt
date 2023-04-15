@@ -54,9 +54,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableWrapper
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableWrapper
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
@@ -118,7 +120,7 @@ internal fun TopicScreen(
                     TopicToolbar(
                         onBackClick = onBackClick,
                         onFollowClick = onFollowClick,
-                        uiState = topicUiState.followableTopic,
+                        uiState = topicUiState.followableTopic.toImmutableWrapper(),
                     )
                 }
                 TopicBody(
@@ -222,7 +224,7 @@ private fun TopicBodyPreview() {
 
 @Composable
 private fun TopicToolbar(
-    uiState: FollowableTopic,
+    uiState: ImmutableWrapper<FollowableTopic>,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onFollowClick: (Boolean) -> Unit = {},
@@ -242,7 +244,7 @@ private fun TopicToolbar(
                 ),
             )
         }
-        val selected = uiState.isFollowed
+        val selected = uiState.value.isFollowed
         NiaFilterChip(
             selected = selected,
             onSelectedChange = onFollowClick,

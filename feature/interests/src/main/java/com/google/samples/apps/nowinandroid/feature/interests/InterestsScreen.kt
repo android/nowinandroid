@@ -33,6 +33,7 @@ import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 
 @Composable
 internal fun InterestsRoute(
@@ -95,7 +96,7 @@ fun InterestsScreenPopulated(
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
-                    topics = followableTopics,
+                    topics = followableTopics.toImmutableListWrapper(),
                 ),
                 followTopic = { _, _ -> },
                 onTopicClick = {},

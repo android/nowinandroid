@@ -28,10 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
 
 @Composable
 fun TopicsTabContent(
-    topics: List<FollowableTopic>,
+    topics: ImmutableListWrapper<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,

@@ -70,6 +70,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import kotlinx.collections.immutable.ImmutableList
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
@@ -189,7 +190,7 @@ fun NiaApp(
 
 @Composable
 private fun NiaNavRail(
-    destinations: List<TopLevelDestination>,
+    destinations: ImmutableList<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -225,7 +226,7 @@ private fun NiaNavRail(
 
 @Composable
 private fun NiaBottomBar(
-    destinations: List<TopLevelDestination>,
+    destinations: ImmutableList<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,

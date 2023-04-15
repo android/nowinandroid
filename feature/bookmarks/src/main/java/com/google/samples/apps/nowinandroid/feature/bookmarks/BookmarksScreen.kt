@@ -62,6 +62,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 
 @Composable
 internal fun BookmarksRoute(
@@ -196,7 +197,7 @@ private fun BookmarksGridPreview(
 ) {
     NiaTheme {
         BookmarksGrid(
-            feedState = Success(userNewsResources),
+            feedState = Success(userNewsResources.toImmutableListWrapper()),
             removeFromBookmarks = {},
             onTopicClick = {},
         )
