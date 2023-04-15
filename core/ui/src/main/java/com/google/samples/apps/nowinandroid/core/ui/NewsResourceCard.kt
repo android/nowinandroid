@@ -66,7 +66,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
 /**
