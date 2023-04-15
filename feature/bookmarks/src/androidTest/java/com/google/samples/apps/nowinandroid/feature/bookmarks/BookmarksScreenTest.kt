@@ -32,6 +32,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -67,7 +69,7 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    userNewsResourcesTestData.take(2),
+                    userNewsResourcesTestData.take(2).toImmutableListWrapper(),
                 ),
                 removeFromBookmarks = {},
                 onTopicClick = {},
@@ -106,7 +108,7 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(
-                    userNewsResourcesTestData.take(2),
+                    userNewsResourcesTestData.take(2).toImmutableListWrapper(),
                 ),
                 removeFromBookmarks = { newsResourceId ->
                     assertEquals(userNewsResourcesTestData[0].id, newsResourceId)
@@ -140,7 +142,7 @@ class BookmarksScreenTest {
     fun feed_whenHasNoBookmarks_showsEmptyState() {
         composeTestRule.setContent {
             BookmarksScreen(
-                feedState = NewsFeedUiState.Success(emptyList()),
+                feedState = NewsFeedUiState.Success(immutableListWrapperOf()),
                 removeFromBookmarks = {},
                 onTopicClick = {},
             )

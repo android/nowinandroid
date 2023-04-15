@@ -25,6 +25,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.R
@@ -74,7 +75,7 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
+                uiState = InterestsUiState.Interests(topics = followableTopicTestData.toImmutableListWrapper()),
             )
         }
 

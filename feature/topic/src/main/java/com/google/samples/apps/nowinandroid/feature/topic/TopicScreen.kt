@@ -285,7 +285,7 @@ fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicUiState = TopicUiState.Loading,
+                topicUiState = Loading,
                 newsUiState = NewsUiState.Loading,
                 onBackClick = {},
                 onFollowClick = {},

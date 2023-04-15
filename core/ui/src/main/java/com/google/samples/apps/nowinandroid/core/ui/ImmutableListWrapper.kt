@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.core.ui
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.adapters.ImmutableListAdapter
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
@@ -28,7 +29,13 @@ value class ImmutableListWrapper<T>(val value: ImmutableList<T>) : ImmutableList
 }
 
 fun <T> List<T>.toImmutableListWrapper(): ImmutableListWrapper<T> =
-    ImmutableListWrapper(this.toImmutableList())
+    ImmutableListWrapper(
+        if (isEmpty()) {
+            persistentListOf()
+        } else {
+            this.toImmutableList()
+        },
+    )
 
 fun <T> immutableListWrapperOf(vararg elements: T): ImmutableListWrapper<T> =
     ImmutableListWrapper(ImmutableListAdapter(elements.asList()))
