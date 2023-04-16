@@ -20,7 +20,6 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ManagedVirtualDevice
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.invoke
-import java.util.Locale
 
 /**
  * Configure project for Gradle managed devices
@@ -55,7 +54,7 @@ private data class DeviceConfig(
     val systemImageSource: String,
 ) {
     val taskName = buildString {
-        append(device.toLowerCase(Locale.ROOT).replace(" ", ""))
+        append(device.lowercase().replace(" ", ""))
         append("api")
         append(apiLevel.toString())
         append(systemImageSource.replace("-", ""))
