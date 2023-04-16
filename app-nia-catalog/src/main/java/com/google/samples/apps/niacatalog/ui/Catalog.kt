@@ -17,6 +17,8 @@
 package com.google.samples.apps.niacatalog.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
@@ -36,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -54,6 +55,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 /**
  * Now in Android component catalog.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NiaCatalog() {
     NiaTheme {
@@ -75,7 +77,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Buttons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(onClick = {}) {
                             Text(text = "Enabled")
                         }
@@ -89,7 +91,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Disabled buttons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(
                             onClick = {},
                             enabled = false,
@@ -112,7 +114,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(
                             onClick = {},
                             text = { Text(text = "Enabled") },
@@ -138,7 +140,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Disabled buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(
                             onClick = {},
                             enabled = false,
@@ -168,7 +170,7 @@ fun NiaCatalog() {
                 item { Text("Dropdown menus", Modifier.padding(top = 16.dp)) }
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         var firstChecked by remember { mutableStateOf(false) }
                         NiaFilterChip(
                             selected = firstChecked,
@@ -197,7 +199,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Icon buttons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         var firstChecked by remember { mutableStateOf(false) }
                         NiaIconToggleButton(
                             checked = firstChecked,
@@ -270,7 +272,7 @@ fun NiaCatalog() {
                 }
                 item { Text("View toggle", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         var firstExpanded by remember { mutableStateOf(false) }
                         NiaViewToggleButton(
                             expanded = firstExpanded,
@@ -296,7 +298,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Tags", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(mainAxisSpacing = 16.dp) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaTopicTag(
                             followed = true,
                             onClick = {},
