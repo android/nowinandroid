@@ -41,10 +41,10 @@ protobuf {
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
-                val java by registering {
+                register("java") {
                     option("lite")
                 }
-                val kotlin by registering {
+                register("kotlin") {
                     option("lite")
                 }
             }
