@@ -41,6 +41,9 @@ interface TopicDao {
     @Query(value = "SELECT * FROM topics")
     fun getTopicEntities(): Flow<List<TopicEntity>>
 
+    @Query(value = "SELECT * FROM topics")
+    fun getOneOffTopicEntities(): List<TopicEntity>
+
     @Query(
         value = """
         SELECT * FROM topics

@@ -44,6 +44,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -63,6 +65,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
@@ -88,6 +91,7 @@ internal fun SearchRoute(
     searchViewModel: SearchViewModel = hiltViewModel(),
     forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {
+    val uiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     SearchScreen(
         modifier = modifier,
         onBackClick = onBackClick,
@@ -96,6 +100,7 @@ internal fun SearchRoute(
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onTopicClick = onTopicClick,
         onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
+        uiState = uiState
     )
 }
 
@@ -121,6 +126,7 @@ internal fun SearchScreen(
         )
         when (uiState) {
             SearchResultUiState.Loading -> Unit
+            SearchResultUiState.EmptyQuery -> Unit
             is SearchResultUiState.Success -> {
                 if (uiState.isEmpty()) {
                     EmptySearchResultBody(
@@ -210,7 +216,7 @@ private fun SearchResultBody(
                     append(stringResource(id = searchR.string.topics))
                 }
             },
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         )
         TopicsTabContent(
             topics = topics,
@@ -227,7 +233,7 @@ private fun SearchResultBody(
                     append(stringResource(id = searchR.string.updates))
                 }
             },
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         )
 
         val state = rememberLazyGridState()
@@ -300,7 +306,10 @@ private fun SearchTextField(
             )
         },
         trailingIcon = {
-            IconButton(onClick = { searchQuery.value = "" }) {
+            IconButton(onClick = {
+                searchQuery.value = ""
+                onSearchQueryChanged("")
+            }) {
                 Icon(
                     imageVector = NiaIcons.Close,
                     contentDescription = stringResource(
