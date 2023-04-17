@@ -39,7 +39,7 @@ class BookmarksViewModel @Inject constructor(
 ) : ViewModel() {
 
     val feedUiState: StateFlow<NewsFeedUiState> =
-        userNewsResourceRepository.getBookmarkedUserNewsResources()
+        userNewsResourceRepository.observeAllBookmarked()
             .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
             .onStart { emit(Loading) }
             .stateIn(

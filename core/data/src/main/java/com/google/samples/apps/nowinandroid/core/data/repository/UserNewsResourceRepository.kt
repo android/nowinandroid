@@ -26,7 +26,7 @@ interface UserNewsResourceRepository {
     /**
      * Returns available news resources as a stream.
      */
-    fun getUserNewsResources(
+    fun observeAll(
         query: NewsResourceQuery = NewsResourceQuery(
             filterTopicIds = null,
             filterNewsIds = null,
@@ -36,10 +36,10 @@ interface UserNewsResourceRepository {
     /**
      * Returns available news resources for the user's followed topics as a stream.
      */
-    fun getUserNewsResourcesForFollowedTopics(): Flow<List<UserNewsResource>>
+    fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>>
 
     /**
      *
      */
-    fun getBookmarkedUserNewsResources(): Flow<List<UserNewsResource>>
+    fun observeAllBookmarked(): Flow<List<UserNewsResource>>
 }

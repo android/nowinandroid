@@ -44,7 +44,7 @@ class CompositeUserNewsResourceRepositoryTest {
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
         // Obtain the user news resources flow.
-        val userNewsResources = userNewsResourceRepository.getUserNewsResources()
+        val userNewsResources = userNewsResourceRepository.observeAll()
 
         // Send some news resources and user data into the data repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
@@ -68,7 +68,7 @@ class CompositeUserNewsResourceRepositoryTest {
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
         // Obtain a stream of user news resources for the given topic id.
         val userNewsResources =
-            userNewsResourceRepository.getUserNewsResources(
+            userNewsResourceRepository.observeAll(
                 NewsResourceQuery(
                     filterTopicIds = setOf(
                         sampleTopic1.id,
@@ -93,7 +93,7 @@ class CompositeUserNewsResourceRepositoryTest {
     fun whenFilteredByFollowedTopics_matchingNewsResourcesAreReturned() = runTest {
         // Obtain a stream of user news resources for the given topic id.
         val userNewsResources =
-            userNewsResourceRepository.getUserNewsResourcesForFollowedTopics()
+            userNewsResourceRepository.observeAllForFollowedTopics()
 
         // Send test data into the repositories.
         val userData = emptyUserData.copy(
@@ -114,7 +114,7 @@ class CompositeUserNewsResourceRepositoryTest {
     @Test
     fun whenFilteredByBookmarkedResources_matchingNewsResourcesAreReturned() = runTest {
         // Obtain the bookmarked user news resources flow.
-        val userNewsResources = userNewsResourceRepository.getBookmarkedUserNewsResources()
+        val userNewsResources = userNewsResourceRepository.observeAllBookmarked()
 
         // Send some news resources and user data into the data repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
