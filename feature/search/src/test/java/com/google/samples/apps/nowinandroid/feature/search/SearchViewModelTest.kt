@@ -55,7 +55,7 @@ class SearchViewModelTest {
     fun setup() {
         viewModel = SearchViewModel(
             getSearchContentsUseCase = getSearchContentsUseCase,
-            savedStateHandle = SavedStateHandle()
+            savedStateHandle = SavedStateHandle(),
         )
     }
 

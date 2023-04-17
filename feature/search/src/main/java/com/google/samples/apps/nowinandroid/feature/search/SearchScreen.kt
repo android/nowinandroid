@@ -126,7 +126,8 @@ internal fun SearchScreen(
         when (uiState) {
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
-            SearchResultUiState.EmptyQuery -> Unit
+            SearchResultUiState.EmptyQuery,
+            -> Unit
             is SearchResultUiState.Success -> {
                 if (uiState.isEmpty()) {
                     EmptySearchResultBody(
