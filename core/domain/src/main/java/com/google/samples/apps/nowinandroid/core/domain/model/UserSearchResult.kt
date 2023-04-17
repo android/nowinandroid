@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository.fake
+package com.google.samples.apps.nowinandroid.core.domain.model
 
 import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
 /**
- * Fake implementation of the [SearchContentsRepository]
+ * An entity of [SearchResult] with additional user information such as whether the user is
+ * following a topic.
  */
-class FakeSearchContentsRepository @Inject constructor() : SearchContentsRepository {
-
-    override suspend fun populateFtsData() { /* no-op */ }
-    override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf()
-}
+data class UserSearchResult(
+    val topics: List<FollowableTopic> = emptyList(),
+    val newsResources: List<UserNewsResource> = emptyList(),
+)

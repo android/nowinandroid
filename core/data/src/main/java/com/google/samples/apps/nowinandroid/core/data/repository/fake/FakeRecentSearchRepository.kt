@@ -16,17 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository.fake
 
-import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
- * Fake implementation of the [SearchContentsRepository]
+ * Fake implementation of the [RecentSearchRepository]
  */
-class FakeSearchContentsRepository @Inject constructor() : SearchContentsRepository {
+class FakeRecentSearchRepository @Inject constructor() : RecentSearchRepository {
+    override suspend fun insertOrReplaceRecentSearch(searchQuery: String) { /* no-op */ }
 
-    override suspend fun populateFtsData() { /* no-op */ }
-    override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf()
+    override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
+        flowOf(emptyList())
+
+    override suspend fun clearRecentSearches() { /* no-op */ }
 }

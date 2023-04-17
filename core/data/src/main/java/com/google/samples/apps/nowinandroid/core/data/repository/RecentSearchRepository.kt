@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository.fake
+package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
 /**
- * Fake implementation of the [SearchContentsRepository]
+ * Data layer interface for the recent searches.
  */
-class FakeSearchContentsRepository @Inject constructor() : SearchContentsRepository {
+interface RecentSearchRepository {
 
-    override suspend fun populateFtsData() { /* no-op */ }
-    override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf()
+    /**
+     * Get the recent search queries up to the number of queries specified as [limit].
+     */
+    fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>>
+
+    /**
+     * Insert or replace the [searchQuery] as part of the recent searches.
+     */
+    suspend fun insertOrReplaceRecentSearch(searchQuery: String)
+
+    /**
+     * Clear the recent searches.
+     */
+    suspend fun clearRecentSearches()
 }

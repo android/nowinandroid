@@ -17,12 +17,15 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
+import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import kotlinx.coroutines.flow.collect
@@ -33,6 +36,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -49,13 +53,17 @@ class SearchViewModelTest {
         searchContentsRepository = searchContentsRepository,
         userDataRepository = userDataRepository,
     )
+    private val recentSearchRepository = TestRecentSearchRepository()
+    private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
     private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
         viewModel = SearchViewModel(
             getSearchContentsUseCase = getSearchContentsUseCase,
+            recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
+            recentSearchRepository = recentSearchRepository,
         )
     }
 
@@ -76,7 +84,7 @@ class SearchViewModelTest {
 
     @Test
     fun emptyResultIsReturned_withNotMatchingQuery() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchQuery.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("XXX")
         searchContentsRepository.addNewsResources(newsResourcesTestData)
@@ -85,6 +93,17 @@ class SearchViewModelTest {
         val result = viewModel.searchResultUiState.value
         // TODO: Figure out to get the latest emitted ui State? The result is emitted as EmptyQuery
         // assertIs<Success>(result)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun recentSearches() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
+        viewModel.onSearchTriggered("kotlin")
+
+        val result = viewModel.recentSearchQueriesUiState.value
+        assertIs<Success>(result)
 
         collectJob.cancel()
     }

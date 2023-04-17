@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
+import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
@@ -29,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

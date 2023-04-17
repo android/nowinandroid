@@ -16,11 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
+import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchResult
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserSearchResult
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -41,7 +42,7 @@ class GetSearchContentsUseCase @Inject constructor(
             .mapToUserSearchResult(userDataRepository.userData)
 }
 
-fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Flow<UserSearchResult> =
+private fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Flow<UserSearchResult> =
     combine(userDataStream) { searchResult, userData ->
         UserSearchResult(
             topics = searchResult.topics.map { topic ->
@@ -58,8 +59,3 @@ fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Fl
             },
         )
     }
-
-data class UserSearchResult(
-    val topics: List<FollowableTopic> = emptyList(),
-    val newsResources: List<UserNewsResource> = emptyList(),
-)
