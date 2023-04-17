@@ -39,7 +39,7 @@ interface UserNewsResourceRepository {
     fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>>
 
     /**
-     *
+     * Returns the user's bookmarked news resources as a stream.
      */
     fun observeAllBookmarked(): Flow<List<UserNewsResource>>
 }
