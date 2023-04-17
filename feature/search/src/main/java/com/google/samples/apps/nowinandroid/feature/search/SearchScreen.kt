@@ -43,9 +43,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,6 +89,7 @@ internal fun SearchRoute(
     forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {
     val uiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
+    val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
     SearchScreen(
         modifier = modifier,
         onBackClick = onBackClick,
@@ -99,6 +98,7 @@ internal fun SearchRoute(
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onTopicClick = onTopicClick,
         onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
+        searchQuery = searchQuery,
         uiState = uiState,
     )
 }
@@ -112,9 +112,9 @@ internal fun SearchScreen(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = { _, _ -> },
     onSearchQueryChanged: (String) -> Unit = {},
     onTopicClick: (String) -> Unit = {},
+    searchQuery: String = "",
     uiState: SearchResultUiState = SearchResultUiState.Loading,
 ) {
-    val searchQuery = remember { mutableStateOf("") }
     TrackScreenViewEvent(screenName = "Search")
     Column(modifier = modifier) {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
@@ -124,7 +124,8 @@ internal fun SearchScreen(
             searchQuery = searchQuery,
         )
         when (uiState) {
-            SearchResultUiState.Loading -> Unit
+            SearchResultUiState.Loading,
+            SearchResultUiState.LoadFailed,
             SearchResultUiState.EmptyQuery -> Unit
             is SearchResultUiState.Success -> {
                 if (uiState.isEmpty()) {
@@ -150,12 +151,11 @@ internal fun SearchScreen(
 @Composable
 fun EmptySearchResultBody(
     onInterestsClick: () -> Unit = {},
-    searchQuery: MutableState<String>,
+    searchQuery: String,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        val queryValue = searchQuery.value
-        val message = stringResource(id = searchR.string.search_result_not_found, queryValue)
-        val start = message.indexOf(queryValue)
+        val message = stringResource(id = searchR.string.search_result_not_found, searchQuery)
+        val start = message.indexOf(searchQuery)
         Text(
             text = AnnotatedString(
                 text = message,
@@ -163,7 +163,7 @@ fun EmptySearchResultBody(
                     AnnotatedString.Range(
                         SpanStyle(fontWeight = FontWeight.Bold),
                         start = start,
-                        end = start + queryValue.length,
+                        end = start + searchQuery.length,
                     ),
                 ),
             ),
@@ -261,7 +261,7 @@ private fun SearchToolbar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onSearchQueryChanged: (String) -> Unit = {},
-    searchQuery: MutableState<String> = mutableStateOf(""),
+    searchQuery: String = "",
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -286,7 +286,7 @@ private fun SearchToolbar(
 @Composable
 private fun SearchTextField(
     onSearchQueryChanged: (String) -> Unit,
-    searchQuery: MutableState<String>,
+    searchQuery: String,
 ) {
     val focusRequester = remember { FocusRequester() }
     TextField(
@@ -306,7 +306,6 @@ private fun SearchTextField(
         },
         trailingIcon = {
             IconButton(onClick = {
-                searchQuery.value = ""
                 onSearchQueryChanged("")
             }) {
                 Icon(
@@ -319,7 +318,6 @@ private fun SearchTextField(
             }
         },
         onValueChange = {
-            searchQuery.value = it
             onSearchQueryChanged(it)
         },
         modifier = Modifier
@@ -327,7 +325,7 @@ private fun SearchTextField(
             .padding(16.dp)
             .focusRequester(focusRequester),
         shape = RoundedCornerShape(32.dp),
-        value = searchQuery.value,
+        value = searchQuery,
     )
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -346,8 +344,7 @@ private fun SearchToolbarPreview() {
 @Composable
 private fun EmptySearchResultColumnPreview() {
     NiaTheme {
-        val searchQuery = remember { mutableStateOf("C++") }
-        EmptySearchResultBody(searchQuery = searchQuery)
+        EmptySearchResultBody(searchQuery = "C++")
     }
 }
 

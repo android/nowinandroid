@@ -16,11 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
+import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.LoadFailed
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -33,20 +34,25 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     // TODO: Add GetSearchContentsCountUseCase to check if the fts tables are populated
     getSearchContentsUseCase: GetSearchContentsUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    val searchQuery = MutableStateFlow("")
+    val searchQuery = savedStateHandle.getStateFlow("searchQuery", "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
         searchQuery.flatMapLatest { query ->
             if (query.length < 2) {
                 flowOf(SearchResultUiState.EmptyQuery)
             } else {
-                getSearchContentsUseCase(query).map {
-                    SearchResultUiState.Success(
-                        topics = it.topics,
-                        newsResources = it.newsResources,
-                    )
+                try {
+                    getSearchContentsUseCase(query).map {
+                        SearchResultUiState.Success(
+                            topics = it.topics,
+                            newsResources = it.newsResources,
+                        )
+                    }
+                } catch (exception: Exception) {
+                    flowOf(LoadFailed)
                 }
             }
         }.stateIn(
@@ -56,6 +62,6 @@ class SearchViewModel @Inject constructor(
         )
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
+        savedStateHandle["searchQuery"] = query
     }
 }

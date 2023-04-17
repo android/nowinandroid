@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
+import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
@@ -54,6 +55,7 @@ class SearchViewModelTest {
     fun setup() {
         viewModel = SearchViewModel(
             getSearchContentsUseCase = getSearchContentsUseCase,
+            savedStateHandle = SavedStateHandle()
         )
     }
 

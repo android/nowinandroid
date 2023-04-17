@@ -27,7 +27,11 @@ import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -54,16 +58,21 @@ class DefaultSearchContentsRepository @Inject constructor(
         val newsResourceIds = newsResourceFtsDao.searchAllNewsResources("*$searchQuery*")
         val topicIds = topicFtsDao.searchAllTopics("*$searchQuery*")
 
-        return combine(newsResourceIds, topicIds) { newsFlow, topicsFlow ->
-            combine(
-                newsResourceDao.getNewsResources(filterNewsIds = newsFlow.toSet()),
-                topicDao.getTopicEntities(topicsFlow.toSet()),
-            ) { newsResources, topics ->
-                SearchResult(
-                    topics = topics.map { it.asExternalModel() },
-                    newsResources = newsResources.map { it.asExternalModel() },
-                )
+        val newsResourcesFlow = newsResourceIds
+            .mapLatest { it.toSet() }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                newsResourceDao.getNewsResources(filterNewsIds = it)
             }
-        }.flattenConcat()
+        val topicsFlow = topicIds
+            .mapLatest { it.toSet() }
+            .distinctUntilChanged()
+            .flatMapLatest(topicDao::getTopicEntities)
+        return combine(newsResourcesFlow, topicsFlow) { newsResources, topics ->
+            SearchResult(
+                topics = topics.map { it.asExternalModel() },
+                newsResources = newsResources.map { it.asExternalModel() },
+            )
+        }
     }
 }
