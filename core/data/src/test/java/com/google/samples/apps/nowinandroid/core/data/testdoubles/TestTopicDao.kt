@@ -43,7 +43,7 @@ class TestTopicDao : TopicDao {
         getTopicEntities()
             .map { topics -> topics.filter { it.id in ids } }
 
-    override fun getOneOffTopicEntities(): List<TopicEntity> = emptyList()
+    override suspend fun getOneOffTopicEntities(): List<TopicEntity> = emptyList()
 
     override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
         // Keep old values over new values
