@@ -29,6 +29,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
 interface TopicFtsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(topics: List<TopicFtsEntity>)
+
     @Query("SELECT topicId FROM topicsFts WHERE topicsFts MATCH :query")
     fun searchAllTopics(query: String): List<String>
 

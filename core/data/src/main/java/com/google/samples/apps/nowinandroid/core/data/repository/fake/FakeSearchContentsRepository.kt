@@ -24,8 +24,7 @@ import javax.inject.Inject
 /**
  * Fake implementation of the [SearchContentsRepository]
  */
-class FakeSearchContentsRepository @Inject constructor(
-) : SearchContentsRepository {
+class FakeSearchContentsRepository @Inject constructor() : SearchContentsRepository {
 
     override fun populateFtsData() {}
     override fun searchContents(searchQuery: String): Flow<SearchResult> {

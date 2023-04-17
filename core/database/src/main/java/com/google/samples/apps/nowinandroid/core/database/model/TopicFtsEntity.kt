@@ -44,5 +44,5 @@ fun TopicEntity.asFtsEntity() = TopicFtsEntity(
     topicId = id,
     name = name,
     shortDescription = shortDescription,
-    longDescription = longDescription
+    longDescription = longDescription,
 )
