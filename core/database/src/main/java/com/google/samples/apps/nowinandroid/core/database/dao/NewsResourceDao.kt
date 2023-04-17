@@ -68,7 +68,7 @@ interface NewsResourceDao {
 
     @Transaction
     @Query(value = "SELECT * FROM news_resources ORDER BY publish_date DESC")
-    fun getOneOffNewsResources(): List<PopulatedNewsResource>
+    suspend fun getOneOffNewsResources(): List<PopulatedNewsResource>
 
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do

@@ -54,10 +54,10 @@ class DefaultSearchContentsRepository @Inject constructor(
         val newsResourceIds = newsResourceFtsDao.searchAllNewsResources("*$searchQuery*")
         val topicIds = topicFtsDao.searchAllTopics("*$searchQuery*")
 
-        return combine(newsResourceIds, topicIds) { news, topics ->
+        return combine(newsResourceIds, topicIds) { newsFlow, topicsFlow ->
             combine(
-                newsResourceDao.getNewsResources(filterNewsIds = news.toSet()),
-                topicDao.getTopicEntities(topics.toSet()),
+                newsResourceDao.getNewsResources(filterNewsIds = newsFlow.toSet()),
+                topicDao.getTopicEntities(topicsFlow.toSet()),
             ) { newsResources, topics ->
                 SearchResult(
                     topics = topics.map { it.asExternalModel() },
