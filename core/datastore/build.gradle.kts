@@ -33,6 +33,11 @@ android {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
     namespace = "com.google.samples.apps.nowinandroid.core.datastore"
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes
@@ -57,12 +62,10 @@ protobuf {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
-
-    testImplementation(project(":core:testing"))
-    testImplementation(project(":core:datastore-test"))
-
-    implementation(libs.kotlinx.coroutines.android)
-
     implementation(libs.androidx.dataStore.core)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.protobuf.kotlin.lite)
+
+    testImplementation(project(":core:datastore-test"))
+    testImplementation(project(":core:testing"))
 }
