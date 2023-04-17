@@ -163,7 +163,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             contentDescription = null,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
         Text(
             text = stringResource(id = R.string.bookmarks_empty_error),

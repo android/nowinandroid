@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.sync.test
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.sync.di.SyncModule
 import dagger.Binds
 import dagger.Module
@@ -31,6 +31,6 @@ import dagger.hilt.testing.TestInstallIn
 interface TestSyncModule {
     @Binds
     fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncStatusMonitor,
-    ): SyncStatusMonitor
+        syncStatusMonitor: NeverSyncingSyncManager,
+    ): SyncManager
 }

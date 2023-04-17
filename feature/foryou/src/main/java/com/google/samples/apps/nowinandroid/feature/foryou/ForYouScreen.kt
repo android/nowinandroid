@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import android.app.Activity
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -56,13 +57,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,7 +71,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.trace
-import androidx.core.view.doOnPreDraw
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
@@ -127,23 +125,8 @@ internal fun ForYouScreen(
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
 
-    // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
-    // This code should be called when the UI is ready for use
-    // and relates to Time To Full Display.
-    // TODO replace with ReportDrawnWhen { } once androidx.activity-compose 1.7.0 is used (currently alpha)
-    if (!isSyncing && !isOnboardingLoading && !isFeedLoading) {
-        val localView = LocalView.current
-        // We use Unit to call reportFullyDrawn only on the first recomposition,
-        // however it will be called again if this composable goes out of scope.
-        // Activity.reportFullyDrawn() has its own check for this
-        // and is safe to call multiple times though.
-        LaunchedEffect(Unit) {
-            // We're leveraging the fact, that the current view is directly set as content of Activity.
-            val activity = localView.context as? Activity ?: return@LaunchedEffect
-            // To be sure not to call in the middle of a frame draw.
-            localView.doOnPreDraw { activity.reportFullyDrawn() }
-        }
-    }
+    // This code should be called when the UI is ready for use and relates to Time To Full Display.
+    ReportDrawnWhen { !isSyncing && !isOnboardingLoading && !isFeedLoading }
 
     val state = rememberLazyGridState()
     TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
@@ -250,7 +233,7 @@ private fun LazyGridScope.onboarding(
                         text = stringResource(R.string.onboarding_guidance_subtitle),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                            .padding(top = 8.dp, start = 24.dp, end = 24.dp),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyMedium,
                     )
@@ -268,8 +251,9 @@ private fun LazyGridScope.onboarding(
                             onClick = saveFollowedTopics,
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
-                                .padding(horizontal = 40.dp)
-                                .width(364.dp),
+                                .padding(horizontal = 24.dp)
+                                .widthIn(364.dp)
+                                .fillMaxWidth(),
                         ) {
                             Text(
                                 text = stringResource(R.string.done),
@@ -458,7 +442,8 @@ fun ForYouScreenTopicSelection(
             ForYouScreen(
                 isSyncing = false,
                 onboardingUiState = OnboardingUiState.Shown(
-                    topics = userNewsResources.flatMap { news -> news.followableTopics },
+                    topics = userNewsResources.flatMap { news -> news.followableTopics }
+                        .distinctBy { it.topic.id },
                 ),
                 feedState = NewsFeedUiState.Success(
                     feed = userNewsResources,
