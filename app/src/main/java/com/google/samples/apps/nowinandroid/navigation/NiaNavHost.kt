@@ -54,7 +54,9 @@ fun NiaNavHost(
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = {},
+            onTopicClick = {
+                navController.navigateToTopic(it)
+            },
         )
         interestsGraph(
             onTopicClick = { topicId ->
