@@ -145,7 +145,7 @@ private fun newsUiState(
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<UserNewsResource>> = userNewsResourceRepository.getUserNewsResources(
+    val newsStream: Flow<List<UserNewsResource>> = userNewsResourceRepository.observeAll(
         NewsResourceQuery(filterTopicIds = setOf(element = topicId)),
     )
 
