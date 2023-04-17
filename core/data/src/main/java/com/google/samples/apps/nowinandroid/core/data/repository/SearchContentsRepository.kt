@@ -20,8 +20,19 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Data layer interface for the search feature.
+ */
 interface SearchContentsRepository {
-    fun populateFtsData()
+
+    /**
+     * Populate the fts tables for the search contents.
+     */
+    suspend fun populateFtsData()
+
+    /**
+     * Query the contents matched with the [searchQuery] and returns it as a [Flow] of [SearchResult]
+     */
     fun searchContents(searchQuery: String): Flow<SearchResult>
 }
 

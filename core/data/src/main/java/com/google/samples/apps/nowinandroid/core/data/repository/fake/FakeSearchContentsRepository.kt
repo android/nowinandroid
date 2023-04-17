@@ -26,7 +26,7 @@ import javax.inject.Inject
  */
 class FakeSearchContentsRepository @Inject constructor() : SearchContentsRepository {
 
-    override fun populateFtsData() {}
+    override suspend fun populateFtsData() {}
     override fun searchContents(searchQuery: String): Flow<SearchResult> {
         TODO("Not yet implemented")
     }

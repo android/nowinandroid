@@ -28,7 +28,7 @@ class TestSearchContentsRepository : SearchContentsRepository {
     private val cachedTopics: MutableList<Topic> = mutableListOf()
     private val cachedNewsResources: MutableList<NewsResource> = mutableListOf()
 
-    override fun populateFtsData() {}
+    override suspend fun populateFtsData() {}
 
     override fun searchContents(searchQuery: String): Flow<SearchResult> {
         return flowOf(

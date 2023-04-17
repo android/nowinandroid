@@ -26,6 +26,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
+/**
+ * A use case which returns the searched contents matched with the search query.
+ */
 class GetSearchContentsUseCase @Inject constructor(
     private val searchContentsRepository: SearchContentsRepository,
     private val userDataRepository: UserDataRepository,

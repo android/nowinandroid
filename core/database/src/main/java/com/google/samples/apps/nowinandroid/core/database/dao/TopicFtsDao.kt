@@ -21,6 +21,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO for [TopicFtsEntity] access.
@@ -28,11 +29,11 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
 @Dao
 interface TopicFtsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(topics: List<TopicFtsEntity>)
+    suspend fun insertAll(topics: List<TopicFtsEntity>)
 
     @Query("SELECT topicId FROM topicsFts WHERE topicsFts MATCH :query")
-    fun searchAllTopics(query: String): List<String>
+    fun searchAllTopics(query: String): Flow<List<String>>
 
     @Query("SELECT count(*) FROM topicsFts")
-    fun getCount(): Int
+    suspend fun getCount(): Int
 }

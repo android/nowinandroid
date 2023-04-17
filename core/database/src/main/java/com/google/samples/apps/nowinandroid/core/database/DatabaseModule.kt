@@ -38,5 +38,5 @@ object DatabaseModule {
         "nia-database",
         // TODO: This is a workaround for executing read query in the main thread for search.
         // Figure out how other use cases avoid that
-    ).allowMainThreadQueries().build()
+    ).build()
 }

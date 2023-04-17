@@ -22,8 +22,13 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DefaultSearchContentsRepository @Inject constructor(
@@ -31,11 +36,16 @@ class DefaultSearchContentsRepository @Inject constructor(
     private val newsResourceFtsDao: NewsResourceFtsDao,
     private val topicDao: TopicDao,
     private val topicFtsDao: TopicFtsDao,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SearchContentsRepository {
 
-    override fun populateFtsData() {
-        newsResourceFtsDao.insertAll(newsResourceDao.getOneOffNewsResources().map { it.asFtsEntity() })
-        topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
+    override suspend fun populateFtsData() {
+        withContext(ioDispatcher) {
+            newsResourceFtsDao.insertAll(
+                newsResourceDao.getOneOffNewsResources().map { it.asFtsEntity() },
+            )
+            topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
+        }
     }
 
     override fun searchContents(searchQuery: String): Flow<SearchResult> {
@@ -44,14 +54,16 @@ class DefaultSearchContentsRepository @Inject constructor(
         val newsResourceIds = newsResourceFtsDao.searchAllNewsResources("*$searchQuery*")
         val topicIds = topicFtsDao.searchAllTopics("*$searchQuery*")
 
-        return combine(
-            newsResourceDao.getNewsResources(filterNewsIds = newsResourceIds.toSet()),
-            topicDao.getTopicEntities(topicIds.toSet()),
-        ) { newsResources, topics ->
-            SearchResult(
-                topics = topics.map { it.asExternalModel() },
-                newsResources = newsResources.map { it.asExternalModel() },
-            )
-        }
+        return combine(newsResourceIds, topicIds) { news, topics ->
+            combine(
+                newsResourceDao.getNewsResources(filterNewsIds = news.toSet()),
+                topicDao.getTopicEntities(topics.toSet()),
+            ) { newsResources, topics ->
+                SearchResult(
+                    topics = topics.map { it.asExternalModel() },
+                    newsResources = newsResources.map { it.asExternalModel() },
+                )
+            }
+        }.flattenConcat()
     }
 }
