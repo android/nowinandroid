@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NewsResourceFtsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(topics: List<NewsResourceFtsEntity>)
+    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>)
 
     @Query("SELECT newsResourceId FROM newsResourcesFts WHERE newsResourcesFts MATCH :query")
     fun searchAllNewsResources(query: String): Flow<List<String>>
