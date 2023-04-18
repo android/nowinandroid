@@ -24,6 +24,7 @@ import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.L
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -44,14 +45,12 @@ class SearchViewModel @Inject constructor(
             if (query.length < 2) {
                 flowOf(SearchResultUiState.EmptyQuery)
             } else {
-                try {
-                    getSearchContentsUseCase(query).map {
-                        SearchResultUiState.Success(
-                            topics = it.topics,
-                            newsResources = it.newsResources,
-                        )
-                    }
-                } catch (exception: Exception) {
+                getSearchContentsUseCase(query).map {
+                    SearchResultUiState.Success(
+                        topics = it.topics,
+                        newsResources = it.newsResources,
+                    )
+                }.catch {
                     flowOf(LoadFailed)
                 }
             }
