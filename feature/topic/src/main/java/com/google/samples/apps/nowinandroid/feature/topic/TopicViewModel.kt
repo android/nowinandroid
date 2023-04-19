@@ -22,11 +22,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
@@ -46,7 +46,7 @@ class TopicViewModel @Inject constructor(
     stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase,
+    userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
@@ -67,7 +67,7 @@ class TopicViewModel @Inject constructor(
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
-        getSaveableNewsResources = getSaveableNewsResources,
+        userNewsResourceRepository = userNewsResourceRepository,
     )
         .stateIn(
             scope = viewModelScope,
@@ -84,6 +84,12 @@ class TopicViewModel @Inject constructor(
     fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
         viewModelScope.launch {
             userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+        }
+    }
+
+    fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
     }
 }
@@ -135,14 +141,12 @@ private fun topicUiState(
 
 private fun newsUiState(
     topicId: String,
-    getSaveableNewsResources: GetUserNewsResourcesUseCase,
+    userNewsResourceRepository: UserNewsResourceRepository,
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<UserNewsResource>> = getSaveableNewsResources(
-        NewsResourceQuery(
-            filterTopicIds = setOf(element = topicId),
-        ),
+    val newsStream: Flow<List<UserNewsResource>> = userNewsResourceRepository.observeAll(
+        NewsResourceQuery(filterTopicIds = setOf(element = topicId)),
     )
 
     // Observe bookmarks

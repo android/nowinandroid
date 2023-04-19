@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.datetime.Instant
 
 /**
@@ -35,6 +32,7 @@ data class UserNewsResource internal constructor(
     val type: NewsResourceType,
     val followableTopics: List<FollowableTopic>,
     val isSaved: Boolean,
+    val hasBeenViewed: Boolean,
 ) {
     constructor(newsResource: NewsResource, userData: UserData) : this(
         id = newsResource.id,
@@ -51,6 +49,7 @@ data class UserNewsResource internal constructor(
             )
         },
         isSaved = userData.bookmarkedNewsResources.contains(newsResource.id),
+        hasBeenViewed = userData.viewedNewsResources.contains(newsResource.id),
     )
 }
 

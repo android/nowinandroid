@@ -59,6 +59,7 @@ class TopicScreenTest {
                 onFollowClick = {},
                 onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourceViewed = {},
             )
         }
 
@@ -78,6 +79,7 @@ class TopicScreenTest {
                 onFollowClick = {},
                 onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourceViewed = {},
             )
         }
 
@@ -102,6 +104,7 @@ class TopicScreenTest {
                 onFollowClick = {},
                 onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourceViewed = {},
             )
         }
 
@@ -124,6 +127,7 @@ class TopicScreenTest {
                 onFollowClick = {},
                 onTopicClick = {},
                 onBookmarkChanged = { _, _ -> },
+                onNewsResourceViewed = {},
             )
         }
 
