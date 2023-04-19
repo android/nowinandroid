@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -43,7 +43,7 @@ class BookmarksViewModelTest {
 
     private val userDataRepository = TestUserDataRepository()
     private val newsRepository = TestNewsRepository()
-    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
+    private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
@@ -53,7 +53,7 @@ class BookmarksViewModelTest {
     fun setup() {
         viewModel = BookmarksViewModel(
             userDataRepository = userDataRepository,
-            getSaveableNewsResources = getUserNewsResourcesUseCase,
+            userNewsResourceRepository = userNewsResourceRepository,
         )
     }
 

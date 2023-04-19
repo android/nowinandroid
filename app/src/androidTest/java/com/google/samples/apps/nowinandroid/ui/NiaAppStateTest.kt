@@ -30,6 +30,9 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -56,6 +59,9 @@ class NiaAppStateTest {
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
 
+    private val userNewsResourceRepository =
+        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository())
+
     // Subject under test.
     private lateinit var state: NiaAppState
 
@@ -67,10 +73,11 @@ class NiaAppStateTest {
             val navController = rememberTestNavController()
             state = remember(navController) {
                 NiaAppState(
-                    windowSizeClass = getCompactWindowClass(),
                     navController = navController,
-                    networkMonitor = networkMonitor,
                     coroutineScope = backgroundScope,
+                    windowSizeClass = getCompactWindowClass(),
+                    networkMonitor = networkMonitor,
+                    userNewsResourceRepository = userNewsResourceRepository,
                 )
             }
 
@@ -92,6 +99,7 @@ class NiaAppStateTest {
             state = rememberNiaAppState(
                 windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
             )
         }
 
@@ -105,10 +113,11 @@ class NiaAppStateTest {
     fun niaAppState_showBottomBar_compact() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
-                windowSizeClass = getCompactWindowClass(),
                 navController = NavHostController(LocalContext.current),
-                networkMonitor = networkMonitor,
                 coroutineScope = backgroundScope,
+                windowSizeClass = getCompactWindowClass(),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
             )
         }
 
@@ -120,10 +129,11 @@ class NiaAppStateTest {
     fun niaAppState_showNavRail_medium() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
                 navController = NavHostController(LocalContext.current),
-                networkMonitor = networkMonitor,
                 coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
             )
         }
 
@@ -135,10 +145,11 @@ class NiaAppStateTest {
     fun niaAppState_showNavRail_large() = runTest {
         composeTestRule.setContent {
             state = NiaAppState(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
-                networkMonitor = networkMonitor,
                 coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
             )
         }
 
@@ -150,10 +161,11 @@ class NiaAppStateTest {
     fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 navController = NavHostController(LocalContext.current),
-                networkMonitor = networkMonitor,
                 coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
             )
         }
 

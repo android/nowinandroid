@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 /**
  * A sealed hierarchy describing the onboarding state for the for you screen.
