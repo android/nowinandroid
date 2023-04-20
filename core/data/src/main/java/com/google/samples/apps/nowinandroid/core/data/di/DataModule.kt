@@ -16,10 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
+import com.google.samples.apps.nowinandroid.core.data.repository.DefaultSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
@@ -47,6 +49,11 @@ interface DataModule {
     fun bindsUserDataRepository(
         userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository
+
+    @Binds
+    fun bindsSearchContentsRepository(
+        searchContentsRepository: DefaultSearchContentsRepository,
+    ): SearchContentsRepository
 
     @Binds
     fun bindsNetworkMonitor(

@@ -36,5 +36,7 @@ object DatabaseModule {
         context,
         NiaDatabase::class.java,
         "nia-database",
+        // TODO: This is a workaround for executing read query in the main thread for search.
+        // Figure out how other use cases avoid that
     ).build()
 }

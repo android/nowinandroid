@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-plugins {
-    id("nowinandroid.android.feature")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
-}
+import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.feature.search"
-}
-
-dependencies {
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:interests"))
-    implementation(libs.kotlinx.datetime)
-}
-
+/**
+ * An entity of [SearchResult] with additional user information such as whether the user is
+ * following a topic.
+ */
+data class UserSearchResult(
+    val topics: List<FollowableTopic> = emptyList(),
+    val newsResources: List<UserNewsResource> = emptyList(),
+)
