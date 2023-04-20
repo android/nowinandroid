@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
+package com.google.samples.apps.nowinandroid.core.data.repository
 
-plugins {
-    id("nowinandroid.android.feature")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
+import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Data layer interface for the search feature.
+ */
+interface SearchContentsRepository {
+
+    /**
+     * Populate the fts tables for the search contents.
+     */
+    suspend fun populateFtsData()
+
+    /**
+     * Query the contents matched with the [searchQuery] and returns it as a [Flow] of [SearchResult]
+     */
+    fun searchContents(searchQuery: String): Flow<SearchResult>
 }
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.feature.search"
-}
-
-dependencies {
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:interests"))
-    implementation(libs.kotlinx.datetime)
-}
-
