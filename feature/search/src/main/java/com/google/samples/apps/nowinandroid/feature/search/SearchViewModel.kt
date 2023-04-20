@@ -22,8 +22,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.LoadFailed
-import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -57,11 +55,11 @@ class SearchViewModel @Inject constructor(
                         }
 
                         is Result.Loading -> {
-                            Loading
+                            SearchResultUiState.Loading
                         }
 
                         is Result.Error -> {
-                            LoadFailed
+                            SearchResultUiState.LoadFailed
                         }
                     }
                 }
