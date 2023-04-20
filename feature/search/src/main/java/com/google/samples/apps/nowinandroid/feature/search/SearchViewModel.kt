@@ -78,10 +78,10 @@ class SearchViewModel @Inject constructor(
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
         recentSearchQueriesUseCase().map(RecentSearchQueriesUiState::Success)
             .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = RecentSearchQueriesUiState.Loading,
-        )
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = RecentSearchQueriesUiState.Loading,
+            )
 
     fun onSearchQueryChanged(query: String) {
         savedStateHandle[SEARCH_QUERY] = query
