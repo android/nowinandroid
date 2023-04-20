@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository
+package com.google.samples.apps.nowinandroid.core.data.model
 
-import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
-import kotlinx.coroutines.flow.Flow
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 
-/**
- * Data layer interface for the search feature.
- */
-interface SearchContentsRepository {
-
-    /**
-     * Populate the fts tables for the search contents.
-     */
-    suspend fun populateFtsData()
-
-    /**
-     * Query the contents matched with the [searchQuery] and returns it as a [Flow] of [SearchResult]
-     */
-    fun searchContents(searchQuery: String): Flow<SearchResult>
-}
+/** */
+data class SearchResult(
+    val topics: List<Topic> = emptyList(),
+    val newsResources: List<NewsResource> = emptyList(),
+)

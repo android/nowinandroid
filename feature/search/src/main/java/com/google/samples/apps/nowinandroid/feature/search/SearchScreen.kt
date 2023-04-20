@@ -151,7 +151,7 @@ internal fun SearchScreen(
 
 @Composable
 fun EmptySearchResultBody(
-    onInterestsClick: () -> Unit = {},
+    onInterestsClick: () -> Unit,
     searchQuery: String,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -206,8 +206,8 @@ private fun SearchResultBody(
     topics: List<FollowableTopic>,
     newsResources: List<UserNewsResource>,
     onFollowButtonClick: (String, Boolean) -> Unit,
-    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = { _, _ -> },
-    onTopicClick: (String) -> Unit = {},
+    onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
 ) {
     if (topics.isNotEmpty()) {
         Text(
@@ -260,8 +260,8 @@ private fun SearchResultBody(
 @Composable
 private fun SearchToolbar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
-    onSearchQueryChanged: (String) -> Unit = {},
+    onBackClick: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
     searchQuery: String = "",
 ) {
     Row(
@@ -337,7 +337,10 @@ private fun SearchTextField(
 @Composable
 private fun SearchToolbarPreview() {
     NiaTheme {
-        SearchToolbar()
+        SearchToolbar(
+            onBackClick = {},
+            onSearchQueryChanged = {},
+        )
     }
 }
 
@@ -345,7 +348,10 @@ private fun SearchToolbarPreview() {
 @Composable
 private fun EmptySearchResultColumnPreview() {
     NiaTheme {
-        EmptySearchResultBody(searchQuery = "C++")
+        EmptySearchResultBody(
+            onInterestsClick = {},
+            searchQuery = "C++",
+        )
     }
 }
 

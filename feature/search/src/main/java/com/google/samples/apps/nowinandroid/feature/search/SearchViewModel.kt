@@ -20,11 +20,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
+import com.google.samples.apps.nowinandroid.core.result.Result
+import com.google.samples.apps.nowinandroid.core.result.asResult
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.LoadFailed
+import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -38,20 +40,30 @@ class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    val searchQuery = savedStateHandle.getStateFlow("searchQuery", "")
+    val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
         searchQuery.flatMapLatest { query ->
-            if (query.length < 2) {
+            if (query.length < SEARCH_QUERY_MIN_LENGTH) {
                 flowOf(SearchResultUiState.EmptyQuery)
             } else {
-                getSearchContentsUseCase(query).map {
-                    SearchResultUiState.Success(
-                        topics = it.topics,
-                        newsResources = it.newsResources,
-                    )
-                }.catch {
-                    flowOf(LoadFailed)
+                getSearchContentsUseCase(query).asResult().map {
+                    when (it) {
+                        is Result.Success -> {
+                            SearchResultUiState.Success(
+                                topics = it.data.topics,
+                                newsResources = it.data.newsResources,
+                            )
+                        }
+
+                        is Result.Loading -> {
+                            Loading
+                        }
+
+                        is Result.Error -> {
+                            LoadFailed
+                        }
+                    }
                 }
             }
         }.stateIn(
@@ -61,6 +73,10 @@ class SearchViewModel @Inject constructor(
         )
 
     fun onSearchQueryChanged(query: String) {
-        savedStateHandle["searchQuery"] = query
+        savedStateHandle[SEARCH_QUERY] = query
     }
 }
+
+/** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */
+const val SEARCH_QUERY_MIN_LENGTH = 2
+const val SEARCH_QUERY = "searchQuery"

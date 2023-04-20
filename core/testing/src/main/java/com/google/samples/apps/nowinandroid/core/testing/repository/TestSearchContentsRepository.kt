@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
+import com.google.samples.apps.nowinandroid.core.data.model.SearchResult
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchResult
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.flow.Flow
@@ -28,23 +28,21 @@ class TestSearchContentsRepository : SearchContentsRepository {
     private val cachedTopics: MutableList<Topic> = mutableListOf()
     private val cachedNewsResources: MutableList<NewsResource> = mutableListOf()
 
-    override suspend fun populateFtsData() {}
+    override suspend fun populateFtsData() { /* no-op */ }
 
-    override fun searchContents(searchQuery: String): Flow<SearchResult> {
-        return flowOf(
-            SearchResult(
-                topics = cachedTopics.filter {
-                    it.name.contains(searchQuery) ||
-                        it.shortDescription.contains(searchQuery) ||
-                        it.longDescription.contains(searchQuery)
-                },
-                newsResources = cachedNewsResources.filter {
-                    it.content.contains(searchQuery) ||
-                        it.title.contains(searchQuery)
-                },
-            ),
-        )
-    }
+    override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf(
+        SearchResult(
+            topics = cachedTopics.filter {
+                it.name.contains(searchQuery) ||
+                    it.shortDescription.contains(searchQuery) ||
+                    it.longDescription.contains(searchQuery)
+            },
+            newsResources = cachedNewsResources.filter {
+                it.content.contains(searchQuery) ||
+                    it.title.contains(searchQuery)
+            },
+        ),
+    )
 
     /**
      * Test only method to add the topics to the stored list in memory
