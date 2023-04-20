@@ -161,9 +161,7 @@ class SearchScreenTest {
             SearchScreen(
                 searchResultUiState = SearchResultUiState.EmptyQuery,
                 recentSearchesUiState = RecentSearchQueriesUiState.Success(
-                    recentQueries = recentSearches.map {
-                        RecentSearchQuery(it)
-                    },
+                    recentQueries = recentSearches.map(::RecentSearchQuery),
                 ),
             )
         }

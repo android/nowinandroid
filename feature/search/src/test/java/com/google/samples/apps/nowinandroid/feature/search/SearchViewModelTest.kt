@@ -98,7 +98,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun recentSearches() = runTest {
+    fun recentSearches_verifyUiStateIsSuccess() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
         viewModel.onSearchTriggered("kotlin")
 
