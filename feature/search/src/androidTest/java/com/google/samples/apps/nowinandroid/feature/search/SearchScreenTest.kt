@@ -23,8 +23,9 @@ import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onParent
+import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
@@ -47,6 +48,7 @@ class SearchScreenTest {
     private lateinit var clearSearchContentDesc: String
     private lateinit var followButtonContentDesc: String
     private lateinit var unfollowButtonContentDesc: String
+    private lateinit var clearRecentSearchesContentDesc: String
     private lateinit var topicsString: String
     private lateinit var updatesString: String
     private lateinit var tryAnotherSearchString: String
@@ -64,6 +66,7 @@ class SearchScreenTest {
     fun setup() {
         composeTestRule.activity.apply {
             clearSearchContentDesc = getString(R.string.clear_search_text_content_desc)
+            clearRecentSearchesContentDesc = getString(R.string.clear_recent_searches_content_desc)
             followButtonContentDesc =
                 getString(interestsR.string.card_follow_button_content_desc)
             unfollowButtonContentDesc =
@@ -82,10 +85,7 @@ class SearchScreenTest {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(clearSearchContentDesc)
-            // The parent of the IconButton whose contentDescription matches the clearSearchText
-            // should be the TextField for search
-            .onParent()
+            .onNodeWithTag("searchTextField")
             .assertIsFocused()
     }
 
@@ -93,7 +93,7 @@ class SearchScreenTest {
     fun emptySearchResult_emptyScreenIsDisplayed() {
         composeTestRule.setContent {
             SearchScreen(
-                uiState = SearchResultUiState.Success(),
+                searchResultUiState = SearchResultUiState.Success(),
             )
         }
 
@@ -106,7 +106,7 @@ class SearchScreenTest {
     fun searchResultWithTopics_allTopicsAreVisible_followButtonsVisibleForTheNumOfFollowedTopics() {
         composeTestRule.setContent {
             SearchScreen(
-                uiState = SearchResultUiState.Success(topics = followableTopicTestData),
+                searchResultUiState = SearchResultUiState.Success(topics = followableTopicTestData),
             )
         }
 
@@ -135,7 +135,7 @@ class SearchScreenTest {
     fun searchResultWithNewsResources_firstNewsResourcesIsVisible() {
         composeTestRule.setContent {
             SearchScreen(
-                uiState = SearchResultUiState.Success(
+                searchResultUiState = SearchResultUiState.Success(
                     newsResources = newsResourcesTestData.map {
                         UserNewsResource(
                             newsResource = it,
@@ -151,6 +151,29 @@ class SearchScreenTest {
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(newsResourcesTestData[0].title)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun emptyQuery_notEmptyRecentSearches_verifyClearSearchesButton_displayed() {
+        val recentSearches = listOf("kotlin", "testing")
+        composeTestRule.setContent {
+            SearchScreen(
+                searchResultUiState = SearchResultUiState.EmptyQuery,
+                recentSearchesUiState = RecentSearchQueriesUiState.Success(
+                    recentQueries = recentSearches.map(::RecentSearchQuery),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(clearRecentSearchesContentDesc)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("kotlin")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("testing")
             .assertIsDisplayed()
     }
 }
