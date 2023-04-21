@@ -23,4 +23,6 @@
     <string name="to_browse_topics"> to browse topics</string>
     <string name="topics">Topics</string>
     <string name="updates">Updates</string>
+    <string name="recent_searches">Recent searches</string>
+    <string name="clear_recent_searches_content_desc">Clear searches</string>
 </resources>

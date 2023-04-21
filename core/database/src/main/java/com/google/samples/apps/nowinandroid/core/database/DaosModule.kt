@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.database
 
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
+import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import dagger.Module
@@ -47,4 +48,9 @@ object DaosModule {
     fun providesNewsResourceFtsDao(
         database: NiaDatabase,
     ): NewsResourceFtsDao = database.newsResourceFtsDao()
+
+    @Provides
+    fun providesRecentSearchQueryDao(
+        database: NiaDatabase,
+    ): RecentSearchQueryDao = database.recentSearchQueryDao()
 }

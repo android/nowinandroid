@@ -51,6 +51,7 @@ fun LazyGridScope.newsFeed(
     feedState: NewsFeedUiState,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
+    onExpandedCardClick: () -> Unit = {},
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -67,6 +68,7 @@ fun LazyGridScope.newsFeed(
                     userNewsResource = userNewsResource,
                     isBookmarked = userNewsResource.isSaved,
                     onClick = {
+                        onExpandedCardClick()
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
                             newsResourceTitle = userNewsResource.title,
