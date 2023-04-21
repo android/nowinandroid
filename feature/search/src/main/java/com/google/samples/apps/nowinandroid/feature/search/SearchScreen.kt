@@ -364,22 +364,15 @@ private fun RecentSearchesBody(
         }
         LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
             items(recentSearchQueries) { recentSearch ->
-                ClickableText(
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 28.sp,
-                                fontFamily = FontFamily.SansSerif,
-                            ),
-                        ) {
-                            append(recentSearch)
-                        }
-                    },
-                    onClick = {
-                        onRecentSearchClicked(recentSearch)
-                    },
+                Text(
+                    text = recentSearch,
+                    fontSize = 28.sp,
+                    fontFamily = FontFamily.SansSerif,
                     modifier = Modifier
                         .padding(vertical = 16.dp)
+                        .clickable {
+                            onRecentSearchClicked(recentSearch)
+                        }
                         .fillMaxWidth(),
                 )
             }
