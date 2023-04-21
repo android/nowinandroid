@@ -103,6 +103,29 @@ class SearchScreenTest {
     }
 
     @Test
+    fun emptySearchResult_nonEmptyRecentSearches_emptySearchScreenAndRecentSearchesAreDisplayed() {
+        val recentSearches = listOf("kotlin")
+        composeTestRule.setContent {
+            SearchScreen(
+                searchResultUiState = SearchResultUiState.Success(),
+                recentSearchesUiState = RecentSearchQueriesUiState.Success(
+                    recentQueries = recentSearches.map(::RecentSearchQuery),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(tryAnotherSearchString)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(clearRecentSearchesContentDesc)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("kotlin")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun searchResultWithTopics_allTopicsAreVisible_followButtonsVisibleForTheNumOfFollowedTopics() {
         composeTestRule.setContent {
             SearchScreen(

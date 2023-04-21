@@ -63,10 +63,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -147,6 +149,7 @@ internal fun SearchScreen(
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
             -> Unit
+
             SearchResultUiState.EmptyQuery,
             -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
@@ -167,6 +170,16 @@ internal fun SearchScreen(
                         onInterestsClick = onInterestsClick,
                         searchQuery = searchQuery,
                     )
+                    if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
+                        RecentSearchesBody(
+                            onClearRecentSearches = onClearRecentSearches,
+                            onRecentSearchClicked = {
+                                onSearchQueryChanged(it)
+                                onSearchTriggered(it)
+                            },
+                            recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
+                        )
+                    }
                 } else {
                     SearchResultBody(
                         topics = searchResultUiState.topics,
@@ -189,7 +202,10 @@ fun EmptySearchResultBody(
     onInterestsClick: () -> Unit,
     searchQuery: String,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 48.dp),
+    ) {
         val message = stringResource(id = searchR.string.search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
@@ -203,26 +219,34 @@ fun EmptySearchResultBody(
                     ),
                 ),
             ),
-            modifier = Modifier.padding(horizontal = 36.dp, vertical = 24.dp),
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 24.dp),
         )
         val interests = stringResource(id = searchR.string.interests)
         val tryAnotherSearchString = buildAnnotatedString {
-            append(stringResource(id = searchR.string.try_another_search))
-            append(" ")
-            withStyle(
-                style = SpanStyle(
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold,
-                ),
-            ) {
-                pushStringAnnotation(tag = interests, annotation = interests)
-                append(interests)
+            withStyle(style = SpanStyle(fontSize = 18.sp)) {
+                append(stringResource(id = searchR.string.try_another_search))
+                append(" ")
+                withStyle(
+                    style = SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold,
+                    ),
+                ) {
+                    pushStringAnnotation(tag = interests, annotation = interests)
+                    append(interests)
+                }
+                append(" ")
+                append(stringResource(id = searchR.string.to_browse_topics))
             }
-            append(" ")
-            append(stringResource(id = searchR.string.to_browse_topics))
         }
         ClickableText(
             text = tryAnotherSearchString,
+            style = TextStyle(
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+            ),
             modifier = Modifier
                 .padding(start = 36.dp, end = 36.dp, bottom = 24.dp)
                 .clickable {},
@@ -454,7 +478,8 @@ private fun SearchTextField(
                 } else {
                     false
                 }
-            }.testTag("searchTextField"),
+            }
+            .testTag("searchTextField"),
         shape = RoundedCornerShape(32.dp),
         value = searchQuery,
         keyboardOptions = KeyboardOptions(
