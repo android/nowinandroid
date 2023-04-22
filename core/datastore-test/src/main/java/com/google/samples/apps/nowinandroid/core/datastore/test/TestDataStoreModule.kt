@@ -27,9 +27,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import org.junit.rules.TemporaryFolder
 import javax.inject.Singleton
 
@@ -43,13 +41,12 @@ object TestDataStoreModule {
     @Provides
     @Singleton
     fun providesUserPreferencesDataStore(
-        @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
+        @Dispatcher(IO) ioScope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer,
         tmpFolder: TemporaryFolder,
     ): DataStore<UserPreferences> =
         tmpFolder.testUserPreferencesDataStore(
-            // TODO: Provide an application-wide CoroutineScope in the DI graph
-            coroutineScope = CoroutineScope(SupervisorJob() + ioDispatcher),
+            coroutineScope = ioScope,
             userPreferencesSerializer = userPreferencesSerializer,
         )
 }
