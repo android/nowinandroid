@@ -29,4 +29,5 @@ class FakeSearchContentsRepository @Inject constructor() : SearchContentsReposit
 
     override suspend fun populateFtsData() { /* no-op */ }
     override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf()
+    override fun getSearchContentsCount(): Flow<Int> = flowOf(1)
 }

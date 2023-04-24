@@ -37,4 +37,10 @@ sealed interface SearchResultUiState {
     ) : SearchResultUiState {
         fun isEmpty(): Boolean = topics.isEmpty() && newsResources.isEmpty()
     }
+
+    /**
+     * A state where the search contents are not ready. This happens when the *Fts tables are not
+     * populated yet.
+     */
+    object SearchNotReady : SearchResultUiState
 }

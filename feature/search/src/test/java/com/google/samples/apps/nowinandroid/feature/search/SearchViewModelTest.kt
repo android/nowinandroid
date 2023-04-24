@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
@@ -55,12 +56,14 @@ class SearchViewModelTest {
     )
     private val recentSearchRepository = TestRecentSearchRepository()
     private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
+    private val getSearchContentsCountUseCase = GetSearchContentsCountUseCase(searchContentsRepository)
     private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
         viewModel = SearchViewModel(
             getSearchContentsUseCase = getSearchContentsUseCase,
+            getSearchContentsCountUseCase = getSearchContentsCountUseCase,
             recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
             recentSearchRepository = recentSearchRepository,

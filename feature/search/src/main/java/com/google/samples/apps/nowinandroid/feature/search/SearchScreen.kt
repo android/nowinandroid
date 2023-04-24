@@ -150,6 +150,7 @@ internal fun SearchScreen(
             SearchResultUiState.LoadFailed,
             -> Unit
 
+            SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
             SearchResultUiState.EmptyQuery,
             -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
@@ -257,6 +258,21 @@ fun EmptySearchResultBody(
                     onInterestsClick()
                 }
         }
+    }
+}
+
+@Composable
+private fun SearchNotReadyBody() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 48.dp),
+    ) {
+        Text(
+            text = stringResource(id = searchR.string.search_not_ready),
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 24.dp),
+        )
     }
 }
 
@@ -523,6 +539,14 @@ private fun RecentSearchesBodyPreview() {
             onRecentSearchClicked = {},
             recentSearchQueries = listOf("kotlin", "jetpack compose", "testing"),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun SearchNotReadyBodyPreview() {
+    NiaTheme {
+        SearchNotReadyBody()
     }
 }
 

@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database.dao
+package com.google.samples.apps.nowinandroid.core.domain
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 /**
- * DAO for [TopicFtsEntity] access.
+ * A use case which returns total count of *Fts tables
  */
-@Dao
-interface TopicFtsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(topics: List<TopicFtsEntity>)
-
-    @Query("SELECT topicId FROM topicsFts WHERE topicsFts MATCH :query")
-    fun searchAllTopics(query: String): Flow<List<String>>
-
-    @Query("SELECT count(*) FROM topicsFts")
-    fun getCount(): Flow<Int>
+class GetSearchContentsCountUseCase @Inject constructor(
+    private val searchContentsRepository: SearchContentsRepository,
+) {
+    operator fun invoke(): Flow<Int> =
+        searchContentsRepository.getSearchContentsCount()
 }

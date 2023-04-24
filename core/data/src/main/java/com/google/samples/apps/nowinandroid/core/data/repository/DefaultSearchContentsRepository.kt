@@ -74,4 +74,13 @@ class DefaultSearchContentsRepository @Inject constructor(
             )
         }
     }
+
+    override fun getSearchContentsCount(): Flow<Int> {
+        return combine(
+            newsResourceFtsDao.getCount(),
+            topicFtsDao.getCount(),
+        ) { newsResourceCount, topicsCount ->
+            newsResourceCount + topicsCount
+        }
+    }
 }
