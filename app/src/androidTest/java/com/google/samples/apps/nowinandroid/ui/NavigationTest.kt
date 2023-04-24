@@ -75,9 +75,7 @@ class NavigationTest {
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
 
     // The strings used for matching in these tests
-    private val done by composeTestRule.stringResource(FeatureForyouR.string.done)
     private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.navigate_up)
-    private val forYouLoading by composeTestRule.stringResource(FeatureForyouR.string.for_you_loading)
     private val forYou by composeTestRule.stringResource(FeatureForyouR.string.for_you)
     private val interests by composeTestRule.stringResource(FeatureInterestsR.string.interests)
     private val sampleTopic = "Headlines"
