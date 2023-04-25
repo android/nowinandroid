@@ -61,7 +61,7 @@ class DefaultSearchContentsRepository @Inject constructor(
             .mapLatest { it.toSet() }
             .distinctUntilChanged()
             .flatMapLatest {
-                newsResourceDao.getNewsResources(filterNewsIds = it)
+                newsResourceDao.getNewsResources(useFilterNewsIds = true, filterNewsIds = it)
             }
         val topicsFlow = topicIds
             .mapLatest { it.toSet() }
@@ -74,4 +74,12 @@ class DefaultSearchContentsRepository @Inject constructor(
             )
         }
     }
+
+    override fun getSearchContentsCount(): Flow<Int> =
+        combine(
+            newsResourceFtsDao.getCount(),
+            topicFtsDao.getCount(),
+        ) { newsResourceCount, topicsCount ->
+            newsResourceCount + topicsCount
+        }
 }

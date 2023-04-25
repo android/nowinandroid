@@ -63,16 +63,16 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -147,6 +147,8 @@ internal fun SearchScreen(
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
             -> Unit
+
+            SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
             SearchResultUiState.EmptyQuery,
             -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
@@ -167,6 +169,16 @@ internal fun SearchScreen(
                         onInterestsClick = onInterestsClick,
                         searchQuery = searchQuery,
                     )
+                    if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
+                        RecentSearchesBody(
+                            onClearRecentSearches = onClearRecentSearches,
+                            onRecentSearchClicked = {
+                                onSearchQueryChanged(it)
+                                onSearchTriggered(it)
+                            },
+                            recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
+                        )
+                    }
                 } else {
                     SearchResultBody(
                         topics = searchResultUiState.topics,
@@ -189,7 +201,10 @@ fun EmptySearchResultBody(
     onInterestsClick: () -> Unit,
     searchQuery: String,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 48.dp),
+    ) {
         val message = stringResource(id = searchR.string.search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
@@ -203,7 +218,9 @@ fun EmptySearchResultBody(
                     ),
                 ),
             ),
-            modifier = Modifier.padding(horizontal = 36.dp, vertical = 24.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 24.dp),
         )
         val interests = stringResource(id = searchR.string.interests)
         val tryAnotherSearchString = buildAnnotatedString {
@@ -223,6 +240,11 @@ fun EmptySearchResultBody(
         }
         ClickableText(
             text = tryAnotherSearchString,
+            style = MaterialTheme.typography.bodyLarge.merge(
+                TextStyle(
+                    textAlign = TextAlign.Center,
+                ),
+            ),
             modifier = Modifier
                 .padding(start = 36.dp, end = 36.dp, bottom = 24.dp)
                 .clickable {},
@@ -233,6 +255,21 @@ fun EmptySearchResultBody(
                     onInterestsClick()
                 }
         }
+    }
+}
+
+@Composable
+private fun SearchNotReadyBody() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 48.dp),
+    ) {
+        Text(
+            text = stringResource(id = searchR.string.search_not_ready),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 24.dp),
+        )
     }
 }
 
@@ -340,22 +377,14 @@ private fun RecentSearchesBody(
         }
         LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
             items(recentSearchQueries) { recentSearch ->
-                ClickableText(
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 28.sp,
-                                fontFamily = FontFamily.SansSerif,
-                            ),
-                        ) {
-                            append(recentSearch)
-                        }
-                    },
-                    onClick = {
-                        onRecentSearchClicked(recentSearch)
-                    },
+                Text(
+                    text = recentSearch,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
                         .padding(vertical = 16.dp)
+                        .clickable {
+                            onRecentSearchClicked(recentSearch)
+                        }
                         .fillMaxWidth(),
                 )
             }
@@ -454,7 +483,8 @@ private fun SearchTextField(
                 } else {
                     false
                 }
-            }.testTag("searchTextField"),
+            }
+            .testTag("searchTextField"),
         shape = RoundedCornerShape(32.dp),
         value = searchQuery,
         keyboardOptions = KeyboardOptions(
@@ -505,6 +535,14 @@ private fun RecentSearchesBodyPreview() {
             onRecentSearchClicked = {},
             recentSearchQueries = listOf("kotlin", "jetpack compose", "testing"),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun SearchNotReadyBodyPreview() {
+    NiaTheme {
+        SearchNotReadyBody()
     }
 }
 

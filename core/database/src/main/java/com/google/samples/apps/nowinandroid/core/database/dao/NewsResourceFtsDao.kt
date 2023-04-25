@@ -35,5 +35,5 @@ interface NewsResourceFtsDao {
     fun searchAllNewsResources(query: String): Flow<List<String>>
 
     @Query("SELECT count(*) FROM newsResourcesFts")
-    suspend fun getCount(): Int
+    fun getCount(): Flow<Int>
 }

@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
@@ -28,6 +29,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
+import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.SearchNotReady
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -55,12 +57,14 @@ class SearchViewModelTest {
     )
     private val recentSearchRepository = TestRecentSearchRepository()
     private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
+    private val getSearchContentsCountUseCase = GetSearchContentsCountUseCase(searchContentsRepository)
     private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
         viewModel = SearchViewModel(
             getSearchContentsUseCase = getSearchContentsUseCase,
+            getSearchContentsCountUseCase = getSearchContentsCountUseCase,
             recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
             recentSearchRepository = recentSearchRepository,
@@ -74,9 +78,12 @@ class SearchViewModelTest {
 
     @Test
     fun stateIsEmptyQuery_withEmptySearchQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("")
+
         assertEquals(EmptyQuery, viewModel.searchResultUiState.value)
 
         collectJob.cancel()
@@ -104,6 +111,17 @@ class SearchViewModelTest {
 
         val result = viewModel.recentSearchQueriesUiState.value
         assertIs<Success>(result)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun searchNotReady_withNoFtsTableEntity() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("")
+
+        assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
 
         collectJob.cancel()
     }

@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
@@ -36,8 +37,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    // TODO: Add GetSearchContentsCountUseCase to check if the fts tables are populated
     getSearchContentsUseCase: GetSearchContentsUseCase,
+    getSearchContentsCountUseCase: GetSearchContentsCountUseCase,
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val recentSearchRepository: RecentSearchRepository,
     private val savedStateHandle: SavedStateHandle,
@@ -46,25 +47,31 @@ class SearchViewModel @Inject constructor(
     val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
-        searchQuery.flatMapLatest { query ->
-            if (query.length < SEARCH_QUERY_MIN_LENGTH) {
-                flowOf(SearchResultUiState.EmptyQuery)
+        getSearchContentsCountUseCase().flatMapLatest { totalCount ->
+            if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
+                flowOf(SearchResultUiState.SearchNotReady)
             } else {
-                getSearchContentsUseCase(query).asResult().map {
-                    when (it) {
-                        is Result.Success -> {
-                            SearchResultUiState.Success(
-                                topics = it.data.topics,
-                                newsResources = it.data.newsResources,
-                            )
-                        }
+                searchQuery.flatMapLatest { query ->
+                    if (query.length < SEARCH_QUERY_MIN_LENGTH) {
+                        flowOf(SearchResultUiState.EmptyQuery)
+                    } else {
+                        getSearchContentsUseCase(query).asResult().map {
+                            when (it) {
+                                is Result.Success -> {
+                                    SearchResultUiState.Success(
+                                        topics = it.data.topics,
+                                        newsResources = it.data.newsResources,
+                                    )
+                                }
 
-                        is Result.Loading -> {
-                            SearchResultUiState.Loading
-                        }
+                                is Result.Loading -> {
+                                    SearchResultUiState.Loading
+                                }
 
-                        is Result.Error -> {
-                            SearchResultUiState.LoadFailed
+                                is Result.Error -> {
+                                    SearchResultUiState.LoadFailed
+                                }
+                            }
                         }
                     }
                 }
@@ -108,5 +115,8 @@ class SearchViewModel @Inject constructor(
 }
 
 /** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */
-const val SEARCH_QUERY_MIN_LENGTH = 2
-const val SEARCH_QUERY = "searchQuery"
+private const val SEARCH_QUERY_MIN_LENGTH = 2
+
+/** Minimum number of the fts table's entity count where it's considered as search is not ready */
+private const val SEARCH_MIN_FTS_ENTITY_COUNT = 1
+private const val SEARCH_QUERY = "searchQuery"

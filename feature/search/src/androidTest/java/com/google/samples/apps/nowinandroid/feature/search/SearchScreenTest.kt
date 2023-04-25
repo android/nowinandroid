@@ -52,6 +52,7 @@ class SearchScreenTest {
     private lateinit var topicsString: String
     private lateinit var updatesString: String
     private lateinit var tryAnotherSearchString: String
+    private lateinit var searchNotReadyString: String
 
     private val userData: UserData = UserData(
         bookmarkedNewsResources = setOf("1", "3"),
@@ -75,6 +76,7 @@ class SearchScreenTest {
             updatesString = getString(R.string.updates)
             tryAnotherSearchString = getString(R.string.try_another_search) +
                 " " + getString(R.string.interests) + " " + getString(R.string.to_browse_topics)
+            searchNotReadyString = getString(R.string.search_not_ready)
         }
     }
 
@@ -99,6 +101,29 @@ class SearchScreenTest {
 
         composeTestRule
             .onNodeWithText(tryAnotherSearchString)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun emptySearchResult_nonEmptyRecentSearches_emptySearchScreenAndRecentSearchesAreDisplayed() {
+        val recentSearches = listOf("kotlin")
+        composeTestRule.setContent {
+            SearchScreen(
+                searchResultUiState = SearchResultUiState.Success(),
+                recentSearchesUiState = RecentSearchQueriesUiState.Success(
+                    recentQueries = recentSearches.map(::RecentSearchQuery),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(tryAnotherSearchString)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(clearRecentSearchesContentDesc)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("kotlin")
             .assertIsDisplayed()
     }
 
@@ -174,6 +199,19 @@ class SearchScreenTest {
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithText("testing")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun searchNotReady_verifySearchNotReadyMessageIsVisible() {
+        composeTestRule.setContent {
+            SearchScreen(
+                searchResultUiState = SearchResultUiState.SearchNotReady,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(searchNotReadyString)
             .assertIsDisplayed()
     }
 }
