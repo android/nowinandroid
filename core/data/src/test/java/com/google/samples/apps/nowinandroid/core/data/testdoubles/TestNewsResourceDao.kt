@@ -47,7 +47,11 @@ class TestNewsResourceDao : NewsResourceDao {
         filterNewsIds: Set<String>,
     ): Flow<List<PopulatedNewsResource>> =
         entitiesStateFlow
-            .map { it.map(NewsResourceEntity::asPopulatedNewsResource) }
+            .map { newsResourceEntities ->
+                newsResourceEntities.map { entity ->
+                    entity.asPopulatedNewsResource(topicCrossReferences)
+                }
+            }
             .map { resources ->
                 var result = resources
                 if (useFilterTopicIds) {
@@ -78,10 +82,6 @@ class TestNewsResourceDao : NewsResourceDao {
         return entities.map { it.id.toLong() }
     }
 
-    override suspend fun updateNewsResources(entities: List<NewsResourceEntity>) {
-        throw NotImplementedError("Unused in tests")
-    }
-
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         entitiesStateFlow.update { oldValues ->
             // New values come first so they overwrite old values
@@ -109,16 +109,20 @@ class TestNewsResourceDao : NewsResourceDao {
     }
 }
 
-private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource(
+private fun NewsResourceEntity.asPopulatedNewsResource(
+    topicCrossReferences: List<NewsResourceTopicCrossRef>,
+) = PopulatedNewsResource(
     entity = this,
-    topics = listOf(
-        TopicEntity(
-            id = filteredInterestsIds.random(),
-            name = "name",
-            shortDescription = "short description",
-            longDescription = "long description",
-            url = "URL",
-            imageUrl = "image URL",
-        ),
-    ),
+    topics = topicCrossReferences
+        .filter { it.newsResourceId == id }
+        .map { newsResourceTopicCrossRef ->
+            TopicEntity(
+                id = newsResourceTopicCrossRef.topicId,
+                name = "name",
+                shortDescription = "short description",
+                longDescription = "long description",
+                url = "URL",
+                imageUrl = "image URL",
+            )
+        },
 )

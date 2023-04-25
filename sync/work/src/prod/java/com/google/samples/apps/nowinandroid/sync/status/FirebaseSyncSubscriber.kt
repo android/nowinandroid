@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.sync.services
+package com.google.samples.apps.nowinandroid.sync.status
 
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.samples.apps.nowinandroid.sync.initializers.SYNC_TOPIC
-import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class SyncNotificationsService : FirebaseMessagingService() {
-
-    @Inject
-    lateinit var syncManager: SyncManager
-
-    override fun onMessageReceived(message: RemoteMessage) {
-        if (SYNC_TOPIC == message.from) {
-            syncManager.requestSync()
-        }
+/**
+ * Implementation of [SyncSubscriber] that subscribes to the FCM [SYNC_TOPIC]
+ */
+class FirebaseSyncSubscriber @Inject constructor(
+    private val firebaseMessaging: FirebaseMessaging,
+) : SyncSubscriber {
+    override suspend fun subscribe() {
+        firebaseMessaging
+            .subscribeToTopic(SYNC_TOPIC)
+            .await()
     }
 }

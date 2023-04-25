@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.sync.di
+package com.google.samples.apps.nowinandroid.sync.status
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.status.WorkManagerSyncManager
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import android.util.Log
+import javax.inject.Inject
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface SyncModule {
-    @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: WorkManagerSyncManager,
-    ): SyncManager
+private const val TAG = "StubSyncSubscriber"
+
+/**
+ * Stub implementation of [SyncSubscriber]
+ */
+class StubSyncSubscriber @Inject constructor() : SyncSubscriber {
+    override suspend fun subscribe() {
+        Log.d(TAG, "Subscribing to sync")
+    }
 }
