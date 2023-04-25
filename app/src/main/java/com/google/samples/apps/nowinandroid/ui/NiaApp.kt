@@ -75,6 +75,7 @@ import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
@@ -237,7 +238,7 @@ private fun NiaNavRail(
 @Composable
 private fun NiaBottomBar(
     destinations: ImmutableList<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
+    destinationsWithUnreadResources: ImmutableSet<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,

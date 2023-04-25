@@ -47,7 +47,9 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.adapters.ImmutableListAdapter
+import kotlinx.collections.immutable.adapters.ImmutableSetAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -127,12 +129,14 @@ class NiaAppState(
     /**
      * The top level destinations that have unread news resources.
      */
-    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> =
+    val topLevelDestinationsWithUnreadResources: StateFlow<ImmutableSet<TopLevelDestination>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
-                setOfNotNull(
-                    FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
-                    BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
+                ImmutableSetAdapter(
+                    setOfNotNull(
+                        FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
+                        BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
+                    )
                 )
             }.stateIn(
                 coroutineScope,
