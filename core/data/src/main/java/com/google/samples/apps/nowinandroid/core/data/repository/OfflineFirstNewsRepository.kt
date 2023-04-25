@@ -75,7 +75,7 @@ class OfflineFirstNewsRepository @Inject constructor(
             modelDeleter = newsResourceDao::deleteNewsResources,
             modelUpdater = { changedIds ->
                 val userData = niaPreferencesDataSource.userData.first()
-                val hasOnBoarded = userData.shouldHideOnboarding
+                val hasOnboarded = userData.shouldHideOnboarding
                 val followedTopicIds = userData.followedTopics
 
                 // TODO: Make this more efficient, there is no need to retrieve populated
