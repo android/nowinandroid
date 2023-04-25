@@ -320,7 +320,7 @@ class OfflineFirstNewsRepositoryTest {
             // Notifier should have been called with only news resources that have topics
             // that the user follows
             assertEquals(
-                expected = followedNewsResourcesFromNetwork,
+                expected = followedNewsResourceIdsFromNetwork,
                 actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
             )
         }
