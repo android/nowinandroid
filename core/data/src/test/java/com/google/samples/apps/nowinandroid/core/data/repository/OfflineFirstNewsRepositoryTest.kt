@@ -312,7 +312,7 @@ class OfflineFirstNewsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
-            val followedNewsResourcesFromNetwork = networkNewsResources
+            val followedNewsResourceIdsFromNetwork = networkNewsResources
                 .filter { (it.topics intersect followedTopicIds).isNotEmpty() }
                 .map(NetworkNewsResource::id)
                 .sorted()
