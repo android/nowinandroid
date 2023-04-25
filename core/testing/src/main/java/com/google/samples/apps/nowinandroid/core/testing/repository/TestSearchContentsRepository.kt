@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsR
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class TestSearchContentsRepository : SearchContentsRepository {
@@ -44,8 +45,9 @@ class TestSearchContentsRepository : SearchContentsRepository {
         ),
     )
 
-    override fun getSearchContentsCount(): Flow<Int> =
-        flowOf(cachedTopics.size + cachedNewsResources.size)
+    override fun getSearchContentsCount(): Flow<Int> = flow {
+        emit(cachedTopics.size + cachedNewsResources.size)
+    }
 
     /**
      * Test only method to add the topics to the stored list in memory
