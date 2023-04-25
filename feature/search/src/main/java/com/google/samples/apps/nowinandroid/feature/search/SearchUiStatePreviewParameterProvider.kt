@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.topics
 

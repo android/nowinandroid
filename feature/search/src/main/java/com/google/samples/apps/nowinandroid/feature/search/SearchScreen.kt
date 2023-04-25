@@ -77,14 +77,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
 import com.google.samples.apps.nowinandroid.feature.interests.TopicsTabContent
@@ -96,6 +97,7 @@ internal fun SearchRoute(
     onBackClick: () -> Unit,
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
+    bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
     interestsViewModel: InterestsViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     forYouViewModel: ForYouViewModel = hiltViewModel(),
@@ -113,6 +115,7 @@ internal fun SearchRoute(
         onSearchTriggered = searchViewModel::onSearchTriggered,
         onTopicClick = onTopicClick,
         onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
+        onNewsResourceViewed = { bookmarksViewModel.setNewsResourceViewed(it, true) },
         recentSearchesUiState = recentSearchQueriesUiState,
         searchQuery = searchQuery,
         searchResultUiState = searchResultUiState,
@@ -127,6 +130,7 @@ internal fun SearchScreen(
     onFollowButtonClick: (String, Boolean) -> Unit = { _, _ -> },
     onInterestsClick: () -> Unit = {},
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit = { _, _ -> },
+    onNewsResourceViewed: (String) -> Unit = {},
     onSearchQueryChanged: (String) -> Unit = {},
     onSearchTriggered: (String) -> Unit = {},
     onTopicClick: (String) -> Unit = {},
@@ -184,6 +188,7 @@ internal fun SearchScreen(
                         topics = searchResultUiState.topics,
                         onFollowButtonClick = onFollowButtonClick,
                         onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                        onNewsResourceViewed = onNewsResourceViewed,
                         onSearchTriggered = onSearchTriggered,
                         onTopicClick = onTopicClick,
                         newsResources = searchResultUiState.newsResources,
@@ -279,6 +284,7 @@ private fun SearchResultBody(
     newsResources: List<UserNewsResource>,
     onFollowButtonClick: (String, Boolean) -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     searchQuery: String = "",
@@ -329,6 +335,7 @@ private fun SearchResultBody(
             newsFeed(
                 feedState = NewsFeedUiState.Success(feed = newsResources),
                 onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                onNewsResourceViewed = onNewsResourceViewed,
                 onTopicClick = onTopicClick,
                 onExpandedCardClick = {
                     onSearchTriggered(searchQuery)

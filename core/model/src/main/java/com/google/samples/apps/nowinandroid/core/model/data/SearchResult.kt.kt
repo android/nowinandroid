@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.model
-
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+package com.google.samples.apps.nowinandroid.core.model.data
 
 /** An entity that holds the search result */
 data class SearchResult(
