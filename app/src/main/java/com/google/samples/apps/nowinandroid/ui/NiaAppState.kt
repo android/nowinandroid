@@ -141,7 +141,7 @@ class NiaAppState(
             }.stateIn(
                 coroutineScope,
                 SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptySet(),
+                initialValue = ImmutableSetAdapter(emptySet()),
             )
 
     /**
