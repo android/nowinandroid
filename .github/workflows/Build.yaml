@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - tm/benchmarks-dry-run # TODO remove, just for testing!!
   pull_request:
 concurrency:
   group: build-${{ github.ref }}
@@ -98,3 +99,21 @@ jobs:
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '*/build/reports/androidTests'
+
+  performanceTests:
+    needs: build
+    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    timeout-minutes: 55
+    strategy:
+      matrix:
+        api-level: [ 30 ]
+    steps:
+      - name: Verify performance tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          heap-size: 600M
+          script: ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.dryRunMode.enable=true
