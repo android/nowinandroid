@@ -80,8 +80,8 @@ class OfflineFirstNewsRepository @Inject constructor(
 
                 // TODO: Make this more efficient, there is no need to retrieve populated
                 //  news resources when all that's needed are the ids
-                val existingFollowedChangedNewsResourceIds = when {
-                    hasOnBoarded -> newsResourceDao.getNewsResources(
+                val existingNewsResourceIdsThatHaveChanged = when {
+                    hasOnboarded -> newsResourceDao.getNewsResources(
                         useFilterTopicIds = true,
                         filterTopicIds = followedTopicIds,
                         useFilterNewsIds = true,
@@ -94,6 +94,7 @@ class OfflineFirstNewsRepository @Inject constructor(
                     else -> emptySet()
                 }
 
+                // Obtain the news resources which have changed from the network and upsert them locally
                 changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
                     val networkNewsResources = network.getNewsResources(ids = chunkedIds)
 
@@ -118,12 +119,12 @@ class OfflineFirstNewsRepository @Inject constructor(
                     )
                 }
 
-                if (hasOnBoarded) {
+                if (hasOnboarded) {
                     val addedNewsResources = newsResourceDao.getNewsResources(
                         useFilterTopicIds = true,
                         filterTopicIds = followedTopicIds,
                         useFilterNewsIds = true,
-                        filterNewsIds = changedIds.toSet() - existingFollowedChangedNewsResourceIds,
+                        filterNewsIds = changedIds.toSet() - existingNewsResourceIdsThatHaveChanged,
                     )
                         .first()
                         .map(PopulatedNewsResource::asExternalModel)
