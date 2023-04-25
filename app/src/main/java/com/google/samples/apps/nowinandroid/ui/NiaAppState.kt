@@ -136,7 +136,7 @@ class NiaAppState(
                     setOfNotNull(
                         FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
                         BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
-                    )
+                    ),
                 )
             }.stateIn(
                 coroutineScope,
