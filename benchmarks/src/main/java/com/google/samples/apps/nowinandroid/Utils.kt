@@ -38,4 +38,3 @@ fun UiDevice.flingElementDownUp(element: UiObject2) {
     waitForIdle()
     element.fling(Direction.UP)
 }
-
