@@ -42,7 +42,6 @@ class BookmarksViewModel @Inject constructor(
 
     val feedUiState: StateFlow<NewsFeedUiState> =
         userNewsResourceRepository.observeAllBookmarked()
-            .map { newsResources -> newsResources.filter(UserNewsResource::isSaved) } // Only show bookmarked news resources.
             .map<List<UserNewsResource>, NewsFeedUiState> { Success(it.toImmutableListWrapper()) }
             .onStart { emit(Loading) }
             .stateIn(
