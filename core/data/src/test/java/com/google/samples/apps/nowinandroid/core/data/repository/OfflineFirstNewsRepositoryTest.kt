@@ -312,13 +312,15 @@ class OfflineFirstNewsRepositoryTest {
 
             subject.syncWith(synchronizer)
 
+            val followedNewsResourcesFromNetwork = networkNewsResources
+                .filter { (it.topics intersect followedTopicIds).isNotEmpty() }
+                .map(NetworkNewsResource::id)
+                .sorted()
+
             // Notifier should have been called with only news resources that have topics
             // that the user follows
             assertEquals(
-                expected = networkNewsResources
-                    .filter { (it.topics intersect followedTopicIds).isNotEmpty() }
-                    .map(NetworkNewsResource::id)
-                    .sorted(),
+                expected = followedNewsResourcesFromNetwork,
                 actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
             )
         }
