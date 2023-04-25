@@ -115,8 +115,8 @@ class SearchViewModel @Inject constructor(
 }
 
 /** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */
-const val SEARCH_QUERY_MIN_LENGTH = 2
+private const val SEARCH_QUERY_MIN_LENGTH = 2
 
 /** Minimum number of the fts table's entity count where it's considered as search is not ready */
-const val SEARCH_MIN_FTS_ENTITY_COUNT = 1
-const val SEARCH_QUERY = "searchQuery"
+private const val SEARCH_MIN_FTS_ENTITY_COUNT = 1
+private const val SEARCH_QUERY = "searchQuery"
