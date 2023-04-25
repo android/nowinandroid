@@ -54,6 +54,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Loading,
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourceViewed = {},
             )
         }
 
@@ -73,6 +74,7 @@ class BookmarksScreenTest {
                 ),
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourceViewed = {},
             )
         }
 
@@ -115,6 +117,7 @@ class BookmarksScreenTest {
                     removeFromBookmarksCalled = true
                 },
                 onTopicClick = {},
+                onNewsResourceViewed = {},
             )
         }
 
@@ -145,6 +148,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Success(immutableListWrapperOf()),
                 removeFromBookmarks = {},
                 onTopicClick = {},
+                onNewsResourceViewed = {},
             )
         }
 

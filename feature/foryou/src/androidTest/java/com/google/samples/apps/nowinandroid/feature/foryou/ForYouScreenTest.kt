@@ -58,6 +58,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -81,6 +82,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -112,6 +114,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -156,6 +159,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -193,6 +197,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -216,6 +221,7 @@ class ForYouScreenTest {
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
+                    onNewsResourceViewed = {},
                 )
             }
         }
@@ -240,6 +246,7 @@ class ForYouScreenTest {
                 onTopicClick = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
+                onNewsResourceViewed = {},
             )
         }
 

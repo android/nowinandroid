@@ -40,7 +40,6 @@ class FakeNiaNetworkDataSource @Inject constructor(
 ) : NiaNetworkDataSource {
 
     companion object {
-        private const val AUTHORS_ASSET = "authors.json"
         private const val NEWS_ASSET = "news.json"
         private const val TOPICS_ASSET = "topics.json"
     }

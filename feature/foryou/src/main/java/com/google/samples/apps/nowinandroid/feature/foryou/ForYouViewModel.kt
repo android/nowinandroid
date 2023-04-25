@@ -18,13 +18,10 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,9 +29,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -44,7 +38,7 @@ import javax.inject.Inject
 class ForYouViewModel @Inject constructor(
     syncManager: SyncManager,
     private val userDataRepository: UserDataRepository,
-    getUserNewsResources: GetUserNewsResourcesUseCase,
+    userNewsResourceRepository: UserNewsResourceRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
@@ -59,8 +53,7 @@ class ForYouViewModel @Inject constructor(
         )
 
     val feedState: StateFlow<NewsFeedUiState> =
-        userDataRepository
-            .getFollowedUserNewsResources(getUserNewsResources)
+        userNewsResourceRepository.observeAllForFollowedTopics()
             .map { NewsFeedUiState.Success(it.toImmutableListWrapper()) }
             .stateIn(
                 scope = viewModelScope,
@@ -97,55 +90,15 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
+    fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
+        }
+    }
+
     fun dismissOnboarding() {
         viewModelScope.launch {
             userDataRepository.setShouldHideOnboarding(true)
         }
     }
 }
-
-/**
- * Obtain a flow of user news resources whose topics match those the user is following.
- *
- * getUserNewsResources: The `UseCase` used to obtain the flow of user news resources.
- */
-private fun UserDataRepository.getFollowedUserNewsResources(
-    getUserNewsResources: GetUserNewsResourcesUseCase,
-): Flow<List<UserNewsResource>> = userData
-    // Map the user data into a set of followed topic IDs or null if we should return an empty list.
-    .map { userData ->
-        if (userData.shouldShowEmptyFeed()) {
-            null
-        } else {
-            userData.followedTopics
-        }
-    }
-    // Only emit a set of followed topic IDs if it's changed. This avoids calling potentially
-    // expensive operations (like setting up a new flow) when nothing has changed.
-    .distinctUntilChanged()
-    // getUserNewsResources returns a flow, so we have a flow inside a flow. flatMapLatest moves
-    // the inner flow (the one we want to return) to the outer flow and cancels any previous flows
-    // created by getUserNewsResources.
-    .flatMapLatest { followedTopics ->
-        if (followedTopics == null) {
-            flowOf(emptyList())
-        } else {
-            getUserNewsResources(
-                NewsResourceQuery(
-                    filterTopicIds = followedTopics,
-                ),
-            )
-        }
-    }
-
-/**
- * If the user hasn't completed the onboarding and hasn't selected any interests
- * show an empty news list to clearly demonstrate that their selections affect the
- * news articles they will see.
- *
- * Note: It should not be possible for the user to get into a state where the onboarding
- * is not displayed AND they haven't followed any topics, however, this method is to safeguard
- * against that scenario in future.
- */
-private fun UserData.shouldShowEmptyFeed() =
-    !shouldHideOnboarding && followedTopics.isEmpty()

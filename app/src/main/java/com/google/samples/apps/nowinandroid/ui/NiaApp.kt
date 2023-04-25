@@ -44,16 +44,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -82,9 +86,11 @@ import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 fun NiaApp(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
+    userNewsResourceRepository: UserNewsResourceRepository,
     appState: NiaAppState = rememberNiaAppState(
         networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass,
+        userNewsResourceRepository = userNewsResourceRepository,
     ),
 ) {
     val shouldShowGradientBackground =
@@ -129,8 +135,10 @@ fun NiaApp(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     if (appState.shouldShowBottomBar) {
+                        val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
                         NiaBottomBar(
                             destinations = appState.topLevelDestinations,
+                            destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("NiaBottomBar"),
@@ -212,6 +220,7 @@ private fun NiaNavRail(
                             imageVector = icon.imageVector,
                             contentDescription = null,
                         )
+
                         is DrawableResourceIcon -> Icon(
                             painter = painterResource(id = icon.id),
                             contentDescription = null,
@@ -219,6 +228,7 @@ private fun NiaNavRail(
                     }
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
+
             )
         }
     }
@@ -227,6 +237,7 @@ private fun NiaNavRail(
 @Composable
 private fun NiaBottomBar(
     destinations: ImmutableList<TopLevelDestination>,
+    destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -235,6 +246,7 @@ private fun NiaBottomBar(
         modifier = modifier,
     ) {
         destinations.forEach { destination ->
+            val hasUnread = destinationsWithUnreadResources.contains(destination)
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             NiaNavigationBarItem(
                 selected = selected,
@@ -258,8 +270,28 @@ private fun NiaBottomBar(
                     }
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
+                modifier = if (hasUnread) notificationDot() else Modifier,
             )
         }
+    }
+}
+
+@Composable
+private fun notificationDot(): Modifier {
+    val tertiaryColor = MaterialTheme.colorScheme.tertiary
+    return Modifier.drawWithContent {
+        drawContent()
+        drawCircle(
+            tertiaryColor,
+            radius = 5.dp.toPx(),
+            // This is based on the dimensions of the NavigationBar's "indicator pill";
+            // however, its parameters are private, so we must depend on them implicitly
+            // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
+            center = center + Offset(
+                64.dp.toPx() * .45f,
+                32.dp.toPx() * -.45f - 6.dp.toPx(),
+            ),
+        )
     }
 }
 

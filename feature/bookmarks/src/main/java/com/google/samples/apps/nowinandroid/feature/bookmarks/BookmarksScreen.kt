@@ -54,7 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
@@ -74,6 +74,7 @@ internal fun BookmarksRoute(
     BookmarksScreen(
         feedState = feedState,
         removeFromBookmarks = viewModel::removeFromSavedResources,
+        onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         onTopicClick = onTopicClick,
         modifier = modifier,
     )
@@ -87,13 +88,14 @@ internal fun BookmarksRoute(
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (feedState) {
         Loading -> LoadingState(modifier)
         is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(feedState, removeFromBookmarks, onTopicClick, modifier)
+            BookmarksGrid(feedState, removeFromBookmarks, onNewsResourceViewed, onTopicClick, modifier)
         } else {
             EmptyState(modifier)
         }
@@ -116,6 +118,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 private fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
+    onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -134,6 +137,7 @@ private fun BookmarksGrid(
         newsFeed(
             feedState = feedState,
             onNewsResourcesCheckedChanged = { id, _ -> removeFromBookmarks(id) },
+            onNewsResourceViewed = onNewsResourceViewed,
             onTopicClick = onTopicClick,
         )
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -199,6 +203,7 @@ private fun BookmarksGridPreview(
         BookmarksGrid(
             feedState = Success(userNewsResources.toImmutableListWrapper()),
             removeFromBookmarks = {},
+            onNewsResourceViewed = {},
             onTopicClick = {},
         )
     }

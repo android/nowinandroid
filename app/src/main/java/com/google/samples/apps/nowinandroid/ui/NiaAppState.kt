@@ -33,6 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksRoute
@@ -49,6 +50,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.adapters.ImmutableListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -56,12 +59,25 @@ import kotlinx.coroutines.flow.stateIn
 fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
+    userNewsResourceRepository: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
-    return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
-        NiaAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
+    return remember(
+        navController,
+        coroutineScope,
+        windowSizeClass,
+        networkMonitor,
+        userNewsResourceRepository,
+    ) {
+        NiaAppState(
+            navController,
+            coroutineScope,
+            windowSizeClass,
+            networkMonitor,
+            userNewsResourceRepository,
+        )
     }
 }
 
@@ -71,6 +87,7 @@ class NiaAppState(
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
+    userNewsResourceRepository: UserNewsResourceRepository,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -106,6 +123,22 @@ class NiaAppState(
      * route.
      */
     val topLevelDestinations: ImmutableList<TopLevelDestination> = ImmutableListAdapter(TopLevelDestination.values().asList())
+
+    /**
+     * The top level destinations that have unread news resources.
+     */
+    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> =
+        userNewsResourceRepository.observeAllForFollowedTopics()
+            .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
+                setOfNotNull(
+                    FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
+                    BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
+                )
+            }.stateIn(
+                coroutineScope,
+                SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptySet(),
+            )
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have

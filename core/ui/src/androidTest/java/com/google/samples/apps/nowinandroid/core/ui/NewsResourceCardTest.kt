@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
@@ -39,6 +40,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResourceWrapper = newsWithKnownResourceType.toImmutableWrapper(),
                 isBookmarked = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},
@@ -67,6 +69,7 @@ class NewsResourceCardTest {
             NewsResourceCardExpanded(
                 userNewsResourceWrapper = newsWithUnknownResourceType.toImmutableWrapper(),
                 isBookmarked = false,
+                hasBeenViewed = false,
                 onToggleBookmark = {},
                 onClick = {},
                 onTopicClick = {},
@@ -100,5 +103,53 @@ class NewsResourceCardTest {
                 .onNodeWithText(topicName.uppercase())
                 .assertContentDescriptionEquals(expectedContentDescription)
         }
+    }
+
+    @Test
+    fun testUnreadDot_displayedWhenUnread() {
+        val unreadNews = userNewsResourcesTestData[2]
+
+        composeTestRule.setContent {
+            NewsResourceCardExpanded(
+                userNewsResource = unreadNews,
+                isBookmarked = false,
+                hasBeenViewed = false,
+                onToggleBookmark = {},
+                onClick = {},
+                onTopicClick = {},
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(
+                composeTestRule.activity.getString(
+                    R.string.unread_resource_dot_content_description,
+                ),
+            )
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun testUnreadDot_notDisplayedWhenRead() {
+        val readNews = userNewsResourcesTestData[0]
+
+        composeTestRule.setContent {
+            NewsResourceCardExpanded(
+                userNewsResource = readNews,
+                isBookmarked = false,
+                hasBeenViewed = true,
+                onToggleBookmark = {},
+                onClick = {},
+                onTopicClick = {},
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(
+                composeTestRule.activity.getString(
+                    R.string.unread_resource_dot_content_description,
+                ),
+            )
+            .assertDoesNotExist()
     }
 }
