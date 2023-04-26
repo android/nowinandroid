@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2023 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="search">Search</string>
+    <string name="clear_search_text_content_desc">Clear search text</string>
+    <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
+    <string name="search_not_ready">Sorry, we are still processing the search index. Please come back later</string>
+    <string name="try_another_search">Try another search or explorer </string>
+    <string name="interests">Interests</string>
+    <string name="to_browse_topics"> to browse topics</string>
+    <string name="topics">Topics</string>
+    <string name="updates">Updates</string>
+    <string name="recent_searches">Recent searches</string>
+    <string name="clear_recent_searches_content_desc">Clear searches</string>
+</resources>

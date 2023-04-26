@@ -19,10 +19,9 @@ package com.google.samples.apps.nowinandroid.sync.services
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
+import com.google.samples.apps.nowinandroid.sync.initializers.SYNC_TOPIC
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
-private const val SYNC_TOPIC = "sync"
 
 @AndroidEntryPoint
 class SyncNotificationsService : FirebaseMessagingService() {

@@ -173,6 +173,10 @@ fun NiaApp(
                         if (destination != null) {
                             NiaTopAppBar(
                                 titleRes = destination.titleTextId,
+                                navigationIcon = NiaIcons.Search,
+                                navigationIconContentDescription = stringResource(
+                                    id = settingsR.string.top_app_bar_navigation_icon_description,
+                                ),
                                 actionIcon = NiaIcons.Settings,
                                 actionIconContentDescription = stringResource(
                                     id = settingsR.string.top_app_bar_action_icon_description,
@@ -181,10 +185,11 @@ fun NiaApp(
                                     containerColor = Color.Transparent,
                                 ),
                                 onActionClick = { appState.setShowSettingsDialog(true) },
+                                onNavigationClick = { appState.navigateToSearch() },
                             )
                         }
 
-                        NiaNavHost(appState.navController)
+                        NiaNavHost(appState)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that

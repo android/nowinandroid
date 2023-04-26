@@ -21,7 +21,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import androidx.room.Upsert
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
@@ -66,17 +65,15 @@ interface NewsResourceDao {
         filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
+    @Transaction
+    @Query(value = "SELECT * FROM news_resources ORDER BY publish_date DESC")
+    suspend fun getOneOffNewsResources(): List<PopulatedNewsResource>
+
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long>
-
-    /**
-     * Updates [entities] in the db that match the primary key, and no-ops if they don't
-     */
-    @Update
-    suspend fun updateNewsResources(entities: List<NewsResourceEntity>)
 
     /**
      * Inserts or updates [newsResourceEntities] in the db under the specified primary keys

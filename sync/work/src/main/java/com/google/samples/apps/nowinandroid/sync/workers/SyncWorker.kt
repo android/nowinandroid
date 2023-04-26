@@ -27,6 +27,7 @@ import androidx.work.WorkerParameters
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
@@ -34,6 +35,7 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncConstraints
 import com.google.samples.apps.nowinandroid.sync.initializers.syncForegroundInfo
+import com.google.samples.apps.nowinandroid.sync.status.SyncSubscriber
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,8 +54,10 @@ class SyncWorker @AssistedInject constructor(
     private val niaPreferences: NiaPreferencesDataSource,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
+    private val searchContentsRepository: SearchContentsRepository,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val analyticsHelper: AnalyticsHelper,
+    private val syncSubscriber: SyncSubscriber,
 ) : CoroutineWorker(appContext, workerParams), Synchronizer {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =
@@ -62,6 +66,8 @@ class SyncWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         traceAsync("Sync", 0) {
             analyticsHelper.logSyncStarted()
+
+            syncSubscriber.subscribe()
 
             // First sync the repositories in parallel
             val syncedSuccessfully = awaitAll(
@@ -72,6 +78,7 @@ class SyncWorker @AssistedInject constructor(
             analyticsHelper.logSyncFinished(syncedSuccessfully)
 
             if (syncedSuccessfully) {
+                searchContentsRepository.populateFtsData()
                 Result.success()
             } else {
                 Result.retry()

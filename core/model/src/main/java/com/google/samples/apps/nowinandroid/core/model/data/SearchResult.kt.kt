@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.sync.di
+package com.google.samples.apps.nowinandroid.core.model.data
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.status.WorkManagerSyncManager
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface SyncModule {
-    @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: WorkManagerSyncManager,
-    ): SyncManager
-}
+/** An entity that holds the search result */
+data class SearchResult(
+    val topics: List<Topic> = emptyList(),
+    val newsResources: List<NewsResource> = emptyList(),
+)

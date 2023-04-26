@@ -27,6 +27,7 @@ import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import com.google.samples.apps.nowinandroid.sync.R
 
+const val SYNC_TOPIC = "sync"
 private const val SyncNotificationId = 0
 private const val SyncNotificationChannelID = "SyncNotificationChannel"
 
