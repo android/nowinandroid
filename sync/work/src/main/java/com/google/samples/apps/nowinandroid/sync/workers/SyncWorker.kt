@@ -27,6 +27,7 @@ import androidx.work.WorkerParameters
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
@@ -53,6 +54,7 @@ class SyncWorker @AssistedInject constructor(
     private val niaPreferences: NiaPreferencesDataSource,
     private val topicRepository: TopicsRepository,
     private val newsRepository: NewsRepository,
+    private val searchContentsRepository: SearchContentsRepository,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val analyticsHelper: AnalyticsHelper,
     private val syncSubscriber: SyncSubscriber,
@@ -76,6 +78,7 @@ class SyncWorker @AssistedInject constructor(
             analyticsHelper.logSyncFinished(syncedSuccessfully)
 
             if (syncedSuccessfully) {
+                searchContentsRepository.populateFtsData()
                 Result.success()
             } else {
                 Result.retry()

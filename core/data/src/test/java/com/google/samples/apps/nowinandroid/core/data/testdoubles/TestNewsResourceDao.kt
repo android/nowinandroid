@@ -67,6 +67,8 @@ class TestNewsResourceDao : NewsResourceDao {
                 result
             }
 
+    override suspend fun getOneOffNewsResources(): List<PopulatedNewsResource> = emptyList()
+
     override suspend fun insertOrIgnoreNewsResources(
         entities: List<NewsResourceEntity>,
     ): List<Long> {
