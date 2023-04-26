@@ -111,7 +111,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = unreadNews,
+                userNewsResourceWrapper = unreadNews.toImmutableWrapper(),
                 isBookmarked = false,
                 hasBeenViewed = false,
                 onToggleBookmark = {},
@@ -135,7 +135,7 @@ class NewsResourceCardTest {
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = readNews,
+                userNewsResourceWrapper = readNews.toImmutableWrapper(),
                 isBookmarked = false,
                 hasBeenViewed = true,
                 onToggleBookmark = {},
