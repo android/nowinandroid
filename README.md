@@ -63,6 +63,8 @@ The **Now in Android** app has been fully modularized and you can find the detai
 description of the modularization strategy used in
 [modularization learning journey](docs/ModularizationLearningJourney.md).
 
+![project-dependencies.graph](docs/images/graphs/project-dependencies-graph.png)
+
 # Build
 
 The app contains the usual `debug` and `release` build variants. 
