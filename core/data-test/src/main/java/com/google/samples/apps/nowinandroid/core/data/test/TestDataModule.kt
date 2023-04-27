@@ -18,9 +18,13 @@ package com.google.samples.apps.nowinandroid.core.data.test
 
 import com.google.samples.apps.nowinandroid.core.data.di.DataModule
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeNewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeRecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
@@ -49,6 +53,16 @@ interface TestDataModule {
     fun bindsUserDataRepository(
         userDataRepository: FakeUserDataRepository,
     ): UserDataRepository
+
+    @Binds
+    fun bindsRecentSearchRepository(
+        recentSearchRepository: FakeRecentSearchRepository,
+    ): RecentSearchRepository
+
+    @Binds
+    fun bindsSearchContentsRepository(
+        searchContentsRepository: FakeSearchContentsRepository,
+    ): SearchContentsRepository
 
     @Binds
     fun bindsNetworkMonitor(

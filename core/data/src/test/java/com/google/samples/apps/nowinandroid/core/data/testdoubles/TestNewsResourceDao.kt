@@ -47,7 +47,11 @@ class TestNewsResourceDao : NewsResourceDao {
         filterNewsIds: Set<String>,
     ): Flow<List<PopulatedNewsResource>> =
         entitiesStateFlow
-            .map { it.map(NewsResourceEntity::asPopulatedNewsResource) }
+            .map { newsResourceEntities ->
+                newsResourceEntities.map { entity ->
+                    entity.asPopulatedNewsResource(topicCrossReferences)
+                }
+            }
             .map { resources ->
                 var result = resources
                 if (useFilterTopicIds) {
@@ -63,6 +67,8 @@ class TestNewsResourceDao : NewsResourceDao {
                 result
             }
 
+    override suspend fun getOneOffNewsResources(): List<PopulatedNewsResource> = emptyList()
+
     override suspend fun insertOrIgnoreNewsResources(
         entities: List<NewsResourceEntity>,
     ): List<Long> {
@@ -76,10 +82,6 @@ class TestNewsResourceDao : NewsResourceDao {
         }
         // Assume no conflicts on insert
         return entities.map { it.id.toLong() }
-    }
-
-    override suspend fun updateNewsResources(entities: List<NewsResourceEntity>) {
-        throw NotImplementedError("Unused in tests")
     }
 
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
@@ -109,16 +111,20 @@ class TestNewsResourceDao : NewsResourceDao {
     }
 }
 
-private fun NewsResourceEntity.asPopulatedNewsResource() = PopulatedNewsResource(
+private fun NewsResourceEntity.asPopulatedNewsResource(
+    topicCrossReferences: List<NewsResourceTopicCrossRef>,
+) = PopulatedNewsResource(
     entity = this,
-    topics = listOf(
-        TopicEntity(
-            id = filteredInterestsIds.random(),
-            name = "name",
-            shortDescription = "short description",
-            longDescription = "long description",
-            url = "URL",
-            imageUrl = "image URL",
-        ),
-    ),
+    topics = topicCrossReferences
+        .filter { it.newsResourceId == id }
+        .map { newsResourceTopicCrossRef ->
+            TopicEntity(
+                id = newsResourceTopicCrossRef.topicId,
+                name = "name",
+                shortDescription = "short description",
+                longDescription = "long description",
+                url = "URL",
+                imageUrl = "image URL",
+            )
+        },
 )

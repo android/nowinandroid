@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.bookmarks
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -34,13 +35,23 @@ import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Short
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,6 +61,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
@@ -77,12 +90,16 @@ internal fun BookmarksRoute(
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         onTopicClick = onTopicClick,
         modifier = modifier,
+        shouldDisplayUndoBookmark = viewModel.shouldDisplayUndoBookmark,
+        undoBookmarkRemoval = viewModel::undoBookmarkRemoval,
+        clearUndoState = viewModel::clearUndoState,
     )
 }
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun BookmarksScreen(
@@ -91,13 +108,51 @@ internal fun BookmarksScreen(
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    shouldDisplayUndoBookmark: Boolean = false,
+    undoBookmarkRemoval: () -> Unit = {},
+    clearUndoState: () -> Unit = {},
 ) {
-    when (feedState) {
-        Loading -> LoadingState(modifier)
-        is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(feedState, removeFromBookmarks, onNewsResourceViewed, onTopicClick, modifier)
-        } else {
-            EmptyState(modifier)
+    val bookmarkRemovedMessage = stringResource(id = R.string.bookmark_removed)
+    val undoText = stringResource(id = R.string.undo)
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(shouldDisplayUndoBookmark) {
+        if (shouldDisplayUndoBookmark) {
+            val snackBarResult = snackbarHostState.showSnackbar(
+                message = bookmarkRemovedMessage,
+                actionLabel = undoText,
+                duration = Short,
+            )
+            when (snackBarResult) {
+                ActionPerformed -> { undoBookmarkRemoval() }
+                else -> { clearUndoState() }
+            }
+        }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                clearUndoState()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) {
+        Box(
+            modifier = Modifier.padding(it).fillMaxSize(),
+        ) {
+            when (feedState) {
+                Loading -> LoadingState(modifier)
+                is Success -> if (feedState.feed.isNotEmpty()) {
+                    BookmarksGrid(feedState, removeFromBookmarks, onNewsResourceViewed, onTopicClick, modifier)
+                } else {
+                    EmptyState(modifier)
+                }
+            }
         }
     }
     TrackScreenViewEvent(screenName = "Saved")
