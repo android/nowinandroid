@@ -80,10 +80,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
@@ -280,8 +282,8 @@ private fun SearchNotReadyBody() {
 
 @Composable
 private fun SearchResultBody(
-    topics: List<FollowableTopic>,
-    newsResources: List<UserNewsResource>,
+    topics: ImmutableListWrapper<FollowableTopic>,
+    newsResources: ImmutableListWrapper<UserNewsResource>,
     onFollowButtonClick: (String, Boolean) -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
@@ -349,7 +351,7 @@ private fun SearchResultBody(
 private fun RecentSearchesBody(
     onClearRecentSearches: () -> Unit,
     onRecentSearchClicked: (String) -> Unit,
-    recentSearchQueries: List<String>,
+    recentSearchQueries: ImmutableListWrapper<String>,
 ) {
     Column {
         Row(
@@ -540,7 +542,7 @@ private fun RecentSearchesBodyPreview() {
         RecentSearchesBody(
             onClearRecentSearches = {},
             onRecentSearchClicked = {},
-            recentSearchQueries = listOf("kotlin", "jetpack compose", "testing"),
+            recentSearchQueries = immutableWrapperOf("kotlin", "jetpack compose", "testing"),
         )
     }
 }

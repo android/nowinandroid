@@ -16,9 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
+import androidx.compose.runtime.Immutable
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 
+@Immutable
 sealed interface SearchResultUiState {
     object Loading : SearchResultUiState
 
@@ -32,8 +36,8 @@ sealed interface SearchResultUiState {
     object LoadFailed : SearchResultUiState
 
     data class Success(
-        val topics: List<FollowableTopic> = emptyList(),
-        val newsResources: List<UserNewsResource> = emptyList(),
+        val topics: ImmutableListWrapper<FollowableTopic> = immutableListWrapperOf(),
+        val newsResources: ImmutableListWrapper<UserNewsResource> = immutableListWrapperOf(),
     ) : SearchResultUiState {
         fun isEmpty(): Boolean = topics.isEmpty() && newsResources.isEmpty()
     }

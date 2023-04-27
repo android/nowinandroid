@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUs
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -59,8 +60,8 @@ class SearchViewModel @Inject constructor(
                             when (it) {
                                 is Result.Success -> {
                                     SearchResultUiState.Success(
-                                        topics = it.data.topics,
-                                        newsResources = it.data.newsResources,
+                                        topics = it.data.topics.toImmutableListWrapper(),
+                                        newsResources = it.data.newsResources.toImmutableListWrapper(),
                                     )
                                 }
 
@@ -83,7 +84,8 @@ class SearchViewModel @Inject constructor(
         )
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
-        recentSearchQueriesUseCase().map(RecentSearchQueriesUiState::Success)
+        recentSearchQueriesUseCase()
+            .map { RecentSearchQueriesUiState.Success(recentQueries = it.toImmutableListWrapper()) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),

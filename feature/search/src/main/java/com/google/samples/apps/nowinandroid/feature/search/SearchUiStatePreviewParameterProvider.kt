@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.topics
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 
 /* ktlint-disable max-line-length */
 /**
@@ -31,8 +32,8 @@ class SearchUiStatePreviewParameterProvider : PreviewParameterProvider<SearchRes
         SearchResultUiState.Success(
             topics = topics.mapIndexed { i, topic ->
                 FollowableTopic(topic = topic, isFollowed = i % 2 == 0)
-            },
-            newsResources = newsResources,
+            }.toImmutableListWrapper(),
+            newsResources = newsResources.toImmutableListWrapper(),
         ),
     )
 }
