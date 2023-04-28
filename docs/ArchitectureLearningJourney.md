@@ -64,7 +64,7 @@ Here's what's happening in each step. The easiest way to find the associated cod
    </td>
    <td>On app startup, a <a href="https://developer.android.com/topic/libraries/architecture/workmanager">WorkManager</a> job to sync all repositories is enqueued.
    </td>
-   <td><code>SyncInitializer.create</code>
+   <td><code>Sync.initialize</code>
    </td>
   </tr>
   <tr>
