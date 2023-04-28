@@ -20,7 +20,10 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.DpSize
@@ -78,6 +81,7 @@ class NiaAppStateTest {
                     windowSizeClass = getCompactWindowClass(),
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
+                    initialShouldShowSettingsDialog = mutableStateOf(false),
                 )
             }
 
@@ -100,6 +104,7 @@ class NiaAppStateTest {
                 windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                initialShouldShowSettingsDialog = rememberTestShouldShowSettingsDialog(),
             )
         }
 
@@ -118,6 +123,7 @@ class NiaAppStateTest {
                 windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                initialShouldShowSettingsDialog = rememberTestShouldShowSettingsDialog(),
             )
         }
 
@@ -134,6 +140,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                initialShouldShowSettingsDialog = rememberTestShouldShowSettingsDialog(),
             )
         }
 
@@ -150,6 +157,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                initialShouldShowSettingsDialog = rememberTestShouldShowSettingsDialog(),
             )
         }
 
@@ -166,6 +174,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                initialShouldShowSettingsDialog = rememberTestShouldShowSettingsDialog(),
             )
         }
 
@@ -194,4 +203,9 @@ private fun rememberTestNavController(): TestNavHostController {
         }
     }
     return navController
+}
+
+@Composable
+private fun rememberTestShouldShowSettingsDialog(): MutableState<Boolean> {
+    return rememberSaveable { mutableStateOf(false) }
 }
