@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -59,6 +60,7 @@ fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
+    settingsDialogState: SettingsDialogState = rememberSettingsDialogState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): NiaAppState {
@@ -67,6 +69,7 @@ fun rememberNiaAppState(
         navController,
         coroutineScope,
         windowSizeClass,
+        settingsDialogState,
         networkMonitor,
         userNewsResourceRepository,
     ) {
@@ -74,17 +77,39 @@ fun rememberNiaAppState(
             navController,
             coroutineScope,
             windowSizeClass,
+            settingsDialogState,
             networkMonitor,
             userNewsResourceRepository,
         )
     }
 }
 
+@Composable
+fun rememberSettingsDialogState(): SettingsDialogState {
+    val shouldShowSettingsDialogState = rememberSaveable { mutableStateOf(false) }
+    return remember {
+        SettingsDialogState(
+            getShouldShowSettingsDialog = { shouldShowSettingsDialogState.value },
+            setShouldShowSettingsDialog = { shouldShowSettingsDialogState.value = it },
+        )
+    }
+}
+
+/**
+ * This class is responsible for tracking the settings dialog visibility state.
+ */
+@Stable
+class SettingsDialogState(
+    val getShouldShowSettingsDialog: () -> Boolean,
+    val setShouldShowSettingsDialog: (Boolean) -> Unit,
+)
+
 @Stable
 class NiaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
+    val settingsDialogState: SettingsDialogState,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
 ) {
@@ -100,8 +125,8 @@ class NiaAppState(
             else -> null
         }
 
-    var shouldShowSettingsDialog by mutableStateOf(false)
-        private set
+    var shouldShowSettingsDialog: Boolean
+        get() = settingsDialogState.getShouldShowSettingsDialog()
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
@@ -171,7 +196,7 @@ class NiaAppState(
     }
 
     fun setShowSettingsDialog(shouldShow: Boolean) {
-        shouldShowSettingsDialog = shouldShow
+        settingsDialogState.setShouldShowSettingsDialog(shouldShow)
     }
 
     fun navigateToSearch() {

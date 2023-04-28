@@ -118,6 +118,7 @@ class NiaAppStateTest {
                 windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                settingsDialogState = rememberSettingsDialogState(),
             )
         }
 
@@ -134,6 +135,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                settingsDialogState = rememberSettingsDialogState(),
             )
         }
 
@@ -150,6 +152,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                settingsDialogState = rememberSettingsDialogState(),
             )
         }
 
@@ -166,6 +169,7 @@ class NiaAppStateTest {
                 windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                settingsDialogState = rememberSettingsDialogState(),
             )
         }
 
