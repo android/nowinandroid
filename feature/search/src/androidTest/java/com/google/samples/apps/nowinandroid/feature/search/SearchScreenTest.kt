@@ -32,6 +32,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
+import com.google.samples.apps.nowinandroid.core.ui.toImmutableListWrapper
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -132,7 +133,9 @@ class SearchScreenTest {
     fun searchResultWithTopics_allTopicsAreVisible_followButtonsVisibleForTheNumOfFollowedTopics() {
         composeTestRule.setContent {
             SearchScreen(
-                searchResultUiState = SearchResultUiState.Success(topics = followableTopicTestData),
+                searchResultUiState = SearchResultUiState.Success(
+                    topics = followableTopicTestData.toImmutableListWrapper(),
+                ),
             )
         }
 
@@ -167,7 +170,7 @@ class SearchScreenTest {
                             newsResource = it,
                             userData = userData,
                         )
-                    },
+                    }.toImmutableListWrapper(),
                 ),
             )
         }
