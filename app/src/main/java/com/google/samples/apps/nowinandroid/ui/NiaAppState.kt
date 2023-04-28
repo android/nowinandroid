@@ -125,7 +125,7 @@ class NiaAppState(
             else -> null
         }
 
-    var shouldShowSettingsDialog: Boolean
+    val shouldShowSettingsDialog: Boolean
         get() = settingsDialogState.getShouldShowSettingsDialog()
 
     val shouldShowBottomBar: Boolean
