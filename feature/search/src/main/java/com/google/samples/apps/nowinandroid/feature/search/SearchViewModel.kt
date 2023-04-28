@@ -85,7 +85,11 @@ class SearchViewModel @Inject constructor(
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
         recentSearchQueriesUseCase()
-            .map { RecentSearchQueriesUiState.Success(recentQueries = it.toImmutableListWrapper()) }
+            .map { queries ->
+                RecentSearchQueriesUiState.Success(
+                    recentQueries = it.map { it.query }.toImmutableListWrapper()
+                )
+            }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),

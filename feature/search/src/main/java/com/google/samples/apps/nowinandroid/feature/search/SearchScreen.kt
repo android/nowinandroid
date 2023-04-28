@@ -85,6 +85,7 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
@@ -163,7 +164,7 @@ internal fun SearchScreen(
                             onSearchQueryChanged(it)
                             onSearchTriggered(it)
                         },
-                        recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
+                        recentSearchQueries = recentSearchesUiState.recentQueries,
                     )
                 }
             }
@@ -181,7 +182,7 @@ internal fun SearchScreen(
                                 onSearchQueryChanged(it)
                                 onSearchTriggered(it)
                             },
-                            recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
+                            recentSearchQueries = recentSearchesUiState.recentQueries,
                         )
                     }
                 } else {
@@ -541,7 +542,7 @@ private fun RecentSearchesBodyPreview() {
         RecentSearchesBody(
             onClearRecentSearches = {},
             onRecentSearchClicked = {},
-            recentSearchQueries = immutableWrapperOf("kotlin", "jetpack compose", "testing"),
+            recentSearchQueries = immutableListWrapperOf("kotlin", "jetpack compose", "testing"),
         )
     }
 }

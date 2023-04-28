@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
-import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.ui.ImmutableListWrapper
 import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 
@@ -24,6 +23,6 @@ sealed interface RecentSearchQueriesUiState {
     object Loading : RecentSearchQueriesUiState
 
     data class Success(
-        val recentQueries: ImmutableListWrapper<RecentSearchQuery> = immutableListWrapperOf(),
+        val recentQueries: ImmutableListWrapper<String> = immutableListWrapperOf(),
     ) : RecentSearchQueriesUiState
 }

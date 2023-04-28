@@ -32,6 +32,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.ui.immutableListWrapperOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -107,12 +108,12 @@ class SearchScreenTest {
 
     @Test
     fun emptySearchResult_nonEmptyRecentSearches_emptySearchScreenAndRecentSearchesAreDisplayed() {
-        val recentSearches = listOf("kotlin")
+        val recentSearches = immutableListWrapperOf("kotlin")
         composeTestRule.setContent {
             SearchScreen(
                 searchResultUiState = SearchResultUiState.Success(),
                 recentSearchesUiState = RecentSearchQueriesUiState.Success(
-                    recentQueries = recentSearches.map(::RecentSearchQuery),
+                    recentQueries = recentSearches,
                 ),
             )
         }
@@ -182,12 +183,12 @@ class SearchScreenTest {
 
     @Test
     fun emptyQuery_notEmptyRecentSearches_verifyClearSearchesButton_displayed() {
-        val recentSearches = listOf("kotlin", "testing")
+        val recentSearches = immutableListWrapperOf("kotlin", "testing")
         composeTestRule.setContent {
             SearchScreen(
                 searchResultUiState = SearchResultUiState.EmptyQuery,
                 recentSearchesUiState = RecentSearchQueriesUiState.Success(
-                    recentQueries = recentSearches.map(::RecentSearchQuery),
+                    recentQueries = recentSearches,
                 ),
             )
         }
