@@ -78,6 +78,7 @@ class NiaAppStateTest {
                     windowSizeClass = getCompactWindowClass(),
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
+                    settingsDialogState = rememberSettingsDialogState(),
                 )
             }
 
