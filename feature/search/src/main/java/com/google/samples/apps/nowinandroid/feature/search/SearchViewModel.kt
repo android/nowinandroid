@@ -87,7 +87,7 @@ class SearchViewModel @Inject constructor(
         recentSearchQueriesUseCase()
             .map { queries ->
                 RecentSearchQueriesUiState.Success(
-                    recentQueries = it.map { it.query }.toImmutableListWrapper(),
+                    recentQueries = queries.map { it.query }.toImmutableListWrapper(),
                 )
             }
             .stateIn(
