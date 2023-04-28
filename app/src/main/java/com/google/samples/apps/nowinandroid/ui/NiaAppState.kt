@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -61,6 +61,7 @@ fun rememberNiaAppState(
     userNewsResourceRepository: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    initialShouldShowSettingsDialog: MutableState<Boolean>,
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
     return remember(
@@ -76,6 +77,7 @@ fun rememberNiaAppState(
             windowSizeClass,
             networkMonitor,
             userNewsResourceRepository,
+            initialShouldShowSettingsDialog,
         )
     }
 }
@@ -87,6 +89,7 @@ class NiaAppState(
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
+    initialShouldShowSettingsDialog: MutableState<Boolean>,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -100,7 +103,7 @@ class NiaAppState(
             else -> null
         }
 
-    var shouldShowSettingsDialog by mutableStateOf(false)
+    var shouldShowSettingsDialog by initialShouldShowSettingsDialog
         private set
 
     val shouldShowBottomBar: Boolean
