@@ -42,8 +42,7 @@ fun TopicsTabContent(
     LazyColumn(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .testTag("interests:topics")
-            .disableSplitMotionEvents(),
+            .testTag("interests:topics"),
         contentPadding = PaddingValues(top = 8.dp)
     ) {
         topics.forEach { followableTopic ->
@@ -65,22 +64,3 @@ fun TopicsTabContent(
         }
     }
 }
-
-fun Modifier.disableSplitMotionEvents() =
-    pointerInput(Unit) {
-        coroutineScope {
-            var currentId: Long = -1L
-            awaitPointerEventScope {
-                while (true) {
-                    awaitPointerEvent(PointerEventPass.Initial).changes.forEach { pointerInfo ->
-                        when {
-                            pointerInfo.pressed && currentId == -1L -> currentId = pointerInfo.id.value
-                            pointerInfo.pressed.not() && currentId == pointerInfo.id.value -> currentId = -1
-                            pointerInfo.id.value != currentId && currentId != -1L -> pointerInfo.consume()
-                            else -> Unit
-                        }
-                    }
-                }
-            }
-        }
-    }
