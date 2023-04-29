@@ -71,14 +71,15 @@ class NiaAppStateTest {
 
         composeTestRule.setContent {
             val navController = rememberTestNavController()
-            state = remember(navController) {
+            val settingsDialogState = rememberSettingsDialogState()
+            state = remember(navController, settingsDialogState) {
                 NiaAppState(
                     navController = navController,
                     coroutineScope = backgroundScope,
                     windowSizeClass = getCompactWindowClass(),
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
-                    settingsDialogState = rememberSettingsDialogState(),
+                    settingsDialogState = settingsDialogState,
                 )
             }
 
