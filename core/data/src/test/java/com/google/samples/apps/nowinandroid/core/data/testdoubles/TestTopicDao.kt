@@ -53,10 +53,6 @@ class TestTopicDao : TopicDao {
         return topicEntities.map { it.id.toLong() }
     }
 
-    override suspend fun updateTopics(entities: List<TopicEntity>) {
-        throw NotImplementedError("Unused in tests")
-    }
-
     override suspend fun upsertTopics(entities: List<TopicEntity>) {
         // Overwrite old values with new values
         entitiesStateFlow.update { oldValues ->
