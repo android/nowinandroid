@@ -37,7 +37,9 @@ internal class TopicArgs(val topicId: String) {
 
 fun NavController.navigateToTopic(topicId: String) {
     val encodedId = Uri.encode(topicId)
-    this.navigate("topic_route/$encodedId")
+    this.navigate("topic_route/$encodedId") {
+        launchSingleTop = true
+    }
 }
 
 fun NavGraphBuilder.topicScreen(
