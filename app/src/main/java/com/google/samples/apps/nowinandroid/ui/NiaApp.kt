@@ -236,7 +236,7 @@ private fun NiaNavRail(
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
 
-                )
+            )
         }
     }
 }
