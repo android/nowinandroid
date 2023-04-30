@@ -31,23 +31,18 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
  * [UserNewsResource]s.
  *
  * [onToggleBookmark] defines the action invoked when a user wishes to bookmark an item
- * [onItemClick] optional parameter for action to be performed when the card is clicked. The
- * default action launches an intent matching the card.
+ * Default action launches an intent matching the card.
  */
 fun LazyListScope.userNewsResourceCardItems(
     items: List<UserNewsResource>,
     onToggleBookmark: (item: UserNewsResource) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
-    onItemClick: ((item: UserNewsResource) -> Unit)? = null,
     onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,
 ) = items(
     items = items,
     key = { it.id },
     itemContent = { userNewsResource ->
-        val resourceUrl = Uri.parse(userNewsResource.url)
-        val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
-        val context = LocalContext.current
         val analyticsHelper = LocalAnalyticsHelper.current
 
         NewsResourceCardExpanded(
@@ -59,10 +54,6 @@ fun LazyListScope.userNewsResourceCardItems(
                 analyticsHelper.logNewsResourceOpened(
                     newsResourceId = userNewsResource.id,
                 )
-                when (onItemClick) {
-                    null -> launchCustomChromeTab(context, resourceUrl, backgroundColor)
-                    else -> onItemClick(userNewsResource)
-                }
                 onNewsResourceViewed(userNewsResource.id)
             },
             onTopicClick = onTopicClick,
