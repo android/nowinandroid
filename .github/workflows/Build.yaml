@@ -104,4 +104,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-reports-${{ matrix.api-level }}
-          path: '*/build/reports/androidTests'
+          path: '**/build/reports/androidTests'
