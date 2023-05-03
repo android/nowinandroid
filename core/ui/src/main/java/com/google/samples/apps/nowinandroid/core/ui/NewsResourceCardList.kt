@@ -43,6 +43,9 @@ fun LazyListScope.userNewsResourceCardItems(
     items = items,
     key = { it.id },
     itemContent = { userNewsResource ->
+        val resourceUrl = Uri.parse(userNewsResource.url)
+        val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+        val context = LocalContext.current
         val analyticsHelper = LocalAnalyticsHelper.current
 
         NewsResourceCardExpanded(
@@ -54,6 +57,7 @@ fun LazyListScope.userNewsResourceCardItems(
                 analyticsHelper.logNewsResourceOpened(
                     newsResourceId = userNewsResource.id,
                 )
+                launchCustomChromeTab(context, resourceUrl, backgroundColor)
                 onNewsResourceViewed(userNewsResource.id)
             },
             onTopicClick = onTopicClick,
