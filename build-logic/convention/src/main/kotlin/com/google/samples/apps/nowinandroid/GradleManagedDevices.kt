@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ManagedVirtualDevice
-import org.gradle.api.Project
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
 
 /**
@@ -27,20 +27,28 @@ import org.gradle.kotlin.dsl.invoke
 internal fun configureGradleManagedDevices(
     commonExtension: CommonExtension<*, *, *, *>,
 ) {
-    val deviceConfigs = listOf(
-        DeviceConfig("Pixel 4", 30, "aosp-atd"),
-        DeviceConfig("Pixel 6", 31, "aosp"),
-        DeviceConfig("Pixel C", 30, "aosp-atd"),
-    )
+    val pixel4 = DeviceConfig("Pixel 4", 30, "aosp-atd")
+    val pixel6 = DeviceConfig("Pixel 6", 31, "aosp")
+    val pixelC = DeviceConfig("Pixel C", 30, "aosp-atd")
+
+    val allDevices = listOf(pixel4, pixel6, pixelC)
+    val ciDevices = listOf(pixel4, pixelC)
 
     commonExtension.testOptions {
         managedDevices {
             devices {
-                deviceConfigs.forEach { deviceConfig ->
+                allDevices.forEach { deviceConfig ->
                     maybeCreate(deviceConfig.taskName, ManagedVirtualDevice::class.java).apply {
                         device = deviceConfig.device
                         apiLevel = deviceConfig.apiLevel
                         systemImageSource = deviceConfig.systemImageSource
+                    }
+                }
+            }
+            groups {
+                maybeCreate("ci").apply {
+                    ciDevices.forEach { deviceConfig ->
+                        targetDevices.add(devices[deviceConfig.taskName])
                     }
                 }
             }
