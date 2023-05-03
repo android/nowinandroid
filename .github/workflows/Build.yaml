@@ -48,15 +48,22 @@ jobs:
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
         with:
-          name: build-outputs
-          path: app/build/outputs
+          name: APKs
+          path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload build reports
+      - name: Upload lint reports (HTML)
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: build-reports
-          path: app/build/reports
+          name: lint-reports
+          path: '**/build/reports/lint-results-*.html'
+
+      - name: Upload test results (XML)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: '**/build/test-results/test*UnitTest/**.xml'
 
   androidTest:
     needs: build
@@ -97,4 +104,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-reports-${{ matrix.api-level }}
-          path: '*/build/reports/androidTests'
+          path: '**/build/reports/androidTests'
