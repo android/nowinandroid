@@ -25,25 +25,22 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun TopicsTabContent(
     topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier
             .padding(horizontal = 16.dp)
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(top = 8.dp)
+        contentPadding = PaddingValues(top = 8.dp),
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id
@@ -54,7 +51,7 @@ fun TopicsTabContent(
                     description = followableTopic.topic.shortDescription,
                     topicImageUrl = followableTopic.topic.imageUrl,
                     onClick = { onTopicClick(topicId) },
-                    onFollowButtonClick = { onFollowButtonClick(topicId, it) }
+                    onFollowButtonClick = { onFollowButtonClick(topicId, it) },
                 )
             }
         }
