@@ -48,15 +48,22 @@ jobs:
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
         with:
-          name: build-outputs
-          path: app/build/outputs
+          name: APKs
+          path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload build reports
+      - name: Upload lint reports (HTML)
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: build-reports
-          path: app/build/reports
+          name: lint-reports
+          path: '**/build/reports/lint-results-*.html'
+
+      - name: Upload test results (XML)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: '**/build/test-results/test*UnitTest/**.xml'
 
   androidTest:
     needs: build
@@ -82,6 +89,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Build AndroidTest apps
+        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest --daemon
+
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -90,11 +100,11 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest -x :benchmark:connectedDemoBenchmarkAndroidTest
+          script: ./gradlew connectedDemoDebugAndroidTest -x :benchmark:connectedDemoBenchmarkAndroidTest --daemon
 
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-reports-${{ matrix.api-level }}
-          path: '*/build/reports/androidTests'
+          path: '**/build/reports/androidTests'
