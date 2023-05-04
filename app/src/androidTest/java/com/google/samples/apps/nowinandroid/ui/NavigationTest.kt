@@ -16,12 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -34,10 +36,10 @@ import com.google.samples.apps.nowinandroid.R
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.properties.ReadOnlyProperty
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
 import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
@@ -69,35 +71,19 @@ class NavigationTest {
     @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    // The strings used for matching in these tests
-    private lateinit var done: String
-    private lateinit var navigateUp: String
-    private lateinit var forYouLoading: String
-    private lateinit var forYou: String
-    private lateinit var interests: String
-    private lateinit var sampleTopic: String
-    private lateinit var appName: String
-    private lateinit var saved: String
-    private lateinit var settings: String
-    private lateinit var brand: String
-    private lateinit var ok: String
+    private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
+        ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
 
-    @Before
-    fun setup() {
-        composeTestRule.activity.apply {
-            done = getString(FeatureForyouR.string.done)
-            navigateUp = getString(FeatureForyouR.string.navigate_up)
-            forYouLoading = getString(FeatureForyouR.string.for_you_loading)
-            forYou = getString(FeatureForyouR.string.for_you)
-            interests = getString(FeatureInterestsR.string.interests)
-            sampleTopic = "Headlines"
-            appName = getString(R.string.app_name)
-            saved = getString(BookmarksR.string.saved)
-            settings = getString(SettingsR.string.top_app_bar_action_icon_description)
-            brand = getString(SettingsR.string.brand_android)
-            ok = getString(SettingsR.string.dismiss_dialog_button_text)
-        }
-    }
+    // The strings used for matching in these tests
+    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.navigate_up)
+    private val forYou by composeTestRule.stringResource(FeatureForyouR.string.for_you)
+    private val interests by composeTestRule.stringResource(FeatureInterestsR.string.interests)
+    private val sampleTopic = "Headlines"
+    private val appName by composeTestRule.stringResource(R.string.app_name)
+    private val saved by composeTestRule.stringResource(BookmarksR.string.saved)
+    private val settings by composeTestRule.stringResource(SettingsR.string.top_app_bar_action_icon_description)
+    private val brand by composeTestRule.stringResource(SettingsR.string.brand_android)
+    private val ok by composeTestRule.stringResource(SettingsR.string.dismiss_dialog_button_text)
 
     @Test
     fun firstScreen_isForYou() {
