@@ -39,7 +39,7 @@ android {
         // This benchmark buildType is used for benchmarking, and should function like your
         // release build (for example, with minification on). It's signed with a debug key
         // for easy local/CI testing.
-        val benchmark by creating {
+        create("benchmark") {
             // Keep the build type debuggable so we can attach a debugger if needed.
             isDebuggable = true
             signingConfig = signingConfigs.getByName("debug")
@@ -68,13 +68,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.benchmark.macro)
     implementation(libs.androidx.test.core)
     implementation(libs.androidx.test.espresso.core)
     implementation(libs.androidx.test.ext)
-    implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.rules)
+    implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.uiautomator)
-    implementation(libs.androidx.benchmark.macro)
 }
 
 androidComponents {

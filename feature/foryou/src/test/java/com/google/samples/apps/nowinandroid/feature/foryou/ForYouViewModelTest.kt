@@ -16,21 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetUserNewsResourcesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncStatusMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -52,11 +52,11 @@ class ForYouViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val networkMonitor = TestNetworkMonitor()
-    private val syncStatusMonitor = TestSyncStatusMonitor()
+    private val syncManager = TestSyncManager()
     private val userDataRepository = TestUserDataRepository()
     private val topicsRepository = TestTopicsRepository()
     private val newsRepository = TestNewsRepository()
-    private val getUserNewsResourcesUseCase = GetUserNewsResourcesUseCase(
+    private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
     )
@@ -70,9 +70,9 @@ class ForYouViewModelTest {
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
-            syncStatusMonitor = syncStatusMonitor,
+            syncManager = syncManager,
             userDataRepository = userDataRepository,
-            getUserNewsResources = getUserNewsResourcesUseCase,
+            userNewsResourceRepository = userNewsResourceRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
     }
@@ -106,7 +106,7 @@ class ForYouViewModelTest {
 
     @Test
     fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
-        syncStatusMonitor.setSyncing(true)
+        syncManager.setSyncing(true)
 
         val collectJob =
             launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }

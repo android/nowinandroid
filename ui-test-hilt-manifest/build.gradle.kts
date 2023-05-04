@@ -15,15 +15,9 @@
  */
 plugins {
     id("nowinandroid.android.library")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("nowinandroid.android.hilt")
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.uitesthiltmanifest"
-}
-
-dependencies {
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 }

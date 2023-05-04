@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
 }
@@ -21,12 +23,22 @@ plugins {
 group = "com.google.samples.apps.nowinandroid.buildlogic"
 
 java {
+    // Up to Java 11 APIs are available through desugaring
+    // https://developer.android.com/studio/write/java11-minimal-support-table
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+}
+
 dependencies {
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.firebase.crashlytics.gradle)
+    compileOnly(libs.firebase.performance.gradle)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
 }
@@ -73,9 +85,13 @@ gradlePlugin {
             id = "nowinandroid.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
-        register("firebase-perf") {
-            id = "nowinandroid.firebase-perf"
-            implementationClass = "FirebasePerfConventionPlugin"
+        register("androidFirebase") {
+            id = "nowinandroid.android.application.firebase"
+            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
+        }
+        register("androidFlavors") {
+            id = "nowinandroid.android.application.flavors"
+            implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
     }
 }

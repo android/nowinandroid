@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 import com.google.samples.apps.nowinandroid.NiaBuildType
-import com.android.build.api.dsl.ManagedVirtualDevice
 
 plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
+    id("nowinandroid.android.application.flavors")
     id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
     id("jacoco")
-    id("nowinandroid.firebase-perf")
+    id("nowinandroid.android.application.firebase")
 }
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
-        versionCode = 4
-        versionName = "0.0.4" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 5
+        versionName = "0.0.5" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
@@ -39,7 +39,7 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
@@ -52,7 +52,7 @@ android {
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.getByName("debug")
         }
-        val benchmark by creating {
+        create("benchmark") {
             // Enable all the optimizations from release build through initWith(release).
             initWith(release)
             matchingFallbacks.add("release")
@@ -65,7 +65,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
@@ -73,17 +73,6 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-        }
-        // TODO: Convert it as a convention plugin once Flamingo goes out (https://github.com/android/nowinandroid/issues/523)
-        managedDevices {
-            devices {
-                maybeCreate<ManagedVirtualDevice>("pixel4api30").apply {
-                    device = "Pixel 4"
-                    apiLevel = 30
-                    // ATDs currently support only API level 30.
-                    systemImageSource = "aosp-atd"
-                }
-            }
         }
     }
     namespace = "com.google.samples.apps.nowinandroid"
@@ -94,6 +83,7 @@ dependencies {
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
     implementation(project(":feature:topic"))
+    implementation(project(":feature:search"))
     implementation(project(":feature:settings"))
 
     implementation(project(":core:common"))
@@ -101,6 +91,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":sync:work"))
 
@@ -129,7 +120,6 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
 
     implementation(libs.coil.kt)
-    implementation(libs.coil.kt.svg)
 }
 
 // androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
