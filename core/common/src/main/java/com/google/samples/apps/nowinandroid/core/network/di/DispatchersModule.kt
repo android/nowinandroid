@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import dagger.Module
 import dagger.Provides
@@ -31,4 +32,8 @@ object DispatchersModule {
     @Provides
     @Dispatcher(IO)
     fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Dispatcher(Default)
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }

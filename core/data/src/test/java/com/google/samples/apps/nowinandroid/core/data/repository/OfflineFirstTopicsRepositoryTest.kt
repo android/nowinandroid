@@ -29,6 +29,8 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -37,6 +39,8 @@ import org.junit.rules.TemporaryFolder
 import kotlin.test.assertEquals
 
 class OfflineFirstTopicsRepositoryTest {
+
+    private val testScope = TestScope(UnconfinedTestDispatcher())
 
     private lateinit var subject: OfflineFirstTopicsRepository
 
@@ -56,7 +60,7 @@ class OfflineFirstTopicsRepositoryTest {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         niaPreferences = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(),
+            tmpFolder.testUserPreferencesDataStore(testScope),
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
@@ -68,7 +72,7 @@ class OfflineFirstTopicsRepositoryTest {
 
     @Test
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
-        runTest {
+        testScope.runTest {
             assertEquals(
                 topicDao.getTopicEntities()
                     .first()
@@ -80,7 +84,7 @@ class OfflineFirstTopicsRepositoryTest {
 
     @Test
     fun offlineFirstTopicsRepository_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             subject.syncWith(synchronizer)
 
             val networkTopics = network.getTopics()
@@ -103,7 +107,7 @@ class OfflineFirstTopicsRepositoryTest {
 
     @Test
     fun offlineFirstTopicsRepository_incremental_sync_pulls_from_network() =
-        runTest {
+        testScope.runTest {
             // Set topics version to 10
             synchronizer.updateChangeListVersions {
                 copy(topicVersion = 10)
@@ -133,7 +137,7 @@ class OfflineFirstTopicsRepositoryTest {
 
     @Test
     fun offlineFirstTopicsRepository_sync_deletes_items_marked_deleted_on_network() =
-        runTest {
+        testScope.runTest {
             val networkTopics = network.getTopics()
                 .map(NetworkTopic::asEntity)
                 .map(TopicEntity::asExternalModel)

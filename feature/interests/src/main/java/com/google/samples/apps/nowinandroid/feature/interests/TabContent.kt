@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 @Composable
 fun TopicsTabContent(
@@ -35,12 +35,13 @@ fun TopicsTabContent(
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    withBottomSpacer: Boolean = true,
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 24.dp)
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(top = 8.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id
@@ -56,8 +57,10 @@ fun TopicsTabContent(
             }
         }
 
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+        if (withBottomSpacer) {
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            }
         }
     }
 }
