@@ -36,7 +36,10 @@ echo y | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
 cd $KOKORO_ARTIFACTS_DIR/git/nowinandroid
 
 # The build needs Java 17, set it as the default Java version.
-sudo update-java-alternatives --set java-1.17.0-openjdk-amd64
+sudo apt-get update
+sudo apt-get install -y openjdk-17-jdk
+sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+java -version
 
 # Also clear JAVA_HOME variable so java -version is used instead
 export JAVA_HOME=
