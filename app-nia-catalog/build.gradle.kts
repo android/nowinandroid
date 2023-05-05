@@ -47,7 +47,7 @@ android {
         missingDimensionStrategy(FlavorDimension.contentType.name, NiaFlavor.demo.name)
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
