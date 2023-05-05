@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":core:model"))
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.browser)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.core.ktx)
 
