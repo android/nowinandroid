@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -57,6 +59,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,6 +76,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.trace
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus.Denied
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -199,6 +205,7 @@ internal fun ForYouScreen(
         }
     }
     TrackScreenViewEvent(screenName = "ForYou")
+    requestNotificationsPermission()
 }
 
 /**
@@ -381,6 +388,21 @@ fun TopicIcon(
             .padding(10.dp)
             .size(32.dp),
     )
+}
+
+@Composable
+@OptIn(ExperimentalPermissionsApi::class)
+private fun requestNotificationsPermission() {
+    if (VERSION.SDK_INT < VERSION_CODES.TIRAMISU) return
+    val notificationsPermissionState = rememberPermissionState(
+        android.Manifest.permission.POST_NOTIFICATIONS,
+    )
+    LaunchedEffect(notificationsPermissionState) {
+        val status = notificationsPermissionState.status
+        if (status is Denied && !status.shouldShowRationale) {
+            notificationsPermissionState.launchPermissionRequest()
+        }
+    }
 }
 
 @DevicePreviews
