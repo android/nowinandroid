@@ -20,12 +20,16 @@ import android.Manifest.permission
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID
 import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -33,6 +37,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val NEWS_NOTIFICATION_REQUEST_CODE = 0
 private const val NEWS_NOTIFICATION_SUMMARY_ID = 1
 private const val NEWS_NOTIFICATION_CHANNEL_ID = ""
 private const val NEWS_NOTIFICATION_GROUP = "NEWS_NOTIFICATIONS"
@@ -52,9 +57,7 @@ class AndroidSystemNotifier @Inject constructor(
                 this,
                 permission.POST_NOTIFICATIONS,
             ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+        ) return
 
         val newsNotifications = newsResources.map { newsResource ->
             newsNotification {
@@ -63,7 +66,9 @@ class AndroidSystemNotifier @Inject constructor(
                 )
                     .setContentTitle(newsResource.title)
                     .setContentText(newsResource.content)
+                    .setContentIntent(newsPendingIntent(newsResource))
                     .setGroup(NEWS_NOTIFICATION_GROUP)
+                    .setAutoCancel(true)
             }
         }
         val summaryNotification = newsNotification {
@@ -80,6 +85,7 @@ class AndroidSystemNotifier @Inject constructor(
                 .setStyle(newsInboxStyle(newsResources, title))
                 .setGroup(NEWS_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
+                .setAutoCancel(true)
                 .build()
         }
 
@@ -139,3 +145,23 @@ private fun Context.ensureNotificationChannel() {
     // Register the channel with the system
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 }
+
+private fun Context.newsPendingIntent(newsResource: NewsResource): PendingIntent? =
+    PendingIntent.getActivity(
+        this,
+        NEWS_NOTIFICATION_REQUEST_CODE,
+        // TODO: Read color from material theme to style the chrome custom tab
+        //  this is currently only readable from composition.
+        CustomTabsIntent.Builder()
+            .build()
+            .apply {
+                intent.data = Uri.parse(newsResource.url)
+                if (VERSION.SDK_INT < VERSION_CODES.O) {
+                    intent.putExtra(
+                        EXTRA_NOTIFICATION_ID,
+                        newsResource.id.hashCode(),
+                    )
+                }
+            }.intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
