@@ -21,60 +21,70 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID
 import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val MAX_NUM_NOTIFICATIONS = 5
+private const val TARGET_ACTIVITY_NAME = "com.google.samples.apps.nowinandroid.MainActivity"
 private const val NEWS_NOTIFICATION_REQUEST_CODE = 0
 private const val NEWS_NOTIFICATION_SUMMARY_ID = 1
 private const val NEWS_NOTIFICATION_CHANNEL_ID = ""
 private const val NEWS_NOTIFICATION_GROUP = "NEWS_NOTIFICATIONS"
+private const val DEEP_LINK_SCHEME_AND_HOST = "https://www.nowinandroid.apps.samples.google.com"
+private const val FOR_YOU_PATH = "foryou"
 
 /**
  * Implementation of [Notifier] that displays notifications in the system tray.
  */
 @Singleton
-class AndroidSystemNotifier @Inject constructor(
+class SystemTrayNotifier @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Notifier {
 
-    override fun onNewsAdded(
+    override fun postNewsNotifications(
         newsResources: List<NewsResource>,
     ) = with(context) {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 permission.POST_NOTIFICATIONS,
             ) != PackageManager.PERMISSION_GRANTED
-        ) return
-
-        val newsNotifications = newsResources.map { newsResource ->
-            newsNotification {
-                setSmallIcon(
-                    com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
-                )
-                    .setContentTitle(newsResource.title)
-                    .setContentText(newsResource.content)
-                    .setContentIntent(newsPendingIntent(newsResource))
-                    .setGroup(NEWS_NOTIFICATION_GROUP)
-                    .setAutoCancel(true)
-            }
+        ) {
+            return
         }
-        val summaryNotification = newsNotification {
+
+        val truncatedNewsResources = newsResources
+            .take(MAX_NUM_NOTIFICATIONS)
+
+        val newsNotifications = truncatedNewsResources
+            .map { newsResource ->
+                createNewsNotification {
+                    setSmallIcon(
+                        com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
+                    )
+                        .setContentTitle(newsResource.title)
+                        .setContentText(newsResource.content)
+                        .setContentIntent(newsPendingIntent(newsResource))
+                        .setGroup(NEWS_NOTIFICATION_GROUP)
+                        .setAutoCancel(true)
+                }
+            }
+        val summaryNotification = createNewsNotification {
             val title = getString(
                 R.string.news_notification_group_summary,
-                newsNotifications.size,
+                truncatedNewsResources.size,
             )
             setContentTitle(title)
                 .setContentText(title)
@@ -82,30 +92,31 @@ class AndroidSystemNotifier @Inject constructor(
                     com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
                 )
                 // Build summary info into InboxStyle template.
-                .setStyle(newsInboxStyle(newsResources, title))
+                .setStyle(newsNotificationStyle(truncatedNewsResources, title))
                 .setGroup(NEWS_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
                 .setAutoCancel(true)
                 .build()
         }
 
-        with(NotificationManagerCompat.from(this)) {
-            newsNotifications.forEachIndexed { index, notification ->
-                notify(newsResources[index].id.hashCode(), notification)
-            }
-            notify(NEWS_NOTIFICATION_SUMMARY_ID, summaryNotification)
+        // Send the notifications
+        val notificationManager = NotificationManagerCompat.from(this)
+        newsNotifications.forEachIndexed { index, notification ->
+            notificationManager.notify(
+                truncatedNewsResources[index].id.hashCode(),
+                notification,
+            )
         }
+        notificationManager.notify(NEWS_NOTIFICATION_SUMMARY_ID, summaryNotification)
     }
 
     /**
      * Creates an inbox style summary notification for news updates
      */
-    private fun newsInboxStyle(
+    private fun newsNotificationStyle(
         newsResources: List<NewsResource>,
         title: String,
     ): InboxStyle = newsResources
-        // Show at most 5 lines
-        .take(5)
         .fold(InboxStyle()) { inboxStyle, newsResource ->
             inboxStyle.addLine(newsResource.title)
         }
@@ -116,10 +127,10 @@ class AndroidSystemNotifier @Inject constructor(
 /**
  * Creates a notification for configured for news updates
  */
-private fun Context.newsNotification(
+private fun Context.createNewsNotification(
     block: NotificationCompat.Builder.() -> Unit,
 ): Notification {
-    ensureNotificationChannel()
+    ensureNotificationChannelExists()
     return NotificationCompat.Builder(
         this,
         NEWS_NOTIFICATION_CHANNEL_ID,
@@ -132,7 +143,7 @@ private fun Context.newsNotification(
 /**
  * Ensures the a notification channel is is present if applicable
  */
-private fun Context.ensureNotificationChannel() {
+private fun Context.ensureNotificationChannelExists() {
     if (VERSION.SDK_INT < VERSION_CODES.O) return
 
     val channel = NotificationChannel(
@@ -146,22 +157,20 @@ private fun Context.ensureNotificationChannel() {
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 }
 
-private fun Context.newsPendingIntent(newsResource: NewsResource): PendingIntent? =
-    PendingIntent.getActivity(
-        this,
-        NEWS_NOTIFICATION_REQUEST_CODE,
-        // TODO: Read color from material theme to style the chrome custom tab
-        //  this is currently only readable from composition.
-        CustomTabsIntent.Builder()
-            .build()
-            .apply {
-                intent.data = Uri.parse(newsResource.url)
-                if (VERSION.SDK_INT < VERSION_CODES.O) {
-                    intent.putExtra(
-                        EXTRA_NOTIFICATION_ID,
-                        newsResource.id.hashCode(),
-                    )
-                }
-            }.intent,
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-    )
+private fun Context.newsPendingIntent(
+    newsResource: NewsResource,
+): PendingIntent? = PendingIntent.getActivity(
+    this,
+    NEWS_NOTIFICATION_REQUEST_CODE,
+    Intent().apply {
+        action = Intent.ACTION_VIEW
+        data = newsResource.newsDeepLinkUri()
+        component = ComponentName(
+            packageName,
+            TARGET_ACTIVITY_NAME,
+        )
+    },
+    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+)
+
+private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()
