@@ -50,7 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -287,7 +286,7 @@ private fun TextLink(text: String, url: String) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .clickable { uriHandler.openUri(url.toUri()) },
+            .clickable { uriHandler.openUri(url) },
     )
 }
 
