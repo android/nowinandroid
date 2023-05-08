@@ -37,11 +37,18 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
-            ?: run {
-                channel.trySend(false)
-                channel.close()
-                return@callbackFlow
-            }
+        if (connectivityManager == null) {
+            channel.trySend(false)
+            channel.close()
+            return@callbackFlow
+        }
+
+        /**
+         * Sends the latest connectivity status to the underlying channel.
+         */
+        fun update() {
+            channel.trySend(connectivityManager.isCurrentlyConnected())
+       }
 
         /**
          * The callback's methods are invoked on changes to *any* network, not just the active
@@ -49,20 +56,14 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
          * ConnectivityManager.
          */
         val callback = object : NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            override fun onAvailable(network: Network) = update()
 
-            override fun onLost(network: Network) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            override fun onLost(network: Network) = update()
 
             override fun onCapabilitiesChanged(
                 network: Network,
                 networkCapabilities: NetworkCapabilities,
-            ) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            ) = update()
         }
 
         connectivityManager.registerNetworkCallback(
@@ -72,7 +73,7 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
             callback,
         )
 
-        channel.trySend(connectivityManager.isCurrentlyConnected())
+        update()
 
         awaitClose {
             connectivityManager.unregisterNetworkCallback(callback)
