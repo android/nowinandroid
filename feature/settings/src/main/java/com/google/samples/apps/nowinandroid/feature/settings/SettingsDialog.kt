@@ -43,12 +43,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -277,8 +279,7 @@ private fun LinksPanel() {
 
 @Composable
 private fun TextLink(text: String, url: String) {
-    val launchResourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     Text(
         text = text,
@@ -286,9 +287,7 @@ private fun TextLink(text: String, url: String) {
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .clickable {
-                ContextCompat.startActivity(context, launchResourceIntent, null)
-            },
+            .clickable { uriHandler.openUri(url.toUri()) },
     )
 }
 
