@@ -37,11 +37,11 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
-        ?: run {
-            channel.trySend(false)
-            channel.close()
-            return@callbackFlow
-        }
+            ?: run {
+                channel.trySend(false)
+                channel.close()
+                return@callbackFlow
+            }
 
         /**
          * The callback's methods are invoked on changes to *any* network, not just the active
