@@ -36,48 +36,50 @@ import javax.inject.Inject
 class ConnectivityManagerNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : NetworkMonitor {
-    override val isOnline: Flow<Boolean> {
+    override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
-            ?: return flowOf(false)
+        ?: run {
+            channel.trySend(false)
+            channel.close()
+            return@callbackFlow
+        }
 
-        return callbackFlow {
-
-            /**
-             * The callback's methods are invoked on changes to *any* network, not just the active
-             * network. So to check for network connectivity, one must query the active network of the
-             * ConnectivityManager.
-             */
-            val callback = object : NetworkCallback() {
-                override fun onAvailable(network: Network) {
-                    channel.trySend(connectivityManager.isCurrentlyConnected())
-                }
-
-                override fun onLost(network: Network) {
-                    channel.trySend(connectivityManager.isCurrentlyConnected())
-                }
-
-                override fun onCapabilitiesChanged(
-                    network: Network,
-                    networkCapabilities: NetworkCapabilities,
-                ) {
-                    channel.trySend(connectivityManager.isCurrentlyConnected())
-                }
+        /**
+         * The callback's methods are invoked on changes to *any* network, not just the active
+         * network. So to check for network connectivity, one must query the active network of the
+         * ConnectivityManager.
+         */
+        val callback = object : NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                channel.trySend(connectivityManager.isCurrentlyConnected())
             }
 
-            connectivityManager.registerNetworkCallback(
-                Builder()
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    .build(),
-                callback,
-            )
+            override fun onLost(network: Network) {
+                channel.trySend(connectivityManager.isCurrentlyConnected())
+            }
 
-            channel.trySend(connectivityManager.isCurrentlyConnected())
-
-            awaitClose {
-                connectivityManager.unregisterNetworkCallback(callback)
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities,
+            ) {
+                channel.trySend(connectivityManager.isCurrentlyConnected())
             }
         }
-            .conflate()
+
+        connectivityManager.registerNetworkCallback(
+            Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build(),
+            callback,
+        )
+
+        channel.trySend(connectivityManager.isCurrentlyConnected())
+
+        awaitClose {
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }
+        .conflate()
 
     @Suppress("DEPRECATION")
     private fun ConnectivityManager.isCurrentlyConnected() = when {
