@@ -48,7 +48,7 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
          */
         fun update() {
             channel.trySend(connectivityManager.isCurrentlyConnected())
-       }
+        }
 
         /**
          * The callback's methods are invoked on changes to *any* network, not just the active
