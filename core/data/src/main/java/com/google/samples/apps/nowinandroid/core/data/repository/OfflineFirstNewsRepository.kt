@@ -63,10 +63,12 @@ class OfflineFirstNewsRepository @Inject constructor(
     )
         .map { it.map(PopulatedNewsResource::asExternalModel) }
 
-    override suspend fun syncWith(synchronizer: Synchronizer) =
-        synchronizer.changeListSync(
+    override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
+        var isFirstSync = false
+        return synchronizer.changeListSync(
             versionReader = ChangeListVersions::newsResourceVersion,
             changeListFetcher = { currentVersion ->
+                isFirstSync = currentVersion <= 0
                 network.getNewsResourceChangeList(after = currentVersion)
             },
             versionUpdater = { latestVersion ->
@@ -92,6 +94,12 @@ class OfflineFirstNewsRepository @Inject constructor(
                         .toSet()
                     // No need to retrieve anything if notifications won't be sent
                     else -> emptySet()
+                }
+
+                if (isFirstSync) {
+                    // When we first retrieve news, mark everything viewed, so that we aren't
+                    // overwhelmed with all historical news.
+                    niaPreferencesDataSource.setNewsResourcesViewed(changedIds, true)
                 }
 
                 // Obtain the news resources which have changed from the network and upsert them locally
@@ -137,4 +145,5 @@ class OfflineFirstNewsRepository @Inject constructor(
                 }
             },
         )
+    }
 }
