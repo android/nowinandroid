@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
@@ -83,12 +84,11 @@ import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
+import com.google.samples.apps.nowinandroid.feature.interests.InterestsItem
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.TopicsTabContent
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 @Composable
@@ -289,49 +289,72 @@ private fun SearchResultBody(
     onTopicClick: (String) -> Unit,
     searchQuery: String = "",
 ) {
-    if (topics.isNotEmpty()) {
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(stringResource(id = searchR.string.topics))
+    val state = rememberLazyGridState()
+    LazyVerticalGrid(
+        columns = Adaptive(300.dp),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("search:newsResources"),
+        state = state,
+    ) {
+        if (topics.isNotEmpty()) {
+            item(
+                span = {
+                    GridItemSpan(maxLineSpan)
+                },
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(stringResource(id = searchR.string.topics))
+                        }
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+            }
+            topics.forEach { followableTopic ->
+                val topicId = followableTopic.topic.id
+                item(
+                    key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
+                    span = {
+                        GridItemSpan(maxLineSpan)
+                    },
+                ) {
+                    InterestsItem(
+                        name = followableTopic.topic.name,
+                        following = followableTopic.isFollowed,
+                        description = followableTopic.topic.shortDescription,
+                        topicImageUrl = followableTopic.topic.imageUrl,
+                        onClick = {
+                            // Pass the current search query to ViewModel to save it as recent searches
+                            onSearchTriggered(searchQuery)
+                            onTopicClick(topicId)
+                        },
+                        onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+                    )
                 }
-            },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        )
-        TopicsTabContent(
-            topics = topics,
-            onTopicClick = {
-                // Pass the current search query to ViewModel to save it as recent searches
-                onSearchTriggered(searchQuery)
-                onTopicClick(it)
-            },
-            onFollowButtonClick = onFollowButtonClick,
-            withBottomSpacer = false,
-        )
-    }
+            }
+        }
 
-    if (newsResources.isNotEmpty()) {
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(stringResource(id = searchR.string.updates))
-                }
-            },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        )
+        if (newsResources.isNotEmpty()) {
+            item(
+                span = {
+                    GridItemSpan(maxLineSpan)
+                },
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(stringResource(id = searchR.string.updates))
+                        }
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+            }
 
-        val state = rememberLazyGridState()
-        TrackScrollJank(scrollableState = state, stateName = "search:newsResource")
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .testTag("search:newsResources"),
-            state = state,
-        ) {
             newsFeed(
                 feedState = NewsFeedUiState.Success(feed = newsResources),
                 onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
