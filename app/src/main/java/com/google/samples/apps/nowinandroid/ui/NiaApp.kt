@@ -15,7 +15,6 @@
  */
 
 package com.google.samples.apps.nowinandroid.ui
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -41,7 +40,10 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -94,6 +96,9 @@ fun NiaApp(
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
+    var showSettingsDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     NiaBackground {
         NiaGradientBackground(
@@ -118,9 +123,9 @@ fun NiaApp(
                 }
             }
 
-            if (appState.shouldShowSettingsDialog) {
+            if (showSettingsDialog) {
                 SettingsDialog(
-                    onDismiss = { appState.setShowSettingsDialog(false) },
+                    onDismiss = { showSettingsDialog = false },
                 )
             }
 
@@ -184,7 +189,7 @@ fun NiaApp(
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent,
                                 ),
-                                onActionClick = { appState.setShowSettingsDialog(true) },
+                                onActionClick = { showSettingsDialog = true },
                                 onNavigationClick = { appState.navigateToSearch() },
                             )
                         }
