@@ -129,7 +129,11 @@ class OfflineFirstNewsRepository @Inject constructor(
                         .first()
                         .map(PopulatedNewsResource::asExternalModel)
 
-                    if (addedNewsResources.isNotEmpty()) notifier.onNewsAdded(addedNewsResources)
+                    if (addedNewsResources.isNotEmpty()) {
+                        notifier.postNewsNotifications(
+                            newsResources = addedNewsResources,
+                        )
+                    }
                 }
             },
         )
