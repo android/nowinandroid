@@ -76,7 +76,7 @@ class SystemTrayNotifier @Inject constructor(
                     )
                         .setContentTitle(newsResource.title)
                         .setContentText(newsResource.content)
-                        .setContentIntent(newsPendingIntent(newsResource))
+                        .setContentIntent(createNewsPendingIntent(newsResource))
                         .setGroup(NEWS_NOTIFICATION_GROUP)
                         .setAutoCancel(true)
                 }
@@ -157,7 +157,7 @@ private fun Context.ensureNotificationChannelExists() {
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 }
 
-private fun Context.newsPendingIntent(
+private fun Context.createNewsPendingIntent(
     newsResource: NewsResource,
 ): PendingIntent? = PendingIntent.getActivity(
     this,
