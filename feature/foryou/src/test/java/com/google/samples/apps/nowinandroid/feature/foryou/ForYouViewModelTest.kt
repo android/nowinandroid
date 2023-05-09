@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -32,6 +33,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -42,6 +44,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -65,12 +68,14 @@ class ForYouViewModelTest {
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository,
     )
+    private val savedStateHandle = SavedStateHandle()
     private lateinit var viewModel: ForYouViewModel
 
     @Before
     fun setup() {
         viewModel = ForYouViewModel(
             syncManager = syncManager,
+            savedStateHandle = savedStateHandle,
             userDataRepository = userDataRepository,
             userNewsResourceRepository = userNewsResourceRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
@@ -454,6 +459,34 @@ class ForYouViewModelTest {
 
         collectJob1.cancel()
         collectJob2.cancel()
+    }
+
+    @Test
+    fun deepLinkedNewsResourceIsFetchedAndResetAfterViewing() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.deepLinkedNewsResource.collect() }
+
+        newsRepository.sendNewsResources(sampleNewsResources)
+        userDataRepository.setUserData(emptyUserData)
+        savedStateHandle[LINKED_NEWS_RESOURCE_ID] = sampleNewsResources.first().id
+
+        assertEquals(
+            expected = UserNewsResource(
+                newsResource = sampleNewsResources.first(),
+                userData = emptyUserData,
+            ),
+            actual = viewModel.deepLinkedNewsResource.value,
+        )
+
+        viewModel.onDeepLinkOpened(
+            newsResourceId = sampleNewsResources.first().id,
+        )
+
+        assertNull(
+            viewModel.deepLinkedNewsResource.value,
+        )
+
+        collectJob.cancel()
     }
 }
 
