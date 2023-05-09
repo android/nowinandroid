@@ -19,6 +19,9 @@ package com.google.samples.apps.nowinandroid.feature.search
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
@@ -42,6 +45,7 @@ class SearchViewModel @Inject constructor(
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val recentSearchRepository: RecentSearchRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
     val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
@@ -105,6 +109,13 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             recentSearchRepository.insertOrReplaceRecentSearch(query)
         }
+        analyticsHelper.logEvent(
+            AnalyticsEvent(
+                type = SEARCH_QUERY,
+                extras = listOf(Param(SEARCH_QUERY, query)
+                )
+            )
+        )
     }
 
     fun clearRecentSearches() {
