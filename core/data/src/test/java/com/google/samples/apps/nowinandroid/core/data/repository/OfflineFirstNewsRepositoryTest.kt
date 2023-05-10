@@ -289,6 +289,33 @@ class OfflineFirstNewsRepositoryTest {
         }
 
     @Test
+    fun offlineFirstNewsRepository_sync_marks_as_read_on_first_run() =
+        testScope.runTest {
+            subject.syncWith(synchronizer)
+
+            assertEquals(
+                network.getNewsResources().map { it.id }.toSet(),
+                niaPreferencesDataSource.userData.first().viewedNewsResources,
+            )
+        }
+
+    @Test
+    fun offlineFirstNewsRepository_sync_does_not_mark_as_read_on_subsequent_run() =
+        testScope.runTest {
+            // Pretend that we already have up to change list 7
+            synchronizer.updateChangeListVersions {
+                copy(newsResourceVersion = 7)
+            }
+
+            subject.syncWith(synchronizer)
+
+            assertEquals(
+                emptySet(),
+                niaPreferencesDataSource.userData.first().viewedNewsResources,
+            )
+        }
+
+    @Test
     fun offlineFirstNewsRepository_sends_notifications_for_newly_synced_news_that_is_followed() =
         testScope.runTest {
             // User has onboarded
