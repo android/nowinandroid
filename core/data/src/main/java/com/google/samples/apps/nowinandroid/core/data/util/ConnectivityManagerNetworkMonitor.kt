@@ -37,6 +37,18 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
+        if (connectivityManager == null) {
+            channel.trySend(false)
+            channel.close()
+            return@callbackFlow
+        }
+
+        /**
+         * Sends the latest connectivity status to the underlying channel.
+         */
+        fun update() {
+            channel.trySend(connectivityManager.isCurrentlyConnected())
+        }
 
         /**
          * The callback's methods are invoked on changes to *any* network, not just the active
@@ -44,47 +56,37 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
          * ConnectivityManager.
          */
         val callback = object : NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            override fun onAvailable(network: Network) = update()
 
-            override fun onLost(network: Network) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            override fun onLost(network: Network) = update()
 
             override fun onCapabilitiesChanged(
                 network: Network,
                 networkCapabilities: NetworkCapabilities,
-            ) {
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-            }
+            ) = update()
         }
 
-        connectivityManager?.registerNetworkCallback(
+        connectivityManager.registerNetworkCallback(
             Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .build(),
             callback,
         )
 
-        channel.trySend(connectivityManager.isCurrentlyConnected())
+        update()
 
         awaitClose {
-            connectivityManager?.unregisterNetworkCallback(callback)
+            connectivityManager.unregisterNetworkCallback(callback)
         }
     }
         .conflate()
 
     @Suppress("DEPRECATION")
-    private fun ConnectivityManager?.isCurrentlyConnected() = when (this) {
-        null -> false
-        else -> when {
-            VERSION.SDK_INT >= VERSION_CODES.M ->
-                activeNetwork
-                    ?.let(::getNetworkCapabilities)
-                    ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    ?: false
-            else -> activeNetworkInfo?.isConnected ?: false
-        }
-    }
+    private fun ConnectivityManager.isCurrentlyConnected() = when {
+        VERSION.SDK_INT >= VERSION_CODES.M ->
+            activeNetwork
+                ?.let(::getNetworkCapabilities)
+                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        else -> activeNetworkInfo?.isConnected
+    } ?: false
 }
