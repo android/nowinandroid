@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
@@ -68,6 +70,7 @@ class SearchViewModelTest {
             recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
             recentSearchRepository = recentSearchRepository,
+            analyticsHelper = NoOpAnalyticsHelper(),
         )
     }
 
