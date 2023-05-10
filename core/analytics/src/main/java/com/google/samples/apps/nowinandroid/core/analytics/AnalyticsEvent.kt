@@ -34,6 +34,7 @@ data class AnalyticsEvent(
     class Types {
         companion object {
             const val SCREEN_VIEW = "screen_view" // (extras: SCREEN_NAME)
+            const val VIEW_SEARCH_RESULTS = "view_search_results" // (extras: SEARCH_TERM)
         }
     }
 
@@ -53,6 +54,7 @@ data class AnalyticsEvent(
     class ParamKeys {
         companion object {
             const val SCREEN_NAME = "screen_name"
+            const val SEARCH_TERM = "search_term"
         }
     }
 }
