@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase

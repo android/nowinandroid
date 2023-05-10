@@ -112,9 +112,10 @@ class SearchViewModel @Inject constructor(
         analyticsHelper.logEvent(
             AnalyticsEvent(
                 type = SEARCH_QUERY,
-                extras = listOf(Param(SEARCH_QUERY, query)
-                )
-            )
+                extras = listOf(
+                    Param(SEARCH_QUERY, query),
+                ),
+            ),
         )
     }
 
