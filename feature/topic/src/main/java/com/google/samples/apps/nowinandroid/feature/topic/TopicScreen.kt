@@ -17,16 +17,21 @@
 package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -49,6 +54,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicA
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberThumbInteractions
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -97,45 +105,78 @@ internal fun TopicScreen(
 ) {
     val state = rememberLazyListState()
     TrackScrollJank(scrollableState = state, stateName = "topic:screen")
-    LazyColumn(
-        state = state,
+    Box(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        item {
-            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-        }
-        when (topicUiState) {
-            TopicUiState.Loading -> item {
-                NiaLoadingWheel(
-                    modifier = modifier,
-                    contentDesc = stringResource(id = string.topic_loading),
-                )
+        LazyColumn(
+            state = state,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
             }
-
-            TopicUiState.Error -> TODO()
-            is TopicUiState.Success -> {
-                item {
-                    TopicToolbar(
-                        onBackClick = onBackClick,
-                        onFollowClick = onFollowClick,
-                        uiState = topicUiState.followableTopic,
+            when (topicUiState) {
+                TopicUiState.Loading -> item {
+                    NiaLoadingWheel(
+                        modifier = modifier,
+                        contentDesc = stringResource(id = string.topic_loading),
                     )
                 }
-                TopicBody(
-                    name = topicUiState.followableTopic.topic.name,
-                    description = topicUiState.followableTopic.topic.longDescription,
-                    news = newsUiState,
-                    imageUrl = topicUiState.followableTopic.topic.imageUrl,
-                    onBookmarkChanged = onBookmarkChanged,
-                    onNewsResourceViewed = onNewsResourceViewed,
-                    onTopicClick = onTopicClick,
-                )
+
+                TopicUiState.Error -> TODO()
+                is TopicUiState.Success -> {
+                    item {
+                        TopicToolbar(
+                            onBackClick = onBackClick,
+                            onFollowClick = onFollowClick,
+                            uiState = topicUiState.followableTopic,
+                        )
+                    }
+                    TopicBody(
+                        name = topicUiState.followableTopic.topic.name,
+                        description = topicUiState.followableTopic.topic.longDescription,
+                        news = newsUiState,
+                        imageUrl = topicUiState.followableTopic.topic.imageUrl,
+                        onBookmarkChanged = onBookmarkChanged,
+                        onNewsResourceViewed = onNewsResourceViewed,
+                        onTopicClick = onTopicClick,
+                    )
+                }
+            }
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-        }
+        val itemsAvailable = topicItemsSize(topicUiState, newsUiState)
+        val scrollbarState = state.scrollbarState(
+            itemsAvailable = itemsAvailable,
+        )
+        FastScrollbar(
+            modifier = Modifier
+                .fillMaxHeight()
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterEnd),
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
+            scrollInProgress = state.isScrollInProgress,
+            onThumbMoved = state.rememberThumbInteractions(
+                itemsAvailable = itemsAvailable,
+            ),
+        )
+    }
+}
+
+private fun topicItemsSize(
+    topicUiState: TopicUiState,
+    newsUiState: NewsUiState,
+) = when (topicUiState) {
+    TopicUiState.Error -> 0 // Nothing
+    TopicUiState.Loading -> 1 // Loading bar
+    is TopicUiState.Success -> when (newsUiState) {
+        NewsUiState.Error -> 0 // Nothing
+        NewsUiState.Loading -> 1 // Loading bar
+        is NewsUiState.Success -> 2 + newsUiState.news.size // Toolbar, header
     }
 }
 
