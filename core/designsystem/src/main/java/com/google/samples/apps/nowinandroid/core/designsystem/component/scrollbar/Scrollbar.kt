@@ -21,6 +21,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
@@ -221,9 +222,10 @@ fun Scrollbar(
     Box(
         modifier = modifier
             .run {
+                val withHover = interactionSource?.let(::hoverable) ?: this
                 when (orientation) {
-                    Orientation.Vertical -> fillMaxHeight()
-                    Orientation.Horizontal -> fillMaxWidth()
+                    Orientation.Vertical -> withHover.fillMaxHeight()
+                    Orientation.Horizontal -> withHover.fillMaxWidth()
                 }
             }
             .onGloballyPositioned { coordinates ->
