@@ -57,6 +57,9 @@ import kotlinx.coroutines.delay
 import kotlin.math.max
 import kotlin.math.min
 
+private const val SCROLLBAR_PRESS_DELAY = 100L
+private const val SCROLLBAR_PRESS_DELTA = 0.1f
+
 /**
  * Class definition for the core properties of a scroll bar
  */
@@ -310,8 +313,7 @@ fun Scrollbar(
             dimension = orientation.valueOf(pressedOffset),
         )
         val isPositive = currentTravel < destinationTravel
-        // TODO: Come up with a better heuristic for jumps
-        val delta = if (isPositive) 0.1f else -0.1f
+        val delta = SCROLLBAR_PRESS_DELTA * if (isPositive) 1f else -1f
 
         while (currentTravel != destinationTravel) {
             currentTravel =
@@ -322,8 +324,7 @@ fun Scrollbar(
                 }
             onThumbMoved(currentTravel)
             interactionThumbTravelPercent = currentTravel
-            // TODO: Define this more thoroughly
-            delay(100)
+            delay(SCROLLBAR_PRESS_DELAY)
         }
     }
 
