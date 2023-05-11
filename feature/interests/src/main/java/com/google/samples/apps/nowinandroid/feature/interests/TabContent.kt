@@ -16,17 +16,26 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberThumbInteractions
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 @Composable
@@ -37,30 +46,52 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier,
     withBottomSpacer: Boolean = true,
 ) {
-    LazyColumn(
+    Box(
         modifier = modifier
-            .padding(horizontal = 24.dp)
-            .testTag("interests:topics"),
-        contentPadding = PaddingValues(vertical = 16.dp),
+            .fillMaxWidth(),
     ) {
-        topics.forEach { followableTopic ->
-            val topicId = followableTopic.topic.id
-            item(key = topicId) {
-                InterestsItem(
-                    name = followableTopic.topic.name,
-                    following = followableTopic.isFollowed,
-                    description = followableTopic.topic.shortDescription,
-                    topicImageUrl = followableTopic.topic.imageUrl,
-                    onClick = { onTopicClick(topicId) },
-                    onFollowButtonClick = { onFollowButtonClick(topicId, it) },
-                )
+        val scrollableState = rememberLazyListState()
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .testTag("interests:topics"),
+            contentPadding = PaddingValues(vertical = 16.dp),
+            state = scrollableState,
+        ) {
+            topics.forEach { followableTopic ->
+                val topicId = followableTopic.topic.id
+                item(key = topicId) {
+                    InterestsItem(
+                        name = followableTopic.topic.name,
+                        following = followableTopic.isFollowed,
+                        description = followableTopic.topic.shortDescription,
+                        topicImageUrl = followableTopic.topic.imageUrl,
+                        onClick = { onTopicClick(topicId) },
+                        onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+                    )
+                }
             }
-        }
 
-        if (withBottomSpacer) {
-            item {
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            if (withBottomSpacer) {
+                item {
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                }
             }
         }
+        val scrollbarState = scrollableState.scrollbarState(
+            itemsAvailable = topics.size,
+        )
+        FastScrollbar(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterEnd),
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
+            scrollInProgress = scrollableState.isScrollInProgress,
+            onThumbMoved = scrollableState.rememberThumbInteractions(
+                itemsAvailable = topics.size,
+            ),
+        )
     }
 }
