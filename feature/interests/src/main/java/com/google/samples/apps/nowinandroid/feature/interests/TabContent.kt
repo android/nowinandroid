@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -84,6 +86,7 @@ fun TopicsTabContent(
         FastScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
+                .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
