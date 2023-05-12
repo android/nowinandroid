@@ -180,7 +180,7 @@ private fun scrollbarThumbColor(
     scrollInProgress: Boolean,
     interactionSource: InteractionSource,
 ): Color {
-    var state by remember { mutableStateOf(Active) }
+    var state by remember { mutableStateOf(Dormant) }
     val pressed by interactionSource.collectIsPressedAsState()
     val hovered by interactionSource.collectIsHoveredAsState()
     val dragged by interactionSource.collectIsDraggedAsState()
