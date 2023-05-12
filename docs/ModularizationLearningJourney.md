@@ -95,7 +95,7 @@ The Now in Android app contains the following types of modules:
 * The `app` module - contains app level and scaffolding classes that bind the rest of the codebase,
   such as `MainActivity`, `NiaApp` and app-level controlled navigation. A good example of this is
   the navigation setup through `NiaNavHost` and the bottom navigation bar setup
-  through `NiaTopLevelNavigation`. The `app` module depends on all `feature` modules and
+  through `TopLevelDestination`. The `app` module depends on all `feature` modules and
   required `core` modules.
 
 * `feature:` modules - feature specific modules which are scoped to handle a single responsibility
@@ -132,7 +132,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    <td>Brings everything together required for the app to function correctly. This includes UI scaffolding and navigation. 
    </td>
    <td><code>NiaApp, MainActivity</code><br>
-   App-level controlled navigation via <code>NiaNavHost, NiaTopLevelNavigation</code>
+   App-level controlled navigation via <code>NiaNavHost, TopLevelDestination</code>
    </td>
   </tr>
   <tr>
