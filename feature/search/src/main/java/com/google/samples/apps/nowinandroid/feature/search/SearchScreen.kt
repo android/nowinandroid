@@ -17,17 +17,22 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
@@ -75,12 +80,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
@@ -289,81 +299,102 @@ private fun SearchResultBody(
     searchQuery: String = "",
 ) {
     val state = rememberLazyGridState()
-    LazyVerticalGrid(
-        columns = Adaptive(300.dp),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-            .testTag("search:newsResources"),
-        state = state,
+            .fillMaxSize(),
     ) {
-        if (topics.isNotEmpty()) {
-            item(
-                span = {
-                    GridItemSpan(maxLineSpan)
-                },
-            ) {
-                Text(
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(stringResource(id = searchR.string.topics))
-                        }
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-            }
-            topics.forEach { followableTopic ->
-                val topicId = followableTopic.topic.id
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("search:newsResources"),
+            state = state,
+        ) {
+            if (topics.isNotEmpty()) {
                 item(
-                    key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
                     span = {
                         GridItemSpan(maxLineSpan)
                     },
                 ) {
-                    InterestsItem(
-                        name = followableTopic.topic.name,
-                        following = followableTopic.isFollowed,
-                        description = followableTopic.topic.shortDescription,
-                        topicImageUrl = followableTopic.topic.imageUrl,
-                        onClick = {
-                            // Pass the current search query to ViewModel to save it as recent searches
-                            onSearchTriggered(searchQuery)
-                            onTopicClick(topicId)
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(stringResource(id = searchR.string.topics))
+                            }
                         },
-                        onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     )
                 }
+                topics.forEach { followableTopic ->
+                    val topicId = followableTopic.topic.id
+                    item(
+                        key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
+                        span = {
+                            GridItemSpan(maxLineSpan)
+                        },
+                    ) {
+                        InterestsItem(
+                            name = followableTopic.topic.name,
+                            following = followableTopic.isFollowed,
+                            description = followableTopic.topic.shortDescription,
+                            topicImageUrl = followableTopic.topic.imageUrl,
+                            onClick = {
+                                // Pass the current search query to ViewModel to save it as recent searches
+                                onSearchTriggered(searchQuery)
+                                onTopicClick(topicId)
+                            },
+                            onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+                        )
+                    }
+                }
             }
-        }
 
-        if (newsResources.isNotEmpty()) {
-            item(
-                span = {
-                    GridItemSpan(maxLineSpan)
-                },
-            ) {
-                Text(
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(stringResource(id = searchR.string.updates))
-                        }
+            if (newsResources.isNotEmpty()) {
+                item(
+                    span = {
+                        GridItemSpan(maxLineSpan)
                     },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                ) {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(stringResource(id = searchR.string.updates))
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    )
+                }
+
+                newsFeed(
+                    feedState = Success(feed = newsResources),
+                    onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                    onNewsResourceViewed = onNewsResourceViewed,
+                    onTopicClick = onTopicClick,
+                    onExpandedCardClick = {
+                        onSearchTriggered(searchQuery)
+                    },
                 )
             }
-
-            newsFeed(
-                feedState = NewsFeedUiState.Success(feed = newsResources),
-                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-                onNewsResourceViewed = onNewsResourceViewed,
-                onTopicClick = onTopicClick,
-                onExpandedCardClick = {
-                    onSearchTriggered(searchQuery)
-                },
-            )
         }
+        val itemsAvailable = topics.size + newsResources.size
+        val scrollbarState = state.scrollbarState(
+            itemsAvailable = itemsAvailable,
+        )
+        state.FastScrollbar(
+            modifier = Modifier
+                .fillMaxHeight()
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterEnd),
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
+            onThumbDisplaced = state.rememberFastScroller(
+                itemsAvailable = itemsAvailable,
+            ),
+        )
     }
 }
 

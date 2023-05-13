@@ -20,6 +20,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -62,7 +63,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberThumbInteractions
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -120,12 +121,9 @@ internal fun BookmarksScreen(
             val snackBarResult = onShowSnackbar(bookmarkRemovedMessage, undoText)
             if (snackBarResult) {
 
-                    undoBookmarkRemoval()
-                }
-
-                else  {
-                    clearUndoState()
-
+                undoBookmarkRemoval()
+            } else {
+                clearUndoState()
             }
         }
     }
@@ -142,19 +140,18 @@ internal fun BookmarksScreen(
     }
 
 
-            when (feedState) {
-                Loading -> LoadingState(modifier)
-                is Success -> if (feedState.feed.isNotEmpty()) {
-                    BookmarksGrid(
-                        feedState,
-                        removeFromBookmarks,
-                        onNewsResourceViewed,
-                        onTopicClick,
-                        modifier,
-                    )
-                } else {
-                    EmptyState(modifier)
-
+    when (feedState) {
+        Loading -> LoadingState(modifier)
+        is Success -> if (feedState.feed.isNotEmpty()) {
+            BookmarksGrid(
+                feedState,
+                removeFromBookmarks,
+                onNewsResourceViewed,
+                onTopicClick,
+                modifier,
+            )
+        } else {
+            EmptyState(modifier)
         }
     }
 
@@ -213,7 +210,7 @@ private fun BookmarksGrid(
         val scrollbarState = scrollableState.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
-        FastScrollbar(
+        scrollableState.FastScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)
@@ -221,8 +218,7 @@ private fun BookmarksGrid(
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            scrollInProgress = scrollableState.isScrollInProgress,
-            onThumbMoved = scrollableState.rememberThumbInteractions(
+            onThumbDisplaced = scrollableState.rememberFastScroller(
                 itemsAvailable = itemsAvailable,
             ),
         )

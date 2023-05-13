@@ -27,36 +27,36 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 
 /**
- * Remembers a function to react to [Scrollbar] thumb position movements for a [LazyListState]
+ * Remembers a function to react to [Scrollbar] thumb position displacements for a [LazyListState]
  * @param itemsAvailable the amount of items in the list.
  */
 @Composable
-fun LazyListState.rememberThumbInteractions(
+fun LazyListState.rememberFastScroller(
     itemsAvailable: Int,
-): (Float) -> Unit = rememberThumbInteractions(
+): (Float) -> Unit = rememberFastScroller(
     itemsAvailable = itemsAvailable,
     scroll = ::scrollToItem,
 )
 
 /**
- * Remembers a function to react to [Scrollbar] thumb position movements for a [LazyGridState]
+ * Remembers a function to react to [Scrollbar] thumb position displacements for a [LazyGridState]
  * @param itemsAvailable the amount of items in the grid.
  */
 @Composable
-fun LazyGridState.rememberThumbInteractions(
+fun LazyGridState.rememberFastScroller(
     itemsAvailable: Int,
-): (Float) -> Unit = rememberThumbInteractions(
+): (Float) -> Unit = rememberFastScroller(
     itemsAvailable = itemsAvailable,
     scroll = ::scrollToItem,
 )
 
 /**
- * Generic function to react to [Scrollbar] thumb interactions in a lazy layout.
+ * Generic function to react to [Scrollbar] thumb displacements in a lazy layout.
  * @param itemsAvailable the total amount of items available to scroll in the layout.
  * @param scroll a function to be invoked when an index has been identified to scroll to.
  */
 @Composable
-private inline fun rememberThumbInteractions(
+private inline fun rememberFastScroller(
     itemsAvailable: Int,
     crossinline scroll: suspend (index: Int) -> Unit,
 ): (Float) -> Unit {
@@ -69,6 +69,6 @@ private inline fun rememberThumbInteractions(
         scroll(indexToFind)
     }
     return remember {
-        { percentage = it }
+        { newPercentage -> percentage = newPercentage }
     }
 }
