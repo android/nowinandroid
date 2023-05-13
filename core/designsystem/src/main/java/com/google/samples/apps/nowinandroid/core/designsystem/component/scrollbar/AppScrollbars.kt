@@ -49,6 +49,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.ThumbState.Inactive
 import kotlinx.coroutines.delay
 
+private const val INACTIVE_TO_DORMANT_COOL_DOWN = 2_000L
+
 /**
  * A [Scrollbar] that allows for fast scrolling of content.
  * Its thumb disappears when the scrolling container is dormant.
@@ -80,7 +82,7 @@ fun FastScrollbar(
                 orientation = orientation,
             )
         },
-        onThumbMoved = onThumbMoved,
+        onThumbDisplaced = onThumbMoved,
     )
 }
 
@@ -202,7 +204,7 @@ private fun scrollbarThumbColor(
             true -> state = Active
             false -> {
                 state = Inactive
-                delay(2_000)
+                delay(INACTIVE_TO_DORMANT_COOL_DOWN)
                 state = Dormant
             }
         }
