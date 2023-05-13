@@ -247,8 +247,10 @@ fun Scrollbar(
                         pressedOffset = offset
 
                         interactionSource?.tryEmit(
-                            if (tryAwaitRelease()) PressInteraction.Release(initialPress)
-                            else PressInteraction.Cancel(initialPress),
+                            when {
+                                tryAwaitRelease() -> PressInteraction.Release(initialPress)
+                                else -> PressInteraction.Cancel(initialPress)
+                            },
                         )
 
                         // End the press
