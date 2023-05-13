@@ -37,7 +37,7 @@ fun LazyListState.scrollbarState(
     scrollbarState(
         itemsAvailable = itemsAvailable,
         visibleItems = { layoutInfo.visibleItemsInfo },
-        firstItemIndex = { visibleItems ->
+        firstVisibleItemIndex = { visibleItems ->
             interpolateFirstItemIndex(
                 visibleItems = visibleItems,
                 itemSize = { it.size },
@@ -71,7 +71,7 @@ fun LazyGridState.scrollbarState(
     scrollbarState(
         itemsAvailable = itemsAvailable,
         visibleItems = { layoutInfo.visibleItemsInfo },
-        firstItemIndex = { visibleItems ->
+        firstVisibleItemIndex = { visibleItems ->
             interpolateFirstItemIndex(
                 visibleItems = visibleItems,
                 itemSize = {

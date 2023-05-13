@@ -33,7 +33,7 @@ import kotlin.math.min
  * Calculates the [ScrollbarState] for lazy layouts.
  * @param itemsAvailable the total amount of items available to scroll in the layout.
  * @param visibleItems a list of items currently visible in the layout.
- * @param firstItemIndex a function for interpolating the first visible index in the lazy layout
+ * @param firstVisibleItemIndex a function for interpolating the first visible index in the lazy layout
  * as scrolling progresses for smooth and linear scrollbar thumb progression.
  * [itemsAvailable].
  * @param reverseLayout if the items in the backing lazy layout are laid out in reverse order.
@@ -42,7 +42,7 @@ import kotlin.math.min
 internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrollbarState(
     itemsAvailable: Int,
     crossinline visibleItems: LazyState.() -> List<LazyStateItem>,
-    crossinline firstItemIndex: LazyState.(List<LazyStateItem>) -> Float,
+    crossinline firstVisibleItemIndex: LazyState.(List<LazyStateItem>) -> Float,
     crossinline itemPercentVisible: LazyState.(LazyStateItem) -> Float,
     crossinline reverseLayout: LazyState.() -> Boolean,
 ): ScrollbarState {
@@ -58,9 +58,8 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
             val visibleItemsInfo = visibleItems(this@scrollbarState)
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
 
-            // Add the item offset for interpolation between scroll indices
             val firstIndex = min(
-                a = firstItemIndex(visibleItemsInfo),
+                a = firstVisibleItemIndex(visibleItemsInfo),
                 b = itemsAvailable.toFloat(),
             )
             if (firstIndex.isNaN()) return@snapshotFlow null
@@ -77,10 +76,9 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
                 a = itemsVisible / itemsAvailable,
                 b = 1f,
             )
-
             ScrollbarState(
                 thumbSizePercent = thumbSizePercent,
-                thumbTravelPercent = when {
+                thumbDisplacementPercent = when {
                     reverseLayout() -> 1f - thumbTravelPercent
                     else -> thumbTravelPercent
                 },
