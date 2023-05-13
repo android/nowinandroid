@@ -93,7 +93,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconT
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DecorativeScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberThumbInteractions
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -230,7 +230,7 @@ internal fun ForYouScreen(
                 )
             }
         }
-        FastScrollbar(
+        state.FastScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)
@@ -238,8 +238,7 @@ internal fun ForYouScreen(
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            scrollInProgress = state.isScrollInProgress,
-            onThumbMoved = state.rememberThumbInteractions(
+            onThumbDisplaced = state.rememberFastScroller(
                 itemsAvailable = itemsAvailable,
             ),
         )
@@ -365,14 +364,13 @@ private fun TopicSelection(
                 )
             }
         }
-        DecorativeScrollbar(
+        lazyGridState.DecorativeScrollbar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .align(Alignment.BottomStart),
             state = lazyGridState.scrollbarState(itemsAvailable = onboardingUiState.topics.size),
             orientation = Orientation.Horizontal,
-            scrollInProgress = lazyGridState.isScrollInProgress,
         )
     }
 }

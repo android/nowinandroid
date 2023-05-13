@@ -23,6 +23,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.Orientation.Horizontal
 import androidx.compose.foundation.gestures.Orientation.Vertical
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
@@ -56,18 +57,15 @@ private const val INACTIVE_TO_DORMANT_COOL_DOWN = 2_000L
  * Its thumb disappears when the scrolling container is dormant.
  * @param modifier a [Modifier] for the [Scrollbar]
  * @param state the driving state for the [Scrollbar]
- * @param scrollInProgress a flag indicating if the scrolling container for the scrollbar is
- * currently scrolling
  * @param orientation the orientation of the scrollbar
- * @param onThumbMoved the fast scroll implementation
+ * @param onThumbDisplaced the fast scroll implementation
  */
 @Composable
-fun FastScrollbar(
+fun ScrollableState.FastScrollbar(
     modifier: Modifier = Modifier,
     state: ScrollbarState,
-    scrollInProgress: Boolean,
     orientation: Orientation,
-    onThumbMoved: (Float) -> Unit,
+    onThumbDisplaced: (Float) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Scrollbar(
@@ -77,12 +75,11 @@ fun FastScrollbar(
         state = state,
         thumb = {
             FastScrollbarThumb(
-                scrollInProgress = scrollInProgress,
                 interactionSource = interactionSource,
                 orientation = orientation,
             )
         },
-        onThumbDisplaced = onThumbMoved,
+        onThumbDisplaced = onThumbDisplaced,
     )
 }
 
@@ -91,15 +88,12 @@ fun FastScrollbar(
  * Its thumb disappears when the scrolling container is dormant.
  * @param modifier a [Modifier] for the [Scrollbar]
  * @param state the driving state for the [Scrollbar]
- * @param scrollInProgress a flag indicating if the scrolling container for the scrollbar is
- * currently scrolling
  * @param orientation the orientation of the scrollbar
  */
 @Composable
-fun DecorativeScrollbar(
+fun ScrollableState.DecorativeScrollbar(
     modifier: Modifier = Modifier,
     state: ScrollbarState,
-    scrollInProgress: Boolean,
     orientation: Orientation,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -111,7 +105,6 @@ fun DecorativeScrollbar(
         thumb = {
             DecorativeScrollbarThumb(
                 interactionSource = interactionSource,
-                scrollInProgress = scrollInProgress,
                 orientation = orientation,
             )
         },
@@ -122,8 +115,7 @@ fun DecorativeScrollbar(
  * A scrollbar thumb that is intended to also be a touch target for fast scrolling.
  */
 @Composable
-private fun FastScrollbarThumb(
-    scrollInProgress: Boolean,
+private fun ScrollableState.FastScrollbarThumb(
     interactionSource: InteractionSource,
     orientation: Orientation,
 ) {
@@ -137,7 +129,6 @@ private fun FastScrollbarThumb(
             }
             .background(
                 color = scrollbarThumbColor(
-                    scrollInProgress = scrollInProgress,
                     interactionSource = interactionSource,
                 ),
                 shape = RoundedCornerShape(16.dp),
@@ -149,8 +140,7 @@ private fun FastScrollbarThumb(
  * A decorative scrollbar thumb for communicating a user's position in a list solely.
  */
 @Composable
-private fun DecorativeScrollbarThumb(
-    scrollInProgress: Boolean,
+private fun ScrollableState.DecorativeScrollbarThumb(
     interactionSource: InteractionSource,
     orientation: Orientation,
 ) {
@@ -164,7 +154,6 @@ private fun DecorativeScrollbarThumb(
             }
             .background(
                 color = scrollbarThumbColor(
-                    scrollInProgress = scrollInProgress,
                     interactionSource = interactionSource,
                 ),
                 shape = RoundedCornerShape(16.dp),
@@ -174,19 +163,18 @@ private fun DecorativeScrollbarThumb(
 
 /**
  * The color of the scrollbar thumb as a function of its interaction state.
- * @param scrollInProgress if the scrolling container is currently scrolling
  * @param interactionSource source of interactions in the scrolling container
  */
 @Composable
-private fun scrollbarThumbColor(
-    scrollInProgress: Boolean,
+private fun ScrollableState.scrollbarThumbColor(
     interactionSource: InteractionSource,
 ): Color {
     var state by remember { mutableStateOf(Dormant) }
     val pressed by interactionSource.collectIsPressedAsState()
     val hovered by interactionSource.collectIsHoveredAsState()
     val dragged by interactionSource.collectIsDraggedAsState()
-    val active = pressed || hovered || dragged || scrollInProgress
+    val active = (canScrollForward || canScrollForward) &&
+        (pressed || hovered || dragged || isScrollInProgress)
 
     val color by animateColorAsState(
         targetValue = when (state) {
@@ -202,7 +190,7 @@ private fun scrollbarThumbColor(
     LaunchedEffect(active) {
         when (active) {
             true -> state = Active
-            false -> {
+            false -> if (state == Active) {
                 state = Inactive
                 delay(INACTIVE_TO_DORMANT_COOL_DOWN)
                 state = Dormant
