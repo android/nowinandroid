@@ -1,150 +1,211 @@
-![Now in Android](docs/images/nia-splash.jpg "Now in Android")
+# Bug report
+**Affected library:** Coil Compose
+**Cause:** Coroutine Launched Outside Side Effect in rememberAsyncImagePainter
 
-<a href="https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
+I have identified a bug in the Coil Compose library that appears to originate from the
+rememberAsyncImagePainter composable function. The bug arises when a onRemembered function is
+invoked inside the rememberAsyncImagePainter function.
 
-Now in Android App
-==================
+onRemembered is a non-composable function that establishes a new coroutine scope and launches a
+coroutine. The issue appears to be that the coroutine is being launched outside of a side effect
+block within a composable function, which is not a good practice in the Jetpack Compose framework.
+The main reason why launching coroutines outside a side effect in a composable function is
+problematic is due to the life-cycle of the composable function. Jetpack Compose recomposes (reruns)
+composable functions for various reasons, such as when the data they're displaying changes. This
+means that a coroutine could be launched multiple times if it's not managed within a side effect
+block such as LaunchedEffect, DisposableEffect, or produceState.
 
-**Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
+Launching a coroutine outside a side-effect block can also result in memory leaks as it's not tied
+to the lifecycle of the composable function. Side effects ensure that when the composable leaves the
+composition, any resources (like the coroutine) are cleaned up.
 
-This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
-app. It is a **work in progress** 🚧.
+This could lead to unexpected behavior, as the scope of the coroutine isn't necessarily tied to the
+lifecycle of the composable function, which can result in unexpected outcomes such as memory leaks
+or even application crashes.
 
-**Now in Android** is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
-follows Android design and development best practices and is intended to be a useful reference
-for developers. As a running app, it's intended to help developers keep up-to-date with the world
-of Android development by providing regular news updates.
+Potential Solution:
+A potential solution could be to move the coroutine launch into a side effect block such as
+LaunchedEffect that automatically cancels the coroutine when the composable function leaves the
+composition.
 
-The app is currently in development. The `demoRelease` variant is [available on the Play Store in open beta](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
-
-# Features
-
-**Now in Android** displays content from the
-[Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
-links to recent videos, articles and other content. Users can also follow topics they are interested
-in.
-
-## Screenshots
-
-![Screenshot showing For You screen, Interests screen and Topic detail screen](docs/images/screenshots.png "Screenshot showing For You screen, Interests screen and Topic detail screen")
-
-# Development Environment
-
-**Now in Android** uses the Gradle build system and can be imported directly into Android Studio (make sure you are using the latest stable version available [here](https://developer.android.com/studio)). 
-
-Change the run configuration to `app`.
-
-![image](https://user-images.githubusercontent.com/873212/210559920-ef4a40c5-c8e0-478b-bb00-4879a8cf184a.png)
-
-The `demoDebug` and `demoRelease` build variants can be built and run (the `prod` variants use a backend server which is not currently publicly available).
-
-![image](https://user-images.githubusercontent.com/873212/210560507-44045dc5-b6d5-41ca-9746-f0f7acf22f8e.png)
-
-Once you're up and running, you can refer to the learning journeys below to get a better
-understanding of which libraries and tools are being used, the reasoning behind the approaches to
-UI, testing, architecture and more, and how all of these different pieces of the project fit
-together to create a complete app.
-
-NOTE: Building the app using an M1 Mac will require the use of
-[Rosetta](https://support.apple.com/en-gb/HT211861). See
-[the following bug](https://github.com/protocolbuffers/protobuf/issues/9397#issuecomment-1086138036)
-for more details.
-
-# Architecture
-
-The **Now in Android** app follows the
-[official architecture guidance](https://developer.android.com/topic/architecture) 
-and is described in detail in the
-[architecture learning journey](docs/ArchitectureLearningJourney.md).
-
-# Modularization
-
-The **Now in Android** app has been fully modularized and you can find the detailed guidance and
-description of the modularization strategy used in
-[modularization learning journey](docs/ModularizationLearningJourney.md).
-
-# Build
-
-The app contains the usual `debug` and `release` build variants. 
-
-In addition, the `benchmark` variant of `app` is used to test startup performance and generate a
-baseline profile (see below for more information).
-
-`app-nia-catalog` is a standalone app that displays the list of components that are stylized for
-**Now in Android**.
-
-The app also uses
-[product flavors](https://developer.android.com/studio/build/build-variants#product-flavors) to
-control where content for the app should be loaded from.
-
-The `demo` flavor uses static local data to allow immediate building and exploring of the UI.
-
-The `prod` flavor makes real network calls to a backend server, providing up-to-date content. At 
-this time, there is not a public backend available.
-
-For normal development use the `demoDebug` variant. For UI performance testing use the
-`demoRelease` variant. 
-
-# Testing
-
-To facilitate testing of components, **Now in Android** uses dependency injection with
-[Hilt](https://developer.android.com/training/dependency-injection/hilt-android).
-
-Most data layer components are defined as interfaces.
-Then, concrete implementations (with various dependencies) are bound to provide those interfaces to
-other components in the app.
-In tests, **Now in Android** notably does _not_ use any mocking libraries.
-Instead, the production implementations can be replaced with test doubles using Hilt's testing APIs
-(or via manual constructor injection for `ViewModel` tests).
-
-These test doubles implement the same interface as the production implementations and generally
-provide a simplified (but still realistic) implementation with additional testing hooks.
-This results in less brittle tests that may exercise more production code, instead of just verifying
-specific calls against mocks.
-
-Examples:
-- In instrumentation tests, a temporary folder is used to store the user's preferences, which is
-  wiped after each test.
-  This allows using the real `DataStore` and exercising all related code, instead of mocking the 
-  flow of data updates.
-
-- There are `Test` implementations of each repository, which implement the normal, full repository
-  interface and also provide test-only hooks.
-  `ViewModel` tests use these `Test` repositories, and thus can use the test-only hooks to
-  manipulate the state of the `Test` repository and verify the resulting behavior, instead of
-  checking that specific repository methods were called.
-
-# UI
-The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
-obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma) (design assets [also available as a PDF](docs/Now-In-Android-Design-File.pdf)).
-
-The Screens and UI elements are built entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose). 
-
-The app has two themes: 
-
-- Dynamic color - uses colors based on the [user's current color theme](https://material.io/blog/announcing-material-you) (if supported)
-- Default theme - uses predefined colors when dynamic color is not supported
-
-Each theme also supports dark mode. 
-
-The app uses adaptive layouts to
-[support different screen sizes](https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes).
-
-Find out more about the [UI architecture here](docs/ArchitectureLearningJourney.md#ui-layer).
-
-# Baseline profiles
-
-The baseline profile for this app is located at [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
-It contains rules that enable AOT compilation of the critical user path taken during app launch.
-For more information on baseline profiles, read [this document](https://developer.android.com/studio/profile/baselineprofiles).
-
-> Note: The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
-
-To generate the baseline profile, select the `benchmark` build variant and run the
-`BaselineProfileGenerator` benchmark test on an AOSP Android Emulator.
-Then copy the resulting baseline profile from the emulator to [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
-
-# License
-
-**Now in Android** is distributed under the terms of the Apache License (Version 2.0). See the
-[license](LICENSE) for more information.
+```
+java.lang.IllegalStateException: Unsupported concurrent change during composition. A state object was modified by composition as well as being modified outside composition.
+at androidx.compose.runtime.Recomposer.applyAndCheck(Recomposer.kt:1127)
+at androidx.compose.runtime.Recomposer.composeInitial$runtime_release(Recomposer.kt:1460)
+at androidx.compose.runtime.ComposerImpl$CompositionContextImpl.composeInitial$runtime_release(Composer.kt:3973)
+at androidx.compose.runtime.ComposerImpl$CompositionContextImpl.composeInitial$runtime_release(Composer.kt:3973)
+at androidx.compose.runtime.CompositionImpl.setContent(Composition.kt:519)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcomposeInto(SubcomposeLayout.kt:466)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:439)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:430)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose(SubcomposeLayout.kt:419)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState$Scope.subcompose(SubcomposeLayout.kt:740)
+at androidx.compose.foundation.lazy.layout.LazyLayoutMeasureScopeImpl.measure-0kLqBqw(LazyLayoutMeasureScope.kt:118)
+at androidx.compose.foundation.lazy.LazyMeasuredItemProvider.getAndMeasure-ZjPyQlc(LazyMeasuredItemProvider.kt:47)
+at androidx.compose.foundation.lazy.LazyListMeasureKt.measureLazyList-Hh3qtAg(LazyListMeasure.kt:164)
+at androidx.compose.foundation.lazy.LazyListKt$rememberLazyListMeasurePolicy$1$1.invoke-0kLqBqw(LazyList.kt:299)
+at androidx.compose.foundation.lazy.LazyListKt$rememberLazyListMeasurePolicy$1$1.invoke(LazyList.kt:190)
+at androidx.compose.foundation.lazy.layout.LazyLayoutKt$LazyLayout$1$2$1.invoke-0kLqBqw(LazyLayout.kt:71)
+at androidx.compose.foundation.lazy.layout.LazyLayoutKt$LazyLayout$1$2$1.invoke(LazyLayout.kt:69)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState$createMeasurePolicy$1.measure-3p2s80s(SubcomposeLayout.kt:598)
+at androidx.compose.ui.node.InnerNodeCoordinator.measure-BRTryo0(InnerNodeCoordinator.kt:103)
+at androidx.compose.foundation.AndroidOverscrollKt$StretchOverscrollNonClippingLayer$2.invoke-3p2s80s(AndroidOverscroll.kt:578)
+at androidx.compose.foundation.AndroidOverscrollKt$StretchOverscrollNonClippingLayer$2.invoke(AndroidOverscroll.kt:577)
+at androidx.compose.ui.layout.LayoutModifierImpl.measure-3p2s80s(LayoutModifier.kt:294)
+at androidx.compose.ui.node.LayoutModifierNodeCoordinator.measure-BRTryo0(LayoutModifierNodeCoordinator.kt:155)
+at androidx.compose.foundation.AndroidOverscrollKt$StretchOverscrollNonClippingLayer$1.invoke-3p2s80s(AndroidOverscroll.kt:562)
+at androidx.compose.foundation.AndroidOverscrollKt$StretchOverscrollNonClippingLayer$1.invoke(AndroidOverscroll.kt:561)
+at androidx.compose.ui.layout.LayoutModifierImpl.measure-3p2s80s(LayoutModifier.kt:294)
+at androidx.compose.ui.node.LayoutModifierNodeCoordinator.measure-BRTryo0(LayoutModifierNodeCoordinator.kt:155)
+at androidx.compose.ui.graphics.SimpleGraphicsLayerModifier.measure-3p2s80s(GraphicsLayerModifier.kt:635)
+at androidx.compose.ui.node.LayoutModifierNodeCoordinator.measure-BRTryo0(LayoutModifierNodeCoordinator.kt:155)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1090)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+2023-05-15 16:28:46.180 21093-21116 TestRunner              com...gle.samples.apps.nowinandroid  E  	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeMeasureSnapshotReads$ui_release(OwnerSnapshotObserver.kt:107)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.access$performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:36)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.remeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:342)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.measure-BRTryo0(LayoutNodeLayoutDelegate.kt:321)
+at androidx.compose.foundation.layout.BoxKt$boxMeasurePolicy$1.measure-3p2s80s(Box.kt:115)
+at androidx.compose.ui.node.InnerNodeCoordinator.measure-BRTryo0(InnerNodeCoordinator.kt:103)
+at androidx.compose.ui.graphics.BlockGraphicsLayerModifier.measure-3p2s80s(GraphicsLayerModifier.kt:572)
+at androidx.compose.ui.node.LayoutModifierNodeCoordinator.measure-BRTryo0(LayoutModifierNodeCoordinator.kt:155)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1090)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeMeasureSnapshotReads$ui_release(OwnerSnapshotObserver.kt:107)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.access$performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:36)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.remeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:342)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.measure-BRTryo0(LayoutNodeLayoutDelegate.kt:321)
+at androidx.compose.foundation.layout.BoxKt$boxMeasurePolicy$1.measure-3p2s80s(Box.kt:115)
+at androidx.compose.ui.node.InnerNodeCoordinator.measure-BRTryo0(InnerNodeCoordinator.kt:103)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1090)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+2023-05-15 16:28:46.180 21093-21116 TestRunner              com...gle.samples.apps.nowinandroid  E  	at androidx.compose.ui.node.OwnerSnapshotObserver.observeMeasureSnapshotReads$ui_release(OwnerSnapshotObserver.kt:107)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.access$performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:36)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.remeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:342)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.measure-BRTryo0(LayoutNodeLayoutDelegate.kt:321)
+at androidx.compose.foundation.layout.RowColumnMeasurementHelper.measureWithoutPlacing-_EkL_-Y(RowColumnMeasurementHelper.kt:112)
+at androidx.compose.foundation.layout.RowColumnImplKt$rowColumnMeasurePolicy$1.measure-3p2s80s(RowColumnImpl.kt:70)
+at androidx.compose.ui.node.InnerNodeCoordinator.measure-BRTryo0(InnerNodeCoordinator.kt:103)
+at androidx.compose.foundation.layout.InsetsPaddingModifier.measure-3p2s80s(WindowInsetsPadding.kt:171)
+at androidx.compose.ui.node.BackwardsCompatNode.measure-3p2s80s(BackwardsCompatNode.kt:323)
+at androidx.compose.ui.node.LayoutModifierNodeCoordinator.measure-BRTryo0(LayoutModifierNodeCoordinator.kt:155)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1090)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$performMeasure$2.invoke(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeMeasureSnapshotReads$ui_release(OwnerSnapshotObserver.kt:107)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:1086)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate.access$performMeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:36)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.remeasure-BRTryo0(LayoutNodeLayoutDelegate.kt:342)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.measure-BRTryo0(LayoutNodeLayoutDelegate.kt:321)
+at androidx.compose.material3.ScaffoldKt$ScaffoldLayout$1$1$1.invoke(Scaffold.kt:240)
+at androidx.compose.material3.ScaffoldKt$ScaffoldLayout$1$1$1.invoke(Scaffold.kt:128)
+at androidx.compose.ui.layout.MeasureScope$layout$1.placeChildren(MeasureScope.kt:70)
+at androidx.compose.ui.layout.LayoutNodeSubcompositionsState$createMeasurePolicy$1$measure$1.placeChildren(SubcomposeLayout.kt:610)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate$layoutChildren$1$1.invoke(LayoutNodeLayoutDelegate.kt:276)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate$layoutChildren$1$1.invoke(LayoutNodeLayoutDelegate.kt:268)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+2023-05-15 16:28:46.181 21093-21116 TestRunner              com...gle.samples.apps.nowinandroid  E  	at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeLayoutSnapshotReads$ui_release(OwnerSnapshotObserver.kt:77)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.layoutChildren(LayoutNodeLayoutDelegate.kt:268)
+at androidx.compose.ui.node.LayoutNode.onNodePlaced$ui_release(LayoutNode.kt:956)
+at androidx.compose.ui.node.InnerNodeCoordinator.placeAt-f8xVGno(InnerNodeCoordinator.kt:137)
+at androidx.compose.ui.layout.Placeable.access$placeAt-f8xVGno(Placeable.kt:35)
+at androidx.compose.ui.layout.Placeable$PlacementScope.place-70tqf50(Placeable.kt:445)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate$placeOuterCoordinator$1.invoke(LayoutNodeLayoutDelegate.kt:451)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate$placeOuterCoordinator$1.invoke(LayoutNodeLayoutDelegate.kt:445)
+at androidx.compose.runtime.snapshots.Snapshot$Companion.observe(Snapshot.kt:2200)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:234)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver$observeReads$1$1.invoke(SnapshotStateObserver.kt:230)
+at androidx.compose.runtime.SnapshotStateKt__DerivedStateKt.observeDerivedStateRecalculations(DerivedState.kt:341)
+at androidx.compose.runtime.SnapshotStateKt.observeDerivedStateRecalculations(Unknown Source:1)
+at androidx.compose.runtime.snapshots.SnapshotStateObserver.observeReads(SnapshotStateObserver.kt:230)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeReads$ui_release(OwnerSnapshotObserver.kt:120)
+at androidx.compose.ui.node.OwnerSnapshotObserver.observeLayoutModifierSnapshotReads$ui_release(OwnerSnapshotObserver.kt:92)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.placeOuterCoordinator-f8xVGno(LayoutNodeLayoutDelegate.kt:445)
+at androidx.compose.ui.node.LayoutNodeLayoutDelegate$MeasurePassDelegate.replace(LayoutNodeLayoutDelegate.kt:466)
+at androidx.compose.ui.node.LayoutNode.replace$ui_release(LayoutNode.kt:844)
+at androidx.compose.ui.node.MeasureAndLayoutDelegate.remeasureAndRelayoutIfNeeded(MeasureAndLayoutDelegate.kt:445)
+at androidx.compose.ui.node.MeasureAndLayoutDelegate.access$remeasureAndRelayoutIfNeeded(MeasureAndLayoutDelegate.kt:39)
+at androidx.compose.ui.node.MeasureAndLayoutDelegate.measureAndLayout(MeasureAndLayoutDelegate.kt:330)
+at androidx.compose.ui.platform.AndroidComposeView.measureAndLayout(AndroidComposeView.android.kt:805)
+at androidx.compose.ui.node.Owner.measureAndLayout$default(Owner.kt:221)
+at androidx.compose.ui.platform.AndroidComposeView.measureAndLayoutForTest(AndroidComposeView.android.kt:860)
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$frameClock$1.invoke(ComposeUiTest.android.kt:262)
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$frameClock$1.invoke(ComposeUiTest.android.kt:254)
+at androidx.compose.ui.test.TestMonotonicFrameClock$performFrame$1.invoke(TestMonotonicFrameClock.jvm.kt:152)
+at androidx.compose.ui.test.TestMonotonicFrameClock$performFrame$1.invoke(TestMonotonicFrameClock.jvm.kt:132)
+at androidx.compose.ui.test.FrameDeferringContinuationInterceptor.runWithoutResumingCoroutines(FrameDeferringContinuationInterceptor.kt:60)
+at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame(TestMonotonicFrameClock.jvm.kt:132)
+at androidx.compose.ui.test.TestMonotonicFrameClock.access$performFrame(TestMonotonicFrameClock.jvm.kt:53)
+at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$2.invokeSuspend(TestMonotonicFrameClock.jvm.kt:110)
+at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:234)
+2023-05-15 16:28:46.181 21093-21116 TestRunner              com...gle.samples.apps.nowinandroid  E  	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:166)
+at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:397)
+at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl(CancellableContinuationImpl.kt:431)
+at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$default(CancellableContinuationImpl.kt:420)
+at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:518)
+at kotlinx.coroutines.test.CancellableContinuationRunnable.run(TestDispatcher.kt:50)
+at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:28)
+at kotlinx.coroutines.test.TestCoroutineScheduler.runCurrent(TestCoroutineScheduler.kt:135)
+at androidx.compose.ui.test.junit4.AbstractMainTestClock$advanceDispatcher$1.invoke(AbstractMainTestClock.kt:74)
+at androidx.compose.ui.test.junit4.AbstractMainTestClock$advanceDispatcher$1.invoke(AbstractMainTestClock.kt:67)
+at androidx.compose.ui.test.junit4.AndroidSynchronization_androidKt.runOnUiThread(AndroidSynchronization.android.kt:33)
+at androidx.compose.ui.test.junit4.MainTestClockImpl$1.invoke(MainTestClockImpl.android.kt:32)
+at androidx.compose.ui.test.junit4.MainTestClockImpl$1.invoke(MainTestClockImpl.android.kt:32)
+at androidx.compose.ui.test.junit4.AbstractMainTestClock.advanceDispatcher(AbstractMainTestClock.kt:67)
+at androidx.compose.ui.test.junit4.AbstractMainTestClock.advanceTimeByFrame(AbstractMainTestClock.kt:38)
+at androidx.compose.ui.test.junit4.ComposeIdlingResource.isIdleNow(ComposeIdlingResource.android.kt:74)
+at androidx.compose.ui.test.junit4.IdlingResourceRegistry.areAllResourcesIdle(IdlingResourceRegistry.jvm.kt:124)
+at androidx.compose.ui.test.junit4.IdlingResourceRegistry.isIdleOrEnsurePolling$ui_test_junit4_release(IdlingResourceRegistry.jvm.kt:103)
+at androidx.compose.ui.test.junit4.EspressoLink.isIdleNow(EspressoLink.android.kt:44)
+at androidx.test.espresso.base.IdlingResourceRegistry.allResourcesAreIdle(IdlingResourceRegistry.java:4)
+at androidx.test.espresso.base.IdlingResourceRegistry$6.isIdleNow(IdlingResourceRegistry.java:1)
+at androidx.test.espresso.base.UiControllerImpl.loopMainThreadUntilIdle(UiControllerImpl.java:10)
+at androidx.test.espresso.Espresso$1.run(Espresso.java:1)
+at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+at android.os.Handler.handleCallback(Handler.java:942)
+at android.os.Handler.dispatchMessage(Handler.java:99)
+at android.os.Looper.loopOnce(Looper.java:201)
+at android.os.Looper.loop(Looper.java:288)
+at android.app.ActivityThread.main(ActivityThread.java:7898)
+at java.lang.reflect.Method.invoke(Native Method)
+at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+```
