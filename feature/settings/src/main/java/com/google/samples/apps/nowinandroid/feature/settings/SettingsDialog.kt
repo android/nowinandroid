@@ -250,11 +250,11 @@ private fun LinksPanel() {
             space = 16.dp,
             alignment = Alignment.CenterHorizontally,
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         val uriHandler = LocalUriHandler.current
         NiaTextButton(
-            onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) }
+            onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
         ) {
             Text(text = stringResource(string.privacy_policy))
         }
@@ -262,17 +262,17 @@ private fun LinksPanel() {
         NiaTextButton(
             onClick = {
                 context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            }
+            },
         ) {
             Text(text = stringResource(string.licenses))
         }
         NiaTextButton(
-            onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) }
+            onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) },
         ) {
             Text(text = stringResource(string.brand_guidelines))
         }
         NiaTextButton(
-            onClick = { uriHandler.openUri(FEEDBACK_URL) }
+            onClick = { uriHandler.openUri(FEEDBACK_URL) },
         ) {
             Text(text = stringResource(string.feedback))
         }
