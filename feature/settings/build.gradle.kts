@@ -27,5 +27,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.google.oss.licenses)
+    implementation(libs.google.oss.licenses) {
+        exclude(group = "androidx.appcompat")
+    }
 }
