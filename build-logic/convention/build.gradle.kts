@@ -22,16 +22,15 @@ plugins {
 
 group = "com.google.samples.apps.nowinandroid.buildlogic"
 
+// Configure the build-logic plugins to target JDK 17
+// This matches the JDK used to build the project, and is not related to what is running on device.
 java {
-    // Up to Java 11 APIs are available through desugaring
-    // https://developer.android.com/studio/write/java11-minimal-support-table
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
-
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -92,6 +91,10 @@ gradlePlugin {
         register("androidFlavors") {
             id = "nowinandroid.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
+        register("jvmLibrary") {
+            id = "nowinandroid.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
         }
     }
 }
