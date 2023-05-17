@@ -23,6 +23,7 @@ plugins {
     id("nowinandroid.android.hilt")
     id("jacoco")
     id("nowinandroid.android.application.firebase")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -118,7 +119,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.profileinstaller)
-
     implementation(libs.coil.kt)
 }
 
