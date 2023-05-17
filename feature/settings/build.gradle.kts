@@ -25,3 +25,10 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.settings"
 }
+
+dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation(libs.google.oss.licenses) {
+        exclude(group = "androidx.appcompat")
+    }
+}

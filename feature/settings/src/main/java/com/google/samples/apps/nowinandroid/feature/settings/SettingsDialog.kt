@@ -16,12 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -48,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
@@ -236,54 +242,41 @@ fun SettingsDialogThemeChooserRow(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LinksPanel() {
-    Row(
-        modifier = Modifier.padding(top = 16.dp),
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(
+            space = 16.dp,
+            alignment = Alignment.CenterHorizontally,
+        ),
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(
-            Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        val uriHandler = LocalUriHandler.current
+        NiaTextButton(
+            onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
         ) {
-            Row {
-                TextLink(
-                    text = stringResource(string.privacy_policy),
-                    url = PRIVACY_POLICY_URL,
-                )
-                Spacer(Modifier.width(16.dp))
-                TextLink(
-                    text = stringResource(string.licenses),
-                    url = LICENSES_URL,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                TextLink(
-                    text = stringResource(string.brand_guidelines),
-                    url = BRAND_GUIDELINES_URL,
-                )
-                Spacer(Modifier.width(16.dp))
-                TextLink(
-                    text = stringResource(string.feedback),
-                    url = FEEDBACK_URL,
-                )
-            }
+            Text(text = stringResource(string.privacy_policy))
+        }
+        val context = LocalContext.current
+        NiaTextButton(
+            onClick = {
+                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+            },
+        ) {
+            Text(text = stringResource(string.licenses))
+        }
+        NiaTextButton(
+            onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) },
+        ) {
+            Text(text = stringResource(string.brand_guidelines))
+        }
+        NiaTextButton(
+            onClick = { uriHandler.openUri(FEEDBACK_URL) },
+        ) {
+            Text(text = stringResource(string.feedback))
         }
     }
-}
-
-@Composable
-private fun TextLink(text: String, url: String) {
-    val uriHandler = LocalUriHandler.current
-
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .clickable { uriHandler.openUri(url) },
-    )
 }
 
 @Preview
@@ -322,8 +315,5 @@ private fun PreviewSettingsDialogLoading() {
 
 /* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
-private const val LICENSES_URL =
-    "https://github.com/android/nowinandroid/blob/main/app/LICENSES.md#open-source-licenses-and-copyright-notices"
-private const val BRAND_GUIDELINES_URL =
-    "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
+private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
 private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"
