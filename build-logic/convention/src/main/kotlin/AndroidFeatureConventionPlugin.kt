@@ -14,15 +14,13 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
+import com.google.samples.apps.nowinandroid.nia
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
@@ -40,7 +38,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 configureGradleManagedDevices(this)
             }
 
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+            val libs = nia().libraries
 
             dependencies {
                 add("implementation", project(":core:model"))
@@ -56,14 +54,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", kotlin("test"))
                 add("androidTestImplementation", project(":core:testing"))
 
-                add("implementation", libs.findLibrary("coil.kt").get())
-                add("implementation", libs.findLibrary("coil.kt.compose").get())
+                add("implementation", libs.`coil-kt`)
+                add("implementation", libs.`coil-kt-compose`)
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+                add("implementation", libs.`androidx-hilt-navigation-compose`)
+                add("implementation", libs.`androidx-lifecycle-runtimeCompose`)
+                add("implementation", libs.`androidx-lifecycle-viewModelCompose`)
 
-                add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
+                add("implementation", libs.`kotlinx-coroutines-android`)
             }
         }
     }
