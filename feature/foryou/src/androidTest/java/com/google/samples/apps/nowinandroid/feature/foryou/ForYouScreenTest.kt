@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import android.Manifest
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.test.assertHasClickAction
@@ -40,7 +42,9 @@ import org.junit.Test
 class ForYouScreenTest {
 
     @get:Rule
-    val permissionTestRule: GrantPermissionRule = grant(Manifest.permission.POST_NOTIFICATIONS)
+    val permissionTestRule: GrantPermissionRule =
+        if (SDK_INT < TIRAMISU) grant()
+        else grant(Manifest.permission.POST_NOTIFICATIONS)
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
