@@ -43,8 +43,11 @@ class ForYouScreenTest {
 
     @get:Rule
     val permissionTestRule: GrantPermissionRule =
-        if (SDK_INT < TIRAMISU) grant()
-        else grant(Manifest.permission.POST_NOTIFICATIONS)
+        if (SDK_INT >= TIRAMISU) {
+            grant(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            grant()
+        }
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
