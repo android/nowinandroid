@@ -30,8 +30,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Build AndroidTest apps
         run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
