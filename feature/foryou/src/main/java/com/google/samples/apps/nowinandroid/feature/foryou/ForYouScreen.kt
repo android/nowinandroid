@@ -96,6 +96,9 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.tunjid.tiler.TiledList
+import com.tunjid.tiler.compose.PivotedTilingEffect
+import com.tunjid.tiler.emptyTiledList
 
 @Composable
 internal fun ForYouRoute(
@@ -114,11 +117,12 @@ internal fun ForYouRoute(
         feedState = feedState,
         deepLinkedUserNewsResource = deepLinkedUserNewsResource,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
-        onDeepLinkOpened = viewModel::onDeepLinkOpened,
         onTopicClick = onTopicClick,
+        onDeepLinkOpened = viewModel::onDeepLinkOpened,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
+        onPageChanged = viewModel::onPageChanged,
         modifier = modifier,
     )
 }
@@ -135,6 +139,7 @@ internal fun ForYouScreen(
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
+    onPageChanged: (Int?) -> Unit = { },
     modifier: Modifier = Modifier,
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
@@ -218,6 +223,15 @@ internal fun ForYouScreen(
     DeepLinkEffect(
         deepLinkedUserNewsResource,
         onDeepLinkOpened,
+    )
+    // Ideally, NewsFeedUiState should have a tiled list. Using ugly casting to keep the diff small
+    val tiledItems =
+        ((feedState as? NewsFeedUiState.Success)?.feed as? TiledList<Int, UserNewsResource>)
+            ?: emptyTiledList()
+
+    state.PivotedTilingEffect(
+        items = tiledItems,
+        onQueryChanged = onPageChanged,
     )
 }
 
@@ -454,11 +468,11 @@ fun ForYouScreenPopulatedFeed(
                 ),
                 deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
+                onDeepLinkOpened = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onTopicClick = {},
-                onDeepLinkOpened = {},
             )
         }
     }
@@ -480,11 +494,11 @@ fun ForYouScreenOfflinePopulatedFeed(
                 ),
                 deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
+                onDeepLinkOpened = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onTopicClick = {},
-                onDeepLinkOpened = {},
             )
         }
     }
@@ -509,11 +523,11 @@ fun ForYouScreenTopicSelection(
                 ),
                 deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
+                onDeepLinkOpened = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onTopicClick = {},
-                onDeepLinkOpened = {},
             )
         }
     }
@@ -530,11 +544,11 @@ fun ForYouScreenLoading() {
                 feedState = NewsFeedUiState.Loading,
                 deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
+                onDeepLinkOpened = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onTopicClick = {},
-                onDeepLinkOpened = {},
             )
         }
     }
@@ -556,11 +570,11 @@ fun ForYouScreenPopulatedAndLoading(
                 ),
                 deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
+                onTopicClick = {},
+                onDeepLinkOpened = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onTopicClick = {},
-                onDeepLinkOpened = {},
             )
         }
     }

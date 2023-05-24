@@ -60,6 +60,8 @@ class OfflineFirstNewsRepository @Inject constructor(
         filterTopicIds = query.filterTopicIds ?: emptySet(),
         useFilterNewsIds = query.filterNewsIds != null,
         filterNewsIds = query.filterNewsIds ?: emptySet(),
+        skip = query.skip,
+        limit = query.limit,
     )
         .map { it.map(PopulatedNewsResource::asExternalModel) }
 

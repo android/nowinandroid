@@ -32,6 +32,16 @@ data class NewsResourceQuery(
      * News ids to filter for. Null means any news id will match.
      */
     val filterNewsIds: Set<String>? = null,
+
+    /**
+     * items to skip in the backing data source
+     */
+    val skip: Int = 0,
+
+    /**
+     * Maximum number of items to fetch at any one time
+     */
+    val limit: Int = Int.MAX_VALUE,
 )
 
 /**

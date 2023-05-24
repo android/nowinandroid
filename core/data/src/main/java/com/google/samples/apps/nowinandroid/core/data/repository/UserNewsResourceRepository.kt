@@ -19,6 +19,18 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.coroutines.flow.Flow
 
+data class UserNewsResourceQuery(
+    /**
+     * items to skip in the backing data source
+     */
+    val skip: Int = 0,
+
+    /**
+     * Maximum number of items to fetch at any one time
+     */
+    val limit: Int = Int.MAX_VALUE,
+)
+
 /**
  * Data layer implementation for [UserNewsResource]
  */
@@ -36,7 +48,9 @@ interface UserNewsResourceRepository {
     /**
      * Returns available news resources for the user's followed topics as a stream.
      */
-    fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>>
+    fun observeAllForFollowedTopics(
+        query: UserNewsResourceQuery = UserNewsResourceQuery()
+    ): Flow<List<UserNewsResource>>
 
     /**
      * Returns the user's bookmarked news resources as a stream.

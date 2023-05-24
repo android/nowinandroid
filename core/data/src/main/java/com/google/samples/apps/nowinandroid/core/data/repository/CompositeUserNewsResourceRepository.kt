@@ -49,12 +49,20 @@ class CompositeUserNewsResourceRepository @Inject constructor(
     /**
      * Returns available news resources (joined with user data) for the followed topics.
      */
-    override fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>> =
+    override fun observeAllForFollowedTopics(
+        query: UserNewsResourceQuery,
+    ): Flow<List<UserNewsResource>> =
         userDataRepository.userData.map { it.followedTopics }.distinctUntilChanged()
             .flatMapLatest { followedTopics ->
                 when {
                     followedTopics.isEmpty() -> flowOf(emptyList())
-                    else -> observeAll(NewsResourceQuery(filterTopicIds = followedTopics))
+                    else -> observeAll(
+                        NewsResourceQuery(
+                            filterTopicIds = followedTopics,
+                            skip = query.skip,
+                            limit = query.limit
+                        ),
+                    )
                 }
             }
 

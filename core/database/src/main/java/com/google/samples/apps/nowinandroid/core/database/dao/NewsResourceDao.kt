@@ -56,6 +56,8 @@ interface NewsResourceDao {
                     ELSE 1
                 END
             ORDER BY publish_date DESC
+            LIMIT :limit
+            OFFSET :skip
     """,
     )
     fun getNewsResources(
@@ -63,6 +65,8 @@ interface NewsResourceDao {
         filterTopicIds: Set<String> = emptySet(),
         useFilterNewsIds: Boolean = false,
         filterNewsIds: Set<String> = emptySet(),
+        skip: Int = 0,
+        limit: Int = Int.MAX_VALUE
     ): Flow<List<PopulatedNewsResource>>
 
     @Transaction

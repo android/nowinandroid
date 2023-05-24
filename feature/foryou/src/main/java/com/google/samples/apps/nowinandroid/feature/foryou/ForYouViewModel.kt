@@ -21,13 +21,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
+import com.tunjid.tiler.ListTiler
+import com.tunjid.tiler.Tile
+import com.tunjid.tiler.Tile.Order
+import com.tunjid.tiler.listTiler
+import com.tunjid.tiler.toTiledList
+import com.tunjid.tiler.utilities.PivotRequest
+import com.tunjid.tiler.utilities.toPivotedTileInputs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -46,6 +56,8 @@ class ForYouViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
+
+    private val currentPage = MutableStateFlow(0)
 
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userData.map { !it.shouldHideOnboarding }
@@ -79,14 +91,17 @@ class ForYouViewModel @Inject constructor(
             initialValue = false,
         )
 
-    val feedState: StateFlow<NewsFeedUiState> =
-        userNewsResourceRepository.observeAllForFollowedTopics()
-            .map(NewsFeedUiState::Success)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = NewsFeedUiState.Loading,
-            )
+    val feedState: StateFlow<NewsFeedUiState> = currentPage
+        .toPivotedTileInputs<Int, UserNewsResource>(pivotRequest)
+        .toTiledList(userNewsResourceRepository.asTiler())
+        // Because items are loaded in chunks, one item can update in one chunk before another
+        .map { it.distinctBy(UserNewsResource::id) }
+        .map(NewsFeedUiState::Success)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = NewsFeedUiState.Loading,
+        )
 
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(
@@ -104,6 +119,10 @@ class ForYouViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = OnboardingUiState.Loading,
             )
+
+    fun onPageChanged(offset: Int?) {
+        currentPage.value = offset ?: 0
+    }
 
     fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         viewModelScope.launch {
@@ -141,3 +160,38 @@ class ForYouViewModel @Inject constructor(
         }
     }
 }
+
+private val pivotRequest = PivotRequest(
+    onCount = 3,
+    offCount = 2,
+    comparator = Int::compareTo,
+    nextQuery = {
+        this + 1
+    },
+    previousQuery = {
+        (this - 1).takeIf { it >= 0 }
+    },
+)
+
+private fun UserNewsResourceRepository.asTiler(): ListTiler<Int, UserNewsResource> = listTiler(
+    // Limit to only 3 pages in the UI at any one time.
+    // This is static right now, but can be made adaptive for large screens
+    limiter = Tile.Limiter(
+        maxQueries = 3,
+        itemSizeHint = null,
+    ),
+    order = Order.PivotSorted(
+        query = 0,
+        comparator = Int::compareTo,
+    ),
+    fetcher = { offset ->
+        observeAllForFollowedTopics(
+            UserNewsResourceQuery(
+                skip = offset,
+                limit = ITEMS_PER_PAGE,
+            ),
+        )
+    },
+)
+
+private const val ITEMS_PER_PAGE = 30
