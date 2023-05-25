@@ -132,7 +132,14 @@ The app uses adaptive layouts to
 
 Find out more about the [UI architecture here](docs/ArchitectureLearningJourney.md#ui-layer).
 
-# Baseline profiles
+# Performance
+
+## Benchmarks
+
+Find all tests written using [`Macrobenchmark`](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
+in the `benchmarks` module. This module also contains the test to generate the Baseline profile.
+
+## Baseline profiles
 
 The baseline profile for this app is located at [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
 It contains rules that enable AOT compilation of the critical user path taken during app launch.
@@ -143,6 +150,16 @@ For more information on baseline profiles, read [this document](https://develope
 To generate the baseline profile, select the `benchmark` build variant and run the
 `BaselineProfileGenerator` benchmark test on an AOSP Android Emulator.
 Then copy the resulting baseline profile from the emulator to [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
+
+## Compose compiler metrics
+
+Run the following command to get and analyse compose compiler metrics:
+
+```
+./gradlew assembleRelease -PenableComposeCompilerMetrics=true -PenableComposeCompilerReports=true
+```
+
+For more information on Compose compiler metrics, see [this blog post](https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8).
 
 # License
 
