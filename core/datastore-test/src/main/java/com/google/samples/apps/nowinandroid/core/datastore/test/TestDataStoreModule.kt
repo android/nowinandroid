@@ -21,8 +21,7 @@ import androidx.datastore.core.DataStoreFactory
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
 import com.google.samples.apps.nowinandroid.core.datastore.UserPreferencesSerializer
 import com.google.samples.apps.nowinandroid.core.datastore.di.DataStoreModule
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -41,12 +40,12 @@ object TestDataStoreModule {
     @Provides
     @Singleton
     fun providesUserPreferencesDataStore(
-        @Dispatcher(IO) ioScope: CoroutineScope,
+        @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer,
         tmpFolder: TemporaryFolder,
     ): DataStore<UserPreferences> =
         tmpFolder.testUserPreferencesDataStore(
-            coroutineScope = ioScope,
+            coroutineScope = scope,
             userPreferencesSerializer = userPreferencesSerializer,
         )
 }
