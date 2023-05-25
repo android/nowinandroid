@@ -100,7 +100,7 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest -x :benchmark:connectedDemoBenchmarkAndroidTest --daemon
+          script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
       - name: Upload test reports
         if: always()
