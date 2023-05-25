@@ -46,6 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -279,16 +280,15 @@ private fun NiaBottomBar(
                     }
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) notificationDot() else Modifier,
+                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
 }
 
-@Composable
-private fun notificationDot(): Modifier {
+private fun Modifier.notificationDot(): Modifier = composed {
     val tertiaryColor = MaterialTheme.colorScheme.tertiary
-    return Modifier.drawWithContent {
+    drawWithContent {
         drawContent()
         drawCircle(
             tertiaryColor,
