@@ -159,8 +159,8 @@ Run the following command to get and analyse compose compiler metrics:
 ./gradlew assembleRelease -PenableComposeCompilerMetrics=true -PenableComposeCompilerReports=true
 ```
 
-The reports files will be added to build/compose-reports in each module. The metrics files will be 
-added to build/compose-metrics in each module.
+The reports files will be added to build/compose-reports in root folder. The metrics files will also be 
+added to build/compose-metrics in root folder.
 
 For more information on Compose compiler metrics, see [this blog post](https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8).
 
