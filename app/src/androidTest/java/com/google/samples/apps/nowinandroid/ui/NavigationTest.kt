@@ -249,22 +249,4 @@ class NavigationTest {
             onNodeWithText(forYou).assertExists()
         }
     }
-
-    @Test
-    fun navigationBar_multipleBackStackInterests() {
-        composeTestRule.apply {
-            onNodeWithText(interests).performClick()
-            // TODO: Grab string from fake data
-            onNodeWithText("Android Studio & Tools").performClick()
-
-            // Switch tab
-            onNodeWithText(forYou).performClick()
-
-            // Come back to Interests
-            onNodeWithText(interests).performClick()
-
-            // Verify we're not in the list of interests
-            onNodeWithText("Android Auto").assertDoesNotExist() // TODO: Grab string from fake data
-        }
-    }
 }

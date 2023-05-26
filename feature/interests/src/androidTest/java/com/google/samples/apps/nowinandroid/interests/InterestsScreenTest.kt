@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -74,7 +75,10 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
+                uiState = InterestsUiState.Interests(
+                    topics = followableTopicTestData,
+                    selectedTopicId = null,
+                ),
             )
         }
 
@@ -107,6 +111,7 @@ class InterestsScreenTest {
     @Composable
     private fun InterestsScreen(uiState: InterestsUiState) {
         InterestsScreen(
+            listState = rememberLazyListState(),
             uiState = uiState,
             followTopic = { _, _ -> },
             onTopicClick = {},

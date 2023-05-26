@@ -19,10 +19,14 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -31,30 +35,36 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 @Composable
 fun TopicsTabContent(
+    selectedTopicId: String?,
     topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    listState: LazyGridState = rememberLazyGridState(),
     withBottomSpacer: Boolean = true,
 ) {
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(300.dp),
+        state = listState,
         modifier = modifier
-            .padding(horizontal = 24.dp)
+            .selectableGroup()
             .testTag("interests:topics"),
         contentPadding = PaddingValues(vertical = 16.dp),
     ) {
-        topics.forEach { followableTopic ->
+        items(
+            items = topics,
+            key = { item -> item.topic.id },
+        ) { followableTopic ->
             val topicId = followableTopic.topic.id
-            item(key = topicId) {
-                InterestsItem(
-                    name = followableTopic.topic.name,
-                    following = followableTopic.isFollowed,
-                    description = followableTopic.topic.shortDescription,
-                    topicImageUrl = followableTopic.topic.imageUrl,
-                    onClick = { onTopicClick(topicId) },
-                    onFollowButtonClick = { onFollowButtonClick(topicId, it) },
-                )
-            }
+            InterestsItem(
+                isSelected = selectedTopicId == topicId,
+                name = followableTopic.topic.name,
+                following = followableTopic.isFollowed,
+                description = followableTopic.topic.shortDescription,
+                topicImageUrl = followableTopic.topic.imageUrl,
+                onClick = { onTopicClick(topicId) },
+                onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+            )
         }
 
         if (withBottomSpacer) {

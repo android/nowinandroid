@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.topic
+package com.google.samples.apps.nowinandroid.feature.interests
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -27,24 +27,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
@@ -54,57 +54,37 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
-import com.google.samples.apps.nowinandroid.feature.topic.R.string
+import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.feature.interests.R.string
+import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Error
+import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Loading
+import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Success
 
-@Composable
-internal fun TopicRoute(
-    onBackClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel(),
-) {
-    val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
-    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
-
-    TrackScreenViewEvent(screenName = "Topic: ${viewModel.topicId}")
-    TopicScreen(
-        topicUiState = topicUiState,
-        newsUiState = newsUiState,
-        modifier = modifier,
-        onBackClick = onBackClick,
-        onFollowClick = viewModel::followTopicToggle,
-        onBookmarkChanged = viewModel::bookmarkNews,
-        onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
-        onTopicClick = onTopicClick,
-    )
-}
-
-@VisibleForTesting
 @Composable
 internal fun TopicScreen(
     topicUiState: TopicUiState,
-    newsUiState: NewsUiState,
     onBackClick: () -> Unit,
-    onFollowClick: (Boolean) -> Unit,
+    onFollowClick: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state = rememberLazyListState()
+    val state = rememberLazyGridState()
     TrackScrollJank(scrollableState = state, stateName = "topic:screen")
-    LazyColumn(
+
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(300.dp),
         state = state,
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+            .selectableGroup()
+            .testTag("interests:topics"),
+        contentPadding = PaddingValues(vertical = 16.dp),
     ) {
-        item {
-            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-        }
         when (topicUiState) {
             TopicUiState.Loading -> item {
                 NiaLoadingWheel(
@@ -113,19 +93,26 @@ internal fun TopicScreen(
                 )
             }
 
-            TopicUiState.Error -> TODO()
-            is TopicUiState.Success -> {
+            Error -> {
                 item {
+                    Text(text = stringResource(id = string.topic_error))
+                }
+            }
+
+            is Success -> {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     TopicToolbar(
                         onBackClick = onBackClick,
-                        onFollowClick = onFollowClick,
+                        onFollowClick = { isChecked ->
+                            onFollowClick(topicUiState.followableTopic.topic.id, isChecked)
+                        },
                         uiState = topicUiState.followableTopic,
                     )
                 }
-                TopicBody(
+                topicBody(
                     name = topicUiState.followableTopic.topic.name,
                     description = topicUiState.followableTopic.topic.longDescription,
-                    news = newsUiState,
+                    news = topicUiState.newsResources,
                     imageUrl = topicUiState.followableTopic.topic.imageUrl,
                     onBookmarkChanged = onBookmarkChanged,
                     onNewsResourceViewed = onNewsResourceViewed,
@@ -133,27 +120,34 @@ internal fun TopicScreen(
                 )
             }
         }
-        item {
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
         }
     }
 }
 
-private fun LazyListScope.TopicBody(
+private fun LazyGridScope.topicBody(
     name: String,
     description: String,
-    news: NewsUiState,
+    news: List<UserNewsResource>,
     imageUrl: String,
     onBookmarkChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     // TODO: Show icon if available
-    item {
+    item(span = { GridItemSpan(maxLineSpan) }) {
         TopicHeader(name, description, imageUrl)
     }
-
-    userNewsResourceCards(news, onBookmarkChanged, onNewsResourceViewed, onTopicClick)
+    newsFeed(
+        feedState = NewsFeedUiState.Success(
+            news,
+        ),
+        onNewsResourceViewed = onNewsResourceViewed,
+        onNewsResourcesCheckedChanged = onBookmarkChanged,
+        onTopicClick = onTopicClick,
+    )
 }
 
 @Composable
@@ -180,43 +174,15 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
     }
 }
 
-// TODO: Could/should this be replaced with [LazyGridScope.newsFeed]?
-private fun LazyListScope.userNewsResourceCards(
-    news: NewsUiState,
-    onBookmarkChanged: (String, Boolean) -> Unit,
-    onNewsResourceViewed: (String) -> Unit,
-    onTopicClick: (String) -> Unit,
-) {
-    when (news) {
-        is NewsUiState.Success -> {
-            userNewsResourceCardItems(
-                items = news.news,
-                onToggleBookmark = { onBookmarkChanged(it.id, !it.isSaved) },
-                onNewsResourceViewed = onNewsResourceViewed,
-                onTopicClick = onTopicClick,
-                itemModifier = Modifier.padding(24.dp),
-            )
-        }
-
-        is NewsUiState.Loading -> item {
-            NiaLoadingWheel(contentDesc = "Loading news") // TODO
-        }
-
-        else -> item {
-            Text("Error") // TODO
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun TopicBodyPreview() {
     NiaTheme {
-        LazyColumn {
-            TopicBody(
+        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+            topicBody(
                 name = "Jetpack Compose",
                 description = "Lorem ipsum maximum",
-                news = NewsUiState.Success(emptyList()),
+                news = emptyList(),
                 imageUrl = "",
                 onBookmarkChanged = { _, _ -> },
                 onNewsResourceViewed = {},
@@ -272,10 +238,12 @@ fun TopicScreenPopulated(
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicUiState = TopicUiState.Success(userNewsResources[0].followableTopics[0]),
-                newsUiState = NewsUiState.Success(userNewsResources),
+                topicUiState = Success(
+                    followableTopic = userNewsResources[0].followableTopics[0],
+                    newsResources = userNewsResources,
+                ),
                 onBackClick = {},
-                onFollowClick = {},
+                onFollowClick = { _, _ -> },
                 onBookmarkChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -290,10 +258,9 @@ fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicUiState = TopicUiState.Loading,
-                newsUiState = NewsUiState.Loading,
+                topicUiState = Loading,
                 onBackClick = {},
-                onFollowClick = {},
+                onFollowClick = { _, _ -> },
                 onBookmarkChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},

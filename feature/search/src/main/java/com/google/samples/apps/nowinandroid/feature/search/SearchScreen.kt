@@ -324,6 +324,7 @@ private fun SearchResultBody(
                     },
                 ) {
                     InterestsItem(
+                        isSelected = false,
                         name = followableTopic.topic.name,
                         following = followableTopic.isFollowed,
                         description = followableTopic.topic.shortDescription,

@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -23,10 +24,8 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmar
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
 
 /**
@@ -44,32 +43,28 @@ fun NiaNavHost(
     startDestination: String = forYouNavigationRoute,
 ) {
     val navController = appState.navController
+    val interestsScrollState = rememberLazyGridState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
     ) {
         // TODO: handle topic clicks from each top level destination
-        forYouScreen(onTopicClick = {})
+        forYouScreen(onTopicClick = navController::navigateToInterests)
         bookmarksScreen(
-            onTopicClick = navController::navigateToTopic,
+            onTopicClick = navController::navigateToInterests,
             onShowSnackbar = onShowSnackbar,
         )
         searchScreen(
             onBackClick = navController::popBackStack,
-            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = navController::navigateToTopic,
+            onInterestsClick = navController::navigateToInterests,
+            onTopicClick = navController::navigateToInterests,
         )
         interestsGraph(
-            onTopicClick = { topicId ->
-                navController.navigateToTopic(topicId)
-            },
-            nestedGraphs = {
-                topicScreen(
-                    onBackClick = navController::popBackStack,
-                    onTopicClick = {},
-                )
-            },
+            listState = interestsScrollState,
+            shouldShowTwoPane = appState.shouldShowTwoPane,
+            onTopicClick = navController::navigateToInterests,
+            onBackClick = navController::navigateToInterests,
         )
     }
 }
