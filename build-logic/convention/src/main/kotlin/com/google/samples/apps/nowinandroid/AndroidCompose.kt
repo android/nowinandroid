@@ -61,7 +61,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
     val enableMetrics = (enableMetricsProvider.orNull == "true")
     if (enableMetrics) {
-        val metricsFolder = File(project.rootProject.buildDir, "compose-metrics")
+        val metricsFolder = rootProject.buildDir.resolve("compose-metrics")
         metricParameters.add("-P")
         metricParameters.add(
             "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath
@@ -71,7 +71,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
     val enableReports = (enableReportsProvider.orNull == "true")
     if (enableReports) {
-        val reportsFolder = File(project.rootProject.buildDir, "compose-reports")
+        val reportsFolder = rootProject.buildDir.resolve("compose-reports")
         metricParameters.add("-P")
         metricParameters.add(
             "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath
