@@ -42,7 +42,7 @@ internal fun InterestsRoute(
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
-    val interestUiState by viewModel.interestUiState.collectAsStateWithLifecycle()
+    val interestUiState by viewModel.interestsUiState.collectAsStateWithLifecycle()
     val topicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
 
     Row(modifier = modifier.fillMaxSize()) {

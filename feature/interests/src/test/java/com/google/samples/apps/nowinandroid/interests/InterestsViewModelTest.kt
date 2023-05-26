@@ -78,22 +78,22 @@ class InterestsViewModelTest {
 
     @Test
     fun uiState_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(InterestsUiState.Loading, viewModel.interestUiState.value)
+        assertEquals(InterestsUiState.Loading, viewModel.interestsUiState.value)
     }
 
     @Test
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestsUiState.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
-        assertEquals(InterestsUiState.Loading, viewModel.interestUiState.value)
+        assertEquals(InterestsUiState.Loading, viewModel.interestsUiState.value)
 
         collectJob.cancel()
     }
 
     @Test
     fun uiState_whenFollowingNewTopic_thenShowUpdatedTopics() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestsUiState.collect() }
 
         val toggleTopicId = testOutputTopics[1].topic.id
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
@@ -101,7 +101,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             false,
-            (viewModel.interestUiState.value as InterestsUiState.Interests)
+            (viewModel.interestsUiState.value as InterestsUiState.Interests)
                 .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
@@ -112,7 +112,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             InterestsUiState.Interests(topics = testOutputTopics, selectedTopicId = selectedTopidId),
-            viewModel.interestUiState.value,
+            viewModel.interestsUiState.value,
         )
 
         collectJob.cancel()
@@ -120,7 +120,7 @@ class InterestsViewModelTest {
 
     @Test
     fun uiState_whenUnfollowingTopics_thenShowUpdatedTopics() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestUiState.collect() }
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.interestsUiState.collect() }
 
         val toggleTopicId = testOutputTopics[1].topic.id
 
@@ -131,7 +131,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             true,
-            (viewModel.interestUiState.value as InterestsUiState.Interests)
+            (viewModel.interestsUiState.value as InterestsUiState.Interests)
                 .topics.first { it.topic.id == toggleTopicId }.isFollowed,
         )
 
@@ -142,7 +142,7 @@ class InterestsViewModelTest {
 
         assertEquals(
             InterestsUiState.Interests(topics = testInputTopics, selectedTopicId = selectedTopidId),
-            viewModel.interestUiState.value,
+            viewModel.interestsUiState.value,
         )
 
         collectJob.cancel()
