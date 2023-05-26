@@ -111,10 +111,7 @@ class InterestsScreenTest {
     @Composable
     private fun InterestsScreen(uiState: InterestsUiState) {
         InterestsScreen(
-            listState = rememberLazyListState(),
             uiState = uiState,
-            followTopic = { _, _ -> },
-            onTopicClick = {},
         )
     }
 }
