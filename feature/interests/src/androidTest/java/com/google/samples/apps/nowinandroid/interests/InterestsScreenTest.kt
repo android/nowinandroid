@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
