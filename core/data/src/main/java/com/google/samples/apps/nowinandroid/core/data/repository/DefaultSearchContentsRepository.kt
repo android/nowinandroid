@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
+import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
@@ -29,6 +30,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
@@ -45,7 +47,12 @@ class DefaultSearchContentsRepository @Inject constructor(
     override suspend fun populateFtsData() {
         withContext(ioDispatcher) {
             newsResourceFtsDao.insertAll(
-                newsResourceDao.getOneOffNewsResources().map { it.asFtsEntity() },
+                newsResourceDao.getNewsResources(
+                    useFilterTopicIds = false,
+                    useFilterNewsIds = false,
+                )
+                    .first()
+                    .map(PopulatedNewsResource::asFtsEntity),
             )
             topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
         }
