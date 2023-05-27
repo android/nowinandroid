@@ -36,20 +36,27 @@ jobs:
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
-      - name: Check lint
-        run: ./gradlew lintDemoDebug
-
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
-
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
         with:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
+
+      - name: Run local tests
+        run: ./gradlew testDemoDebug testProdDebug
+
+      - name: Upload test results (XML)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: '**/build/test-results/test*UnitTest/**.xml'
+
+      - name: Check lint
+        run: ./gradlew lintProdRelease
 
       - name: Upload lint reports (HTML)
         if: always()
@@ -58,12 +65,11 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
-      - name: Upload test results (XML)
+      - name: Upload lint reports (SARIF)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          name: test-results
-          path: '**/build/test-results/test*UnitTest/**.xml'
+          sarif_file: '**/build/reports/lint-results-*.sarif'
 
   androidTest:
     needs: build
