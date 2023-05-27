@@ -107,7 +107,7 @@ The Now in Android app contains the following types of modules:
 
 * `core:` modules - common library modules containing auxiliary code and specific dependencies that
   need to be shared between other modules in the app. These modules can depend on other core
-  modules, but they shouldn't depend on feature nor app modules.
+  modules, but they shouldn’t depend on feature nor app modules.
 
 * Miscellaneous modules - such as `sync`, `benchmark` and `test` modules, as well
   as `app-nia-catalog` - a catalog app for displaying our design system quickly.
