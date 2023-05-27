@@ -69,7 +69,7 @@ jobs:
         if: always()
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: '**/build/reports/lint-results-*.sarif'
+          sarif_file: './'
 
   androidTest:
     needs: build
