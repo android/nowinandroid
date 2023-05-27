@@ -107,7 +107,7 @@ The Now in Android app contains the following types of modules:
 
 * `core:` modules - common library modules containing auxiliary code and specific dependencies that
   need to be shared between other modules in the app. These modules can depend on other core
-  modules, but they shouldn’t depend on feature nor app modules.
+  modules, but they shouldn't depend on feature nor app modules.
 
 * Miscellaneous modules - such as `sync`, `benchmark` and `test` modules, as well
   as `app-nia-catalog` - a catalog app for displaying our design system quickly.
@@ -160,12 +160,20 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
+   <td><code>core:designsystem</code>
+   </td>
+   <td>Design system, tokens and icons.
+   </td>
+   <td><code>NiaTheme</code><br>
+   <code>NiaIcons</code>
+   </td>
+  </tr>
+  <tr>
    <td><code>core:ui</code>
    </td>
-   <td>UI components, composables and resources, such as icons, used by different features.
+   <td>UI components, composables and resources, used by different features.
    </td>
-   <td><code>NiaIcons</code><br>
-   <code>NewsResourceCardExpanded</code>
+   <td><code>NewsResourceCardExpanded</code>
    </td>
   </tr>
   <tr>
