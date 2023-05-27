@@ -35,9 +35,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)
-    implementation(libs.firebase.cloud.messaging)
     implementation(libs.hilt.ext.work)
     implementation(libs.kotlinx.coroutines.android)
+
+    prodImplementation(libs.firebase.cloud.messaging)
 
     kapt(libs.hilt.ext.compiler)
 
