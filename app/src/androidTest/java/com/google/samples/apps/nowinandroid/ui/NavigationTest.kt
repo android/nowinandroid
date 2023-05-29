@@ -36,6 +36,7 @@ import com.google.samples.apps.nowinandroid.R
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -84,6 +85,9 @@ class NavigationTest {
     private val settings by composeTestRule.stringResource(SettingsR.string.top_app_bar_action_icon_description)
     private val brand by composeTestRule.stringResource(SettingsR.string.brand_android)
     private val ok by composeTestRule.stringResource(SettingsR.string.dismiss_dialog_button_text)
+
+    @Before
+    fun setup() = composeTestRule.waitForIdle()
 
     @Test
     fun firstScreen_isForYou() {
