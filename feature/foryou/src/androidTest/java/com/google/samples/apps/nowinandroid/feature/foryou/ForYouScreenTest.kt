@@ -112,7 +112,7 @@ class ForYouScreenTest {
 
     @Test
     fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
-        val testData = followableTopicTestData.map { it -> it.copy(isFollowed = false) }
+        val testData = followableTopicTestData.map { it.copy(isFollowed = false) }
 
         composeTestRule.setContent {
             BoxWithConstraints {
