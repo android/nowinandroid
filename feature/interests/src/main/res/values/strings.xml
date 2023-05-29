@@ -15,9 +15,9 @@
      limitations under the License.
 -->
 <resources>
-    <string name="interests">Interests</string>
-    <string name="loading">Loading data</string>
-    <string name="empty_header">"No available data"</string>
-    <string name="card_follow_button_content_desc">Follow interest</string>
-    <string name="card_unfollow_button_content_desc">Unfollow interest</string>
+    <string name="feature_interests_title">Interests</string>
+    <string name="feature_interests_loading">Loading data</string>
+    <string name="feature_interests_empty_header">"No available data"</string>
+    <string name="feature_interests_card_follow_button_content_desc">Follow interest</string>
+    <string name="feature_interests_card_unfollow_button_content_desc">Unfollow interest</string>
 </resources>

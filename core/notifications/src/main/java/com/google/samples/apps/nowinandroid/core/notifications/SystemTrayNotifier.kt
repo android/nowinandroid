@@ -72,7 +72,7 @@ class SystemTrayNotifier @Inject constructor(
             .map { newsResource ->
                 createNewsNotification {
                     setSmallIcon(
-                        com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
+                        com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                     )
                         .setContentTitle(newsResource.title)
                         .setContentText(newsResource.content)
@@ -83,13 +83,13 @@ class SystemTrayNotifier @Inject constructor(
             }
         val summaryNotification = createNewsNotification {
             val title = getString(
-                R.string.news_notification_group_summary,
+                R.string.core_notifications_news_notification_group_summary,
                 truncatedNewsResources.size,
             )
             setContentTitle(title)
                 .setContentText(title)
                 .setSmallIcon(
-                    com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
+                    com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                 )
                 // Build summary info into InboxStyle template.
                 .setStyle(newsNotificationStyle(truncatedNewsResources, title))
@@ -148,10 +148,10 @@ private fun Context.ensureNotificationChannelExists() {
 
     val channel = NotificationChannel(
         NEWS_NOTIFICATION_CHANNEL_ID,
-        getString(R.string.news_notification_channel_name),
+        getString(R.string.core_notifications_news_notification_channel_name),
         NotificationManager.IMPORTANCE_DEFAULT,
     ).apply {
-        description = getString(R.string.news_notification_channel_description)
+        description = getString(R.string.core_notifications_news_notification_channel_description)
     }
     // Register the channel with the system
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
