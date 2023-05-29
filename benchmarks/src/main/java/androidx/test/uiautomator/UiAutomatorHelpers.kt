@@ -46,3 +46,15 @@ enum class HasChildrenOp {
     EXACTLY,
     AT_MOST,
 }
+
+/**
+ * Waits until an object with [selector] if visible on screen and returns the object.
+ * If the element is not available in [timeout], throws [AssertionError]
+ */
+fun UiDevice.waitAndFindObject(selector: BySelector, timeout: Long): UiObject2 {
+    if (!wait(Until.hasObject(selector), timeout)) {
+        throw AssertionError("Element not found on screen in ${timeout}ms (selector=$selector)")
+    }
+
+    return findObject(selector)
+}
