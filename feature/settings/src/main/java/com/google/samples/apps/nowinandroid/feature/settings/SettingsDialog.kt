@@ -83,7 +83,6 @@ fun SettingsDialog(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingsDialog(
     settingsUiState: SettingsUiState,
