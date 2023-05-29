@@ -65,10 +65,6 @@ interface NewsResourceDao {
         filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
-    @Transaction
-    @Query(value = "SELECT * FROM news_resources ORDER BY publish_date DESC")
-    suspend fun getOneOffNewsResources(): List<PopulatedNewsResource>
-
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
