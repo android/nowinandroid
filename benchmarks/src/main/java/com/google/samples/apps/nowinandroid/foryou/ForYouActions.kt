@@ -20,8 +20,8 @@ import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
-import androidx.test.uiautomator.waitAndFindObject
 import com.google.samples.apps.nowinandroid.flingElementDownUp
+import com.google.samples.apps.nowinandroid.waitAndFindObject
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
