@@ -36,9 +36,3 @@ data class NewsResourceFtsEntity(
     @ColumnInfo(name = "content")
     val content: String,
 )
-
-fun NewsResourceEntity.asFtsEntity() = NewsResourceFtsEntity(
-    newsResourceId = id,
-    title = title,
-    content = content,
-)
