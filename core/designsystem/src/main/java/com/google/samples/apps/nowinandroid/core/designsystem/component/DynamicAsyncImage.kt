@@ -49,7 +49,7 @@ fun DynamicAsyncImage(
     imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    placeholder: Painter = painterResource(R.drawable.ic_placeholder_default),
+    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder_default),
 ) {
     val iconTint = LocalTintTheme.current.iconTint
     var isLoading by remember { mutableStateOf(true) }
