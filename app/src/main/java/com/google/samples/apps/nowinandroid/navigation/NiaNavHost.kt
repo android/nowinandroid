@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
@@ -40,7 +40,7 @@ import com.google.samples.apps.nowinandroid.ui.NiaAppState
 fun NiaNavHost(
     appState: NiaAppState,
     modifier: Modifier = Modifier,
-    startDestination: String = forYouNavigationRoute,
+    startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
     NavHost(

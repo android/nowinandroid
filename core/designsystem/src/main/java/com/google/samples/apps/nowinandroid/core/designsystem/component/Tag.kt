@@ -25,6 +25,9 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+private const val UNFOLLOWED_TOPIC_TAG_CONTAINER_ALPHA = 0.5f
+private const val DISABLED_TOPIC_TAG_CONTAINER_ALPHA = 0.12f
+
 @Composable
 fun NiaTopicTag(
     modifier: Modifier = Modifier,
@@ -38,7 +41,7 @@ fun NiaTopicTag(
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(
-                alpha = NiaTagDefaults.UnfollowedTopicTagContainerAlpha,
+                alpha = UNFOLLOWED_TOPIC_TAG_CONTAINER_ALPHA,
             )
         }
         TextButton(
@@ -48,7 +51,7 @@ fun NiaTopicTag(
                 containerColor = containerColor,
                 contentColor = contentColorFor(backgroundColor = containerColor),
                 disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaTagDefaults.DisabledTopicTagContainerAlpha,
+                    alpha = DISABLED_TOPIC_TAG_CONTAINER_ALPHA,
                 ),
             ),
         ) {
@@ -57,15 +60,4 @@ fun NiaTopicTag(
             }
         }
     }
-}
-
-/**
- * Now in Android tag default values.
- */
-object NiaTagDefaults {
-    const val UnfollowedTopicTagContainerAlpha = 0.5f
-
-    // TODO: File bug
-    // Button disabled container alpha value not exposed by ButtonDefaults
-    const val DisabledTopicTagContainerAlpha = 0.12f
 }

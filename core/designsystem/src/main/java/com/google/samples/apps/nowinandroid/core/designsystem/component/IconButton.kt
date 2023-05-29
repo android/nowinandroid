@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
+private const val DISABLED_ICON_BUTTON_CONTAINER_ALPHA = 0.12f
+
 /**
  * Now in Android toggle button with icon and checked icon content slots. Wraps Material 3
  * [IconButton].
@@ -57,7 +59,7 @@ fun NiaIconToggleButton(
             checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             disabledContainerColor = if (checked) {
                 MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = NiaIconButtonDefaults.DisabledIconButtonContainerAlpha,
+                    alpha = DISABLED_ICON_BUTTON_CONTAINER_ALPHA,
                 )
             } else {
                 Color.Transparent
@@ -66,13 +68,4 @@ fun NiaIconToggleButton(
     ) {
         if (checked) checkedIcon() else icon()
     }
-}
-
-/**
- * Now in Android icon button default values.
- */
-object NiaIconButtonDefaults {
-    // TODO: File bug
-    // IconToggleButton disabled container alpha not exposed by IconButtonDefaults
-    const val DisabledIconButtonContainerAlpha = 0.12f
 }

@@ -22,14 +22,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
 
-const val bookmarksRoute = "bookmarks_route"
+const val BOOKMARKS_ROUTE = "bookmarks_route"
 
 fun NavController.navigateToBookmarks(navOptions: NavOptions? = null) {
-    this.navigate(bookmarksRoute, navOptions)
+    this.navigate(BOOKMARKS_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.bookmarksScreen(onTopicClick: (String) -> Unit) {
-    composable(route = bookmarksRoute) {
+    composable(route = BOOKMARKS_ROUTE) {
         BookmarksRoute(onTopicClick)
     }
 }

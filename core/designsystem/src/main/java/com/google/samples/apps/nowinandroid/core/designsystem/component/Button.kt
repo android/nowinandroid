@@ -31,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+private const val DISABLED_OUTLINED_BUTTON_BORDER_ALPHA = 0.12f
+private val outlinedButtonBorderWidth = 1.dp
+
 /**
  * Now in Android filled button with generic content slot. Wraps Material 3 [Button].
  *
@@ -124,12 +127,12 @@ fun NiaOutlinedButton(
             contentColor = MaterialTheme.colorScheme.onBackground,
         ),
         border = BorderStroke(
-            width = NiaButtonDefaults.OutlinedButtonBorderWidth,
+            width = outlinedButtonBorderWidth,
             color = if (enabled) {
                 MaterialTheme.colorScheme.outline
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaButtonDefaults.DisabledOutlinedButtonBorderAlpha,
+                    alpha = DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
                 )
             },
         ),
@@ -258,17 +261,4 @@ private fun NiaButtonContent(
     ) {
         text()
     }
-}
-
-/**
- * Now in Android button default values.
- */
-object NiaButtonDefaults {
-    // TODO: File bug
-    // OutlinedButton border color doesn't respect disabled state by default
-    const val DisabledOutlinedButtonBorderAlpha = 0.12f
-
-    // TODO: File bug
-    // OutlinedButton default border width isn't exposed via ButtonDefaults
-    val OutlinedButtonBorderWidth = 1.dp
 }

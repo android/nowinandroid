@@ -28,11 +28,11 @@ import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 
 @VisibleForTesting
-internal const val topicIdArg = "topicId"
+internal const val TOPIC_ID_ARG = "topicId"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle, stringDecoder: StringDecoder) :
-        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[topicIdArg])))
+        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[TOPIC_ID_ARG])))
 }
 
 fun NavController.navigateToTopic(topicId: String) {
@@ -47,9 +47,9 @@ fun NavGraphBuilder.topicScreen(
     onTopicClick: (String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$topicIdArg}",
+        route = "topic_route/{$TOPIC_ID_ARG}",
         arguments = listOf(
-            navArgument(topicIdArg) { type = NavType.StringType },
+            navArgument(TOPIC_ID_ARG) { type = NavType.StringType },
         ),
     ) {
         TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
