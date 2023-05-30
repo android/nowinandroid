@@ -60,11 +60,6 @@ interface TestDataModule {
     ): RecentSearchRepository
 
     @Binds
-    fun bindsSearchContentsRepository(
-        searchContentsRepository: FakeSearchContentsRepository,
-    ): SearchContentsRepository
-
-    @Binds
     fun bindsNetworkMonitor(
         networkMonitor: AlwaysOnlineNetworkMonitor,
     ): NetworkMonitor
