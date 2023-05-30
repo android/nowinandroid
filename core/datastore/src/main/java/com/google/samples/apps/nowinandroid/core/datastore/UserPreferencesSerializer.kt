@@ -32,7 +32,6 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
     override suspend fun readFrom(input: InputStream): UserPreferences =
         try {
             // readFrom is already called on the data store background thread
-            @Suppress("BlockingMethodInNonBlockingContext")
             UserPreferences.parseFrom(input)
         } catch (exception: InvalidProtocolBufferException) {
             throw CorruptionException("Cannot read proto.", exception)
@@ -40,7 +39,6 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
 
     override suspend fun writeTo(t: UserPreferences, output: OutputStream) {
         // writeTo is already called on the data store background thread
-        @Suppress("BlockingMethodInNonBlockingContext")
         t.writeTo(output)
     }
 }
