@@ -183,13 +183,13 @@ fun BookmarkButton(
         modifier = modifier,
         icon = {
             Icon(
-                painter = painterResource(NiaIcons.BookmarkBorder),
+                imageVector = NiaIcons.BookmarkBorder,
                 contentDescription = stringResource(R.string.bookmark),
             )
         },
         checkedIcon = {
             Icon(
-                painter = painterResource(NiaIcons.Bookmark),
+                imageVector = NiaIcons.Bookmark,
                 contentDescription = stringResource(R.string.unbookmark),
             )
         },
