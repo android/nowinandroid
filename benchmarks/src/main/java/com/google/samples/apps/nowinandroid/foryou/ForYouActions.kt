@@ -18,9 +18,13 @@ package com.google.samples.apps.nowinandroid.foryou
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.BySelector
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
+
+val topicSelectionRes: BySelector = By.res("forYou:topicSelection")
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
@@ -32,44 +36,63 @@ fun MacrobenchmarkScope.forYouWaitForContent() {
     obj.wait(untilHasChildren(), 60_000)
 }
 
+fun MacrobenchmarkScope.forYouGetSelectedTopics(): List<UiObject2> {
+    val topics = device.findObject(topicSelectionRes) ?: return emptyList()
+    return topics.findObjects(By.checked(true))
+}
+
+fun MacrobenchmarkScope.hasTopicSelected(): Boolean {
+    return forYouGetSelectedTopics().isNotEmpty()
+}
+
+fun MacrobenchmarkScope.forYouClearSelectedTopics() {
+    forYouGetSelectedTopics().forEach {
+        it.click()
+        device.waitForIdle()
+    }
+}
+
 /**
  * Selects some topics, which will show the feed content for them.
  * [recheckTopicsIfChecked] Topics may be already checked from the previous iteration.
  */
-fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = false) {
-    val topics = device.findObject(By.res("forYou:topicSelection"))
+fun MacrobenchmarkScope.forYouSelectTopics(
+    recheckTopicsIfChecked: Boolean = false,
+    howManyToClick: Int = 3,
+    skip: Int = 0
+) {
+    val topics = device.findObject(topicSelectionRes)
+    val topicsItems = topics.findObjects(By.checkable(true))
 
     // Set gesture margin from sides not to trigger system gesture navigation
     val horizontalMargin = 10 * topics.visibleBounds.width() / 100
     topics.setGestureMargins(horizontalMargin, 0, horizontalMargin, 0)
 
     // Select some topics to show some feed content
-    var index = 0
+    var index = skip
     var visited = 0
 
-    while (visited < 3) {
+    while (visited < howManyToClick) {
         // Selecting some topics, which will populate items in the feed.
-        val topic = topics.children[index % topics.childCount]
-        // Find the checkable element to figure out whether it's checked or not
-        val topicCheckIcon = topic.findObject(By.checkable(true))
+        val topicItem = topicsItems[index % topics.childCount]
         // Topic icon may not be visible if it's out of the screen boundaries
         // If that's the case, let's try another index
-        if (topicCheckIcon == null) {
+        if (topicItem == null) {
             index++
             continue
         }
 
         when {
             // Topic wasn't checked, so just do that
-            !topicCheckIcon.isChecked -> {
-                topic.click()
+            !topicItem.isChecked -> {
+                topicItem.click()
                 device.waitForIdle()
             }
 
             // Topic was checked already and we want to recheck it, so just do it twice
             recheckTopicsIfChecked -> {
                 repeat(2) {
-                    topic.click()
+                    topicItem.click()
                     device.waitForIdle()
                 }
             }
