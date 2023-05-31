@@ -52,7 +52,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
@@ -70,8 +69,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRailItem
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.DrawableResourceIcon
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.Icon.ImageVectorIcon
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
@@ -225,22 +222,16 @@ private fun NiaNavRail(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
                 icon = {
-                    val icon = if (selected) {
-                        destination.selectedIcon
-                    } else {
-                        destination.unselectedIcon
-                    }
-                    when (icon) {
-                        is ImageVectorIcon -> Icon(
-                            imageVector = icon.imageVector,
-                            contentDescription = null,
-                        )
-
-                        is DrawableResourceIcon -> Icon(
-                            painter = painterResource(id = icon.id),
-                            contentDescription = null,
-                        )
-                    }
+                    Icon(
+                        imageVector = destination.unselectedIcon,
+                        contentDescription = null,
+                    )
+                },
+                selectedIcon = {
+                    Icon(
+                        imageVector = destination.selectedIcon,
+                        contentDescription = null,
+                    )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
                 modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
@@ -267,22 +258,16 @@ private fun NiaBottomBar(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
                 icon = {
-                    val icon = if (selected) {
-                        destination.selectedIcon
-                    } else {
-                        destination.unselectedIcon
-                    }
-                    when (icon) {
-                        is ImageVectorIcon -> Icon(
-                            imageVector = icon.imageVector,
-                            contentDescription = null,
-                        )
-
-                        is DrawableResourceIcon -> Icon(
-                            painter = painterResource(id = icon.id),
-                            contentDescription = null,
-                        )
-                    }
+                    Icon(
+                        imageVector = destination.unselectedIcon,
+                        contentDescription = null,
+                    )
+                },
+                selectedIcon = {
+                    Icon(
+                        imageVector = destination.selectedIcon,
+                        contentDescription = null,
+                    )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
                 modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
