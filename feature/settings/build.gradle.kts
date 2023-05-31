@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
-
 plugins {
     id("nowinandroid.android.feature")
     id("nowinandroid.android.library.compose")

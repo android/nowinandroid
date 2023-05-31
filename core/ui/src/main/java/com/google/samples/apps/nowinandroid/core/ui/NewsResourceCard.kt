@@ -251,14 +251,6 @@ fun NewsResourceMetaData(
 }
 
 @Composable
-fun NewsResourceLink(
-    @Suppress("UNUSED_PARAMETER")
-    newsResource: NewsResource,
-) {
-    TODO()
-}
-
-@Composable
 fun NewsResourceShortDescription(
     newsResourceShortDescription: String,
 ) {
