@@ -23,6 +23,7 @@ plugins {
     id("nowinandroid.android.hilt")
     id("jacoco")
     id("nowinandroid.android.application.firebase")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -39,7 +40,7 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         val release by getting {
@@ -52,7 +53,7 @@ android {
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.getByName("debug")
         }
-        val benchmark by creating {
+        create("benchmark") {
             // Enable all the optimizations from release build through initWith(release).
             initWith(release)
             matchingFallbacks.add("release")
@@ -65,7 +66,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
@@ -83,6 +84,7 @@ dependencies {
     implementation(project(":feature:foryou"))
     implementation(project(":feature:bookmarks"))
     implementation(project(":feature:topic"))
+    implementation(project(":feature:search"))
     implementation(project(":feature:settings"))
 
     implementation(project(":core:common"))
@@ -117,7 +119,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.profileinstaller)
-
     implementation(libs.coil.kt)
 }
 

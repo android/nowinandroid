@@ -139,12 +139,18 @@ class NiaPreferencesDataSource @Inject constructor(
     }
 
     suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
-        userPreferences.updateData {
-            it.copy {
-                if (viewed) {
-                    viewedNewsResourceIds.put(newsResourceId, true)
-                } else {
-                    viewedNewsResourceIds.remove(newsResourceId)
+        setNewsResourcesViewed(listOf(newsResourceId), viewed)
+    }
+
+    suspend fun setNewsResourcesViewed(newsResourceIds: List<String>, viewed: Boolean) {
+        userPreferences.updateData { prefs ->
+            prefs.copy {
+                newsResourceIds.forEach { id ->
+                    if (viewed) {
+                        viewedNewsResourceIds.put(id, true)
+                    } else {
+                        viewedNewsResourceIds.remove(id)
+                    }
                 }
             }
         }

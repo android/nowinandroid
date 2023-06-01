@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
-
 plugins {
     id("nowinandroid.android.feature")
     id("nowinandroid.android.library.compose")
@@ -24,4 +22,11 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.settings"
+}
+
+dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation(libs.google.oss.licenses) {
+        exclude(group = "androidx.appcompat")
+    }
 }

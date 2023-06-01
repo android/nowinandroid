@@ -47,7 +47,7 @@ android {
         missingDimensionStrategy(FlavorDimension.contentType.name, NiaFlavor.demo.name)
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
@@ -55,7 +55,7 @@ android {
     namespace = "com.google.samples.apps.niacatalog"
 
     buildTypes {
-        val release by getting {
+        release {
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
