@@ -33,8 +33,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -195,7 +197,13 @@ fun NiaApp(
                             )
                         }
 
-                        NiaNavHost(appState)
+                        NiaNavHost(appState = appState, onShowSnackbar = { message, action ->
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = action,
+                                duration = Short,
+                            ) == ActionPerformed
+                        })
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
