@@ -150,6 +150,7 @@ fun SettingsDialog(
     )
 }
 
+// [ColumnScope] is used for using the [ColumnScope.AnimatedVisibility] extension overload composable.
 @Composable
 private fun ColumnScope.SettingsPanel(
     settings: UserEditableSettings,
