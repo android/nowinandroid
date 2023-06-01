@@ -43,16 +43,14 @@ class TestTopicDao : TopicDao {
         getTopicEntities()
             .map { topics -> topics.filter { it.id in ids } }
 
+    override suspend fun getOneOffTopicEntities(): List<TopicEntity> = emptyList()
+
     override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
         // Keep old values over new values
         entitiesStateFlow.update { oldValues ->
             (oldValues + topicEntities).distinctBy(TopicEntity::id)
         }
         return topicEntities.map { it.id.toLong() }
-    }
-
-    override suspend fun updateTopics(entities: List<TopicEntity>) {
-        throw NotImplementedError("Unused in tests")
     }
 
     override suspend fun upsertTopics(entities: List<TopicEntity>) {

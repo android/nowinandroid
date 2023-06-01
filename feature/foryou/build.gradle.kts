@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
-
 plugins {
     id("nowinandroid.android.feature")
     id("nowinandroid.android.library.compose")
@@ -29,4 +27,5 @@ android {
 dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.accompanist.permissions)
 }

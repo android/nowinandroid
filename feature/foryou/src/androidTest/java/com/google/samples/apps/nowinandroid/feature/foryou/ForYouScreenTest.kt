@@ -16,6 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
+import android.Manifest
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.test.assertHasClickAction
@@ -28,6 +31,8 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.rule.GrantPermissionRule.grant
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -35,6 +40,15 @@ import org.junit.Rule
 import org.junit.Test
 
 class ForYouScreenTest {
+
+    @get:Rule
+    val permissionTestRule: GrantPermissionRule =
+        if (SDK_INT >= TIRAMISU) {
+            grant(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            grant()
+        }
+
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
@@ -52,11 +66,13 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -76,11 +92,13 @@ class ForYouScreenTest {
                     isSyncing = true,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Success(emptyList()),
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -94,7 +112,7 @@ class ForYouScreenTest {
 
     @Test
     fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
-        val testData = followableTopicTestData.map { it -> it.copy(isFollowed = false) }
+        val testData = followableTopicTestData.map { it.copy(isFollowed = false) }
 
         composeTestRule.setContent {
             BoxWithConstraints {
@@ -106,11 +124,13 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -151,11 +171,13 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -189,11 +211,13 @@ class ForYouScreenTest {
                     onboardingUiState =
                     OnboardingUiState.Shown(topics = followableTopicTestData),
                     feedState = NewsFeedUiState.Loading,
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -213,11 +237,13 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Loading,
+                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
+                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -238,11 +264,13 @@ class ForYouScreenTest {
                 feedState = NewsFeedUiState.Success(
                     feed = userNewsResourcesTestData,
                 ),
+                deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
                 onTopicClick = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
+                onDeepLinkOpened = {},
             )
         }
 
