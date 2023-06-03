@@ -20,7 +20,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
-import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
+import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
@@ -63,7 +63,9 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
             }
         }
 
-        val request = Builder().addCapability(NET_CAPABILITY_INTERNET).build()
+        val request = Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
         connectivityManager.registerNetworkCallback(request, callback)
 
         /**
@@ -82,7 +84,7 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
         VERSION.SDK_INT >= VERSION_CODES.M ->
             activeNetwork
                 ?.let(::getNetworkCapabilities)
-                ?.hasCapability(NET_CAPABILITY_INTERNET)
+                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 
         else -> activeNetworkInfo?.isConnected
     } ?: false
