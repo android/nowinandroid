@@ -23,7 +23,7 @@ import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
@@ -60,7 +60,7 @@ fun NiaNavHost(
             onInterestsClick = navController::navigateToInterests,
             onTopicClick = navController::navigateToInterests,
         )
-        interestsGraph(
+        interestsScreen(
             listState = interestsScrollState,
             shouldShowTwoPane = appState.shouldShowTwoPane,
             onTopicClick = navController::navigateToInterests,

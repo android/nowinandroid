@@ -38,7 +38,7 @@ fun NavController.navigateToInterests(
     }
 }
 
-fun NavGraphBuilder.interestsGraph(
+fun NavGraphBuilder.interestsScreen(
     listState: LazyGridState,
     shouldShowTwoPane: Boolean,
     onTopicClick: (String) -> Unit,
