@@ -32,7 +32,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.feature.interests.R.string
 
 @Composable
 internal fun InterestsScreen(
@@ -50,7 +49,7 @@ internal fun InterestsScreen(
             InterestsUiState.Loading ->
                 NiaLoadingWheel(
                     modifier = modifier,
-                    contentDesc = stringResource(id = string.loading),
+                    contentDesc = stringResource(id = R.string.loading),
                 )
 
             is InterestsUiState.Interests ->
