@@ -43,7 +43,7 @@ class ScrollForYouFeedBenchmark {
         metrics = listOf(FrameTimingMetric()),
         compilationMode = compilationMode,
         iterations = 10,
-        startupMode = StartupMode.COLD,
+        startupMode = StartupMode.WARM,
         setupBlock = {
             // Start the app
             pressHome()
