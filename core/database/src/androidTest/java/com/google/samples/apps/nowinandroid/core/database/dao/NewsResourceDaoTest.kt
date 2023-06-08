@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopi
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -50,6 +51,7 @@ class NewsResourceDaoTest {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
         val newsResourceEntities = listOf(
             testNewsResource(
@@ -85,6 +87,7 @@ class NewsResourceDaoTest {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun newsResourceDao_filters_items_by_news_ids_by_descending_publish_date() = runTest {
         val newsResourceEntities = listOf(
             testNewsResource(
@@ -123,6 +126,7 @@ class NewsResourceDaoTest {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun newsResourceDao_filters_items_by_topic_ids_by_descending_publish_date() = runTest {
         val topicEntities = listOf(
             testTopicEntity(
@@ -183,6 +187,7 @@ class NewsResourceDaoTest {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun newsResourceDao_filters_items_by_news_and_topic_ids_by_descending_publish_date() = runTest {
         val topicEntities = listOf(
             testTopicEntity(
@@ -245,42 +250,42 @@ class NewsResourceDaoTest {
     }
 
     @Test
-    fun newsResourceDao_deletes_items_by_ids() =
-        runTest {
-            val newsResourceEntities = listOf(
-                testNewsResource(
-                    id = "0",
-                    millisSinceEpoch = 0,
-                ),
-                testNewsResource(
-                    id = "1",
-                    millisSinceEpoch = 3,
-                ),
-                testNewsResource(
-                    id = "2",
-                    millisSinceEpoch = 1,
-                ),
-                testNewsResource(
-                    id = "3",
-                    millisSinceEpoch = 2,
-                ),
-            )
-            newsResourceDao.upsertNewsResources(newsResourceEntities)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun newsResourceDao_deletes_items_by_ids() = runTest {
+        val newsResourceEntities = listOf(
+            testNewsResource(
+                id = "0",
+                millisSinceEpoch = 0,
+            ),
+            testNewsResource(
+                id = "1",
+                millisSinceEpoch = 3,
+            ),
+            testNewsResource(
+                id = "2",
+                millisSinceEpoch = 1,
+            ),
+            testNewsResource(
+                id = "3",
+                millisSinceEpoch = 2,
+            ),
+        )
+        newsResourceDao.upsertNewsResources(newsResourceEntities)
 
-            val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
+        val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
 
-            newsResourceDao.deleteNewsResources(
-                toDelete.map(NewsResourceEntity::id),
-            )
+        newsResourceDao.deleteNewsResources(
+            toDelete.map(NewsResourceEntity::id),
+        )
 
-            assertEquals(
-                toKeep.map(NewsResourceEntity::id)
-                    .toSet(),
-                newsResourceDao.getNewsResources().first()
-                    .map { it.entity.id }
-                    .toSet(),
-            )
-        }
+        assertEquals(
+            toKeep.map(NewsResourceEntity::id)
+                .toSet(),
+            newsResourceDao.getNewsResources().first()
+                .map { it.entity.id }
+                .toSet(),
+        )
+    }
 }
 
 private fun testTopicEntity(
