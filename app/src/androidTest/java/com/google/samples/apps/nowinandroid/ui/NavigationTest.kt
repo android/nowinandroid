@@ -33,6 +33,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -66,9 +67,15 @@ class NavigationTest {
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     /**
-     * Use the primary activity to initialize the app normally.
+     * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission.
      */
     @get:Rule(order = 2)
+    val postNotificationsPermission = GrantPostNotificationsPermissionRule()
+
+    /**
+     * Use the primary activity to initialize the app normally.
+     */
+    @get:Rule(order = 3)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
