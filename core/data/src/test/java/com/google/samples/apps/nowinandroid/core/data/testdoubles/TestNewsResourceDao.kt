@@ -75,9 +75,11 @@ class TestNewsResourceDao : NewsResourceDao {
     ): Flow<List<String>> {
         val filteredNewsResourceIds = entitiesStateFlow.map { newsResourceEntities ->
             newsResourceEntities.filter { entity ->
-                !useFilterTopicIds || topicCrossReferences.any {
-                    it.newsResourceId == entity.id && it.topicId in filterTopicIds
-                } && (!useFilterNewsIds || entity.id in filterNewsIds)
+                (
+                    !useFilterTopicIds || topicCrossReferences.any {
+                        it.newsResourceId == entity.id && it.topicId in filterTopicIds
+                    }
+                    ) && (!useFilterNewsIds || entity.id in filterNewsIds)
             }.map { it.id }
         }
         return filteredNewsResourceIds
