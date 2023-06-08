@@ -66,6 +66,26 @@ interface NewsResourceDao {
     ): Flow<List<PopulatedNewsResource>>
 
     /**
+     * Retrieves news resource IDs based on topic and news filters.
+     */
+    @Query(
+        value = """
+    SELECT news_resources.id
+    FROM news_resources
+    INNER JOIN news_resources_topics
+    ON news_resources.id = news_resources_topics.news_resource_id
+    WHERE (:useFilterTopicIds = 0 OR news_resources_topics.topic_id IN (:filterTopicIds))
+    AND (:useFilterNewsIds = 0 OR news_resources.id IN (:filterNewsIds))
+    """,
+    )
+    fun getNewsResourceIdsByFilter(
+        useFilterTopicIds: Boolean,
+        filterTopicIds: Set<String>,
+        useFilterNewsIds: Boolean,
+        filterNewsIds: Set<String>,
+    ): Flow<List<String>>
+
+    /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
