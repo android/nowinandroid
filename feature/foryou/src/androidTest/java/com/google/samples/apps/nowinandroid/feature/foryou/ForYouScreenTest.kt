@@ -28,6 +28,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
+import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -35,7 +36,11 @@ import org.junit.Rule
 import org.junit.Test
 
 class ForYouScreenTest {
-    @get:Rule
+
+    @get:Rule(order = 0)
+    val postNotificationsPermission = GrantPostNotificationsPermissionRule()
+
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val doneButtonMatcher by lazy {
@@ -98,7 +103,7 @@ class ForYouScreenTest {
 
     @Test
     fun topicSelector_whenNoTopicsSelected_showsTopicChipsAndDisabledDoneButton() {
-        val testData = followableTopicTestData.map { it -> it.copy(isFollowed = false) }
+        val testData = followableTopicTestData.map { it.copy(isFollowed = false) }
 
         composeTestRule.setContent {
             BoxWithConstraints {

@@ -39,6 +39,7 @@ import com.google.samples.apps.nowinandroid.ui.NiaAppState
 @Composable
 fun NiaNavHost(
     appState: NiaAppState,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     startDestination: String = forYouNavigationRoute,
 ) {
@@ -50,7 +51,10 @@ fun NiaNavHost(
     ) {
         // TODO: handle topic clicks from each top level destination
         forYouScreen(onTopicClick = {})
-        bookmarksScreen(onTopicClick = {})
+        bookmarksScreen(
+            onTopicClick = navController::navigateToTopic,
+            onShowSnackbar = onShowSnackbar,
+        )
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },

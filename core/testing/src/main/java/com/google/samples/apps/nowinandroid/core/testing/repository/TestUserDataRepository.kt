@@ -113,22 +113,6 @@ class TestUserDataRepository : UserDataRepository {
     }
 
     /**
-     * A test-only API to allow setting/unsetting of bookmarks.
-     *
-     */
-    fun setNewsResourceBookmarks(newsResourceIds: Set<String>) {
-        currentUserData.let { current ->
-            _userData.tryEmit(current.copy(bookmarkedNewsResources = newsResourceIds))
-        }
-    }
-
-    /**
-     * A test-only API to allow querying the current followed topics.
-     */
-    fun getCurrentFollowedTopics(): Set<String>? =
-        _userData.replayCache.firstOrNull()?.followedTopics
-
-    /**
      * A test-only API to allow setting of user data directly.
      */
     fun setUserData(userData: UserData) {

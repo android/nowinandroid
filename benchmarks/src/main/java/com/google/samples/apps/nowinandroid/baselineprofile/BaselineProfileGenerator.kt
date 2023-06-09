@@ -52,8 +52,6 @@ class BaselineProfileGenerator {
 
             // Navigate to saved screen
             goToBookmarksScreen()
-            // TODO: we need to implement adding stuff to bookmarks before able to scroll it
-            // bookmarksScrollFeedDownUp()
 
             // Navigate to interests screen
             goToInterestsScreen()

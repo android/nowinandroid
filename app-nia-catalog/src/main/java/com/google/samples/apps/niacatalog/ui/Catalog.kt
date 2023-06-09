@@ -36,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
@@ -206,13 +205,13 @@ fun NiaCatalog() {
                             onCheckedChange = { checked -> firstChecked = checked },
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    imageVector = NiaIcons.BookmarkBorder,
                                     contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    imageVector = NiaIcons.Bookmark,
                                     contentDescription = null,
                                 )
                             },
@@ -223,13 +222,13 @@ fun NiaCatalog() {
                             onCheckedChange = { checked -> secondChecked = checked },
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    imageVector = NiaIcons.BookmarkBorder,
                                     contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    imageVector = NiaIcons.Bookmark,
                                     contentDescription = null,
                                 )
                             },
@@ -239,13 +238,13 @@ fun NiaCatalog() {
                             onCheckedChange = {},
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    imageVector = NiaIcons.BookmarkBorder,
                                     contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    imageVector = NiaIcons.Bookmark,
                                     contentDescription = null,
                                 )
                             },
@@ -256,13 +255,13 @@ fun NiaCatalog() {
                             onCheckedChange = {},
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.BookmarkBorder),
+                                    imageVector = NiaIcons.BookmarkBorder,
                                     contentDescription = null,
                                 )
                             },
                             checkedIcon = {
                                 Icon(
-                                    painter = painterResource(id = NiaIcons.Bookmark),
+                                    imageVector = NiaIcons.Bookmark,
                                     contentDescription = null,
                                 )
                             },
@@ -334,40 +333,31 @@ fun NiaCatalog() {
                 item { Text("Navigation", Modifier.padding(top = 16.dp)) }
                 item {
                     var selectedItem by remember { mutableStateOf(0) }
-                    val items = listOf("For you", "Episodes", "Saved", "Interests")
+                    val items = listOf("For you", "Saved", "Interests")
                     val icons = listOf(
                         NiaIcons.UpcomingBorder,
-                        NiaIcons.MenuBookBorder,
                         NiaIcons.BookmarksBorder,
+                        NiaIcons.Grid3x3,
                     )
                     val selectedIcons = listOf(
                         NiaIcons.Upcoming,
-                        NiaIcons.MenuBook,
                         NiaIcons.Bookmarks,
+                        NiaIcons.Grid3x3,
                     )
-                    val tagIcon = NiaIcons.Tag
                     NiaNavigationBar {
                         items.forEachIndexed { index, item ->
                             NiaNavigationBarItem(
                                 icon = {
-                                    if (index == 3) {
-                                        Icon(imageVector = tagIcon, contentDescription = null)
-                                    } else {
-                                        Icon(
-                                            painter = painterResource(id = icons[index]),
-                                            contentDescription = item,
-                                        )
-                                    }
+                                    Icon(
+                                        imageVector = icons[index],
+                                        contentDescription = item,
+                                    )
                                 },
                                 selectedIcon = {
-                                    if (index == 3) {
-                                        Icon(imageVector = tagIcon, contentDescription = null)
-                                    } else {
-                                        Icon(
-                                            painter = painterResource(id = selectedIcons[index]),
-                                            contentDescription = item,
-                                        )
-                                    }
+                                    Icon(
+                                        imageVector = selectedIcons[index],
+                                        contentDescription = item,
+                                    )
                                 },
                                 label = { Text(item) },
                                 selected = selectedItem == index,
