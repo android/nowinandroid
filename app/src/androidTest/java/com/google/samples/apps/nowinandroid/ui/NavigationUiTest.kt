@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
@@ -61,9 +62,15 @@ class NavigationUiTest {
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     /**
-     * Use a test activity to set the content on.
+     * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission.
      */
     @get:Rule(order = 2)
+    val postNotificationsPermission = GrantPostNotificationsPermissionRule()
+
+    /**
+     * Use a test activity to set the content on.
+     */
+    @get:Rule(order = 3)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     val userNewsResourceRepository = CompositeUserNewsResourceRepository(

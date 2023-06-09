@@ -59,7 +59,6 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
-import com.google.samples.apps.nowinandroid.feature.topic.TopicUiState.Loading
 
 @Composable
 internal fun TopicRoute(
@@ -107,7 +106,7 @@ internal fun TopicScreen(
             Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
         }
         when (topicUiState) {
-            Loading -> item {
+            TopicUiState.Loading -> item {
                 NiaLoadingWheel(
                     modifier = modifier,
                     contentDesc = stringResource(id = string.topic_loading),

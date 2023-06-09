@@ -32,7 +32,6 @@ import org.jetbrains.uast.UQualifiedReferenceExpression
  * A detector that checks for incorrect usages of Compose Material APIs over equivalents in
  * the Now in Android design system module.
  */
-@Suppress("UnstableApiUsage")
 class DesignSystemDetector : Detector(), Detector.UastScanner {
 
     override fun getApplicableUastTypes(): List<Class<out UElement>> {
