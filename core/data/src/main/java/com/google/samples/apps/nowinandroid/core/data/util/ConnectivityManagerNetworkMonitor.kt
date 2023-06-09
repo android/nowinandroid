@@ -21,6 +21,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
@@ -44,36 +45,33 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
         }
 
         /**
-         * Sends the latest connectivity status to the underlying channel.
-         */
-        fun update() {
-            channel.trySend(connectivityManager.isCurrentlyConnected())
-        }
-
-        /**
-         * The callback's methods are invoked on changes to *any* network, not just the active
-         * network. So to check for network connectivity, one must query the active network of the
-         * ConnectivityManager.
+         * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
+         * not just the active network. So we can simply track the presence (or absence) of such [Network].
          */
         val callback = object : NetworkCallback() {
-            override fun onAvailable(network: Network) = update()
 
-            override fun onLost(network: Network) = update()
+            private val networks = mutableSetOf<Network>()
 
-            override fun onCapabilitiesChanged(
-                network: Network,
-                networkCapabilities: NetworkCapabilities,
-            ) = update()
+            override fun onAvailable(network: Network) {
+                networks += network
+                channel.trySend(true)
+            }
+
+            override fun onLost(network: Network) {
+                networks -= network
+                channel.trySend(networks.isNotEmpty())
+            }
         }
 
-        connectivityManager.registerNetworkCallback(
-            Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .build(),
-            callback,
-        )
+        val request = Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+        connectivityManager.registerNetworkCallback(request, callback)
 
-        update()
+        /**
+         * Sends the latest connectivity status to the underlying channel.
+         */
+        channel.trySend(connectivityManager.isCurrentlyConnected())
 
         awaitClose {
             connectivityManager.unregisterNetworkCallback(callback)
@@ -87,6 +85,7 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
             activeNetwork
                 ?.let(::getNetworkCapabilities)
                 ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
         else -> activeNetworkInfo?.isConnected
     } ?: false
 }
