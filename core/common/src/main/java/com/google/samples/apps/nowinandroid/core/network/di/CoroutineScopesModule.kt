@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,31 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.di
+package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import com.google.samples.apps.nowinandroid.core.network.di.DispatchersModule
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import javax.inject.Qualifier
+import javax.inject.Singleton
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope
 
 @Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [DispatchersModule::class],
-)
-object TestDispatchersModule {
+@InstallIn(SingletonComponent::class)
+object CoroutineScopesModule {
     @Provides
-    @Dispatcher(IO)
-    fun providesIODispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
-
-    @Provides
-    @Dispatcher(Default)
-    fun providesDefaultDispatcher(
-        testDispatcher: TestDispatcher,
-    ): CoroutineDispatcher = testDispatcher
+    @Singleton
+    @ApplicationScope
+    fun providesCoroutineScope(
+        @Dispatcher(Default) dispatcher: CoroutineDispatcher,
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 }
