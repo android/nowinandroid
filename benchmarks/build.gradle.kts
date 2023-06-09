@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.samples.apps.nowinandroid.NiaBuildType
 import com.google.samples.apps.nowinandroid.configureFlavors
 

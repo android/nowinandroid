@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database.model
+package com.google.samples.apps.nowinandroid.core.rules
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Fts4
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.TIRAMISU
+import androidx.test.rule.GrantPermissionRule.grant
+import org.junit.rules.TestRule
 
 /**
- * Fts entity for the news resources. See https://developer.android.com/reference/androidx/room/Fts4.
+ * [TestRule] granting [POST_NOTIFICATIONS] permission if running on [SDK_INT] greater than [TIRAMISU].
  */
-@Entity(tableName = "newsResourcesFts")
-@Fts4
-data class NewsResourceFtsEntity(
-
-    @ColumnInfo(name = "newsResourceId")
-    val newsResourceId: String,
-
-    @ColumnInfo(name = "title")
-    val title: String,
-
-    @ColumnInfo(name = "content")
-    val content: String,
-)
+class GrantPostNotificationsPermissionRule :
+    TestRule by if (SDK_INT >= TIRAMISU) grant(POST_NOTIFICATIONS) else grant()

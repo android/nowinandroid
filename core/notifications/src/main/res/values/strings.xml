@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="news_notification_title">Now in Android</string>
     <string name="news_notification_channel_name">News updates</string>
     <string name="news_notification_channel_description">The latest updates on what\'s new in Android</string>
     <string name="news_notification_group_summary">%1$d news updates</string>
