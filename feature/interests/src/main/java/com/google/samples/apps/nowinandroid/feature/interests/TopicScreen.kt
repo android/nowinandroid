@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.selection.selectableGroup
@@ -59,9 +60,6 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.interests.R.string
-import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Error
-import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Loading
-import com.google.samples.apps.nowinandroid.feature.interests.TopicUiState.Success
 
 @Composable
 internal fun TopicScreen(
@@ -72,13 +70,13 @@ internal fun TopicScreen(
     onBookmarkChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
+    gridState: LazyGridState = rememberLazyGridState(),
 ) {
-    val state = rememberLazyGridState()
-    TrackScrollJank(scrollableState = state, stateName = "topic:screen")
+    TrackScrollJank(scrollableState = gridState, stateName = "topic:screen")
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(300.dp),
-        state = state,
+        state = gridState,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .selectableGroup()
@@ -93,13 +91,13 @@ internal fun TopicScreen(
                 )
             }
 
-            Error -> {
+            TopicUiState.Error -> {
                 item {
                     Text(text = stringResource(id = string.topic_error))
                 }
             }
 
-            is Success -> {
+            is TopicUiState.Success -> {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     TopicToolbar(
                         onBackClick = onBackClick,
@@ -238,7 +236,7 @@ fun TopicScreenPopulated(
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicUiState = Success(
+                topicUiState = TopicUiState.Success(
                     followableTopic = userNewsResources[0].followableTopics[0],
                     newsResources = userNewsResources,
                 ),
@@ -258,7 +256,7 @@ fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
             TopicScreen(
-                topicUiState = Loading,
+                topicUiState = TopicUiState.Loading,
                 onBackClick = {},
                 onFollowClick = { _, _ -> },
                 onBookmarkChanged = { _, _ -> },

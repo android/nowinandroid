@@ -145,7 +145,7 @@ fun NiaApp(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentBackStackEntry?.destination,
+                            currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("NiaBottomBar"),
                         )
                     }
@@ -167,7 +167,7 @@ fun NiaApp(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentBackStackEntry?.destination,
+                            currentDestination = appState.currentDestination,
                             modifier = Modifier
                                 .testTag("NiaNavRail")
                                 .safeDrawingPadding(),
@@ -176,10 +176,10 @@ fun NiaApp(
 
                     Column(Modifier.fillMaxSize()) {
                         // Show the top app bar on top level destinations.
-                        val destination = appState.currentTopLevelDestination
+                        val destination = appState.topBarTitle
                         if (destination != null) {
                             NiaTopAppBar(
-                                titleRes = destination.titleTextId,
+                                titleRes = destination,
                                 navigationIcon = NiaIcons.Search,
                                 navigationIconContentDescription = stringResource(
                                     id = settingsR.string.top_app_bar_navigation_icon_description,

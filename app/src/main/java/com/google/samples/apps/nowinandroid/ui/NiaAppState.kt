@@ -21,10 +21,12 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -86,24 +88,34 @@ class NiaAppState(
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
 ) {
-    val currentBackStackEntry: NavBackStackEntry?
+    val currentDestination: NavDestination?
         @Composable get() = navController
-            .currentBackStackEntryAsState().value
+            .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: TopLevelDestination?
+    val topBarTitle: Int?
         @Composable get() {
-            val route: String? = currentBackStackEntry?.destination?.route
-            val arguments: Bundle? = currentBackStackEntry?.arguments
+            val backStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
+            val route: String? = backStackEntry?.destination?.route
+            val arguments: Bundle? = backStackEntry?.arguments
             return when {
-                route == forYouNavigationRoute -> FOR_YOU
-                route == bookmarksRoute -> BOOKMARKS
+                route == forYouNavigationRoute -> FOR_YOU.titleTextId
+                route == bookmarksRoute -> BOOKMARKS.titleTextId
                 route == interestsRoute &&
-                    (arguments?.getString(topicIdArg) == null || shouldShowTwoPane) -> INTERESTS
+                    (arguments?.getString(topicIdArg) == null || shouldShowTwoPane) -> INTERESTS.titleTextId
                 else -> null
             }
         }
+
+    val currentTopLevelDestination: TopLevelDestination?
+        @Composable get() = when (currentDestination?.route) {
+            forYouNavigationRoute -> FOR_YOU
+            bookmarksRoute -> BOOKMARKS
+            interestsRoute -> INTERESTS
+            else -> null
+        }
+
     val shouldShowGradientBackground: Boolean
-        @Composable get() = currentBackStackEntry?.destination?.route == forYouNavigationRoute
+        @Composable get() = currentTopLevelDestination == FOR_YOU
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
