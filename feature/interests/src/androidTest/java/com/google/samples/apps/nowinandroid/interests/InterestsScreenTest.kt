@@ -111,8 +111,8 @@ class InterestsScreenTest {
     private fun InterestsScreen(uiState: InterestsUiState) {
         InterestsScreen(
             uiState = uiState,
-            followTopic = {_, _ -> },
-            onTopicClick = {}
+            followTopic = { _, _ -> },
+            onTopicClick = {},
         )
     }
 }
