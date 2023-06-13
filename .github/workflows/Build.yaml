@@ -148,3 +148,44 @@ jobs:
         with:
           name: test-reports
           path: '**/build/reports/androidTests'
+
+  deploygate:
+    name: Upload to DeployGate and Comment Pull Request
+    needs: build
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.after }}
+      - uses: actions/download-artifact@v3
+        with:
+          name: APKs
+          path: 'app/build/outputs/apk/demo/app-demo-debug.apk'
+      - name: Get latest commit
+        run: |
+          echo "MESSAGE=$(git log -1 --pretty=format:%s ${{ github.event.after }})" >> "$GITHUB_OUTPUT"
+        id: get_latest_commit
+      - uses: jmatsu/dg-upload-app-action@v0.2
+        with:
+          app_owner_name: ${{ secrets.DEPLOYGATE_APP_OWNER_NAME }}
+          api_token: ${{ secrets.DEPLOYGATE_API_TOKEN }}
+          app_file_path: app/build/outputs/apk/demo/app-demo-debug.apk
+          distribution_find_by: name
+          distribution_id: ${{ github.head_ref }}
+          message: ${{ github.head_ref }} - ${{ steps.get_latest_commit.outputs.MESSAGE }}
+          release_note: ${{ steps.get_latest_commit.outputs.MESSAGE }}
+        id: deploygate
+      - uses: jaxxstorm/action-install-gh-release@f2bcf7617d36fea65f0a9d261d4947b19947956e # v1.9.0
+        with:
+          repo: suzuki-shunsuke/github-comment
+          tag: v6.0.0
+          cache: enable
+      - run: |
+          github-comment hide && github-comment post --config .github/github-comment-config.yaml -k distribution_page --var "DistributionUrl:${{ steps.deploygate.outputs.distribution_url }}" --var "LatestCommitMessage:${{ steps.get_latest_commit.outputs.MESSAGE }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}

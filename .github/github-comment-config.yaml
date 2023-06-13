@@ -1,0 +1,11 @@
+post:
+  distribution_page:
+    template: |
+      ### <span aria-hidden="true">✅</span> Deployed to DeployGate. Enjoy the new app!
+      |Name|Link|
+      |---|---|
+      |<span aria-hidden="true">🔨</span> Latest commit sha1|{{.SHA1}}|
+      |<span aria-hidden="true">💬</span> Latest commit message|{{.Vars.LatestCommitMessage}}|
+      |<span aria-hidden="true">🔍</span> Latest build|{{template "link" .}}|
+      |<span aria-hidden="true">🔗</span> Distribution Page|[{{.Vars.DistributionUrl}}]({{.Vars.DistributionUrl}})|
+      |<span aria-hidden="true">📱</span> Open on mobile|![QR Code](https://deploygate.com/qr?size=178&data={{urlquery .Vars.DistributionUrl}})|
