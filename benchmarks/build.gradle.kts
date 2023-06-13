@@ -75,9 +75,3 @@ dependencies {
     implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.uiautomator)
 }
-
-androidComponents {
-    beforeVariants {
-        it.enable = it.buildType == "benchmark"
-    }
-}
