@@ -173,7 +173,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
    <td>UI components, composables and resources, used by different features.
    </td>
-   <td><code>NewsResourceCardExpanded</code>
+   <td> <code>NewsFeed</code> <code>NewsResourceCardExpanded</code>
    </td>
   </tr>
   <tr>
