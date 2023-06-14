@@ -164,7 +164,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
    <td>Design system which includes Core UI components (many of which are customized Material 3 components), app theme and icons. The design system can be viewed by running the `app-nia-catalog` run configuration. 
    </td>
-   <td><code>NiaTheme</code><br>
+   <td>
    <code>NiaIcons</code>    <code>NiaButton</code>    <code>NiaTheme</code> 
    </td>
   </tr>
