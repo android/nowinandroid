@@ -70,7 +70,7 @@ class InterestsViewModel @Inject constructor(
     )
 
     val topicUiState: StateFlow<TopicUiState?> = topicId.flatMapLatest { topicId ->
-        topicUiState(
+        createTopicUiState(
             topicId,
             userDataRepository,
             userNewsResourceRepository,
@@ -101,7 +101,7 @@ class InterestsViewModel @Inject constructor(
     }
 }
 
-private fun topicUiState(
+private fun createTopicUiState(
     topicId: String?,
     userDataRepository: UserDataRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
