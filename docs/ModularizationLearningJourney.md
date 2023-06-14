@@ -165,7 +165,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    <td>Design system, tokens and icons.
    </td>
    <td><code>NiaTheme</code><br>
-   <code>NiaIcons</code>
+   <code>NiaIcons</code>    <code>NiaButton</code>    <code>NiaTheme</code> 
    </td>
   </tr>
   <tr>
