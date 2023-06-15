@@ -58,7 +58,7 @@ fun LazyGridScope.newsFeed(
         NewsFeedUiState.Loading -> Unit
         is NewsFeedUiState.Success -> {
             items(
-                feedState.feed,
+                items = feedState.feed,
                 key = { it.id },
                 contentType = { "newsFeedItem" },
             ) { userNewsResource ->
