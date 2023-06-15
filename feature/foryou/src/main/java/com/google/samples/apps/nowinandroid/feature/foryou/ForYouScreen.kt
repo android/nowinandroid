@@ -182,7 +182,7 @@ internal fun ForYouScreen(
             onTopicClick = onTopicClick,
         )
 
-        item(span = { GridItemSpan(maxLineSpan) }, contentType = { "bottomSpacing" }) {
+        item(span = { GridItemSpan(maxLineSpan) }, contentType = "bottomSpacing") {
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 // Add space for the content to clear the "offline" snackbar.
