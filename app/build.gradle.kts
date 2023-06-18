@@ -121,10 +121,3 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.coil.kt)
 }
-
-// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-configurations.configureEach {
-    resolutionStrategy {
-        force(libs.junit4)
-    }
-}
