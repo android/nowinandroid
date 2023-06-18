@@ -94,10 +94,6 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
-import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsItem
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 @Composable
@@ -106,10 +102,10 @@ internal fun SearchRoute(
     onBackClick: () -> Unit,
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
-    bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
-    interestsViewModel: InterestsViewModel = hiltViewModel(),
+    onFollowTopic: (followedTopicId: String, followed: Boolean) -> Unit,
+    updateNewsResourceSaved: (newsResourceId: String, isChecked: Boolean) -> Unit,
+    onNewsResourceViewed: (newsResourceId: String) -> Unit,
     searchViewModel: SearchViewModel = hiltViewModel(),
-    forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
@@ -118,13 +114,13 @@ internal fun SearchRoute(
         modifier = modifier,
         onBackClick = onBackClick,
         onClearRecentSearches = searchViewModel::clearRecentSearches,
-        onFollowButtonClick = interestsViewModel::followTopic,
+        onFollowButtonClick = onFollowTopic,
         onInterestsClick = onInterestsClick,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onSearchTriggered = searchViewModel::onSearchTriggered,
         onTopicClick = onTopicClick,
-        onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
-        onNewsResourceViewed = { bookmarksViewModel.setNewsResourceViewed(it, true) },
+        onNewsResourcesCheckedChanged = updateNewsResourceSaved,
+        onNewsResourceViewed = onNewsResourceViewed,
         recentSearchesUiState = recentSearchQueriesUiState,
         searchQuery = searchQuery,
         searchResultUiState = searchResultUiState,

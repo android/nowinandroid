@@ -32,6 +32,9 @@ fun NavGraphBuilder.searchScreen(
     onBackClick: () -> Unit,
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
+    onFollowTopic: (followedTopicId: String, followed: Boolean) -> Unit,
+    onNewsResourceViewed: (newsResourceId: String) -> Unit,
+    updateNewsResourceSaved: (newsResourceId: String, isChecked: Boolean) -> Unit,
 ) {
     // TODO: Handle back stack for each top-level destination. At the moment each top-level
     // destination may have own search screen's back stack.
@@ -40,6 +43,9 @@ fun NavGraphBuilder.searchScreen(
             onBackClick = onBackClick,
             onInterestsClick = onInterestsClick,
             onTopicClick = onTopicClick,
+            onFollowTopic = onFollowTopic,
+            onNewsResourceViewed = onNewsResourceViewed,
+            updateNewsResourceSaved = updateNewsResourceSaved,
         )
     }
 }

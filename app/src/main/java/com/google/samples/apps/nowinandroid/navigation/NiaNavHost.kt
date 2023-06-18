@@ -18,10 +18,14 @@ package com.google.samples.apps.nowinandroid.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
+import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
+import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
@@ -41,6 +45,9 @@ fun NiaNavHost(
     appState: NiaAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
+    bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
+    forYouViewModel: ForYouViewModel = hiltViewModel(),
+    interestsViewModel: InterestsViewModel = hiltViewModel(),
     startDestination: String = forYouNavigationRoute,
 ) {
     val navController = appState.navController
@@ -58,6 +65,9 @@ fun NiaNavHost(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
             onTopicClick = navController::navigateToTopic,
+            onFollowTopic = interestsViewModel::followTopic,
+            onNewsResourceViewed = { bookmarksViewModel.setNewsResourceViewed(it, true) },
+            updateNewsResourceSaved = forYouViewModel::updateNewsResourceSaved,
         )
         interestsGraph(
             onTopicClick = navController::navigateToTopic,
