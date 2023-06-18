@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestD
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
+import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
 
 /**
  * UI test for checking the correct behaviour of the Search screen.
@@ -73,9 +73,9 @@ class SearchScreenTest {
             clearSearchContentDesc = getString(R.string.clear_search_text_content_desc)
             clearRecentSearchesContentDesc = getString(R.string.clear_recent_searches_content_desc)
             followButtonContentDesc =
-                getString(interestsR.string.card_follow_button_content_desc)
+                getString(CoreUiR.string.card_follow_button_content_desc)
             unfollowButtonContentDesc =
-                getString(interestsR.string.card_unfollow_button_content_desc)
+                getString(CoreUiR.string.card_unfollow_button_content_desc)
             topicsString = getString(R.string.topics)
             updatesString = getString(R.string.updates)
             tryAnotherSearchString = getString(R.string.try_another_search) +
