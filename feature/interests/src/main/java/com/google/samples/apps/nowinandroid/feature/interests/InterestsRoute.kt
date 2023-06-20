@@ -79,7 +79,7 @@ internal fun InterestsRoute(
                         Modifier
                     } else {
                         Modifier.safeDrawingPadding()
-                    }
+                    },
                 ),
         ) {
             topicUiState?.let { state ->

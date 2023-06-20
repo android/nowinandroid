@@ -99,7 +99,7 @@ fun InterestsItem(
                     )
                 } else {
                     Modifier
-                }
+                },
             ),
     )
 }
