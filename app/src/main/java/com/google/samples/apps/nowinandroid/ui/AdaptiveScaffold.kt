@@ -38,6 +38,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -104,6 +106,9 @@ fun <T> AdaptiveScaffold(
     val context = LocalContext.current
     val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(context)
     val widthDp = metrics.bounds.width() / context.resources.displayMetrics.density
+    val movableContent = remember(content) {
+        movableContentOf(content)
+    }
 
     when {
         widthDp >= 1240f -> {
@@ -141,7 +146,7 @@ fun <T> AdaptiveScaffold(
                     },
                     modifier = Modifier.padding(padding),
                 ) {
-                    content(padding)
+                    movableContent(padding)
                 }
             }
         }
@@ -175,7 +180,7 @@ fun <T> AdaptiveScaffold(
                             )
                         }
                     }
-                    content(padding)
+                    movableContent(padding)
                 }
             }
         }
@@ -209,7 +214,7 @@ fun <T> AdaptiveScaffold(
                 contentColor = colors.contentColor,
                 contentWindowInsets = contentWindowInsets,
             ) { padding ->
-                content(padding)
+                movableContent(padding)
             }
         }
     }
