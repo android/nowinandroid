@@ -90,17 +90,17 @@ fun InterestsItem(
         modifier = modifier
             .semantics(mergeDescendants = true) { /* no-op */ }
             .selectable(selected = isSelected, onClick = onClick)
-            .run {
+            .then(
                 if (isSelected) {
-                    border(
+                    Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outline,
                         shape = MaterialTheme.shapes.medium,
                     )
                 } else {
-                    this
+                    Modifier
                 }
-            },
+            ),
     )
 }
 

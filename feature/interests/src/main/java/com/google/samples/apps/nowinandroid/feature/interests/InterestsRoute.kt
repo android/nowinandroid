@@ -74,13 +74,13 @@ internal fun InterestsRoute(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .run {
-                    if (!shouldShowTwoPane) {
-                        safeDrawingPadding()
+                .then(
+                    if (shouldShowTwoPane) {
+                        Modifier
                     } else {
-                        this
+                        Modifier.safeDrawingPadding()
                     }
-                },
+                ),
         ) {
             topicUiState?.let { state ->
                 TopicScreen(
