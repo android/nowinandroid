@@ -171,7 +171,7 @@ Using the above modularization strategy, the Now in Android app has the followin
   <tr>
    <td><code>core:ui</code>
    </td>
-   <td>Composite UI components and resources used by feature modules, such as the news feed. Unlike the <code>designsystem<code> module, it is dependent on the data layer since it renders models, like news resources. 
+   <td>Composite UI components and resources used by feature modules, such as the news feed. Unlike the <code>designsystem</code> module, it is dependent on the data layer since it renders models, like news resources. 
    </td>
    <td> <code>NewsFeed</code> <code>NewsResourceCardExpanded</code>
    </td>
