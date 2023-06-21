@@ -45,11 +45,6 @@ understanding of which libraries and tools are being used, the reasoning behind 
 UI, testing, architecture and more, and how all of these different pieces of the project fit
 together to create a complete app.
 
-NOTE: Building the app using an M1 Mac will require the use of
-[Rosetta](https://support.apple.com/en-gb/HT211861). See
-[the following bug](https://github.com/protocolbuffers/protobuf/issues/9397#issuecomment-1086138036)
-for more details.
-
 # Architecture
 
 The **Now in Android** app follows the

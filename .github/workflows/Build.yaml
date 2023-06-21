@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
@@ -107,4 +108,43 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-reports-${{ matrix.api-level }}
+          path: '**/build/reports/androidTests'
+
+  androidTest-GMD:
+    needs: build
+    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    timeout-minutes: 55
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Build AndroidTest apps
+        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
+
+      - name: Run instrumented tests with GMD
+        run: ./gradlew cleanManagedDevices --unused-only &&
+          ./gradlew ciDemoDebugAndroidTest -Dorg.gradle.workers.max=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+
+      - name: Upload test reports
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
           path: '**/build/reports/androidTests'

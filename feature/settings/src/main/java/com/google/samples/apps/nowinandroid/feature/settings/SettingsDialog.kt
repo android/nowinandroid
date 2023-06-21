@@ -17,9 +17,11 @@
 package com.google.samples.apps.nowinandroid.feature.settings
 
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -149,8 +151,9 @@ fun SettingsDialog(
     )
 }
 
+// [ColumnScope] is used for using the [ColumnScope.AnimatedVisibility] extension overload composable.
 @Composable
-private fun SettingsPanel(
+private fun ColumnScope.SettingsPanel(
     settings: UserEditableSettings,
     supportDynamicColor: Boolean,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
@@ -170,19 +173,21 @@ private fun SettingsPanel(
             onClick = { onChangeThemeBrand(ANDROID) },
         )
     }
-    if (settings.brand == DEFAULT && supportDynamicColor) {
-        SettingsDialogSectionTitle(text = stringResource(R.string.dynamic_color_preference))
-        Column(Modifier.selectableGroup()) {
-            SettingsDialogThemeChooserRow(
-                text = stringResource(string.dynamic_color_yes),
-                selected = settings.useDynamicColor,
-                onClick = { onChangeDynamicColorPreference(true) },
-            )
-            SettingsDialogThemeChooserRow(
-                text = stringResource(string.dynamic_color_no),
-                selected = !settings.useDynamicColor,
-                onClick = { onChangeDynamicColorPreference(false) },
-            )
+    AnimatedVisibility(visible = settings.brand == DEFAULT && supportDynamicColor) {
+        Column {
+            SettingsDialogSectionTitle(text = stringResource(R.string.dynamic_color_preference))
+            Column(Modifier.selectableGroup()) {
+                SettingsDialogThemeChooserRow(
+                    text = stringResource(string.dynamic_color_yes),
+                    selected = settings.useDynamicColor,
+                    onClick = { onChangeDynamicColorPreference(true) },
+                )
+                SettingsDialogThemeChooserRow(
+                    text = stringResource(string.dynamic_color_no),
+                    selected = !settings.useDynamicColor,
+                    onClick = { onChangeDynamicColorPreference(false) },
+                )
+            }
         }
     }
     SettingsDialogSectionTitle(text = stringResource(R.string.dark_mode_preference))
