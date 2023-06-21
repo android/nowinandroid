@@ -182,7 +182,7 @@ internal fun ForYouScreen(
             onTopicClick = onTopicClick,
         )
 
-        item(span = { GridItemSpan(maxLineSpan) }) {
+        item(span = { GridItemSpan(maxLineSpan) }, contentType = "bottomSpacing") {
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 // Add space for the content to clear the "offline" snackbar.
@@ -240,7 +240,7 @@ private fun LazyGridScope.onboarding(
         -> Unit
 
         is OnboardingUiState.Shown -> {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = { GridItemSpan(maxLineSpan) }, contentType = "onboarding") {
                 Column(modifier = interestsItemModifier) {
                     Text(
                         text = stringResource(R.string.onboarding_guidance_title),
