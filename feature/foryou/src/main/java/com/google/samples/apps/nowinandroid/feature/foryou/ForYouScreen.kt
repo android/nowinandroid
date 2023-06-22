@@ -62,6 +62,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -109,12 +110,15 @@ internal fun ForYouRoute(
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
 
+    val onTopicCheckedChangedRem: (String, Boolean) -> Unit =
+        remember { viewModel::updateTopicSelection }
+
     ForYouScreen(
         isSyncing = isSyncing,
         onboardingUiState = onboardingUiState,
         feedState = feedState,
         deepLinkedUserNewsResource = deepLinkedUserNewsResource,
-        onTopicCheckedChanged = viewModel::updateTopicSelection,
+        onTopicCheckedChanged = onTopicCheckedChangedRem,
         onDeepLinkOpened = viewModel::onDeepLinkOpened,
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
@@ -259,9 +263,9 @@ private fun LazyGridScope.onboarding(
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     TopicSelection(
-                        onboardingUiState,
-                        onTopicCheckedChanged,
-                        Modifier.padding(bottom = 8.dp),
+                        onboardingUiState = onboardingUiState,
+                        onTopicCheckedChanged = onTopicCheckedChanged,
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                     // Done button
                     Row(

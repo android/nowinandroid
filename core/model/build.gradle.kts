@@ -15,9 +15,16 @@
  */
 
 plugins {
-    id("nowinandroid.jvm.library")
+    id("nowinandroid.android.library")
+}
+
+android {
+    namespace = "com.google.samples.apps.nowinandroid.model"
 }
 
 dependencies {
     implementation(libs.kotlinx.datetime)
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.androidx.compose.runtime)
 }
