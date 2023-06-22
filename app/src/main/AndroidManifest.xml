@@ -19,12 +19,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-permission android:name="android.permission.SMS" />
-
-    <uses-permission android:name="android.permission.DUMP" />
-
     <!--
     Firebase automatically adds the AD_ID permission, even though we don't use it. If you use this
     permission you must declare how you're using it to Google Play, otherwise the app will be
@@ -63,7 +57,5 @@
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
