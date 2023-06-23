@@ -49,8 +49,9 @@ fun NiaNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        // TODO: handle topic clicks from each top level destination
-        forYouScreen(onTopicClick = {})
+        forYouScreen(
+            onTopicClick = navController::navigateToTopic,
+        )
         bookmarksScreen(
             onTopicClick = navController::navigateToTopic,
             onShowSnackbar = onShowSnackbar,
@@ -61,15 +62,11 @@ fun NiaNavHost(
             onTopicClick = navController::navigateToTopic,
         )
         interestsGraph(
-            onTopicClick = { topicId ->
-                navController.navigateToTopic(topicId)
-            },
-            nestedGraphs = {
-                topicScreen(
-                    onBackClick = navController::popBackStack,
-                    onTopicClick = {},
-                )
-            },
+            onTopicClick = navController::navigateToTopic,
+        )
+        topicScreen(
+            onBackClick = navController::popBackStack,
+            onTopicClick = navController::navigateToTopic,
         )
     }
 }

@@ -22,9 +22,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
+import com.google.samples.apps.nowinandroid.core.ui.detailsPane
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 
 @VisibleForTesting
@@ -46,7 +46,7 @@ fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
-    composable(
+    detailsPane(
         route = "topic_route/{$topicIdArg}",
         arguments = listOf(
             navArgument(topicIdArg) { type = NavType.StringType },

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration.Indefinite
@@ -32,6 +33,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,30 +55,42 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.ui.AdaptiveScaffold
+import com.google.samples.apps.nowinandroid.core.ui.AdaptiveScaffoldNavigationComponentDefaults
+import com.google.samples.apps.nowinandroid.core.ui.AdaptiveScaffoldNavigator
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(
     ExperimentalLayoutApi::class,
     ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class,
 )
 @Composable
 fun NiaApp(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
+    adaptiveScaffoldNavigator: AdaptiveScaffoldNavigator = remember {
+        AdaptiveScaffoldNavigator()
+    },
     appState: NiaAppState = rememberNiaAppState(
         networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass,
         userNewsResourceRepository = userNewsResourceRepository,
+        navController = rememberNavController(adaptiveScaffoldNavigator),
     ),
 ) {
     val shouldShowGradientBackground =
@@ -117,6 +131,7 @@ fun NiaApp(
             val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
 
             AdaptiveScaffold(
+                navigator = adaptiveScaffoldNavigator,
                 navigationItems = TopLevelDestination.values().toList(),
                 navigationItemTitle = { item, _ -> Text(text = stringResource(id = item.titleTextId)) },
                 navigationItemIcon = { item, isSelected ->
@@ -138,6 +153,28 @@ fun NiaApp(
                     railContainerColor = Color.Transparent,
                     contentContainerColor = Color.Transparent,
                 ),
+                topBar = {
+                    val titleResId by appState.topBarTitle
+                    val title = titleResId?.let { stringResource(it) }
+                    if (title != null) {
+                        NiaTopAppBar(
+                            title = title,
+                            navigationIcon = NiaIcons.Search,
+                            navigationIconContentDescription = stringResource(
+                                id = settingsR.string.top_app_bar_navigation_icon_description,
+                            ),
+                            actionIcon = NiaIcons.Settings,
+                            actionIconContentDescription = stringResource(
+                                id = settingsR.string.top_app_bar_action_icon_description,
+                            ),
+                            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                containerColor = Color.Transparent,
+                            ),
+                            onActionClick = { showSettingsDialog = true },
+                            onNavigationClick = { appState.navigateToSearch() },
+                        )
+                    }
+                },
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 modifier = Modifier.semantics {

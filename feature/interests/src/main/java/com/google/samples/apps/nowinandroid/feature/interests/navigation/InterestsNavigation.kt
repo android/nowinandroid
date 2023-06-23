@@ -32,7 +32,6 @@ fun NavController.navigateToInterestsGraph(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.interestsGraph(
     onTopicClick: (String) -> Unit,
-    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
         route = interestsGraphRoutePattern,
@@ -41,6 +40,5 @@ fun NavGraphBuilder.interestsGraph(
         composable(route = interestsRoute) {
             InterestsRoute(onTopicClick)
         }
-        nestedGraphs()
     }
 }

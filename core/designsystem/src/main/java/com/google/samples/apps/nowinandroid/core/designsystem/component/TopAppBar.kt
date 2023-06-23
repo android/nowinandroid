@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NiaTopAppBar(
-    @StringRes titleRes: Int,
+    title: String,
     navigationIcon: ImageVector,
     navigationIconContentDescription: String?,
     actionIcon: ImageVector,
@@ -49,7 +49,7 @@ fun NiaTopAppBar(
     onActionClick: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(id = titleRes)) },
+        title = { Text(text = title) },
         navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
@@ -107,7 +107,7 @@ fun NiaTopAppBar(
 @Composable
 private fun NiaTopAppBarPreview() {
     NiaTopAppBar(
-        titleRes = android.R.string.untitled,
+        title = stringResource(id = android.R.string.untitled),
         navigationIcon = NiaIcons.Search,
         navigationIconContentDescription = "Navigation icon",
         actionIcon = NiaIcons.MoreVert,

@@ -20,6 +20,8 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
@@ -95,6 +97,21 @@ class NiaAppState(
             bookmarksRoute -> BOOKMARKS
             interestsRoute -> INTERESTS
             else -> null
+        }
+
+    val topBarTitle: State<Int?>
+        @Composable get() = produceState<Int?>(initialValue = null) {
+            navController.currentBackStackEntryFlow.collect { backStackEntry ->
+                val topLevelDestination = when (backStackEntry.destination.route) {
+                    forYouNavigationRoute -> FOR_YOU
+                    bookmarksRoute -> BOOKMARKS
+                    interestsRoute -> INTERESTS
+                    else -> null
+                }
+                if (topLevelDestination != null) {
+                    value = topLevelDestination.titleTextId
+                }
+            }
         }
 
     val shouldShowBottomBar: Boolean
