@@ -193,11 +193,6 @@ fun NiaApp(
                     modifier = Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding)
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(
-                                WindowInsetsSides.Horizontal,
-                            ),
-                        ),
                 )
             }
         }

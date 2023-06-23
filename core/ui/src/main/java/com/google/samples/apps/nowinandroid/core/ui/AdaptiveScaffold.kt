@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -55,6 +56,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.window.layout.WindowMetricsCalculator
 
 class AdaptiveScaffoldNavigationComponentColors internal constructor(
@@ -265,6 +267,7 @@ private fun <T> RailScaffold(
 
     Row(modifier = modifier) {
         NavigationRail(
+            modifier = Modifier.safeDrawingPadding(),
             containerColor = colors.railContainerColor,
         ) {
             navigationItems.forEach { item ->
@@ -291,7 +294,6 @@ private fun <T> RailScaffold(
             snackbarHost = snackbarHost,
             containerColor = colors.contentContainerColor,
             contentColor = colors.contentColor,
-            contentWindowInsets = contentWindowInsets,
         ) { padding ->
             content(padding)
         }
@@ -330,41 +332,42 @@ private fun <T> DrawerScaffold(
     )
 
     Row(modifier = modifier) {
-        Scaffold(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(weight),
-            topBar = topBar,
-            snackbarHost = snackbarHost,
-            containerColor = colors.contentContainerColor,
-            contentColor = colors.contentColor,
-            contentWindowInsets = contentWindowInsets,
-        ) { padding ->
-            PermanentNavigationDrawer(
-                drawerContent = {
-                    PermanentDrawerSheet(
-                        drawerContainerColor = colors.drawerContainerColor,
-                    ) {
-                        navigationItems.forEach { item ->
-                            NavigationDrawerItem(
-                                label = { navigationItemTitle(item, isItemSelected(item)) },
-                                icon = { navigationItemIcon(item, isItemSelected(item)) },
-                                selected = isItemSelected(item),
-                                onClick = { onNavigationItemClick(item) },
-                                colors = NavigationDrawerItemDefaults.colors(
-                                    selectedContainerColor = colors.selectedContainerColor,
-                                    unselectedContainerColor = colors.unselectedContainerColor,
-                                    selectedIconColor = colors.selectedIconColor,
-                                    unselectedIconColor = colors.unselectedIconColor,
-                                    selectedTextColor = colors.selectedTextColor,
-                                    unselectedTextColor = colors.unselectedTextColor,
-                                ),
-                            )
-                        }
+        PermanentNavigationDrawer(
+            drawerContent = {
+                PermanentDrawerSheet(
+                    drawerContainerColor = colors.drawerContainerColor,
+                ) {
+                    navigationItems.forEach { item ->
+                        NavigationDrawerItem(
+                            label = { navigationItemTitle(item, isItemSelected(item)) },
+                            icon = { navigationItemIcon(item, isItemSelected(item)) },
+                            selected = isItemSelected(item),
+                            onClick = { onNavigationItemClick(item) },
+                            colors = NavigationDrawerItemDefaults.colors(
+                                selectedContainerColor = colors.selectedContainerColor,
+                                unselectedContainerColor = colors.unselectedContainerColor,
+                                selectedIconColor = colors.selectedIconColor,
+                                unselectedIconColor = colors.unselectedIconColor,
+                                selectedTextColor = colors.selectedTextColor,
+                                unselectedTextColor = colors.unselectedTextColor,
+                            ),
+                            modifier = Modifier.padding(8.dp)
+                        )
                     }
-                },
-                modifier = Modifier.padding(padding),
-            ) {
+                }
+            },
+            modifier = Modifier.safeDrawingPadding(),
+        ) {
+            Scaffold(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(weight),
+                topBar = topBar,
+                snackbarHost = snackbarHost,
+                containerColor = colors.contentContainerColor,
+                contentColor = colors.contentColor,
+                contentWindowInsets = contentWindowInsets,
+            ) { padding ->
                 content(padding)
             }
         }
