@@ -19,10 +19,11 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -37,11 +38,12 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier,
     withBottomSpacer: Boolean = true,
 ) {
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(300.dp),
         modifier = modifier
-            .padding(horizontal = 24.dp)
+            .selectableGroup()
             .testTag("interests:topics"),
-        contentPadding = PaddingValues(vertical = 16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         topics.forEach { followableTopic ->
             val topicId = followableTopic.topic.id
