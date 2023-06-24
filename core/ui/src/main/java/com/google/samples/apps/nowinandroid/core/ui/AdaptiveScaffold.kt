@@ -351,17 +351,17 @@ private fun <T> DrawerScaffold(
                                 selectedTextColor = colors.selectedTextColor,
                                 unselectedTextColor = colors.unselectedTextColor,
                             ),
-                            modifier = Modifier.padding(8.dp)
+                            modifier = Modifier.padding(8.dp),
                         )
                     }
                 }
             },
-            modifier = Modifier.safeDrawingPadding(),
+            modifier = Modifier
+                .safeDrawingPadding()
+                .fillMaxHeight()
+                .fillMaxWidth(weight),
         ) {
             Scaffold(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(weight),
                 topBar = topBar,
                 snackbarHost = snackbarHost,
                 containerColor = colors.contentContainerColor,
