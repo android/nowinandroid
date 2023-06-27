@@ -138,18 +138,14 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         lazyStats.get().isTrackingEnabled = true
-
-        // Logs the app's Baseline Profile Compilation Status using
-        lifecycleScope.launch {
-            logCompilationStatus()
-        }
+        logCompilationStatus()
     }
 
     override fun onPause() {
         super.onPause()
         lazyStats.get().isTrackingEnabled = false
     }
-    
+
     /**
      * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].
      */
