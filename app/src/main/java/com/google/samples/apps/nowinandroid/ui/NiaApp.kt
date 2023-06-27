@@ -129,7 +129,7 @@ fun NiaApp(
             AdaptiveScaffold(
                 navigator = adaptiveScaffoldNavigator,
                 navigationItems = TopLevelDestination.values().toList(),
-                navigationItemTitle = { item, _ -> Text(text = stringResource(id = item.titleTextId)) },
+                navigationItemTitle = { item, _ -> Text(text = stringResource(id = item.iconTextId)) },
                 navigationItemIcon = { item, isSelected ->
                     val isUnread = unreadDestinations.contains(item)
                     Icon(
@@ -139,9 +139,7 @@ fun NiaApp(
                     )
                 },
                 isItemSelected = { item ->
-                    appState.currentDestination.isTopLevelDestinationInHierarchy(
-                        item,
-                    )
+                    appState.currentDestination.isTopLevelDestinationInHierarchy(item)
                 },
                 onNavigationItemClick = appState::navigateToTopLevelDestination,
                 colors = AdaptiveScaffoldNavigationComponentDefaults.colors(

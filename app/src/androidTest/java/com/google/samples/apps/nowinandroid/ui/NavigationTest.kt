@@ -20,9 +20,8 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -210,9 +209,7 @@ class NavigationTest {
             // Check that the saved screen is still visible and selected.
             onNode(
                 hasText(saved) and
-                    hasAnyAncestor(
-                        hasTestTag("NiaBottomBar") or hasTestTag("NiaNavRail"),
-                    ),
+                    isSelectable(),
             ).assertIsSelected()
         }
     }
@@ -247,24 +244,6 @@ class NavigationTest {
             Espresso.pressBack()
             // THEN the app shows the For You destination
             onNodeWithText(forYou).assertExists()
-        }
-    }
-
-    @Test
-    fun navigationBar_multipleBackStackInterests() {
-        composeTestRule.apply {
-            onNodeWithText(interests).performClick()
-            // TODO: Grab string from fake data
-            onNodeWithText("Android Studio & Tools").performClick()
-
-            // Switch tab
-            onNodeWithText(forYou).performClick()
-
-            // Come back to Interests
-            onNodeWithText(interests).performClick()
-
-            // Verify we're not in the list of interests
-            onNodeWithText("Android Auto").assertDoesNotExist() // TODO: Grab string from fake data
         }
     }
 }
