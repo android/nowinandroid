@@ -149,6 +149,7 @@ class MainActivity : ComponentActivity() {
         super.onPause()
         lazyStats.get().isTrackingEnabled = false
     }
+    
     /**
      * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].
      */
