@@ -64,10 +64,11 @@ class AdaptiveScaffoldNavigator : Navigator<Destination>() {
                 value = backStackEntry
             }
         }
-        val backStackEntry = currentBackStackEntry
-        backStackEntry?.LocalOwnersProvider(saveableStateHolder) {
-            val destination = (backStackEntry.destination as? Destination)
-            destination?.content?.invoke(backStackEntry)
+        currentBackStackEntry?.let { backStackEntry ->
+            backStackEntry.LocalOwnersProvider(saveableStateHolder) {
+                val destination = backStackEntry.destination as Destination
+                destination.content(backStackEntry)
+            }
         }
     }
 
@@ -82,12 +83,12 @@ class AdaptiveScaffoldNavigator : Navigator<Destination>() {
         navigatorExtras: Extras?,
     ) {
         entries.forEach { entry ->
-            state.pushWithTransition(entry)
+            state.push(entry)
         }
     }
 
     override fun popBackStack(popUpTo: NavBackStackEntry, savedState: Boolean) {
-        state.popWithTransition(popUpTo, savedState)
+        state.pop(popUpTo, savedState)
     }
 
     @NavDestination.ClassType(Composable::class)

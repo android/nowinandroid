@@ -294,6 +294,7 @@ private fun <T> RailScaffold(
             snackbarHost = snackbarHost,
             containerColor = colors.contentContainerColor,
             contentColor = colors.contentColor,
+            contentWindowInsets = contentWindowInsets,
         ) { padding ->
             content(padding)
         }
@@ -399,6 +400,7 @@ fun <T> AdaptiveScaffold(
     content: @Composable (padding: PaddingValues) -> Unit,
 ) {
     val isDetailsPaneVisible by navigator.isVisible.collectAsState(initial = false)
+
     AdaptiveScaffold(
         modifier = modifier,
         navigationItems = navigationItems,
