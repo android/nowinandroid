@@ -327,7 +327,7 @@ private fun <T> DrawerScaffold(
     content: @Composable (padding: PaddingValues) -> Unit,
 ) {
     val weight: Float by animateFloatAsState(
-        targetValue = if (isDetailsPaneVisible) 0.5f else 1f,
+        targetValue = if (isDetailsPaneVisible) 0.65f else 1f,
         animationSpec = tween(durationMillis = 500),
         label = "Details Pane",
     )
