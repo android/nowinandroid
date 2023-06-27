@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -35,6 +36,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
+import androidx.profileinstaller.ProfileVerifier
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
@@ -50,7 +52,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 import javax.inject.Inject
+
+private const val TAG = "MainActivity"
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
@@ -133,11 +138,47 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         lazyStats.get().isTrackingEnabled = true
+
+        // Logs the app's Baseline Profile Compilation Status using
+        lifecycleScope.launch {
+            logCompilationStatus()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         lazyStats.get().isTrackingEnabled = false
+    }
+    /**
+     * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].
+     */
+    private fun logCompilationStatus() {
+        /*
+        To verify profile installation locally, you need to either compile the app
+        with the speed-profile like so:
+         `adb shell cmd package compile -f -m speed-profile com.example.macrobenchmark.target`
+
+        Or trigger background dex optimizations manually like so:
+        `adb shell pm bg-dexopt-job`
+        As these run in the background it might take a while for this to complete.
+
+        To see quick turnaround of the ProfileVerifier, we recommend using `speed-profile`.
+        If you don't do either of these steps, you might only see the profile being enqueued for
+        compilation when running the sample locally.
+         */
+        Executors.newSingleThreadExecutor().submit {
+            val result = ProfileVerifier.getCompilationStatusAsync().get()
+            Log.d(TAG, "ProfileInstaller status code: ${result.profileInstallResultCode}")
+            Log.d(
+                TAG,
+                when {
+                    result.isCompiledWithProfile -> "ProfileInstaller: is compiled with profile"
+                    result.hasProfileEnqueuedForCompilation() -> "ProfileInstaller: " +
+                        "Enqueued for compilation"
+                    else -> "Profile not compiled or enqueued"
+                },
+            )
+        }
     }
 }
 
