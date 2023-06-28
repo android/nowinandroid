@@ -2,7 +2,7 @@
 accompanist = "0.28.0"
 androidDesugarJdkLibs = "1.2.2"
 androidGradlePlugin = "8.0.2"
-androidxActivity = "1.7.0"
+androidxActivity = "1.7.2"
 androidxAppCompat = "1.5.1"
 androidxBrowser = "1.4.0"
 androidxComposeBom = "2023.06.01"
