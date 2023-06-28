@@ -102,8 +102,9 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
@@ -122,8 +123,9 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
@@ -142,8 +144,9 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
@@ -162,8 +165,9 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
@@ -182,8 +186,9 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
@@ -202,14 +207,15 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
     fun compactWidth_expandedHeight_showsNavigationBar() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(400.dp, 1000.dp)) {
+            TestHarness(size = DpSize(400.dp, 900.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
@@ -222,14 +228,15 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaNavRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
     fun mediumWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(610.dp, 1000.dp)) {
+            TestHarness(size = DpSize(610.dp, 900.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
@@ -242,14 +249,15 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 
     @Test
     fun expandedWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(900.dp, 1000.dp)) {
+            TestHarness(size = DpSize(900.dp, 900.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
@@ -262,7 +270,8 @@ class NavigationUiTest {
             }
         }
 
-        composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationRail").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:navigationBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("adaptiveScaffold:permanentDrawer").assertDoesNotExist()
     }
 }

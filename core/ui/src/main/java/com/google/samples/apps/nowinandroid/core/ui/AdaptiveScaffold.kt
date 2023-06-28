@@ -16,6 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -56,6 +59,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.window.layout.WindowMetricsCalculator
 
@@ -108,6 +112,41 @@ object AdaptiveScaffoldNavigationComponentDefaults {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> AdaptiveScaffold(
+    navigator: AdaptiveScaffoldNavigator,
+    modifier: Modifier = Modifier,
+    navigationItems: List<T>,
+    navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
+    navigationItemIcon: @Composable (item: T, isSelected: Boolean) -> Unit,
+    isItemSelected: @Composable (item: T) -> Boolean,
+    onNavigationItemClick: (item: T) -> Unit,
+    topBar: @Composable () -> Unit = {},
+    snackbarHost: @Composable () -> Unit = {},
+    colors: AdaptiveScaffoldNavigationComponentColors = AdaptiveScaffoldNavigationComponentDefaults.colors(),
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+    content: @Composable (padding: PaddingValues) -> Unit,
+) {
+    val isDetailsPaneVisible by navigator.isVisible.collectAsState(initial = false)
+
+    AdaptiveScaffold(
+        modifier = modifier,
+        navigationItems = navigationItems,
+        navigationItemTitle = navigationItemTitle,
+        navigationItemIcon = navigationItemIcon,
+        isItemSelected = isItemSelected,
+        onNavigationItemClick = onNavigationItemClick,
+        topBar = topBar,
+        snackbarHost = snackbarHost,
+        colors = colors,
+        contentWindowInsets = contentWindowInsets,
+        isDetailsPaneVisible = isDetailsPaneVisible,
+        detailsPane = navigator.detailsPaneContent,
+        content = content,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> AdaptiveScaffold(
     modifier: Modifier = Modifier,
     navigationItems: List<T>,
     navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
@@ -123,12 +162,12 @@ fun <T> AdaptiveScaffold(
     content: @Composable (padding: PaddingValues) -> Unit,
 ) {
     val context = LocalContext.current
-    val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(context)
+    val activity = context.getActivity() ?: throw IllegalStateException("Activity not found")
+    val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity)
     val widthDp = metrics.bounds.width() / context.resources.displayMetrics.density
     val movableContent = remember(content) {
         movableContentOf(content)
     }
-
     when {
         widthDp >= 1240f -> DrawerScaffold(
             modifier = modifier,
@@ -205,6 +244,7 @@ private fun <T> BottomBarScaffold(
             bottomBar = {
                 NavigationBar(
                     containerColor = colors.bottomBarContainerColor,
+                    modifier = Modifier.testTag("adaptiveScaffold:navigationBar"),
                 ) {
                     navigationItems.forEach { item ->
                         NavigationBarItem(
@@ -267,7 +307,9 @@ private fun <T> RailScaffold(
 
     Row(modifier = modifier) {
         NavigationRail(
-            modifier = Modifier.safeDrawingPadding(),
+            modifier = Modifier
+                .safeDrawingPadding()
+                .testTag("adaptiveScaffold:navigationRail"),
             containerColor = colors.railContainerColor,
         ) {
             navigationItems.forEach { item ->
@@ -337,6 +379,9 @@ private fun <T> DrawerScaffold(
             drawerContent = {
                 PermanentDrawerSheet(
                     drawerContainerColor = colors.drawerContainerColor,
+                    modifier = Modifier
+                        .safeDrawingPadding()
+                        .testTag("adaptiveScaffold:permanentDrawer"),
                 ) {
                     navigationItems.forEach { item ->
                         NavigationDrawerItem(
@@ -383,37 +428,8 @@ private fun <T> DrawerScaffold(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun <T> AdaptiveScaffold(
-    navigator: AdaptiveScaffoldNavigator,
-    modifier: Modifier = Modifier,
-    navigationItems: List<T>,
-    navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
-    navigationItemIcon: @Composable (item: T, isSelected: Boolean) -> Unit,
-    isItemSelected: @Composable (item: T) -> Boolean,
-    onNavigationItemClick: (item: T) -> Unit,
-    topBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable () -> Unit = {},
-    colors: AdaptiveScaffoldNavigationComponentColors = AdaptiveScaffoldNavigationComponentDefaults.colors(),
-    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    content: @Composable (padding: PaddingValues) -> Unit,
-) {
-    val isDetailsPaneVisible by navigator.isVisible.collectAsState(initial = false)
-
-    AdaptiveScaffold(
-        modifier = modifier,
-        navigationItems = navigationItems,
-        navigationItemTitle = navigationItemTitle,
-        navigationItemIcon = navigationItemIcon,
-        isItemSelected = isItemSelected,
-        onNavigationItemClick = onNavigationItemClick,
-        topBar = topBar,
-        snackbarHost = snackbarHost,
-        colors = colors,
-        contentWindowInsets = contentWindowInsets,
-        isDetailsPaneVisible = isDetailsPaneVisible,
-        detailsPane = navigator.detailsPaneContent,
-        content = content,
-    )
+private fun Context.getActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.getActivity()
+    else -> null
 }
