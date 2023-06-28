@@ -177,7 +177,7 @@ class MainActivity : ComponentActivity() {
                     status.hasProfileEnqueuedForCompilation() ->
                         "ProfileInstaller: Enqueued for compilation"
                     else -> "Profile not compiled or enqueued"
-                }
+                },
             )
         }
     }
