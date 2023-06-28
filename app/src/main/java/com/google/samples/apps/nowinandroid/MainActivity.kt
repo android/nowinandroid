@@ -54,7 +54,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 private const val TAG = "MainActivity"
