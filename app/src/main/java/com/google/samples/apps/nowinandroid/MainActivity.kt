@@ -154,20 +154,24 @@ class MainActivity : ComponentActivity() {
      * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].
      */
     private suspend fun logCompilationStatus() {
+        /*
+        When delivering through Google Play, the baseline profile is compiled during installation.
+        In this case you will see the correct state logged without any further action necessary.
+
+        To verify baseline profile installation locally, you need to manually trigger baseline
+        profile installation.
+        For immediate compilation, call:
+         `adb shell cmd package compile -f -m speed-profile com.example.macrobenchmark.target`
+
+        You can also trigger background optimizations:
+         `adb shell pm bg-dexopt-job`
+
+        Both jobs run asynchronously and might take some time complete.
+        To see quick turnaround of the ProfileVerifier, we recommend using `speed-profile`.
+        If you don't do either of these steps, you might only see the profile status reported as
+        "enqueued for compilation" when running the sample locally.
+        */
         withContext(Dispatchers.IO) {
-            /*
-            To verify profile installation locally, you need to either compile the app
-            with the speed-profile like so:
-             `adb shell cmd package compile -f -m speed-profile com.example.macrobenchmark.target`
-
-            Or trigger background dex optimizations manually like so:
-            `adb shell pm bg-dexopt-job`
-            As these run in the background it might take a while for this to complete.
-
-            To see quick turnaround of the ProfileVerifier, we recommend using `speed-profile`.
-            If you don't do either of these steps, you might only see the profile being enqueued for
-            compilation when running the sample locally.
-             */
             val status = ProfileVerifier.getCompilationStatusAsync().get()
             Log.d(TAG, "ProfileInstaller status code: ${status.profileInstallResultCode}")
             Log.d(
