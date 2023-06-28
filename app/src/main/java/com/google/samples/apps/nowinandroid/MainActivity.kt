@@ -174,7 +174,8 @@ class MainActivity : ComponentActivity() {
                 TAG,
                 when {
                     status.isCompiledWithProfile -> "ProfileInstaller: is compiled with profile"
-                    status.hasProfileEnqueuedForCompilation() -> "ProfileInstaller: Enqueued for compilation"
+                    status.hasProfileEnqueuedForCompilation() ->
+                        "ProfileInstaller: Enqueued for compilation"
                     else -> "Profile not compiled or enqueued"
                 }
             )
