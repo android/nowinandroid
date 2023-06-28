@@ -119,6 +119,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.profileinstaller)
+    implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
 }
 

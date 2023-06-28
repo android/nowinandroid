@@ -52,6 +52,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -168,7 +169,7 @@ class MainActivity : ComponentActivity() {
         "enqueued for compilation" when running the sample locally.
         */
         withContext(Dispatchers.IO) {
-            val status = ProfileVerifier.getCompilationStatusAsync().get()
+            val status = ProfileVerifier.getCompilationStatusAsync().await()
             Log.d(TAG, "ProfileInstaller status code: ${status.profileInstallResultCode}")
             Log.d(
                 TAG,
