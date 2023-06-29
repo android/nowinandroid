@@ -16,15 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -58,10 +56,8 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.window.layout.WindowMetricsCalculator
 
 class AdaptiveScaffoldNavigationComponentColors internal constructor(
     val detailsPaneContainerColor: Color,
@@ -161,68 +157,63 @@ fun <T> AdaptiveScaffold(
     detailsPane: @Composable () -> Unit = {},
     content: @Composable (padding: PaddingValues) -> Unit,
 ) {
-    val context = LocalContext.current
-    val activity = context.getActivity() ?: throw IllegalStateException("Activity not found")
-    val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity)
-    val widthDp = metrics.bounds.width() / context.resources.displayMetrics.density
-    val movableContent = remember(content) {
-        movableContentOf(content)
-    }
-    when {
-        widthDp >= 1240f -> DrawerScaffold(
-            modifier = modifier,
-            navigationItems = navigationItems,
-            navigationItemTitle = navigationItemTitle,
-            navigationItemIcon = navigationItemIcon,
-            isItemSelected = isItemSelected,
-            onNavigationItemClick = onNavigationItemClick,
-            topBar = topBar,
-            snackbarHost = snackbarHost,
-            colors = colors,
-            contentWindowInsets = contentWindowInsets,
-            isDetailsPaneVisible = isDetailsPaneVisible,
-            detailsPane = detailsPane,
-            content = movableContent,
-        )
+    BoxWithConstraints(modifier = modifier) {
+        val movableContent = remember(content) {
+            movableContentOf(content)
+        }
+        when {
+            maxWidth >= 1240.dp -> DrawerScaffold(
+                navigationItems = navigationItems,
+                navigationItemTitle = navigationItemTitle,
+                navigationItemIcon = navigationItemIcon,
+                isItemSelected = isItemSelected,
+                onNavigationItemClick = onNavigationItemClick,
+                topBar = topBar,
+                snackbarHost = snackbarHost,
+                colors = colors,
+                contentWindowInsets = contentWindowInsets,
+                isDetailsPaneVisible = isDetailsPaneVisible,
+                detailsPane = detailsPane,
+                content = movableContent,
+            )
 
-        widthDp >= 600f -> RailScaffold(
-            modifier = modifier,
-            navigationItems = navigationItems,
-            navigationItemTitle = navigationItemTitle,
-            navigationItemIcon = navigationItemIcon,
-            isItemSelected = isItemSelected,
-            onNavigationItemClick = onNavigationItemClick,
-            topBar = topBar,
-            snackbarHost = snackbarHost,
-            colors = colors,
-            contentWindowInsets = contentWindowInsets,
-            isDetailsPaneVisible = isDetailsPaneVisible,
-            detailsPane = detailsPane,
-            content = movableContent,
-        )
+            maxWidth >= 600.dp -> RailScaffold(
+                navigationItems = navigationItems,
+                navigationItemTitle = navigationItemTitle,
+                navigationItemIcon = navigationItemIcon,
+                isItemSelected = isItemSelected,
+                onNavigationItemClick = onNavigationItemClick,
+                topBar = topBar,
+                snackbarHost = snackbarHost,
+                colors = colors,
+                contentWindowInsets = contentWindowInsets,
+                isDetailsPaneVisible = isDetailsPaneVisible,
+                detailsPane = detailsPane,
+                content = movableContent,
+            )
 
-        else -> BottomBarScaffold(
-            modifier = modifier,
-            navigationItems = navigationItems,
-            navigationItemTitle = navigationItemTitle,
-            navigationItemIcon = navigationItemIcon,
-            isItemSelected = isItemSelected,
-            onNavigationItemClick = onNavigationItemClick,
-            topBar = topBar,
-            snackbarHost = snackbarHost,
-            colors = colors,
-            contentWindowInsets = contentWindowInsets,
-            isDetailsPaneVisible = isDetailsPaneVisible,
-            detailsPane = detailsPane,
-            content = movableContent,
-        )
+            else -> BottomBarScaffold(
+                navigationItems = navigationItems,
+                navigationItemTitle = navigationItemTitle,
+                navigationItemIcon = navigationItemIcon,
+                isItemSelected = isItemSelected,
+                onNavigationItemClick = onNavigationItemClick,
+                topBar = topBar,
+                snackbarHost = snackbarHost,
+                colors = colors,
+                contentWindowInsets = contentWindowInsets,
+                isDetailsPaneVisible = isDetailsPaneVisible,
+                detailsPane = detailsPane,
+                content = movableContent,
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun <T> BottomBarScaffold(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navigationItems: List<T>,
     navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
     navigationItemIcon: @Composable (item: T, isSelected: Boolean) -> Unit,
@@ -285,7 +276,7 @@ private fun <T> BottomBarScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun <T> RailScaffold(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navigationItems: List<T>,
     navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
     navigationItemIcon: @Composable (item: T, isSelected: Boolean) -> Unit,
@@ -354,7 +345,7 @@ private fun <T> RailScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun <T> DrawerScaffold(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navigationItems: List<T>,
     navigationItemTitle: @Composable (item: T, isSelected: Boolean) -> Unit,
     navigationItemIcon: @Composable (item: T, isSelected: Boolean) -> Unit,
@@ -426,10 +417,4 @@ private fun <T> DrawerScaffold(
             detailsPane()
         }
     }
-}
-
-private fun Context.getActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.getActivity()
-    else -> null
 }
