@@ -88,8 +88,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent

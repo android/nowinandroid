@@ -120,7 +120,6 @@ internal fun BookmarksScreen(
         if (shouldDisplayUndoBookmark) {
             val snackBarResult = onShowSnackbar(bookmarkRemovedMessage, undoText)
             if (snackBarResult) {
-
                 undoBookmarkRemoval()
             } else {
                 clearUndoState()
@@ -138,7 +137,6 @@ internal fun BookmarksScreen(
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
-
 
     when (feedState) {
         Loading -> LoadingState(modifier)
