@@ -19,6 +19,9 @@ package com.google.samples.apps.nowinandroid.feature.foryou
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -42,6 +45,7 @@ import javax.inject.Inject
 class ForYouViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     syncManager: SyncManager,
+    private val analyticsHelper: AnalyticsHelper,
     private val userDataRepository: UserDataRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
@@ -127,6 +131,7 @@ class ForYouViewModel @Inject constructor(
         if (newsResourceId == deepLinkedNewsResource.value?.id) {
             savedStateHandle[LINKED_NEWS_RESOURCE_ID] = null
         }
+        analyticsHelper.logNewsDeepLinkOpen(newsResourceId = newsResourceId)
         viewModelScope.launch {
             userDataRepository.setNewsResourceViewed(
                 newsResourceId = newsResourceId,
@@ -141,3 +146,16 @@ class ForYouViewModel @Inject constructor(
         }
     }
 }
+
+private fun AnalyticsHelper.logNewsDeepLinkOpen(newsResourceId: String) =
+    logEvent(
+        AnalyticsEvent(
+            type = "news_deep_link_opened",
+            extras = listOf(
+                Param(
+                    key = LINKED_NEWS_RESOURCE_ID,
+                    value = newsResourceId,
+                ),
+            ),
+        ),
+    )
