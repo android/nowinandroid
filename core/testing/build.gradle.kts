@@ -41,5 +41,6 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
     implementation(project(":core:notifications"))
+    implementation(project(":core:analytics"))
     implementation(libs.kotlinx.datetime)
 }
