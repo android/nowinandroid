@@ -131,17 +131,7 @@ class ForYouViewModel @Inject constructor(
         if (newsResourceId == deepLinkedNewsResource.value?.id) {
             savedStateHandle[LINKED_NEWS_RESOURCE_ID] = null
         }
-        analyticsHelper.logEvent(
-            AnalyticsEvent(
-                type = "news_deep_link_opened",
-                extras = listOf(
-                    Param(
-                        key = LINKED_NEWS_RESOURCE_ID,
-                        value = newsResourceId,
-                    ),
-                ),
-            ),
-        )
+        analyticsHelper.logNewsDeepLinkOpen(newsResourceId = newsResourceId)
         viewModelScope.launch {
             userDataRepository.setNewsResourceViewed(
                 newsResourceId = newsResourceId,
@@ -156,3 +146,16 @@ class ForYouViewModel @Inject constructor(
         }
     }
 }
+
+private fun AnalyticsHelper.logNewsDeepLinkOpen(newsResourceId: String) =
+    logEvent(
+        AnalyticsEvent(
+            type = "news_deep_link_opened",
+            extras = listOf(
+                Param(
+                    key = LINKED_NEWS_RESOURCE_ID,
+                    value = newsResourceId,
+                ),
+            ),
+        ),
+    )
