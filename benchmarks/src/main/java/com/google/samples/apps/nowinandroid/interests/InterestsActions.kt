@@ -48,3 +48,17 @@ fun MacrobenchmarkScope.interestsToggleBookmarked() {
     checkable.click()
     device.waitForIdle()
 }
+
+fun MacrobenchmarkScope.setAppTheme(isDark: Boolean) {
+    when (isDark){
+        true -> device.findObject(By.text("Dark")).click()
+        false -> device.findObject(By.text("Light")).click()
+    }
+    device.waitForIdle()
+    device.findObject(By.text("OK")).click()
+
+    // Wait until interests are shown on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
+    val topAppBar = device.findObject(By.res("niaTopAppBar"))
+    topAppBar.wait(Until.hasObject(By.text("Now in Android")), 2_000)
+}
