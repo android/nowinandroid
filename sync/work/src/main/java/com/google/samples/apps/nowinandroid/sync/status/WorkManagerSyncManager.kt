@@ -38,7 +38,7 @@ class WorkManagerSyncManager @Inject constructor(
 ) : SyncManager {
     override val isSyncing: Flow<Boolean> =
         WorkManager.getInstance(context).getWorkInfosForUniqueWorkFlow(SyncWorkName)
-            .map(MutableList<WorkInfo>::anyRunning)
+            .map(List<WorkInfo>::anyRunning)
             .conflate()
 
     override fun requestSync() {
