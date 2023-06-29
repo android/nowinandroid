@@ -116,8 +116,11 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.inter
 
     if (firstItemIndex < 0) return Float.NaN
 
+    val firstItemSize = itemSize(firstItem)
+    if (firstItemSize == 0) return Float.NaN
+
     val itemOffset = offset(firstItem).toFloat()
-    val offsetPercentage = abs(itemOffset) / itemSize(firstItem)
+    val offsetPercentage = abs(itemOffset) / firstItemSize
 
     val nextItem = nextItemOnMainAxis(firstItem) ?: return firstItemIndex + offsetPercentage
 
