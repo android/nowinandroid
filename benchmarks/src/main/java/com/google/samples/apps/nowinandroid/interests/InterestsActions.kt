@@ -50,7 +50,7 @@ fun MacrobenchmarkScope.interestsToggleBookmarked() {
 }
 
 fun MacrobenchmarkScope.setAppTheme(isDark: Boolean) {
-    when (isDark){
+    when (isDark) {
         true -> device.findObject(By.text("Dark")).click()
         false -> device.findObject(By.text("Light")).click()
     }
