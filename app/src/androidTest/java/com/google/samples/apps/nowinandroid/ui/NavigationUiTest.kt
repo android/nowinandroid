@@ -257,7 +257,7 @@ class NavigationUiTest {
     @Test
     fun compactWidth_expandedHeight_showsNavigationBar() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(400.dp, 900.dp)) {
+            TestHarness(size = DpSize(400.dp, 1000.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
@@ -278,7 +278,7 @@ class NavigationUiTest {
     @Test
     fun mediumWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(610.dp, 900.dp)) {
+            TestHarness(size = DpSize(610.dp, 1000.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
@@ -299,7 +299,7 @@ class NavigationUiTest {
     @Test
     fun expandedWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(900.dp, 900.dp)) {
+            TestHarness(size = DpSize(900.dp, 1000.dp)) {
                 BoxWithConstraints {
                     NiaApp(
                         windowSizeClass = WindowSizeClass.calculateFromSize(
