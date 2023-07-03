@@ -39,11 +39,6 @@ class FakeNiaNetworkDataSource @Inject constructor(
     private val assets: FakeAssetManager = JvmUnitTestFakeAssetManager,
 ) : NiaNetworkDataSource {
 
-    companion object {
-        private const val NEWS_ASSET = "news.json"
-        private const val TOPICS_ASSET = "topics.json"
-    }
-
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
@@ -61,6 +56,11 @@ class FakeNiaNetworkDataSource @Inject constructor(
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
+
+    companion object {
+        private const val NEWS_ASSET = "news.json"
+        private const val TOPICS_ASSET = "topics.json"
+    }
 }
 
 /**
