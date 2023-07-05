@@ -63,7 +63,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -216,7 +216,7 @@ private fun BookmarksGrid(
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbDisplaced = scrollableState.rememberFastScroller(
+            onThumbMoved = scrollableState.rememberDraggableScroller(
                 itemsAvailable = itemsAvailable,
             ),
         )

@@ -55,7 +55,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackg
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -159,7 +159,7 @@ internal fun TopicScreen(
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbDisplaced = state.rememberFastScroller(
+            onThumbMoved = state.rememberDraggableScroller(
                 itemsAvailable = itemsAvailable,
             ),
         )
