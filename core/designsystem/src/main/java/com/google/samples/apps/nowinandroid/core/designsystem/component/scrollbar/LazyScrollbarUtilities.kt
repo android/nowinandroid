@@ -78,7 +78,7 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
             )
             ScrollbarState(
                 thumbSizePercent = thumbSizePercent,
-                thumbDisplacementPercent = when {
+                thumbMovedPercent = when {
                     reverseLayout() -> 1f - thumbTravelPercent
                     else -> thumbTravelPercent
                 },
