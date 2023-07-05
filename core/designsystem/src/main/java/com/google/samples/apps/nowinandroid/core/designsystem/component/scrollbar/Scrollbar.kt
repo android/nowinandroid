@@ -101,10 +101,11 @@ private value class ScrollbarTrack(
 
 /**
  * Creates a [ScrollbarState] with the listed properties
- * @param thumbSizePercent the thumb size of the scrollbar as a percentage of the total track size
+ * @param thumbSizePercent the thumb size of the scrollbar as a percentage of the total track size.
+ *  Refers to either the thumb width (for horizontal scrollbars)
+ *  or height (for vertical scrollbars).
  * @param thumbDisplacementPercent the distance the thumb has traveled as a percentage of total
- * track size. Refers to either the thumb width (for horizontal scrollbars)
- * or height (for vertical scrollbars).
+ * track size.
  */
 fun ScrollbarState(
     thumbSizePercent: Float,
