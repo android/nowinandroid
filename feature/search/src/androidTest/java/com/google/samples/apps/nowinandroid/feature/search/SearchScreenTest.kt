@@ -20,11 +20,14 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToIndex
 import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
@@ -139,15 +142,18 @@ class SearchScreenTest {
         composeTestRule
             .onNodeWithText(topicsString)
             .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(followableTopicTestData[0].topic.name)
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(followableTopicTestData[1].topic.name)
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithText(followableTopicTestData[2].topic.name)
-            .assertIsDisplayed()
+
+        val scrollableNode = composeTestRule
+            .onAllNodes(hasScrollToNodeAction())
+            .onFirst()
+
+        followableTopicTestData.forEachIndexed { index, followableTopic ->
+            scrollableNode.performScrollToIndex(index)
+
+            composeTestRule
+                .onNodeWithText(followableTopic.topic.name)
+                .assertIsDisplayed()
+        }
 
         composeTestRule
             .onAllNodesWithContentDescription(followButtonContentDesc)
