@@ -80,7 +80,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -381,7 +381,7 @@ private fun SearchResultBody(
         val scrollbarState = state.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
-        state.FastScrollbar(
+        state.DraggableScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)

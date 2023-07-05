@@ -54,7 +54,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicA
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.FastScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberFastScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -151,7 +151,7 @@ internal fun TopicScreen(
         val scrollbarState = state.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
-        state.FastScrollbar(
+        state.DraggableScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)

@@ -101,6 +101,9 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
  * of the scroll.
  * @param itemIndex a lookup function for index of an item in the layout relative to
  * the total amount of items available.
+ *
+ * @return a [Float] in the range [firstItemPosition..nextItemPosition) where nextItemPosition
+ * is the index of the consecutive item along the major axis.
  * */
 internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.interpolateFirstItemIndex(
     visibleItems: List<LazyStateItem>,
