@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,8 +57,17 @@ import kotlinx.coroutines.delay
 import kotlin.math.max
 import kotlin.math.min
 
-private const val SCROLLBAR_PRESS_DELAY = 10L
-private const val SCROLLBAR_PRESS_DELTA = 0.02f
+/**
+ * The delay between scrolls when a user long presses on the scrollbar track to initiate a scroll
+ * instead of dragging the scrollbar thumb.
+ */
+private const val SCROLLBAR_PRESS_DELAY_MS = 10L
+
+/**
+ * The percentage displacement of the scrollbar when scrolled by long presses on the scrollbar
+ * track.
+ */
+private const val SCROLLBAR_PRESS_DELTA_PCT = 0.02f
 
 /**
  * Class definition for the core properties of a scroll bar
@@ -91,10 +100,11 @@ private value class ScrollbarTrack(
 }
 
 /**
- * Creates a scrollbar state with the listed properties
+ * Creates a [ScrollbarState] with the listed properties
  * @param thumbSizePercent the thumb size of the scrollbar as a percentage of the total track size
  * @param thumbDisplacementPercent the distance the thumb has traveled as a percentage of total
- * track size
+ * track size. Refers to either the thumb width (for horizontal scrollbars)
+ * or height (for vertical scrollbars).
  */
 fun ScrollbarState(
     thumbSizePercent: Float,
@@ -162,7 +172,7 @@ internal fun Orientation.valueOf(intOffset: IntOffset) = when (this) {
 }
 
 /**
- * A Composable for drawing a Scrollbar
+ * A Composable for drawing a scrollbar
  * @param orientation the scroll direction of the scrollbar
  * @param state the state describing the position of the scrollbar
  * @param minThumbSize the minimum size of the scrollbar thumb
@@ -219,7 +229,7 @@ fun Scrollbar(
         }
     }
 
-    // Scrollbar track container
+    // scrollbar track container
     Box(
         modifier = modifier
             .run {
@@ -275,7 +285,7 @@ fun Scrollbar(
             a = with(localDensity) { thumbDisplacementPx.toDp() },
             b = 0.dp,
         )
-        // Scrollbar thumb container
+        // scrollbar thumb container
         Box(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -319,7 +329,7 @@ fun Scrollbar(
             dimension = orientation.valueOf(pressedOffset),
         )
         val isPositive = currentThumbDisplacement < destinationThumbDisplacement
-        val delta = SCROLLBAR_PRESS_DELTA * if (isPositive) 1f else -1f
+        val delta = SCROLLBAR_PRESS_DELTA_PCT * if (isPositive) 1f else -1f
 
         while (currentThumbDisplacement != destinationThumbDisplacement) {
             currentThumbDisplacement = when {
@@ -334,7 +344,7 @@ fun Scrollbar(
             }
             onThumbDisplaced(currentThumbDisplacement)
             interactionThumbTravelPercent = currentThumbDisplacement
-            delay(SCROLLBAR_PRESS_DELAY)
+            delay(SCROLLBAR_PRESS_DELAY_MS)
         }
     }
 

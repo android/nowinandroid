@@ -50,10 +50,13 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.ThumbState.Inactive
 import kotlinx.coroutines.delay
 
-private const val INACTIVE_TO_DORMANT_COOL_DOWN = 2_000L
+/**
+ * The time period for showing the scrollbar thumb after interacting with it, before it fades away
+ */
+private const val SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS = 2_000L
 
 /**
- * A [Scrollbar] that allows for fast scrolling of content.
+ * A [Scrollbar] that allows for fast scrolling of content by dragging its thumb.
  * Its thumb disappears when the scrolling container is dormant.
  * @param modifier a [Modifier] for the [Scrollbar]
  * @param state the driving state for the [Scrollbar]
@@ -61,7 +64,7 @@ private const val INACTIVE_TO_DORMANT_COOL_DOWN = 2_000L
  * @param onThumbDisplaced the fast scroll implementation
  */
 @Composable
-fun ScrollableState.FastScrollbar(
+fun ScrollableState.DraggableScrollbar(
     modifier: Modifier = Modifier,
     state: ScrollbarState,
     orientation: Orientation,
@@ -74,7 +77,7 @@ fun ScrollableState.FastScrollbar(
         interactionSource = interactionSource,
         state = state,
         thumb = {
-            FastScrollbarThumb(
+            DraggableScrollbarThumb(
                 interactionSource = interactionSource,
                 orientation = orientation,
             )
@@ -115,7 +118,7 @@ fun ScrollableState.DecorativeScrollbar(
  * A scrollbar thumb that is intended to also be a touch target for fast scrolling.
  */
 @Composable
-private fun ScrollableState.FastScrollbarThumb(
+private fun ScrollableState.DraggableScrollbarThumb(
     interactionSource: InteractionSource,
     orientation: Orientation,
 ) {
@@ -137,7 +140,7 @@ private fun ScrollableState.FastScrollbarThumb(
 }
 
 /**
- * A decorative scrollbar thumb for communicating a user's position in a list solely.
+ * A decorative scrollbar thumb used solely for communicating a user's position in a list.
  */
 @Composable
 private fun ScrollableState.DecorativeScrollbarThumb(
@@ -192,7 +195,7 @@ private fun ScrollableState.scrollbarThumbColor(
             true -> state = Active
             false -> if (state == Active) {
                 state = Inactive
-                delay(INACTIVE_TO_DORMANT_COOL_DOWN)
+                delay(SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS)
                 state = Dormant
             }
         }
