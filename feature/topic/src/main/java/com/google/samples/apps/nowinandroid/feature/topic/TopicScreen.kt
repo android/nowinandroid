@@ -122,7 +122,7 @@ internal fun TopicScreen(
                         uiState = topicUiState.followableTopic,
                     )
                 }
-                TopicBody(
+                topicBody(
                     name = topicUiState.followableTopic.topic.name,
                     description = topicUiState.followableTopic.topic.longDescription,
                     news = newsUiState,
@@ -139,7 +139,7 @@ internal fun TopicScreen(
     }
 }
 
-private fun LazyListScope.TopicBody(
+private fun LazyListScope.topicBody(
     name: String,
     description: String,
     news: NewsUiState,
@@ -213,7 +213,7 @@ private fun LazyListScope.userNewsResourceCards(
 private fun TopicBodyPreview() {
     NiaTheme {
         LazyColumn {
-            TopicBody(
+            topicBody(
                 name = "Jetpack Compose",
                 description = "Lorem ipsum maximum",
                 news = NewsUiState.Success(emptyList()),
