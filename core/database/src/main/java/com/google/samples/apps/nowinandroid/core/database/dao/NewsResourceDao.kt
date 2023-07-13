@@ -65,6 +65,33 @@ interface NewsResourceDao {
         filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
+    @Transaction
+    @Query(
+       value = """
+            SELECT id FROM news_resources
+            WHERE 
+                CASE WHEN :useFilterNewsIds
+                    THEN id IN (:filterNewsIds)
+                    ELSE 1
+                END
+             AND
+                CASE WHEN :useFilterTopicIds
+                    THEN id IN
+                        (
+                            SELECT news_resource_id FROM news_resources_topics
+                            WHERE topic_id IN (:filterTopicIds)
+                        )
+                    ELSE 1
+                END
+            ORDER BY publish_date DESC
+    """)
+    fun getNewsResourceIds(
+        useFilterTopicIds: Boolean = false,
+        filterTopicIds: Set<String> = emptySet(),
+        useFilterNewsIds: Boolean = false,
+        filterNewsIds: Set<String> = emptySet(),
+    ): Flow<List<String>>
+
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
