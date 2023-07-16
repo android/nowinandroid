@@ -27,6 +27,7 @@ import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.allowNotifications
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import org.junit.Rule
 import org.junit.Test
@@ -86,6 +87,7 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         },
     ) {
         startActivityAndWait()
+        allowNotifications()
         // Waits until the content is ready to capture Time To Full Display
         forYouWaitForContent()
     }
