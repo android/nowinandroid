@@ -70,7 +70,7 @@ interface NewsResourceDao {
      */
     @Transaction
     @Query(
-       value = """
+        value = """
             SELECT id FROM news_resources
             WHERE 
                 CASE WHEN :useFilterNewsIds
@@ -87,7 +87,8 @@ interface NewsResourceDao {
                     ELSE 1
                 END
             ORDER BY publish_date DESC
-    """)
+    """,
+    )
     fun getNewsResourceIds(
         useFilterTopicIds: Boolean = false,
         filterTopicIds: Set<String> = emptySet(),
