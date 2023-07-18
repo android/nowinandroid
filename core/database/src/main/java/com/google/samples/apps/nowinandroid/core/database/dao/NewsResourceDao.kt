@@ -65,6 +65,9 @@ interface NewsResourceDao {
         filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
+    /**
+     * Fetches ids of news resources that match the query parameters
+     */
     @Transaction
     @Query(
        value = """
