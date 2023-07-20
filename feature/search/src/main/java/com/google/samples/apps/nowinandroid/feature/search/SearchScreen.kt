@@ -246,6 +246,7 @@ fun EmptySearchResultBody(
             text = tryAnotherSearchString,
             style = MaterialTheme.typography.bodyLarge.merge(
                 TextStyle(
+                    color = MaterialTheme.colorScheme.secondary,
                     textAlign = TextAlign.Center,
                 ),
             ),
