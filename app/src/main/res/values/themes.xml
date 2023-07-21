@@ -21,25 +21,27 @@
     <style name="NightAdjusted.Theme.Nia" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+<!--        <item name="android:windowActionBar">false</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
     </style>
 
-    <!-- Allows us to override platform level specific attributes in their
-         respective values-vXX folder. -->
-    <style name="PlatformAdjusted.Theme.Nia" parent="NightAdjusted.Theme.Nia">
-        <item name="android:statusBarColor">@color/black30</item>
-    </style>
+<!--    &lt;!&ndash; Allows us to override platform level specific attributes in their-->
+<!--         respective values-vXX folder. &ndash;&gt;-->
+<!--    <style name="PlatformAdjusted.Theme.Nia" parent="NightAdjusted.Theme.Nia">-->
+<!--        <item name="android:statusBarColor">@color/black30</item>-->
+<!--    </style>-->
 
-    <!-- The final theme we use -->
-    <style name="Theme.Nia" parent="PlatformAdjusted.Theme.Nia" />
+<!--    &lt;!&ndash; The final theme we use &ndash;&gt;-->
+<!--    <style name="Theme.Nia" parent="PlatformAdjusted.Theme.Nia" />-->
 
-    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
-    </style>
+<!--    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">-->
+<!--        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>-->
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>-->
+<!--    </style>-->
 
-    <style name="Theme.Nia.Splash" parent="NightAdjusted.Theme.Splash">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
-        <item name="postSplashScreenTheme">@style/Theme.Nia</item>
-    </style>
+<!--    <style name="Theme.Nia.Splash" parent="NightAdjusted.Theme.Splash">-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>-->
+<!--        <item name="postSplashScreenTheme">@style/Theme.Nia</item>-->
+<!--    </style>-->
 
 </resources>

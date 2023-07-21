@@ -17,63 +17,35 @@
 package com.google.samples.apps.nowinandroid
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.metrics.performance.JankStats
-import androidx.profileinstaller.ProfileVerifier
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
-import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
-import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private const val TAG = "MainActivity"
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    /**
-     * Lazily inject [JankStats], which is used to track jank throughout the app.
-     */
-    @Inject
-    lateinit var lazyStats: dagger.Lazy<JankStats>
-
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
-
-    @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
@@ -81,7 +53,6 @@ class MainActivity : ComponentActivity() {
     val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         var uiState: MainActivityUiState by mutableStateOf(Loading)
@@ -94,16 +65,6 @@ class MainActivity : ComponentActivity() {
                         uiState = it
                     }
                     .collect()
-            }
-        }
-
-        // Keep the splash screen on-screen until the UI state is loaded. This condition is
-        // evaluated each time the app needs to be redrawn so it should be fast to avoid blocking
-        // the UI.
-        splashScreen.setKeepOnScreenCondition {
-            when (uiState) {
-                Loading -> true
-                is Success -> false
             }
         }
 
@@ -121,65 +82,13 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
 
-            CompositionLocalProvider(LocalAnalyticsHelper provides analyticsHelper) {
-                NiaTheme(
-                    darkTheme = darkTheme,
-                    androidTheme = shouldUseAndroidTheme(uiState),
-                    disableDynamicTheming = shouldDisableDynamicTheming(uiState),
-                ) {
-                    NiaApp(
-                        networkMonitor = networkMonitor,
-                        windowSizeClass = calculateWindowSizeClass(this),
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
-                }
+            NiaTheme(
+                darkTheme = darkTheme,
+                androidTheme = shouldUseAndroidTheme(uiState),
+                disableDynamicTheming = shouldDisableDynamicTheming(uiState),
+            ) {
+                NiaApp()
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lazyStats.get().isTrackingEnabled = true
-        lifecycleScope.launch {
-            logCompilationStatus()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        lazyStats.get().isTrackingEnabled = false
-    }
-
-    /**
-     * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].
-     */
-    private suspend fun logCompilationStatus() {
-        /*
-        When delivering through Google Play, the baseline profile is compiled during installation.
-        In this case you will see the correct state logged without any further action necessary.
-        To verify baseline profile installation locally, you need to manually trigger baseline
-        profile installation.
-        For immediate compilation, call:
-         `adb shell cmd package compile -f -m speed-profile com.example.macrobenchmark.target`
-        You can also trigger background optimizations:
-         `adb shell pm bg-dexopt-job`
-        Both jobs run asynchronously and might take some time complete.
-        To see quick turnaround of the ProfileVerifier, we recommend using `speed-profile`.
-        If you don't do either of these steps, you might only see the profile status reported as
-        "enqueued for compilation" when running the sample locally.
-        */
-        withContext(Dispatchers.IO) {
-            val status = ProfileVerifier.getCompilationStatusAsync().await()
-            Log.d(TAG, "ProfileInstaller status code: ${status.profileInstallResultCode}")
-            Log.d(
-                TAG,
-                when {
-                    status.isCompiledWithProfile -> "ProfileInstaller: is compiled with profile"
-                    status.hasProfileEnqueuedForCompilation() ->
-                        "ProfileInstaller: Enqueued for compilation"
-                    else -> "Profile not compiled or enqueued"
-                },
-            )
         }
     }
 }

@@ -51,29 +51,25 @@ class TopicViewModel @Inject constructor(
 
     private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
 
-    val topicId = topicArgs.topicId
-
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository,
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = TopicUiState.Loading,
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading,
-        )
 
     val newUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicArgs.topicId,
         userDataRepository = userDataRepository,
         userNewsResourceRepository = userNewsResourceRepository,
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = NewsUiState.Loading,
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading,
-        )
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {

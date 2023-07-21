@@ -58,7 +58,4 @@ dependencies {
     implementation(libs.androidx.dataStore.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.protobuf.kotlin.lite)
-
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(project(":core:testing"))
 }

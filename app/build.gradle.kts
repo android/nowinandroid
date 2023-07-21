@@ -19,11 +19,7 @@ plugins {
     id("nowinandroid.android.application")
     id("nowinandroid.android.application.compose")
     id("nowinandroid.android.application.flavors")
-    id("nowinandroid.android.application.jacoco")
     id("nowinandroid.android.hilt")
-    id("jacoco")
-    id("nowinandroid.android.application.firebase")
-    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -53,17 +49,6 @@ android {
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.getByName("debug")
         }
-        create("benchmark") {
-            // Enable all the optimizations from release build through initWith(release).
-            initWith(release)
-            matchingFallbacks.add("release")
-            // Debug key signing is available to everyone.
-            signingConfig = signingConfigs.getByName("debug")
-            // Only use benchmark proguard rules
-            proguardFiles("benchmark-rules.pro")
-            isMinifyEnabled = true
-            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
-        }
     }
 
     packaging {
@@ -80,37 +65,18 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:interests"))
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:bookmarks"))
-    implementation(project(":feature:topic"))
-    implementation(project(":feature:search"))
-    implementation(project(":feature:settings"))
-
     implementation(project(":core:common"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
     implementation(project(":core:data"))
+    implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
-    implementation(project(":core:analytics"))
-
-    implementation(project(":sync:work"))
-
-    androidTestImplementation(project(":core:testing"))
-    androidTestImplementation(project(":core:datastore-test"))
-    androidTestImplementation(project(":core:data-test"))
-    androidTestImplementation(project(":core:network"))
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.accompanist.testharness)
-    androidTestImplementation(kotlin("test"))
-    debugImplementation(libs.androidx.compose.ui.testManifest)
-    debugImplementation(project(":ui-test-hilt-manifest"))
+    implementation(project(":core:ui"))
+    implementation(project(":feature:interests"))
+    implementation(project(":feature:topic"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.runtime.tracing)

@@ -31,6 +31,4 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     kapt(libs.hilt.compiler)
-
-    testImplementation(project(":core:testing"))
 }

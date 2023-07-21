@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 
@@ -66,7 +65,6 @@ fun LazyGridScope.newsFeed(
                     mutableStateOf(Uri.parse(userNewsResource.url))
                 }
                 val context = LocalContext.current
-                val analyticsHelper = LocalAnalyticsHelper.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
                 NewsResourceCardExpanded(
@@ -74,9 +72,6 @@ fun LazyGridScope.newsFeed(
                     isBookmarked = userNewsResource.isSaved,
                     onClick = {
                         onExpandedCardClick()
-                        analyticsHelper.logNewsResourceOpened(
-                            newsResourceId = userNewsResource.id,
-                        )
                         launchCustomChromeTab(context, resourceUrl, backgroundColor)
                         onNewsResourceViewed(userNewsResource.id)
                     },

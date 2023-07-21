@@ -39,35 +39,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 @Composable
 fun NiaTopAppBar(
     @StringRes titleRes: Int,
-    navigationIcon: ImageVector,
-    navigationIconContentDescription: String?,
-    actionIcon: ImageVector,
-    actionIconContentDescription: String?,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
-    onNavigationClick: () -> Unit = {},
-    onActionClick: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes)) },
-        navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
-                Icon(
-                    imageVector = navigationIcon,
-                    contentDescription = navigationIconContentDescription,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = onActionClick) {
-                Icon(
-                    imageVector = actionIcon,
-                    contentDescription = actionIconContentDescription,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-        },
         colors = colors,
         modifier = modifier.testTag("niaTopAppBar"),
     )
@@ -99,18 +75,5 @@ fun NiaTopAppBar(
         },
         colors = colors,
         modifier = modifier.testTag("niaTopAppBar"),
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview("Top App Bar")
-@Composable
-private fun NiaTopAppBarPreview() {
-    NiaTopAppBar(
-        titleRes = android.R.string.untitled,
-        navigationIcon = NiaIcons.Search,
-        navigationIconContentDescription = "Navigation icon",
-        actionIcon = NiaIcons.MoreVert,
-        actionIconContentDescription = "Action icon",
     )
 }

@@ -19,7 +19,6 @@ plugins {
     id("nowinandroid.android.library.jacoco")
     id("nowinandroid.android.hilt")
     id("kotlinx-serialization")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -34,10 +33,6 @@ android {
     }
 }
 
-secrets {
-    defaultPropertiesFileName = "secrets.defaults.properties"
-}
-
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
@@ -49,6 +44,4 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
-
-    testImplementation(project(":core:testing"))
 }

@@ -54,14 +54,13 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 
 @Composable
-internal fun TopicRoute(
+fun TopicRoute(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -70,7 +69,6 @@ internal fun TopicRoute(
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
     val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
 
-    TrackScreenViewEvent(screenName = "Topic: ${viewModel.topicId}")
     TopicScreen(
         topicUiState = topicUiState,
         newsUiState = newsUiState,

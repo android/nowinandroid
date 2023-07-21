@@ -32,10 +32,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
 @Composable
-internal fun InterestsRoute(
+fun InterestsRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel(),
@@ -77,7 +76,6 @@ internal fun InterestsScreen(
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
-    TrackScreenViewEvent(screenName = "Interests")
 }
 
 @Composable
