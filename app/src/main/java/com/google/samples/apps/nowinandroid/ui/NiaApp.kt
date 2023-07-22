@@ -196,14 +196,15 @@ fun NiaApp(
                                 onNavigationClick = { appState.navigateToSearch() },
                             )
                         }
-
-                        NiaNavHost(appState = appState, onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        })
+                        NiaAnimation {
+                            NiaNavHost(appState = appState, onShowSnackbar = { message, action ->
+                                snackbarHostState.showSnackbar(
+                                    message = message,
+                                    actionLabel = action,
+                                    duration = Short,
+                                ) == ActionPerformed
+                            })
+                        }
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
