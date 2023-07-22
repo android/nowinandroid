@@ -183,7 +183,7 @@ class NiaAppStateTest {
 @Composable
 private fun rememberTestNavController(): TestNavHostController {
     val context = LocalContext.current
-    val navController = remember {
+    return remember<TestNavHostController> {
         TestNavHostController(context).apply {
             navigatorProvider.addNavigator(ComposeNavigator())
             graph = createGraph(startDestination = "a") {
@@ -193,5 +193,4 @@ private fun rememberTestNavController(): TestNavHostController {
             }
         }
     }
-    return navController
 }
