@@ -16,19 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 
 /**
@@ -42,30 +34,11 @@ fun DynamicAsyncImage(
     placeholder: Painter? = null,
 ) {
     val iconTint = LocalTintTheme.current.iconTint
-    SubcomposeAsyncImage(
-        error = {
-            if (placeholder != null) {
-                Image(
-                    painter = placeholder,
-                    contentDescription = "placeholder image",
-                )
-            }
-        },
+    AsyncImage(
+        placeholder = placeholder,
         model = imageUrl,
         contentDescription = contentDescription,
         colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
         modifier = modifier,
-        loading = {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    Modifier.size(80.dp),
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            }
-        },
-
-        )
+    )
 }

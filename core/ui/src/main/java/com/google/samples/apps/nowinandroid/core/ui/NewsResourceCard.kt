@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +31,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -61,8 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -152,37 +147,20 @@ fun NewsResourceCardExpanded(
 fun NewsResourceHeaderImage(
     headerImageUrl: String?,
 ) {
-
-    SubcomposeAsyncImage(
+    AsyncImage(
+        placeholder = if (LocalInspectionMode.current) {
+            painterResource(DesignsystemR.drawable.ic_placeholder_default)
+        } else {
+            // TODO b/228077205, show specific loading image visual
+            null
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp),
         contentScale = ContentScale.Crop,
         model = headerImageUrl,
         // TODO b/226661685: Investigate using alt text of  image to populate content description
-        contentDescription = null, // decorative image,
-        error = {
-            if (LocalInspectionMode.current) {
-                Image(
-                    painter =
-                    painterResource(DesignsystemR.drawable.ic_placeholder_default),
-                    contentDescription = "placeholder image",
-                )
-            } else {
-                null
-            }
-        },
-        loading = {
-            Box(
-                modifier = Modifier.size(180.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    Modifier.size(80.dp),
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            }
-        },
+        contentDescription = null, // decorative image
     )
 }
 
