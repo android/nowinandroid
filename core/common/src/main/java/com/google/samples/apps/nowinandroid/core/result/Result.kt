@@ -27,11 +27,20 @@ sealed interface Result<out T> {
     object Loading : Result<Nothing>
 }
 
-fun <T> Flow<T>.asResult(): Flow<Result<T>> {
+fun <T, R> Flow<T>.mapToResultUiState(
+    onSuccess: (T) -> R,
+    onLoading: () -> R,
+    onError: (Throwable?) -> R,
+): Flow<R> {
     return this
-        .map<T, Result<T>> {
-            Result.Success(it)
-        }
+        .map { Result.Success(it) as Result<T> }
         .onStart { emit(Result.Loading) }
-        .catch { emit(Result.Error(it)) }
+        .catch { e -> emit(Result.Error(e)) }
+        .map { result ->
+            when (result) {
+                is Result.Success -> onSuccess(result.data)
+                is Result.Loading -> onLoading()
+                is Result.Error -> onError(result.exception)
+            }
+        }
 }

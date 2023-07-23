@@ -27,8 +27,7 @@ import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.result.Result
-import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.result.mapToResultUiState
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -114,29 +113,19 @@ private fun topicUiState(
         topicStream,
         ::Pair,
     )
-        .asResult()
-        .map { followedTopicToTopicResult ->
-            when (followedTopicToTopicResult) {
-                is Result.Success -> {
-                    val (followedTopics, topic) = followedTopicToTopicResult.data
-                    val followed = followedTopics.contains(topicId)
-                    TopicUiState.Success(
-                        followableTopic = FollowableTopic(
-                            topic = topic,
-                            isFollowed = followed,
-                        ),
-                    )
-                }
-
-                is Result.Loading -> {
-                    TopicUiState.Loading
-                }
-
-                is Result.Error -> {
-                    TopicUiState.Error
-                }
-            }
-        }
+        .mapToResultUiState(
+            onSuccess = { (followedTopics, topic) ->
+                val followed = followedTopics.contains(topicId)
+                TopicUiState.Success(
+                    followableTopic = FollowableTopic(
+                        topic = topic,
+                        isFollowed = followed,
+                    ),
+                )
+            },
+            onLoading = { TopicUiState.Loading },
+            onError = { TopicUiState.Error },
+        )
 }
 
 private fun newsUiState(
@@ -158,23 +147,14 @@ private fun newsUiState(
         bookmark,
         ::Pair,
     )
-        .asResult()
-        .map { newsToBookmarksResult ->
-            when (newsToBookmarksResult) {
-                is Result.Success -> {
-                    val news = newsToBookmarksResult.data.first
-                    NewsUiState.Success(news)
-                }
-
-                is Result.Loading -> {
-                    NewsUiState.Loading
-                }
-
-                is Result.Error -> {
-                    NewsUiState.Error
-                }
-            }
-        }
+        .mapToResultUiState(
+            onSuccess = {
+                    (news, bookmark) ->
+                NewsUiState.Success(news)
+            },
+            onLoading = { NewsUiState.Loading },
+            onError = { NewsUiState.Error },
+        )
 }
 
 sealed interface TopicUiState {

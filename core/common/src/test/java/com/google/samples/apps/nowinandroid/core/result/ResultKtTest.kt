@@ -30,7 +30,11 @@ class ResultKtTest {
             emit(1)
             throw Exception("Test Done")
         }
-            .asResult()
+            .mapToResultUiState(
+                onSuccess = { Result.Success(it) },
+                onLoading = { Result.Loading },
+                onError = { Result.Error(it) },
+            )
             .test {
                 assertEquals(Result.Loading, awaitItem())
                 assertEquals(Result.Success(1), awaitItem())

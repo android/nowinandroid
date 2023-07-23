@@ -26,8 +26,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRep
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
-import com.google.samples.apps.nowinandroid.core.result.Result
-import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.result.mapToResultUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -59,24 +58,17 @@ class SearchViewModel @Inject constructor(
                     if (query.length < SEARCH_QUERY_MIN_LENGTH) {
                         flowOf(SearchResultUiState.EmptyQuery)
                     } else {
-                        getSearchContentsUseCase(query).asResult().map {
-                            when (it) {
-                                is Result.Success -> {
+                        getSearchContentsUseCase(query)
+                            .mapToResultUiState(
+                                onSuccess = {
                                     SearchResultUiState.Success(
-                                        topics = it.data.topics,
-                                        newsResources = it.data.newsResources,
+                                        it.topics,
+                                        it.newsResources,
                                     )
-                                }
-
-                                is Result.Loading -> {
-                                    SearchResultUiState.Loading
-                                }
-
-                                is Result.Error -> {
-                                    SearchResultUiState.LoadFailed
-                                }
-                            }
-                        }
+                                },
+                                onLoading = { SearchResultUiState.Loading },
+                                onError = { SearchResultUiState.LoadFailed },
+                            )
                     }
                 }
             }
