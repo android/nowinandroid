@@ -33,7 +33,7 @@ fun <T, R> Flow<T>.mapToResultUiState(
     onError: (Throwable?) -> R,
 ): Flow<R> {
     return this
-        .map { Result.Success(it) as Result<T> }
+        .map<_, Result<T>> { Result.Success(it) }
         .onStart { emit(Result.Loading) }
         .catch { e -> emit(Result.Error(e)) }
         .map { result ->
