@@ -67,6 +67,33 @@ class TestNewsResourceDao : NewsResourceDao {
                 result
             }
 
+    override fun getNewsResourceIds(
+        useFilterTopicIds: Boolean,
+        filterTopicIds: Set<String>,
+        useFilterNewsIds: Boolean,
+        filterNewsIds: Set<String>,
+    ): Flow<List<String>> =
+        entitiesStateFlow
+            .map { newsResourceEntities ->
+                newsResourceEntities.map { entity ->
+                    entity.asPopulatedNewsResource(topicCrossReferences)
+                }
+            }
+            .map { resources ->
+                var result = resources
+                if (useFilterTopicIds) {
+                    result = result.filter { resource ->
+                        resource.topics.any { it.id in filterTopicIds }
+                    }
+                }
+                if (useFilterNewsIds) {
+                    result = result.filter { resource ->
+                        resource.entity.id in filterNewsIds
+                    }
+                }
+                result.map { it.entity.id }
+            }
+
     override suspend fun insertOrIgnoreNewsResources(
         entities: List<NewsResourceEntity>,
     ): List<Long> {
