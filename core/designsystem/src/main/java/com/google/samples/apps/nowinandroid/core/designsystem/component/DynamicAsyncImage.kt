@@ -66,6 +66,5 @@ fun DynamicAsyncImage(
                 )
             }
         },
-
-        )
+    )
 }
