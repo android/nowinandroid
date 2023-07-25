@@ -41,6 +41,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.coil.kt.compose)
+    implementation(libs.kotlinx.coroutines.core) {
+        because("Compose BoM forces a version by default that AndroidJUnitRunner does not expect, and will fail with: java.lang.NoClassDefFoundError: Failed resolution of: Lkotlinx/coroutines/DelayWithTimeoutDiagnostics;")
+    }
 
     androidTestImplementation(project(":core:testing"))
 }
