@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.allowNotifications
 import com.google.samples.apps.nowinandroid.bookmarks.goToBookmarksScreen
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
@@ -42,6 +43,8 @@ class BaselineProfileGenerator {
 
             pressHome()
             startActivityAndWait()
+
+            allowNotifications()
 
             // Scroll the feed critical user journey
             forYouWaitForContent()
