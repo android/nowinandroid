@@ -88,3 +88,17 @@ fun MacrobenchmarkScope.forYouScrollFeedDownUp() {
     val feedList = device.findObject(By.res("forYou:feed"))
     device.flingElementDownUp(feedList)
 }
+
+fun MacrobenchmarkScope.setAppTheme(isDark: Boolean) {
+    when (isDark) {
+        true -> device.findObject(By.text("Dark")).click()
+        false -> device.findObject(By.text("Light")).click()
+    }
+    device.waitForIdle()
+    device.findObject(By.text("OK")).click()
+
+    // Wait until the top app bar is visible on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
+    val topAppBar = device.findObject(By.res("niaTopAppBar"))
+    topAppBar.wait(Until.hasObject(By.text("Now in Android")), 2_000)
+}
