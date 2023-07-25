@@ -43,7 +43,6 @@ class BaselineProfileGenerator {
 
             pressHome()
             startActivityAndWait()
-
             allowNotifications()
 
             // Scroll the feed critical user journey
