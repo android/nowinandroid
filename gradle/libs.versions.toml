@@ -49,7 +49,7 @@ protobuf = "3.23.4"
 protobufPlugin = "0.9.3"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
-room = "2.5.0"
+room = "2.5.2"
 secrets = "2.0.1"
 turbine = "0.12.1"
 
