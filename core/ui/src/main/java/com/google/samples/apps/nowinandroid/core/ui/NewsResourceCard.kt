@@ -72,6 +72,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
@@ -157,15 +158,11 @@ fun NewsResourceHeaderImage(
         // TODO b/226661685: Investigate using alt text of  image to populate content description
         contentDescription = null, // decorative image,
         error = {
-            if (LocalInspectionMode.current) {
                 Image(
                     painter =
                     painterResource(DesignsystemR.drawable.ic_placeholder_default),
                     contentDescription = "placeholder image",
                 )
-            } else {
-                null
-            }
         },
         loading = {
             Box(
@@ -248,8 +245,12 @@ fun dateFormatted(publishDate: Instant): String {
         }
     }
 
-    return DateTimeFormatter.ofPattern("MMM d, yyyy")
-        .withZone(zoneId).format(publishDate.toJavaInstant())
+    return DateTimeFormatter
+        .ofLocalizedDate(FormatStyle.MEDIUM)
+        .withLocale(Locale.getDefault())
+        .withZone(zoneId)
+        .format(publishDate.toJavaInstant())
+
 }
 
 @Composable
