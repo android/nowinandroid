@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.28.0"
-androidDesugarJdkLibs = "1.2.2"
+androidDesugarJdkLibs = "2.0.3"
 androidGradlePlugin = "8.1.0"
 androidxActivity = "1.7.0"
 androidxAppCompat = "1.5.1"
@@ -49,7 +49,7 @@ protobuf = "3.23.4"
 protobufPlugin = "0.9.3"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
-room = "2.5.0"
+room = "2.5.2"
 secrets = "2.0.1"
 turbine = "0.12.1"
 
