@@ -27,8 +27,10 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
@@ -262,10 +264,13 @@ class NavigationTest {
 
     @Test
     fun navigationBar_multipleBackStackInterests() = runTest {
-        val topics = datasource.getTopics(ids = null)
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
-            onNodeWithText(topics.random().name).performClick()
+
+            // Select a random topic
+            val topic = datasource.getTopics().random().name
+            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
+            onNodeWithText(topic).performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
@@ -274,7 +279,7 @@ class NavigationTest {
             onNodeWithText(interests).performClick()
 
             // Verify we're not in the list of interests
-            onNodeWithText(topics.random().name).assertDoesNotExist()
+            onNodeWithTag("interests:topics").assertDoesNotExist()
         }
     }
 }
