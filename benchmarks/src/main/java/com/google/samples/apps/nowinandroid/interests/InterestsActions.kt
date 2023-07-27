@@ -34,7 +34,7 @@ fun MacrobenchmarkScope.goToInterestsScreen() {
 }
 
 fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
-    val topicsList = device.findObject(By.res("interests:topics"))
+    val topicsList = device.wait(Until.findObject(By.res("interests:topics")), 2_000)
     device.flingElementDownUp(topicsList)
 }
 
