@@ -26,9 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.R
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 
 /**
@@ -44,12 +46,10 @@ fun DynamicAsyncImage(
     val iconTint = LocalTintTheme.current.iconTint
     SubcomposeAsyncImage(
         error = {
-            if (placeholder != null) {
-                Image(
-                    painter = placeholder,
-                    contentDescription = "placeholder image",
-                )
-            }
+            Image(
+                painter = placeholder ?: painterResource(R.drawable.ic_placeholder_default),
+                contentDescription = "placeholder image",
+            )
         },
         model = imageUrl,
         contentDescription = contentDescription,
