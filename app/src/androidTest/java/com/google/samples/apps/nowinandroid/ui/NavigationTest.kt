@@ -33,7 +33,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -83,7 +83,7 @@ class NavigationTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Inject
-    lateinit var datasource: FakeNiaNetworkDataSource
+    lateinit var datasource: NiaNetworkDataSource
 
     private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
@@ -262,10 +262,10 @@ class NavigationTest {
 
     @Test
     fun navigationBar_multipleBackStackInterests() = runTest {
-        suspend fun randomTopicName() = datasource.getTopics(ids = null).random().name
+        val topics = datasource.getTopics(ids = null)
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
-            onNodeWithText(randomTopicName()).performClick()
+            onNodeWithText(topics.random().name).performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
@@ -274,7 +274,7 @@ class NavigationTest {
             onNodeWithText(interests).performClick()
 
             // Verify we're not in the list of interests
-            onNodeWithText(randomTopicName()).assertDoesNotExist()
+            onNodeWithText(topics.random().name).assertDoesNotExist()
         }
     }
 }
