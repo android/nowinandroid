@@ -57,7 +57,7 @@ fun DynamicAsyncImage(
         modifier = modifier,
         loading = {
             Box(
-                modifier = modifier,
+                modifier = Modifier,
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
