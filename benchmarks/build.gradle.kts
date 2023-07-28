@@ -18,6 +18,7 @@ import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
     id("nowinandroid.android.test")
+    alias(libs.plugins.baselineProfile)
 }
 
 android {
