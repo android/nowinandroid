@@ -1,0 +1,3 @@
+[submodule "graph-untangler-plugin"]
+	path = graph-untangler-plugin
+	url = https://github.com/siggijons/graph-untangler-plugin

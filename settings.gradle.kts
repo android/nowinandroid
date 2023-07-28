@@ -15,6 +15,7 @@
  */
 
 pluginManagement {
+    includeBuild("graph-untangler-plugin")
     includeBuild("build-logic")
     repositories {
         google()
