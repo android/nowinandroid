@@ -36,6 +36,7 @@ import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -267,8 +268,8 @@ class NavigationTest {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
 
-            // Select a random topic
-            val topic = datasource.getTopics().random().name
+            // Select the last topic
+            val topic = datasource.getTopics().sortedBy(NetworkTopic::name).last().name
             onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
             onNodeWithText(topic).performClick()
 
