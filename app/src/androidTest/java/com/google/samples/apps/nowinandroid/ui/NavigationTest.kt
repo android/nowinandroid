@@ -35,12 +35,13 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
-import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -86,7 +87,7 @@ class NavigationTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Inject
-    lateinit var datasource: NiaNetworkDataSource
+    lateinit var topicsRepository: TopicsRepository
 
     private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
@@ -269,7 +270,7 @@ class NavigationTest {
             onNodeWithText(interests).performClick()
 
             // Select the last topic
-            val topic = datasource.getTopics().sortedBy(NetworkTopic::name).last().name
+            val topic = topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
             onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
             onNodeWithText(topic).performClick()
 
