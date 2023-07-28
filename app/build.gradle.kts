@@ -133,3 +133,7 @@ configurations.configureEach {
         force("org.objenesis:objenesis:2.6")
     }
 }
+
+baselineProfile {
+    saveInSrc = true
+}
