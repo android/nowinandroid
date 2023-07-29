@@ -35,12 +35,12 @@ fun NiaAnimation(content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = true,
         enter = slideInVertically(
-            initialOffsetY = { -40 }
+            initialOffsetY = { -40 },
         ) + expandVertically(
-            expandFrom = Alignment.Bottom
+            expandFrom = Alignment.Bottom,
         ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
-    ){
+        exit = slideOutVertically() + shrinkVertically() + fadeOut(),
+    ) {
         content()
     }
 }
