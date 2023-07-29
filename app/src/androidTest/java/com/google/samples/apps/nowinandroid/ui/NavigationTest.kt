@@ -27,19 +27,27 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import javax.inject.Inject
 import kotlin.properties.ReadOnlyProperty
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
@@ -78,6 +86,9 @@ class NavigationTest {
     @get:Rule(order = 3)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    @Inject
+    lateinit var topicsRepository: TopicsRepository
+
     private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
 
@@ -91,6 +102,9 @@ class NavigationTest {
     private val settings by composeTestRule.stringResource(SettingsR.string.top_app_bar_action_icon_description)
     private val brand by composeTestRule.stringResource(SettingsR.string.brand_android)
     private val ok by composeTestRule.stringResource(SettingsR.string.dismiss_dialog_button_text)
+
+    @Before
+    fun setup() = hiltRule.inject()
 
     @Test
     fun firstScreen_isForYou() {
@@ -251,11 +265,14 @@ class NavigationTest {
     }
 
     @Test
-    fun navigationBar_multipleBackStackInterests() {
+    fun navigationBar_multipleBackStackInterests() = runTest {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
-            // TODO: Grab string from fake data
-            onNodeWithText("Android Studio & Tools").performClick()
+
+            // Select the last topic
+            val topic = topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
+            onNodeWithText(topic).performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
@@ -264,7 +281,7 @@ class NavigationTest {
             onNodeWithText(interests).performClick()
 
             // Verify we're not in the list of interests
-            onNodeWithText("Android Auto").assertDoesNotExist() // TODO: Grab string from fake data
+            onNodeWithTag("interests:topics").assertDoesNotExist()
         }
     }
 }
