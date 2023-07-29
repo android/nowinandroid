@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.search.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -40,6 +41,9 @@ fun NavGraphBuilder.searchScreen(
             onBackClick = onBackClick,
             onInterestsClick = onInterestsClick,
             onTopicClick = onTopicClick,
+            setNewsResourceViewed = hiltViewModel(),
+            followTopic = hiltViewModel(),
+            updateNewsResourceSaved = hiltViewModel(),
         )
     }
 }

@@ -25,8 +25,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:bookmarks"))
-    implementation(project(":feature:foryou"))
     implementation(project(":feature:interests"))
     implementation(libs.kotlinx.datetime)
 }
