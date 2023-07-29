@@ -159,8 +159,7 @@ fun NewsResourceHeaderImage(
         contentDescription = null, // decorative image,
         error = {
                 Image(
-                    painter =
-                    painterResource(DesignsystemR.drawable.ic_placeholder_default),
+                    painter = painterResource(DesignsystemR.drawable.ic_placeholder_default),
                     contentDescription = "placeholder image",
                 )
         },
