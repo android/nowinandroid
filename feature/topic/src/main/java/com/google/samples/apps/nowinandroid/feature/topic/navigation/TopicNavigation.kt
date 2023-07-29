@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
-import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
@@ -24,19 +23,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 @VisibleForTesting
 internal const val topicIdArg = "topicId"
 
 internal class TopicArgs(val topicId: String) {
-    constructor(savedStateHandle: SavedStateHandle, stringDecoder: StringDecoder) :
-        this(stringDecoder.decodeString(checkNotNull(savedStateHandle[topicIdArg])))
+    constructor(savedStateHandle: SavedStateHandle) :
+        this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), "UTF-8"))
 }
 
 fun NavController.navigateToTopic(topicId: String) {
-    val encodedId = Uri.encode(topicId)
+    val encodedId = URLEncoder.encode(topicId, "UTF-8")
     this.navigate("topic_route/$encodedId") {
         launchSingleTop = true
     }
