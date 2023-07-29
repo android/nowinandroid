@@ -41,13 +41,13 @@ fun DynamicAsyncImage(
     imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    placeholder: Painter? = null,
+    placeholder: Painter = painterResource(R.drawable.ic_placeholder_default),
 ) {
     val iconTint = LocalTintTheme.current.iconTint
     SubcomposeAsyncImage(
         error = {
             Image(
-                painter = placeholder ?: painterResource(R.drawable.ic_placeholder_default),
+                painter = placeholder,
                 contentDescription = "placeholder image",
             )
         },
