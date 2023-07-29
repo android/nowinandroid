@@ -175,7 +175,7 @@ private fun ColumnScope.SettingsPanel(
     }
     AnimatedVisibility(visible = settings.brand == DEFAULT && supportDynamicColor) {
         Column {
-            SettingsDialogSectionTitle(text = stringResource(R.string.dynamic_color_preference))
+            SettingsDialogSectionTitle(text = stringResource(string.dynamic_color_preference))
             Column(Modifier.selectableGroup()) {
                 SettingsDialogThemeChooserRow(
                     text = stringResource(string.dynamic_color_yes),
@@ -190,7 +190,7 @@ private fun ColumnScope.SettingsPanel(
             }
         }
     }
-    SettingsDialogSectionTitle(text = stringResource(R.string.dark_mode_preference))
+    SettingsDialogSectionTitle(text = stringResource(string.dark_mode_preference))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
             text = stringResource(string.dark_mode_config_system_default),
