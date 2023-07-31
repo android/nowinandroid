@@ -58,7 +58,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp", sdk=[33])
+@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp", sdk = [33])
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
 class NiaAppScreenSizesScreenshotTests {
@@ -122,8 +122,9 @@ class NiaAppScreenSizesScreenshotTests {
             }
         }
         composeTestRule.onRoot()
-            .captureRoboImage("src/test/screenshots/${screenshotName}.png",
-                roborazziOptions = DefaultRoborazziOptions
+            .captureRoboImage(
+                "src/test/screenshots/$screenshotName.png",
+                roborazziOptions = DefaultRoborazziOptions,
             )
     }
 

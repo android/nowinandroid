@@ -35,24 +35,15 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 #
 #      # TODO: Explain why --no-configuration-cache
-#      - name: Check spotless
-#        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
-#
-#      - name: Check lint
-#        run: ./gradlew lintDemoDebug
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+
+      - name: Check lint
+        run: ./gradlew lintDemoDebug
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
@@ -61,12 +52,12 @@ jobs:
         run: ./gradlew testDemoDebug testProdDebug
 
       - name: Run all local screenshot tests (Roborazzi)
-        id: screenshots-verify
+        id: screenshotsverify
         run: ./gradlew :feature:foryou:verifyRoborazziDemoDebug
 
       # Runs if previous job failed
-      - name: Push new screenshots if failed
-        if: always() # TODO steps.screenshots-verify.outputs.exit_code != 0 #TODO: only on pull_request
+      - name: Push new screenshots if failed and it's a PR
+        if: steps.screenshotsverify.outcome == 'failure' && github.event_name != 'pull_request'
         run: |
           ./gradlew :feature:foryou:recordRoborazziDemoDebug
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
