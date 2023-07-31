@@ -40,4 +40,5 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.secrets) apply false
+    id("io.github.takahirom.roborazzi") version "1.2.0-alpha-1" apply false
 }
