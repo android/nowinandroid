@@ -14,7 +14,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - name: Checkout
@@ -37,8 +37,7 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-#
-#      # TODO: Explain why --no-configuration-cache
+
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
@@ -47,25 +46,6 @@ jobs:
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
-
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
-
-      - name: Run all local screenshot tests (Roborazzi)
-        id: screenshotsverify
-        run: ./gradlew :feature:foryou:verifyRoborazziDemoDebug
-
-      # Runs if previous job failed
-      - name: Push new screenshots if failed and it's a PR
-        if: steps.screenshotsverify.outcome == 'failure' && github.event_name != 'pull_request'
-        run: |
-          ./gradlew :feature:foryou:recordRoborazziDemoDebug
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          ls
-          git add screenshots/
-          git commit -m "🤖 Updates screenshots"
-          git push
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
@@ -79,6 +59,51 @@ jobs:
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.head.ref }}  # To enable git push
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Run local tests
+        run: ./gradlew testDemoDebug testProdDebug
+
+      - name: Run all local screenshot tests (Roborazzi)
+        id: screenshotsverify
+        run: ./gradlew verifyRoborazziDemoDebug
+
+      # Runs if previous job failed
+      - name: Push new screenshots if failed and it's a PR
+        if: steps.screenshotsverify.outcome == 'failure' && github.event_name != 'pull_request'
+        run: |
+          ./gradlew recordRoborazziDemoDebug
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          ls
+          git add ./\*.png
+          git commit -m "🤖 Updates screenshots"
+          git push
 
       - name: Upload test results (XML)
         if: always()
