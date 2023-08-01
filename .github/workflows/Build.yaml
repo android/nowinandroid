@@ -92,7 +92,7 @@ jobs:
 
       # Runs if previous job failed
       - name: Push new screenshots if failed and it's a PR
-        if: steps.screenshotsverify.outcome == 'failure' && github.event_name != 'pull_request'
+        if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
           ./gradlew recordRoborazziDemoDebug
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -104,6 +104,7 @@ jobs:
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
+        if: always()
         run: ./gradlew testDemoDebug testProdDebug
 
       - name: Upload test results (XML)
