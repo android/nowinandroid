@@ -91,7 +91,7 @@ jobs:
 
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
-        run: ./gradlew verifyRoborazziDemoDebug
+        run: ./gradlew verifyRoborazziDemoDebug --rerun
 
       # Runs if previous job failed
       - name: Push new screenshots if failed and it's a PR
