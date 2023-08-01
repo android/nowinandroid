@@ -20,6 +20,8 @@ import android.util.Log
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
@@ -35,7 +37,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNe
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
@@ -112,7 +114,7 @@ class NiaAppScreenSizesScreenshotTests {
         // Configure user data
         runBlocking {
             userDataRepository.setShouldHideOnboarding(true)
-            userDataRepository.setFollowedTopicIds(setOf(newsResourcesTestData.first().id))
+            userDataRepository.setFollowedTopicIds(setOf(topicsTestData.first().id))
         }
     }
 
@@ -122,18 +124,23 @@ class NiaAppScreenSizesScreenshotTests {
             userDataRepository = userDataRepository,
         )
         composeTestRule.setContent {
-            TestHarness(size = DpSize(width, height)) {
-                BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+            CompositionLocalProvider(
+                LocalInspectionMode provides true,
+            ) {
+                TestHarness(size = DpSize(width, height)) {
+                    BoxWithConstraints {
+                        NiaApp(
+                            windowSizeClass = WindowSizeClass.calculateFromSize(
+                                DpSize(maxWidth, maxHeight),
+                            ),
+                            networkMonitor = networkMonitor,
+                            userNewsResourceRepository = userNewsResourceRepository,
+                        )
+                    }
                 }
             }
         }
+
         composeTestRule.onRoot()
             .captureRoboImage(
                 "src/testDemo/screenshots/$screenshotName.png",
