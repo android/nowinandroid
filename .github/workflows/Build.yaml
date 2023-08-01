@@ -89,7 +89,7 @@ jobs:
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
-        run: exit 1 #./gradlew verifyRoborazziDemoDebug
+        run: ./gradlew verifyRoborazziDemoDebug
 
       # Runs if previous job failed
       - name: Push new screenshots if failed and it's a PR
