@@ -86,12 +86,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
-
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
-        run: ./gradlew verifyRoborazziDemoDebug --rerun
+        run: ./gradlew verifyRoborazziDemoDebug
 
       # Runs if previous job failed
       - name: Push new screenshots if failed and it's a PR
@@ -104,6 +101,10 @@ jobs:
           git add ./\*.png
           git commit -m "🤖 Updates screenshots"
           git push
+
+      # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
+      - name: Run local tests
+        run: ./gradlew testDemoDebug testProdDebug
 
       - name: Upload test results (XML)
         if: always()
