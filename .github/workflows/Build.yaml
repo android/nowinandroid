@@ -102,6 +102,7 @@ jobs:
         if: steps.screenshotsrecord.outcome == 'success'
         with:
           file_pattern: './\*.png'
+          disable_globbing: true
           commit_message: "🤖 Updates screenshots"
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
