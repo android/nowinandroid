@@ -93,15 +93,16 @@ jobs:
 
       # Runs if previous job failed
       - name: Push new screenshots if failed and it's a PR
+        id: screenshotsrecord
         if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
           ./gradlew recordRoborazziDemoDebug
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          ls
-          git add ./\*.png
-          git commit -m "🤖 Updates screenshots"
-          git push
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: steps.screenshotsrecord.outcome == 'success'
+        with:
+          file_pattern: './\*.png'
+          commit_message: "🤖 Updates screenshots"
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
