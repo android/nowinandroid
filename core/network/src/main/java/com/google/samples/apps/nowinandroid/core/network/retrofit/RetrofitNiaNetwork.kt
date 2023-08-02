@@ -57,10 +57,10 @@ private interface RetrofitNiaNetworkApi {
     ): List<NetworkChangeList>
 }
 
-private const val NiaBaseUrl = BuildConfig.BACKEND_URL
+private const val NIA_BASE_URL = BuildConfig.BACKEND_URL
 
 /**
- * Wrapper for data provided from the [NiaBaseUrl]
+ * Wrapper for data provided from the [NIA_BASE_URL]
  */
 @Serializable
 private data class NetworkResponse<T>(
@@ -77,7 +77,7 @@ class RetrofitNiaNetwork @Inject constructor(
 ) : NiaNetworkDataSource {
 
     private val networkApi = Retrofit.Builder()
-        .baseUrl(NiaBaseUrl)
+        .baseUrl(NIA_BASE_URL)
         .callFactory(okhttpCallFactory)
         .addConverterFactory(
             networkJson.asConverterFactory("application/json".toMediaType()),
