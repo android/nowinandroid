@@ -5,8 +5,7 @@ on:
     branches:
       - main
   pull_request:
-permissions:
-  contents: write
+
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
@@ -62,6 +61,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     timeout-minutes: 60
 
     steps:
@@ -92,16 +95,17 @@ jobs:
         run: ./gradlew verifyRoborazziDemoDebug
 
       # Runs if previous job failed
-      - name: Push new screenshots if failed and it's a PR
+      - name: Generate new screenshots if verification failed and it's a PR
         id: screenshotsrecord
         if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
           ./gradlew recordRoborazziDemoDebug
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Push new screenshots if available
+        uses: stefanzweifel/git-auto-commit-action@v4
         if: steps.screenshotsrecord.outcome == 'success'
         with:
-          file_pattern: './\*.png'
+          file_pattern: '*/*.png'
           disable_globbing: true
           commit_message: "🤖 Updates screenshots"
 
