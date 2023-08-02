@@ -25,6 +25,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -33,6 +34,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,9 +42,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
@@ -87,6 +91,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicA
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DecorativeScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
+import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -144,75 +152,96 @@ internal fun ForYouScreen(
     // This code should be called when the UI is ready for use and relates to Time To Full Display.
     ReportDrawnWhen { !isSyncing && !isOnboardingLoading && !isFeedLoading }
 
+    val itemsAvailable = feedItemsSize(feedState, onboardingUiState)
+
     val state = rememberLazyGridState()
+    val scrollbarState = state.scrollbarState(
+        itemsAvailable = itemsAvailable,
+    )
     TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
-    LazyVerticalGrid(
-        columns = Adaptive(300.dp),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+    Box(
         modifier = modifier
-            .fillMaxSize()
-            .testTag("forYou:feed"),
-        state = state,
+            .fillMaxSize(),
     ) {
-        onboarding(
-            onboardingUiState = onboardingUiState,
-            onTopicCheckedChanged = onTopicCheckedChanged,
-            saveFollowedTopics = saveFollowedTopics,
-            // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
-            // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
-            interestsItemModifier = Modifier.layout { measurable, constraints ->
-                val placeable = measurable.measure(
-                    constraints.copy(
-                        maxWidth = constraints.maxWidth + 32.dp.roundToPx(),
-                    ),
-                )
-                layout(placeable.width, placeable.height) {
-                    placeable.place(0, 0)
+        LazyVerticalGrid(
+            columns = Adaptive(300.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier
+                .testTag("forYou:feed"),
+            state = state,
+        ) {
+            onboarding(
+                onboardingUiState = onboardingUiState,
+                onTopicCheckedChanged = onTopicCheckedChanged,
+                saveFollowedTopics = saveFollowedTopics,
+                // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
+                // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
+                interestsItemModifier = Modifier.layout { measurable, constraints ->
+                    val placeable = measurable.measure(
+                        constraints.copy(
+                            maxWidth = constraints.maxWidth + 32.dp.roundToPx(),
+                        ),
+                    )
+                    layout(placeable.width, placeable.height) {
+                        placeable.place(0, 0)
+                    }
+                },
+            )
+
+            newsFeed(
+                feedState = feedState,
+                onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
+                onNewsResourceViewed = onNewsResourceViewed,
+                onTopicClick = onTopicClick,
+            )
+
+            item(span = { GridItemSpan(maxLineSpan) }, contentType = "bottomSpacing") {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Add space for the content to clear the "offline" snackbar.
+                    // TODO: Check that the Scaffold handles this correctly in NiaApp
+                    // if (isOffline) Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                 }
-            },
-        )
-
-        newsFeed(
-            feedState = feedState,
-            onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
-            onNewsResourceViewed = onNewsResourceViewed,
-            onTopicClick = onTopicClick,
-        )
-
-        item(span = { GridItemSpan(maxLineSpan) }, contentType = "bottomSpacing") {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                // Add space for the content to clear the "offline" snackbar.
-                // TODO: Check that the Scaffold handles this correctly in NiaApp
-                // if (isOffline) Spacer(modifier = Modifier.height(48.dp))
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
-    }
-    AnimatedVisibility(
-        visible = isSyncing || isFeedLoading || isOnboardingLoading,
-        enter = slideInVertically(
-            initialOffsetY = { fullHeight -> -fullHeight },
-        ) + fadeIn(),
-        exit = slideOutVertically(
-            targetOffsetY = { fullHeight -> -fullHeight },
-        ) + fadeOut(),
-    ) {
-        val loadingContentDescription = stringResource(id = R.string.for_you_loading)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
+        AnimatedVisibility(
+            visible = isSyncing || isFeedLoading || isOnboardingLoading,
+            enter = slideInVertically(
+                initialOffsetY = { fullHeight -> -fullHeight },
+            ) + fadeIn(),
+            exit = slideOutVertically(
+                targetOffsetY = { fullHeight -> -fullHeight },
+            ) + fadeOut(),
         ) {
-            NiaOverlayLoadingWheel(
+            val loadingContentDescription = stringResource(id = R.string.for_you_loading)
+            Box(
                 modifier = Modifier
-                    .align(Alignment.Center),
-                contentDesc = loadingContentDescription,
-            )
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+            ) {
+                NiaOverlayLoadingWheel(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    contentDesc = loadingContentDescription,
+                )
+            }
         }
+        state.DraggableScrollbar(
+            modifier = Modifier
+                .fillMaxHeight()
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterEnd),
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
+            onThumbMoved = state.rememberDraggableScroller(
+                itemsAvailable = itemsAvailable,
+            ),
+        )
     }
     TrackScreenViewEvent(screenName = "ForYou")
     NotificationPermissionEffect()
@@ -298,38 +327,51 @@ private fun TopicSelection(
 
     TrackScrollJank(scrollableState = lazyGridState, stateName = topicSelectionTestTag)
 
-    LazyHorizontalGrid(
-        state = lazyGridState,
-        rows = GridCells.Fixed(3),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(24.dp),
+    Box(
         modifier = modifier
-            // LazyHorizontalGrid has to be constrained in height.
-            // However, we can't set a fixed height because the horizontal grid contains
-            // vertical text that can be rescaled.
-            // When the fontScale is at most 1, we know that the horizontal grid will be at most
-            // 240dp tall, so this is an upper bound for when the font scale is at most 1.
-            // When the fontScale is greater than 1, the height required by the text inside the
-            // horizontal grid will increase by at most the same factor, so 240sp is a valid
-            // upper bound for how much space we need in that case.
-            // The maximum of these two bounds is therefore a valid upper bound in all cases.
-            .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
-            .fillMaxWidth()
-            .testTag(topicSelectionTestTag),
+            .fillMaxWidth(),
     ) {
-        items(
-            items = onboardingUiState.topics,
-            key = { it.topic.id },
+        LazyHorizontalGrid(
+            state = lazyGridState,
+            rows = GridCells.Fixed(3),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(24.dp),
+            modifier = Modifier
+                // LazyHorizontalGrid has to be constrained in height.
+                // However, we can't set a fixed height because the horizontal grid contains
+                // vertical text that can be rescaled.
+                // When the fontScale is at most 1, we know that the horizontal grid will be at most
+                // 240dp tall, so this is an upper bound for when the font scale is at most 1.
+                // When the fontScale is greater than 1, the height required by the text inside the
+                // horizontal grid will increase by at most the same factor, so 240sp is a valid
+                // upper bound for how much space we need in that case.
+                // The maximum of these two bounds is therefore a valid upper bound in all cases.
+                .heightIn(max = max(240.dp, with(LocalDensity.current) { 240.sp.toDp() }))
+                .fillMaxWidth()
+                .testTag(topicSelectionTestTag),
         ) {
-            SingleTopicButton(
-                name = it.topic.name,
-                topicId = it.topic.id,
-                imageUrl = it.topic.imageUrl,
-                isSelected = it.isFollowed,
-                onClick = onTopicCheckedChanged,
-            )
+            items(
+                items = onboardingUiState.topics,
+                key = { it.topic.id },
+            ) {
+                SingleTopicButton(
+                    name = it.topic.name,
+                    topicId = it.topic.id,
+                    imageUrl = it.topic.imageUrl,
+                    isSelected = it.isFollowed,
+                    onClick = onTopicCheckedChanged,
+                )
+            }
         }
+        lazyGridState.DecorativeScrollbar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .align(Alignment.BottomStart),
+            state = lazyGridState.scrollbarState(itemsAvailable = onboardingUiState.topics.size),
+            orientation = Orientation.Horizontal,
+        )
     }
 }
 
@@ -440,6 +482,26 @@ private fun DeepLinkEffect(
             toolbarColor = backgroundColor,
         )
     }
+}
+
+private fun feedItemsSize(
+    feedState: NewsFeedUiState,
+    onboardingUiState: OnboardingUiState,
+): Int {
+    val feedSize = when (feedState) {
+        NewsFeedUiState.Loading -> 1
+        is NewsFeedUiState.Success -> feedState.feed.size
+    }
+    val onboardingSize = when (onboardingUiState) {
+        OnboardingUiState.LoadFailed,
+        OnboardingUiState.NotShown,
+        -> 0
+
+        OnboardingUiState.Loading,
+        is OnboardingUiState.Shown,
+        -> 1
+    }
+    return feedSize + onboardingSize
 }
 
 @DevicePreviews
