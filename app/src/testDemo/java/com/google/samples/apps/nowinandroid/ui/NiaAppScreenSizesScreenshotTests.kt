@@ -62,6 +62,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
+// Configure Robolectric to use a very large screen size that can fit all of the test sizes.
+// This allows enough room to render the content under test without clipping or scaling.
 @Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp", sdk = [33])
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
