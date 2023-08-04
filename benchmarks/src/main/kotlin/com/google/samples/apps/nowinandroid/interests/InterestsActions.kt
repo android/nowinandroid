@@ -20,7 +20,6 @@ import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import com.google.samples.apps.nowinandroid.flingElementDownUp
-import com.google.samples.apps.nowinandroid.waitAndFindObject
 
 fun MacrobenchmarkScope.goToInterestsScreen() {
     device.findObject(By.text("Interests")).click()
@@ -35,7 +34,8 @@ fun MacrobenchmarkScope.goToInterestsScreen() {
 }
 
 fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
-    val topicsList = device.waitAndFindObject(By.res("interests:topics"), 2_000)
+    device.wait(Until.hasObject(By.res("interests:topics")), 2_000)
+    val topicsList = device.findObject(By.res("interests:topics"))
     device.flingElementDownUp(topicsList)
 }
 

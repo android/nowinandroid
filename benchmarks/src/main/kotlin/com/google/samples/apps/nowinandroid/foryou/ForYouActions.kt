@@ -21,7 +21,9 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
+import org.junit.Assert.fail
 import com.google.samples.apps.nowinandroid.waitAndFindObject
+import org.junit.Assert.fail
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
@@ -49,6 +51,9 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
     var visited = 0
 
     while (visited < 3) {
+        if (topics.childCount == 0) {
+            fail("No topics found, can't generate profile for ForYou page.")
+        }
         // Selecting some topics, which will populate items in the feed.
         val topic = topics.children[index % topics.childCount]
         // Find the checkable element to figure out whether it's checked or not
