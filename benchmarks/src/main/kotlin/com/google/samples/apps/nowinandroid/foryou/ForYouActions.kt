@@ -21,7 +21,6 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
-import org.junit.Assert.fail
 import com.google.samples.apps.nowinandroid.waitAndFindObject
 import org.junit.Assert.fail
 

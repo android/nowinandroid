@@ -33,6 +33,6 @@ class StartupBaselineProfile {
             PACKAGE_NAME,
             includeInStartupProfile = true,
         ) {
-            startActivityAndWait()
+            startActivityAndWait() // Just wait
         }
 }
