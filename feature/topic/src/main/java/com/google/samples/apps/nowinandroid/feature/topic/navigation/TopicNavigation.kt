@@ -26,17 +26,20 @@ import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
 import java.net.URLDecoder
 import java.net.URLEncoder
+import kotlin.text.Charsets.UTF_8
+
+private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
 internal const val topicIdArg = "topicId"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle) :
-        this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), "UTF-8"))
+        this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), URL_CHARACTER_ENCODING))
 }
 
 fun NavController.navigateToTopic(topicId: String) {
-    val encodedId = URLEncoder.encode(topicId, "UTF-8")
+    val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
     this.navigate("topic_route/$encodedId") {
         launchSingleTop = true
     }
