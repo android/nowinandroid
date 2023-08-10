@@ -18,19 +18,30 @@ package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter.State.Error
+import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.google.samples.apps.nowinandroid.core.designsystem.R
+import com.google.samples.apps.nowinandroid.core.designsystem.R.drawable
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 
 /**
@@ -44,27 +55,34 @@ fun DynamicAsyncImage(
     placeholder: Painter = painterResource(R.drawable.ic_placeholder_default),
 ) {
     val iconTint = LocalTintTheme.current.iconTint
-    SubcomposeAsyncImage(
-        error = {
-            Image(
-                painter = placeholder,
-                contentDescription = "placeholder image",
-            )
-        },
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    val imageLoader = rememberAsyncImagePainter(
         model = imageUrl,
-        contentDescription = contentDescription,
-        colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
-        modifier = modifier,
-        loading = {
-            Box(
-                modifier = Modifier,
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    Modifier.size(80.dp),
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            }
+        onState = { state ->
+            isLoading = state is Loading
+            isError = state is Error
         },
     )
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        if (isLoading) {
+            // Display a progress bar while loading
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(80.dp),
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+        Image(
+            contentScale = ContentScale.Crop,
+            painter = if (isError.not()) imageLoader else placeholder,
+            contentDescription = contentDescription,
+            colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
+            modifier = modifier,
+        )
+    }
 }

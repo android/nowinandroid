@@ -44,6 +44,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +60,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
+import com.google.samples.apps.nowinandroid.core.designsystem.R.drawable
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -74,7 +80,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
-import com.google.samples.apps.nowinandroid.core.designsystem.R as DesignsystemR
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved
@@ -149,32 +154,41 @@ fun NewsResourceCardExpanded(
 fun NewsResourceHeaderImage(
     headerImageUrl: String?,
 ) {
-    SubcomposeAsyncImage(
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    val imageLoader = rememberAsyncImagePainter(
+        model = headerImageUrl,
+        onState = { state ->
+            isLoading = state is AsyncImagePainter.State.Loading
+            isError = state is AsyncImagePainter.State.Error
+        },
+    )
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp),
-        contentScale = ContentScale.Crop,
-        model = headerImageUrl,
-        // TODO b/226661685: Investigate using alt text of  image to populate content description
-        contentDescription = null, // decorative image,
-        error = {
-                Image(
-                    painter = painterResource(DesignsystemR.drawable.ic_placeholder_default),
-                    contentDescription = "placeholder image",
-                )
-        },
-        loading = {
-            Box(
-                modifier = Modifier.size(180.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    Modifier.size(80.dp),
-                    color = MaterialTheme.colorScheme.tertiary,
-                )
-            }
-        },
-    )
+        contentAlignment = Alignment.Center,
+    ) {
+        if (isLoading) {
+            // Display a progress bar while loading
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(80.dp),
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp),
+            contentScale = ContentScale.Crop,
+            painter = if (isError.not()) imageLoader else painterResource(drawable.ic_placeholder_default),
+            // TODO b/226661685: Investigate using alt text of  image to populate content description
+            contentDescription = null, // decorative image,
+        )
+    }
 }
 
 @Composable
@@ -249,7 +263,6 @@ fun dateFormatted(publishDate: Instant): String {
         .withLocale(Locale.getDefault())
         .withZone(zoneId)
         .format(publishDate.toJavaInstant())
-
 }
 
 @Composable
