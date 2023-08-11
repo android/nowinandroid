@@ -43,6 +43,6 @@ class MainActivityViewModel @Inject constructor(
 }
 
 sealed interface MainActivityUiState {
-    object Loading : MainActivityUiState
+    data object Loading : MainActivityUiState
     data class Success(val userData: UserData) : MainActivityUiState
 }

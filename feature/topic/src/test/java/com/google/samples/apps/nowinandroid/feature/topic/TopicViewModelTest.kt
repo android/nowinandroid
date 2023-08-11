@@ -22,7 +22,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.testing.decoder.FakeStringDecoder
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -63,7 +62,6 @@ class TopicViewModelTest {
     fun setup() {
         viewModel = TopicViewModel(
             savedStateHandle = SavedStateHandle(mapOf(topicIdArg to testInputTopics[0].topic.id)),
-            stringDecoder = FakeStringDecoder(),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
             userNewsResourceRepository = userNewsResourceRepository,
