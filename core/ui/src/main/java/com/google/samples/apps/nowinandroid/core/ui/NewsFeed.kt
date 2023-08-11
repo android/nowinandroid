@@ -112,7 +112,7 @@ sealed interface NewsFeedUiState {
     /**
      * The feed is still loading.
      */
-    object Loading : NewsFeedUiState
+    data object Loading : NewsFeedUiState
 
     /**
      * The feed is loaded with the given list of news resources.
