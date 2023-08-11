@@ -28,6 +28,9 @@ jobs:
 
       - name: Build app
         run: ./gradlew :app:assembleDemoRelease
+               -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+               -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+
 
       - name: Create Release
         id: create_release
