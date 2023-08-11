@@ -128,10 +128,11 @@ class NiaAppState(
             }
             return when (navigatorAttached) {
                 false -> emptyList()
-                true -> composeNavigator
-                    .backStack
-                    .collectAsStateWithLifecycle()
-                    .value
+                true ->
+                    composeNavigator
+                        .backStack
+                        .collectAsStateWithLifecycle()
+                        .value
             }
         }
 
