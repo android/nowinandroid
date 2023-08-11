@@ -21,7 +21,6 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
-import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -45,13 +44,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryAndroidComponentsExtension> {
                 configurePrintApksTask(this)
                 disableUnnecessaryAndroidTests(target)
-            }
-            configurations.configureEach {
-                resolutionStrategy {
-                    force(libs.findLibrary("junit4").get())
-                    // Temporary workaround for https://issuetracker.google.com/174733673
-                    force("org.objenesis:objenesis:2.6")
-                }
             }
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
