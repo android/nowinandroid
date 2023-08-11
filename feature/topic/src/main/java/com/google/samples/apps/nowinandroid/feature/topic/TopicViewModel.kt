@@ -23,7 +23,6 @@ import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQue
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.decoder.StringDecoder
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -43,13 +42,12 @@ import javax.inject.Inject
 @HiltViewModel
 class TopicViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    stringDecoder: StringDecoder,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    private val topicArgs: TopicArgs = TopicArgs(savedStateHandle, stringDecoder)
+    private val topicArgs: TopicArgs = TopicArgs(savedStateHandle)
 
     val topicId = topicArgs.topicId
 
