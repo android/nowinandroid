@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.allowNotifications
 import com.google.samples.apps.nowinandroid.bookmarks.goToBookmarksScreen
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
@@ -39,7 +40,7 @@ class BaselineProfileGenerator {
             // This block defines the app's critical user journey. Here we are interested in
             // optimizing for app startup. But you can also navigate and scroll
             // through your most important UI.
-
+            allowNotifications()
             pressHome()
             startActivityAndWait()
 
