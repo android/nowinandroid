@@ -59,8 +59,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavBackStackEntry
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
@@ -146,7 +145,7 @@ fun NiaApp(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
+                            backstackEntries = appState.backStackEntries,
                             modifier = Modifier.testTag("NiaBottomBar"),
                         )
                     }
@@ -168,7 +167,7 @@ fun NiaApp(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
+                            backstackEntries = appState.backStackEntries,
                             modifier = Modifier
                                 .testTag("NiaNavRail")
                                 .safeDrawingPadding(),
@@ -219,12 +218,12 @@ private fun NiaNavRail(
     destinations: List<TopLevelDestination>,
     destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
+    backstackEntries: List<NavBackStackEntry>,
     modifier: Modifier = Modifier,
 ) {
     NiaNavigationRail(modifier = modifier) {
         destinations.forEach { destination ->
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+            val selected = backstackEntries.isTopLevelDestinationInHierarchy(destination)
             val hasUnread = destinationsWithUnreadResources.contains(destination)
             NiaNavigationRailItem(
                 selected = selected,
@@ -253,7 +252,7 @@ private fun NiaBottomBar(
     destinations: List<TopLevelDestination>,
     destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
+    backstackEntries: List<NavBackStackEntry>,
     modifier: Modifier = Modifier,
 ) {
     NiaNavigationBar(
@@ -261,7 +260,7 @@ private fun NiaBottomBar(
     ) {
         destinations.forEach { destination ->
             val hasUnread = destinationsWithUnreadResources.contains(destination)
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+            val selected = backstackEntries.isTopLevelDestinationInHierarchy(destination)
             NiaNavigationBarItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
@@ -303,7 +302,30 @@ private fun Modifier.notificationDot(): Modifier =
         }
     }
 
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
-    this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) ?: false
-    } ?: false
+/**
+ * Checks the backstack to determine the current [TopLevelDestination] in focus.
+ */
+private fun List<NavBackStackEntry>.isTopLevelDestinationInHierarchy(
+    destination: TopLevelDestination,
+): Boolean = when (destination) {
+    // The FOR_YOU destination is always in the back stack since it is the
+    // start destination in the nav graph. Check that other top level destinations are not present.
+    TopLevelDestination.FOR_YOU -> none { entry ->
+        TopLevelDestination.BOOKMARKS.matches(entry) || TopLevelDestination.INTERESTS.matches(entry)
+    }
+    // The presence of either of these top level destinations in the back stack indicates
+    // that is is the current top level.
+    TopLevelDestination.BOOKMARKS,
+    TopLevelDestination.INTERESTS,
+    -> any(destination::matches)
+}
+
+/**
+ * Checks if a [TopLevelDestination] matches a [NavBackStackEntry]
+ */
+private fun TopLevelDestination.matches(
+    navBackStackEntry: NavBackStackEntry,
+) = navBackStackEntry.destination.route?.contains(
+    other = name,
+    ignoreCase = true,
+) ?: false
