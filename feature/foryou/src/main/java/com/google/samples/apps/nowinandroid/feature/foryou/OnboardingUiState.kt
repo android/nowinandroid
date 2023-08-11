@@ -25,17 +25,17 @@ sealed interface OnboardingUiState {
     /**
      * The onboarding state is loading.
      */
-    object Loading : OnboardingUiState
+    data object Loading : OnboardingUiState
 
     /**
      * The onboarding state was unable to load.
      */
-    object LoadFailed : OnboardingUiState
+    data object LoadFailed : OnboardingUiState
 
     /**
      * There is no onboarding state.
      */
-    object NotShown : OnboardingUiState
+    data object NotShown : OnboardingUiState
 
     /**
      * There is a onboarding state, with the given lists of topics.
