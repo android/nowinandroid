@@ -19,10 +19,7 @@ package com.google.samples.apps.nowinandroid.startup
 import androidx.benchmark.macro.BaselineProfileMode.Disable
 import androidx.benchmark.macro.BaselineProfileMode.Require
 import androidx.benchmark.macro.CompilationMode
-import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupMode.COLD
-import androidx.benchmark.macro.StartupMode.HOT
-import androidx.benchmark.macro.StartupMode.WARM
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -34,31 +31,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
+ * Enables app startups from various states of baseline profile or [CompilationMode]s.
  * Run this benchmark from Studio to see startup measurements, and captured system traces
  * for investigating your app's performance from a cold state.
  */
 @RunWith(AndroidJUnit4ClassRunner::class)
-class ColdStartupBenchmark : AbstractStartupBenchmark(COLD)
-
-/**
- * Run this benchmark from Studio to see startup measurements, and captured system traces
- * for investigating your app's performance from a warm state.
- */
-@RunWith(AndroidJUnit4ClassRunner::class)
-class WarmStartupBenchmark : AbstractStartupBenchmark(WARM)
-
-/**
- * Run this benchmark from Studio to see startup measurements, and captured system traces
- * for investigating your app's performance from a hot state.
- */
-@RunWith(AndroidJUnit4ClassRunner::class)
-class HotStartupBenchmark : AbstractStartupBenchmark(HOT)
-
-/**
- * Base class for benchmarks with different startup modes.
- * Enables app startups from various states of baseline profile or [CompilationMode]s.
- */
-abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
+class StartupBenchmark {
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
@@ -81,9 +59,10 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
         metrics = listOf(StartupTimingMetric()),
         compilationMode = compilationMode,
         iterations = 10,
-        startupMode = startupMode,
+        startupMode = COLD,
         setupBlock = {
             pressHome()
+            allowNotifications()
         },
     ) {
         startActivityAndWait()
