@@ -107,7 +107,8 @@ class NiaAppState(
 
     val backStackEntries: List<NavBackStackEntry>
         @Composable get() {
-            // TODO: Read backStack directly from the navController when b/295553995 is resolved.
+            // TODO: Read backStack directly from the navController when
+            //  https://issuetracker.google.com/issues/295553995 is resolved.
             // Get compose navigator so backstack can be read
             val composeNavigator = remember {
                 navController.navigatorProvider[ComposeNavigator::class]
