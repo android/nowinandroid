@@ -434,7 +434,6 @@ fun TopicIcon(
     modifier: Modifier = Modifier,
 ) {
     DynamicAsyncImage(
-        // TODO b/228077205, show loading image visual instead of static placeholder
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
         imageUrl = imageUrl,
         contentDescription = null, // decorative
