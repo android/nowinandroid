@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.lint.designsystem
+package com.google.samples.apps.nowinandroid.lint
 
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
+import com.google.samples.apps.nowinandroid.lint.designsystem.DesignSystemDetector
 
-/**
- * An issue registry that checks for incorrect usages of Compose Material APIs over equivalents in
- * the Now in Android design system module.
- */
-class DesignSystemIssueRegistry : IssueRegistry() {
-    override val issues = listOf(DesignSystemDetector.ISSUE)
+class NiaIssueRegistry : IssueRegistry() {
+
+    override val issues = listOf(
+        DesignSystemDetector.ISSUE,
+    )
 
     override val api: Int = CURRENT_API
 
