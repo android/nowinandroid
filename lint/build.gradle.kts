@@ -29,7 +29,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
@@ -38,4 +38,7 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.lint.api)
+    testImplementation(libs.lint.checks)
+    testImplementation(libs.lint.tests)
+    testImplementation(kotlin("test"))
 }
