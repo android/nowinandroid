@@ -41,11 +41,8 @@ import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterestsGraph
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -98,14 +95,6 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            forYouNavigationRoute -> FOR_YOU
-            bookmarksRoute -> BOOKMARKS
-            interestsRoute -> INTERESTS
-            else -> null
-        }
-
-    val backStackEntries: List<NavBackStackEntry>
         @Composable get() {
             // TODO: Read backStack directly from the navController when
             //  https://issuetracker.google.com/issues/295553995 is resolved.
@@ -128,12 +117,13 @@ class NiaAppState(
                 }
             }
             return when (navigatorAttached) {
-                false -> emptyList()
+                false -> null
                 true ->
                     composeNavigator
                         .backStack
                         .collectAsStateWithLifecycle()
                         .value
+                        .currentTopLevelDestination(topLevelDestinations)
             }
         }
 
@@ -226,3 +216,28 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
         }
     }
 }
+
+/**
+ * Walks the backstack to determine the current [TopLevelDestination] in focus.
+ */
+private fun List<NavBackStackEntry>.currentTopLevelDestination(
+    topLevelDestinations: List<TopLevelDestination>,
+): TopLevelDestination? {
+    // Walk the back stack from the top to find the first entry that matches a
+    // top level destination
+    for (index in lastIndex downTo 0) {
+        val firstMatch = topLevelDestinations.firstOrNull(this[index]::matches)
+        if (firstMatch != null) return firstMatch
+    }
+    return null
+}
+
+/**
+ * Checks if a [NavBackStackEntry] matches a [TopLevelDestination]
+ */
+private fun NavBackStackEntry.matches(
+    topLevelDestination: TopLevelDestination,
+) = destination.route?.contains(
+    other = topLevelDestination.name,
+    ignoreCase = true,
+) ?: false
