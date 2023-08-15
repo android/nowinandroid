@@ -277,8 +277,7 @@ private fun NiaBottomBar(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = (if (hasUnread) Modifier.notificationDot() else Modifier)
-                    .testTag(destination.name),
+                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }

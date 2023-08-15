@@ -17,12 +17,16 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnyChild
+import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -35,7 +39,9 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import dagger.hilt.android.testing.BindValue
@@ -88,6 +94,12 @@ class NavigationTest {
 
     @Inject
     lateinit var topicsRepository: TopicsRepository
+
+    @Inject
+    lateinit var newsRepository: NewsRepository
+
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
 
     private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
@@ -284,4 +296,56 @@ class NavigationTest {
             onNodeWithTag("interests:topics").assertDoesNotExist()
         }
     }
+
+    @Test
+    fun navigationBar_has_right_top_level_destination_selected() = runTest {
+        val newsResourceToBookmark = newsRepository.getNewsResources()
+            .first()
+            .first { newsResource ->
+                newsResource.topics.any { it.name == sampleTopic }
+            }
+
+        userDataRepository.updateNewsResourceBookmark(
+            newsResourceId = newsResourceToBookmark.id,
+            bookmarked = true,
+        )
+        composeTestRule.apply {
+            onNodeWithText(interests).performClick()
+
+            // assert interests tab is selected
+            assertTabSelected(interests)
+
+            // Select a topic
+            onNodeWithTag("interests:topics").performScrollToNode(hasText(sampleTopic))
+            onNodeWithText(sampleTopic).performClick()
+
+            // assert interests tab is still selected
+            assertTabSelected(interests)
+
+            // Switch to bookmarks tab
+            onNodeWithText(saved).performClick()
+
+            // assert bookmarks tab selection
+            assertTabSelected(saved)
+
+            // tap on a topic
+            onNode(hasScrollToNodeAction()).performScrollToNode(
+                hasText(
+                    text = sampleTopic,
+                    ignoreCase = true,
+                ),
+            )
+            onNodeWithText(
+                text = sampleTopic,
+                ignoreCase = true,
+            ).performClick()
+
+            // assert bookmarks tab is still selected
+            assertTabSelected(saved)
+        }
+    }
 }
+
+private fun SemanticsNodeInteractionsProvider.assertTabSelected(text: String) = onNode(
+    hasAnyChild(hasText(text)) and hasAnyChild(isSelected()),
+).assertExists()

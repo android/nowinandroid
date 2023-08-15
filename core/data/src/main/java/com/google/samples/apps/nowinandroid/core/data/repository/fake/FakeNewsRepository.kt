@@ -21,12 +21,14 @@ import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
+import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -48,24 +50,39 @@ class FakeNewsRepository @Inject constructor(
         query: NewsResourceQuery,
     ): Flow<List<NewsResource>> =
         flow {
+            val topicIdsToTopics = datasource.getTopics().associateBy(NetworkTopic::id)
+            val networkNewsResources = datasource
+                .getNewsResources()
+                .filter { networkNewsResource ->
+                    // Filter out any news resources which don't match the current query.
+                    // If no query parameters (filterTopicIds or filterNewsIds) are specified
+                    // then the news resource is returned.
+                    listOfNotNull(
+                        true,
+                        query.filterNewsIds?.contains(networkNewsResource.id),
+                        query.filterTopicIds?.let { filterTopicIds ->
+                            networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
+                        },
+                    )
+                        .all(true::equals)
+                }
+            val newsResourceIdToTopicIds = networkNewsResources.associateBy(
+                keySelector = NetworkNewsResource::id,
+                valueTransform = NetworkNewsResource::topics,
+            )
             emit(
-                datasource
-                    .getNewsResources()
-                    .filter { networkNewsResource ->
-                        // Filter out any news resources which don't match the current query.
-                        // If no query parameters (filterTopicIds or filterNewsIds) are specified
-                        // then the news resource is returned.
-                        listOfNotNull(
-                            true,
-                            query.filterNewsIds?.contains(networkNewsResource.id),
-                            query.filterTopicIds?.let { filterTopicIds ->
-                                networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
-                            },
-                        )
-                            .all(true::equals)
-                    }
+                networkNewsResources
                     .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel),
+                    .map(NewsResourceEntity::asExternalModel)
+                    .map { newsResource ->
+                        newsResource.copy(
+                            topics = newsResourceIdToTopicIds[newsResource.id]
+                                ?.map(topicIdsToTopics::getValue)
+                                ?.map(NetworkTopic::asEntity)
+                                ?.map(TopicEntity::asExternalModel)
+                                ?: emptyList(),
+                        )
+                    },
             )
         }.flowOn(ioDispatcher)
 
