@@ -50,7 +50,6 @@ class FakeNewsRepository @Inject constructor(
         query: NewsResourceQuery,
     ): Flow<List<NewsResource>> =
         flow {
-            val topicIdsToTopics = datasource.getTopics().associateBy(NetworkTopic::id)
             val networkNewsResources = datasource
                 .getNewsResources()
                 .filter { networkNewsResource ->
@@ -69,6 +68,9 @@ class FakeNewsRepository @Inject constructor(
             val newsResourceIdToTopicIds = networkNewsResources.associateBy(
                 keySelector = NetworkNewsResource::id,
                 valueTransform = NetworkNewsResource::topics,
+            )
+            val topicIdsToTopics = datasource.getTopics().associateBy(
+                keySelector = NetworkTopic::id
             )
             emit(
                 networkNewsResources
