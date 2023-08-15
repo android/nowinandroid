@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.core.data
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
@@ -45,7 +44,7 @@ class UserNewsResourceTest {
             url = "Test URL",
             headerImageUrl = "Test image URL",
             publishDate = Clock.System.now(),
-            type = Article,
+            type = "Article",
             topics = listOf(
                 Topic(
                     id = "T1",

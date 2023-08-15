@@ -19,8 +19,6 @@ package com.google.samples.apps.nowinandroid.core.ui
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
@@ -97,7 +95,7 @@ object PreviewParameterData {
                     second = 0,
                     nanosecond = 0,
                 ).toInstant(TimeZone.UTC),
-                type = NewsResourceType.Codelab,
+                type = "Codelab",
                 topics = listOf(topics[2]),
             ),
             userData = userData,
@@ -113,7 +111,7 @@ object PreviewParameterData {
                 url = "https://youtu.be/-fJ6poHQrjM",
                 headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
                 publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-                type = Video,
+                type = "Video",
                 topics = topics.take(2),
             ),
             userData = userData,
@@ -129,7 +127,7 @@ object PreviewParameterData {
                 url = "https://youtu.be/ZARz0pjm5YM",
                 headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
                 publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-                type = Video,
+                type = "Video",
                 topics = listOf(topics[2]),
             ),
             userData = userData,

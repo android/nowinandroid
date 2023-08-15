@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.network.fake
 
 import JvmUnitTestFakeAssetManager
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -81,7 +80,7 @@ class FakeNiaNetworkDataSourceTest {
                     second = 0,
                     nanosecond = 0,
                 ).toInstant(TimeZone.UTC),
-                type = Codelab,
+                type = "Codelab",
                 topics = listOf("2", "3", "10"),
             ),
             /* ktlint-enable max-line-length */

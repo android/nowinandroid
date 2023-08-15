@@ -28,6 +28,6 @@ data class NewsResource(
     val url: String,
     val headerImageUrl: String?,
     val publishDate: Instant,
-    val type: NewsResourceType,
+    val type: String,
     val topics: List<Topic>,
 )
