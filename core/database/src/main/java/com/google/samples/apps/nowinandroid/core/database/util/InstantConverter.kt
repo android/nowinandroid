@@ -28,4 +28,3 @@ class InstantConverter {
     fun instantToLong(instant: Instant?): Long? =
         instant?.toEpochMilliseconds()
 }
-
