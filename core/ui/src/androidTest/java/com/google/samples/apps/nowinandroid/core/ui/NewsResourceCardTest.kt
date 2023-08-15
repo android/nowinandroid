@@ -54,7 +54,7 @@ class NewsResourceCardTest {
                 composeTestRule.activity.getString(
                     R.string.card_meta_data_text,
                     dateFormatted,
-                    newsWithKnownResourceType.type.displayText,
+                    newsWithKnownResourceType.type,
                 ),
             )
             .assertExists()
