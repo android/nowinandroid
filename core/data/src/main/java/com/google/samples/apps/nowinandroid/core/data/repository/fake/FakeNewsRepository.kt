@@ -70,7 +70,7 @@ class FakeNewsRepository @Inject constructor(
                 valueTransform = NetworkNewsResource::topics,
             )
             val topicIdsToTopics = datasource.getTopics().associateBy(
-                keySelector = NetworkTopic::id
+                keySelector = NetworkTopic::id,
             )
             emit(
                 networkNewsResources
