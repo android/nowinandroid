@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.data.model
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Article
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -56,7 +55,7 @@ class NetworkEntityKtTest {
                 url = "url",
                 headerImageUrl = "headerImageUrl",
                 publishDate = Instant.fromEpochMilliseconds(1),
-                type = Article,
+                type = "Article",
             )
         val entity = networkModel.asEntity()
 
@@ -66,7 +65,7 @@ class NetworkEntityKtTest {
         assertEquals("url", entity.url)
         assertEquals("headerImageUrl", entity.headerImageUrl)
         assertEquals(Instant.fromEpochMilliseconds(1), entity.publishDate)
-        assertEquals(Article, entity.type)
+        assertEquals("Article", entity.type)
 
         val expandedNetworkModel =
             NetworkNewsResourceExpanded(
@@ -76,7 +75,7 @@ class NetworkEntityKtTest {
                 url = "url",
                 headerImageUrl = "headerImageUrl",
                 publishDate = Instant.fromEpochMilliseconds(1),
-                type = Article,
+                type = "Article",
             )
 
         val entityFromExpanded = expandedNetworkModel.asEntity()
@@ -87,6 +86,6 @@ class NetworkEntityKtTest {
         assertEquals("url", entityFromExpanded.url)
         assertEquals("headerImageUrl", entityFromExpanded.headerImageUrl)
         assertEquals(Instant.fromEpochMilliseconds(1), entityFromExpanded.publishDate)
-        assertEquals(Article, entityFromExpanded.type)
+        assertEquals("Article", entityFromExpanded.type)
     }
 }

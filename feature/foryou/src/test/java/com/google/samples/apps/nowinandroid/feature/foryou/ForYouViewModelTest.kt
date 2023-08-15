@@ -23,7 +23,6 @@ import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNe
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
@@ -545,7 +544,7 @@ private val sampleNewsResources = listOf(
         url = "https://youtu.be/-fJ6poHQrjM",
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = Video,
+        type = "Video",
         topics = listOf(
             Topic(
                 id = "0",
@@ -566,7 +565,7 @@ private val sampleNewsResources = listOf(
         url = "https://youtu.be/ZARz0pjm5YM",
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-        type = Video,
+        type = "Video",
         topics = listOf(
             Topic(
                 id = "1",
@@ -585,7 +584,7 @@ private val sampleNewsResources = listOf(
         url = "https://youtu.be/r5JgIyS3t3s",
         headerImageUrl = "https://i.ytimg.com/vi/r5JgIyS3t3s/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
-        type = Video,
+        type = "Video",
         topics = listOf(
             Topic(
                 id = "1",

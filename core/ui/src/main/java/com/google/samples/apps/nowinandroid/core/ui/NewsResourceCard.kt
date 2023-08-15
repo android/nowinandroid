@@ -68,7 +68,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
@@ -264,12 +263,12 @@ fun dateFormatted(publishDate: Instant): String {
 @Composable
 fun NewsResourceMetaData(
     publishDate: Instant,
-    resourceType: NewsResourceType,
+    resourceType: String,
 ) {
     val formattedDate = dateFormatted(publishDate)
     Text(
-        if (resourceType != NewsResourceType.Unknown) {
-            stringResource(R.string.card_meta_data_text, formattedDate, resourceType.displayText)
+        if (resourceType.isNotEmpty()) {
+            stringResource(R.string.card_meta_data_text, formattedDate, resourceType)
         } else {
             formattedDate
         },
