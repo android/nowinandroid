@@ -99,7 +99,7 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                 url = "https://developer.android.com/jetpack/androidx/versions/all-channel",
                 headerImageUrl = "",
                 publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
-                type = "Unknown",
+                type = "",
                 topics = listOf(topicsTestData[2]),
             ),
             userData = userData,

@@ -61,13 +61,13 @@ class NewsResourceCardTest {
     }
 
     @Test
-    fun testMetaDataDisplay_withUnknownResource() {
-        val newsWithUnknownResourceType = userNewsResourcesTestData[3]
+    fun testMetaDataDisplay_withEmptyResourceType() {
+        val newsWithEmptyResourceType = userNewsResourcesTestData[3]
         var dateFormatted = ""
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = newsWithUnknownResourceType,
+                userNewsResource = newsWithEmptyResourceType,
                 isBookmarked = false,
                 hasBeenViewed = false,
                 onToggleBookmark = {},
@@ -75,11 +75,11 @@ class NewsResourceCardTest {
                 onTopicClick = {},
             )
 
-            dateFormatted = dateFormatted(publishDate = newsWithUnknownResourceType.publishDate)
+            dateFormatted = dateFormatted(publishDate = newsWithEmptyResourceType.publishDate)
         }
 
         composeTestRule
-            .onNodeWithText(dateFormatted, substring = true)
+            .onNodeWithText(dateFormatted)
             .assertIsDisplayed()
     }
 
