@@ -267,7 +267,7 @@ fun NewsResourceMetaData(
 ) {
     val formattedDate = dateFormatted(publishDate)
     Text(
-        if (resourceType.isNotEmpty()) {
+        if (resourceType.isNotBlank()) {
             stringResource(R.string.card_meta_data_text, formattedDate, resourceType)
         } else {
             formattedDate
