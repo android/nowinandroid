@@ -34,7 +34,7 @@ class NewsResourceCardTest {
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
         val newsWithKnownResourceType = userNewsResourcesTestData[0]
-        var dateFormatted = ""
+        lateinit var dateFormatted: String
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
@@ -63,7 +63,7 @@ class NewsResourceCardTest {
     @Test
     fun testMetaDataDisplay_withEmptyResourceType() {
         val newsWithEmptyResourceType = userNewsResourcesTestData[3]
-        var dateFormatted = ""
+        lateinit var dateFormatted: String
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
