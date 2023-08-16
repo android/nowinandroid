@@ -32,7 +32,7 @@ class PopulatedNewsResourceKtTest {
                 content = "Hilt",
                 url = "url",
                 headerImageUrl = "headerImageUrl",
-                type = "Video",
+                type = "Video 📺",
                 publishDate = Instant.fromEpochMilliseconds(1),
             ),
             topics = listOf(
@@ -55,7 +55,7 @@ class PopulatedNewsResourceKtTest {
                 content = "Hilt",
                 url = "url",
                 headerImageUrl = "headerImageUrl",
-                type = "Video",
+                type = "Video 📺",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 topics = listOf(
                     Topic(

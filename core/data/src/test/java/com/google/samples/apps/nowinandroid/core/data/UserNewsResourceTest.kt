@@ -44,7 +44,7 @@ class UserNewsResourceTest {
             url = "Test URL",
             headerImageUrl = "Test image URL",
             publishDate = Clock.System.now(),
-            type = "Article",
+            type = "Article 📚",
             topics = listOf(
                 Topic(
                     id = "T1",

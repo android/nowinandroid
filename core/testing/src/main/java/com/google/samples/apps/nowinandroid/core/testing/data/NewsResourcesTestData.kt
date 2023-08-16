@@ -41,7 +41,7 @@ val newsResourcesTestData: List<NewsResource> = listOf(
         url = "https://youtu.be/-fJ6poHQrjM",
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = "Video",
+        type = "Video 📺",
         topics = listOf(topicsTestData[0], topicsTestData[1]),
     ),
     NewsResource(
@@ -54,7 +54,7 @@ val newsResourcesTestData: List<NewsResource> = listOf(
         url = "https://youtu.be/ZARz0pjm5YM",
         headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-        type = "Video",
+        type = "Video 📺",
         topics = listOf(topicsTestData[2]),
     ),
     NewsResource(

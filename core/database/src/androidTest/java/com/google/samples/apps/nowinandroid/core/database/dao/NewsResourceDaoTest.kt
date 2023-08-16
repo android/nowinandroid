@@ -304,5 +304,5 @@ private fun testNewsResource(
     url = "",
     headerImageUrl = "",
     publishDate = Instant.fromEpochMilliseconds(millisSinceEpoch),
-    type = "DAC",
+    type = "Article 📚",
 )
