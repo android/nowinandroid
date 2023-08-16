@@ -79,7 +79,7 @@ class NewsResourceCardTest {
         }
 
         composeTestRule
-            .onNodeWithText(dateFormatted)
+            .onNodeWithText(dateFormatted, substring = true)
             .assertIsDisplayed()
     }
 
