@@ -18,9 +18,6 @@ package com.google.samples.apps.nowinandroid.core.testing.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Codelab
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Unknown
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -56,7 +53,7 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                     second = 0,
                     nanosecond = 0,
                 ).toInstant(TimeZone.UTC),
-                type = Codelab,
+                type = "Codelab",
                 topics = listOf(topicsTestData[2]),
             ),
             userData = userData,
@@ -72,7 +69,7 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                 url = "https://youtu.be/-fJ6poHQrjM",
                 headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
                 publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-                type = Video,
+                type = "Video 📺",
                 topics = topicsTestData.take(2),
             ),
             userData = userData,
@@ -88,7 +85,7 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                 url = "https://youtu.be/ZARz0pjm5YM",
                 headerImageUrl = "https://i.ytimg.com/vi/ZARz0pjm5YM/maxresdefault.jpg",
                 publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
-                type = Video,
+                type = "Video 📺",
                 topics = listOf(topicsTestData[2]),
             ),
             userData = userData,
@@ -102,7 +99,7 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                 url = "https://developer.android.com/jetpack/androidx/versions/all-channel",
                 headerImageUrl = "",
                 publishDate = Instant.parse("2022-10-01T00:00:00.000Z"),
-                type = Unknown,
+                type = "",
                 topics = listOf(topicsTestData[2]),
             ),
             userData = userData,

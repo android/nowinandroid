@@ -20,7 +20,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -258,7 +257,7 @@ private val sampleNewsResources = listOf(
         url = "https://youtu.be/-fJ6poHQrjM",
         headerImageUrl = "https://i.ytimg.com/vi/-fJ6poHQrjM/maxresdefault.jpg",
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
-        type = Video,
+        type = "Video 📺",
         topics = listOf(
             Topic(
                 id = "0",
