@@ -29,7 +29,7 @@ data class UserNewsResource internal constructor(
     val url: String,
     val headerImageUrl: String?,
     val publishDate: Instant,
-    val type: NewsResourceType,
+    val type: String,
     val followableTopics: List<FollowableTopic>,
     val isSaved: Boolean,
     val hasBeenViewed: Boolean,
