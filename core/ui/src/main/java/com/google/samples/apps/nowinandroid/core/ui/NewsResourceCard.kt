@@ -158,6 +158,7 @@ fun NewsResourceHeaderImage(
             isError = state is AsyncImagePainter.State.Error
         },
     )
+    val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -179,7 +180,11 @@ fun NewsResourceHeaderImage(
                 .fillMaxWidth()
                 .height(180.dp),
             contentScale = ContentScale.Crop,
-            painter = if (isError.not()) imageLoader else painterResource(drawable.ic_placeholder_default),
+            painter = if (isError.not() && !isLocalInspection) {
+                imageLoader
+            } else {
+                painterResource(drawable.ic_placeholder_default)
+            },
             // TODO b/226661685: Investigate using alt text of  image to populate content description
             contentDescription = null, // decorative image,
         )

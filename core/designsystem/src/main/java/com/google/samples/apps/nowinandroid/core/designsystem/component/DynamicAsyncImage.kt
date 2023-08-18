@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -60,11 +61,12 @@ fun DynamicAsyncImage(
             isError = state is Error
         },
     )
+    val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        if (isLoading) {
+        if (isLoading && !isLocalInspection) {
             // Display a progress bar while loading
             CircularProgressIndicator(
                 modifier = Modifier
@@ -75,10 +77,9 @@ fun DynamicAsyncImage(
         }
         Image(
             contentScale = ContentScale.Crop,
-            painter = if (isError.not()) imageLoader else placeholder,
+            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
             contentDescription = contentDescription,
             colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
-            modifier = modifier,
         )
     }
 }
