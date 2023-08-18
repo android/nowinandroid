@@ -128,6 +128,7 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+robolectric-shadows = { group = "org.robolectric", name = "shadows-framework", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

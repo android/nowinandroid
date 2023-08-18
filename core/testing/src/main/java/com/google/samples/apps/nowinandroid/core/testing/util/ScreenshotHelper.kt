@@ -28,11 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
+import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
+import org.robolectric.RuntimeEnvironment
 
 val DefaultRoborazziOptions =
-    RoborazziOptions(compareOptions = CompareOptions(changeThreshold = 0f))
+    RoborazziOptions(
+        compareOptions = CompareOptions(changeThreshold = 0f), // Pixel-perfect matching
+        recordOptions = RecordOptions(resizeScale = 0.5), // Reduce the size of the PNGs
+    )
 
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
@@ -54,28 +59,35 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     body: @Composable () -> Unit,
     roborazziOptions: RoborazziOptions = DefaultRoborazziOptions,
 ) {
-    val (width, height) = extractSpecs(deviceSpec)
+    val (width, height, dpi) = extractSpecs(deviceSpec)
+
+    // Set qualifiers from specs
+    RuntimeEnvironment.setQualifiers("w${width}dp-h${height}dp-${dpi}dpi")
 
     this.activity.setContent {
         CompositionLocalProvider(
             LocalInspectionMode provides true,
         ) {
-            TestHarness(size = DpSize(width.dp, height.dp)) {
-                body()
-            }
+            body()
         }
     }
     this.onRoot()
         .captureRoboImage(
-            "src/test/screenshots/${screenshotName}_$deviceName.png",
+            "src/test/screenshots/${screenshotName}_${deviceName}.png",
             roborazziOptions = roborazziOptions,
         )
 }
 
-private fun extractSpecs(deviceSpec: String): List<Int> {
+/**
+ * Extracts some properties from the spec string. Note that this function is not exhaustive.
+ */
+private fun extractSpecs(deviceSpec: String): TestDeviceSpecs {
     val specs = deviceSpec.substringAfter("spec:")
         .split(",").map { it.split("=") }.associate { it[0] to it[1] }
     val width = specs["width"]?.toInt() ?: 640
     val height = specs["height"]?.toInt() ?: 480
-    return listOf(width, height)
+    val dpi = specs["dpi"]?.toInt() ?: 480
+    return TestDeviceSpecs(width, height, dpi)
 }
+
+data class TestDeviceSpecs(val width: Int, val height: Int, val dpi: Int)

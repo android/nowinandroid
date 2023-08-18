@@ -35,6 +35,7 @@ dependencies {
     api(libs.junit4)
     api(libs.kotlinx.coroutines.test)
     api(libs.roborazzi)
+    api(libs.robolectric.shadows)
     api(libs.turbine)
 
     debugApi(libs.androidx.compose.ui.testManifest)
