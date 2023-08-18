@@ -91,7 +91,7 @@ jobs:
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork
         continue-on-error: false
-        if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.fork
+        if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Screenshot tests failed, please create a PR in your fork first." && exit 1
 
