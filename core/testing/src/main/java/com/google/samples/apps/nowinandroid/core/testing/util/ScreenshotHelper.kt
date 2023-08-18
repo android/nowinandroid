@@ -23,14 +23,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import org.robolectric.RuntimeEnvironment
 
 val DefaultRoborazziOptions =
@@ -73,7 +70,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     }
     this.onRoot()
         .captureRoboImage(
-            "src/test/screenshots/${screenshotName}_${deviceName}.png",
+            "src/test/screenshots/${screenshotName}_$deviceName.png",
             roborazziOptions = roborazziOptions,
         )
 }
