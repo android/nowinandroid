@@ -33,17 +33,17 @@ import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -96,7 +96,10 @@ class NiaAppScreenSizesScreenshotTests {
     lateinit var userDataRepository: UserDataRepository
 
     @Inject
-    lateinit var newsRepository: NewsRepository
+    lateinit var topicsRepository: TopicsRepository
+
+    @Inject
+    lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
     @Before
     fun setup() {
@@ -116,15 +119,14 @@ class NiaAppScreenSizesScreenshotTests {
         // Configure user data
         runBlocking {
             userDataRepository.setShouldHideOnboarding(true)
-            userDataRepository.setFollowedTopicIds(setOf(topicsTestData.first().id))
+
+            userDataRepository.setFollowedTopicIds(
+                setOf(topicsRepository.getTopics().first().first().id),
+            )
         }
     }
 
     private fun testNiaAppScreenshotWithSize(width: Dp, height: Dp, screenshotName: String) {
-        val userNewsResourceRepository = CompositeUserNewsResourceRepository(
-            newsRepository = newsRepository,
-            userDataRepository = userDataRepository,
-        )
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
