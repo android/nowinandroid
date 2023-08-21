@@ -99,6 +99,9 @@ class OfflineFirstNewsRepository @Inject constructor(
                     niaPreferencesDataSource.setNewsResourcesViewed(changedIds, true)
                 }
 
+                // Fetch all the cross references
+                val allCrossReferences = newsResourceDao.fetchAllCrossReferences()
+
                 // Obtain the news resources which have changed from the network and upsert them locally
                 changedIds.chunked(SYNC_BATCH_SIZE).forEach { chunkedIds ->
                     val networkNewsResources = network.getNewsResources(ids = chunkedIds)
@@ -116,12 +119,22 @@ class OfflineFirstNewsRepository @Inject constructor(
                             NetworkNewsResource::asEntity,
                         ),
                     )
+
+                    val dataDiff = allCrossReferences.subtract(
+                        networkNewsResources.map(NetworkNewsResource::topicCrossReferences)
+                            .distinct()
+                            .flatten()
+                            .toSet()
+                    )
+
                     newsResourceDao.insertOrIgnoreTopicCrossRefEntities(
                         newsResourceTopicCrossReferences = networkNewsResources
                             .map(NetworkNewsResource::topicCrossReferences)
                             .distinct()
                             .flatten(),
                     )
+
+                    newsResourceDao.deleteCrossReferences(dataDiff.toList())
                 }
 
                 if (hasOnboarded) {

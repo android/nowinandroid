@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -112,6 +113,12 @@ interface NewsResourceDao {
     suspend fun insertOrIgnoreTopicCrossRefEntities(
         newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
     )
+
+    @Query("SELECT * from news_resources_topics")
+    suspend fun fetchAllCrossReferences(): List<NewsResourceTopicCrossRef>
+
+    @Delete
+    suspend fun deleteCrossReferences(list: List<NewsResourceTopicCrossRef>)
 
     /**
      * Deletes rows in the db matching the specified [ids]
