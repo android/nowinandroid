@@ -54,6 +54,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
+import java.util.TimeZone
 import javax.inject.Inject
 
 /**
@@ -124,6 +125,12 @@ class NiaAppScreenSizesScreenshotTests {
                 setOf(topicsRepository.getTopics().first().first().id),
             )
         }
+    }
+
+    @Before
+    fun setTimeZone() {
+        // Make time zone deterministic in tests
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
     private fun testNiaAppScreenshotWithSize(width: Dp, height: Dp, screenshotName: String) {

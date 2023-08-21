@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParam
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.NotShown
 import dagger.hilt.android.testing.HiltTestApplication
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,6 +34,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
+import java.util.TimeZone
 
 /**
  * Screenshot tests for the [ForYouScreen].
@@ -50,6 +52,12 @@ class ForYouScreenScreenshotTests {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val userNewsResources = UserNewsResourcePreviewParameterProvider().values.first()
+
+    @Before
+    fun setTimeZone() {
+        // Make time zone deterministic in tests
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
 
     @Test
     fun testForYouScreenPopulatedFeed() {
