@@ -24,7 +24,6 @@ import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEnti
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -305,5 +304,5 @@ private fun testNewsResource(
     url = "",
     headerImageUrl = "",
     publishDate = Instant.fromEpochMilliseconds(millisSinceEpoch),
-    type = NewsResourceType.DAC,
+    type = "Article 📚",
 )

@@ -28,8 +28,8 @@ import androidx.work.NetworkType
 import com.google.samples.apps.nowinandroid.sync.R
 
 const val SYNC_TOPIC = "sync"
-private const val SyncNotificationId = 0
-private const val SyncNotificationChannelID = "SyncNotificationChannel"
+private const val SYNC_NOTIFICATION_ID = 0
+private const val SYNC_NOTIFICATION_CHANNEL_ID = "SyncNotificationChannel"
 
 // All sync work needs an internet connectionS
 val SyncConstraints
@@ -42,7 +42,7 @@ val SyncConstraints
  * run with a foreground service
  */
 fun Context.syncForegroundInfo() = ForegroundInfo(
-    SyncNotificationId,
+    SYNC_NOTIFICATION_ID,
     syncWorkNotification(),
 )
 
@@ -53,7 +53,7 @@ fun Context.syncForegroundInfo() = ForegroundInfo(
 private fun Context.syncWorkNotification(): Notification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel = NotificationChannel(
-            SyncNotificationChannelID,
+            SYNC_NOTIFICATION_CHANNEL_ID,
             getString(R.string.sync_notification_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
@@ -68,7 +68,7 @@ private fun Context.syncWorkNotification(): Notification {
 
     return NotificationCompat.Builder(
         this,
-        SyncNotificationChannelID,
+        SYNC_NOTIFICATION_CHANNEL_ID,
     )
         .setSmallIcon(
             com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,

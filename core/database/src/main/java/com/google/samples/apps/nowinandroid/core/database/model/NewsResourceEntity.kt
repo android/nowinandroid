@@ -20,7 +20,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType
 import kotlinx.datetime.Instant
 
 /**
@@ -39,7 +38,7 @@ data class NewsResourceEntity(
     val headerImageUrl: String?,
     @ColumnInfo(name = "publish_date")
     val publishDate: Instant,
-    val type: NewsResourceType,
+    val type: String,
 )
 
 fun NewsResourceEntity.asExternalModel() = NewsResource(

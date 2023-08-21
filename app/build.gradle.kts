@@ -29,8 +29,8 @@ plugins {
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
-        versionCode = 5
-        versionName = "0.0.5" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 8
+        versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
@@ -106,7 +106,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(project(":ui-test-hilt-manifest"))
 
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -121,13 +120,4 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
-}
-
-// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-configurations.configureEach {
-    resolutionStrategy {
-        force(libs.junit4)
-        // Temporary workaround for https://issuetracker.google.com/174733673
-        force("org.objenesis:objenesis:2.6")
-    }
 }

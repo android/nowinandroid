@@ -80,17 +80,14 @@ class OfflineFirstNewsRepository @Inject constructor(
                 val hasOnboarded = userData.shouldHideOnboarding
                 val followedTopicIds = userData.followedTopics
 
-                // TODO: Make this more efficient, there is no need to retrieve populated
-                //  news resources when all that's needed are the ids
                 val existingNewsResourceIdsThatHaveChanged = when {
-                    hasOnboarded -> newsResourceDao.getNewsResources(
+                    hasOnboarded -> newsResourceDao.getNewsResourceIds(
                         useFilterTopicIds = true,
                         filterTopicIds = followedTopicIds,
                         useFilterNewsIds = true,
                         filterNewsIds = changedIds.toSet(),
                     )
                         .first()
-                        .map { it.entity.id }
                         .toSet()
                     // No need to retrieve anything if notifications won't be sent
                     else -> emptySet()

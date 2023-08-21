@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.database.model
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResourceType.Video
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
 import org.junit.Test
@@ -33,7 +32,7 @@ class PopulatedNewsResourceKtTest {
                 content = "Hilt",
                 url = "url",
                 headerImageUrl = "headerImageUrl",
-                type = Video,
+                type = "Video 📺",
                 publishDate = Instant.fromEpochMilliseconds(1),
             ),
             topics = listOf(
@@ -56,7 +55,7 @@ class PopulatedNewsResourceKtTest {
                 content = "Hilt",
                 url = "url",
                 headerImageUrl = "headerImageUrl",
-                type = Video,
+                type = "Video 📺",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 topics = listOf(
                     Topic(
