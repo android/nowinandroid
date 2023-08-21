@@ -21,13 +21,14 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
+import com.google.samples.apps.nowinandroid.waitAndFindObject
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
     device.wait(Until.gone(By.res("loadingWheel")), 5_000)
     // Sometimes, the loading wheel is gone, but the content is not loaded yet
     // So we'll wait here for topics to be sure
-    val obj = device.findObject(By.res("forYou:topicSelection"))
+    val obj = device.waitAndFindObject(By.res("forYou:topicSelection"), 10_000)
     // Timeout here is quite big, because sometimes data loading takes a long time!
     obj.wait(untilHasChildren(), 60_000)
 }
@@ -87,4 +88,18 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
 fun MacrobenchmarkScope.forYouScrollFeedDownUp() {
     val feedList = device.findObject(By.res("forYou:feed"))
     device.flingElementDownUp(feedList)
+}
+
+fun MacrobenchmarkScope.setAppTheme(isDark: Boolean) {
+    when (isDark) {
+        true -> device.findObject(By.text("Dark")).click()
+        false -> device.findObject(By.text("Light")).click()
+    }
+    device.waitForIdle()
+    device.findObject(By.text("OK")).click()
+
+    // Wait until the top app bar is visible on screen
+    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
+    val topAppBar = device.findObject(By.res("niaTopAppBar"))
+    topAppBar.wait(Until.hasObject(By.text("Now in Android")), 2_000)
 }

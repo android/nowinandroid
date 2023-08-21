@@ -34,7 +34,7 @@ class NewsResourceCardTest {
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
         val newsWithKnownResourceType = userNewsResourcesTestData[0]
-        var dateFormatted = ""
+        lateinit var dateFormatted: String
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
@@ -54,20 +54,20 @@ class NewsResourceCardTest {
                 composeTestRule.activity.getString(
                     R.string.card_meta_data_text,
                     dateFormatted,
-                    newsWithKnownResourceType.type.displayText,
+                    newsWithKnownResourceType.type,
                 ),
             )
             .assertExists()
     }
 
     @Test
-    fun testMetaDataDisplay_withUnknownResource() {
-        val newsWithUnknownResourceType = userNewsResourcesTestData[3]
-        var dateFormatted = ""
+    fun testMetaDataDisplay_withEmptyResourceType() {
+        val newsWithEmptyResourceType = userNewsResourcesTestData[3]
+        lateinit var dateFormatted: String
 
         composeTestRule.setContent {
             NewsResourceCardExpanded(
-                userNewsResource = newsWithUnknownResourceType,
+                userNewsResource = newsWithEmptyResourceType,
                 isBookmarked = false,
                 hasBeenViewed = false,
                 onToggleBookmark = {},
@@ -75,7 +75,7 @@ class NewsResourceCardTest {
                 onTopicClick = {},
             )
 
-            dateFormatted = dateFormatted(publishDate = newsWithUnknownResourceType.publishDate)
+            dateFormatted = dateFormatted(publishDate = newsWithEmptyResourceType.publishDate)
         }
 
         composeTestRule

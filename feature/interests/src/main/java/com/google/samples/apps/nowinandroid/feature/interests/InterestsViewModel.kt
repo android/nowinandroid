@@ -53,11 +53,11 @@ class InterestsViewModel @Inject constructor(
 }
 
 sealed interface InterestsUiState {
-    object Loading : InterestsUiState
+    data object Loading : InterestsUiState
 
     data class Interests(
         val topics: List<FollowableTopic>,
     ) : InterestsUiState
 
-    object Empty : InterestsUiState
+    data object Empty : InterestsUiState
 }
