@@ -28,7 +28,6 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUs
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +48,7 @@ class SearchViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
-    val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
+    val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
         getSearchContentsCountUseCase()
@@ -105,7 +104,7 @@ class SearchViewModel @Inject constructor(
      */
     fun onSearchTriggered(query: String) {
         viewModelScope.launch {
-            recentSearchRepository.insertOrReplaceRecentSearch(query)
+            recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
         }
         analyticsHelper.logEventSearchTriggered(query = query)
     }
