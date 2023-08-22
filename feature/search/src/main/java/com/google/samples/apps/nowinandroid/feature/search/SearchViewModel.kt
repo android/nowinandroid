@@ -51,43 +51,41 @@ class SearchViewModel @Inject constructor(
     val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
-        getSearchContentsCountUseCase().flatMapLatest { totalCount ->
-            if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
-                flowOf(SearchResultUiState.SearchNotReady)
-            } else {
-                searchQuery.flatMapLatest { query ->
-                    if (query.length < SEARCH_QUERY_MIN_LENGTH) {
-                        flowOf(SearchResultUiState.EmptyQuery)
-                    } else {
-                        getSearchContentsUseCase(query).asResult().map {
-                            when (it) {
-                                is Result.Success -> {
-                                    SearchResultUiState.Success(
-                                        topics = it.data.topics,
-                                        newsResources = it.data.newsResources,
-                                    )
-                                }
+        getSearchContentsCountUseCase()
+            .flatMapLatest { totalCount ->
+                if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
+                    flowOf(SearchResultUiState.SearchNotReady)
+                } else {
+                    searchQuery.flatMapLatest { query ->
+                        if (query.length < SEARCH_QUERY_MIN_LENGTH) {
+                            flowOf(SearchResultUiState.EmptyQuery)
+                        } else {
+                            getSearchContentsUseCase(query)
+                                .asResult()
+                                .map { result ->
+                                    when (result) {
+                                        is Result.Success -> SearchResultUiState.Success(
+                                            topics = result.data.topics,
+                                            newsResources = result.data.newsResources,
+                                        )
 
-                                is Result.Loading -> {
-                                    SearchResultUiState.Loading
+                                        is Result.Loading -> SearchResultUiState.Loading
+                                        is Result.Error -> SearchResultUiState.LoadFailed
+                                    }
                                 }
-
-                                is Result.Error -> {
-                                    SearchResultUiState.LoadFailed
-                                }
-                            }
                         }
                     }
                 }
             }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SearchResultUiState.Loading,
-        )
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = SearchResultUiState.Loading,
+            )
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
-        recentSearchQueriesUseCase().map(RecentSearchQueriesUiState::Success)
+        recentSearchQueriesUseCase()
+            .map(RecentSearchQueriesUiState::Success)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -109,14 +107,9 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             recentSearchRepository.insertOrReplaceRecentSearch(query)
         }
-        analyticsHelper.logEvent(
-            AnalyticsEvent(
-                type = SEARCH_QUERY,
-                extras = listOf(
-                    Param(SEARCH_QUERY, query),
-                ),
-            ),
-        )
+        val eventExtras = listOf(element = Param(key = SEARCH_QUERY, value = query))
+        val analyticsEvent = AnalyticsEvent(type = SEARCH_QUERY, extras = eventExtras)
+        analyticsHelper.logEvent(event = analyticsEvent)
     }
 
     fun clearRecentSearches() {
