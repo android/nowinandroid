@@ -169,7 +169,7 @@ jobs:
   androidTest-GMD:
     needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 55
+    timeout-minutes: 90
 
     steps:
       - name: Checkout
