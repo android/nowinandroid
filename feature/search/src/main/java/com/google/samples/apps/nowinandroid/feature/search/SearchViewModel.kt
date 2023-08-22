@@ -28,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUs
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -106,9 +107,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             recentSearchRepository.insertOrReplaceRecentSearch(query)
         }
-        val eventExtras = listOf(element = Param(key = SEARCH_QUERY, value = query))
-        val analyticsEvent = AnalyticsEvent(type = SEARCH_QUERY, extras = eventExtras)
-        analyticsHelper.logEvent(event = analyticsEvent)
+        analyticsHelper.logEventSearchTriggered(query = query)
     }
 
     fun clearRecentSearches() {
@@ -117,6 +116,14 @@ class SearchViewModel @Inject constructor(
         }
     }
 }
+
+private fun AnalyticsHelper.logEventSearchTriggered(query: String) =
+    logEvent(
+        event = AnalyticsEvent(
+            type = SEARCH_QUERY,
+            extras = listOf(element = Param(key = SEARCH_QUERY, value = query)),
+        ),
+    )
 
 /** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */
 private const val SEARCH_QUERY_MIN_LENGTH = 2
