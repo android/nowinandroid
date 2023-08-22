@@ -76,8 +76,7 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }
-            }
-            .stateIn(
+            }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = SearchResultUiState.Loading,

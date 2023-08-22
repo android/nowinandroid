@@ -29,7 +29,7 @@ sealed interface SearchResultUiState {
      */
     data object EmptyQuery : SearchResultUiState
 
-    object LoadFailed : SearchResultUiState
+    data object LoadFailed : SearchResultUiState
 
     data class Success(
         val topics: List<FollowableTopic> = emptyList(),
