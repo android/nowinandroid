@@ -28,6 +28,7 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.google.accompanist.testharness.TestHarness
 import org.robolectric.RuntimeEnvironment
 
 val DefaultRoborazziOptions =
@@ -36,16 +37,18 @@ val DefaultRoborazziOptions =
         recordOptions = RecordOptions(resizeScale = 0.5), // Reduce the size of the PNGs
     )
 
+
+enum class DefaultTestDevices(val description: String, val spec: String) {
+    PHONE("phone", "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480"),
+    FOLDABLE("foldable", "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480"),
+    TABLET("tablet", "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"),
+}
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
     body: @Composable () -> Unit,
 ) {
-    listOf(
-        "phone" to "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480",
-        "foldable" to "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480",
-        "tablet" to "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480",
-    ).forEach {
-        this.captureForDevice(it.first, it.second, screenshotName, body)
+    DefaultTestDevices.values().forEach {
+        this.captureForDevice(it.description, it.spec, screenshotName, body = body)
     }
 }
 
@@ -53,8 +56,9 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     deviceName: String,
     deviceSpec: String,
     screenshotName: String,
-    body: @Composable () -> Unit,
     roborazziOptions: RoborazziOptions = DefaultRoborazziOptions,
+    darkMode: Boolean = false,
+    body: @Composable () -> Unit,
 ) {
     val (width, height, dpi) = extractSpecs(deviceSpec)
 
@@ -65,7 +69,9 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
         CompositionLocalProvider(
             LocalInspectionMode provides true,
         ) {
-            body()
+            TestHarness(darkMode = darkMode) {
+                body()
+            }
         }
     }
     this.onRoot()
