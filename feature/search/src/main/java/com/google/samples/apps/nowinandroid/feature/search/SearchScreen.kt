@@ -312,7 +312,11 @@ private fun SearchResultBody(
             state = state,
         ) {
             if (topics.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
+                item(
+                    span = {
+                        GridItemSpan(maxLineSpan)
+                    },
+                ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -326,7 +330,9 @@ private fun SearchResultBody(
                     val topicId = followableTopic.topic.id
                     item(
                         key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
-                        span = { GridItemSpan(maxLineSpan) },
+                        span = {
+                            GridItemSpan(maxLineSpan)
+                        },
                     ) {
                         InterestsItem(
                             name = followableTopic.topic.name,
@@ -345,7 +351,11 @@ private fun SearchResultBody(
             }
 
             if (newsResources.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
+                item(
+                    span = {
+                        GridItemSpan(maxLineSpan)
+                    },
+                ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
