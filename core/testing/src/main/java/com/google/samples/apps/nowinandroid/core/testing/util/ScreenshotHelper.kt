@@ -37,7 +37,6 @@ val DefaultRoborazziOptions =
         recordOptions = RecordOptions(resizeScale = 0.5), // Reduce the size of the PNGs
     )
 
-
 enum class DefaultTestDevices(val description: String, val spec: String) {
     PHONE("phone", "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480"),
     FOLDABLE("foldable", "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480"),
