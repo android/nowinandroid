@@ -441,9 +441,7 @@ private fun RecentSearchesBody(
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
                         .padding(vertical = 16.dp)
-                        .clickable {
-                            onRecentSearchClicked(recentSearch)
-                        }
+                        .clickable { onRecentSearchClicked(recentSearch) }
                         .fillMaxWidth(),
                 )
             }
