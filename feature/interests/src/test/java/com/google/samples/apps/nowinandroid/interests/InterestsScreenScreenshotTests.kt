@@ -59,7 +59,7 @@ class InterestsScreenScreenshotTests {
     @Test
     fun interestsScreen_loading() {
         composeTestRule.captureMultiDevice("interestsScreen_loading") {
-            InterestsScreen(InterestsUiState.Empty)
+            InterestsScreen(InterestsUiState.Loading)
         }
     }
 
