@@ -92,6 +92,10 @@ gradlePlugin {
             id = "nowinandroid.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
+        register("androidLint") {
+            id = "nowinandroid.android.lint"
+            implementationClass = "AndroidLintConventionPlugin"
+        }
         register("jvmLibrary") {
             id = "nowinandroid.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"

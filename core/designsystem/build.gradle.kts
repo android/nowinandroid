@@ -23,9 +23,6 @@ android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    lint {
-        checkDependencies = true
-    }
     namespace = "com.google.samples.apps.nowinandroid.core.designsystem"
 }
 
