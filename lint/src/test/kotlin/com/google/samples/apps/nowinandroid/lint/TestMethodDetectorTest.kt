@@ -21,6 +21,7 @@ import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
 import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.FORMAT
 import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.PREFIX
+import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.UNDERSCORE
 import org.junit.Test
 
 class TestMethodDetectorTest {
@@ -101,7 +102,7 @@ class TestMethodDetectorTest {
 
     @Test
     fun `detect underscores`() {
-        lint().issues(UNDERSCORES)
+        lint().issues(UNDERSCORE)
             .files(
                 JUNIT_TEST_STUB,
                 kotlin(
