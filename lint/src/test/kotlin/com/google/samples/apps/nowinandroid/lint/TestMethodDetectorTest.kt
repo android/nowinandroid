@@ -48,10 +48,10 @@ class TestMethodDetectorTest {
             .run()
             .expect(
                 """
-                src/Test.kt:6: Warning: Test method starts with test [TestMethodWithTestPrefix]
+                src/Test.kt:6: Warning: Test method starts with test [TestMethodPrefix]
                     fun test_foo() = Unit
                         ~~~~~~~~
-                src/Test.kt:8: Warning: Test method starts with test [TestMethodWithTestPrefix]
+                src/Test.kt:8: Warning: Test method starts with test [TestMethodPrefix]
                     fun `test foo`() = Unit
                         ~~~~~~~~~~
                 0 errors, 2 warnings
@@ -59,11 +59,11 @@ class TestMethodDetectorTest {
             )
             .expectFixDiffs(
                 """
-                Fix for src/Test.kt line 6: Remove underscores:
+                Autofix for src/Test.kt line 6: Remove prefix:
                 @@ -6 +6
                 -     fun test_foo() = Unit
                 +     fun foo() = Unit
-                Fix for src/Test.kt line 8: Remove underscores:
+                Autofix for src/Test.kt line 8: Remove prefix:
                 @@ -8 +8
                 -     fun `test foo`() = Unit
                 +     fun `foo`() = Unit
@@ -92,7 +92,7 @@ class TestMethodDetectorTest {
             .run()
             .expect(
                 """
-                src/androidTest/com/example/Test.kt:6: Warning: Test method does not follow the given_when_then format [TestMethodGivenWhenThenFormatTest]
+                src/androidTest/com/example/Test.kt:6: Warning: Test method does not follow the given_when_then format [TestMethodFormat]
                     fun given_foo_when_bar_then_baz() = Unit
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 0 errors, 1 warnings
@@ -122,10 +122,10 @@ class TestMethodDetectorTest {
             .run()
             .expect(
                 """
-                src/Test.kt:6: Warning: Test method contains underscores [TestMethodContainsUnderscore]
+                src/Test.kt:6: Warning: Test method contains underscores [TestMethodUnderscore]
                     fun foo_bar_baz() = Unit
                         ~~~~~~~~~~~
-                src/Test.kt:8: Warning: Test method contains underscores [TestMethodContainsUnderscore]
+                src/Test.kt:8: Warning: Test method contains underscores [TestMethodUnderscore]
                     fun `foo_bar_baz`() = Unit
                         ~~~~~~~~~~~~~
                 0 errors, 2 warnings
