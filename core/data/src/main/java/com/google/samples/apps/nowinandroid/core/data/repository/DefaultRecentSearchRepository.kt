@@ -20,28 +20,21 @@ import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.data.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import javax.inject.Inject
 
 class DefaultRecentSearchRepository @Inject constructor(
     private val recentSearchQueryDao: RecentSearchQueryDao,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : RecentSearchRepository {
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {
-        withContext(ioDispatcher) {
-            recentSearchQueryDao.insertOrReplaceRecentSearchQuery(
-                RecentSearchQueryEntity(
-                    query = searchQuery,
-                    queriedDate = Clock.System.now(),
-                ),
-            )
-        }
+        recentSearchQueryDao.insertOrReplaceRecentSearchQuery(
+            RecentSearchQueryEntity(
+                query = searchQuery,
+                queriedDate = Clock.System.now(),
+            ),
+        )
     }
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
