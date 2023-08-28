@@ -47,7 +47,7 @@ class InterestsViewModel @Inject constructor(
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(followedTopicId, followed)
+            userDataRepository.setTopicIdFollowed(followedTopicId, followed)
         }
     }
 }
