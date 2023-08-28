@@ -80,7 +80,7 @@ class OfflineFirstUserDataRepositoryTest {
     @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =
         testScope.runTest {
-            subject.toggleFollowedTopicId(followedTopicId = "0", followed = true)
+            subject.setTopicIdFollowed(followedTopicId = "0", followed = true)
 
             assertEquals(
                 setOf("0"),
@@ -89,7 +89,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
             )
 
-            subject.toggleFollowedTopicId(followedTopicId = "1", followed = true)
+            subject.setTopicIdFollowed(followedTopicId = "1", followed = true)
 
             assertEquals(
                 setOf("0", "1"),

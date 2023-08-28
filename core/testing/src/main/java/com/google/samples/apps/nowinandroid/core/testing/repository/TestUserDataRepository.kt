@@ -49,7 +49,7 @@ class TestUserDataRepository : UserDataRepository {
         _userData.tryEmit(currentUserData.copy(followedTopics = followedTopicIds))
     }
 
-    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
+    override suspend fun setTopicIdFollowed(followedTopicId: String, followed: Boolean) {
         currentUserData.let { current ->
             val followedTopics = if (followed) {
                 current.followedTopics + followedTopicId

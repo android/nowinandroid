@@ -73,7 +73,7 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun toggleFollowedTopicId(topicId: String, followed: Boolean) {
+    suspend fun setTopicIdFollowed(topicId: String, followed: Boolean) {
         try {
             userPreferences.updateData {
                 it.copy {
@@ -122,7 +122,7 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun toggleNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
+    suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) {
         try {
             userPreferences.updateData {
                 it.copy {

@@ -75,7 +75,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.toggleFollowedTopicId(topicArgs.topicId, followed)
+            userDataRepository.setTopicIdFollowed(topicArgs.topicId, followed)
         }
     }
 
