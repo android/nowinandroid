@@ -20,10 +20,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 @Composable
 fun NiaTopicTag(
@@ -55,6 +57,16 @@ fun NiaTopicTag(
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 text()
             }
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun TagPreview() {
+    NiaTheme {
+        NiaTopicTag(followed = true, onClick = {}) {
+            Text("Topic".uppercase())
         }
     }
 }

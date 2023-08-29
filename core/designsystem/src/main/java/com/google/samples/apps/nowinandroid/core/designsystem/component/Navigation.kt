@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,10 +26,14 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android navigation bar item with icon and label content slots. Wraps Material 3
@@ -159,6 +164,47 @@ fun NiaNavigationRail(
         header = header,
         content = content,
     )
+}
+
+@ThemePreviews
+@Composable
+fun NiaNavigationPreview() {
+
+    val items = listOf("For you", "Saved", "Interests")
+    val icons = listOf(
+        NiaIcons.UpcomingBorder,
+        NiaIcons.BookmarksBorder,
+        NiaIcons.Grid3x3,
+    )
+    val selectedIcons = listOf(
+        NiaIcons.Upcoming,
+        NiaIcons.Bookmarks,
+        NiaIcons.Grid3x3,
+    )
+
+    NiaTheme {
+        NiaNavigationBar {
+            items.forEachIndexed { index, item ->
+                NiaNavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = icons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = selectedIcons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    label = { Text(item) },
+                    selected = index == 0,
+                    onClick = { },
+                )
+            }
+        }
+    }
 }
 
 /**

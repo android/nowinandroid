@@ -17,12 +17,16 @@
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android toggle button with icon and checked icon content slots. Wraps Material 3
@@ -65,6 +69,52 @@ fun NiaIconToggleButton(
         ),
     ) {
         if (checked) checkedIcon() else icon()
+    }
+}
+
+@ThemePreviews
+@Composable
+fun IconButtonPreview() {
+    NiaTheme {
+        NiaIconToggleButton(
+            checked = true,
+            onCheckedChange = { },
+            icon = {
+                Icon(
+                    imageVector = NiaIcons.BookmarkBorder,
+                    contentDescription = null,
+                )
+            },
+            checkedIcon = {
+                Icon(
+                    imageVector = NiaIcons.Bookmark,
+                    contentDescription = null,
+                )
+            },
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun IconButtonPreviewUnchecked() {
+    NiaTheme {
+        NiaIconToggleButton(
+            checked = false,
+            onCheckedChange = { },
+            icon = {
+                Icon(
+                    imageVector = NiaIcons.BookmarkBorder,
+                    contentDescription = null,
+                )
+            },
+            checkedIcon = {
+                Icon(
+                    imageVector = NiaIcons.Bookmark,
+                    contentDescription = null,
+                )
+            },
+        )
     }
 }
 

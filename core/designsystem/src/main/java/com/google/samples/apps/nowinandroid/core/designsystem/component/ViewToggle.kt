@@ -24,11 +24,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android view toggle button with included trailing icon as well as compact and expanded
@@ -101,6 +105,36 @@ private fun NiaViewToggleButtonContent(
     if (trailingIcon != null) {
         Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
             trailingIcon()
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun ViewTogglePreviewExpanded() {
+    NiaTheme {
+        Surface {
+            NiaViewToggleButton(
+                expanded = true,
+                onExpandedChange = { },
+                compactText = { Text(text = "Compact view") },
+                expandedText = { Text(text = "Expanded view") },
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ViewTogglePreviewCompact() {
+    NiaTheme {
+        Surface {
+            NiaViewToggleButton(
+                expanded = false,
+                onExpandedChange = { },
+                compactText = { Text(text = "Compact view") },
+                expandedText = { Text(text = "Expanded view") },
+            )
         }
     }
 }
