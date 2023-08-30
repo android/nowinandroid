@@ -17,17 +17,15 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -67,7 +65,6 @@ class LoadingWheelScreenshotTests() {
     }
 
     private fun loadingWheelPermutationsThemeSelectedDynamic(name: String, content: @Composable () -> Unit) {
-
         // TODO: darkMode doesn't seem to be affecting the actual LoadingWheel
         //  (but it does change the background)
         val darkMode = mutableStateOf(true)
@@ -79,10 +76,12 @@ class LoadingWheelScreenshotTests() {
             ) {
                 NiaTheme(
                     darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value
+                    disableDynamicTheming = !dynamicTheming.value,
                 ) {
                     Surface {
-                        content()
+                        key(darkMode.value, dynamicTheming.value) {
+                            content()
+                        }
                     }
                 }
             }
@@ -99,7 +98,7 @@ class LoadingWheelScreenshotTests() {
                 composeTestRule.onRoot()
                     .captureRoboImage(
                         "src/test/screenshots/LoadingWheel" +
-                            "/${name}_${darkModeDesc}_${dynamicThemingDesc}.png",
+                            "/${name}_${darkModeDesc}_$dynamicThemingDesc.png",
                         roborazziOptions = DefaultRoborazziOptions,
                     )
             }
@@ -119,7 +118,7 @@ class LoadingWheelScreenshotTests() {
             composeTestRule.mainClock.advanceTimeBy(deltaTime)
             composeTestRule.onRoot()
                 .captureRoboImage(
-                    "src/test/screenshots/LoadingWheel/LoadingWheel_animation_${deltaTime}.png",
+                    "src/test/screenshots/LoadingWheel/LoadingWheel_animation_$deltaTime.png",
                     roborazziOptions = DefaultRoborazziOptions,
                 )
         }

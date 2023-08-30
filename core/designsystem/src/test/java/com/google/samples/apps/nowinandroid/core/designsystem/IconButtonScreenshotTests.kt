@@ -17,22 +17,15 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
@@ -58,7 +51,6 @@ class IconButtonScreenshotTests {
 
     @Test
     fun iconButtonPermutationsThemeSelectedDynamic() {
-
         val darkMode = mutableStateOf(true)
         val checked = mutableStateOf(true)
         val dynamicTheming = mutableStateOf(false)
@@ -69,7 +61,7 @@ class IconButtonScreenshotTests {
             ) {
                 NiaTheme(
                     darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value
+                    disableDynamicTheming = !dynamicTheming.value,
                 ) {
                     NiaIconToggleExample(checked.value)
                 }
@@ -91,7 +83,7 @@ class IconButtonScreenshotTests {
                     composeTestRule.onRoot()
                         .captureRoboImage(
                             "src/test/screenshots/IconButton/IconButton_" +
-                                "${checkedDesc}_${darkModeDesc}_${dynamicThemingDesc}.png",
+                                "${checkedDesc}_${darkModeDesc}_$dynamicThemingDesc.png",
                             roborazziOptions = DefaultRoborazziOptions,
                         )
                 }

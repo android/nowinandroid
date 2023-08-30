@@ -18,20 +18,12 @@ package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
 import org.junit.Test
@@ -51,82 +43,95 @@ class BackgroundScreenshotTests {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun backgroundDefault() {
-        testScreenshotDarkAndLight("BackgroundDefault") {
-            NiaTheme(disableDynamicTheming = true) {
-                NiaBackground(Modifier.size(100.dp), content = {})
-            }
+    fun niaBackground_multipleThemes() {
+        composeTestRule.captureMultiTheme("Background") {
+            NiaBackground(Modifier.size(100.dp), content = {})
         }
     }
 
     @Test
-    fun backgroundDynamic() {
-        testScreenshotDarkAndLight("BackgroundDynamic") {
-            NiaTheme(disableDynamicTheming = false) {
-                NiaBackground(Modifier.size(100.dp), content = {})
-            }
+    fun niaGradientBackground_multipleThemes() {
+        composeTestRule.captureMultiTheme("Background", "GradientBackground") {
+            NiaGradientBackground(Modifier.size(100.dp), content = {})
         }
     }
-
-    @Test
-    fun backgroundAndroid() {
-        testScreenshotDarkAndLight("BackgroundAndroid") {
-            NiaTheme(androidTheme = true) {
-                NiaBackground(Modifier.size(100.dp), content = {})
-            }
-        }
-    }
-
-    @Test
-    fun gradientBackgroundDefault() {
-        testScreenshotDarkAndLight("BackgroundGradientDefault") {
-            NiaTheme(disableDynamicTheming = true) {
-                NiaGradientBackground(Modifier.size(100.dp), content = {})
-            }
-        }
-    }
-
-    @Test
-    fun gradientBackgroundDynamic() {
-        testScreenshotDarkAndLight("BackgroundGradientDynamic") {
-            NiaTheme(disableDynamicTheming = false) {
-                NiaGradientBackground(Modifier.size(100.dp), content = {})
-            }
-        }
-    }
-
-    @Test
-    fun gradientBackgroundAndroid() {
-        testScreenshotDarkAndLight("BackgroundGradientAndroid") {
-            NiaTheme(androidTheme = true) {
-                NiaGradientBackground(Modifier.size(100.dp), content = {})
-            }
-        }
-    }
-
-    private fun testScreenshotDarkAndLight(screenshotName: String, content: @Composable () -> Unit) {
-
-        val darkMode = mutableStateOf(true)
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                TestHarness(darkMode = darkMode.value) {
-                    content()
-                }
-            }
-        }
-
-        composeTestRule.onRoot()
-            .captureRoboImage(
-                "src/test/screenshots/Background/${screenshotName}_dark.png",
-                roborazziOptions = DefaultRoborazziOptions,
-            )
-        darkMode.value = false
-        composeTestRule.onRoot()
-            .captureRoboImage(
-                "src/test/screenshots/Background/${screenshotName}_light.png",
-                roborazziOptions = DefaultRoborazziOptions,
-            )
-    }
+//
+//    @Test
+//    fun backgroundDefault() {
+//        testScreenshotDarkAndLight("BackgroundDefault") {
+//            NiaTheme(disableDynamicTheming = true) {
+//                NiaBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    @Test
+//    fun backgroundDynamic() {
+//        testScreenshotDarkAndLight("BackgroundDynamic") {
+//            NiaTheme(disableDynamicTheming = false) {
+//                NiaBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    @Test
+//    fun backgroundAndroid() {
+//        testScreenshotDarkAndLight("BackgroundAndroid") {
+//            NiaTheme(androidTheme = true) {
+//                NiaBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    @Test
+//    fun gradientBackgroundDefault() {
+//        testScreenshotDarkAndLight("BackgroundGradientDefault") {
+//            NiaTheme(disableDynamicTheming = true) {
+//                NiaGradientBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    @Test
+//    fun gradientBackgroundDynamic() {
+//        testScreenshotDarkAndLight("BackgroundGradientDynamic") {
+//            NiaTheme(disableDynamicTheming = false) {
+//                NiaGradientBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    @Test
+//    fun gradientBackgroundAndroid() {
+//        testScreenshotDarkAndLight("BackgroundGradientAndroid") {
+//            NiaTheme(androidTheme = true) {
+//                NiaGradientBackground(Modifier.size(100.dp), content = {})
+//            }
+//        }
+//    }
+//
+//    private fun testScreenshotDarkAndLight(screenshotName: String, content: @Composable () -> Unit) {
+//        val darkMode = mutableStateOf(true)
+//        composeTestRule.setContent {
+//            CompositionLocalProvider(
+//                LocalInspectionMode provides true,
+//            ) {
+//                TestHarness(darkMode = darkMode.value) {
+//                    content()
+//                }
+//            }
+//        }
+//
+//        composeTestRule.onRoot()
+//            .captureRoboImage(
+//                "src/test/screenshots/Background/${screenshotName}_dark.png",
+//                roborazziOptions = DefaultRoborazziOptions,
+//            )
+//        darkMode.value = false
+//        composeTestRule.onRoot()
+//            .captureRoboImage(
+//                "src/test/screenshots/Background/${screenshotName}_light.png",
+//                roborazziOptions = DefaultRoborazziOptions,
+//            )
+//    }
 }

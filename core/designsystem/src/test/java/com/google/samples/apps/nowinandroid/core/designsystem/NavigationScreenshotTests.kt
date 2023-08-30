@@ -17,9 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -29,11 +27,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
@@ -59,7 +54,6 @@ class NavigationScreenshotTests() {
 
     @Test
     fun navigationPermutationsThemeSelectedDynamic() {
-
         val darkMode = mutableStateOf(true)
         val dynamicTheming = mutableStateOf(false)
 
@@ -69,7 +63,7 @@ class NavigationScreenshotTests() {
             ) {
                 NiaTheme(
                     darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value
+                    disableDynamicTheming = !dynamicTheming.value,
                 ) {
                     NiaNavigationBarExample()
                 }
@@ -87,7 +81,7 @@ class NavigationScreenshotTests() {
                 composeTestRule.onRoot()
                     .captureRoboImage(
                         "src/test/screenshots/Navigation" +
-                            "/Navigation_${darkModeDesc}_${dynamicThemingDesc}.png",
+                            "/Navigation_${darkModeDesc}_$dynamicThemingDesc.png",
                         roborazziOptions = DefaultRoborazziOptions,
                     )
             }
@@ -96,7 +90,6 @@ class NavigationScreenshotTests() {
 
     @Test
     fun NavigationHugeFont() {
-
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
@@ -119,7 +112,7 @@ class NavigationScreenshotTests() {
     @Composable
     private fun NiaNavigationBarExample(label: String = "Item") {
         NiaNavigationBar {
-            (0..2).forEach{ index ->
+            (0..2).forEach { index ->
                 NiaNavigationBarItem(
                     icon = {
                         Icon(

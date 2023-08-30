@@ -17,20 +17,17 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -46,80 +43,39 @@ import org.robolectric.annotation.LooperMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, sdk = [33], qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class TabsScreenshotTests() {
+class TagScreenshotTests() {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun tabsPermutationsThemeSelectedDynamic() {
-        val darkMode = mutableStateOf(true)
-        val dynamicTheming = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                NiaTheme(
-                    darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value,
-                ) {
-                    NiaTabsExample()
-                }
-            }
-        }
-
-        listOf(true, false).forEach { darkModeValue ->
-            darkMode.value = darkModeValue
-            val darkModeDesc = if (darkModeValue) "dark" else "light"
-
-            listOf(true, false).forEach { dynamicThemingValue ->
-                dynamicTheming.value = dynamicThemingValue
-                val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-
-                composeTestRule.onRoot()
-                    .captureRoboImage(
-                        "src/test/screenshots/Tabs" +
-                            "/Tabs_${darkModeDesc}_$dynamicThemingDesc.png",
-                        roborazziOptions = DefaultRoborazziOptions,
-                    )
+    fun tagPermutationsThemeSelectedDynamic() {
+        composeTestRule.captureMultiTheme("Tag") {
+            NiaTopicTag(followed = true, onClick = {}) {
+                Text("TOPIC")
             }
         }
     }
 
     @Test
-    fun TabsHugeFont() {
+    fun TagHugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
                 TestHarness(fontScale = 2f) {
                     NiaTheme {
-                        NiaTabsExample("Looooong item")
+                        NiaTopicTag(followed = true, onClick = {}) {
+                            Text("LOOOOONG TOPIC")
+                        }
                     }
                 }
             }
         }
         composeTestRule.onRoot()
             .captureRoboImage(
-                "src/test/screenshots/Tabs/Tabs_fontScale2.png",
+                "src/test/screenshots/Tag/Tag_fontScale2.png",
                 roborazziOptions = DefaultRoborazziOptions,
             )
-    }
-
-    @Composable
-    private fun NiaTabsExample(label: String = "Topics") {
-        Surface {
-            val titles = listOf(label, "People")
-            NiaTabRow(selectedTabIndex = 0) {
-                titles.forEachIndexed { index, title ->
-                    NiaTab(
-                        selected = index == 0,
-                        onClick = { },
-                        text = { Text(text = title) },
-                    )
-                }
-            }
-        }
     }
 }

@@ -36,7 +36,6 @@ import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
@@ -54,7 +53,6 @@ class FilterChipScreenshotTests() {
 
     @Test
     fun filterChipPermutationsThemeSelectedDynamic() {
-
         val darkMode = mutableStateOf(false)
         val selected = mutableStateOf(false)
         val dynamicTheming = mutableStateOf(false)
@@ -85,14 +83,13 @@ class FilterChipScreenshotTests() {
 
                     composeTestRule.onRoot()
                         .captureRoboImage(
-                            "src/test/screenshots/FilterChip/FilterChip_${darkModeDesc}_${selectedDesc}_${dynamicThemingDesc}.png",
+                            "src/test/screenshots/FilterChip/FilterChip_${darkModeDesc}_${selectedDesc}_$dynamicThemingDesc.png",
                             roborazziOptions = DefaultRoborazziOptions,
                         )
                 }
             }
         }
     }
-
 
     @Test
     fun NavigationHugeFont() {

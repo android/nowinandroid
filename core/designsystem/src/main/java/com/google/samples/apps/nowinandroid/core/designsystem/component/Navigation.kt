@@ -30,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -169,7 +168,6 @@ fun NiaNavigationRail(
 @ThemePreviews
 @Composable
 fun NiaNavigationPreview() {
-
     val items = listOf("For you", "Saved", "Interests")
     val icons = listOf(
         NiaIcons.UpcomingBorder,

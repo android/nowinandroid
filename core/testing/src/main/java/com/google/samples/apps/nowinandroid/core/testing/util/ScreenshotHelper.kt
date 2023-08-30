@@ -20,6 +20,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
@@ -29,6 +31,7 @@ import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.robolectric.RuntimeEnvironment
 
 val DefaultRoborazziOptions =
@@ -78,6 +81,55 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             "src/test/screenshots/${screenshotName}_$deviceName.png",
             roborazziOptions = roborazziOptions,
         )
+}
+
+/**
+ * Takes four screenshots combining light/dark and default/dynamic themes.
+ */
+fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiTheme(
+    name: String,
+    overrideFileName: String? = null,
+    shouldCompareDarkMode: Boolean = true,
+    shouldCompareDynamicTheme: Boolean = true,
+    content: @Composable () -> Unit,
+) {
+    val darkModeValues = if (shouldCompareDarkMode) listOf(true, false) else listOf(false)
+    val dynamicThemingValues = if (shouldCompareDynamicTheme) listOf(true, false) else listOf(false)
+
+    val darkMode = mutableStateOf(true)
+    val dynamicTheming = mutableStateOf(false)
+
+    this.setContent {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true,
+        ) {
+            NiaTheme(
+                darkTheme = darkMode.value,
+                disableDynamicTheming = !dynamicTheming.value,
+            ) {
+                key(darkMode.value, dynamicTheming.value) { // Necessary sometimes (e.g. animations)
+                    content()
+                }
+            }
+        }
+    }
+    darkModeValues.forEach { darkModeValue ->
+        darkMode.value = darkModeValue
+        val darkModeDesc = if (darkModeValue) "dark" else "light"
+
+        dynamicThemingValues.forEach { dynamicThemingValue ->
+            dynamicTheming.value = dynamicThemingValue
+            val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
+
+            val filename = overrideFileName ?: name
+            this.onRoot()
+                .captureRoboImage(
+                    "src/test/screenshots/" +
+                        "$name/${filename}_${darkModeDesc}_$dynamicThemingDesc.png",
+                    roborazziOptions = DefaultRoborazziOptions,
+                )
+        }
+    }
 }
 
 /**
