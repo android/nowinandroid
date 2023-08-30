@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -84,52 +85,109 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 }
 
 /**
- * Takes four screenshots combining light/dark and default/dynamic themes.
+ * Takes six screenshots combining light/dark and default/Android themes and whether dynamic color
+ * is enabled.
  */
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiTheme(
     name: String,
     overrideFileName: String? = null,
     shouldCompareDarkMode: Boolean = true,
-    shouldCompareDynamicTheme: Boolean = true,
-    content: @Composable () -> Unit,
+    shouldCompareDynamicColor: Boolean = true,
+    shouldCompareAndroidTheme: Boolean = true,
+    content: @Composable (desc: String) -> Unit,
 ) {
     val darkModeValues = if (shouldCompareDarkMode) listOf(true, false) else listOf(false)
-    val dynamicThemingValues = if (shouldCompareDynamicTheme) listOf(true, false) else listOf(false)
+    val dynamicThemingValues = if (shouldCompareDynamicColor) listOf(true, false) else listOf(false)
+    val androidThemeValues = if (shouldCompareAndroidTheme) listOf(true, false) else listOf(false)
 
     val darkMode = mutableStateOf(true)
     val dynamicTheming = mutableStateOf(false)
+    val androidTheme = mutableStateOf(false)
 
     this.setContent {
         CompositionLocalProvider(
             LocalInspectionMode provides true,
         ) {
             NiaTheme(
+                androidTheme = androidTheme.value,
                 darkTheme = darkMode.value,
                 disableDynamicTheming = !dynamicTheming.value,
             ) {
                 key(darkMode.value, dynamicTheming.value) { // Necessary sometimes (e.g. animations)
-                    content()
+                    val description = generateDescription(
+                        shouldCompareDarkMode,
+                        darkMode,
+                        shouldCompareAndroidTheme,
+                        androidTheme,
+                        shouldCompareDynamicColor,
+                        dynamicTheming
+                    )
+                    content(description)
                 }
             }
         }
     }
-    darkModeValues.forEach { darkModeValue ->
-        darkMode.value = darkModeValue
-        val darkModeDesc = if (darkModeValue) "dark" else "light"
+    
+    // Create permutations
+    darkModeValues.forEach { isDarkMode ->
+        darkMode.value = isDarkMode
+        val darkModeDesc = if (isDarkMode) "dark" else "light"
 
-        dynamicThemingValues.forEach { dynamicThemingValue ->
-            dynamicTheming.value = dynamicThemingValue
-            val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
+        androidThemeValues.forEach { isAndroidTheme ->
+            androidTheme.value = isAndroidTheme
+            val androidThemeDesc = if (isAndroidTheme) "androidTheme" else "defaultTheme"
 
-            val filename = overrideFileName ?: name
-            this.onRoot()
-                .captureRoboImage(
-                    "src/test/screenshots/" +
-                        "$name/${filename}_${darkModeDesc}_$dynamicThemingDesc.png",
-                    roborazziOptions = DefaultRoborazziOptions,
-                )
+            dynamicThemingValues.forEach dynamicTheme@ { isDynamicTheming ->
+                // Skip tests with both Android Theme and Dynamic color as they're incompatible.
+                if (isAndroidTheme && isDynamicTheming) return@dynamicTheme
+
+                dynamicTheming.value = isDynamicTheming
+                val dynamicThemingDesc = if (isDynamicTheming) "dynamic" else "notDynamic"
+
+                val filename = overrideFileName ?: name
+
+                this.onRoot()
+                    .captureRoboImage(
+                        "src/test/screenshots/" +
+                            "$name/${filename}" +
+                            "_${darkModeDesc}" +
+                            "_${androidThemeDesc}" +
+                            "_${dynamicThemingDesc}" +
+                            ".png",
+                        roborazziOptions = DefaultRoborazziOptions,
+                    )
+            }
         }
     }
+}
+
+@Composable
+private fun generateDescription(
+    shouldCompareDarkMode: Boolean,
+    darkMode: MutableState<Boolean>,
+    shouldCompareAndroidTheme: Boolean,
+    androidTheme: MutableState<Boolean>,
+    shouldCompareDynamicColor: Boolean,
+    dynamicTheming: MutableState<Boolean>,
+): String {
+    val description = "" +
+        if (shouldCompareDarkMode) {
+            if (darkMode.value) "Dark" else "Light"
+        } else {
+            ""
+        } +
+        if (shouldCompareAndroidTheme) {
+            if (androidTheme.value) " Android" else " Default"
+        } else {
+            ""
+        } +
+        if (shouldCompareDynamicColor) {
+            if (dynamicTheming.value) " Dynamic" else ""
+        } else {
+            ""
+        }
+
+    return description.trim()
 }
 
 /**

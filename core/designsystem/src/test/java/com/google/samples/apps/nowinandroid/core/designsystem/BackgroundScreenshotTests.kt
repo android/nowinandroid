@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
@@ -44,94 +45,19 @@ class BackgroundScreenshotTests {
 
     @Test
     fun niaBackground_multipleThemes() {
-        composeTestRule.captureMultiTheme("Background") {
-            NiaBackground(Modifier.size(100.dp), content = {})
+        composeTestRule.captureMultiTheme("Background") { description ->
+            NiaBackground(Modifier.size(100.dp)) {
+                Text("$description background")
+            }
         }
     }
 
     @Test
     fun niaGradientBackground_multipleThemes() {
-        composeTestRule.captureMultiTheme("Background", "GradientBackground") {
-            NiaGradientBackground(Modifier.size(100.dp), content = {})
+        composeTestRule.captureMultiTheme("Background", "GradientBackground") { description ->
+            NiaGradientBackground(Modifier.size(100.dp)) {
+                Text("$description background")
+            }
         }
     }
-//
-//    @Test
-//    fun backgroundDefault() {
-//        testScreenshotDarkAndLight("BackgroundDefault") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun backgroundDynamic() {
-//        testScreenshotDarkAndLight("BackgroundDynamic") {
-//            NiaTheme(disableDynamicTheming = false) {
-//                NiaBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun backgroundAndroid() {
-//        testScreenshotDarkAndLight("BackgroundAndroid") {
-//            NiaTheme(androidTheme = true) {
-//                NiaBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun gradientBackgroundDefault() {
-//        testScreenshotDarkAndLight("BackgroundGradientDefault") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaGradientBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun gradientBackgroundDynamic() {
-//        testScreenshotDarkAndLight("BackgroundGradientDynamic") {
-//            NiaTheme(disableDynamicTheming = false) {
-//                NiaGradientBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun gradientBackgroundAndroid() {
-//        testScreenshotDarkAndLight("BackgroundGradientAndroid") {
-//            NiaTheme(androidTheme = true) {
-//                NiaGradientBackground(Modifier.size(100.dp), content = {})
-//            }
-//        }
-//    }
-//
-//    private fun testScreenshotDarkAndLight(screenshotName: String, content: @Composable () -> Unit) {
-//        val darkMode = mutableStateOf(true)
-//        composeTestRule.setContent {
-//            CompositionLocalProvider(
-//                LocalInspectionMode provides true,
-//            ) {
-//                TestHarness(darkMode = darkMode.value) {
-//                    content()
-//                }
-//            }
-//        }
-//
-//        composeTestRule.onRoot()
-//            .captureRoboImage(
-//                "src/test/screenshots/Background/${screenshotName}_dark.png",
-//                roborazziOptions = DefaultRoborazziOptions,
-//            )
-//        darkMode.value = false
-//        composeTestRule.onRoot()
-//            .captureRoboImage(
-//                "src/test/screenshots/Background/${screenshotName}_light.png",
-//                roborazziOptions = DefaultRoborazziOptions,
-//            )
-//    }
 }

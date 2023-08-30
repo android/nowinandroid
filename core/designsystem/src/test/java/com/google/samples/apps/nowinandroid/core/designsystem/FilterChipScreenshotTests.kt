@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
@@ -28,9 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -52,47 +55,69 @@ class FilterChipScreenshotTests() {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun filterChipPermutationsThemeSelectedDynamic() {
-        val darkMode = mutableStateOf(false)
-        val selected = mutableStateOf(false)
-        val dynamicTheming = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            TestHarness(darkMode = darkMode.value, size = DpSize(80.dp, 40.dp)) {
-                NiaTheme(disableDynamicTheming = !dynamicTheming.value) {
-                    NiaBackground {
-                        NiaFilterChip(selected = selected.value, onSelectedChange = {}) {
-                            Text("Chip")
-                        }
-                    }
-                }
-            }
-        }
-
-        listOf(true, false).forEach { darkModeValue ->
-            darkMode.value = darkModeValue
-            val darkModeDesc = if (darkModeValue) "dark" else "light"
-
-            listOf(true, false).forEach { selectedValue ->
-                selected.value = selectedValue
-                val selectedDesc = if (selectedValue) "selected" else "notSelected"
-
-                listOf(true, false).forEach { dynamicThemingValue ->
-                    dynamicTheming.value = dynamicThemingValue
-                    val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-
-                    composeTestRule.onRoot()
-                        .captureRoboImage(
-                            "src/test/screenshots/FilterChip/FilterChip_${darkModeDesc}_${selectedDesc}_$dynamicThemingDesc.png",
-                            roborazziOptions = DefaultRoborazziOptions,
-                        )
+    fun filterChip_multipleThemes() {
+        composeTestRule.captureMultiTheme("FilterChip") { description ->
+            Surface {
+                NiaFilterChip(selected = false, onSelectedChange = {}) {
+                    Text("Unselected chip")
                 }
             }
         }
     }
 
     @Test
-    fun NavigationHugeFont() {
+    fun filterChip_multipleThemes_selected() {
+        composeTestRule.captureMultiTheme("FilterChip", "FilterChipSelected") { description ->
+            Surface {
+                NiaFilterChip(selected = true, onSelectedChange = {}) {
+                    Text("Selected Chip")
+                }
+            }
+        }
+    }
+//
+//    @Test
+//    fun filterChipPermutationsThemeSelectedDynamic() {
+//        val darkMode = mutableStateOf(false)
+//        val selected = mutableStateOf(false)
+//        val dynamicTheming = mutableStateOf(false)
+//
+//        composeTestRule.setContent {
+//            TestHarness(darkMode = darkMode.value, size = DpSize(80.dp, 40.dp)) {
+//                NiaTheme(disableDynamicTheming = !dynamicTheming.value) {
+//                    NiaBackground {
+//                        NiaFilterChip(selected = selected.value, onSelectedChange = {}) {
+//                            Text("Chip")
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        listOf(true, false).forEach { darkModeValue ->
+//            darkMode.value = darkModeValue
+//            val darkModeDesc = if (darkModeValue) "dark" else "light"
+//
+//            listOf(true, false).forEach { selectedValue ->
+//                selected.value = selectedValue
+//                val selectedDesc = if (selectedValue) "selected" else "notSelected"
+//
+//                listOf(true, false).forEach { dynamicThemingValue ->
+//                    dynamicTheming.value = dynamicThemingValue
+//                    val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
+//
+//                    composeTestRule.onRoot()
+//                        .captureRoboImage(
+//                            "src/test/screenshots/FilterChip/FilterChip_${darkModeDesc}_${selectedDesc}_$dynamicThemingDesc.png",
+//                            roborazziOptions = DefaultRoborazziOptions,
+//                        )
+//                }
+//            }
+//        }
+//    }
+
+    @Test
+    fun FilterChipHugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,

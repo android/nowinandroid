@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
@@ -25,10 +27,12 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -49,44 +53,19 @@ class IconButtonScreenshotTests {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+
     @Test
-    fun iconButtonPermutationsThemeSelectedDynamic() {
-        val darkMode = mutableStateOf(true)
-        val checked = mutableStateOf(true)
-        val dynamicTheming = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                NiaTheme(
-                    darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value,
-                ) {
-                    NiaIconToggleExample(checked.value)
-                }
-            }
+    fun iconButtonmultipleThemes() {
+        composeTestRule.captureMultiTheme("IconButton") { description ->
+            NiaIconToggleExample(false)
         }
+    }
 
-        listOf(true, false).forEach { darkModeValue ->
-            darkMode.value = darkModeValue
-            val darkModeDesc = if (darkModeValue) "dark" else "light"
-
-            listOf(true, false).forEach { dynamicThemingValue ->
-                dynamicTheming.value = dynamicThemingValue
-                val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-
-                listOf(true, false).forEach { checkedValue ->
-                    checked.value = checkedValue
-                    val checkedDesc = if (checkedValue) "checked" else "unchecked"
-
-                    composeTestRule.onRoot()
-                        .captureRoboImage(
-                            "src/test/screenshots/IconButton/IconButton_" +
-                                "${checkedDesc}_${darkModeDesc}_$dynamicThemingDesc.png",
-                            roborazziOptions = DefaultRoborazziOptions,
-                        )
-                }
+    @Test
+    fun iconButtonmultipleThemes_unchecked() {
+        composeTestRule.captureMultiTheme("IconButton", "IconButtonUnchecked") { description ->
+            Surface {
+                NiaIconToggleExample(true)
             }
         }
     }
