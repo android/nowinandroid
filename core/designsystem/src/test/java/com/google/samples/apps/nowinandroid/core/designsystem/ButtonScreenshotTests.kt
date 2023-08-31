@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,88 +77,4 @@ class ButtonScreenshotTests {
             }
         }
     }
-//
-//    @Test
-//    fun buttonDefault() {
-//        testScreenshotDarkAndLight("ButtonDefault") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaBackground {
-//                    NiaButton(onClick = {}, text = { Text("Default Button") })
-//                }
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun buttonDynamic() {
-//        testScreenshotDarkAndLight("ButtonDynamic") {
-//            NiaTheme(disableDynamicTheming = false) {
-//                NiaBackground {
-//                    NiaOutlinedButton(onClick = {}, text = { Text("Dynamic Button") })
-//                }
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun outlinedButton() {
-//        testScreenshotDarkAndLight("ButtonOutlined") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaBackground {
-//                    NiaOutlinedButton(onClick = {}, text = { Text("Outlined Button") })
-//                }
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun outlinedButtonDynamic() {
-//        testScreenshotDarkAndLight("Buttonoutlineddynamic") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaBackground {
-//                    NiaOutlinedButton(onClick = {}, text = { Text("Outlined Dynamic") })
-//                }
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun buttonLeadingIcon() {
-//        testScreenshotDarkAndLight("ButtonLeadingIcon") {
-//            NiaTheme(disableDynamicTheming = true) {
-//                NiaBackground {
-//                    NiaButton(
-//                        onClick = {},
-//                        text = { Text("Test button") },
-//                        leadingIcon = { Icon(imageVector = NiaIcons.Add, contentDescription = null) },
-//                    )
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun testScreenshotDarkAndLight(screenshotName: String, content: @Composable () -> Unit) {
-//        val darkMode = mutableStateOf(true)
-//        composeTestRule.setContent {
-//            CompositionLocalProvider(
-//                LocalInspectionMode provides true,
-//            ) {
-//                TestHarness(darkMode = darkMode.value, size = DpSize(170.dp, 50.dp)) {
-//                    content()
-//                }
-//            }
-//        }
-//
-//        composeTestRule.onRoot()
-//            .captureRoboImage(
-//                "src/test/screenshots/Button/${screenshotName}_dark.png",
-//                roborazziOptions = DefaultRoborazziOptions,
-//            )
-//        darkMode.value = false
-//        composeTestRule.onRoot()
-//            .captureRoboImage(
-//                "src/test/screenshots/Button/${screenshotName}_light.png",
-//                roborazziOptions = DefaultRoborazziOptions,
-//            )
-//    }
 }

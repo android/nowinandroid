@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
 
-@HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, sdk = [33], qualifiers = "480dpi")
@@ -73,49 +72,9 @@ class FilterChipScreenshotTests() {
             }
         }
     }
-//
-//    @Test
-//    fun filterChipPermutationsThemeSelectedDynamic() {
-//        val darkMode = mutableStateOf(false)
-//        val selected = mutableStateOf(false)
-//        val dynamicTheming = mutableStateOf(false)
-//
-//        composeTestRule.setContent {
-//            TestHarness(darkMode = darkMode.value, size = DpSize(80.dp, 40.dp)) {
-//                NiaTheme(disableDynamicTheming = !dynamicTheming.value) {
-//                    NiaBackground {
-//                        NiaFilterChip(selected = selected.value, onSelectedChange = {}) {
-//                            Text("Chip")
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        listOf(true, false).forEach { darkModeValue ->
-//            darkMode.value = darkModeValue
-//            val darkModeDesc = if (darkModeValue) "dark" else "light"
-//
-//            listOf(true, false).forEach { selectedValue ->
-//                selected.value = selectedValue
-//                val selectedDesc = if (selectedValue) "selected" else "notSelected"
-//
-//                listOf(true, false).forEach { dynamicThemingValue ->
-//                    dynamicTheming.value = dynamicThemingValue
-//                    val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-//
-//                    composeTestRule.onRoot()
-//                        .captureRoboImage(
-//                            "src/test/screenshots/FilterChip/FilterChip_${darkModeDesc}_${selectedDesc}_$dynamicThemingDesc.png",
-//                            roborazziOptions = DefaultRoborazziOptions,
-//                        )
-//                }
-//            }
-//        }
-//    }
 
     @Test
-    fun FilterChipHugeFont() {
+    fun filterChip_hugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
