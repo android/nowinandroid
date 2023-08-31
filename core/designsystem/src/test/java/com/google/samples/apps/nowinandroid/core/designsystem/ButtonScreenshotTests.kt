@@ -17,27 +17,13 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOutlinedButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -80,7 +66,7 @@ class ButtonScreenshotTests {
         composeTestRule.captureMultiTheme(
             name = "Button",
             overrideFileName = "ButtonLeadingIcon",
-            shouldCompareAndroidTheme = false
+            shouldCompareAndroidTheme = false,
         ) { description ->
             Surface {
                 NiaButton(

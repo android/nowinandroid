@@ -21,7 +21,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
@@ -31,6 +30,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -52,43 +52,14 @@ class TabsScreenshotTests() {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun tabsPermutationsThemeSelectedDynamic() {
-        val darkMode = mutableStateOf(true)
-        val dynamicTheming = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                NiaTheme(
-                    darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value,
-                ) {
-                    NiaTabsExample()
-                }
-            }
-        }
-
-        listOf(true, false).forEach { darkModeValue ->
-            darkMode.value = darkModeValue
-            val darkModeDesc = if (darkModeValue) "dark" else "light"
-
-            listOf(true, false).forEach { dynamicThemingValue ->
-                dynamicTheming.value = dynamicThemingValue
-                val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-
-                composeTestRule.onRoot()
-                    .captureRoboImage(
-                        "src/test/screenshots/Tabs" +
-                            "/Tabs_${darkModeDesc}_$dynamicThemingDesc.png",
-                        roborazziOptions = DefaultRoborazziOptions,
-                    )
-            }
+    fun tabs_multipleThemes() {
+        composeTestRule.captureMultiTheme("Tabs") {
+            NiaTabsExample()
         }
     }
 
     @Test
-    fun TabsHugeFont() {
+    fun tabs_hugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,

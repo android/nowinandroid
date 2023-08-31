@@ -49,7 +49,7 @@ class TagScreenshotTests() {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun tagPermutationsThemeSelectedDynamic() {
+    fun Tag_multipleThemes() {
         composeTestRule.captureMultiTheme("Tag") {
             NiaTopicTag(followed = true, onClick = {}) {
                 Text("TOPIC")
@@ -58,7 +58,7 @@ class TagScreenshotTests() {
     }
 
     @Test
-    fun TagHugeFont() {
+    fun tag_hugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,

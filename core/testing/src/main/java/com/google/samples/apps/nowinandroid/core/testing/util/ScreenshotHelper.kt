@@ -113,21 +113,22 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
                 darkTheme = darkMode.value,
                 disableDynamicTheming = !dynamicTheming.value,
             ) {
-                key(darkMode.value, dynamicTheming.value) { // Necessary sometimes (e.g. animations)
+                // Keying is necessary in some cases (e.g. animations)
+                key(androidTheme.value, darkMode.value, dynamicTheming.value) {
                     val description = generateDescription(
                         shouldCompareDarkMode,
                         darkMode,
                         shouldCompareAndroidTheme,
                         androidTheme,
                         shouldCompareDynamicColor,
-                        dynamicTheming
+                        dynamicTheming,
                     )
                     content(description)
                 }
             }
         }
     }
-    
+
     // Create permutations
     darkModeValues.forEach { isDarkMode ->
         darkMode.value = isDarkMode
@@ -137,7 +138,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             androidTheme.value = isAndroidTheme
             val androidThemeDesc = if (isAndroidTheme) "androidTheme" else "defaultTheme"
 
-            dynamicThemingValues.forEach dynamicTheme@ { isDynamicTheming ->
+            dynamicThemingValues.forEach dynamicTheme@{ isDynamicTheming ->
                 // Skip tests with both Android Theme and Dynamic color as they're incompatible.
                 if (isAndroidTheme && isDynamicTheming) return@dynamicTheme
 
@@ -149,10 +150,10 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
                 this.onRoot()
                     .captureRoboImage(
                         "src/test/screenshots/" +
-                            "$name/${filename}" +
-                            "_${darkModeDesc}" +
-                            "_${androidThemeDesc}" +
-                            "_${dynamicThemingDesc}" +
+                            "$name/$filename" +
+                            "_$darkModeDesc" +
+                            "_$androidThemeDesc" +
+                            "_$dynamicThemingDesc" +
                             ".png",
                         roborazziOptions = DefaultRoborazziOptions,
                     )

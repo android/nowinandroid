@@ -18,11 +18,6 @@ package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -30,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadi
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -51,56 +47,19 @@ class LoadingWheelScreenshotTests() {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun todo1() {
-        loadingWheelPermutationsThemeSelectedDynamic("LoadingWheel") {
-            NiaLoadingWheel(contentDesc = "test")
+    fun loadingWheel_multipleThemes() {
+        composeTestRule.captureMultiTheme("LoadingWheel") {
+            Surface {
+                NiaLoadingWheel(contentDesc = "test")
+            }
         }
     }
 
     @Test
-    fun todo2() {
-        loadingWheelPermutationsThemeSelectedDynamic("OverlayLoadingWheel") {
-            NiaOverlayLoadingWheel(contentDesc = "test")
-        }
-    }
-
-    private fun loadingWheelPermutationsThemeSelectedDynamic(name: String, content: @Composable () -> Unit) {
-        // TODO: darkMode doesn't seem to be affecting the actual LoadingWheel
-        //  (but it does change the background)
-        val darkMode = mutableStateOf(true)
-        val dynamicTheming = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                NiaTheme(
-                    darkTheme = darkMode.value,
-                    disableDynamicTheming = !dynamicTheming.value,
-                ) {
-                    Surface {
-                        key(darkMode.value, dynamicTheming.value) {
-                            content()
-                        }
-                    }
-                }
-            }
-        }
-
-        listOf(true, false).forEach { darkModeValue ->
-            darkMode.value = darkModeValue
-            val darkModeDesc = if (darkModeValue) "dark" else "light"
-
-            listOf(true, false).forEach { dynamicThemingValue ->
-                dynamicTheming.value = dynamicThemingValue
-                val dynamicThemingDesc = if (dynamicThemingValue) "dynamic" else "default"
-
-                composeTestRule.onRoot()
-                    .captureRoboImage(
-                        "src/test/screenshots/LoadingWheel" +
-                            "/${name}_${darkModeDesc}_$dynamicThemingDesc.png",
-                        roborazziOptions = DefaultRoborazziOptions,
-                    )
+    fun overlayLoadingWheel_multipleThemes() {
+        composeTestRule.captureMultiTheme("LoadingWheel", "OverlayLoadingWheel") {
+            Surface {
+                NiaOverlayLoadingWheel(contentDesc = "test")
             }
         }
     }
