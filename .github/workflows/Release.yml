@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 45
 
     steps:
@@ -28,6 +28,7 @@ jobs:
 
       - name: Build app
         run: ./gradlew :app:assembleDemoRelease
+               -Pandroidx.benchmark.enabledRules=BaselineProfile
                -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
                -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
 
