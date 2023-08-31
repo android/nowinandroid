@@ -17,6 +17,7 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.dsl.Lint
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -25,10 +26,10 @@ class AndroidLintConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             when {
-                pluginManager.hasPlugin("com.android.application") ->
+                pluginManager.hasPlugin(libs.plugins.android.application.get().pluginId) ->
                     configure<ApplicationExtension> { lint(Lint::configure) }
 
-                pluginManager.hasPlugin("com.android.library") ->
+                pluginManager.hasPlugin(libs.plugins.android.library.get().pluginId) ->
                     configure<LibraryExtension> { lint(Lint::configure) }
 
                 else -> {

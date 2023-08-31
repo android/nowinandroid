@@ -40,6 +40,9 @@ dependencies {
     compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+
+    // These dependency below allows us to get [LibrariesForLibs] the class provided by [libs] in the plugins
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
 gradlePlugin {

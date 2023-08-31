@@ -15,6 +15,7 @@
  */
 
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,7 +23,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("org.jetbrains.kotlin.jvm")
+                apply(libs.plugins.kotlin.jvm.get().pluginId)
                 apply("nowinandroid.android.lint")
             }
             configureKotlinJvm()

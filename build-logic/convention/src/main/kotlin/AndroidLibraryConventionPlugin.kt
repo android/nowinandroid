@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -31,7 +32,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.library")
+                apply(libs.plugins.android.library.get().pluginId)
                 apply("org.jetbrains.kotlin.android")
                 apply("nowinandroid.android.lint")
             }

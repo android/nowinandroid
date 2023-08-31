@@ -52,14 +52,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", kotlin("test"))
                 add("androidTestImplementation", project(":core:testing"))
 
-                add("implementation", libs.findLibrary("coil.kt").get())
-                add("implementation", libs.findLibrary("coil.kt.compose").get())
+                add("implementation", libs.coil.kt)
+                add("implementation", libs.coil.kt.compose)
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+                add("implementation", libs.androidx.hilt.navigation.compose)
+                add("implementation", libs.androidx.lifecycle.runtimeCompose)
+                add("implementation", libs.androidx.lifecycle.viewModelCompose)
 
-                add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
+                add("implementation", libs.kotlinx.coroutines.android)
             }
         }
     }

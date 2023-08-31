@@ -16,6 +16,7 @@
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureJacoco
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -25,7 +26,7 @@ class AndroidApplicationJacocoConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("org.gradle.jacoco")
-                apply("com.android.application")
+                apply(libs.plugins.android.application.get().pluginId)
             }
             val extension = extensions.getByType<ApplicationAndroidComponentsExtension>()
             configureJacoco(extension)

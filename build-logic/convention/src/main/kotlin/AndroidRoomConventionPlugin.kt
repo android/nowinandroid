@@ -30,7 +30,7 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("com.google.devtools.ksp")
+            pluginManager.apply(libs.plugins.ksp.get().pluginId)
 
             extensions.configure<KspExtension> {
                 // The schemas directory contains a schema file for each version of the Room database.
@@ -40,9 +40,9 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", libs.findLibrary("room.runtime").get())
-                add("implementation", libs.findLibrary("room.ktx").get())
-                add("ksp", libs.findLibrary("room.compiler").get())
+                add("implementation", libs.room.runtime)
+                add("implementation", libs.room.ktx)
+                add("ksp", libs.room.compiler)
             }
         }
     }

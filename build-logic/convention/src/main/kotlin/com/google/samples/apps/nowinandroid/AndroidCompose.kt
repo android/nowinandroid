@@ -34,18 +34,17 @@ internal fun Project.configureAndroidCompose(
         }
 
         composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().toString()
+            kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
         }
 
         dependencies {
-            val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
+            add("implementation", platform(libs.androidx.compose.bom))
+            add("androidTestImplementation", platform(libs.androidx.compose.bom))
             // Add ComponentActivity to debug manifest
-            add("debugImplementation", libs.findLibrary("androidx.compose.ui.testManifest").get())
+            add("debugImplementation", libs.androidx.compose.ui.testManifest)
             // Screenshot Tests on JVM
-            add("testImplementation", libs.findLibrary("robolectric").get())
-            add("testImplementation", libs.findLibrary("roborazzi").get())
+            add("testImplementation", libs.robolectric)
+            add("testImplementation", libs.roborazzi)
         }
 
         testOptions {
