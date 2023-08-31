@@ -75,7 +75,13 @@ jobs:
         run: ./gradlew testDemoDebug testProdDebug :lint:test
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew assemble
+        run: ./gradlew assemble -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          -Dorg.gradle.workers.max=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
+          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
