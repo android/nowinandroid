@@ -20,9 +20,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
@@ -100,21 +101,21 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     val dynamicThemingValues = if (shouldCompareDynamicColor) listOf(true, false) else listOf(false)
     val androidThemeValues = if (shouldCompareAndroidTheme) listOf(true, false) else listOf(false)
 
-    val darkMode = mutableStateOf(true)
-    val dynamicTheming = mutableStateOf(false)
-    val androidTheme = mutableStateOf(false)
+    var darkMode by mutableStateOf(true)
+    var dynamicTheming by mutableStateOf(false)
+    var androidTheme by mutableStateOf(false)
 
     this.setContent {
         CompositionLocalProvider(
             LocalInspectionMode provides true,
         ) {
             NiaTheme(
-                androidTheme = androidTheme.value,
-                darkTheme = darkMode.value,
-                disableDynamicTheming = !dynamicTheming.value,
+                androidTheme = androidTheme,
+                darkTheme = darkMode,
+                disableDynamicTheming = !dynamicTheming,
             ) {
                 // Keying is necessary in some cases (e.g. animations)
-                key(androidTheme.value, darkMode.value, dynamicTheming.value) {
+                key(androidTheme, darkMode, dynamicTheming) {
                     val description = generateDescription(
                         shouldCompareDarkMode,
                         darkMode,
@@ -131,18 +132,18 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 
     // Create permutations
     darkModeValues.forEach { isDarkMode ->
-        darkMode.value = isDarkMode
+        darkMode = isDarkMode
         val darkModeDesc = if (isDarkMode) "dark" else "light"
 
         androidThemeValues.forEach { isAndroidTheme ->
-            androidTheme.value = isAndroidTheme
+            androidTheme = isAndroidTheme
             val androidThemeDesc = if (isAndroidTheme) "androidTheme" else "defaultTheme"
 
             dynamicThemingValues.forEach dynamicTheme@{ isDynamicTheming ->
                 // Skip tests with both Android Theme and Dynamic color as they're incompatible.
                 if (isAndroidTheme && isDynamicTheming) return@dynamicTheme
 
-                dynamicTheming.value = isDynamicTheming
+                dynamicTheming = isDynamicTheming
                 val dynamicThemingDesc = if (isDynamicTheming) "dynamic" else "notDynamic"
 
                 val filename = overrideFileName ?: name
@@ -165,25 +166,25 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 @Composable
 private fun generateDescription(
     shouldCompareDarkMode: Boolean,
-    darkMode: MutableState<Boolean>,
+    darkMode: Boolean,
     shouldCompareAndroidTheme: Boolean,
-    androidTheme: MutableState<Boolean>,
+    androidTheme: Boolean,
     shouldCompareDynamicColor: Boolean,
-    dynamicTheming: MutableState<Boolean>,
+    dynamicTheming: Boolean,
 ): String {
     val description = "" +
         if (shouldCompareDarkMode) {
-            if (darkMode.value) "Dark" else "Light"
+            if (darkMode) "Dark" else "Light"
         } else {
             ""
         } +
         if (shouldCompareAndroidTheme) {
-            if (androidTheme.value) " Android" else " Default"
+            if (androidTheme) " Android" else " Default"
         } else {
             ""
         } +
         if (shouldCompareDynamicColor) {
-            if (dynamicTheming.value) " Dynamic" else ""
+            if (dynamicTheming) " Dynamic" else ""
         } else {
             ""
         }
