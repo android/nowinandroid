@@ -21,9 +21,10 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.dependencies
 
-abstract class HiltConventionPlugin : Plugin<Project> {
-    open val basePluginId: String? = null
-    protected abstract fun DependencyHandlerScope.additionalDependencies(libs: VersionCatalog)
+class HiltConventionPlugin(
+    val basePluginId: String? = null,
+    val dependencyHandler: DependencyHandlerScope.(libs: VersionCatalog) -> Unit
+) : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -32,7 +33,7 @@ abstract class HiltConventionPlugin : Plugin<Project> {
             }
             dependencies {
                 "ksp"(libs.findLibrary("hilt.compiler").get())
-                additionalDependencies(libs)
+                dependencyHandler(libs)
             }
         }
     }

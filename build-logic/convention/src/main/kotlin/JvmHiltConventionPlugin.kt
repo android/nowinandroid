@@ -14,11 +14,11 @@
  *   limitations under the License.
  */
 
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-class JvmHiltConventionPlugin : HiltConventionPlugin() {
-    override fun DependencyHandlerScope.additionalDependencies(libs: VersionCatalog) {
+class JvmHiltConventionPlugin : Plugin<Project> by HiltConventionPlugin(
+    dependencyHandler = { libs ->
         "implementation"(libs.findLibrary("hilt.core").get())
-    }
-}
+    },
+)
