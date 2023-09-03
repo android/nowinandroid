@@ -14,14 +14,15 @@
  *   limitations under the License.
  */
 
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-class AndroidHiltConventionPlugin : HiltConventionPlugin() {
-    override val basePluginId = "dagger.hilt.android.plugin"
-    override fun DependencyHandlerScope.additionalDependencies(libs: VersionCatalog) {
+class AndroidHiltConventionPlugin : Plugin<Project> by HiltConventionPlugin(
+    basePluginId = "dagger.hilt.android.plugin",
+    dependencyHandler = { libs ->
         "implementation"(libs.findLibrary("hilt.android").get())
+        "ksp"(libs.findLibrary("hilt.compiler").get())
         "kspAndroidTest"(libs.findLibrary("hilt.compiler").get())
         "kspTest"(libs.findLibrary("hilt.compiler").get())
     }
-}
+)
