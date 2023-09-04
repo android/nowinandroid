@@ -21,15 +21,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android filled button with generic content slot. Wraps Material 3 [Button].
@@ -257,6 +262,50 @@ private fun NiaButtonContent(
             ),
     ) {
         text()
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaButtonPreview() {
+    NiaTheme {
+        NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
+            NiaButton(onClick = {}, text = { Text("Test button") })
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaOutlinedButtonPreview() {
+    NiaTheme() {
+        NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
+            NiaOutlinedButton(onClick = {}, text = { Text("Test button") })
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaButtonPreview2() {
+    NiaTheme {
+        NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
+            NiaButton(onClick = {}, text = { Text("Test button") })
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaButtonLeadingIconPreview() {
+    NiaTheme {
+        NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
+            NiaButton(
+                onClick = {},
+                text = { Text("Test button") },
+                leadingIcon = { Icon(imageVector = NiaIcons.Add, contentDescription = null) },
+            )
+        }
     }
 }
 
