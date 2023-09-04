@@ -24,11 +24,15 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android tab. Wraps Material 3 [Tab] and shifts text label down.
@@ -95,6 +99,23 @@ fun NiaTabRow(
         },
         tabs = tabs,
     )
+}
+
+@ThemePreviews
+@Composable
+fun TabsPreview() {
+    NiaTheme {
+        val titles = listOf("Topics", "People")
+        NiaTabRow(selectedTabIndex = 0) {
+            titles.forEachIndexed { index, title ->
+                NiaTab(
+                    selected = index == 0,
+                    onClick = { },
+                    text = { Text(text = title) },
+                )
+            }
+        }
+    }
 }
 
 object NiaTabDefaults {

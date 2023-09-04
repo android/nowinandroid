@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -23,11 +24,13 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 /**
  * Now in Android filter chip with included leading checked icon as well as text content slot.
@@ -101,6 +104,18 @@ fun NiaFilterChip(
             selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
         ),
     )
+}
+
+@ThemePreviews
+@Composable
+fun ChipPreview() {
+    NiaTheme {
+        NiaBackground(modifier = Modifier.size(80.dp, 20.dp)) {
+            NiaFilterChip(selected = true, onSelectedChange = {}) {
+                Text("Chip")
+            }
+        }
+    }
 }
 
 /**
