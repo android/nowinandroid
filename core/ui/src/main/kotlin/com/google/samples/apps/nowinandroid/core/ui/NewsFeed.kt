@@ -23,10 +23,10 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +47,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
  * An extension on [LazyListScope] defining a feed with news resources.
  * Depending on the [feedState], this might emit no items.
  */
-fun LazyGridScope.newsFeed(
+fun LazyStaggeredGridScope.newsFeed(
     feedState: NewsFeedUiState,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
@@ -129,7 +129,7 @@ sealed interface NewsFeedUiState {
 @Composable
 private fun NewsFeedLoadingPreview() {
     NiaTheme {
-        LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
+        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Loading,
                 onNewsResourcesCheckedChanged = { _, _ -> },
@@ -148,7 +148,7 @@ private fun NewsFeedContentPreview(
     userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
-        LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
+        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(300.dp)) {
             newsFeed(
                 feedState = NewsFeedUiState.Success(userNewsResources),
                 onNewsResourcesCheckedChanged = { _, _ -> },
