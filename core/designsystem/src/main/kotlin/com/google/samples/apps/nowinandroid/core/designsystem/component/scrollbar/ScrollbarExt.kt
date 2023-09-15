@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridItemInfo
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemInfo
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 
 /**
@@ -101,4 +103,41 @@ fun LazyGridState.scrollbarState(
             )
         },
         reverseLayout = { layoutInfo.reverseLayout },
+    )
+
+/**
+ * Remembers a [ScrollbarState] driven by the changes in a [LazyStaggeredGridState]
+ *
+ * @param itemsAvailable the total amount of items available to scroll in the staggered grid.
+ * @param itemIndex a lookup function for index of an item in the staggered grid relative
+ * to [itemsAvailable].
+ */
+@Composable
+fun LazyStaggeredGridState.scrollbarState(
+    itemsAvailable: Int,
+    itemIndex: (LazyStaggeredGridItemInfo) -> Int = LazyStaggeredGridItemInfo::index,
+): ScrollbarState =
+    scrollbarState(
+        itemsAvailable = itemsAvailable,
+        visibleItems = { layoutInfo.visibleItemsInfo },
+        firstVisibleItemIndex = { visibleItems ->
+            interpolateFirstItemIndex(
+                visibleItems = visibleItems,
+                itemSize = { layoutInfo.orientation.valueOf(it.size) },
+                offset = { layoutInfo.orientation.valueOf(it.offset) },
+                nextItemOnMainAxis = { first ->
+                    visibleItems.find { it != first && it.lane == first.lane }
+                },
+                itemIndex = itemIndex,
+            )
+        },
+        itemPercentVisible = itemPercentVisible@{ itemInfo ->
+            itemVisibilityPercentage(
+                itemSize = layoutInfo.orientation.valueOf(itemInfo.size),
+                itemStartOffset = layoutInfo.orientation.valueOf(itemInfo.offset),
+                viewportStartOffset = layoutInfo.viewportStartOffset,
+                viewportEndOffset = layoutInfo.viewportEndOffset,
+            )
+        },
+        reverseLayout = { false },
     )
