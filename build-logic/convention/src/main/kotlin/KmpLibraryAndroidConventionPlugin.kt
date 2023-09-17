@@ -14,29 +14,22 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
-import com.google.samples.apps.nowinandroid.configureKotlinAndroid
-import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-class AndroidApplicationConventionPlugin : Plugin<Project> {
+@Deprecated("AndroidLibraryConventionPlugin")
+class KmpLibraryAndroidConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
-                apply(libs.findPlugin("kotlin-multiplatform").get().get().pluginId)
-                apply("nowinandroid.android.lint")
+                apply("nowinandroid.kmp.library.jvm")
             }
 
             extensions.configure<KotlinMultiplatformExtension> {
@@ -45,22 +38,15 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 (this as org.gradle.api.plugins.ExtensionAware).extensions
                     .configure<NamedDomainObjectContainer<KotlinSourceSet>>("sourceSets") {
                         val androidMain by getting {
+                            dependencies {
+                            }
+                        }
+                        val androidUnitTest by getting {
+                            dependencies {
+                                implementation(libs.findLibrary("junit4").get().get())
+                            }
                         }
                     }
-            }
-            extensions.configure<ApplicationExtension> {
-                configureKotlinAndroid(this)
-                defaultConfig {
-                    targetSdk = 34
-                    multiDexEnabled = true
-                }
-                configureGradleManagedDevices(this)
-            }
-            extensions.configure<ApplicationAndroidComponentsExtension> {
-                configurePrintApksTask(this)
-            }
-            dependencies {
-                "implementation"(libs.findLibrary("androidx-multidex").get().get())
             }
         }
     }

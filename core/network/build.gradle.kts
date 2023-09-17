@@ -39,16 +39,17 @@ secrets {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
-    implementation(libs.coil.kt)
-    implementation(libs.coil.kt.svg)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.okhttp.logging)
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
+    api(project(":core:common"))
+    api(project(":core:model"))
+    api(libs.coil.kt)
+    api(libs.coil.kt.svg)
+    api(libs.kotlinx.coroutines.android)
+    api(libs.kotlinx.datetime)
+    api(libs.kotlinx.serialization.json)
+    api(libs.okhttp.logging)
+    api(libs.retrofit.core)
+    api(libs.retrofit.kotlin.serialization)
+
 
     testImplementation(project(":core:testing"))
 }

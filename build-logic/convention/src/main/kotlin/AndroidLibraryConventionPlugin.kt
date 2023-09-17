@@ -21,18 +21,22 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
+import com.google.samples.apps.nowinandroid.libs
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.getting
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
+                apply("nowinandroid.kmp.library.jvm")
                 apply("nowinandroid.android.lint")
             }
 
@@ -46,12 +50,34 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 disableUnnecessaryAndroidTests(target)
             }
-            dependencies {
-                add("testImplementation", kotlin("test"))
-                add("testImplementation", project(":core:testing"))
-                add("androidTestImplementation", kotlin("test"))
-                add("androidTestImplementation", project(":core:testing"))
+            extensions.configure<KotlinMultiplatformExtension> {
+                androidTarget()
+
+                // https://kotlinlang.org/docs/multiplatform-android-layout.html
+                (this as org.gradle.api.plugins.ExtensionAware).extensions
+                    .configure<NamedDomainObjectContainer<KotlinSourceSet>>("sourceSets") {
+                        val androidMain by getting {
+                            dependencies {
+                            }
+                        }
+                        val androidUnitTest by getting {
+                            dependencies {
+                                implementation(kotlin("test"))
+                                implementation(project(":core:testing"))
+                                implementation(libs.findLibrary("junit4").get().get())
+                            }
+                        }
+                        val androidInstrumentedTest by getting {
+                            dependencies {
+                                implementation(kotlin("test"))
+                                implementation(project(":core:testing"))
+                                implementation(libs.findLibrary("junit4").get().get())
+
+                            }
+                        }
+                    }
             }
+
         }
     }
 }

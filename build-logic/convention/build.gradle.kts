@@ -39,6 +39,8 @@ dependencies {
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
     compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.kotlin.kapt.gradlePlugin)
+    compileOnly(libs.jetbrains.compose.gradlePulgin)
     compileOnly(libs.ksp.gradlePlugin)
 }
 
@@ -96,9 +98,25 @@ gradlePlugin {
             id = "nowinandroid.android.lint"
             implementationClass = "AndroidLintConventionPlugin"
         }
-        register("jvmLibrary") {
-            id = "nowinandroid.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
+//        register("jvmLibrary") {
+//            id = "nowinandroid.jvm.library"
+//            implementationClass = "JvmLibraryConventionPlugin"
+//        }
+        register("kmpLibraryJvm") {
+            id = "nowinandroid.kmp.library.jvm"
+            implementationClass = "KmpLibraryJvmConventionPlugin"
+        }
+//        register("kmpLibraryAndroid") {
+//            id = "nowinandroid.kmp.library.android"
+//            implementationClass = "KmpLibraryAndroidConventionPlugin"
+//        }
+        register("kmpComposeLibrary") {
+            id = "nowinandroid.kmp.library.compose"
+            implementationClass = "KmpLibraryComposeConventionPlugin"
+        }
+        register("kmpFramework") {
+            id = "nowinandroid.kmp.framework"
+            implementationClass = "KmpFrameworkConventionPlugin"
         }
     }
 }

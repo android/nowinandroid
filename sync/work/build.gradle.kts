@@ -21,28 +21,40 @@ plugins {
 
 android {
     defaultConfig {
-        testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+        testInstrumentationRunner =
+            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
     namespace = "com.google.samples.apps.nowinandroid.sync"
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:model"))
+    api(project(":core:analytics"))
+    api(project(":core:common"))
+    api(project(":core:data"))
+    api(project(":core:datastore"))
+    api(project(":core:model"))
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)
-    implementation(libs.firebase.cloud.messaging)
-    implementation(libs.hilt.ext.work)
+    api(libs.firebase.cloud.messaging)
     implementation(libs.kotlinx.coroutines.android)
 
-    kapt(libs.hilt.ext.compiler)
+    implementation(libs.hilt.ext.work)
+    with(libs.hilt.ext.compiler) {
+        kapt(this)
+        kaptTest(this)
+        kaptAndroidTest(this)
+    }
 
-    testImplementation(project(":core:testing"))
-
-    androidTestImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:network"))
+    androidTestImplementation(project(":core:datastore-test"))
+    androidTestImplementation(project(":core:data-test"))
+}
+
+kapt {
+    javacOptions {
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
 }

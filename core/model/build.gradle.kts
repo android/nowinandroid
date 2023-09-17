@@ -15,9 +15,15 @@
  */
 
 plugins {
-    id("nowinandroid.jvm.library")
+    id("nowinandroid.kmp.library.jvm")
 }
 
-dependencies {
-    implementation(libs.kotlinx.datetime)
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlinx.datetime)
+            }
+        }
+    }
 }

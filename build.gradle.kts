@@ -32,8 +32,11 @@ buildscript {
 // Lists all plugins used throughout the project without applying them.
 plugins {
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.native.cocoapods) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.firebase.perf) apply false
     alias(libs.plugins.gms) apply false

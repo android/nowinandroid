@@ -40,10 +40,10 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.tooling)
 
-    implementation(project(":core:analytics"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:model"))
+    api(project(":core:analytics"))
+    api(project(":core:designsystem"))
+    api(project(":core:domain"))
+    api(project(":core:model"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)

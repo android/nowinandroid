@@ -20,6 +20,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
@@ -28,6 +29,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        // https://github.com/jimgoog/ComposeAppUsingPrereleaseComposeCompiler/tree/main#project-configuration
+        maven("https://androidx.dev/storage/compose-compiler/repository/")
+
     }
 }
 rootProject.name = "nowinandroid"

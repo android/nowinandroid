@@ -1,49 +1,51 @@
 [versions]
 accompanist = "0.28.0"
 androidDesugarJdkLibs = "2.0.3"
-androidGradlePlugin = "8.1.0"
-androidxActivity = "1.8.0-alpha06"
-androidxAppCompat = "1.5.1"
-androidxBrowser = "1.4.0"
-androidxComposeBom = "2023.06.01"
-androidxComposeCompiler = "1.5.0"
+androidGradlePlugin = "8.1.1"
+androidxMultidex = "2.0.1"
+androidxActivity = "1.8.0-beta01"
+androidxAppCompat = "1.6.1"
+androidxBrowser = "1.6.0"
+androidxComposeBom = "2023.09.00"
+androidxComposeCompiler = "1.5.3"
 androidxComposeRuntimeTracing = "1.0.0-alpha03"
-androidxCore = "1.9.0"
-androidxCoreSplashscreen = "1.0.0"
+androidxCore = "1.12.0"
+androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
-androidxEspresso = "3.5.0"
+androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.6.1"
-androidxMacroBenchmark = "1.2.0-alpha16"
-androidxMetrics = "1.0.0-alpha03"
-androidxNavigation = "2.5.3"
+androidxLifecycle = "2.6.2"
+androidxMacroBenchmark = "1.2.0-beta05"
+androidxMetrics = "1.0.0-alpha04"
+androidxNavigation = "2.7.2"
 androidxProfileinstaller = "1.3.1"
 androidxStartup = "1.1.1"
 androidxTestCore = "1.5.0"
-androidxTestExt = "1.1.4"
+androidxTestExt = "1.1.5"
 androidxTestRules = "1.5.0"
-androidxTestRunner = "1.5.1"
+androidxTestRunner = "1.5.2"
 androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
-androidxWindowManager = "1.0.0"
-androidxWork = "2.9.0-alpha01"
+androidxWindowManager = "1.1.0"
+androidxWork = "2.9.0-beta01"
 coil = "2.2.2"
-firebaseBom = "31.2.0"
-firebaseCrashlyticsPlugin = "2.9.2"
+firebaseBom = "32.3.0"
+firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
-gmsPlugin = "4.3.14"
+gmsPlugin = "4.4.0"
 googleOss = "17.0.1"
 googleOssPlugin = "0.10.6"
-hilt = "2.47"
+hilt = "2.48"
 hiltExt = "1.0.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
-kotlin = "1.9.0"
-kotlinxCoroutines = "1.6.4"
+kotlin = "1.9.10"
+kotlinxCoroutines = "1.7.3"
 kotlinxDatetime = "0.4.0"
-kotlinxSerializationJson = "1.5.1"
-ksp = "1.9.0-1.0.13"
-lint = "31.0.2"
+kotlinxSerializationJson = "1.6.0"
+compose-mp = "1.5.1"
+ksp = "1.9.10-1.0.13"
+lint = "31.1.1"
 okhttp = "4.10.0"
 protobuf = "3.24.0"
 protobufPlugin = "0.9.4"
@@ -59,6 +61,7 @@ turbine = "0.12.1"
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 accompanist-testharness = { group = "com.google.accompanist", name = "accompanist-testharness", version.ref = "accompanist" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "androidxMultidex" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
@@ -116,6 +119,7 @@ hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.r
 hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -140,6 +144,8 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-kapt-gradlePlugin = { group = "org.jetbrains.kotlin.kapt", name = "org.jetbrains.kotlin.kapt.gradle.plugin", version.ref = "kotlin" }
+jetbrains-compose-gradlePulgin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose-mp" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.1" }
 
@@ -152,7 +158,11 @@ firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "fireb
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-mp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

@@ -39,6 +39,7 @@ private fun String.capitalize() = replaceFirstChar {
     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
 }
 
+@Suppress("DEPRECATION")
 internal fun Project.configureJacoco(
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {

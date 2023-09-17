@@ -42,9 +42,8 @@ object TestDataStoreModule {
     fun providesUserPreferencesDataStore(
         @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer,
-        tmpFolder: TemporaryFolder,
     ): DataStore<UserPreferences> =
-        tmpFolder.testUserPreferencesDataStore(
+        TemporaryFolder().testUserPreferencesDataStore(
             coroutineScope = scope,
             userPreferencesSerializer = userPreferencesSerializer,
         )

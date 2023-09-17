@@ -15,15 +15,17 @@
  */
 
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+@Deprecated("Use KmpLibraryConventionPlugin instead", ReplaceWith("KmpLibraryConventionPlugin"))
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("org.jetbrains.kotlin.jvm")
-                apply("nowinandroid.android.lint")
+                apply(libs.findPlugin("kotlin-multiplatform").get().get().pluginId)
+//                apply("nowinandroid.android.lint")
             }
             configureKotlinJvm()
         }

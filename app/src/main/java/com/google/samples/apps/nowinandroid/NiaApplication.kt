@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid
 
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
@@ -28,7 +29,7 @@ import javax.inject.Provider
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApplication : Application(), ImageLoaderFactory {
+class NiaApplication : MultiDexApplication(), ImageLoaderFactory {
     @Inject
     lateinit var imageLoader: Provider<ImageLoader>
 

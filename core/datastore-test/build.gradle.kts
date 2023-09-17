@@ -27,6 +27,6 @@ dependencies {
     api(libs.androidx.dataStore.core)
 
     implementation(libs.protobuf.kotlin.lite)
-    implementation(project(":core:common"))
-    implementation(project(":core:testing"))
+    api(project(":core:common"))
+    api(project(":core:testing"))
 }

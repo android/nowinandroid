@@ -19,11 +19,11 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
@@ -40,12 +40,21 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            // Up to Java 11 APIs are available through desugaring
-            // https://developer.android.com/studio/write/java11-minimal-support-table
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
             isCoreLibraryDesugaringEnabled = true
         }
+        sourceSets.getByName("main") {
+//            with("src/main/java") {
+//                kotlin.srcDir(this)
+//                java.srcDir(this)
+//            }
+            manifest.srcFile("src/main/AndroidManifest.xml")
+        }
+    }
+    extensions.configure<KotlinMultiplatformExtension> {
+        // Up to Java 11 APIs are available through desugaring
+        // https://developer.android.com/studio/write/java11-minimal-support-table
+        jvmToolchain(11)
+        androidTarget()
     }
 
     configureKotlin()
@@ -59,11 +68,11 @@ internal fun Project.configureKotlinAndroid(
  * Configure base Kotlin options for JVM (non-Android)
  */
 internal fun Project.configureKotlinJvm() {
-    extensions.configure<JavaPluginExtension> {
+    extensions.configure<KotlinMultiplatformExtension> {
         // Up to Java 11 APIs are available through desugaring
         // https://developer.android.com/studio/write/java11-minimal-support-table
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        jvmToolchain(11)
+        jvm()
     }
 
     configureKotlin()

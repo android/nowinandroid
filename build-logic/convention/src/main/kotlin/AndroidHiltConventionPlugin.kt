@@ -18,25 +18,54 @@ import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 
 class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply("dagger.hilt.android.plugin")
+                apply(libs.findPlugin("hilt").get().get().pluginId)
                 // KAPT must go last to avoid build warnings.
                 // See: https://stackoverflow.com/questions/70550883/warning-the-following-options-were-not-recognized-by-any-processor-dagger-f
-                apply("org.jetbrains.kotlin.kapt")
+                apply(libs.findPlugin("kotlin-kapt").get().get().pluginId)
             }
 
             dependencies {
                 "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
-                "kaptAndroidTest"(libs.findLibrary("hilt.compiler").get())
-                "kaptTest"(libs.findLibrary("hilt.compiler").get())
+                with(libs.findLibrary("hilt.compiler").get().get()) {
+                    "kapt"(this)
+                    "kaptTest"(this)
+                    "kaptAndroidTest"(this)
+                }
+                with(libs.findLibrary("hilt.android.testing").get().get()) {
+                    "testImplementation"(this)
+                    "androidTestImplementation"(this)
+                }
             }
-
+            // https://youtrack.jetbrains.com/issue/KT-30589/Kapt-An-illegal-reflective-access-operation-has-occurred#focus=Comments-27-7442009.0-0
+            tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask>()
+                .configureEach {
+                    listOf(
+                        "util",
+                        "file",
+                        "main",
+                        "jvm",
+                        "processing",
+                        "comp",
+                        "tree",
+                        "api",
+                        "parser",
+                        "code",
+                    )
+                        .flatMap {
+                            listOf(
+                                "--add-opens",
+                                "jdk.compiler/com.sun.tools.javac.$it=ALL-UNNAMED",
+                            )
+                        }
+                        .forEach(kaptProcessJvmArgs::addAll)
+                }
         }
     }
-
 }

@@ -52,19 +52,27 @@ protobuf {
     }
 }
 
-androidComponents.beforeVariants {
-    android.sourceSets.register(it.name) {
-        java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
-        kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))
+androidComponents.beforeVariants { variant ->
+    android.sourceSets.register(variant.name) {
+        listOf("java", "kotlin").forEach {
+            with(
+                project.layout.buildDirectory.asFile.get()
+                    .resolve("generated/source/proto/${variant.name}/$it"),
+            ) {
+                java.srcDir(this)
+                kotlin.srcDir(this)
+            }
+        }
     }
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
-    implementation(libs.androidx.dataStore.core)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.protobuf.kotlin.lite)
+    api(project(":core:common"))
+    api(project(":core:model"))
+    api(libs.androidx.dataStore.core)
+    api(libs.kotlinx.coroutines.android)
+    api(libs.protobuf.kotlin.lite)
+
 
     testImplementation(project(":core:datastore-test"))
     testImplementation(project(":core:testing"))

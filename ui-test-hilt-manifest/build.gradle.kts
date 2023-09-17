@@ -21,3 +21,9 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.uitesthiltmanifest"
 }
+
+kapt {
+    javacOptions {
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
+}

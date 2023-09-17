@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
+    api(project(":core:data"))
+    api(project(":core:model"))
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)

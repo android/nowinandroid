@@ -24,16 +24,20 @@ plugins {
     id("jacoco")
     id("nowinandroid.android.application.firebase")
     id("com.google.android.gms.oss-licenses-plugin")
+    id("nowinandroid.kmp.library.compose")
+    id("nowinandroid.kmp.framework")
 }
+
 
 android {
     defaultConfig {
         applicationId = "com.google.samples.apps.nowinandroid"
         versionCode = 8
-        versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionName = findProperty("VERSION_NAME").toString()
 
         // Custom test runner to set up Hilt dependency graph
-        testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+        testInstrumentationRunner =
+            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -42,16 +46,25 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro", "multidex-config.pro",
+            )
+            multiDexKeepProguard = file("multidex-config.pro")
         }
         val release by getting {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro", "multidex-config.pro",
+            )
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.getByName("debug")
+            multiDexKeepProguard = file("multidex-config.pro")
         }
         create("benchmark") {
             // Enable all the optimizations from release build through initWith(release).
@@ -80,21 +93,21 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:interests"))
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:bookmarks"))
-    implementation(project(":feature:topic"))
-    implementation(project(":feature:search"))
-    implementation(project(":feature:settings"))
+    api(project(":feature:interests"))
+    api(project(":feature:foryou"))
+    api(project(":feature:bookmarks"))
+    api(project(":feature:topic"))
+    api(project(":feature:search"))
+    api(project(":feature:settings"))
 
-    implementation(project(":core:common"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
-    implementation(project(":core:analytics"))
+    api(project(":core:common"))
+    api(project(":core:ui"))
+    api(project(":core:designsystem"))
+    api(project(":core:data"))
+    api(project(":core:model"))
+    api(project(":core:analytics"))
 
-    implementation(project(":sync:work"))
+    api(project(":sync:work"))
 
     androidTestImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:datastore-test"))
@@ -120,6 +133,9 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.hilt.ext.work)
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.ext.compiler)
 
     // Core functions
     testImplementation(project(":core:testing"))
@@ -132,4 +148,11 @@ dependencies {
     implementation(libs.work.testing)
     kaptTest(libs.hilt.compiler)
 
+}
+
+kapt {
+    correctErrorTypes = true
+    javacOptions {
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
 }
