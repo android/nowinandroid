@@ -128,8 +128,8 @@ dependencies {
     testImplementation(project(":core:network"))
     testImplementation(libs.androidx.navigation.testing)
     testImplementation(libs.accompanist.testharness)
+    testImplementation(libs.work.testing)
     testImplementation(kotlin("test"))
-    implementation(libs.work.testing)
     kaptTest(libs.hilt.compiler)
 
 }
