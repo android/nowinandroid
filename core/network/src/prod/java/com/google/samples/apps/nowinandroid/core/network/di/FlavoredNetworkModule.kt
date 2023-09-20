@@ -27,6 +27,16 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface FlavoredNetworkModule {
 
+//    @Binds
+//    fun RetrofitNiaNetwork.binds(): NiaNetworkDataSource
+
+
+    /**
+     * Original: fun RetrofitNiaNetwork.binds(): NiaNetworkDataSource
+     * fix: 错误: @Binds methods can not be an extension function
+     */
     @Binds
-    fun RetrofitNiaNetwork.binds(): NiaNetworkDataSource
+    fun bindNiaNetworkDataSource(
+        niaNetworkDataSource: RetrofitNiaNetwork
+    ): NiaNetworkDataSource
 }
