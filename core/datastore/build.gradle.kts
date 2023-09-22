@@ -60,12 +60,12 @@ androidComponents.beforeVariants {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
+    implementation(projects.core.common)
+    implementation(projects.core.model)
     implementation(libs.androidx.dataStore.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.protobuf.kotlin.lite)
 
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.datastoreTest)
+    testImplementation(projects.core.testing)
 }

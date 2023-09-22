@@ -39,8 +39,8 @@ secrets {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
+    implementation(projects.core.common)
+    implementation(projects.core.model)
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
     implementation(libs.kotlinx.coroutines.android)
@@ -50,5 +50,5 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
 
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.testing)
 }
