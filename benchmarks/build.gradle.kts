@@ -17,7 +17,7 @@ import com.google.samples.apps.nowinandroid.NiaBuildType
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
-    id("nowinandroid.android.test")
+    alias(libs.plugins.nowinandroid.android.test)
 }
 
 android {
