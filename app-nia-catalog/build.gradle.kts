@@ -32,8 +32,8 @@ import com.google.samples.apps.nowinandroid.NiaFlavor
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.application")
-    id("nowinandroid.android.application.compose")
+    alias(libs.plugins.nowinandroid.android.application)
+    alias(libs.plugins.nowinandroid.android.application.compose)
 }
 
 android {
