@@ -67,8 +67,8 @@ androidComponents.beforeVariants { variant ->
 }
 
 dependencies {
-    api(project(":core:common"))
-    api(project(":core:model"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
     api(libs.androidx.dataStore.core)
     api(libs.kotlinx.coroutines.android)
     api(libs.protobuf.kotlin.lite)

@@ -17,8 +17,10 @@
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 
 class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -31,6 +33,9 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
                 apply(libs.findPlugin("kotlin-kapt").get().get().pluginId)
             }
 
+            extensions.configure<KaptExtension> {
+                correctErrorTypes = true
+            }
             dependencies {
                 "implementation"(libs.findLibrary("hilt.android").get())
                 with(libs.findLibrary("hilt.compiler").get().get()) {

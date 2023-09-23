@@ -39,8 +39,8 @@ secrets {
 }
 
 dependencies {
-    api(project(":core:common"))
-    api(project(":core:model"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
     api(libs.coil.kt)
     api(libs.coil.kt.svg)
     api(libs.kotlinx.coroutines.android)

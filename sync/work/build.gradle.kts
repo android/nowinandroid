@@ -28,11 +28,11 @@ android {
 }
 
 dependencies {
-    api(project(":core:analytics"))
-    api(project(":core:common"))
-    api(project(":core:data"))
-    api(project(":core:datastore"))
-    api(project(":core:model"))
+    implementation(project(":core:analytics"))
+    implementation(project(":core:common"))
+    implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:model"))
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)

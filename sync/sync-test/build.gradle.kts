@@ -24,6 +24,6 @@ android {
 
 dependencies {
     api(project(":sync:work"))
-    api(project(":core:data"))
-    api(project(":core:testing"))
+    implementation(project(":core:data"))
+    implementation(project(":core:testing"))
 }

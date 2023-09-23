@@ -31,13 +31,13 @@ android {
 }
 
 dependencies {
-    api(project(":core:analytics"))
-    api(project(":core:common"))
-    api(project(":core:database"))
-    api(project(":core:datastore"))
-    api(project(":core:model"))
-    api(project(":core:network"))
-    api(project(":core:notifications"))
+    implementation(project(":core:analytics"))
+    implementation(project(":core:common"))
+    implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:notifications"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)

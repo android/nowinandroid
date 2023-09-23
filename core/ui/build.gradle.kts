@@ -17,6 +17,7 @@ plugins {
     id("nowinandroid.android.library")
     id("nowinandroid.android.library.compose")
     id("nowinandroid.android.library.jacoco")
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -40,10 +41,10 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.tooling)
 
-    api(project(":core:analytics"))
-    api(project(":core:designsystem"))
-    api(project(":core:domain"))
-    api(project(":core:model"))
+    implementation(project(":core:analytics"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)
@@ -52,4 +53,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     androidTestImplementation(project(":core:testing"))
+}
+kapt {
+    correctErrorTypes = true
 }

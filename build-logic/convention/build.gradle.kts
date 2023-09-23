@@ -106,10 +106,6 @@ gradlePlugin {
             id = "nowinandroid.kmp.library.jvm"
             implementationClass = "KmpLibraryJvmConventionPlugin"
         }
-//        register("kmpLibraryAndroid") {
-//            id = "nowinandroid.kmp.library.android"
-//            implementationClass = "KmpLibraryAndroidConventionPlugin"
-//        }
         register("kmpComposeLibrary") {
             id = "nowinandroid.kmp.library.compose"
             implementationClass = "KmpLibraryComposeConventionPlugin"

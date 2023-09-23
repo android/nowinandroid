@@ -40,12 +40,12 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.testManifest)
 
-    api(project(":core:common"))
-    api(project(":core:data"))
-    api(project(":core:designsystem"))
-    api(project(":core:domain"))
-    api(project(":core:model"))
-    api(project(":core:notifications"))
-    api(project(":core:analytics"))
+    implementation(project(":core:common"))
+    implementation(project(":core:data"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
+    implementation(project(":core:notifications"))
+    implementation(project(":core:analytics"))
     implementation(libs.kotlinx.datetime)
 }
