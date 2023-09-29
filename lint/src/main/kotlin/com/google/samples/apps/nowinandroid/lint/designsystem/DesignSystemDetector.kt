@@ -27,6 +27,7 @@ import com.android.tools.lint.detector.api.Severity
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UQualifiedReferenceExpression
+import org.jetbrains.uast.tryResolveNamed
 
 /**
  * A detector that checks for incorrect usages of Compose Material APIs over equivalents in
@@ -50,7 +51,7 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
             }
 
             override fun visitQualifiedReferenceExpression(node: UQualifiedReferenceExpression) {
-                val name = node.receiver.asRenderString()
+                val name = node.receiver.tryResolveNamed()?.name ?: return
                 val preferredName = RECEIVER_NAMES[name] ?: return
                 reportIssue(context, node, name, preferredName)
             }

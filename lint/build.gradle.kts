@@ -38,4 +38,7 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.lint.api)
+    testImplementation(libs.lint)
+    testImplementation(libs.lint.test)
+    testImplementation(libs.junit4)
 }
