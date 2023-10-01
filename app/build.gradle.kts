@@ -24,6 +24,7 @@ plugins {
     id("jacoco")
     id("nowinandroid.android.application.firebase")
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.firebase.testlab")
 }
 
 android {
@@ -69,6 +70,16 @@ android {
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
+    }
+    firebaseTestLab {
+        serviceAccountCredentials.set(file("service-account.json"))
+
+        managedDevices {
+            create("myFtlDevice") {
+                device = "Pixel2"
+                apiLevel = 29
+            }
         }
     }
     testOptions {
