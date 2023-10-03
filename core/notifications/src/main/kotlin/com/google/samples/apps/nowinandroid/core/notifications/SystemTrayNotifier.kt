@@ -141,7 +141,7 @@ private fun Context.createNewsNotification(
 }
 
 /**
- * Ensures the a notification channel is is present if applicable
+ * Ensures that a notification channel is present if applicable
  */
 private fun Context.ensureNotificationChannelExists() {
     if (VERSION.SDK_INT < VERSION_CODES.O) return
