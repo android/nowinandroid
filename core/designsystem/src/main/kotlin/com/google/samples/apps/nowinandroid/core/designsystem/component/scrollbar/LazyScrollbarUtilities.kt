@@ -1,95 +1,23 @@
 /*
  * Copyright 2023 The Android Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *       https://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar
 
 import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlin.math.abs
-import kotlin.math.min
-
-/**
- * Calculates the [ScrollbarState] for lazy layouts.
- * @param itemsAvailable the total amount of items available to scroll in the layout.
- * @param visibleItems a list of items currently visible in the layout.
- * @param firstVisibleItemIndex a function for interpolating the first visible index in the lazy layout
- * as scrolling progresses for smooth and linear scrollbar thumb progression.
- * [itemsAvailable].
- * @param reverseLayout if the items in the backing lazy layout are laid out in reverse order.
- * */
-@Composable
-internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrollbarState(
-    itemsAvailable: Int,
-    crossinline visibleItems: LazyState.() -> List<LazyStateItem>,
-    crossinline firstVisibleItemIndex: LazyState.(List<LazyStateItem>) -> Float,
-    crossinline itemPercentVisible: LazyState.(LazyStateItem) -> Float,
-    crossinline reverseLayout: LazyState.() -> Boolean,
-): ScrollbarState {
-    var state by remember { mutableStateOf(ScrollbarState.FULL) }
-
-    LaunchedEffect(
-        key1 = this,
-        key2 = itemsAvailable,
-    ) {
-        snapshotFlow {
-            if (itemsAvailable == 0) return@snapshotFlow null
-
-            val visibleItemsInfo = visibleItems(this@scrollbarState)
-            if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
-
-            val firstIndex = min(
-                a = firstVisibleItemIndex(visibleItemsInfo),
-                b = itemsAvailable.toFloat(),
-            )
-            if (firstIndex.isNaN()) return@snapshotFlow null
-
-            val itemsVisible = visibleItemsInfo.sumOf {
-                itemPercentVisible(it).toDouble()
-            }.toFloat()
-
-            val thumbTravelPercent = min(
-                a = firstIndex / itemsAvailable,
-                b = 1f,
-            )
-            val thumbSizePercent = min(
-                a = itemsVisible / itemsAvailable,
-                b = 1f,
-            )
-            ScrollbarState(
-                thumbSizePercent = thumbSizePercent,
-                thumbMovedPercent = when {
-                    reverseLayout() -> 1f - thumbTravelPercent
-                    else -> thumbTravelPercent
-                },
-            )
-        }
-            .filterNotNull()
-            .distinctUntilChanged()
-            .collect { state = it }
-    }
-    return state
-}
 
 /**
  * Linearly interpolates the index for the first item in [visibleItems] for smooth scrollbar
