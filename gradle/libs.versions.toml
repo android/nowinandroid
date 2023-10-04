@@ -157,6 +157,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+
+# Plugins defined by this project
 nowinandroid-android-application = { id = "nowinandroid.android.application", version = "unspecified" }
 nowinandroid-android-application-compose = { id = "nowinandroid.android.application.compose", version = "unspecified" }
 nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase", version = "unspecified" }
