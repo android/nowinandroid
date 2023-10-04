@@ -16,13 +16,13 @@
 import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
-    id("nowinandroid.android.application")
-    id("nowinandroid.android.application.compose")
-    id("nowinandroid.android.application.flavors")
-    id("nowinandroid.android.application.jacoco")
-    id("nowinandroid.android.hilt")
+    alias(libs.plugins.nowinandroid.android.application)
+    alias(libs.plugins.nowinandroid.android.application.compose)
+    alias(libs.plugins.nowinandroid.android.application.flavors)
+    alias(libs.plugins.nowinandroid.android.application.jacoco)
+    alias(libs.plugins.nowinandroid.android.hilt)
     id("jacoco")
-    id("nowinandroid.android.application.firebase")
+    alias(libs.plugins.nowinandroid.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 

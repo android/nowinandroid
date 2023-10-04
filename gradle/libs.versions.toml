@@ -157,3 +157,20 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+
+# Plugins defined by this project
+nowinandroid-android-application = { id = "nowinandroid.android.application", version = "unspecified" }
+nowinandroid-android-application-compose = { id = "nowinandroid.android.application.compose", version = "unspecified" }
+nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase", version = "unspecified" }
+nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors", version = "unspecified" }
+nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco", version = "unspecified" }
+nowinandroid-android-feature = { id = "nowinandroid.android.feature", version = "unspecified" }
+nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspecified" }
+nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
+nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose", version = "unspecified" }
+nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco", version = "unspecified" }
+nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspecified" }
+nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
+nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
+nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }
+
