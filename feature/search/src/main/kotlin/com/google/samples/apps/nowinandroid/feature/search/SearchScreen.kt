@@ -35,11 +35,11 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -297,16 +297,16 @@ private fun SearchResultBody(
     onTopicClick: (String) -> Unit,
     searchQuery: String = "",
 ) {
-    val state = rememberLazyGridState()
+    val state = rememberLazyStaggeredGridState()
     Box(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalItemSpacing = 24.dp,
             modifier = Modifier
                 .fillMaxSize()
                 .testTag("search:newsResources"),
@@ -314,9 +314,7 @@ private fun SearchResultBody(
         ) {
             if (topics.isNotEmpty()) {
                 item(
-                    span = {
-                        GridItemSpan(maxLineSpan)
-                    },
+                    span = StaggeredGridItemSpan.FullLine,
                 ) {
                     Text(
                         text = buildAnnotatedString {
@@ -331,9 +329,7 @@ private fun SearchResultBody(
                     val topicId = followableTopic.topic.id
                     item(
                         key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
-                        span = {
-                            GridItemSpan(maxLineSpan)
-                        },
+                        span = StaggeredGridItemSpan.FullLine,
                     ) {
                         InterestsItem(
                             name = followableTopic.topic.name,
@@ -353,9 +349,7 @@ private fun SearchResultBody(
 
             if (newsResources.isNotEmpty()) {
                 item(
-                    span = {
-                        GridItemSpan(maxLineSpan)
-                    },
+                    span = StaggeredGridItemSpan.FullLine,
                 ) {
                     Text(
                         text = buildAnnotatedString {
