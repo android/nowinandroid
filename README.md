@@ -109,6 +109,13 @@ Examples:
   manipulate the state of the `Test` repository and verify the resulting behavior, instead of
   checking that specific repository methods were called.
 
+## Screenshot tests
+
+**Now In Android** uses [Roborazzi](https://github.com/takahirom/roborazzi) to do screenshot tests
+of certain screens and components. To run these tests, run the `verifyRoborazziDemoDebug` or
+`recordRoborazziDemoDebug` tasks. Note that screenshots are recorded on CI, using Linux, and other
+platforms might generate slightly different images, making the tests fail.
+
 # UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
 obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma) (design assets [also available as a PDF](docs/Now-In-Android-Design-File.pdf)).
@@ -140,7 +147,8 @@ The baseline profile for this app is located at [`app/src/main/baseline-prof.txt
 It contains rules that enable AOT compilation of the critical user path taken during app launch.
 For more information on baseline profiles, read [this document](https://developer.android.com/studio/profile/baselineprofiles).
 
-> Note: The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
+> [!NOTE]
+> The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
 
 To generate the baseline profile, select the `benchmark` build variant and run the
 `BaselineProfileGenerator` benchmark test on an AOSP Android Emulator.
@@ -150,7 +158,7 @@ Then copy the resulting baseline profile from the emulator to [`app/src/main/bas
 
 Run the following command to get and analyse compose compiler metrics:
 
-```
+```bash
 ./gradlew assembleRelease -PenableComposeCompilerMetrics=true -PenableComposeCompilerReports=true
 ```
 

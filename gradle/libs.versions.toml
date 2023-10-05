@@ -43,13 +43,15 @@ kotlin = "1.9.0"
 kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.5.1"
-ksp = "1.9.0-1.0.11"
+ksp = "1.9.0-1.0.13"
 lint = "31.0.2"
 okhttp = "4.10.0"
-protobuf = "3.23.4"
-protobufPlugin = "0.9.3"
+protobuf = "3.24.0"
+protobufPlugin = "0.9.4"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
+robolectric = "4.10.3"
+roborazzi = "1.5.0-alpha-2"
 room = "2.5.2"
 secrets = "2.0.1"
 turbine = "0.12.1"
@@ -126,6 +128,9 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+robolectric-shadows = { group = "org.robolectric", name = "shadows-framework", version.ref = "robolectric" }
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -137,6 +142,7 @@ firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "fir
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -151,4 +157,22 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+
+# Plugins defined by this project
+nowinandroid-android-application = { id = "nowinandroid.android.application", version = "unspecified" }
+nowinandroid-android-application-compose = { id = "nowinandroid.android.application.compose", version = "unspecified" }
+nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase", version = "unspecified" }
+nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors", version = "unspecified" }
+nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco", version = "unspecified" }
+nowinandroid-android-feature = { id = "nowinandroid.android.feature", version = "unspecified" }
+nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspecified" }
+nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
+nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose", version = "unspecified" }
+nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco", version = "unspecified" }
+nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspecified" }
+nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
+nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
+nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }
+

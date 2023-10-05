@@ -16,13 +16,13 @@
 import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
-    id("nowinandroid.android.application")
-    id("nowinandroid.android.application.compose")
-    id("nowinandroid.android.application.flavors")
-    id("nowinandroid.android.application.jacoco")
-    id("nowinandroid.android.hilt")
+    alias(libs.plugins.nowinandroid.android.application)
+    alias(libs.plugins.nowinandroid.android.application.compose)
+    alias(libs.plugins.nowinandroid.android.application.flavors)
+    alias(libs.plugins.nowinandroid.android.application.jacoco)
+    alias(libs.plugins.nowinandroid.android.hilt)
     id("jacoco")
-    id("nowinandroid.android.application.firebase")
+    alias(libs.plugins.nowinandroid.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.firebase.testlab")
 }
@@ -91,31 +91,31 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:interests"))
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:bookmarks"))
-    implementation(project(":feature:topic"))
-    implementation(project(":feature:search"))
-    implementation(project(":feature:settings"))
+    implementation(projects.feature.interests)
+    implementation(projects.feature.foryou)
+    implementation(projects.feature.bookmarks)
+    implementation(projects.feature.topic)
+    implementation(projects.feature.search)
+    implementation(projects.feature.settings)
 
-    implementation(project(":core:common"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
-    implementation(project(":core:analytics"))
+    implementation(projects.core.common)
+    implementation(projects.core.ui)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.data)
+    implementation(projects.core.model)
+    implementation(projects.core.analytics)
 
-    implementation(project(":sync:work"))
+    implementation(projects.sync.work)
 
-    androidTestImplementation(project(":core:testing"))
-    androidTestImplementation(project(":core:datastore-test"))
-    androidTestImplementation(project(":core:data-test"))
-    androidTestImplementation(project(":core:network"))
+    androidTestImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(projects.core.dataTest)
+    androidTestImplementation(projects.core.network)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(kotlin("test"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
-    debugImplementation(project(":ui-test-hilt-manifest"))
+    debugImplementation(projects.uiTestHiltManifest)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -131,4 +131,16 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+
+    // Core functions
+    testImplementation(projects.core.testing)
+    testImplementation(projects.core.datastoreTest)
+    testImplementation(projects.core.dataTest)
+    testImplementation(projects.core.network)
+    testImplementation(libs.androidx.navigation.testing)
+    testImplementation(libs.accompanist.testharness)
+    testImplementation(libs.work.testing)
+    testImplementation(kotlin("test"))
+    kaptTest(libs.hilt.compiler)
+
 }

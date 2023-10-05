@@ -32,8 +32,8 @@ import com.google.samples.apps.nowinandroid.NiaFlavor
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.application")
-    id("nowinandroid.android.application.compose")
+    alias(libs.plugins.nowinandroid.android.application)
+    alias(libs.plugins.nowinandroid.android.application.compose)
 }
 
 android {
@@ -65,7 +65,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:ui"))
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
     implementation(libs.androidx.activity.compose)
 }

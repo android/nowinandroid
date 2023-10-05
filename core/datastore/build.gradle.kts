@@ -15,9 +15,9 @@
  */
 
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.android.hilt")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.nowinandroid.android.hilt)
     alias(libs.plugins.protobuf)
 }
 
@@ -54,18 +54,19 @@ protobuf {
 
 androidComponents.beforeVariants {
     android.sourceSets.register(it.name) {
+        val buildDir = layout.buildDirectory.get().asFile
         java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
         kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))
     }
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
+    implementation(projects.core.common)
+    implementation(projects.core.model)
     implementation(libs.androidx.dataStore.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.protobuf.kotlin.lite)
 
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.datastoreTest)
+    testImplementation(projects.core.testing)
 }
