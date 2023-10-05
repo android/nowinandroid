@@ -36,7 +36,7 @@ jobs:
 
       - name: Get service account JSON file
         env:
-          PLAY_FILE: ${{ secrets.SERVICE_ACCOUNT }}
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
         run: |
           echo $SERVICE_ACCOUNT  > ./app/service-account.json
 
