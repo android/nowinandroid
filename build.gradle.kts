@@ -16,8 +16,8 @@
 
 buildscript {
     repositories {
-        google()
         mavenCentral()
+        google()
 
         // Android Build Server
         maven { url = uri("../nowinandroid-prebuilts/m2repository") }
