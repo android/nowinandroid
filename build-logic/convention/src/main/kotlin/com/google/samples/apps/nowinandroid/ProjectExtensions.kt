@@ -63,7 +63,6 @@ internal fun Project.platformAndroidTestImplementation(alias: String) {
     }
 }
 
-
 internal fun Project.projectAndroidTestImplementation(alias: String) {
     dependencies {
         dependencies.add("androidTestImplementation", project(alias))
