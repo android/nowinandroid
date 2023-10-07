@@ -15,7 +15,8 @@
  */
 
 import com.google.devtools.ksp.gradle.KspExtension
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.findLibrary
+import com.google.samples.apps.nowinandroid.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.InputDirectory
@@ -40,9 +41,9 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", libs.findLibrary("room.runtime").get())
-                add("implementation", libs.findLibrary("room.ktx").get())
-                add("ksp", libs.findLibrary("room.compiler").get())
+                implementation("room.runtime")
+                implementation("room.ktx")
+                add("ksp", findLibrary("room.compiler"))
             }
         }
     }
