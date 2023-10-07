@@ -14,7 +14,8 @@
  *   limitations under the License.
  */
 
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.findLibrary
+import com.google.samples.apps.nowinandroid.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -30,10 +31,10 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
-                "kaptAndroidTest"(libs.findLibrary("hilt.compiler").get())
-                "kaptTest"(libs.findLibrary("hilt.compiler").get())
+                implementation("hilt.android")
+                "kapt"(findLibrary("hilt.compiler"))
+                "kaptAndroidTest"(findLibrary("hilt.compiler"))
+                "kaptTest"(findLibrary("hilt.compiler"))
             }
 
         }
