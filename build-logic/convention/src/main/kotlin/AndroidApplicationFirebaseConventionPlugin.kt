@@ -16,7 +16,8 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.implementation
+import com.google.samples.apps.nowinandroid.platformImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -32,11 +33,10 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                val bom = libs.findLibrary("firebase-bom").get()
-                add("implementation", platform(bom))
-                "implementation"(libs.findLibrary("firebase.analytics").get())
-                "implementation"(libs.findLibrary("firebase.performance").get())
-                "implementation"(libs.findLibrary("firebase.crashlytics").get())
+                platformImplementation("firebase-bom")
+                implementation("firebase.analytics")
+                implementation("firebase.performance")
+                implementation("firebase.crashlytics")
             }
 
             extensions.configure<ApplicationExtension> {
