@@ -15,6 +15,7 @@ androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.0.0"
+androidxJunit = "1.1.5"
 androidxLifecycle = "2.6.2"
 androidxMacroBenchmark = "1.2.0"
 androidxMetrics = "1.0.0-alpha04"
@@ -40,7 +41,6 @@ hilt = "2.48.1"
 hiltExt = "1.1.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
-junit = "1.1.5"
 kotlin = "1.9.10"
 kotlinxCoroutines = "1.7.3"
 kotlinxDatetime = "0.4.1"
@@ -148,7 +148,7 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.1" }
-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
