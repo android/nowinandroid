@@ -76,7 +76,7 @@ jobs:
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          -Pandroidx.benchmark.enabledRules=BaselineProfile
+          -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
           -Dorg.gradle.workers.max=1
           -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
           -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
