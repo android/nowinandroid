@@ -64,9 +64,9 @@ android {
     }
 
     testOptions.managedDevices.devices {
-        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel6Api31") {
+        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel6Api33") {
             device = "Pixel 6"
-            apiLevel = 31
+            apiLevel = 33
             systemImageSource = "aosp"
         }
     }
@@ -79,7 +79,7 @@ android {
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on. The default
     // is none.
-    managedDevices += "pixel6Api31"
+    managedDevices += "pixel6Api33"
 
     // This enables using connected devices to generate profiles. The default is true.
     // When using connected devices, they must be rooted or API 33 and higher.
