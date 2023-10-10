@@ -22,6 +22,7 @@ import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 import com.google.samples.apps.nowinandroid.waitAndFindObject
+import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
 import org.junit.Assert.fail
 
 fun MacrobenchmarkScope.forYouWaitForContent() {
@@ -103,7 +104,5 @@ fun MacrobenchmarkScope.setAppTheme(isDark: Boolean) {
     device.findObject(By.text("OK")).click()
 
     // Wait until the top app bar is visible on screen
-    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
-    val topAppBar = device.findObject(By.res("niaTopAppBar"))
-    topAppBar.wait(Until.hasObject(By.text("Now in Android")), 2_000)
+    waitForObjectOnTopAppBar(By.text("Now in Android"))
 }

@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
+import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,6 +34,6 @@ class StartupBaselineProfile {
             PACKAGE_NAME,
             includeInStartupProfile = true,
         ) {
-            startActivityAndWait() // Just wait
+            startActivityAndAllowNotifications()
         }
 }
