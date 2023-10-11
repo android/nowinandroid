@@ -7,7 +7,7 @@ androidxAppCompat = "1.6.1"
 androidxBrowser = "1.6.0"
 androidxComposeBom = "2023.10.00"
 androidxComposeCompiler = "1.5.3"
-androidxComposeRuntimeTracing = "1.0.0-alpha04"
+androidxComposeRuntimeTracing = "1.0.0-alpha03"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
@@ -173,4 +173,3 @@ nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspe
 nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
 nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
 nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }
-
