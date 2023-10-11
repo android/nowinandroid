@@ -75,15 +75,9 @@ jobs:
         run: ./gradlew testDemoDebug testProdDebug :lint:test
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew assemble -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
-          # For NiA we don't want to generate baseline profiles
-          # or benchmark performance for regular builds.
-          -Pandroidx.baselineprofile.skipgeneration=true
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
-          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+        run: ./gradlew :app:assemble :benchmarks:assemble
+          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
+          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
