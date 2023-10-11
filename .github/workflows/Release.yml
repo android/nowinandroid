@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    timeout-minutes: 45
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
@@ -26,12 +26,19 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Install GMD image
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;aosp_atd;x86"
+
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Build app
         run: ./gradlew :app:assembleDemoRelease
-               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
-               -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-               -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-
+             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
+             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+             -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+             -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
