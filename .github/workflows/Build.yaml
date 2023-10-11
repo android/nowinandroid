@@ -82,7 +82,7 @@ jobs:
           -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
           -Pandroid.experimental.androidTest.numManagedDeviceShards=1
           -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=false
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3

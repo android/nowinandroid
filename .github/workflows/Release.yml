@@ -28,10 +28,9 @@ jobs:
 
       - name: Build app
         run: ./gradlew :app:assembleDemoRelease
-               -Pandroidx.benchmark.enabledRules=BaselineProfile
+               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
                -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
                -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-
 
       - name: Create Release
         id: create_release
