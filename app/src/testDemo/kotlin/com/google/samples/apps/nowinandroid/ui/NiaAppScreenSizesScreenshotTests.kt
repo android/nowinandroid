@@ -162,7 +162,7 @@ class NiaAppScreenSizesScreenshotTests {
     @Test
     fun compactWidth_compactHeight_showsNavigationBar() {
         testNiaAppScreenshotWithSize(
-            610.dp,
+            400.dp,
             400.dp,
             "compactWidth_compactHeight_showsNavigationBar",
         )
