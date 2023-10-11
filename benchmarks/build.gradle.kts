@@ -22,6 +22,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.google.samples.apps.nowinandroid.benchmarks"
 
     defaultConfig {
@@ -75,7 +76,6 @@ android {
     experimentalProperties["android.experimental.self-instrumenting"] = true
 }
 
-
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on. The default
     // is none.
@@ -84,6 +84,7 @@ baselineProfile {
     // This enables using connected devices to generate profiles. The default is true.
     // When using connected devices, they must be rooted or API 33 and higher.
     useConnectedDevices = false
+
 }
 
 dependencies {
