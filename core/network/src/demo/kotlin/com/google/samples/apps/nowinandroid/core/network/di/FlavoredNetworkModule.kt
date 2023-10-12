@@ -28,5 +28,5 @@ import dagger.hilt.components.SingletonComponent
 interface FlavoredNetworkModule {
 
     @Binds
-    fun FakeNiaNetworkDataSource.binds(): NiaNetworkDataSource
+    fun binds(impl: FakeNiaNetworkDataSource): NiaNetworkDataSource
 }
