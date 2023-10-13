@@ -82,9 +82,16 @@ class TestMethodDetectorTest {
                     import org.junit.Test
                     class Test {
                         @Test
-                        fun given_when_then() = Unit
+                        fun when_then() = Unit
                         @Test
-                        fun given_foo_when_bar_then_baz() = Unit
+                        fun given_when_then() = Unit
+
+                        @Test
+                        fun foo() = Unit
+                        @Test
+                        fun foo_bar_baz_qux() = Unit
+                        @Test
+                        fun `foo bar baz`() = Unit
                     }
                 """,
                 ).indented(),
@@ -92,10 +99,16 @@ class TestMethodDetectorTest {
             .run()
             .expect(
                 """
-                src/androidTest/com/example/Test.kt:6: Warning: Test method does not follow the given_when_then format [TestMethodFormat]
-                    fun given_foo_when_bar_then_baz() = Unit
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                0 errors, 1 warnings
+                src/androidTest/com/example/Test.kt:9: Warning: Test method does not follow the given_when_then or when_then format [TestMethodFormat]
+                    fun foo() = Unit
+                        ~~~
+                src/androidTest/com/example/Test.kt:11: Warning: Test method does not follow the given_when_then or when_then format [TestMethodFormat]
+                    fun foo_bar_baz_qux() = Unit
+                        ~~~~~~~~~~~~~~~
+                src/androidTest/com/example/Test.kt:13: Warning: Test method does not follow the given_when_then or when_then format [TestMethodFormat]
+                    fun `foo bar baz`() = Unit
+                        ~~~~~~~~~~~~~
+                0 errors, 3 warnings
                 """.trimIndent(),
             )
     }

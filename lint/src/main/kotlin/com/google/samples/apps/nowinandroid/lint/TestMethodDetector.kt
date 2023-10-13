@@ -83,7 +83,7 @@ class TestMethodDetector : Detector(), SourceCodeScanner {
         usageInfo: AnnotationUsageInfo,
     ) {
         if (!context.isAndroidTest()) return
-        if ("""^[^\W_]+_[^\W_]+_[^\W_]+$""".toRegex().matches(name)) return
+        if ("""[^\W_]+(_[^\W_]+){1,2}""".toRegex().matches(name)) return
         context.report(
             issue = FORMAT,
             scope = usageInfo.usage,
@@ -153,8 +153,8 @@ class TestMethodDetector : Detector(), SourceCodeScanner {
         @JvmField
         val FORMAT: Issue = issue(
             id = "TestMethodFormat",
-            briefDescription = "Test method does not follow the `given_when_then` format",
-            explanation = "Test method should follow the `given_when_then` format.",
+            briefDescription = "Test method does not follow the `given_when_then` or `when_then` format",
+            explanation = "Test method should follow the `given_when_then` or `when_then` format.",
         )
     }
 }
