@@ -40,7 +40,7 @@ import kotlin.io.path.Path
  * - [detectUnderscore] removes underscores in JVM unit test (and add backticks if necessary).
  * - [detectFormat] Checks the `given_when_then` format of Android instrumented tests (backticks are not supported).
  */
-class TestMethodDetector : Detector(), SourceCodeScanner {
+class TestMethodNameDetector : Detector(), SourceCodeScanner {
 
     override fun applicableAnnotations() = listOf("org.junit.Test")
 
@@ -131,7 +131,7 @@ class TestMethodDetector : Detector(), SourceCodeScanner {
             priority = 5,
             severity = WARNING,
             implementation = Implementation(
-                TestMethodDetector::class.java,
+                TestMethodNameDetector::class.java,
                 EnumSet.of(JAVA_FILE, TEST_SOURCES),
             ),
         )

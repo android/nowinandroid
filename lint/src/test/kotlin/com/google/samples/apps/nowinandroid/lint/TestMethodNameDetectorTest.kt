@@ -19,12 +19,12 @@ package com.google.samples.apps.nowinandroid.lint
 import com.android.tools.lint.checks.infrastructure.TestFile
 import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
-import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.FORMAT
-import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.PREFIX
-import com.google.samples.apps.nowinandroid.lint.TestMethodDetector.Companion.UNDERSCORE
+import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.FORMAT
+import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.PREFIX
+import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.UNDERSCORE
 import org.junit.Test
 
-class TestMethodDetectorTest {
+class TestMethodNameDetectorTest {
 
     @Test
     fun `detect prefix`() {
