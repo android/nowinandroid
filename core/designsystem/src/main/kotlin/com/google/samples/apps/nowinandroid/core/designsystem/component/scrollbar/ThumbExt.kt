@@ -22,7 +22,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -74,7 +74,7 @@ private inline fun rememberDraggableScroller(
     itemsAvailable: Int,
     crossinline scroll: suspend (index: Int) -> Unit,
 ): (Float) -> Unit {
-    var percentage by remember { mutableStateOf(Float.NaN) }
+    var percentage by remember { mutableFloatStateOf(Float.NaN) }
     val itemCount by rememberUpdatedState(itemsAvailable)
 
     LaunchedEffect(percentage) {

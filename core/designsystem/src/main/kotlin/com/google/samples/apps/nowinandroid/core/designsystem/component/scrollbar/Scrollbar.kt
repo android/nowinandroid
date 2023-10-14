@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -205,7 +206,7 @@ fun Scrollbar(
 
     // Used to immediately show drag feedback in the UI while the scrolling implementation
     // catches up
-    var interactionThumbTravelPercent by remember { mutableStateOf(Float.NaN) }
+    var interactionThumbTravelPercent by remember { mutableFloatStateOf(Float.NaN) }
 
     var track by remember { mutableStateOf(ScrollbarTrack(packedValue = 0)) }
 
