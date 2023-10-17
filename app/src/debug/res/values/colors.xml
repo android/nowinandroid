@@ -17,7 +17,8 @@
 <resources>
     <!-- Status bar -->
     <color name="black30">#4D000000</color>
+    <color name="orange40">#FFA23F16</color>
 
     <color name="ic_launcher_background_tint">#000000</color>
-    <color name="ic_launcher_foreground_tint">#2296F3</color>
+    <color name="ic_launcher_foreground_tint">@color/orange40</color>
 </resources>
