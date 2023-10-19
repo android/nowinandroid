@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <!-- Status bar -->
     <color name="black30">#4D000000</color>
     <color name="blue40">#FF006780</color>
 
