@@ -25,7 +25,6 @@ class NiaIssueRegistry : IssueRegistry() {
 
     override val issues = listOf(
         DesignSystemDetector.ISSUE,
-        TestMethodNameDetector.UNDERSCORE,
         TestMethodNameDetector.FORMAT,
         TestMethodNameDetector.PREFIX,
     )

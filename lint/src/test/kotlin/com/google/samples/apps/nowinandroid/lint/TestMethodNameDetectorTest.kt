@@ -21,7 +21,6 @@ import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
 import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.FORMAT
 import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.PREFIX
-import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.UNDERSCORE
 import org.junit.Test
 
 class TestMethodNameDetectorTest {
@@ -109,51 +108,6 @@ class TestMethodNameDetectorTest {
                     fun `foo bar baz`() = Unit
                         ~~~~~~~~~~~~~
                 0 errors, 3 warnings
-                """.trimIndent(),
-            )
-    }
-
-    @Test
-    fun `detect underscores`() {
-        lint().issues(UNDERSCORE)
-            .files(
-                JUNIT_TEST_STUB,
-                kotlin(
-                    """
-                    import org.junit.Test
-                    class Test {
-                        @Test
-                        fun foo() = Unit
-                        @Test
-                        fun foo_bar_baz() = Unit
-                        @Test
-                        fun `foo_bar_baz`() = Unit
-                    }
-                """,
-                ).indented(),
-            )
-            .run()
-            .expect(
-                """
-                src/Test.kt:6: Warning: Test method contains underscores [TestMethodUnderscore]
-                    fun foo_bar_baz() = Unit
-                        ~~~~~~~~~~~
-                src/Test.kt:8: Warning: Test method contains underscores [TestMethodUnderscore]
-                    fun `foo_bar_baz`() = Unit
-                        ~~~~~~~~~~~~~
-                0 errors, 2 warnings
-                """.trimIndent(),
-            )
-            .expectFixDiffs(
-                """
-                Autofix for src/Test.kt line 6: Replace underscores with spaces:
-                @@ -6 +6
-                -     fun foo_bar_baz() = Unit
-                +     fun `foo bar baz`() = Unit
-                Autofix for src/Test.kt line 8: Replace underscores with spaces:
-                @@ -8 +8
-                -     fun `foo_bar_baz`() = Unit
-                +     fun `foo bar baz`() = Unit
                 """.trimIndent(),
             )
     }

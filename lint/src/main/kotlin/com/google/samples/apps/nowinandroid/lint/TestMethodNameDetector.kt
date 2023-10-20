@@ -37,7 +37,6 @@ import kotlin.io.path.Path
 /**
  * A detector that checks for common patterns in naming the test methods:
  * - [detectPrefix] removes unnecessary "test" prefix in all unit test.
- * - [detectUnderscore] removes underscores in JVM unit test (and add backticks if necessary).
  * - [detectFormat] Checks the `given_when_then` format of Android instrumented tests (backticks are not supported).
  */
 class TestMethodNameDetector : Detector(), SourceCodeScanner {
@@ -54,7 +53,6 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
 
         method.detectPrefix(context, usageInfo)
         method.detectFormat(context, usageInfo)
-        method.detectUnderscore(context, usageInfo)
     }
 
     private fun JavaContext.isAndroidTest() = Path("androidTest") in file.toPath()
@@ -92,31 +90,6 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
         )
     }
 
-    private fun PsiMethod.detectUnderscore(
-        context: JavaContext,
-        usageInfo: AnnotationUsageInfo,
-    ) {
-        if (context.isAndroidTest()) return
-        if ("_" !in name) return
-        context.report(
-            issue = UNDERSCORE,
-            scope = usageInfo.usage,
-            location = context.getNameLocation(this),
-            message = UNDERSCORE.getBriefDescription(RAW),
-            quickfixData = LintFix.create()
-                .name("Replace underscores with spaces")
-                .replace()
-                .range(context.getNameLocation(this))
-                .with(
-                    name.replace("_", " ")
-                        .removeSurrounding("`")
-                        .let { """`$it`""" },
-                )
-                .autoFix()
-                .build(),
-        )
-    }
-
     companion object {
 
         private fun issue(
@@ -134,13 +107,6 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
                 TestMethodNameDetector::class.java,
                 EnumSet.of(JAVA_FILE, TEST_SOURCES),
             ),
-        )
-
-        @JvmField
-        val UNDERSCORE: Issue = issue(
-            id = "TestMethodUnderscore",
-            briefDescription = "Test method contains underscores",
-            explanation = "Test methods should not contains underscores.",
         )
 
         @JvmField
