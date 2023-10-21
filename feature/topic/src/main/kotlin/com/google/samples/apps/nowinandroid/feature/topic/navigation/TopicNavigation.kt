@@ -32,6 +32,7 @@ private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
 internal const val topicIdArg = "topicId"
+const val topicNavigationRoute = "topic_route/"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle) :
@@ -40,7 +41,7 @@ internal class TopicArgs(val topicId: String) {
 
 fun NavController.navigateToTopic(topicId: String) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    this.navigate("topic_route/$encodedId") {
+    this.navigate("$topicNavigationRoute$encodedId") {
         launchSingleTop = true
     }
 }
@@ -50,7 +51,7 @@ fun NavGraphBuilder.topicScreen(
     onTopicClick: (String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$topicIdArg}",
+        route = "$topicNavigationRoute{$topicIdArg}",
         arguments = listOf(
             navArgument(topicIdArg) { type = NavType.StringType },
         ),

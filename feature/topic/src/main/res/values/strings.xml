@@ -16,4 +16,7 @@
 -->
 <resources>
     <string name="topic_loading">Loading topic</string>
+    <string name="topic_loading_news">Loading news</string>
+    <string name="topic_following">FOLLOWING</string>
+    <string name="topic_not_following">NOT FOLLOWING</string>
 </resources>

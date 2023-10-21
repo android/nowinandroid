@@ -239,7 +239,7 @@ private fun LazyListScope.userNewsResourceCards(
         }
 
         is NewsUiState.Loading -> item {
-            NiaLoadingWheel(contentDesc = "Loading news") // TODO
+            NiaLoadingWheel(contentDesc = stringResource(id = string.topic_loading_news)) // TODO
         }
 
         else -> item {
@@ -295,9 +295,9 @@ private fun TopicToolbar(
             modifier = Modifier.padding(end = 24.dp),
         ) {
             if (selected) {
-                Text("FOLLOWING")
+                Text(stringResource(id = string.topic_following))
             } else {
-                Text("NOT FOLLOWING")
+                Text(stringResource(id = string.topic_not_following))
             }
         }
     }
