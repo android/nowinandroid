@@ -47,7 +47,7 @@ jobs:
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
+        run: ./gradlew testDemoDebug testProdDebug :lint:test
 
   test:
     runs-on: ubuntu-latest
