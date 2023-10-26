@@ -125,6 +125,9 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
+      - name: Check badging
+        run: ./gradlew :app:checkProdReleaseBadging
+
   androidTest:
     needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
