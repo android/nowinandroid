@@ -52,6 +52,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -262,8 +263,7 @@ fun EmptySearchResultBody(
                 .padding(start = 36.dp, end = 36.dp, bottom = 24.dp)
                 .clickable {},
         ) { offset ->
-            tryAnotherSearchString.getStringAnnotations(start = offset, end = offset)
-                .firstOrNull()
+            tryAnotherSearchString.getStringAnnotations(start = offset, end = offset).firstOrNull()
                 ?.let {
                     onInterestsClick()
                 }
@@ -298,9 +298,11 @@ private fun SearchResultBody(
     searchQuery: String = "",
 ) {
     val state = rememberLazyStaggeredGridState()
+    val itemsAvailable by remember {
+        derivedStateOf { topics.size + newsResources.size }
+    }
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(300.dp),
@@ -372,7 +374,6 @@ private fun SearchResultBody(
                 )
             }
         }
-        val itemsAvailable = topics.size + newsResources.size
         val scrollbarState = state.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
