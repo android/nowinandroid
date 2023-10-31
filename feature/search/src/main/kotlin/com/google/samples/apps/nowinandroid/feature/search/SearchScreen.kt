@@ -52,6 +52,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -298,6 +299,9 @@ private fun SearchResultBody(
     searchQuery: String = "",
 ) {
     val state = rememberLazyStaggeredGridState()
+    val itemsAvailable by remember {
+        derivedStateOf { topics.size + newsResources.size }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -372,7 +376,7 @@ private fun SearchResultBody(
                 )
             }
         }
-        val itemsAvailable = topics.size + newsResources.size
+
         val scrollbarState = state.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
