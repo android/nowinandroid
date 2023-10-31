@@ -47,7 +47,7 @@ jobs:
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
+        run: ./gradlew testDemoDebug testProdDebug :lint:test
 
   test:
     runs-on: ubuntu-latest
@@ -124,6 +124,9 @@ jobs:
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
+
+      - name: Check badging
+        run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
     needs: build
