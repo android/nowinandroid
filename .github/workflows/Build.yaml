@@ -40,7 +40,7 @@ jobs:
         with:
           commit_message: Apply Spotless
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
+          branch: ${{ github.head_ref }}
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
