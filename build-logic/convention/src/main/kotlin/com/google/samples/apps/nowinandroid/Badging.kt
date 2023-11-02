@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
+import com.android.SdkConstants
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -113,7 +114,9 @@ fun Project.configureBadgingTasks(
                 aapt2Executable.set(
                     File(
                         baseExtension.sdkDirectory,
-                        "build-tools/${baseExtension.buildToolsVersion}/aapt2",
+                        "${SdkConstants.FD_BUILD_TOOLS}/" +
+                            "${baseExtension.buildToolsVersion}/" +
+                            SdkConstants.FN_AAPT2,
                     ),
                 )
 
