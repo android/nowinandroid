@@ -34,8 +34,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+      - name: Apply formatting if failed
+        run: ./gradlew spotlessApply --init-script gradle/init.gradle.kts --no-configuration-cache
+      - uses: stefanweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply Spotless
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
