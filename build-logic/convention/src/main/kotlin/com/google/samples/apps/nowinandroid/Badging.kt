@@ -29,7 +29,7 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.configure
+import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.ExecOperations
@@ -58,7 +58,7 @@ abstract class GenerateBadgingTask : DefaultTask() {
                 aapt2Executable.get().asFile.absolutePath,
                 "dump",
                 "badging",
-                apk.get().asFile.absolutePath
+                apk.get().asFile.absolutePath,
             )
             standardOutput = badging.asFile.get().outputStream()
         }
@@ -86,12 +86,12 @@ abstract class CheckBadgingTask : DefaultTask() {
         if (
             Files.mismatch(
                 goldenBadging.get().asFile.toPath(),
-                generatedBadging.get().asFile.toPath()
+                generatedBadging.get().asFile.toPath(),
             ) != -1L
         ) {
             throw GradleException(
                 "Generated badging is different from golden badging! " +
-                    "If this change is intended, run ./gradlew updateBadging"
+                    "If this change is intended, run ./gradlew updateBadging",
             )
         }
     }
@@ -99,44 +99,47 @@ abstract class CheckBadgingTask : DefaultTask() {
 
 fun Project.configureBadgingTasks(
     baseExtension: BaseExtension,
-    componentsExtension: ApplicationAndroidComponentsExtension
+    componentsExtension: ApplicationAndroidComponentsExtension,
 ) {
     // Registers a callback to be called, when a new variant is configured
     componentsExtension.onVariants { variant ->
         // Registers a new task to verify the app bundle.
-        val generateBadging = tasks.register<GenerateBadgingTask>("generate${variant.name}Badging") {
-            apk.set(
-                variant.artifacts.get(SingleArtifact.APK_FROM_BUNDLE)
-            )
-            aapt2Executable.set(
-                File(
-                    baseExtension.sdkDirectory,
-                    "build-tools/${baseExtension.buildToolsVersion}/aapt2"
+        val capitalizedVariantName = variant.name.capitalized()
+        val generateBadging =
+            tasks.register<GenerateBadgingTask>("generate${capitalizedVariantName}Badging") {
+                apk.set(
+                    variant.artifacts.get(SingleArtifact.APK_FROM_BUNDLE),
                 )
-            )
-
-            badging.set(
-                project.layout.buildDirectory.file(
-                    "outputs/apk_from_bundle/${variant.name}/${variant.name}-badging.txt"
+                aapt2Executable.set(
+                    File(
+                        baseExtension.sdkDirectory,
+                        "build-tools/${baseExtension.buildToolsVersion}/aapt2",
+                    ),
                 )
-            )
-        }
 
-        tasks.register<Copy>("update${variant.name}Badging") {
+                badging.set(
+                    project.layout.buildDirectory.file(
+                        "outputs/apk_from_bundle/${variant.name}/${variant.name}-badging.txt",
+                    ),
+                )
+            }
+
+        tasks.register<Copy>("update${capitalizedVariantName}Badging") {
             from(generateBadging.get().badging)
             into(project.layout.projectDirectory)
         }
 
-        val checkBadgingTaskName = "check${variant.name}Badging"
+        val checkBadgingTaskName = "check${capitalizedVariantName}Badging"
         tasks.register<CheckBadgingTask>(checkBadgingTaskName) {
             goldenBadging.set(
-                project.layout.projectDirectory.file("${variant.name}-badging.txt"))
+                project.layout.projectDirectory.file("${variant.name}-badging.txt"),
+            )
             generatedBadging.set(
-                generateBadging.get().badging
+                generateBadging.get().badging,
             )
 
             output.set(
-                project.layout.buildDirectory.dir("intermediates/$checkBadgingTaskName")
+                project.layout.buildDirectory.dir("intermediates/$checkBadgingTaskName"),
             )
         }
     }
