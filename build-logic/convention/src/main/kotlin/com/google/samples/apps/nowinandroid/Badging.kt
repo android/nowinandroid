@@ -24,7 +24,9 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
@@ -79,6 +81,9 @@ abstract class CheckBadgingTask : DefaultTask() {
     @get:InputFile
     abstract val generatedBadging: RegularFileProperty
 
+    @get:Input
+    abstract val updateBadgingTaskName: Property<String>
+
     override fun getGroup(): String = LifecycleBasePlugin.VERIFICATION_GROUP
 
     @TaskAction
@@ -91,7 +96,7 @@ abstract class CheckBadgingTask : DefaultTask() {
         ) {
             throw GradleException(
                 "Generated badging is different from golden badging! " +
-                    "If this change is intended, run ./gradlew updateBadging",
+                    "If this change is intended, run ./gradlew ${updateBadgingTaskName.get()}",
             )
         }
     }
@@ -105,8 +110,9 @@ fun Project.configureBadgingTasks(
     componentsExtension.onVariants { variant ->
         // Registers a new task to verify the app bundle.
         val capitalizedVariantName = variant.name.capitalized()
+        val generateBadgingTaskName = "generate${capitalizedVariantName}Badging"
         val generateBadging =
-            tasks.register<GenerateBadgingTask>("generate${capitalizedVariantName}Badging") {
+            tasks.register<GenerateBadgingTask>(generateBadgingTaskName) {
                 apk.set(
                     variant.artifacts.get(SingleArtifact.APK_FROM_BUNDLE),
                 )
@@ -124,7 +130,8 @@ fun Project.configureBadgingTasks(
                 )
             }
 
-        tasks.register<Copy>("update${capitalizedVariantName}Badging") {
+        val updateBadgingTaskName = "update${capitalizedVariantName}Badging"
+        tasks.register<Copy>(updateBadgingTaskName) {
             from(generateBadging.get().badging)
             into(project.layout.projectDirectory)
         }
@@ -137,6 +144,7 @@ fun Project.configureBadgingTasks(
             generatedBadging.set(
                 generateBadging.get().badging,
             )
+            this.updateBadgingTaskName.set(updateBadgingTaskName)
 
             output.set(
                 project.layout.buildDirectory.dir("intermediates/$checkBadgingTaskName"),
