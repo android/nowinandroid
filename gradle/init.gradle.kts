@@ -16,6 +16,10 @@
 
 val ktlintVersion = "0.48.1"
 
+buildfeatures{
+   databinding=true
+}
+
 initscript {
     val spotlessVersion = "6.22.0"
 
