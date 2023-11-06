@@ -61,11 +61,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             // Only use benchmark proguard rules
             proguardFiles("benchmark-rules.pro")
+            isMinifyEnabled = false // Needed for DEX layout optimizations
             applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
-            // Enable DEX layout optimizations
-            // https://developer.android.com/topic/performance/baselineprofiles/dex-layout-optimizations#enable-dex-optimizations
-            isMinifyEnabled = false
-            experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
         }
     }
 
@@ -80,6 +77,10 @@ android {
         }
     }
     namespace = "com.google.samples.apps.nowinandroid"
+
+    // Enable DEX layout optimizations
+    // https://developer.android.com/topic/performance/baselineprofiles/dex-layout-optimizations#enable-dex-optimizations
+    experimentalProperties["android.experimental.r8.dex-startup-optimization"] = true
 }
 
 dependencies {
