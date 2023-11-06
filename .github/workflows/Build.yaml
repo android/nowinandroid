@@ -11,7 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  test_and_apk:
+    name: "Local tests and APKs"
     runs-on: ubuntu-latest
 
     permissions:
@@ -68,7 +69,19 @@ jobs:
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
         if: always()
-        run: ./gradlew testDemoDebug testProdDebug
+        run: ./gradlew testDemoDebug testProdDebug :lint:test
+
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+
+      - name: Build all build type and flavor permutations
+        run: ./gradlew assemble
+
+      - name: Upload build outputs (APKs)
+        uses: actions/upload-artifact@v3
+        with:
+          name: APKs
+          path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload test results (XML)
         if: always()
@@ -91,6 +104,7 @@ jobs:
         run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest-build:
+    name: "Build for device tests"
     runs-on: macos-latest
     timeout-minutes: 90
 
@@ -113,20 +127,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
-
-      - name: Build all build type and flavor permutations
-        run: ./gradlew assemble
-
-      - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
-        with:
-          name: APKs
-          path: '**/build/outputs/apk/**/*.apk'
-
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug :lint:test
 
   androidTest-run:
     needs: androidTest-build
