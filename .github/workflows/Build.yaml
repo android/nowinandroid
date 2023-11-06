@@ -129,7 +129,7 @@ jobs:
         run: ./gradlew testDemoDebug testProdDebug :lint:test
 
   androidTest-run:
-    needs: build
+    needs: androidTest-build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
     timeout-minutes: 55
     strategy:
