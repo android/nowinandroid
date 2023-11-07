@@ -127,7 +127,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build projects before running emulator
-        run: ./gradlew :packageDemoDebug
+        run: ./gradlew packageDemoDebug
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
