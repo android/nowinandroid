@@ -42,6 +42,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -265,12 +266,14 @@ class NavigationTest {
     }
 
     @Test
-    fun navigationBar_multipleBackStackInterests() = runTest {
+    fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
 
             // Select the last topic
-            val topic = topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+            val topic = runBlocking {
+                topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+            }
             onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
             onNodeWithText(topic).performClick()
 
