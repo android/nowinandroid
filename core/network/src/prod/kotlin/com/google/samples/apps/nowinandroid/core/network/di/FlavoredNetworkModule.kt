@@ -28,5 +28,5 @@ import dagger.hilt.components.SingletonComponent
 interface FlavoredNetworkModule {
 
     @Binds
-    fun RetrofitNiaNetwork.binds(): NiaNetworkDataSource
+    fun binds(impl: RetrofitNiaNetwork): NiaNetworkDataSource
 }

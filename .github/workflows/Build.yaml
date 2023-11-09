@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -47,7 +47,7 @@ jobs:
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug
+        run: ./gradlew testDemoDebug testProdDebug :lint:test
 
   test:
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -96,7 +96,7 @@ jobs:
           ./gradlew recordRoborazziDemoDebug
 
       - name: Push new screenshots if available
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.screenshotsrecord.outcome == 'success'
         with:
           file_pattern: '*/*.png'
@@ -125,6 +125,9 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
+      - name: Check badging
+        run: ./gradlew :app:checkProdReleaseBadging
+
   androidTest:
     needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
@@ -135,7 +138,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
