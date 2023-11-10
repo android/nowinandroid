@@ -105,7 +105,7 @@ jobs:
 
   androidTest:
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 55
+    timeout-minutes: 60
     strategy:
       matrix:
         api-level: [26, 30]
