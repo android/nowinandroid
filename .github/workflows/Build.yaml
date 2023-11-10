@@ -39,6 +39,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
@@ -70,9 +73,6 @@ jobs:
       - name: Run local tests
         if: always()
         run: ./gradlew testDemoDebug testProdDebug :lint:test
-
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
       - name: Build all build type and flavor permutations
         run: ./gradlew assemble
