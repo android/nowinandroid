@@ -16,7 +16,7 @@
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -30,7 +30,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
 
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(projects.core.testing)
 }
