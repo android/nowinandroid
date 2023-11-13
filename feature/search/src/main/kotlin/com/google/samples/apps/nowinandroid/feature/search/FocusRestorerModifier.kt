@@ -59,7 +59,7 @@ private fun imeVisibilityAsState(): State<Boolean> {
 }
 
 // Add this modifier to a [TextField] to retain focus and keyboard visibility
-// after configuration is changed. This also works with multiple [TextField]
+// after configuration is changed. This also works with multiple [TextField]s.
 internal fun Modifier.focusRestorer(focusRequester: FocusRequester, defaultFocus: Boolean = true) = composed {
     var hasFocus by rememberSaveable { mutableStateOf(defaultFocus) }
     // Cache the hasFocus value during initialization because `onFocusChanged` is called
