@@ -50,16 +50,20 @@ private fun Context.findActivity(): Activity {
     throw IllegalStateException("Failed to find Activity!")
 }
 
-// Obtain IME visibility as a State which can trigger recomposition.
-// Note that this may not work if edge-to-edge layout is not enabled.
+/**
+ * Obtain IME visibility as a State which can trigger recomposition.
+ * Note that this may not work if edge-to-edge layout is not enabled.
+ */
 @Composable
 private fun imeVisibilityAsState(): State<Boolean> {
     val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
     return rememberUpdatedState(isImeVisible)
 }
 
-// Add this modifier to a [TextField] to retain focus and keyboard visibility
-// after configuration is changed. This also works with multiple [TextField]s.
+/**
+ * Add this modifier to a [TextField] to retain focus and keyboard visibility
+ * after configuration is changed. This also works with multiple [TextField]s.
+ */
 internal fun Modifier.focusRestorer(focusRequester: FocusRequester, defaultFocus: Boolean = true) = composed {
     var hasFocus by rememberSaveable { mutableStateOf(defaultFocus) }
     // Cache the hasFocus value during initialization because `onFocusChanged` is called
