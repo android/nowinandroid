@@ -77,12 +77,10 @@ android {
 }
 
 baselineProfile {
-    // This specifies the managed devices to use that you run the tests on. The default
-    // is none.
+    // This specifies the managed devices to use that you run the tests on.
     managedDevices += "pixel6Api33"
 
-    // This enables using connected devices to generate profiles. The default is true.
-    // When using connected devices, they must be rooted or API 33 and higher.
+    // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
     useConnectedDevices = false
 
 }
