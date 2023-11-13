@@ -76,8 +76,14 @@ jobs:
 
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
+          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
+          -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
+          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
+          -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
+          -x collectDemoNonMinifiedReleaseBaselineProfile
+          -x collectDemoNonMinifiedBenchmarkBaselineProfile
+          -x collectProdNonMinifiedReleaseBaselineProfile
+          -x collectProdNonMinifiedBenchmarkBaselineProfile
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v3
