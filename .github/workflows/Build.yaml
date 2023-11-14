@@ -73,7 +73,9 @@ jobs:
       - name: Run local tests
         if: always()
         run: ./gradlew testDemoDebug testProdDebug :lint:test
-
+      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
+      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
+      # release build
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble
           -x pixel6Api33ProdNonMinifiedReleaseAndroidTest

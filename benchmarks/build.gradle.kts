@@ -17,12 +17,11 @@ import com.google.samples.apps.nowinandroid.NiaBuildType
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.test)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.nowinandroid.android.test)
 }
 
 android {
-
     namespace = "com.google.samples.apps.nowinandroid.benchmarks"
 
     defaultConfig {
