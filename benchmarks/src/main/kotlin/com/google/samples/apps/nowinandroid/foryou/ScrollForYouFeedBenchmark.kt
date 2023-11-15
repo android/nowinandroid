@@ -22,7 +22,7 @@ import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.allowNotifications
+import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,8 +47,7 @@ class ScrollForYouFeedBenchmark {
         setupBlock = {
             // Start the app
             pressHome()
-            startActivityAndWait()
-            allowNotifications()
+            startActivityAndAllowNotifications()
         },
     ) {
         forYouWaitForContent()
