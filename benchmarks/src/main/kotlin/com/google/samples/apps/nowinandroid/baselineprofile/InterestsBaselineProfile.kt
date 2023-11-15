@@ -18,40 +18,22 @@ package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.allowNotifications
-import com.google.samples.apps.nowinandroid.bookmarks.goToBookmarksScreen
-import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
-import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
-import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import com.google.samples.apps.nowinandroid.interests.goToInterestsScreen
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
+import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
 import org.junit.Rule
 import org.junit.Test
 
 /**
- * Generates a baseline profile which can be copied to `app/src/main/baseline-prof.txt`.
+ * Baseline Profile of the "Interests" screen
  */
-class BaselineProfileGenerator {
+class InterestsBaselineProfile {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
     @Test
     fun generate() =
         baselineProfileRule.collect(PACKAGE_NAME) {
-            // This block defines the app's critical user journey. Here we are interested in
-            // optimizing for app startup. But you can also navigate and scroll
-            // through your most important UI.
-            allowNotifications()
-            pressHome()
-            startActivityAndWait()
-            allowNotifications()
-
-            // Scroll the feed critical user journey
-            forYouWaitForContent()
-            forYouSelectTopics(true)
-            forYouScrollFeedDownUp()
-
-            // Navigate to saved screen
-            goToBookmarksScreen()
+            startActivityAndAllowNotifications()
 
             // Navigate to interests screen
             goToInterestsScreen()

@@ -15,6 +15,7 @@ androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.0.0"
+androidxJunit = "1.1.5"
 androidxLifecycle = "2.6.2"
 androidxMacroBenchmark = "1.2.0"
 androidxMetrics = "1.0.0-alpha04"
@@ -142,6 +143,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -152,6 +154,7 @@ work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark"}
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
