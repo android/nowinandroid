@@ -177,12 +177,12 @@ private fun newsUiState(
 
 sealed interface TopicUiState {
     data class Success(val followableTopic: FollowableTopic) : TopicUiState
-    object Error : TopicUiState
-    object Loading : TopicUiState
+    data object Error : TopicUiState
+    data object Loading : TopicUiState
 }
 
 sealed interface NewsUiState {
     data class Success(val news: List<UserNewsResource>) : NewsUiState
-    object Error : NewsUiState
-    object Loading : NewsUiState
+    data object Error : NewsUiState
+    data object Loading : NewsUiState
 }

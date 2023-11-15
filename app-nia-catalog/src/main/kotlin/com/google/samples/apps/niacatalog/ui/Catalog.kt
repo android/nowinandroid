@@ -32,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -318,7 +319,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Tabs", Modifier.padding(top = 16.dp)) }
                 item {
-                    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+                    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
                     val titles = listOf("Topics", "People")
                     NiaTabRow(selectedTabIndex = selectedTabIndex) {
                         titles.forEachIndexed { index, title ->
@@ -332,7 +333,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Navigation", Modifier.padding(top = 16.dp)) }
                 item {
-                    var selectedItem by rememberSaveable { mutableStateOf(0) }
+                    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
                     val items = listOf("For you", "Saved", "Interests")
                     val icons = listOf(
                         NiaIcons.UpcomingBorder,
