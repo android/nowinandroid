@@ -24,14 +24,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.collectWindowSizeAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -59,7 +62,6 @@ import javax.inject.Inject
 
 private const val TAG = "MainActivity"
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -80,6 +82,7 @@ class MainActivity : ComponentActivity() {
 
     val viewModel: MainActivityViewModel by viewModels()
 
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -139,9 +142,10 @@ class MainActivity : ComponentActivity() {
                     androidTheme = shouldUseAndroidTheme(uiState),
                     disableDynamicTheming = shouldDisableDynamicTheming(uiState),
                 ) {
+                    val windowSize by collectWindowSizeAsState()
                     NiaApp(
+                        windowSize = windowSize.toDpSize(),
                         networkMonitor = networkMonitor,
-                        windowSizeClass = calculateWindowSizeClass(this),
                         userNewsResourceRepository = userNewsResourceRepository,
                     )
                 }
@@ -235,6 +239,11 @@ private fun shouldUseDarkTheme(
         DarkThemeConfig.LIGHT -> false
         DarkThemeConfig.DARK -> true
     }
+}
+
+@Composable
+private fun IntSize.toDpSize(): DpSize = with(LocalDensity.current) {
+    DpSize(width.toDp(), height.toDp())
 }
 
 /**
