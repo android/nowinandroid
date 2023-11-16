@@ -79,14 +79,12 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
     fun taskAction() {
         val hasFiles = sources.orNull?.any { directory ->
             directory.asFileTree.files.any {
-                it.isFile && it.parentFile.path.contains("build${File.separator}generated").not()
+                it.isFile && "build${File.separator}generated" !in it.parentFile.path
             }
         } ?: throw RuntimeException("Cannot check androidTest sources")
 
         // Don't print APK location if there are no androidTest source files
-        if (!hasFiles) {
-            return
-        }
+        if (!hasFiles) return
 
         val builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
             ?: throw RuntimeException("Cannot load APKs")

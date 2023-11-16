@@ -33,9 +33,8 @@ class TestTopicsRepository : TopicsRepository {
 
     override fun getTopics(): Flow<List<Topic>> = topicsFlow
 
-    override fun getTopic(id: String): Flow<Topic> {
-        return topicsFlow.map { topics -> topics.find { it.id == id }!! }
-    }
+    override fun getTopic(id: String): Flow<Topic> =
+        topicsFlow.map { topics -> topics.find { it.id == id }!! }
 
     /**
      * A test-only API to allow controlling the list of topics from tests.

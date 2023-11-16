@@ -264,9 +264,7 @@ fun EmptySearchResultBody(
         ) { offset ->
             tryAnotherSearchString.getStringAnnotations(start = offset, end = offset)
                 .firstOrNull()
-                ?.let {
-                    onInterestsClick()
-                }
+                ?.let { onInterestsClick() }
         }
     }
 }
@@ -519,9 +517,7 @@ private fun SearchTextField(
             }
         },
         onValueChange = {
-            if (!it.contains("\n")) {
-                onSearchQueryChanged(it)
-            }
+            if ("\n" !in it) onSearchQueryChanged(it)
         },
         modifier = Modifier
             .fillMaxWidth()

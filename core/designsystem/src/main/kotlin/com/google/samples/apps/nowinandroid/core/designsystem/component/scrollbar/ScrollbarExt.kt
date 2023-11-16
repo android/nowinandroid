@@ -229,10 +229,5 @@ fun LazyStaggeredGridState.scrollbarState(
         .collect { value = it }
 }.value
 
-private inline fun <T> List<T>.floatSumOf(selector: (T) -> Float): Float {
-    var sum = 0f
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
+private inline fun <T> List<T>.floatSumOf(selector: (T) -> Float): Float =
+    fold(0f) { acc, it -> acc + selector(it) }
