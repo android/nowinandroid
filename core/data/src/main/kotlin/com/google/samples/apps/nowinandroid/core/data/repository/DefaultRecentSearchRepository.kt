@@ -39,9 +39,7 @@ class DefaultRecentSearchRepository @Inject constructor(
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
         recentSearchQueryDao.getRecentSearchQueryEntities(limit).map { searchQueries ->
-            searchQueries.map {
-                it.asExternalModel()
-            }
+            searchQueries.map { it.asExternalModel() }
         }
 
     override suspend fun clearRecentSearches() = recentSearchQueryDao.clearRecentSearchQueries()

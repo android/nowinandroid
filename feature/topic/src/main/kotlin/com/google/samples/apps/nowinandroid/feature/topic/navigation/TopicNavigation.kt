@@ -40,7 +40,7 @@ internal class TopicArgs(val topicId: String) {
 
 fun NavController.navigateToTopic(topicId: String) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    this.navigate("topic_route/$encodedId") {
+    navigate("topic_route/$encodedId") {
         launchSingleTop = true
     }
 }

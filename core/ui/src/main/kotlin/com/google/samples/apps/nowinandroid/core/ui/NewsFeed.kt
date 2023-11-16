@@ -64,9 +64,7 @@ fun LazyStaggeredGridScope.newsFeed(
                 key = { it.id },
                 contentType = { "newsFeedItem" },
             ) { userNewsResource ->
-                val resourceUrl by remember {
-                    mutableStateOf(Uri.parse(userNewsResource.url))
-                }
+                val resourceUrl by remember { mutableStateOf(Uri.parse(userNewsResource.url)) }
                 val context = LocalContext.current
                 val analyticsHelper = LocalAnalyticsHelper.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()

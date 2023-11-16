@@ -26,5 +26,5 @@ class TestAnalyticsHelper : AnalyticsHelper {
         events.add(event)
     }
 
-    fun hasLogged(event: AnalyticsEvent) = events.contains(event)
+    fun hasLogged(event: AnalyticsEvent) = event in events
 }
