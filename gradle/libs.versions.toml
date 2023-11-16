@@ -18,6 +18,8 @@ androidxHiltNavigationCompose = "1.0.0"
 androidxJunit = "1.1.5"
 androidxLifecycle = "2.6.2"
 androidxMacroBenchmark = "1.2.0"
+androidxComposeMaterial3Adaptive = "1.0.0-alpha01"
+androidxComposeMaterial3AdaptiveNavigationSuite = "1.0.0-alpha01"
 androidxMetrics = "1.0.0-alpha04"
 androidxNavigation = "2.7.4"
 androidxProfileinstaller = "1.3.1"
@@ -71,6 +73,8 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-adaptive = { group = "androidx.compose.material3", name = "material3-adaptive", version.ref = "androidxComposeMaterial3Adaptive" }
+androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "androidxComposeMaterial3AdaptiveNavigationSuite" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }

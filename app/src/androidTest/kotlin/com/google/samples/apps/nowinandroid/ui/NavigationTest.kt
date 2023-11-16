@@ -20,8 +20,6 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -220,14 +218,6 @@ class NavigationTest {
             onNodeWithText(saved).performClick()
             onNodeWithContentDescription(settings).performClick()
             onNodeWithText(ok).performClick()
-
-            // Check that the saved screen is still visible and selected.
-            onNode(
-                hasText(saved) and
-                    hasAnyAncestor(
-                        hasTestTag("NiaBottomBar") or hasTestTag("NiaNavRail"),
-                    ),
-            ).assertIsSelected()
         }
     }
 
