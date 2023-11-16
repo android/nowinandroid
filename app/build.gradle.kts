@@ -116,6 +116,12 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.compose.material3.adaptive) {
+        this.isTransitive = false
+    }
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite) {
+        this.isTransitive = false
+    }
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)

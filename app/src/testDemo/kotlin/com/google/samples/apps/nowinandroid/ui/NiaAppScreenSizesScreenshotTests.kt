@@ -17,9 +17,6 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.util.Log
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -60,12 +57,11 @@ import javax.inject.Inject
 /**
  * Tests that the navigation UI is rendered correctly on different screen sizes.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
 // This allows enough room to render the content under test without clipping or scaling.
-@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi", sdk = [33])
+@Config(application = HiltTestApplication::class, qualifiers = "w1300dp-h1000dp-480dpi", sdk = [33])
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
 class NiaAppScreenSizesScreenshotTests {
@@ -138,16 +134,13 @@ class NiaAppScreenSizesScreenshotTests {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
-                TestHarness(size = DpSize(width, height)) {
-                    BoxWithConstraints {
-                        NiaApp(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                        )
-                    }
+                val windowSize = DpSize(width, height)
+                TestHarness(size = windowSize) {
+                    NiaApp(
+                        windowSize = windowSize,
+                        networkMonitor = networkMonitor,
+                        userNewsResourceRepository = userNewsResourceRepository,
+                    )
                 }
             }
         }
@@ -237,6 +230,33 @@ class NiaAppScreenSizesScreenshotTests {
             900.dp,
             1000.dp,
             "expandedWidth_expandedHeight_showsNavigationRail",
+        )
+    }
+
+    @Test
+    fun largeScreenWidth_compactHeight_showsPermanentDrawer() {
+        testNiaAppScreenshotWithSize(
+            1300.dp,
+            400.dp,
+            "largeScreenWidth_compactHeight_showsPermanentDrawer",
+        )
+    }
+
+    @Test
+    fun largeScreenWidth_mediumHeight_showsPermanentDrawer() {
+        testNiaAppScreenshotWithSize(
+            1300.dp,
+            500.dp,
+            "largeScreenWidth_mediumHeight_showsPermanentDrawer",
+        )
+    }
+
+    @Test
+    fun largeScreenWidth_expandedHeight_showsPermanentDrawer() {
+        testNiaAppScreenshotWithSize(
+            1300.dp,
+            1000.dp,
+            "largeScreenWidth_expandedHeight_showsPermanentDrawer",
         )
     }
 }

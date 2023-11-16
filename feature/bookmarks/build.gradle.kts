@@ -23,7 +23,3 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks"
 }
-
-dependencies {
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-}

@@ -16,12 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -53,7 +55,7 @@ import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberNiaAppState(
-    windowSizeClass: WindowSizeClass,
+    windowSize: DpSize,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -63,14 +65,14 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        windowSizeClass,
+        windowSize,
         networkMonitor,
         userNewsResourceRepository,
     ) {
         NiaAppState(
             navController,
             coroutineScope,
-            windowSizeClass,
+            windowSize,
             networkMonitor,
             userNewsResourceRepository,
         )
@@ -81,7 +83,7 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass,
+    private val windowSize: DpSize,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
 ) {
@@ -96,12 +98,6 @@ class NiaAppState(
             interestsRoute -> INTERESTS
             else -> null
         }
-
-    val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    val shouldShowNavRail: Boolean
-        get() = !shouldShowBottomBar
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -132,6 +128,26 @@ class NiaAppState(
                 SharingStarted.WhileSubscribed(5_000),
                 initialValue = emptySet(),
             )
+
+    /**
+     * Per <a href="https://m3.material.io/components/navigation-drawer/guidelines">Material Design 3 guidelines</a>,
+     * the selection of the appropriate navigation component should be contingent on the available
+     * window size:
+     * - Bottom Bar for compact window sizes (below 600dp)
+     * - Navigation Rail for medium and expanded window sizes up to 1240dp (between 600dp and 1240dp)
+     * - Navigation Drawer to window size above 1240dp
+     */
+    @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
+    val navigationSuiteType: NavigationSuiteType
+        @Composable get() {
+            return if (windowSize.width > 1240.dp) {
+                NavigationSuiteType.NavigationDrawer
+            } else if (windowSize.width >= 600.dp) {
+                NavigationSuiteType.NavigationRail
+            } else {
+                NavigationSuiteType.NavigationBar
+            }
+        }
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
