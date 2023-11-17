@@ -74,7 +74,10 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
+                uiState = InterestsUiState.Interests(
+                    selectedTopicId = null,
+                    topics = followableTopicTestData,
+                ),
             )
         }
 
@@ -108,8 +111,9 @@ class InterestsScreenTest {
     private fun InterestsScreen(uiState: InterestsUiState) {
         InterestsScreen(
             uiState = uiState,
-            followTopic = { _, _ -> },
-            onTopicClick = {},
+            followTopic = { _, _ -> /* no-op */ },
+            onTopicClick = { /* no-op */ },
+            detailsPane = { /* no-op */ },
         )
     }
 }

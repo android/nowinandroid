@@ -16,31 +16,40 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
-private const val INTERESTS_GRAPH_ROUTE_PATTERN = "interests_graph"
-const val interestsRoute = "interests_route"
+internal const val topicIdArg = "topicId"
+const val interestsRoute = "interests_route?$topicIdArg={$topicIdArg}"
 
-fun NavController.navigateToInterestsGraph(navOptions: NavOptions? = null) {
-    this.navigate(INTERESTS_GRAPH_ROUTE_PATTERN, navOptions)
+fun NavController.navigateToInterestsGraph(
+    topicId: String? = null,
+    navOptions: NavOptions? = null,
+) {
+    if (topicId == null) {
+        navigate("interests_route", navOptions)
+    } else {
+        navigate("interests_route?$topicIdArg=$topicId", navOptions)
+    }
 }
 
 fun NavGraphBuilder.interestsGraph(
-    onTopicClick: (String) -> Unit,
-    nestedGraphs: NavGraphBuilder.() -> Unit,
+    detailsPane: @Composable (String) -> Unit,
 ) {
-    navigation(
-        route = INTERESTS_GRAPH_ROUTE_PATTERN,
-        startDestination = interestsRoute,
+    composable(
+        route = interestsRoute,
+        arguments = listOf(
+            navArgument(topicIdArg) {
+                defaultValue = null
+                nullable = true
+            },
+        ),
     ) {
-        composable(route = interestsRoute) {
-            InterestsRoute(onTopicClick)
-        }
-        nestedGraphs()
+        InterestsRoute(detailsPane)
     }
 }

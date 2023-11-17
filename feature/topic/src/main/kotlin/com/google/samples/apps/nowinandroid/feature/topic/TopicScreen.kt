@@ -32,12 +32,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +54,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadi
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -69,8 +65,7 @@ import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import com.google.samples.apps.nowinandroid.feature.topic.R.string
 
 @Composable
-internal fun TopicRoute(
-    onBackClick: () -> Unit,
+fun TopicRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
@@ -83,7 +78,6 @@ internal fun TopicRoute(
         topicUiState = topicUiState,
         newsUiState = newsUiState,
         modifier = modifier,
-        onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
@@ -96,7 +90,6 @@ internal fun TopicRoute(
 internal fun TopicScreen(
     topicUiState: TopicUiState,
     newsUiState: NewsUiState,
-    onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onBookmarkChanged: (String, Boolean) -> Unit,
@@ -112,9 +105,6 @@ internal fun TopicScreen(
             state = state,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
-                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-            }
             when (topicUiState) {
                 TopicUiState.Loading -> item {
                     NiaLoadingWheel(
@@ -127,7 +117,6 @@ internal fun TopicScreen(
                 is TopicUiState.Success -> {
                     item {
                         TopicToolbar(
-                            onBackClick = onBackClick,
                             onFollowClick = onFollowClick,
                             uiState = topicUiState.followableTopic,
                         )
@@ -270,24 +259,12 @@ private fun TopicBodyPreview() {
 private fun TopicToolbar(
     uiState: FollowableTopic,
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
     onFollowClick: (Boolean) -> Unit = {},
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 32.dp),
+        horizontalArrangement = Arrangement.End,
+        modifier = modifier.fillMaxWidth(),
     ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(
-                imageVector = NiaIcons.ArrowBack,
-                contentDescription = stringResource(
-                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back,
-                ),
-            )
-        }
         val selected = uiState.isFollowed
         NiaFilterChip(
             selected = selected,
@@ -314,7 +291,6 @@ fun TopicScreenPopulated(
             TopicScreen(
                 topicUiState = TopicUiState.Success(userNewsResources[0].followableTopics[0]),
                 newsUiState = NewsUiState.Success(userNewsResources),
-                onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
                 onNewsResourceViewed = {},
@@ -332,7 +308,6 @@ fun TopicScreenLoading() {
             TopicScreen(
                 topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Loading,
-                onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
                 onNewsResourceViewed = {},

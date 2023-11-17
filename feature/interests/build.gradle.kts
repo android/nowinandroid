@@ -22,3 +22,9 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests"
 }
+
+dependencies {
+    implementation(libs.androidx.compose.material3.adaptive) {
+        isTransitive = false
+    }
+}

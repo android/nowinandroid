@@ -36,7 +36,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
 @Composable
 internal fun InterestsRoute(
-    onTopicClick: (String) -> Unit,
+    detailsPane: @Composable (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
@@ -45,7 +45,8 @@ internal fun InterestsRoute(
     InterestsScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
-        onTopicClick = onTopicClick,
+        onTopicClick = viewModel::onTopicClick,
+        detailsPane = detailsPane,
         modifier = modifier,
     )
 }
@@ -55,6 +56,7 @@ internal fun InterestsScreen(
     uiState: InterestsUiState,
     followTopic: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
+    detailsPane: @Composable (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -67,13 +69,17 @@ internal fun InterestsScreen(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.loading),
                 )
+
             is InterestsUiState.Interests ->
                 TopicsTabContent(
                     topics = uiState.topics,
+                    selectedTopicId = uiState.selectedTopicId,
                     onTopicClick = onTopicClick,
                     onFollowButtonClick = followTopic,
+                    detailsPane = detailsPane,
                     modifier = modifier,
                 )
+
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
@@ -96,9 +102,11 @@ fun InterestsScreenPopulated(
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
                     topics = followableTopics,
+                    selectedTopicId = followableTopics.first().topic.id,
                 ),
                 followTopic = { _, _ -> },
                 onTopicClick = {},
+                detailsPane = {},
             )
         }
     }
@@ -113,6 +121,7 @@ fun InterestsScreenLoading() {
                 uiState = InterestsUiState.Loading,
                 followTopic = { _, _ -> },
                 onTopicClick = {},
+                detailsPane = {},
             )
         }
     }
@@ -127,6 +136,7 @@ fun InterestsScreenEmpty() {
                 uiState = InterestsUiState.Empty,
                 followTopic = { _, _ -> },
                 onTopicClick = {},
+                detailsPane = {},
             )
         }
     }

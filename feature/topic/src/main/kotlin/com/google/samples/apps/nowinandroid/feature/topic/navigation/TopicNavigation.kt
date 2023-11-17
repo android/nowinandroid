@@ -20,6 +20,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -32,29 +33,27 @@ private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
 internal const val topicIdArg = "topicId"
+const val topicNavigationRoute = "topic_route/{$topicIdArg}"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle) :
         this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), URL_CHARACTER_ENCODING))
 }
 
-fun NavController.navigateToTopic(topicId: String) {
+fun NavController.navigateToTopic(topicId: String, navOptions: NavOptions? = null) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    this.navigate("topic_route/$encodedId") {
-        launchSingleTop = true
-    }
+    navigate("topic_route/$encodedId", navOptions)
 }
 
 fun NavGraphBuilder.topicScreen(
-    onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$topicIdArg}",
+        route = topicNavigationRoute,
         arguments = listOf(
             navArgument(topicIdArg) { type = NavType.StringType },
         ),
     ) {
-        TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
+        TopicRoute(onTopicClick = onTopicClick)
     }
 }

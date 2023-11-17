@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
+import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -53,6 +54,7 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
+            savedStateHandle = SavedStateHandle(),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
@@ -93,7 +95,7 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testOutputTopics),
+            InterestsUiState.Interests(selectedTopicId = null, topics = testOutputTopics),
             viewModel.uiState.value,
         )
 
@@ -123,7 +125,7 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testInputTopics),
+            InterestsUiState.Interests(selectedTopicId = null, topics = testInputTopics),
             viewModel.uiState.value,
         )
 
