@@ -43,6 +43,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.TintTheme
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 
 /**
@@ -53,6 +56,8 @@ import kotlin.test.assertEquals
  * [LocalBackgroundTheme] — have the expected values for a given theme mode, as specified by the
  * design system.
  */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [33])
 class ThemeTest {
 
     @get:Rule
