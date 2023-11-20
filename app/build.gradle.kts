@@ -147,12 +147,5 @@ baselineProfile {
 }
 
 dependencyGuard {
-
-    configuration("demoDebugRuntimeClasspath")
-
-    configuration("demoReleaseRuntimeClasspath")
-
-    configuration("prodDebugRuntimeClasspath")
-
     configuration("prodReleaseRuntimeClasspath")
 }
