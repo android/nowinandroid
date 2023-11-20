@@ -16,7 +16,12 @@
 
 buildscript {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex(".*google.*")
+                includeGroupByRegex(".*android.*")
+            }
+        }
         mavenCentral()
 
         // Android Build Server
