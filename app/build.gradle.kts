@@ -25,7 +25,6 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
-    alias(libs.plugins.dependencyGuard)
 }
 
 android {
