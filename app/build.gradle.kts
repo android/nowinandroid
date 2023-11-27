@@ -43,6 +43,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
+
+            // Don't create baseline profiles for debug builds.
+            baselineProfile.automaticGenerationDuringBuild = false
         }
         val release = getByName("release") {
             isMinifyEnabled = true
@@ -137,10 +140,4 @@ dependencies {
     testImplementation(kotlin("test"))
     kspTest(libs.hilt.compiler)
 
-}
-
-baselineProfile {
-    // Don't build on every iteration of a full assemble.
-    // Instead enable generation directly for the release build variant.
-    automaticGenerationDuringBuild = false
 }
