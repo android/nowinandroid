@@ -52,9 +52,7 @@ android {
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
-            signingConfig = signingConfigs.named("debug").get()
-            // Ensure Baseline Profile is fresh for release builds.
-            baselineProfile.automaticGenerationDuringBuild = true
+            signingConfig = signingConfigs.getByName("debug").get()
         }
     }
 
@@ -69,6 +67,20 @@ android {
         }
     }
     namespace = "com.google.samples.apps.nowinandroid"
+}
+
+baselineProfile {
+    saveInSrc = false
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+    mergeIntoMain = true
+    variants {
+        create("release") {
+            // Ensure Baseline Profile is fresh for release builds.
+            automaticGenerationDuringBuild = true
+        }
+    }
 }
 
 dependencies {
