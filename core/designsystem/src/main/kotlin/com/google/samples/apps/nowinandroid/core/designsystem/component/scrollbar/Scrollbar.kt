@@ -39,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -48,7 +47,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -340,13 +338,13 @@ fun Scrollbar(
                 Horizontal -> {
                     constraints.copy(
                         minWidth = thumbSizePx.roundToInt(),
-                        maxWidth = thumbSizePx.roundToInt()
+                        maxWidth = thumbSizePx.roundToInt(),
                     )
                 }
                 Vertical -> {
                     constraints.copy(
                         minHeight = thumbSizePx.roundToInt(),
-                        maxHeight = thumbSizePx.roundToInt()
+                        maxHeight = thumbSizePx.roundToInt(),
                     )
                 }
             }
@@ -392,8 +390,6 @@ fun Scrollbar(
                 interactionThumbTravelPercent = currentThumbMovedPercent
                 delay(SCROLLBAR_PRESS_DELAY_MS)
             }
-
-
         }
     }
 
