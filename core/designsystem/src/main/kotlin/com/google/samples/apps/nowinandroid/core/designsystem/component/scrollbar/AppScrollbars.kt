@@ -38,7 +38,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +66,7 @@ private const val SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS = 2_000L
 @Composable
 fun ScrollableState.DraggableScrollbar(
     modifier: Modifier = Modifier,
-    state: State<ScrollbarState>,
+    state: ScrollbarState,
     orientation: Orientation,
     onThumbMoved: (Float) -> Unit,
 ) {
@@ -97,7 +96,7 @@ fun ScrollableState.DraggableScrollbar(
 @Composable
 fun ScrollableState.DecorativeScrollbar(
     modifier: Modifier = Modifier,
-    state: State<ScrollbarState>,
+    state: ScrollbarState,
     orientation: Orientation,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
