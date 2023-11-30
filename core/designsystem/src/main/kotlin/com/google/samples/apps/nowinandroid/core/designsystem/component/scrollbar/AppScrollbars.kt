@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.Orientation.Horizontal
 import androidx.compose.foundation.gestures.Orientation.Vertical
@@ -49,7 +48,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorProducer
 import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.node.DrawModifierNode
@@ -60,10 +58,7 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.ThumbState.Active
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.ThumbState.Dormant
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.ThumbState.Inactive
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.launch
 
 /**
  * The time period for showing the scrollbar thumb after interacting with it, before it fades away
@@ -175,14 +170,14 @@ private fun ScrollableState.DecorativeScrollbarThumb(
 @Composable
 private fun Modifier.scrollThumb(
     scrollableState: ScrollableState,
-    interactionSource: InteractionSource
+    interactionSource: InteractionSource,
 ): Modifier {
     val colorState = scrollbarThumbColor(scrollableState, interactionSource)
     return this then ScrollThumbElement { colorState.value }
 }
 
-private data class ScrollThumbElement(val colorProducer: ColorProducer)
-    : ModifierNodeElement<ScrollThumbNode>() {
+private data class ScrollThumbElement(val colorProducer: ColorProducer) :
+    ModifierNodeElement<ScrollThumbNode>() {
     override fun create(): ScrollThumbNode = ScrollThumbNode(colorProducer)
     override fun update(node: ScrollThumbNode) {
         node.colorProducer = colorProducer
@@ -190,7 +185,7 @@ private data class ScrollThumbElement(val colorProducer: ColorProducer)
     }
 }
 
-private class ScrollThumbNode(var colorProducer: ColorProducer): DrawModifierNode, Modifier.Node() {
+private class ScrollThumbNode(var colorProducer: ColorProducer) : DrawModifierNode, Modifier.Node() {
     private val shape = RoundedCornerShape(16.dp)
 
     // naive cache outline calculation if size is the same
@@ -221,7 +216,7 @@ private class ScrollThumbNode(var colorProducer: ColorProducer): DrawModifierNod
 @Composable
 private fun scrollbarThumbColor(
     scrollableState: ScrollableState,
-    interactionSource: InteractionSource
+    interactionSource: InteractionSource,
 ): State<Color> {
     var state by remember { mutableStateOf(Dormant) }
     val pressed by interactionSource.collectIsPressedAsState()
