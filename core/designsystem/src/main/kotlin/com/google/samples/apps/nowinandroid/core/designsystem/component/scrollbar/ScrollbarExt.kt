@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemInfo
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -40,7 +41,7 @@ import kotlin.math.min
 fun LazyListState.scrollbarState(
     itemsAvailable: Int,
     itemIndex: (LazyListItemInfo) -> Int = LazyListItemInfo::index,
-): ScrollbarState = produceState(
+): State<ScrollbarState> = produceState(
     initialValue = ScrollbarState.FULL,
     key1 = this,
     key2 = itemsAvailable,
@@ -91,7 +92,7 @@ fun LazyListState.scrollbarState(
         .filterNotNull()
         .distinctUntilChanged()
         .collect { value = it }
-}.value
+}
 
 /**
  * Calculates a [ScrollbarState] driven by the changes in a [LazyGridState]
@@ -103,7 +104,7 @@ fun LazyListState.scrollbarState(
 fun LazyGridState.scrollbarState(
     itemsAvailable: Int,
     itemIndex: (LazyGridItemInfo) -> Int = LazyGridItemInfo::index,
-): ScrollbarState = produceState(
+): State<ScrollbarState> = produceState(
     initialValue = ScrollbarState.FULL,
     key1 = this,
     key2 = itemsAvailable,
@@ -164,7 +165,7 @@ fun LazyGridState.scrollbarState(
         .filterNotNull()
         .distinctUntilChanged()
         .collect { value = it }
-}.value
+}
 
 /**
  * Remembers a [ScrollbarState] driven by the changes in a [LazyStaggeredGridState]
@@ -177,7 +178,7 @@ fun LazyGridState.scrollbarState(
 fun LazyStaggeredGridState.scrollbarState(
     itemsAvailable: Int,
     itemIndex: (LazyStaggeredGridItemInfo) -> Int = LazyStaggeredGridItemInfo::index,
-): ScrollbarState = produceState(
+): State<ScrollbarState> = produceState(
     initialValue = ScrollbarState.FULL,
     key1 = this,
     key2 = itemsAvailable,
@@ -227,7 +228,7 @@ fun LazyStaggeredGridState.scrollbarState(
         .filterNotNull()
         .distinctUntilChanged()
         .collect { value = it }
-}.value
+}
 
 private inline fun <T> List<T>.floatSumOf(selector: (T) -> Float): Float {
     var sum = 0f
