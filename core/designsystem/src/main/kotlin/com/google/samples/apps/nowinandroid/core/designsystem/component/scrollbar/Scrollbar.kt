@@ -91,6 +91,12 @@ class ScrollbarState {
      */
     val thumbMovedPercent
         get() = unpackFloat2(packedValue)
+
+    /**
+     * Returns the max distance the thumb can travel as a percentage of total track size
+     */
+    val thumbTrackSizePercent
+        get() = 1f - unpackFloat1(packedValue)
 }
 
 /**
@@ -310,27 +316,30 @@ fun Scrollbar(
                 b = minThumbSize.toPx(),
             )
 
-            val thumbTravelPercent = when {
-                interactionThumbTravelPercent.isNaN() -> state.thumbMovedPercent
-                else -> interactionThumbTravelPercent
+            val trackSizePx = when (state.thumbTrackSizePercent) {
+                0f -> track.size
+                else -> (track.size - thumbSizePx) / state.thumbTrackSizePercent
             }
 
-            val thumbMovedPx = min(
-                a = track.size * thumbTravelPercent,
-                b = track.size - thumbSizePx,
+            val thumbTravelPercent = max(
+                a = min(
+                    a = when {
+                        interactionThumbTravelPercent.isNaN() -> state.thumbMovedPercent
+                        else -> interactionThumbTravelPercent
+                    },
+                    b = state.thumbTrackSizePercent,
+                ),
+                b = 0f,
             )
 
-            val scrollbarThumbMovedPx = max(
-                a = thumbMovedPx.roundToInt(),
-                b = 0,
-            )
+            val thumbMovedPx = trackSizePx * thumbTravelPercent
 
             val y = when (orientation) {
                 Horizontal -> 0
-                Vertical -> scrollbarThumbMovedPx
+                Vertical -> thumbMovedPx.roundToInt()
             }
             val x = when (orientation) {
-                Horizontal -> scrollbarThumbMovedPx
+                Horizontal -> thumbMovedPx.roundToInt()
                 Vertical -> 0
             }
 
