@@ -43,6 +43,13 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
 }
 
+tasks {
+    validatePlugins {
+        enableStricterValidation.set(true)
+        failOnWarning.set(true)
+    }
+}
+
 gradlePlugin {
     plugins {
         register("androidApplicationCompose") {

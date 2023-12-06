@@ -26,11 +26,14 @@ import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.register
@@ -40,14 +43,17 @@ import java.io.File
 import java.nio.file.Files
 import javax.inject.Inject
 
+@CacheableTask
 abstract class GenerateBadgingTask : DefaultTask() {
 
     @get:OutputFile
     abstract val badging: RegularFileProperty
 
+    @get:PathSensitive(PathSensitivity.NONE)
     @get:InputFile
     abstract val apk: RegularFileProperty
 
+    @get:PathSensitive(PathSensitivity.NONE)
     @get:InputFile
     abstract val aapt2Executable: RegularFileProperty
 
@@ -68,6 +74,7 @@ abstract class GenerateBadgingTask : DefaultTask() {
     }
 }
 
+@CacheableTask
 abstract class CheckBadgingTask : DefaultTask() {
 
     // In order for the task to be up-to-date when the inputs have not changed,
@@ -76,9 +83,11 @@ abstract class CheckBadgingTask : DefaultTask() {
     @get:OutputDirectory
     abstract val output: DirectoryProperty
 
+    @get:PathSensitive(PathSensitivity.NONE)
     @get:InputFile
     abstract val goldenBadging: RegularFileProperty
 
+    @get:PathSensitive(PathSensitivity.NONE)
     @get:InputFile
     abstract val generatedBadging: RegularFileProperty
 

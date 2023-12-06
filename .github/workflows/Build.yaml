@@ -39,6 +39,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Check build-logic
+        run: ./gradlew check -p build-logic
+
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
