@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import kotlin.math.roundToInt
 
 /**
  * Remembers a function to react to [Scrollbar] thumb position displacements for a [LazyListState]
@@ -79,7 +80,7 @@ private inline fun rememberDraggableScroller(
 
     LaunchedEffect(percentage) {
         if (percentage.isNaN()) return@LaunchedEffect
-        val indexToFind = (itemCount * percentage).toInt()
+        val indexToFind = (itemCount * percentage).roundToInt()
         scroll(indexToFind)
     }
     return remember {
