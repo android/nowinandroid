@@ -2,6 +2,7 @@ package: name='com.google.samples.apps.nowinandroid' versionCode='8' versionName
 sdkVersion:'21'
 targetSdkVersion:'34'
 uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.RECORD_AUDIO'
 uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
 uses-permission: name='android.permission.POST_NOTIFICATIONS'
 uses-permission: name='android.permission.WAKE_LOCK'
@@ -111,6 +112,8 @@ uses-library-not-required:'android.ext.adservices'
 feature-group: label=''
   uses-feature: name='android.hardware.faketouch'
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+  uses-feature: name='android.hardware.microphone'
+  uses-implied-feature: name='android.hardware.microphone' reason='requested android.permission.RECORD_AUDIO permission'
 main
 other-activities
 other-receivers
