@@ -96,7 +96,7 @@ class ScrollbarState {
      * Returns the max distance the thumb can travel as a percentage of total track size
      */
     val thumbTrackSizePercent
-        get() = 1f - unpackFloat1(packedValue)
+        get() = 1f - thumbSizePercent
 }
 
 /**
