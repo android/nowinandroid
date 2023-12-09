@@ -34,7 +34,7 @@ import javax.inject.Inject
  * Disk storage backed implementation of the [TopicsRepository].
  * Reads are exclusively from local storage to support offline access.
  */
-class OfflineFirstTopicsRepository @Inject constructor(
+internal class OfflineFirstTopicsRepository @Inject constructor(
     private val topicDao: TopicDao,
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
