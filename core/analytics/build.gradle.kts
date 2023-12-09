@@ -24,9 +24,8 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.firebase.analytics)
-    implementation(libs.kotlinx.coroutines.android)
+
+    prodImplementation(platform(libs.firebase.bom))
+    prodImplementation(libs.firebase.analytics)
 }
