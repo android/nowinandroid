@@ -18,6 +18,7 @@ updates:
           - "org.jetbrains.kotlin.jvm"
           - "com.google.devtools.ksp"
           - "androidx.compose.compiler:compiler"
+    open-pull-requests-limit: 10
 registries:
   maven-google:
     type: "maven-repository"
