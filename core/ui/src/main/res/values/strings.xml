@@ -26,4 +26,6 @@
 
     <string name="core_ui_topic_chip_content_description_when_followed">%1$s is followed</string>
     <string name="core_ui_topic_chip_content_description_when_not_followed">%1$s is not followed</string>
+
+    <string name="core_ui_custom_tab_activity_not_found">Please install a browser to open this news resource</string>
 </resources>

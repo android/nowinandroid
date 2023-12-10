@@ -16,8 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -101,7 +103,11 @@ fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: In
         .setDefaultColorSchemeParams(customTabBarColor)
         .build()
 
-    customTabsIntent.launchUrl(context, uri)
+    try {
+        customTabsIntent.launchUrl(context, uri)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, R.string.core_ui_custom_tab_activity_not_found, Toast.LENGTH_LONG).show()
+    }
 }
 
 /**
