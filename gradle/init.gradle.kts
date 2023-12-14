@@ -39,7 +39,6 @@ rootProject {
                     mapOf(
                         "android" to "true",
                         "ktlint_standard_property-naming" to "disabled",
-                        "ktlint_standard_discouraged-comment-location" to "disabled",
                     ),
                 )
                 licenseHeaderFile(rootProject.file("spotless/copyright.kt"))

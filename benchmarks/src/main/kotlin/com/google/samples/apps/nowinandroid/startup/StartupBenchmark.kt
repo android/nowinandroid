@@ -60,7 +60,8 @@ class StartupBenchmark {
         packageName = PACKAGE_NAME,
         metrics = listOf(StartupTimingMetric()),
         compilationMode = compilationMode,
-        iterations = 20, // More iterations result in higher statistical significance.
+        // More iterations result in higher statistical significance.
+        iterations = 20,
         startupMode = COLD,
         setupBlock = {
             pressHome()
