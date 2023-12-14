@@ -47,7 +47,7 @@ class TagScreenshotTests() {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun Tag_multipleThemes() {
+    fun tag_multipleThemes() {
         composeTestRule.captureMultiTheme("Tag") {
             NiaTopicTag(followed = true, onClick = {}) {
                 Text("TOPIC")
