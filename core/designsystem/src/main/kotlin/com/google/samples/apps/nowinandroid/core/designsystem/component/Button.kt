@@ -278,7 +278,7 @@ fun NiaButtonPreview() {
 @ThemePreviews
 @Composable
 fun NiaOutlinedButtonPreview() {
-    NiaTheme() {
+    NiaTheme {
         NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
             NiaOutlinedButton(onClick = {}, text = { Text("Test button") })
         }

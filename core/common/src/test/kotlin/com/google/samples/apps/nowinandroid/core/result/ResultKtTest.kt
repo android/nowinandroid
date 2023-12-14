@@ -25,7 +25,7 @@ import kotlin.test.assertEquals
 class ResultKtTest {
 
     @Test
-    fun Result_catches_errors() = runTest {
+    fun result_catches_errors() = runTest {
         flow {
             emit(1)
             throw Exception("Test Done")
