@@ -31,11 +31,11 @@ import kotlin.text.Charsets.UTF_8
 private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
-internal const val topicIdArg = "topicId"
+internal const val TOPIC_ID_ARG = "topicId"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle) :
-        this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), URL_CHARACTER_ENCODING))
+        this(URLDecoder.decode(checkNotNull(savedStateHandle[TOPIC_ID_ARG]), URL_CHARACTER_ENCODING))
 }
 
 fun NavController.navigateToTopic(topicId: String) {
@@ -50,9 +50,9 @@ fun NavGraphBuilder.topicScreen(
     onTopicClick: (String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$topicIdArg}",
+        route = "topic_route/{$TOPIC_ID_ARG}",
         arguments = listOf(
-            navArgument(topicIdArg) { type = NavType.StringType },
+            navArgument(TOPIC_ID_ARG) { type = NavType.StringType },
         ),
     ) {
         TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
