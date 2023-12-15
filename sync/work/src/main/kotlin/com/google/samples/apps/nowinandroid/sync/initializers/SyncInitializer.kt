@@ -28,7 +28,7 @@ object Sync {
         WorkManager.getInstance(context).apply {
             // Run sync on app startup and ensure only one sync worker runs at any time
             enqueueUniqueWork(
-                SyncWorkName,
+                SYNC_WORK_NAME,
                 ExistingWorkPolicy.KEEP,
                 SyncWorker.startUpSyncWork(),
             )
@@ -37,4 +37,4 @@ object Sync {
 }
 
 // This name should not be changed otherwise the app may have concurrent sync requests running
-internal const val SyncWorkName = "SyncWorkName"
+internal const val SYNC_WORK_NAME = "SyncWorkName"
