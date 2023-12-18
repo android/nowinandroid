@@ -31,6 +31,7 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -108,6 +109,23 @@ class ForYouViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = OnboardingUiState.Loading,
             )
+
+    private val _showNotificationPermission = MutableStateFlow(false)
+    val showNotificationPermission: StateFlow<Boolean> = _showNotificationPermission
+    private val _dialogState = MutableStateFlow(false)
+    val dialogState: StateFlow<Boolean> = _dialogState
+
+    fun toggleDialog() {
+        viewModelScope.launch {
+            _dialogState.emit(!_dialogState.value)
+        }
+    }
+    fun showNotificationPermission() {
+        viewModelScope.launch {
+            _showNotificationPermission.emit(!_showNotificationPermission.value)
+        }
+    }
+
 
     fun updateTopicSelection(topicId: String, isChecked: Boolean) {
         viewModelScope.launch {

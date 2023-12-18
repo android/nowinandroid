@@ -59,12 +59,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,16 +118,22 @@ internal fun ForYouRoute(
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
+    val showDialog by viewModel.dialogState.collectAsState()
+    val askNotificationPermission by viewModel.showNotificationPermission.collectAsState()
 
     ForYouScreen(
         isSyncing = isSyncing,
         onboardingUiState = onboardingUiState,
         feedState = feedState,
         deepLinkedUserNewsResource = deepLinkedUserNewsResource,
+        askShowDialog = showDialog,
+        askNotificationPermission = askNotificationPermission,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onDeepLinkOpened = viewModel::onDeepLinkOpened,
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
+        showNotificationPermissionDialog = viewModel::toggleDialog,
+        showNotificationPermission = viewModel::showNotificationPermission,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         modifier = modifier,
@@ -138,10 +146,14 @@ internal fun ForYouScreen(
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
     deepLinkedUserNewsResource: UserNewsResource?,
+    askShowDialog: Boolean,
+    askNotificationPermission: Boolean,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onDeepLinkOpened: (String) -> Unit,
     saveFollowedTopics: () -> Unit,
+    showNotificationPermissionDialog: () -> Unit,
+    showNotificationPermission: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -160,6 +172,18 @@ internal fun ForYouScreen(
     )
     TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
+    if(askShowDialog){
+        ShowDialog(
+            showNotificationPermissionDialog,
+            showNotificationPermission
+        )
+    }
+
+    if(askNotificationPermission){
+        NotificationPermissionEffect()
+        showNotificationPermission()
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -177,6 +201,7 @@ internal fun ForYouScreen(
                 onboardingUiState = onboardingUiState,
                 onTopicCheckedChanged = onTopicCheckedChanged,
                 saveFollowedTopics = saveFollowedTopics,
+                askNotificationPermission = showNotificationPermissionDialog,
                 // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
                 // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
                 interestsItemModifier = Modifier.layout { measurable, constraints ->
@@ -244,7 +269,7 @@ internal fun ForYouScreen(
         )
     }
     TrackScreenViewEvent(screenName = "ForYou")
-    NotificationPermissionEffect()
+//    NotificationPermissionEffect()
     DeepLinkEffect(
         deepLinkedUserNewsResource,
         onDeepLinkOpened,
@@ -260,6 +285,7 @@ private fun LazyStaggeredGridScope.onboarding(
     onboardingUiState: OnboardingUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
+    askNotificationPermission: () -> Unit,
     interestsItemModifier: Modifier = Modifier,
 ) {
     when (onboardingUiState) {
@@ -298,7 +324,10 @@ private fun LazyStaggeredGridScope.onboarding(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         NiaButton(
-                            onClick = saveFollowedTopics,
+                            onClick = {
+                                askNotificationPermission()
+                                saveFollowedTopics()
+                            },
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
                                 .padding(horizontal = 24.dp)
@@ -445,6 +474,38 @@ fun TopicIcon(
 }
 
 @Composable
+private fun ShowDialog(
+    onDismissRequest: ()-> Unit,
+    askNotificationPermission: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(text = "Grant Notification Permission")
+        },
+        text = {
+            Text("Would you like to be informed when new content is published on these topics, content is typically published every few days?")
+        },
+        confirmButton = {
+            NiaButton(
+                onClick = {
+                    askNotificationPermission()
+                    onDismissRequest()
+                },
+            ) {
+                Text(text = "OK")
+            }
+        },
+        dismissButton = {
+            NiaButton(onClick =  onDismissRequest ) {
+                Text(text ="Cancel")
+            }
+        },
+    )
+}
+
+
+@Composable
 @OptIn(ExperimentalPermissionsApi::class)
 private fun NotificationPermissionEffect() {
     // Permission requests should only be made from an Activity Context, which is not present
@@ -516,8 +577,12 @@ fun ForYouScreenPopulatedFeed(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
+                askShowDialog = false,
+                askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
+                showNotificationPermission = {},
+                showNotificationPermissionDialog = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -542,8 +607,12 @@ fun ForYouScreenOfflinePopulatedFeed(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
+                askShowDialog = false,
+                askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
+                showNotificationPermission = {},
+                showNotificationPermissionDialog = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -571,8 +640,12 @@ fun ForYouScreenTopicSelection(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
+                askShowDialog = false,
+                askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
+                showNotificationPermission = {},
+                showNotificationPermissionDialog = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -592,8 +665,12 @@ fun ForYouScreenLoading() {
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
                 deepLinkedUserNewsResource = null,
+                askShowDialog = false,
+                askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
+                showNotificationPermission = {},
+                showNotificationPermissionDialog = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -618,8 +695,12 @@ fun ForYouScreenPopulatedAndLoading(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
+                askShowDialog = false,
+                askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
+                showNotificationPermission = {},
+                showNotificationPermissionDialog = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
