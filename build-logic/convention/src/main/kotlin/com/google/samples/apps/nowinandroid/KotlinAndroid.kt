@@ -85,7 +85,6 @@ private fun Project.configureKotlin() {
             freeCompilerArgs = freeCompilerArgs + listOf(
                 // Enable experimental coroutines APIs, including Flow
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview",
             )
         }
     }
