@@ -14,8 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<!-- Allow users to distinguish between build variants by having a different background color for
-the launcher icon. See https://github.com/android/nowinandroid/pull/989. -->
 <resources>
     <color name="ic_launcher_background_tint">#000000</color>
     <color name="ic_launcher_foreground_tint">#FFA23F16</color>
