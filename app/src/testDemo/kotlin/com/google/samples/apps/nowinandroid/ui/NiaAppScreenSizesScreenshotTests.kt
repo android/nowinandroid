@@ -154,7 +154,7 @@ class NiaAppScreenSizesScreenshotTests {
 
         composeTestRule.onRoot()
             .captureRoboImage(
-                "src/testDemoDebug/screenshots/$screenshotName.png",
+                "src/testDemo/screenshots/$screenshotName.png",
                 roborazziOptions = DefaultRoborazziOptions,
             )
     }
