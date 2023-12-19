@@ -24,7 +24,6 @@ import kotlin.test.assertEquals
 
 class ResultKtTest {
 
-    @Suppress("ktlint:standard:function-naming")
     @Test
     fun Result_catches_errors() = runTest {
         flow {
