@@ -57,6 +57,7 @@ robolectric = "4.11.1"
 roborazzi = "1.6.0"
 room = "2.6.0"
 secrets = "2.0.1"
+truth = "1.1.5"
 turbine = "1.0.0"
 
 [libraries]
@@ -140,6 +141,7 @@ roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", versi
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Dependencies of the included build-logic
