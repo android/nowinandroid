@@ -24,7 +24,7 @@ import kotlin.test.assertTrue
 class ListToMapMigrationTest {
 
     @Test
-    fun listToMapMigration_should_migrate_topic_ids() = runTest {
+    fun ListToMapMigration_should_migrate_topic_ids() = runTest {
         // Set up existing preferences with topic ids
         val preMigrationUserPreferences = userPreferences {
             deprecatedFollowedTopicIds.addAll(listOf("1", "2", "3"))
@@ -50,7 +50,7 @@ class ListToMapMigrationTest {
     }
 
     @Test
-    fun listToMapMigration_should_migrate_author_ids() = runTest {
+    fun ListToMapMigration_should_migrate_author_ids() = runTest {
         // Set up existing preferences with author ids
         val preMigrationUserPreferences = userPreferences {
             deprecatedFollowedAuthorIds.addAll(listOf("4", "5", "6"))
@@ -76,7 +76,7 @@ class ListToMapMigrationTest {
     }
 
     @Test
-    fun listToMapMigration_should_migrate_bookmarks() = runTest {
+    fun ListToMapMigration_should_migrate_bookmarks() = runTest {
         // Set up existing preferences with bookmarks
         val preMigrationUserPreferences = userPreferences {
             deprecatedBookmarkedNewsResourceIds.addAll(listOf("7", "8", "9"))

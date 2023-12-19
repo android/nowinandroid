@@ -27,7 +27,7 @@ import kotlin.test.assertTrue
 class IntToStringIdsMigrationTest {
 
     @Test
-    fun intToStringIdsMigration_should_migrate_topic_ids() = runTest {
+    fun IntToStringIdsMigration_should_migrate_topic_ids() = runTest {
         // Set up existing preferences with topic int ids
         val preMigrationUserPreferences = userPreferences {
             deprecatedIntFollowedTopicIds.addAll(listOf(1, 2, 3))
@@ -56,7 +56,7 @@ class IntToStringIdsMigrationTest {
     }
 
     @Test
-    fun intToStringIdsMigration_should_migrate_author_ids() = runTest {
+    fun IntToStringIdsMigration_should_migrate_author_ids() = runTest {
         // Set up existing preferences with author int ids
         val preMigrationUserPreferences = userPreferences {
             deprecatedIntFollowedAuthorIds.addAll(listOf(4, 5, 6))
