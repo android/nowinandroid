@@ -23,7 +23,7 @@ import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.By
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.allowNotifications
+import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,8 +47,7 @@ class TopicsScreenRecompositionBenchmark {
             setupBlock = {
                 // Start the app
                 pressHome()
-                startActivityAndWait()
-                allowNotifications()
+                startActivityAndAllowNotifications()
                 // Navigate to interests screen
                 device.findObject(By.text("Interests")).click()
                 device.waitForIdle()

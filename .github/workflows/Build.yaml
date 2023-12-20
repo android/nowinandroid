@@ -11,45 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties        
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
-
-      - name: Build all build type and flavor permutations
-        run: ./gradlew assemble
-
-      - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
-        with:
-          name: APKs
-          path: '**/build/outputs/apk/**/*.apk'
-
-      - name: Run local tests
-        run: ./gradlew testDemoDebug testProdDebug :lint:test
-
-  test:
+  test_and_apk:
+    name: "Local tests and APKs"
     runs-on: ubuntu-latest
 
     permissions:
@@ -68,13 +31,19 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Check build-logic
+        run: ./gradlew check -p build-logic
+
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
@@ -106,11 +75,30 @@ jobs:
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
         if: always()
-        run: ./gradlew testDemoDebug testProdDebug
+        run: ./gradlew testDemoDebug :lint:test
+      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
+      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
+      # release build
+      - name: Build all build type and flavor permutations
+        run: ./gradlew :app:assemble :benchmarks:assemble
+          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
+          -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
+          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
+          -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
+          -x collectDemoNonMinifiedReleaseBaselineProfile
+          -x collectDemoNonMinifiedBenchmarkBaselineProfile
+          -x collectProdNonMinifiedReleaseBaselineProfile
+          -x collectProdNonMinifiedBenchmarkBaselineProfile
+
+      - name: Upload build outputs (APKs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: APKs
+          path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload test results (XML)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
@@ -120,7 +108,7 @@ jobs:
 
       - name: Upload lint reports (HTML)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
@@ -129,7 +117,6 @@ jobs:
         run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
-    needs: build
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
     timeout-minutes: 55
     strategy:
@@ -144,7 +131,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
@@ -152,8 +139,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Build AndroidTest apps
-        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest --daemon
+      - name: Build projects before running emulator
+        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -167,7 +154,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
