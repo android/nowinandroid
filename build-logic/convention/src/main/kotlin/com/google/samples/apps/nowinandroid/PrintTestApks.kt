@@ -30,7 +30,10 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
 internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) {
@@ -62,10 +65,14 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
     }
 }
 
+@DisableCachingByDefault(because = "Prints output")
 internal abstract class PrintApkLocationTask : DefaultTask() {
+
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     @get:InputDirectory
     abstract val apkFolder: DirectoryProperty
 
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     @get:InputFiles
     abstract val sources: ListProperty<Directory>
 

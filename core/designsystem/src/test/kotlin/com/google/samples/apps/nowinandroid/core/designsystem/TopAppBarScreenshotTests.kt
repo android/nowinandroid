@@ -43,7 +43,7 @@ import org.robolectric.annotation.LooperMode
 @OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class, sdk = [33], qualifiers = "480dpi")
+@Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 class TopAppBarScreenshotTests() {
 
