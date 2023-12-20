@@ -65,7 +65,7 @@ import javax.inject.Inject
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
 // This allows enough room to render the content under test without clipping or scaling.
-@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi", sdk = [33])
+@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
 class NiaAppScreenSizesScreenshotTests {
