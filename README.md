@@ -22,7 +22,7 @@ The app is currently in development. The `prodRelease` variant is [available on 
 **Now in Android** displays content from the
 [Now in Android](https://developer.android.com/series/now-in-android) series. Users can browse for
 links to recent videos, articles and other content. Users can also follow topics they are interested
-in.
+in, and be notified when new content is published which matches interests they are following.
 
 ## Screenshots
 
@@ -109,12 +109,42 @@ Examples:
   manipulate the state of the `Test` repository and verify the resulting behavior, instead of
   checking that specific repository methods were called.
 
-## Screenshot tests
+To run the tests execute the following gradle tasks: 
 
-**Now In Android** uses [Roborazzi](https://github.com/takahirom/roborazzi) to do screenshot tests
-of certain screens and components. To run these tests, run the `verifyRoborazziDemoDebug` or
-`recordRoborazziDemoDebug` tasks. Note that screenshots are recorded on CI, using Linux, and other
-platforms might generate slightly different images, making the tests fail.
+- `testDemoDebug` run all local tests against the `demoDebug` variant.
+- `connectedDemoDebugAndroidTest` run all instrumented tests against the `demoDebug` variant. 
+
+**Note:** You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
+tests against _all_ build variants which is both unecessary and will result in failures as only the
+`demoDebug` variant is supported. No other variants have any tests (although this might change in future). 
+
+## Screenshot tests
+A screenshot test takes a screenshot of a screen or a UI component within the app, and compares it 
+with a previously recorded screenshot which is known to be rendered correctly. 
+
+For example, Now in Android has [screenshot tests](https://github.com/android/nowinandroid/blob/main/app/src/testDemoDebug/kotlin/com/google/samples/apps/nowinandroid/ui/NiaAppScreenSizesScreenshotTests.kt)
+to verify that the navigation is displayed correctly on different screen sizes 
+([known correct screenshots](https://github.com/android/nowinandroid/tree/main/app/src/testDemoDebug/screenshots)). 
+
+Now In Android uses [Roborazzi](https://github.com/takahirom/roborazzi) to run screenshot tests
+of certain screens and UI components. When working with screenshot tests the following gradle tasks are useful:
+
+- `verifyRoborazziDemoDebug` run all screenshot tests, verifying the screenshots against the known
+correct screenshots.
+- `recordRoborazziDemoDebug` record new "known correct" screenshots. Use this command when you have
+made changes to the UI and manually verified that they are rendered correctly. Screenshots will be
+stored in `modulename/src/test/screenshots`.
+- `compareRoborazziDemoDebug` create comparison images between failed tests and the known correct
+images. These can also be found in `modulename/src/test/screenshots`. 
+
+**Note:** The known correct screenshots stored in this repository are recorded on CI using Linux. Other
+platforms may (and probably will) generate slightly different images, making the screenshot tests fail. 
+When working on a non-Linux platform, a workaround to this is to run `recordRoborazziDemoDebug` on the
+`main` branch before starting work. After making changes, `verifyRoborazziDemoDebug` will identify only
+legitimate changes. 
+
+For more information about screenshot testing 
+[check out this talk](https://www.droidcon.com/2023/11/15/easy-screenshot-testing-with-compose/).
 
 # UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
