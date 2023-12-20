@@ -1,0 +1,26 @@
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    registries: "*"
+    labels: [ "version update" ]
+    groups:
+      kotlin-ksp-compose:
+        patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.jvm"
+          - "com.google.devtools.ksp"
+          - "androidx.compose.compiler:compiler"
+    open-pull-requests-limit: 10
+registries:
+  maven-google:
+    type: "maven-repository"
+    url: "https://maven.google.com"
+    replaces-base: true
