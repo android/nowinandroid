@@ -166,7 +166,10 @@ class NavigationTest {
         composeTestRule.apply {
             // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
-            // TODO: Add top level destinations here, see b/226357686.
+
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+
             onNodeWithText(interests).performClick()
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
         }
