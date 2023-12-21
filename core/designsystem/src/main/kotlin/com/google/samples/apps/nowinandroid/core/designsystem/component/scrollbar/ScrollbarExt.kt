@@ -231,4 +231,4 @@ fun LazyStaggeredGridState.scrollbarState(
 }
 
 private inline fun <T> List<T>.floatSumOf(selector: (T) -> Float): Float =
-    fold(0f) { acc, it -> acc + selector(it) }
+    fold(initial = 0f) { accumulator, listItem -> accumulator + selector(listItem) }
