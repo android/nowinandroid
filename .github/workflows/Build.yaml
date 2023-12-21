@@ -76,19 +76,8 @@ jobs:
       - name: Run local tests
         if: always()
         run: ./gradlew testDemoDebug :lint:test
-      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
-      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
-      # release build
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
-          -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectDemoNonMinifiedBenchmarkBaselineProfile
-          -x collectProdNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedBenchmarkBaselineProfile
+        run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
