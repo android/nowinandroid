@@ -328,7 +328,8 @@ private fun SearchResultBody(
                 topics.forEach { followableTopic ->
                     val topicId = followableTopic.topic.id
                     item(
-                        key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
+                        // Append a prefix to distinguish a key for news resources
+                        key = "topic-$topicId",
                         span = StaggeredGridItemSpan.FullLine,
                     ) {
                         InterestsItem(

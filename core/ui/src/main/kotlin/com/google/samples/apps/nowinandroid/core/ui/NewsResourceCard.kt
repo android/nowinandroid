@@ -186,7 +186,8 @@ fun NewsResourceHeaderImage(
                 painterResource(drawable.ic_placeholder_default)
             },
             // TODO b/226661685: Investigate using alt text of  image to populate content description
-            contentDescription = null, // decorative image,
+            // decorative image,
+            contentDescription = null,
         )
     }
 }
@@ -295,7 +296,8 @@ fun NewsResourceTopics(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
+        // causes narrow chips
+        modifier = modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (followableTopic in topics) {

@@ -22,10 +22,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.feature.search.SearchRoute
 
-const val searchRoute = "search_route"
+const val SEARCH_ROUTE = "search_route"
 
 fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
-    this.navigate(searchRoute, navOptions)
+    this.navigate(SEARCH_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.searchScreen(
@@ -35,7 +35,7 @@ fun NavGraphBuilder.searchScreen(
 ) {
     // TODO: Handle back stack for each top-level destination. At the moment each top-level
     // destination may have own search screen's back stack.
-    composable(route = searchRoute) {
+    composable(route = SEARCH_ROUTE) {
         SearchRoute(
             onBackClick = onBackClick,
             onInterestsClick = onInterestsClick,
