@@ -99,7 +99,8 @@ private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) 
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(4.dp),
             imageVector = NiaIcons.Person,
-            contentDescription = null, // decorative image
+            // decorative image
+            contentDescription = null,
         )
     } else {
         DynamicAsyncImage(
