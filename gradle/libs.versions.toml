@@ -29,7 +29,7 @@ androidxTestRunner = "1.5.2"
 androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
 androidxWindowManager = "1.2.0"
-androidxWork = "2.9.0-rc01"
+androidxWork = "2.9.0"
 coil = "2.5.0"
 dependencyGuard = "0.4.3"
 firebaseBom = "32.4.0"
@@ -153,7 +153,7 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
-work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.1" }
+work-testing = { group = "androidx.work", name = "work-testing", version = "2.9.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -437,7 +437,8 @@ fun TopicIcon(
     DynamicAsyncImage(
         placeholder = painterResource(R.drawable.ic_icon_placeholder),
         imageUrl = imageUrl,
-        contentDescription = null, // decorative
+        // decorative
+        contentDescription = null,
         modifier = modifier
             .padding(10.dp)
             .size(32.dp),

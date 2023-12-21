@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.feature.settings
 
 import android.content.Intent
@@ -316,7 +318,6 @@ private fun PreviewSettingsDialogLoading() {
     }
 }
 
-/* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
 private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"
