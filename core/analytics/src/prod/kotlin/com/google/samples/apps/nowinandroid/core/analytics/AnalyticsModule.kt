@@ -35,6 +35,8 @@ abstract class AnalyticsModule {
     companion object {
         @Provides
         @Singleton
-        fun provideFirebaseAnalytics(): FirebaseAnalytics { return Firebase.analytics }
+        fun provideFirebaseAnalytics(): FirebaseAnalytics {
+            return Firebase.analytics
+        }
     }
 }

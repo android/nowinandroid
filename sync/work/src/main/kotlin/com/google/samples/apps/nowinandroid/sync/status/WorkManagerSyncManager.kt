@@ -22,7 +22,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State
 import androidx.work.WorkManager
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
-import com.google.samples.apps.nowinandroid.sync.initializers.SyncWorkName
+import com.google.samples.apps.nowinandroid.sync.initializers.SYNC_WORK_NAME
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +37,7 @@ class WorkManagerSyncManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : SyncManager {
     override val isSyncing: Flow<Boolean> =
-        WorkManager.getInstance(context).getWorkInfosForUniqueWorkFlow(SyncWorkName)
+        WorkManager.getInstance(context).getWorkInfosForUniqueWorkFlow(SYNC_WORK_NAME)
             .map(List<WorkInfo>::anyRunning)
             .conflate()
 
@@ -45,7 +45,7 @@ class WorkManagerSyncManager @Inject constructor(
         val workManager = WorkManager.getInstance(context)
         // Run sync on app startup and ensure only one sync worker runs at any time
         workManager.enqueueUniqueWork(
-            SyncWorkName,
+            SYNC_WORK_NAME,
             ExistingWorkPolicy.KEEP,
             SyncWorker.startUpSyncWork(),
         )

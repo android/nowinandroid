@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -29,7 +31,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
-/* ktlint-disable max-line-length */
 /**
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)
  * provides list of [UserNewsResource] for Composable previews.
