@@ -50,7 +50,7 @@ private const val FOR_YOU_PATH = "foryou"
  * Implementation of [Notifier] that displays notifications in the system tray.
  */
 @Singleton
-class SystemTrayNotifier @Inject constructor(
+internal class SystemTrayNotifier @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Notifier {
 
