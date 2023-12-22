@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,11 +17,8 @@
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
-class AndroidHiltConventionPlugin : HiltConventionPlugin() {
-    override val basePluginId = "dagger.hilt.android.plugin"
+class JvmHiltConventionPlugin : HiltConventionPlugin() {
     override fun DependencyHandlerScope.additionalDependencies(libs: VersionCatalog) {
-        "implementation"(libs.findLibrary("hilt.android").get())
-        "kspAndroidTest"(libs.findLibrary("hilt.compiler").get())
-        "kspTest"(libs.findLibrary("hilt.compiler").get())
+        "implementation"(libs.findLibrary("hilt.core").get())
     }
 }
