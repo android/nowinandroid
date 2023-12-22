@@ -33,6 +33,7 @@ class HiltConventionPlugin(
             }
             dependencies {
                 "ksp"(libs.findLibrary("hilt.compiler").get())
+                "kspTest"(libs.findLibrary("hilt.compiler").get())
                 dependencyHandler(libs)
             }
         }
