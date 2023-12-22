@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright 2022 The Android Open Source Project
+     Copyright 2023 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,14 +14,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <application>
-        <service
-            android:name=".services.SyncNotificationsService"
-            android:exported="false"
-            tools:node="remove" />
-    </application>
-
-</manifest>
+<resources>
+    <!-- Allow users to distinguish between build variants by having a different background color
+    for the launcher icon. See https://github.com/android/nowinandroid/pull/989. -->
+    <color name="ic_launcher_background_tint">#000000</color>
+    <color name="ic_launcher_foreground_tint">#FFA23F16</color>
+</resources>

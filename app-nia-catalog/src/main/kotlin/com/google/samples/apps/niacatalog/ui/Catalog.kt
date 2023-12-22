@@ -32,8 +32,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -170,13 +171,13 @@ fun NiaCatalog() {
                 item { Text("Chips", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        var firstChecked by remember { mutableStateOf(false) }
+                        var firstChecked by rememberSaveable { mutableStateOf(false) }
                         NiaFilterChip(
                             selected = firstChecked,
                             onSelectedChange = { checked -> firstChecked = checked },
                             label = { Text(text = "Enabled") },
                         )
-                        var secondChecked by remember { mutableStateOf(true) }
+                        var secondChecked by rememberSaveable { mutableStateOf(true) }
                         NiaFilterChip(
                             selected = secondChecked,
                             onSelectedChange = { checked -> secondChecked = checked },
@@ -199,7 +200,7 @@ fun NiaCatalog() {
                 item { Text("Icon buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        var firstChecked by remember { mutableStateOf(false) }
+                        var firstChecked by rememberSaveable { mutableStateOf(false) }
                         NiaIconToggleButton(
                             checked = firstChecked,
                             onCheckedChange = { checked -> firstChecked = checked },
@@ -216,7 +217,7 @@ fun NiaCatalog() {
                                 )
                             },
                         )
-                        var secondChecked by remember { mutableStateOf(true) }
+                        var secondChecked by rememberSaveable { mutableStateOf(true) }
                         NiaIconToggleButton(
                             checked = secondChecked,
                             onCheckedChange = { checked -> secondChecked = checked },
@@ -272,14 +273,14 @@ fun NiaCatalog() {
                 item { Text("View toggle", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        var firstExpanded by remember { mutableStateOf(false) }
+                        var firstExpanded by rememberSaveable { mutableStateOf(false) }
                         NiaViewToggleButton(
                             expanded = firstExpanded,
                             onExpandedChange = { expanded -> firstExpanded = expanded },
                             compactText = { Text(text = "Compact view") },
                             expandedText = { Text(text = "Expanded view") },
                         )
-                        var secondExpanded by remember { mutableStateOf(true) }
+                        var secondExpanded by rememberSaveable { mutableStateOf(true) }
                         NiaViewToggleButton(
                             expanded = secondExpanded,
                             onExpandedChange = { expanded -> secondExpanded = expanded },
@@ -318,7 +319,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Tabs", Modifier.padding(top = 16.dp)) }
                 item {
-                    var selectedTabIndex by remember { mutableStateOf(0) }
+                    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
                     val titles = listOf("Topics", "People")
                     NiaTabRow(selectedTabIndex = selectedTabIndex) {
                         titles.forEachIndexed { index, title ->
@@ -332,7 +333,7 @@ fun NiaCatalog() {
                 }
                 item { Text("Navigation", Modifier.padding(top = 16.dp)) }
                 item {
-                    var selectedItem by remember { mutableStateOf(0) }
+                    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
                     val items = listOf("For you", "Saved", "Interests")
                     val icons = listOf(
                         NiaIcons.UpcomingBorder,

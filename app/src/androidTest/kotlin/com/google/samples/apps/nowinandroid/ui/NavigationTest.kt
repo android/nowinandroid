@@ -42,7 +42,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -51,7 +51,7 @@ import javax.inject.Inject
 import kotlin.properties.ReadOnlyProperty
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.interests.R as FeatureInterestsR
+import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
 import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 
 /**
@@ -93,15 +93,15 @@ class NavigationTest {
         ReadOnlyProperty<Any?, String> { _, _ -> activity.getString(resId) }
 
     // The strings used for matching in these tests
-    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.navigate_up)
-    private val forYou by composeTestRule.stringResource(FeatureForyouR.string.for_you)
-    private val interests by composeTestRule.stringResource(FeatureInterestsR.string.interests)
+    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_navigate_up)
+    private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_title)
+    private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_interests)
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
-    private val saved by composeTestRule.stringResource(BookmarksR.string.saved)
-    private val settings by composeTestRule.stringResource(SettingsR.string.top_app_bar_action_icon_description)
-    private val brand by composeTestRule.stringResource(SettingsR.string.brand_android)
-    private val ok by composeTestRule.stringResource(SettingsR.string.dismiss_dialog_button_text)
+    private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_title)
+    private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_top_app_bar_action_icon_description)
+    private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_brand_android)
+    private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_dismiss_dialog_button_text)
 
     @Before
     fun setup() = hiltRule.inject()
@@ -166,7 +166,10 @@ class NavigationTest {
         composeTestRule.apply {
             // GIVEN the user is on any of the top level destinations, THEN the Up arrow is not shown.
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
-            // TODO: Add top level destinations here, see b/226357686.
+
+            onNodeWithText(saved).performClick()
+            onNodeWithContentDescription(navigateUp).assertDoesNotExist()
+
             onNodeWithText(interests).performClick()
             onNodeWithContentDescription(navigateUp).assertDoesNotExist()
         }
@@ -265,12 +268,14 @@ class NavigationTest {
     }
 
     @Test
-    fun navigationBar_multipleBackStackInterests() = runTest {
+    fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
             onNodeWithText(interests).performClick()
 
             // Select the last topic
-            val topic = topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+            val topic = runBlocking {
+                topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+            }
             onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
             onNodeWithText(topic).performClick()
 

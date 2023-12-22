@@ -44,10 +44,10 @@ class FakeNiaNetworkDataSourceTest {
         )
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     @Test
     fun testDeserializationOfTopics() = runTest(testDispatcher) {
         assertEquals(
-            /* ktlint-disable max-line-length */
             NetworkTopic(
                 id = "1",
                 name = "Headlines",
@@ -56,15 +56,14 @@ class FakeNiaNetworkDataSourceTest {
                 url = "",
                 imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             ),
-            /* ktlint-enable max-line-length */
             subject.getTopics().first(),
         )
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     @Test
     fun testDeserializationOfNewsResources() = runTest(testDispatcher) {
         assertEquals(
-            /* ktlint-disable max-line-length */
             NetworkNewsResource(
                 id = "125",
                 title = "Android Basics with Compose",
@@ -83,7 +82,6 @@ class FakeNiaNetworkDataSourceTest {
                 type = "Codelab",
                 topics = listOf("2", "3", "10"),
             ),
-            /* ktlint-enable max-line-length */
             subject.getNewsResources().find { it.id == "125" },
         )
     }

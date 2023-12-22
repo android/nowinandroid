@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `java-library`
     kotlin("jvm")
-    id("nowinandroid.android.lint")
+    alias(libs.plugins.nowinandroid.android.lint)
 }
 
 java {
@@ -38,4 +38,7 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.lint.api)
+    testImplementation(libs.lint.checks)
+    testImplementation(libs.lint.tests)
+    testImplementation(kotlin("test"))
 }
