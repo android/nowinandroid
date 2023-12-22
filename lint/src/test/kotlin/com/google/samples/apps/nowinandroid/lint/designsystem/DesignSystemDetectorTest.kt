@@ -34,6 +34,7 @@ class DesignSystemDetectorTest {
             .files(
                 COMPOSABLE_STUB,
                 STUBS,
+                @Suppress("LintImplTrimIndent")
                 kotlin(
                     """
                     |import androidx.compose.runtime.Composable
@@ -121,6 +122,7 @@ class DesignSystemDetectorTest {
             .files(
                 COMPOSABLE_STUB,
                 STUBS,
+                @Suppress("LintImplTrimIndent")
                 kotlin(
                     """
                     |fun main() {
