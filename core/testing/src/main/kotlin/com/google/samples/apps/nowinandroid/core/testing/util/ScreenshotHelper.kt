@@ -53,7 +53,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     screenshotName: String,
     body: @Composable () -> Unit,
 ) {
-    DefaultTestDevices.values().forEach {
+    DefaultTestDevices.entries.forEach {
         this.captureForDevice(it.description, it.spec, screenshotName, body = body)
     }
 }
