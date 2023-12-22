@@ -37,22 +37,20 @@ class GetFollowableTopicsUseCase @Inject constructor(
      *
      * @param sortBy - the field used to sort the topics. Default NONE = no sorting.
      */
-    operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<FollowableTopic>> {
-        return combine(
-            userDataRepository.userData,
-            topicsRepository.getTopics(),
-        ) { userData, topics ->
-            val followedTopics = topics
-                .map { topic ->
-                    FollowableTopic(
-                        topic = topic,
-                        isFollowed = topic.id in userData.followedTopics,
-                    )
-                }
-            when (sortBy) {
-                NAME -> followedTopics.sortedBy { it.topic.name }
-                else -> followedTopics
+    operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<FollowableTopic>> = combine(
+        userDataRepository.userData,
+        topicsRepository.getTopics(),
+    ) { userData, topics ->
+        val followedTopics = topics
+            .map { topic ->
+                FollowableTopic(
+                    topic = topic,
+                    isFollowed = topic.id in userData.followedTopics,
+                )
             }
+        when (sortBy) {
+            NAME -> followedTopics.sortedBy { it.topic.name }
+            else -> followedTopics
         }
     }
 }

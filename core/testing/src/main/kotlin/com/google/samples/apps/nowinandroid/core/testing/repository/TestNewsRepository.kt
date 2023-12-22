@@ -43,9 +43,7 @@ class TestNewsRepository : NewsRepository {
                 }
             }
             query.filterNewsIds?.let { filterNewsIds ->
-                result = newsResources.filter {
-                    filterNewsIds.contains(it.id)
-                }
+                result = newsResources.filter { it.id in filterNewsIds }
             }
             result
         }

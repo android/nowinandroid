@@ -29,18 +29,15 @@ class TestSearchContentsRepository : SearchContentsRepository {
     private val cachedTopics: MutableList<Topic> = mutableListOf()
     private val cachedNewsResources: MutableList<NewsResource> = mutableListOf()
 
-    override suspend fun populateFtsData() { /* no-op */ }
+    override suspend fun populateFtsData() = Unit
 
     override fun searchContents(searchQuery: String): Flow<SearchResult> = flowOf(
         SearchResult(
             topics = cachedTopics.filter {
-                it.name.contains(searchQuery) ||
-                    it.shortDescription.contains(searchQuery) ||
-                    it.longDescription.contains(searchQuery)
+                searchQuery in it.name || searchQuery in it.shortDescription || searchQuery in it.longDescription
             },
             newsResources = cachedNewsResources.filter {
-                it.content.contains(searchQuery) ||
-                    it.title.contains(searchQuery)
+                searchQuery in it.content || searchQuery in it.title
             },
         ),
     )
