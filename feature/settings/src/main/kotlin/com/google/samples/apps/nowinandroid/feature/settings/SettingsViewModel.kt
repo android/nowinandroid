@@ -24,12 +24,13 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -48,13 +49,7 @@ class SettingsViewModel @Inject constructor(
             }
             .stateIn(
                 scope = viewModelScope,
-                // Starting eagerly means the user data is ready when the SettingsDialog is laid out
-                // for the first time. Without this, due to b/221643630 the layout is done using the
-                // "Loading" text, then replaced with the user editable fields once loaded, however,
-                // the layout height doesn't change meaning all the fields are squashed into a small
-                // scrollable column.
-                // TODO: Change to SharingStarted.WhileSubscribed(5_000) when b/221643630 is fixed
-                started = SharingStarted.Eagerly,
+                started = WhileSubscribed(5.seconds.inWholeMilliseconds),
                 initialValue = Loading,
             )
 
