@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DefaultSearchContentsRepository @Inject constructor(
+internal class DefaultSearchContentsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
     private val newsResourceFtsDao: NewsResourceFtsDao,
     private val topicDao: TopicDao,
