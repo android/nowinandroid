@@ -32,7 +32,7 @@ import kotlinx.coroutines.test.TestDispatcher
     components = [SingletonComponent::class],
     replaces = [DispatchersModule::class],
 )
-object TestDispatchersModule {
+internal object TestDispatchersModule {
     @Provides
     @Dispatcher(IO)
     fun providesIODispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher

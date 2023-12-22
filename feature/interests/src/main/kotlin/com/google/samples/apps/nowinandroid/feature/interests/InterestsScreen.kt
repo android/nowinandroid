@@ -65,7 +65,7 @@ internal fun InterestsScreen(
             InterestsUiState.Loading ->
                 NiaLoadingWheel(
                     modifier = modifier,
-                    contentDesc = stringResource(id = R.string.loading),
+                    contentDesc = stringResource(id = R.string.feature_interests_loading),
                 )
             is InterestsUiState.Interests ->
                 TopicsTabContent(
@@ -82,7 +82,7 @@ internal fun InterestsScreen(
 
 @Composable
 private fun InterestsEmptyScreen() {
-    Text(text = stringResource(id = R.string.empty_header))
+    Text(text = stringResource(id = R.string.feature_interests_empty_header))
 }
 
 @DevicePreviews
