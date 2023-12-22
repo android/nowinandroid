@@ -28,7 +28,7 @@ import dagger.hilt.testing.TestInstallIn
     components = [SingletonComponent::class],
     replaces = [SyncModule::class],
 )
-interface TestSyncModule {
+internal interface TestSyncModule {
     @Binds
     fun bindsSyncStatusMonitor(
         syncStatusMonitor: NeverSyncingSyncManager,

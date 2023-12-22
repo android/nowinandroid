@@ -28,7 +28,7 @@ import androidx.room.migration.AutoMigrationSpec
  * from and Y is the schema version you're migrating to. The class should implement
  * `AutoMigrationSpec`.
  */
-object DatabaseMigrations {
+internal object DatabaseMigrations {
 
     @RenameColumn(
         tableName = "topics",

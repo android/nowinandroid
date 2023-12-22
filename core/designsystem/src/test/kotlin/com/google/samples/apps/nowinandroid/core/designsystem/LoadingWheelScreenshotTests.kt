@@ -66,7 +66,7 @@ class LoadingWheelScreenshotTests() {
     fun loadingWheelAnimation() {
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.setContent {
-            NiaTheme() {
+            NiaTheme {
                 NiaLoadingWheel(contentDesc = "")
             }
         }

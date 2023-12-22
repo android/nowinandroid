@@ -45,7 +45,7 @@ class TopicScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            topicLoading = getString(R.string.topic_loading)
+            topicLoading = getString(R.string.feature_topic_loading)
         }
     }
 

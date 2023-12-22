@@ -45,7 +45,7 @@ private const val SYNC_BATCH_SIZE = 40
  * Disk storage backed implementation of the [NewsRepository].
  * Reads are exclusively from local storage to support offline access.
  */
-class OfflineFirstNewsRepository @Inject constructor(
+internal class OfflineFirstNewsRepository @Inject constructor(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
     private val newsResourceDao: NewsResourceDao,
     private val topicDao: TopicDao,
