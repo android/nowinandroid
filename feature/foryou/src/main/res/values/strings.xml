@@ -15,11 +15,11 @@
      limitations under the License.
 -->
 <resources>
-    <string name="for_you">For you</string>
-    <string name="done">Done</string>
-    <string name="for_you_loading">Loading for you…</string>
-    <string name="navigate_up">Navigate up</string>
-    <string name="onboarding_guidance_title">What are you interested in?</string>
-    <string name="onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
+    <string name="feature_foryou_title">For you</string>
+    <string name="feature_foryou_done">Done</string>
+    <string name="feature_foryou_loading">Loading for you…</string>
+    <string name="feature_foryou_navigate_up">Navigate up</string>
+    <string name="feature_foryou_onboarding_guidance_title">What are you interested in?</string>
+    <string name="feature_foryou_onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
 
 </resources>

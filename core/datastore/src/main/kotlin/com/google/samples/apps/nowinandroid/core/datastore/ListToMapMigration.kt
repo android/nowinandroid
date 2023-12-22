@@ -21,7 +21,7 @@ import androidx.datastore.core.DataMigration
 /**
  * Migrates from using lists to maps for user data.
  */
-object ListToMapMigration : DataMigration<UserPreferences> {
+internal object ListToMapMigration : DataMigration<UserPreferences> {
 
     override suspend fun cleanUp() = Unit
 

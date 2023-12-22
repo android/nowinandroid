@@ -15,5 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="topic_loading">Loading topic</string>
+    <string name="feature_topic_loading">Loading topic</string>
 </resources>
