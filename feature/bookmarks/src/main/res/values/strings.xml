@@ -15,10 +15,10 @@
      limitations under the License.
 -->
 <resources>
-    <string name="saved">Saved</string>
-    <string name="saved_loading">Loading saved…</string>
-    <string name="bookmarks_empty_error">No saved updates</string>
-    <string name="bookmarks_empty_description">Updates you save will be stored here\nto read later</string>
-    <string name="bookmark_removed">Bookmark removed</string>
-    <string name="undo">UNDO</string>
+    <string name="feature_bookmarks_title">Saved</string>
+    <string name="feature_bookmarks_loading">Loading saved…</string>
+    <string name="feature_bookmarks_empty_error">No saved updates</string>
+    <string name="feature_bookmarks_empty_description">Updates you save will be stored here\nto read later</string>
+    <string name="feature_bookmarks_removed">Bookmark removed</string>
+    <string name="feature_bookmarks_undo">UNDO</string>
 </resources>

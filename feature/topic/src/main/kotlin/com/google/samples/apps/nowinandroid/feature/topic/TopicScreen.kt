@@ -119,7 +119,7 @@ internal fun TopicScreen(
                 TopicUiState.Loading -> item {
                     NiaLoadingWheel(
                         modifier = modifier,
-                        contentDesc = stringResource(id = string.topic_loading),
+                        contentDesc = stringResource(id = string.feature_topic_loading),
                     )
                 }
 
@@ -284,7 +284,7 @@ private fun TopicToolbar(
             Icon(
                 imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
-                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.back,
+                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_back,
                 ),
             )
         }

@@ -115,7 +115,7 @@ class NiaAppState(
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
      * route.
      */
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     /**
      * The top level destinations that have unread news resources.
