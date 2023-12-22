@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
 android {
@@ -40,10 +40,10 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.tooling)
 
-    implementation(project(":core:analytics"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:model"))
+    implementation(projects.core.analytics)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.domain)
+    implementation(projects.core.model)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)
@@ -51,5 +51,5 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.kotlinx.datetime)
 
-    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(projects.core.testing)
 }

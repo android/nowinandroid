@@ -49,13 +49,14 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -153,7 +154,7 @@ internal fun ForYouScreen(
 
     val itemsAvailable = feedItemsSize(feedState, onboardingUiState)
 
-    val state = rememberLazyGridState()
+    val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(
         itemsAvailable = itemsAvailable,
     )
@@ -163,11 +164,11 @@ internal fun ForYouScreen(
         modifier = modifier
             .fillMaxSize(),
     ) {
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalItemSpacing = 24.dp,
             modifier = Modifier
                 .testTag("forYou:feed"),
             state = state,
@@ -197,7 +198,7 @@ internal fun ForYouScreen(
                 onTopicClick = onTopicClick,
             )
 
-            item(span = { GridItemSpan(maxLineSpan) }, contentType = "bottomSpacing") {
+            item(span = StaggeredGridItemSpan.FullLine, contentType = "bottomSpacing") {
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
                     // Add space for the content to clear the "offline" snackbar.
@@ -216,7 +217,7 @@ internal fun ForYouScreen(
                 targetOffsetY = { fullHeight -> -fullHeight },
             ) + fadeOut(),
         ) {
-            val loadingContentDescription = stringResource(id = R.string.for_you_loading)
+            val loadingContentDescription = stringResource(id = R.string.feature_foryou_loading)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -255,7 +256,7 @@ internal fun ForYouScreen(
  * Depending on the [onboardingUiState], this might emit no items.
  *
  */
-private fun LazyGridScope.onboarding(
+private fun LazyStaggeredGridScope.onboarding(
     onboardingUiState: OnboardingUiState,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     saveFollowedTopics: () -> Unit,
@@ -268,10 +269,10 @@ private fun LazyGridScope.onboarding(
         -> Unit
 
         is OnboardingUiState.Shown -> {
-            item(span = { GridItemSpan(maxLineSpan) }, contentType = "onboarding") {
+            item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
                 Column(modifier = interestsItemModifier) {
                     Text(
-                        text = stringResource(R.string.onboarding_guidance_title),
+                        text = stringResource(R.string.feature_foryou_onboarding_guidance_title),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -279,7 +280,7 @@ private fun LazyGridScope.onboarding(
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
-                        text = stringResource(R.string.onboarding_guidance_subtitle),
+                        text = stringResource(R.string.feature_foryou_onboarding_guidance_subtitle),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp, start = 24.dp, end = 24.dp),
@@ -305,7 +306,7 @@ private fun LazyGridScope.onboarding(
                                 .fillMaxWidth(),
                         ) {
                             Text(
-                                text = stringResource(R.string.done),
+                                text = stringResource(R.string.feature_foryou_done),
                             )
                         }
                     }
@@ -434,9 +435,10 @@ fun TopicIcon(
     modifier: Modifier = Modifier,
 ) {
     DynamicAsyncImage(
-        placeholder = painterResource(R.drawable.ic_icon_placeholder),
+        placeholder = painterResource(R.drawable.feature_foryou_ic_icon_placeholder),
         imageUrl = imageUrl,
-        contentDescription = null, // decorative
+        // decorative
+        contentDescription = null,
         modifier = modifier
             .padding(10.dp)
             .size(32.dp),

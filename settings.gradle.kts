@@ -31,6 +31,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "nowinandroid"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":app-nia-catalog")
 include(":benchmarks")
@@ -39,6 +41,7 @@ include(":core:data")
 include(":core:data-test")
 include(":core:database")
 include(":core:datastore")
+include(":core:datastore-proto")
 include(":core:datastore-test")
 include(":core:designsystem")
 include(":core:domain")

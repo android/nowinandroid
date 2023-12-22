@@ -35,11 +35,11 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -217,7 +217,7 @@ fun EmptySearchResultBody(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
-        val message = stringResource(id = searchR.string.search_result_not_found, searchQuery)
+        val message = stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
             text = AnnotatedString(
@@ -234,9 +234,9 @@ fun EmptySearchResultBody(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp),
         )
-        val interests = stringResource(id = searchR.string.interests)
+        val interests = stringResource(id = searchR.string.feature_search_interests)
         val tryAnotherSearchString = buildAnnotatedString {
-            append(stringResource(id = searchR.string.try_another_search))
+            append(stringResource(id = searchR.string.feature_search_try_another_search))
             append(" ")
             withStyle(
                 style = SpanStyle(
@@ -248,7 +248,7 @@ fun EmptySearchResultBody(
                 append(interests)
             }
             append(" ")
-            append(stringResource(id = searchR.string.to_browse_topics))
+            append(stringResource(id = searchR.string.feature_search_to_browse_topics))
         }
         ClickableText(
             text = tryAnotherSearchString,
@@ -278,7 +278,7 @@ private fun SearchNotReadyBody() {
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
         Text(
-            text = stringResource(id = searchR.string.search_not_ready),
+            text = stringResource(id = searchR.string.feature_search_not_ready),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp),
@@ -297,16 +297,16 @@ private fun SearchResultBody(
     onTopicClick: (String) -> Unit,
     searchQuery: String = "",
 ) {
-    val state = rememberLazyGridState()
+    val state = rememberLazyStaggeredGridState()
     Box(
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalItemSpacing = 24.dp,
             modifier = Modifier
                 .fillMaxSize()
                 .testTag("search:newsResources"),
@@ -314,14 +314,12 @@ private fun SearchResultBody(
         ) {
             if (topics.isNotEmpty()) {
                 item(
-                    span = {
-                        GridItemSpan(maxLineSpan)
-                    },
+                    span = StaggeredGridItemSpan.FullLine,
                 ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(stringResource(id = searchR.string.topics))
+                                append(stringResource(id = searchR.string.feature_search_topics))
                             }
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -330,10 +328,9 @@ private fun SearchResultBody(
                 topics.forEach { followableTopic ->
                     val topicId = followableTopic.topic.id
                     item(
-                        key = "topic-$topicId", // Append a prefix to distinguish a key for news resources
-                        span = {
-                            GridItemSpan(maxLineSpan)
-                        },
+                        // Append a prefix to distinguish a key for news resources
+                        key = "topic-$topicId",
+                        span = StaggeredGridItemSpan.FullLine,
                     ) {
                         InterestsItem(
                             name = followableTopic.topic.name,
@@ -353,14 +350,12 @@ private fun SearchResultBody(
 
             if (newsResources.isNotEmpty()) {
                 item(
-                    span = {
-                        GridItemSpan(maxLineSpan)
-                    },
+                    span = StaggeredGridItemSpan.FullLine,
                 ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(stringResource(id = searchR.string.updates))
+                                append(stringResource(id = searchR.string.feature_search_updates))
                             }
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -412,7 +407,7 @@ private fun RecentSearchesBody(
             Text(
                 text = buildAnnotatedString {
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(stringResource(id = searchR.string.recent_searches))
+                        append(stringResource(id = searchR.string.feature_search_recent_searches))
                     }
                 },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -427,7 +422,7 @@ private fun RecentSearchesBody(
                     Icon(
                         imageVector = NiaIcons.Close,
                         contentDescription = stringResource(
-                            id = searchR.string.clear_recent_searches_content_desc,
+                            id = searchR.string.feature_search_clear_recent_searches_content_desc,
                         ),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
@@ -465,7 +460,7 @@ private fun SearchToolbar(
             Icon(
                 imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
-                    id = string.back,
+                    id = string.core_ui_back,
                 ),
             )
         }
@@ -502,7 +497,7 @@ private fun SearchTextField(
             Icon(
                 imageVector = NiaIcons.Search,
                 contentDescription = stringResource(
-                    id = searchR.string.search,
+                    id = searchR.string.feature_search_title,
                 ),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -517,7 +512,7 @@ private fun SearchTextField(
                     Icon(
                         imageVector = NiaIcons.Close,
                         contentDescription = stringResource(
-                            id = searchR.string.clear_search_text_content_desc,
+                            id = searchR.string.feature_search_clear_search_text_content_desc,
                         ),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    kotlin("kapt")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -24,13 +24,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
+    implementation(projects.core.data)
+    implementation(projects.core.model)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
 
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.testing)
 }

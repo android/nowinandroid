@@ -35,10 +35,10 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells.Adaptive
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -113,8 +113,8 @@ internal fun BookmarksScreen(
     undoBookmarkRemoval: () -> Unit = {},
     clearUndoState: () -> Unit = {},
 ) {
-    val bookmarkRemovedMessage = stringResource(id = R.string.bookmark_removed)
-    val undoText = stringResource(id = R.string.undo)
+    val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_removed)
+    val undoText = stringResource(id = R.string.feature_bookmarks_undo)
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
@@ -163,7 +163,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentSize()
             .testTag("forYou:loading"),
-        contentDesc = stringResource(id = R.string.saved_loading),
+        contentDesc = stringResource(id = R.string.feature_bookmarks_loading),
     )
 }
 
@@ -175,17 +175,17 @@ private fun BookmarksGrid(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollableState = rememberLazyGridState()
+    val scrollableState = rememberLazyStaggeredGridState()
     TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
     Box(
         modifier = modifier
             .fillMaxSize(),
     ) {
-        LazyVerticalGrid(
-            columns = Adaptive(300.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(300.dp),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalItemSpacing = 24.dp,
             state = scrollableState,
             modifier = Modifier
                 .fillMaxSize()
@@ -197,7 +197,7 @@ private fun BookmarksGrid(
                 onNewsResourceViewed = onNewsResourceViewed,
                 onTopicClick = onTopicClick,
             )
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
@@ -236,7 +236,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.img_empty_bookmarks),
+            painter = painterResource(id = R.drawable.feature_bookmarks_img_empty_bookmarks),
             colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
             contentDescription = null,
         )
@@ -244,7 +244,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = stringResource(id = R.string.bookmarks_empty_error),
+            text = stringResource(id = R.string.feature_bookmarks_empty_error),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
@@ -254,7 +254,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = stringResource(id = R.string.bookmarks_empty_description),
+            text = stringResource(id = R.string.feature_bookmarks_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,

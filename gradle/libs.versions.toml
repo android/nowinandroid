@@ -1,59 +1,64 @@
 [versions]
-accompanist = "0.28.0"
-androidDesugarJdkLibs = "2.0.3"
-androidGradlePlugin = "8.1.1"
-androidxActivity = "1.8.0-alpha06"
-androidxAppCompat = "1.5.1"
-androidxBrowser = "1.4.0"
-androidxComposeBom = "2023.06.01"
-androidxComposeCompiler = "1.5.0"
-androidxComposeRuntimeTracing = "1.0.0-alpha03"
-androidxCore = "1.9.0"
-androidxCoreSplashscreen = "1.0.0"
+accompanist = "0.32.0"
+androidDesugarJdkLibs = "2.0.4"
+# AGP and tools should be updated together
+androidGradlePlugin = "8.2.0"
+androidTools = "31.1.3"
+androidxActivity = "1.8.0"
+androidxAppCompat = "1.6.1"
+androidxBrowser = "1.6.0"
+androidxComposeBom = "2023.10.01"
+androidxComposeCompiler = "1.5.7"
+androidxComposeRuntimeTracing = "1.0.0-beta01"
+androidxCore = "1.12.0"
+androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
-androidxEspresso = "3.5.0"
+androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.6.1"
-androidxMacroBenchmark = "1.2.0-alpha16"
-androidxMetrics = "1.0.0-alpha03"
-androidxNavigation = "2.5.3"
+androidxJunit = "1.1.5"
+androidxLifecycle = "2.6.2"
+androidxMacroBenchmark = "1.2.2"
+androidxMetrics = "1.0.0-alpha04"
+androidxNavigation = "2.7.4"
 androidxProfileinstaller = "1.3.1"
 androidxStartup = "1.1.1"
 androidxTestCore = "1.5.0"
-androidxTestExt = "1.1.4"
+androidxTestExt = "1.1.5"
 androidxTestRules = "1.5.0"
-androidxTestRunner = "1.5.1"
+androidxTestRunner = "1.5.2"
 androidxTracing = "1.1.0"
 androidxUiAutomator = "2.2.0"
-androidxWindowManager = "1.0.0"
-androidxWork = "2.9.0-alpha01"
-coil = "2.2.2"
-firebaseBom = "31.2.0"
-firebaseCrashlyticsPlugin = "2.9.2"
+androidxWindowManager = "1.2.0"
+androidxWork = "2.9.0"
+coil = "2.5.0"
+dependencyGuard = "0.4.3"
+firebaseBom = "32.4.0"
+firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
-gmsPlugin = "4.3.14"
+gmsPlugin = "4.4.0"
 googleOss = "17.0.1"
 googleOssPlugin = "0.10.6"
-hilt = "2.47"
-hiltExt = "1.0.0"
+hilt = "2.50"
+hiltExt = "1.1.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
-kotlin = "1.9.0"
-kotlinxCoroutines = "1.6.4"
-kotlinxDatetime = "0.4.0"
-kotlinxSerializationJson = "1.5.1"
-ksp = "1.9.0-1.0.13"
-lint = "31.0.2"
-okhttp = "4.10.0"
-protobuf = "3.24.0"
+kotlin = "1.9.21"
+kotlinxCoroutines = "1.7.3"
+kotlinxDatetime = "0.5.0"
+kotlinxSerializationJson = "1.6.0"
+ksp = "1.9.21-1.0.16"
+lint = "31.2.0"
+okhttp = "4.12.0"
+protobuf = "3.24.4"
 protobufPlugin = "0.9.4"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
-robolectric = "4.10.3"
-roborazzi = "1.5.0-alpha-2"
-room = "2.5.2"
+robolectric = "4.11.1"
+roborazzi = "1.6.0"
+room = "2.6.1"
 secrets = "2.0.1"
-turbine = "0.12.1"
+truth = "1.1.5"
+turbine = "1.0.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -64,6 +69,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -122,6 +128,8 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
+lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
+lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
@@ -133,20 +141,26 @@ roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", versi
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerfPlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-work-testing = { group = "androidx.work", name = "work-testing", version = "2.8.1" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+work-testing = { group = "androidx.work", name = "work-testing", version = "2.9.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark"}
+dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
@@ -156,4 +170,21 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+room = { id = "androidx.room", version.ref = "room" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+
+# Plugins defined by this project
+nowinandroid-android-application = { id = "nowinandroid.android.application", version = "unspecified" }
+nowinandroid-android-application-compose = { id = "nowinandroid.android.application.compose", version = "unspecified" }
+nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase", version = "unspecified" }
+nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors", version = "unspecified" }
+nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco", version = "unspecified" }
+nowinandroid-android-feature = { id = "nowinandroid.android.feature", version = "unspecified" }
+nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspecified" }
+nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
+nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose", version = "unspecified" }
+nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco", version = "unspecified" }
+nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspecified" }
+nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
+nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
+nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }

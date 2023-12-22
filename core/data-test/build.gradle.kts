@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.hilt")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.hilt)
 }
 
 android {
@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    api(project(":core:data"))
-    implementation(project(":core:testing"))
-    implementation(project(":core:common"))
+    api(projects.core.data)
+    implementation(projects.core.testing)
+    implementation(projects.core.common)
 }
