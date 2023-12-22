@@ -24,7 +24,7 @@ private const val TAG = "StubSyncSubscriber"
 /**
  * Stub implementation of [SyncSubscriber]
  */
-class StubSyncSubscriber @Inject constructor() : SyncSubscriber {
+internal class StubSyncSubscriber @Inject constructor() : SyncSubscriber {
     override suspend fun subscribe() {
         Log.d(TAG, "Subscribing to sync")
     }
