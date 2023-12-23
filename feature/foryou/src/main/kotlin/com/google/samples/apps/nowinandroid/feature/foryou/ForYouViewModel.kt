@@ -116,7 +116,7 @@ class ForYouViewModel @Inject constructor(
     private val _dialogState = MutableStateFlow(false)
     val dialogState: StateFlow<Boolean> = _dialogState
 
-    fun toggleDialog() {
+    fun toggleNotificationPermissionDialog() {
         viewModelScope.launch {
             _dialogState.update  {!_dialogState.value}
         }

@@ -21,6 +21,8 @@
     <string name="navigate_up">Navigate up</string>
     <string name="onboarding_guidance_title">What are you interested in?</string>
     <string name="onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="grant_notification_permission">Grant notification permission</string>
     <string name="grant_notification_permission_description">Would you like to be informed when new content is published on these topics, content is typically published every few days?</string>
 

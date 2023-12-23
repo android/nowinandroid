@@ -118,7 +118,7 @@ internal fun ForYouRoute(
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
-    val showDialog by viewModel.dialogState.collectAsState()
+    val notificationPermissionDialog by viewModel.dialogState.collectAsState()
     val askNotificationPermission by viewModel.showNotificationPermission.collectAsState()
 
     ForYouScreen(
@@ -126,14 +126,14 @@ internal fun ForYouRoute(
         onboardingUiState = onboardingUiState,
         feedState = feedState,
         deepLinkedUserNewsResource = deepLinkedUserNewsResource,
-        askShowDialog = showDialog,
+        askToShowNotificationPermissionDialog = notificationPermissionDialog,
         askNotificationPermission = askNotificationPermission,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onDeepLinkOpened = viewModel::onDeepLinkOpened,
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
-        showNotificationPermissionDialog = viewModel::toggleDialog,
-        showNotificationPermission = viewModel::showNotificationPermission,
+        onNotificationPermissionDismiss = viewModel::toggleNotificationPermissionDialog,
+        onNotificationPermissionConfirm = viewModel::showNotificationPermission,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         modifier = modifier,
@@ -146,14 +146,14 @@ internal fun ForYouScreen(
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
     deepLinkedUserNewsResource: UserNewsResource?,
-    askShowDialog: Boolean,
+    askToShowNotificationPermissionDialog: Boolean,
     askNotificationPermission: Boolean,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onDeepLinkOpened: (String) -> Unit,
     saveFollowedTopics: () -> Unit,
-    showNotificationPermissionDialog: () -> Unit,
-    showNotificationPermission: () -> Unit,
+    onNotificationPermissionDismiss: () -> Unit,
+    onNotificationPermissionConfirm: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -172,16 +172,16 @@ internal fun ForYouScreen(
     )
     TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
-    if(askShowDialog){
-        ShowDialog(
-            showNotificationPermissionDialog,
-            showNotificationPermission
+    if(askToShowNotificationPermissionDialog){
+        ShowNotificationPermissionDialog(
+            onNotificationPermissionDismiss,
+            onNotificationPermissionConfirm
         )
     }
 
     if(askNotificationPermission){
         NotificationPermissionEffect()
-        showNotificationPermission()
+        onNotificationPermissionConfirm()
     }
 
     Box(
@@ -201,7 +201,7 @@ internal fun ForYouScreen(
                 onboardingUiState = onboardingUiState,
                 onTopicCheckedChanged = onTopicCheckedChanged,
                 saveFollowedTopics = saveFollowedTopics,
-                askNotificationPermission = showNotificationPermissionDialog,
+                askNotificationPermission = onNotificationPermissionDismiss,
                 // Custom LayoutModifier to remove the enforced parent 16.dp contentPadding
                 // from the LazyVerticalGrid and enable edge-to-edge scrolling for this section
                 interestsItemModifier = Modifier.layout { measurable, constraints ->
@@ -474,7 +474,7 @@ fun TopicIcon(
 }
 
 @Composable
-private fun ShowDialog(
+private fun ShowNotificationPermissionDialog(
     onDismissRequest: ()-> Unit,
     askNotificationPermission: () -> Unit
 ) {
@@ -493,12 +493,12 @@ private fun ShowDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = "OK")
+                Text(stringResource(id = R.string.ok))
             }
         },
         dismissButton = {
             NiaButton(onClick =  onDismissRequest ) {
-                Text(text ="Cancel")
+                Text(stringResource(id = R.string.cancel))
             }
         },
     )
@@ -577,12 +577,12 @@ fun ForYouScreenPopulatedFeed(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
-                askShowDialog = false,
+                askToShowNotificationPermissionDialog = false,
                 askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                showNotificationPermission = {},
-                showNotificationPermissionDialog = {},
+                onNotificationPermissionConfirm = {},
+                onNotificationPermissionDismiss = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -607,12 +607,12 @@ fun ForYouScreenOfflinePopulatedFeed(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
-                askShowDialog = false,
+                askToShowNotificationPermissionDialog = false,
                 askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                showNotificationPermission = {},
-                showNotificationPermissionDialog = {},
+                onNotificationPermissionConfirm = {},
+                onNotificationPermissionDismiss = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -640,12 +640,12 @@ fun ForYouScreenTopicSelection(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
-                askShowDialog = false,
+                askToShowNotificationPermissionDialog = false,
                 askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                showNotificationPermission = {},
-                showNotificationPermissionDialog = {},
+                onNotificationPermissionConfirm = {},
+                onNotificationPermissionDismiss = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -665,12 +665,12 @@ fun ForYouScreenLoading() {
                 onboardingUiState = OnboardingUiState.Loading,
                 feedState = NewsFeedUiState.Loading,
                 deepLinkedUserNewsResource = null,
-                askShowDialog = false,
+                askToShowNotificationPermissionDialog = false,
                 askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                showNotificationPermission = {},
-                showNotificationPermissionDialog = {},
+                onNotificationPermissionConfirm = {},
+                onNotificationPermissionDismiss = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
@@ -695,12 +695,12 @@ fun ForYouScreenPopulatedAndLoading(
                     feed = userNewsResources,
                 ),
                 deepLinkedUserNewsResource = null,
-                askShowDialog = false,
+                askToShowNotificationPermissionDialog = false,
                 askNotificationPermission = false,
                 onTopicCheckedChanged = { _, _ -> },
                 saveFollowedTopics = {},
-                showNotificationPermission = {},
-                showNotificationPermissionDialog = {},
+                onNotificationPermissionConfirm = {},
+                onNotificationPermissionDismiss = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
                 onTopicClick = {},
