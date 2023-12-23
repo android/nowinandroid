@@ -481,10 +481,10 @@ private fun ShowDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            Text(text = "Grant Notification Permission")
+            Text(stringResource(id = R.string.grant_notification_permission))
         },
         text = {
-            Text("Would you like to be informed when new content is published on these topics, content is typically published every few days?")
+            Text(stringResource(id = R.string.grant_notification_permission_description))
         },
         confirmButton = {
             NiaButton(

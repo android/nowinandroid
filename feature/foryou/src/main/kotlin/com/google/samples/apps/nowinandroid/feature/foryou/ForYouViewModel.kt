@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -117,12 +118,12 @@ class ForYouViewModel @Inject constructor(
 
     fun toggleDialog() {
         viewModelScope.launch {
-            _dialogState.emit(!_dialogState.value)
+            _dialogState.update  {!_dialogState.value}
         }
     }
     fun showNotificationPermission() {
         viewModelScope.launch {
-            _showNotificationPermission.emit(!_showNotificationPermission.value)
+            _showNotificationPermission.update { !_showNotificationPermission.value }
         }
     }
 
