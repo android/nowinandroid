@@ -81,6 +81,10 @@ class ForYouScreenScreenshotTests {
                     onTopicClick = {},
                     deepLinkedUserNewsResource = null,
                     onDeepLinkOpened = {},
+                    askNotificationPermission = false,
+                    askToShowNotificationPermissionDialog = false,
+                    onNotificationPermissionConfirm = {},
+                    onNotificationPermissionDismiss = {}
                 )
             }
         }
@@ -101,6 +105,10 @@ class ForYouScreenScreenshotTests {
                     onTopicClick = {},
                     deepLinkedUserNewsResource = null,
                     onDeepLinkOpened = {},
+                    askNotificationPermission = false,
+                    askToShowNotificationPermissionDialog = false,
+                    onNotificationPermissionConfirm = {},
+                    onNotificationPermissionDismiss = {}
                 )
             }
         }
@@ -164,6 +172,10 @@ class ForYouScreenScreenshotTests {
                     onTopicClick = {},
                     deepLinkedUserNewsResource = null,
                     onDeepLinkOpened = {},
+                    askNotificationPermission = false,
+                    askToShowNotificationPermissionDialog = false,
+                    onNotificationPermissionConfirm = {},
+                    onNotificationPermissionDismiss = {}
                 )
             }
         }
@@ -187,6 +199,10 @@ class ForYouScreenScreenshotTests {
                         onTopicClick = {},
                         deepLinkedUserNewsResource = null,
                         onDeepLinkOpened = {},
+                        askNotificationPermission = false,
+                        askToShowNotificationPermissionDialog = false,
+                        onNotificationPermissionConfirm = {},
+                        onNotificationPermissionDismiss = {}
                     )
                 }
             }
