@@ -37,7 +37,7 @@ import com.google.samples.apps.nowinandroid.ui.NiaAppState
  * within each route is handled using state and Back Handlers.
  */
 @Composable
-fun NiaNavHost(
+internal fun NiaNavHost(
     appState: NiaAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,

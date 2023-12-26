@@ -305,7 +305,7 @@ private fun TopicToolbar(
 
 @DevicePreviews
 @Composable
-fun TopicScreenPopulated(
+private fun TopicScreenPopulated(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
@@ -326,7 +326,7 @@ fun TopicScreenPopulated(
 
 @DevicePreviews
 @Composable
-fun TopicScreenLoading() {
+private fun TopicScreenLoading() {
     NiaTheme {
         NiaBackground {
             TopicScreen(

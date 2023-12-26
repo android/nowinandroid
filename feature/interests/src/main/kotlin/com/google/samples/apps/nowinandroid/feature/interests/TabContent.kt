@@ -41,7 +41,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 @Composable
-fun TopicsTabContent(
+internal fun TopicsTabContent(
     topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,

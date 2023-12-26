@@ -126,7 +126,7 @@ fun ViewTogglePreviewExpanded() {
 
 @Preview
 @Composable
-fun ViewTogglePreviewCompact() {
+private fun ViewTogglePreviewCompact() {
     NiaTheme {
         Surface {
             NiaViewToggleButton(

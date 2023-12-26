@@ -504,7 +504,7 @@ private fun feedItemsSize(
 
 @DevicePreviews
 @Composable
-fun ForYouScreenPopulatedFeed(
+private fun ForYouScreenPopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
@@ -530,7 +530,7 @@ fun ForYouScreenPopulatedFeed(
 
 @DevicePreviews
 @Composable
-fun ForYouScreenOfflinePopulatedFeed(
+private fun ForYouScreenOfflinePopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
@@ -556,7 +556,7 @@ fun ForYouScreenOfflinePopulatedFeed(
 
 @DevicePreviews
 @Composable
-fun ForYouScreenTopicSelection(
+private fun ForYouScreenTopicSelection(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
@@ -585,7 +585,7 @@ fun ForYouScreenTopicSelection(
 
 @DevicePreviews
 @Composable
-fun ForYouScreenLoading() {
+private fun ForYouScreenLoading() {
     BoxWithConstraints {
         NiaTheme {
             ForYouScreen(
@@ -606,7 +606,7 @@ fun ForYouScreenLoading() {
 
 @DevicePreviews
 @Composable
-fun ForYouScreenPopulatedAndLoading(
+private fun ForYouScreenPopulatedAndLoading(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {

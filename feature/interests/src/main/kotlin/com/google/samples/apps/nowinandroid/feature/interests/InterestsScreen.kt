@@ -87,7 +87,7 @@ private fun InterestsEmptyScreen() {
 
 @DevicePreviews
 @Composable
-fun InterestsScreenPopulated(
+private fun InterestsScreenPopulated(
     @PreviewParameter(FollowableTopicPreviewParameterProvider::class)
     followableTopics: List<FollowableTopic>,
 ) {
@@ -106,7 +106,7 @@ fun InterestsScreenPopulated(
 
 @DevicePreviews
 @Composable
-fun InterestsScreenLoading() {
+private fun InterestsScreenLoading() {
     NiaTheme {
         NiaBackground {
             InterestsScreen(
@@ -120,7 +120,7 @@ fun InterestsScreenLoading() {
 
 @DevicePreviews
 @Composable
-fun InterestsScreenEmpty() {
+private fun InterestsScreenEmpty() {
     NiaTheme {
         NiaBackground {
             InterestsScreen(
