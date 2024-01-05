@@ -47,3 +47,20 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
 }
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            if (project.findProperty("composeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.layout.buildDirectory.asFile.get()}/compose_compiler"
+                )
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.layout.buildDirectory.asFile.get()}/compose_compiler",
+                )
+            }
+        }
+    }
+}
