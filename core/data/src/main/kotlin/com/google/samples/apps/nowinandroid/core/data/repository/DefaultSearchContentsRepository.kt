@@ -24,16 +24,12 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class DefaultSearchContentsRepository @Inject constructor(
@@ -41,21 +37,18 @@ internal class DefaultSearchContentsRepository @Inject constructor(
     private val newsResourceFtsDao: NewsResourceFtsDao,
     private val topicDao: TopicDao,
     private val topicFtsDao: TopicFtsDao,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SearchContentsRepository {
 
     override suspend fun populateFtsData() {
-        withContext(ioDispatcher) {
-            newsResourceFtsDao.insertAll(
-                newsResourceDao.getNewsResources(
-                    useFilterTopicIds = false,
-                    useFilterNewsIds = false,
-                )
-                    .first()
-                    .map(PopulatedNewsResource::asFtsEntity),
+        newsResourceFtsDao.insertAll(
+            newsResourceDao.getNewsResources(
+                useFilterTopicIds = false,
+                useFilterNewsIds = false,
             )
-            topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
-        }
+                .first()
+                .map(PopulatedNewsResource::asFtsEntity),
+        )
+        topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
     }
 
     override fun searchContents(searchQuery: String): Flow<SearchResult> {
