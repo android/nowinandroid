@@ -25,5 +25,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(projects.core.data)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
 }

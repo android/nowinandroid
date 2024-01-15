@@ -54,10 +54,10 @@ private fun Context.syncWorkNotification(): Notification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel = NotificationChannel(
             SYNC_NOTIFICATION_CHANNEL_ID,
-            getString(R.string.sync_notification_channel_name),
+            getString(R.string.sync_work_notification_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = getString(R.string.sync_notification_channel_description)
+            description = getString(R.string.sync_work_notification_channel_description)
         }
         // Register the channel with the system
         val notificationManager: NotificationManager? =
@@ -71,9 +71,9 @@ private fun Context.syncWorkNotification(): Notification {
         SYNC_NOTIFICATION_CHANNEL_ID,
     )
         .setSmallIcon(
-            com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
+            com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
         )
-        .setContentTitle(getString(R.string.sync_notification_title))
+        .setContentTitle(getString(R.string.sync_work_notification_title))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()
 }
