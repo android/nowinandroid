@@ -190,7 +190,7 @@ jobs:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Run FTL instrumented tests
-        run: ./gradlew ftlDeviceDemoDebugAndroidTest
+        run: ./gradlew ftlDeviceDemoDebugAndroidTest --no-configuration-cache
 
       - name: Delete serviceAccount.json
         run: rm -f serviceAccount.json
