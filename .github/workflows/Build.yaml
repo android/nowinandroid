@@ -158,3 +158,40 @@ jobs:
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
+  firebase-test-lab:
+    name: "Firebase Test Lab"
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Create serviceAccount.json
+        run: echo "$SERVICE_ACCOUNT" | base64 --decode > serviceAccount.json
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Run FTL instrumented tests
+        run: ./gradlew ftlDeviceDemoDebugAndroidTest
+
+      - name: Delete serviceAccount.json
+        run: rm -f serviceAccount.json
+        if: always()
