@@ -116,18 +116,20 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.dataTest)
-    testImplementation(projects.core.testing)
     testImplementation(libs.accompanist.testharness)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.work.testing)
 
     testDemoImplementation(libs.robolectric)
-    testDemoImplementation(libs.roborazzi)
+    testDemoImplementation(projects.roborazzi)
 
+    androidTestImplementation(kotlin("test"))
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(libs.hilt.android.testing)
 

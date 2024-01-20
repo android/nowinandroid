@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.compose)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
 android {
-    namespace = "com.google.samples.apps.nowinandroid.feature.topic"
+    namespace = "com.google.samples.apps.nowinandroid.roborazzi"
 }
 
 dependencies {
-    implementation(projects.core.data)
+    api(libs.androidx.activity.compose)
+    api(libs.androidx.compose.ui.test)
+    api(libs.roborazzi)
+    api(libs.robolectric.shadows)
 
-    testImplementation(projects.core.testing)
+    debugApi(libs.androidx.compose.ui.testManifest)
 
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(projects.core.testing)
+    implementation(libs.accompanist.testharness)
+    implementation(projects.core.designsystem)
 }

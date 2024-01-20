@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.util
+package com.google.samples.apps.nowinandroid.roborazzi
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

@@ -26,8 +26,8 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
-import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
+import com.google.samples.apps.nowinandroid.roborazzi.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.roborazzi.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
 import org.junit.Test

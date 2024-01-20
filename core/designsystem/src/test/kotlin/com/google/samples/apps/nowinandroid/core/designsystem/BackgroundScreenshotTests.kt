@@ -24,7 +24,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
+import com.google.samples.apps.nowinandroid.roborazzi.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
 import org.junit.Test

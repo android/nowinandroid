@@ -36,5 +36,6 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
 
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
 }

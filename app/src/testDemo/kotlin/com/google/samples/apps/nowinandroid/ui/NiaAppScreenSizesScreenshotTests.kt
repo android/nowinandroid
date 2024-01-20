@@ -37,7 +37,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.roborazzi.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
