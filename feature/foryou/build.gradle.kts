@@ -35,6 +35,6 @@ dependencies {
     testImplementation(projects.roborazzi)
 
 
-    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
 }

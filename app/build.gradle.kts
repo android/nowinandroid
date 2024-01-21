@@ -129,8 +129,8 @@ dependencies {
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.accompanist.testharness)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
     baselineProfile(projects.benchmarks)

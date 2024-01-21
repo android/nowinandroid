@@ -24,11 +24,9 @@ android {
 
 dependencies {
     api(libs.androidx.activity.compose)
-    api(libs.androidx.compose.ui.test)
+    api(libs.bundles.androidx.compose.ui.test)
     api(libs.roborazzi)
     api(libs.robolectric.shadows)
-
-    debugApi(libs.androidx.compose.ui.testManifest)
 
     implementation(libs.accompanist.testharness)
     implementation(projects.core.designsystem)

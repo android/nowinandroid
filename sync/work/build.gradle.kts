@@ -38,6 +38,7 @@ dependencies {
     prodImplementation(libs.firebase.cloud.messaging)
     prodImplementation(platform(libs.firebase.bom))
 
+    androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlinx.coroutines.guava)

@@ -30,10 +30,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 apply("nowinandroid.android.hilt")
             }
             extensions.configure<LibraryExtension> {
-                defaultConfig {
-                    testInstrumentationRunner =
-                        "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-                }
                 configureGradleManagedDevices(this)
             }
 
