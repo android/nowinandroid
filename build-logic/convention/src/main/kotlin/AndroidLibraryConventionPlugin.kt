@@ -39,6 +39,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
+                testOptions.animationsDisabled = true
                 configureFlavors(this)
                 configureGradleManagedDevices(this)
                 // The resource prefix is derived from the module name,
