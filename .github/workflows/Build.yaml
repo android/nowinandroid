@@ -166,7 +166,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           force-avd-creation: false
           arch: x86_64
-          target: aosp_atd
+          target: default # No ATD in API 26
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           disk-size: 6000M
