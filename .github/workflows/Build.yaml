@@ -149,6 +149,28 @@ jobs:
       - name: Build projects before running emulator
         run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
 
+      # Cache AVD. See https://github.com/ReactiveCircus/android-emulator-runner
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avdcache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avdcache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          disk-size: 6000M
+          heap-size: 600M
+          script: echo "Generated AVD snapshot for caching."
+
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
