@@ -101,19 +101,19 @@ jobs:
           commit_message: "🤖 Updates screenshots"
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
-      - name: Run local tests and create report
+      - name: Run local tests
         if: always()
         run: ./gradlew testDemoDebug :lint:test
+
       # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
-
-      - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedReleaseBaselineProfile
+      - name: Build all build type and flavor permutations including baseline profiles
+        run: ./gradlew :app:assemble
+             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
+             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+             -Pandroid.experimental.androidTest.numManagedDeviceShards=1
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
