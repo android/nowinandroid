@@ -17,6 +17,8 @@ of Android development by providing regular news updates.
 
 The app is currently in development. The `prodRelease` variant is [available on the Play Store](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
 
+Build status: ![example workflow](https://github.com/android/nowinandroid/actions/workflows/Nightly.yaml/badge.svg)
+
 # Features
 
 **Now in Android** displays content from the
