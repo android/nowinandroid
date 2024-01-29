@@ -59,7 +59,7 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.saved_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_bookmarks_loading),
             )
             .assertExists()
     }
@@ -125,7 +125,7 @@ class BookmarksScreenTest {
         composeTestRule
             .onAllNodesWithContentDescription(
                 composeTestRule.activity.getString(
-                    com.google.samples.apps.nowinandroid.core.ui.R.string.unbookmark,
+                    com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_unbookmark,
                 ),
             ).filter(
                 hasAnyAncestor(
@@ -156,13 +156,13 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.bookmarks_empty_error),
+                composeTestRule.activity.getString(R.string.feature_bookmarks_empty_error),
             )
             .assertExists()
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.bookmarks_empty_description),
+                composeTestRule.activity.getString(R.string.feature_bookmarks_empty_description),
             )
             .assertExists()
     }

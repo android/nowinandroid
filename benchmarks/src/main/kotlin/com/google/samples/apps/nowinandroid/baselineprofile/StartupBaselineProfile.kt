@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.baselineprofile
 
+import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
@@ -30,11 +31,9 @@ class StartupBaselineProfile {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun generate() =
-        baselineProfileRule.collect(
-            PACKAGE_NAME,
-            includeInStartupProfile = true,
-        ) {
-            startActivityAndAllowNotifications()
-        }
+    fun generate() = baselineProfileRule.collect(
+        PACKAGE_NAME,
+        includeInStartupProfile = true,
+        profileBlock = MacrobenchmarkScope::startActivityAndAllowNotifications,
+    )
 }

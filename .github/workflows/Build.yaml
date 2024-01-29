@@ -31,13 +31,16 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Check build-logic
+        run: ./gradlew check -p build-logic
 
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
@@ -75,7 +78,7 @@ jobs:
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
         if: always()
-        run: ./gradlew testDemoDebug testProdDebug :lint:test
+        run: ./gradlew testDemoDebug :lint:test
       # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
@@ -91,14 +94,14 @@ jobs:
           -x collectProdNonMinifiedBenchmarkBaselineProfile
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload test results (XML)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
@@ -108,7 +111,7 @@ jobs:
 
       - name: Upload lint reports (HTML)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
@@ -117,13 +120,20 @@ jobs:
         run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
-    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    runs-on: ubuntu-latest
     timeout-minutes: 55
     strategy:
       matrix:
         api-level: [26, 30]
 
     steps:
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -131,7 +141,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
@@ -154,7 +164,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
