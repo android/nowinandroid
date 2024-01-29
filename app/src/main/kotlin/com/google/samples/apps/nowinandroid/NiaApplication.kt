@@ -17,21 +17,20 @@
 package com.google.samples.apps.nowinandroid
 
 import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
+import coil.Coil
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
+import com.google.samples.apps.nowinandroid.util.ImageLoaderAsyncFactory
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
-import javax.inject.Provider
 
 /**
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApplication : Application(), ImageLoaderFactory {
+class NiaApplication : Application() {
     @Inject
-    lateinit var imageLoader: Provider<ImageLoader>
+    lateinit var imageLoaderAsyncFactory: ImageLoaderAsyncFactory
 
     @Inject
     lateinit var profileVerifierLogger: ProfileVerifierLogger
@@ -41,7 +40,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
         profileVerifierLogger()
+        // We set immediately Coil's image loader factory to prevent initialization with the first image.
+        Coil.setImageLoader(imageLoaderAsyncFactory)
     }
-
-    override fun newImageLoader(): ImageLoader = imageLoader.get()
 }
