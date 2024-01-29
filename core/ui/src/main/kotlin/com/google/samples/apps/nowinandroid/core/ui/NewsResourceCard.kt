@@ -40,7 +40,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,7 +69,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -244,27 +241,11 @@ fun NotificationDot(
 }
 
 @Composable
-fun dateFormatted(publishDate: Instant): String {
-    var zoneId by remember { mutableStateOf(ZoneId.systemDefault()) }
-
-    val context = LocalContext.current
-
-    DisposableEffect(context) {
-        val receiver = TimeZoneBroadcastReceiver(
-            onTimeZoneChanged = { zoneId = ZoneId.systemDefault() },
-        )
-        receiver.register(context)
-        onDispose {
-            receiver.unregister(context)
-        }
-    }
-
-    return DateTimeFormatter
-        .ofLocalizedDate(FormatStyle.MEDIUM)
-        .withLocale(Locale.getDefault())
-        .withZone(zoneId)
-        .format(publishDate.toJavaInstant())
-}
+fun dateFormatted(publishDate: Instant): String = DateTimeFormatter
+    .ofLocalizedDate(FormatStyle.MEDIUM)
+    .withLocale(Locale.getDefault())
+    .withZone(LocalTimeZone.current)
+    .format(publishDate.toJavaInstant())
 
 @Composable
 fun NewsResourceMetaData(

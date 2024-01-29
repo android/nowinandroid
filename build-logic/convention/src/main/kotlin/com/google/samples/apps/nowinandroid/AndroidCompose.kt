@@ -53,7 +53,8 @@ internal fun Project.configureAndroidCompose(
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+            freeCompilerArgs += buildComposeMetricsParameters() 
+            freeCompilerArgs += stabilityConfiguration()
         }
     }
 }
@@ -68,7 +69,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
         val metricsFolder = buildDir.resolve("compose-metrics").resolve(relativePath)
         metricParameters.add("-P")
         metricParameters.add(
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath,
         )
     }
 
@@ -83,3 +84,8 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     }
     return metricParameters.toList()
 }
+
+private fun Project.stabilityConfiguration() = listOf(
+    "-P",
+    "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=${project.rootDir.absolutePath}/compose_compiler_config.conf",
+)

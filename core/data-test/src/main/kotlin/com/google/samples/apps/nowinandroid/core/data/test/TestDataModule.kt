@@ -28,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeSearch
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.fake.FakeUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
@@ -68,4 +69,7 @@ interface TestDataModule {
     fun bindsNetworkMonitor(
         networkMonitor: AlwaysOnlineNetworkMonitor,
     ): NetworkMonitor
+
+    @Binds
+    fun binds(impl: DefaultZoneIdTimeZoneMonitor): TimeZoneMonitor
 }
