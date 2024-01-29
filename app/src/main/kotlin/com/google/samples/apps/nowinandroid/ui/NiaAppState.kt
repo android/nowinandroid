@@ -32,6 +32,7 @@ import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BOOKMARKS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
@@ -50,12 +51,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.time.ZoneId
 
 @Composable
 fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
+    timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): NiaAppState {
@@ -66,13 +69,15 @@ fun rememberNiaAppState(
         windowSizeClass,
         networkMonitor,
         userNewsResourceRepository,
+        timeZoneMonitor,
     ) {
         NiaAppState(
-            navController,
-            coroutineScope,
-            windowSizeClass,
-            networkMonitor,
-            userNewsResourceRepository,
+            navController = navController,
+            coroutineScope = coroutineScope,
+            windowSizeClass = windowSizeClass,
+            networkMonitor = networkMonitor,
+            userNewsResourceRepository = userNewsResourceRepository,
+            timeZoneMonitor = timeZoneMonitor,
         )
     }
 }
@@ -80,10 +85,11 @@ fun rememberNiaAppState(
 @Stable
 class NiaAppState(
     val navController: NavHostController,
-    val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
+    private val timeZoneMonitor: TimeZoneMonitor,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -127,11 +133,19 @@ class NiaAppState(
                     FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
                     BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
                 )
-            }.stateIn(
+            }
+            .stateIn(
                 coroutineScope,
                 SharingStarted.WhileSubscribed(5_000),
                 initialValue = emptySet(),
             )
+
+    val currentTimeZone = timeZoneMonitor.currentZoneId
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            ZoneId.systemDefault(),
+        )
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
