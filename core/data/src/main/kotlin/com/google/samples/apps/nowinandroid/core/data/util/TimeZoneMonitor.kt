@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import java.time.ZoneId
+import java.util.TimeZone
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -72,6 +73,7 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                         intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.let { zoneId ->
                             // We need to convert it from java.util.Timezone to java.time.ZoneId
                             ZoneId.of(zoneId, ZoneId.SHORT_IDS)
+                            TimeZone.getTimeZone(zoneId).toZoneId()
                         }
                     }
 
