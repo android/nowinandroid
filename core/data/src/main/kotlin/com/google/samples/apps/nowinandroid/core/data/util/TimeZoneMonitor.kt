@@ -88,6 +88,7 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                 context.unregisterReceiver(receiver)
             }
         }
+            .conflate()
             .flowOn(ioDispatcher)
             // Sharing the callback to prevent multiple BroadcastReceivers being registered
             .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
