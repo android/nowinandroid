@@ -112,8 +112,8 @@ androidx.vectordrawable:vectordrawable:1.1.0
 androidx.versionedparcelable:versionedparcelable:1.1.1
 androidx.viewpager:viewpager:1.0.0
 androidx.window:window:1.0.0
-androidx.work:work-runtime-ktx:2.9.0-rc01
-androidx.work:work-runtime:2.9.0-rc01
+androidx.work:work-runtime-ktx:2.9.0
+androidx.work:work-runtime:2.9.0
 com.caverock:androidsvg-aar:1.4
 com.google.accompanist:accompanist-drawablepainter:0.32.0
 com.google.accompanist:accompanist-permissions:0.32.0
