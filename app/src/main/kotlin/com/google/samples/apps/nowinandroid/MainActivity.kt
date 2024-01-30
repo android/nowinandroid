@@ -28,12 +28,12 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
@@ -47,7 +47,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
+import com.google.samples.apps.nowinandroid.core.ui.LocalZoneId
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import dagger.hilt.android.AndroidEntryPoint
@@ -140,11 +140,11 @@ class MainActivity : ComponentActivity() {
                 timeZoneMonitor = timeZoneMonitor,
             )
 
-            val currentTimeZone by appState.currentTimeZone.collectAsState()
+            val currentZoneId by appState.currentTimeZone.collectAsStateWithLifecycle()
 
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
-                LocalTimeZone provides currentTimeZone,
+                LocalZoneId provides currentZoneId,
             ) {
                 NiaTheme(
                     darkTheme = darkTheme,

@@ -20,7 +20,7 @@ import androidx.compose.runtime.compositionLocalOf
 import java.time.ZoneId
 
 /**
- * TimeZone that can be provided with the TimeZoneMonitor.
+ * ZoneId that can be provided with the TimeZoneMonitor.
  * This way, it's not needed to pass every single composable the time zone to show in UI.
  */
-val LocalTimeZone = compositionLocalOf { ZoneId.systemDefault() }
+val LocalZoneId = compositionLocalOf { ZoneId.systemDefault() }
