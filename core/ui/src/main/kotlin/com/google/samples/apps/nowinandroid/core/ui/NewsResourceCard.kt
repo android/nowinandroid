@@ -244,7 +244,7 @@ fun NotificationDot(
 fun dateFormatted(publishDate: Instant): String = DateTimeFormatter
     .ofLocalizedDate(FormatStyle.MEDIUM)
     .withLocale(Locale.getDefault())
-    .withZone(LocalTimeZone.current)
+    .withZone(LocalZoneId.current)
     .format(publishDate.toJavaInstant())
 
 @Composable
