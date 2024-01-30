@@ -38,4 +38,3 @@ class TestTimeZoneMonitor : TimeZoneMonitor {
         val defaultTimeZone: ZoneId = ZoneId.of("Europe/Warsaw")
     }
 }
-
