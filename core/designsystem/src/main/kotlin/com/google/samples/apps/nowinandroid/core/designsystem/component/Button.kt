@@ -134,7 +134,7 @@ fun NiaOutlinedButton(
                 MaterialTheme.colorScheme.outline
             } else {
                 MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaButtonDefaults.DisabledOutlinedButtonBorderAlpha,
+                    alpha = NiaButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
                 )
             },
         ),
@@ -278,7 +278,7 @@ fun NiaButtonPreview() {
 @ThemePreviews
 @Composable
 fun NiaOutlinedButtonPreview() {
-    NiaTheme() {
+    NiaTheme {
         NiaBackground(modifier = Modifier.size(150.dp, 50.dp)) {
             NiaOutlinedButton(onClick = {}, text = { Text("Test button") })
         }
@@ -315,7 +315,7 @@ fun NiaButtonLeadingIconPreview() {
 object NiaButtonDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default
-    const val DisabledOutlinedButtonBorderAlpha = 0.12f
+    const val DISABLED_OUTLINED_BUTTON_BORDER_ALPHA = 0.12f
 
     // TODO: File bug
     // OutlinedButton default border width isn't exposed via ButtonDefaults

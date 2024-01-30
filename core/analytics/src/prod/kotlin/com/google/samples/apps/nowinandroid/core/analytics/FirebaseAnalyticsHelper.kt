@@ -23,7 +23,7 @@ import javax.inject.Inject
 /**
  * Implementation of `AnalyticsHelper` which logs events to a Firebase backend.
  */
-class FirebaseAnalyticsHelper @Inject constructor(
+internal class FirebaseAnalyticsHelper @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : AnalyticsHelper {
 
