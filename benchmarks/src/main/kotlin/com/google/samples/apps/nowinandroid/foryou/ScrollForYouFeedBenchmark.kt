@@ -58,4 +58,3 @@ class ScrollForYouFeedBenchmark {
         forYouScrollFeedDownUp()
     }
 }
-
