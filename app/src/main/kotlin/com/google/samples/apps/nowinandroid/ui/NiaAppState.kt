@@ -51,7 +51,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.time.ZoneId
+import kotlinx.datetime.TimeZone
 
 @Composable
 fun rememberNiaAppState(
@@ -140,11 +140,11 @@ class NiaAppState(
                 initialValue = emptySet(),
             )
 
-    val currentTimeZone = timeZoneMonitor.currentZoneId
+    val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(
             coroutineScope,
             SharingStarted.WhileSubscribed(5_000),
-            ZoneId.systemDefault(),
+            TimeZone.currentSystemDefault(),
         )
 
     /**

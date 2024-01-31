@@ -19,22 +19,22 @@ package com.google.samples.apps.nowinandroid.core.testing.util
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.ZoneId
+import kotlinx.datetime.TimeZone
 
 class TestTimeZoneMonitor : TimeZoneMonitor {
 
     private val timeZoneFlow = MutableStateFlow(defaultTimeZone)
 
-    override val currentZoneId: Flow<ZoneId> = timeZoneFlow
+    override val currentTimeZone: Flow<TimeZone> = timeZoneFlow
 
     /**
      * A test-only API to set the from tests.
      */
-    fun setTimeZone(zoneId: ZoneId) {
+    fun setTimeZone(zoneId: TimeZone) {
         timeZoneFlow.value = zoneId
     }
 
     companion object {
-        val defaultTimeZone: ZoneId = ZoneId.of("Europe/Warsaw")
+        val defaultTimeZone: TimeZone = TimeZone.of("Europe/Warsaw")
     }
 }

@@ -17,10 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.runtime.compositionLocalOf
-import java.time.ZoneId
+import kotlinx.datetime.TimeZone
 
 /**
- * ZoneId that can be provided with the TimeZoneMonitor.
+ * TimeZone that can be provided with the TimeZoneMonitor.
  * This way, it's not needed to pass every single composable the time zone to show in UI.
  */
-val LocalZoneId = compositionLocalOf { ZoneId.systemDefault() }
+val LocalTimeZone = compositionLocalOf { TimeZone.currentSystemDefault() }
