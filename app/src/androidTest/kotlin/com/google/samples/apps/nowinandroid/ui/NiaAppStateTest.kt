@@ -39,9 +39,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.TimeZone
 import org.junit.Rule
 import org.junit.Test
-import java.time.ZoneId
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -199,7 +199,7 @@ class NiaAppStateTest {
                 timeZoneMonitor = timeZoneMonitor,
             )
         }
-        val changedTz = ZoneId.of("Europe/Prague")
+        val changedTz = TimeZone.of("Europe/Prague")
         backgroundScope.launch { state.currentTimeZone.collect() }
         timeZoneMonitor.setTimeZone(changedTz)
         assertEquals(

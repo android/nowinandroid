@@ -47,7 +47,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.ui.LocalZoneId
+import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import dagger.hilt.android.AndroidEntryPoint
@@ -144,7 +144,7 @@ class MainActivity : ComponentActivity() {
 
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
-                LocalZoneId provides currentZoneId,
+                LocalTimeZone provides currentZoneId,
             ) {
                 NiaTheme(
                     darkTheme = darkTheme,

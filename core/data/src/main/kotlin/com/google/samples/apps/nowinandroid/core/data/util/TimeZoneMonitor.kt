@@ -34,10 +34,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.datetime.TimeZone
 import java.time.ZoneId
-import java.util.TimeZone
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -46,7 +47,7 @@ import javax.inject.Singleton
  * It always emits at least once with default setting and then for each TZ change.
  */
 interface TimeZoneMonitor {
-    val currentZoneId: Flow<ZoneId>
+    val currentTimeZone: Flow<TimeZone>
 }
 
 @Singleton
@@ -56,10 +57,10 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : TimeZoneMonitor {
 
-    override val currentZoneId: SharedFlow<ZoneId> =
-        callbackFlow<ZoneId> {
+    override val currentTimeZone: SharedFlow<TimeZone> =
+        callbackFlow<TimeZone> {
             // Send the default time zone first.
-            trySend(ZoneId.systemDefault())
+            trySend(TimeZone.currentSystemDefault())
 
             // Registers BroadcastReceiver for the TimeZone changes
             val receiver = object : BroadcastReceiver() {
@@ -70,15 +71,15 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                         null
                     } else {
                         // Starting Android R we also get the new TimeZone.
-                        intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.let { zoneId ->
+                        intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.let { timeZoneId ->
                             // We need to convert it from java.util.Timezone to java.time.ZoneId
-                            ZoneId.of(zoneId, ZoneId.SHORT_IDS)
-                            TimeZone.getTimeZone(zoneId).toZoneId()
+                            val zoneId = ZoneId.of(timeZoneId, ZoneId.SHORT_IDS)
+                            TimeZone.of(zoneId.id)
                         }
                     }
 
                     // If there isn't a zoneId in the intent, fallback to the systemDefault, which should also reflect the change
-                    trySend(zoneIdFromIntent ?: ZoneId.systemDefault())
+                    trySend(zoneIdFromIntent ?: TimeZone.currentSystemDefault())
                 }
             }
 
