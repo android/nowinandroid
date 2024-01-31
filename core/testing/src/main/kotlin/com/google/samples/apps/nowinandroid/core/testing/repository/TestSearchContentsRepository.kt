@@ -55,5 +55,5 @@ class TestSearchContentsRepository : SearchContentsRepository {
      * Test only method to add the news resources to the stored list in memory
      */
     fun addNewsResources(newsResources: List<NewsResource>) =
-        cachedNewsResources.update { newsResources }
+        cachedNewsResources.update { it + newsResources }
 }
