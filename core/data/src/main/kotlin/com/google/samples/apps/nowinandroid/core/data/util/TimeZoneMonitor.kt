@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import androidx.core.os.trace
+import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
@@ -58,7 +58,7 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
 ) : TimeZoneMonitor {
 
     override val currentTimeZone: SharedFlow<TimeZone> =
-        callbackFlow<TimeZone> {
+        callbackFlow {
             // Send the default time zone first.
             trySend(TimeZone.currentSystemDefault())
 
