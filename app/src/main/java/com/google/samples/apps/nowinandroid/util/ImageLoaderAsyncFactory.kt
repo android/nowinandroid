@@ -19,11 +19,11 @@ package com.google.samples.apps.nowinandroid.util
 import androidx.tracing.trace
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
 import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -41,14 +41,12 @@ class ImageLoaderAsyncFactory @Inject constructor(
     appScope: CoroutineScope,
     private val imageLoader: dagger.Lazy<ImageLoader>,
 ) : ImageLoaderFactory {
-    private lateinit var asyncNewImageLoader: Deferred<ImageLoader>
 
-    init {
-        asyncNewImageLoader = appScope.async {
-            // Initialize immediately, but need a Deferred for callers
-            imageLoader.get()
-        }
-    }
+    /**
+     * Initialize immediately, but need a Deferred for callers
+     * [ApplicationScope] already uses [Default] dispatcher, so we don't have to switch it here.
+     */
+    private val asyncNewImageLoader: Deferred<ImageLoader> = appScope.async { imageLoader.get() }
 
     /**
      * This runBlocking here is on purpose to prevent any unfinished Coil initialization.
