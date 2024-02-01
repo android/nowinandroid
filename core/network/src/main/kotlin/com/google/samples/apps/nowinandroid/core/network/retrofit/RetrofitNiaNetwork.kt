@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
+import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -73,17 +74,19 @@ private data class NetworkResponse<T>(
 @Singleton
 internal class RetrofitNiaNetwork @Inject constructor(
     networkJson: Json,
-    okhttpCallFactory: Call.Factory,
+    okhttpCallFactory: dagger.Lazy<Call.Factory>,
 ) : NiaNetworkDataSource {
 
-    private val networkApi = Retrofit.Builder()
-        .baseUrl(NIA_BASE_URL)
-        .callFactory(okhttpCallFactory)
-        .addConverterFactory(
-            networkJson.asConverterFactory("application/json".toMediaType()),
-        )
-        .build()
-        .create(RetrofitNiaNetworkApi::class.java)
+    private val networkApi = trace("RetrofitNiaNetwork") {
+        Retrofit.Builder()
+            .baseUrl(NIA_BASE_URL)
+            .callFactory { okhttpCallFactory.get().newCall(it) }
+            .addConverterFactory(
+                networkJson.asConverterFactory("application/json".toMediaType()),
+            )
+            .build()
+            .create(RetrofitNiaNetworkApi::class.java)
+    }
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data
