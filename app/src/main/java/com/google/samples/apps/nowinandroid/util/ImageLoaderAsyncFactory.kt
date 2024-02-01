@@ -44,9 +44,9 @@ class ImageLoaderAsyncFactory @Inject constructor(
     private lateinit var asyncNewImageLoader: Deferred<ImageLoader>
 
     init {
-        appScope.launch {
+        asyncNewImageLoader = appScope.async {
             // Initialize immediately, but need a Deferred for callers
-            asyncNewImageLoader = async { imageLoader.get() }
+            imageLoader.get()
         }
     }
 
