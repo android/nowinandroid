@@ -58,9 +58,7 @@ private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    /**
-     * Lazily inject [JankStats], which is used to track jank throughout the app.
-     */
+    /** Lazily inject [JankStats], which is used to track jank throughout the app. */
     @Inject
     lateinit var lazyStats: dagger.Lazy<JankStats>
 
