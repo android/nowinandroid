@@ -8,7 +8,7 @@ androidx.appcompat:appcompat-resources:1.6.1
 androidx.arch.core:core-common:2.2.0
 androidx.arch.core:core-runtime:2.2.0
 androidx.autofill:autofill:1.0.0
-androidx.browser:browser:1.6.0
+androidx.browser:browser:1.7.0
 androidx.collection:collection-jvm:1.3.0
 androidx.collection:collection:1.3.0
 androidx.compose.animation:animation-android:1.5.4
