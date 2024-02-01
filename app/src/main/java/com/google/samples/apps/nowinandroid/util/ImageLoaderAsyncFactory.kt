@@ -54,7 +54,10 @@ class ImageLoaderAsyncFactory @Inject constructor(
      */
     override fun newImageLoader() =
         trace("NiaImageLoader.runBlocking") {
-            if (asyncNewImageLoader.isCompleted) asyncNewImageLoader.getCompleted() 
-            else runBlocking { asyncNewImageLoader.await() }
+            if (asyncNewImageLoader.isCompleted) {
+                asyncNewImageLoader.getCompleted()
+            } else {
+                runBlocking { asyncNewImageLoader.await() }
+            }
         }
 }
