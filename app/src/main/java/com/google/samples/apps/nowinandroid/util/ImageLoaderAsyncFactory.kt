@@ -55,5 +55,8 @@ class ImageLoaderAsyncFactory @Inject constructor(
      * Most likely this will be already initialized by the time we want to show an image on the screen.
      */
     override fun newImageLoader() =
-        trace("NiaImageLoader.runBlocking") { runBlocking { asyncNewImageLoader.await() } }
+        trace("NiaImageLoader.runBlocking") {
+            if (asyncNewImageLoader.isCompleted) asyncNewImageLoader.getCompleted() 
+            else runBlocking { asyncNewImageLoader.await() }
+        }
 }
