@@ -80,6 +80,8 @@ internal class RetrofitNiaNetwork @Inject constructor(
     private val networkApi = trace("RetrofitNiaNetwork") {
         Retrofit.Builder()
             .baseUrl(NIA_BASE_URL)
+            // We use callFactory lambda here with dagger.Lazy<Call.Factory>
+            // to prevent initializing OkHttp on the main thread.
             .callFactory { okhttpCallFactory.get().newCall(it) }
             .addConverterFactory(
                 networkJson.asConverterFactory("application/json".toMediaType()),
