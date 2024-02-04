@@ -82,7 +82,7 @@ class CompositeUserNewsResourceRepositoryTest {
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
-                .filter { it.topics.contains(sampleTopic1) }
+                .filter { sampleTopic1 in it.topics }
                 .mapToUserNewsResources(emptyUserData),
             userNewsResources.first(),
         )
@@ -104,7 +104,7 @@ class CompositeUserNewsResourceRepositoryTest {
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
-                .filter { it.topics.contains(sampleTopic1) }
+                .filter { sampleTopic1 in it.topics }
                 .mapToUserNewsResources(userData),
             userNewsResources.first(),
         )
