@@ -47,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
@@ -237,7 +238,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.feature_bookmarks_img_empty_bookmarks),
-            colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
+            colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
             contentDescription = null,
         )
 

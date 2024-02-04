@@ -164,9 +164,7 @@ class NiaAppState(
         }
     }
 
-    fun navigateToSearch() {
-        navController.navigateToSearch()
-    }
+    fun navigateToSearch() = navController.navigateToSearch()
 }
 
 /**
