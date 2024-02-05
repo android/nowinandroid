@@ -157,9 +157,9 @@ class NiaAppState(
             }
 
             when (topLevelDestination) {
-                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
-                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
-                INTERESTS -> navController.navigateToInterestsGraph(topLevelNavOptions)
+                FOR_YOU -> navController.navigateToForYou()
+                BOOKMARKS -> navController.navigateToBookmarks()
+                INTERESTS -> navController.navigateToInterestsGraph()
             }
         }
     }

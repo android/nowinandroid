@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
 
 const val BOOKMARKS_ROUTE = "bookmarks_route"
 
-fun NavController.navigateToBookmarks(navOptions: NavOptions) = navigate(BOOKMARKS_ROUTE, navOptions)
+fun NavController.navigateToBookmarks() = navigate(BOOKMARKS_ROUTE)
 
 fun NavGraphBuilder.bookmarksScreen(
     onTopicClick: (String) -> Unit,

@@ -30,7 +30,7 @@ const val FOR_YOU_ROUTE = "for_you_route/{$LINKED_NEWS_RESOURCE_ID}"
 private const val DEEP_LINK_URI_PATTERN =
     "https://www.nowinandroid.apps.samples.google.com/foryou/{$LINKED_NEWS_RESOURCE_ID}"
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(FOR_YOU_ROUTE, navOptions)
+fun NavController.navigateToForYou() = navigate(FOR_YOU_ROUTE)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable(

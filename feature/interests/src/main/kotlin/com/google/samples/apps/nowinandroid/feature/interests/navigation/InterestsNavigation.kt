@@ -26,7 +26,7 @@ import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 private const val INTERESTS_GRAPH_ROUTE_PATTERN = "interests_graph"
 const val INTERESTS_ROUTE = "interests_route"
 
-fun NavController.navigateToInterestsGraph(navOptions: NavOptions) = navigate(INTERESTS_GRAPH_ROUTE_PATTERN, navOptions)
+fun NavController.navigateToInterestsGraph() = navigate(INTERESTS_GRAPH_ROUTE_PATTERN)
 
 fun NavGraphBuilder.interestsGraph(
     onTopicClick: (String) -> Unit,
