@@ -140,11 +140,11 @@ class MainActivity : ComponentActivity() {
                 timeZoneMonitor = timeZoneMonitor,
             )
 
-            val currentZoneId by appState.currentTimeZone.collectAsStateWithLifecycle()
+            val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
 
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
-                LocalTimeZone provides currentZoneId,
+                LocalTimeZone provides currentTimeZone,
             ) {
                 NiaTheme(
                     darkTheme = darkTheme,
