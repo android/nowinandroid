@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toKotlinTimeZone
 import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -75,7 +76,8 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                         intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.let { timeZoneId ->
                             // We need to convert it from java.util.Timezone to java.time.ZoneId
                             val zoneId = ZoneId.of(timeZoneId, ZoneId.SHORT_IDS)
-                            TimeZone.of(zoneId.id)
+                            // Convert to kotlinx.datetime.TimeZone
+                            zoneId.toKotlinTimeZone()
                         }
                     }
 
