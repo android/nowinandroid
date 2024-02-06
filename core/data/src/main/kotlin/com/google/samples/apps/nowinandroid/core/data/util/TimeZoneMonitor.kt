@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
@@ -87,10 +88,16 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                 context.registerReceiver(receiver, IntentFilter(Intent.ACTION_TIMEZONE_CHANGED))
             }
 
+            // Send here again, because registering the Broadcast Receiver can take up to several milliseconds.
+            // This way, we can reduce the likelihood that a TZ change wouldn't be caught with the Broadcast Receiver.
+            trySend(TimeZone.currentSystemDefault())
+
             awaitClose {
                 context.unregisterReceiver(receiver)
             }
         }
+            // We use to prevent multiple emissions of the same type, because we use trySend multiple times.
+            .distinctUntilChanged()
             .conflate()
             .flowOn(ioDispatcher)
             // Sharing the callback to prevent multiple BroadcastReceivers being registered

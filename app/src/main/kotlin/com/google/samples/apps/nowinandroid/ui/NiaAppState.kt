@@ -89,7 +89,7 @@ class NiaAppState(
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
-    private val timeZoneMonitor: TimeZoneMonitor,
+    timeZoneMonitor: TimeZoneMonitor,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
