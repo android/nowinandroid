@@ -116,12 +116,52 @@ jobs:
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
 
-  androidTest:
+  #  androidTest:
+  #    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+  #    timeout-minutes: 55
+  #    strategy:
+  #      matrix:
+  #        api-level: [26, 30]
+  #
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Copy CI gradle.properties
+  #        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+  #
+  #      - name: Set up JDK 17
+  #        uses: actions/setup-java@v4
+  #        with:
+  #          distribution: 'zulu'
+  #          java-version: 17
+  #
+  #      - name: Setup Gradle
+  #        uses: gradle/gradle-build-action@v2
+  #
+  #      - name: Build projects before running emulator
+  #        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
+  #
+  #      - name: Run instrumentation tests
+  #        uses: reactivecircus/android-emulator-runner@v2
+  #        with:
+  #          api-level: ${{ matrix.api-level }}
+  #          arch: x86_64
+  #          disable-animations: true
+  #          disk-size: 6000M
+  #          heap-size: 600M
+  #          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+  #
+  #      - name: Upload test reports
+  #        if: always()
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: test-reports-${{ matrix.api-level }}
+  #          path: '**/build/reports/androidTests'
+
+  androidTest-GMD:
     runs-on: macOS-latest # enables hardware acceleration in the virtual machine
-    timeout-minutes: 55
-    strategy:
-      matrix:
-        api-level: [26, 30]
+    timeout-minutes: 90
 
     steps:
       - name: Checkout
@@ -139,18 +179,26 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Build projects before running emulator
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Build AndroidTest apps
         run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
 
-      - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Run instrumented tests with GMD
+        run: ./gradlew ciDemoDebugAndroidTest --no-parallel --max-workers=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+
+      - name: Upload test reports
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
         with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          name: test-reports-GMD
+          path: '**/build/reports/androidTests'
+
+      - name: Print disk space usage
+        if: failure()
+        run: df -h
 
       - name: Upload test reports
         if: always()

@@ -41,6 +41,7 @@ dependencies {
     debugApi(libs.androidx.compose.ui.tooling)
 
     implementation(libs.coil.kt.compose)
+    implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.accompanist.testharness)
