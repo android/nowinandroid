@@ -176,6 +176,12 @@ jobs:
       - name: Build projects before running emulator
         run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
 
+      - name: Print available space
+        run: df -h
+
+      - name: Print disk usage
+        run: du -h -d 2 /home/runner/
+        
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
