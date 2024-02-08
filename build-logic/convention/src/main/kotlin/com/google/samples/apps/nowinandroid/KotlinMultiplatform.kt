@@ -58,20 +58,24 @@ internal fun Project.configureKotlinMultiplatform() {
         tvosArm64()
         iosArm64()
 
-        // tier 3
-        androidNativeArm32()
-        androidNativeArm64()
-        androidNativeX86()
-        androidNativeX64()
-        mingwX64()
-        watchosDeviceArm64()
+        // fix :core:model:androidNativeArm32Main: Could not resolve org.jetbrains.kotlinx:kotlinx-datetime
+//        // tier 3
+//        androidNativeArm32()
+//        androidNativeArm64()
+//        androidNativeX86()
+//        androidNativeX64()
+//        mingwX64()
+//        watchosDeviceArm64()
 
         // linking fails for the linux test build if not built on a linux host
         // ensure the tests and linking for them is only done on linux hosts
         project.tasks.named("linuxX64Test") { enabled = HostManager.hostIsLinux }
         project.tasks.named("linkDebugTestLinuxX64") { enabled = HostManager.hostIsLinux }
 
-        project.tasks.named("mingwX64Test") { enabled = HostManager.hostIsMingw }
-        project.tasks.named("linkDebugTestMingwX64") { enabled = HostManager.hostIsMingw }
+        // Fixes Cannot locate tasks that match ':core:model:testClasses' as task 'testClasses'
+        // not found in project ':core:model'. Some candidates are: 'jsTestClasses', 'jvmTestClasses'.
+        project.tasks.create("testClasses") {
+            dependsOn("allTests")
+        }
     }
 }
