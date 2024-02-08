@@ -81,7 +81,7 @@ com.google.dagger:dagger-lint-aar:2.50
 com.google.dagger:dagger:2.50
 com.google.dagger:hilt-android:2.50
 com.google.dagger:hilt-core:2.50
-com.google.guava:listenablefuture:1.0
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.6.0
 com.squareup.okio:okio:3.6.0
