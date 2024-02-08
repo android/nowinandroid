@@ -17,12 +17,12 @@
 package com.google.samples.apps.nowinandroid
 
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.konan.target.HostManager
 
 internal fun Project.configureKotlinMultiplatform() {
-    (project.kotlinExtension as KotlinMultiplatformExtension).apply {
+    extensions.configure<KotlinMultiplatformExtension> {
         jvm()
 
         js {
