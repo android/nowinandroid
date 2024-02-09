@@ -27,6 +27,16 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
+      - name: Free Up GitHub Actions Ubuntu Runner Disk Space 🔧
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
+
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
@@ -148,7 +158,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 30]
+        api-level: [ 26, 30 ]
 
     steps:
       - name: Enable KVM group perms
