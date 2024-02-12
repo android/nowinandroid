@@ -36,6 +36,7 @@ kotlin {
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinInject.runtime)
                 implementation(libs.sqldelight.coroutines.extensions)
+                implementation(libs.sqldelight.primitive.adapters)
             }
         }
         val androidMain by getting {

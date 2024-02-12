@@ -1,0 +1,68 @@
+CREATE TABLE news_resources (
+  id TEXT NOT NULL PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  url TEXT NOT NULL,
+  header_image_url TEXT,
+  publish_date INTEGER NOT NULL,
+  type TEXT NOT NULL
+);
+
+getNewsResources:
+SELECT * FROM news_resources
+WHERE
+    CASE WHEN :useFilterNewsIds
+        THEN id IN (:filterNewsIds)
+        ELSE 1
+    END
+ AND
+    CASE WHEN :useFilterTopicIds
+        THEN id IN
+            (
+                SELECT news_resource_id FROM news_resources_topics
+                WHERE topic_id IN (:filterTopicIds)
+            )
+        ELSE 1
+    END
+ORDER BY publish_date DESC;
+
+getNewsResourceIds:
+SELECT id FROM news_resources
+WHERE
+    CASE WHEN :useFilterNewsIds
+        THEN id IN (:filterNewsIds)
+        ELSE 1
+    END
+ AND
+    CASE WHEN :useFilterTopicIds
+        THEN id IN
+            (
+                SELECT news_resource_id FROM news_resources_topics
+                WHERE topic_id IN (:filterTopicIds)
+            )
+        ELSE 1
+    END
+ORDER BY publish_date DESC;
+
+insertOrIgnoreNewsResources:
+INSERT OR IGNORE INTO news_resources (id, title, content, url, header_image_url, publish_date, type)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+upsertNewsResources:
+INSERT INTO news_resources (id, title, content, url, header_image_url, publish_date, type)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(id) DO UPDATE SET
+title = excluded.title,
+content = excluded.content,
+url = excluded.url,
+header_image_url = excluded.header_image_url,
+publish_date = excluded.publish_date,
+type = excluded.type;
+
+insertOrIgnoreTopicCrossRefEntities:
+INSERT OR IGNORE INTO news_resources_topics (news_resource_id, topic_id)
+VALUES (?, ?);
+
+deleteNewsResources:
+DELETE FROM news_resources
+WHERE id IN (:ids);
