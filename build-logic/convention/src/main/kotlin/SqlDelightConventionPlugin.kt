@@ -14,29 +14,25 @@
  * limitations under the License.
  */
 
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
-import com.google.samples.apps.nowinandroid.configureKotlinMultiplatform
+import com.google.samples.apps.nowinandroid.configurePrintApksTask
+import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.kotlin
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-class KmpLibraryConventionPlugin: Plugin<Project> {
+class SqlDelightConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            plugins.apply("com.android.library")
-            plugins.apply("org.jetbrains.kotlin.multiplatform")
-            configureKotlinMultiplatform()
-            extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
-                configureFlavors(this)
-                configureGradleManagedDevices(this)
-                // The resource prefix is derived from the module name,
-                // so resources inside ":core:module1" must be prefixed with "core_module1_"
-                resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
+            pluginManager.apply("app.cash.sqldelight")
+            extensions.configure<KotlinMultiplatformExtension> {
             }
         }
     }

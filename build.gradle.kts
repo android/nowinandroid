@@ -48,4 +48,5 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.sqldelight.gradle.plugin) apply false
 }

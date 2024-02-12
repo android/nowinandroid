@@ -18,6 +18,10 @@ plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.model"
+}
+
 kotlin {
     sourceSets {
         commonMain.dependencies {

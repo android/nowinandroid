@@ -114,5 +114,9 @@ gradlePlugin {
             id = "nowinandroid.kmp.library"
             implementationClass = "KmpLibraryConventionPlugin"
         }
+        register("kmpAndroidLibrary") {
+            id = "nowinandroid.kmp.android.library"
+            implementationClass = "KmpAndroidLibraryConventionPlugin"
+        }
     }
 }

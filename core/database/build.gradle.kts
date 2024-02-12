@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,8 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
-    alias(libs.plugins.nowinandroid.android.room)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.sqldelight.gradle.plugin)
 }
 
 android {
@@ -29,10 +27,33 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.core.database"
 }
 
-dependencies {
-    api(projects.core.model)
-
-    implementation(libs.kotlinx.datetime)
-
-    androidTestImplementation(projects.core.testing)
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(projects.core.model)
+                implementation(libs.kotlinx.datetime)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.android.driver)
+            }
+        }
+        val nativeMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.native.driver)
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.sqlite.driver)
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
+    }
 }

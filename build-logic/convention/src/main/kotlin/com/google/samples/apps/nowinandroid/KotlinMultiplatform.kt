@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.konan.target.HostManager
 internal fun Project.configureKotlinMultiplatform() {
     extensions.configure<KotlinMultiplatformExtension> {
         jvm()
+        androidTarget()
 
         js {
             browser {
@@ -82,11 +83,4 @@ internal fun Project.configureKotlinMultiplatform() {
             dependsOn("allTests")
         }
     }
-}
-
-internal fun Project.configureAndroidKotlinMultiplatform() {
-    extensions.configure<KotlinMultiplatformExtension> {
-        androidTarget()
-    }
-    configureKotlinMultiplatform()
 }
