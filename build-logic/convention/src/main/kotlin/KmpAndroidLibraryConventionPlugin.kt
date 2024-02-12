@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import com.google.samples.apps.nowinandroid.configureKotlinMultiplatform
+import com.google.samples.apps.nowinandroid.configureAndroidKotlinMultiplatform
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
-class KmpLibraryConventionPlugin: Plugin<Project> {
+class KmpAndroidLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             plugins.apply("org.jetbrains.kotlin.multiplatform")
-            configureKotlinMultiplatform()
+            configureAndroidKotlinMultiplatform()
         }
     }
 }
