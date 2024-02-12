@@ -28,13 +28,15 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AnalyticsModule {
+internal abstract class AnalyticsModule {
     @Binds
     abstract fun bindsAnalyticsHelper(analyticsHelperImpl: FirebaseAnalyticsHelper): AnalyticsHelper
 
     companion object {
         @Provides
         @Singleton
-        fun provideFirebaseAnalytics(): FirebaseAnalytics { return Firebase.analytics }
+        fun provideFirebaseAnalytics(): FirebaseAnalytics {
+            return Firebase.analytics
+        }
     }
 }

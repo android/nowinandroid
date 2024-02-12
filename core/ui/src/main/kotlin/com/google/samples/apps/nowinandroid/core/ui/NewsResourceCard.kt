@@ -91,7 +91,7 @@ fun NewsResourceCardExpanded(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val clickActionLabel = stringResource(R.string.card_tap_action)
+    val clickActionLabel = stringResource(R.string.core_ui_card_tap_action)
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
@@ -183,10 +183,11 @@ fun NewsResourceHeaderImage(
             painter = if (isError.not() && !isLocalInspection) {
                 imageLoader
             } else {
-                painterResource(drawable.ic_placeholder_default)
+                painterResource(drawable.core_designsystem_ic_placeholder_default)
             },
             // TODO b/226661685: Investigate using alt text of  image to populate content description
-            contentDescription = null, // decorative image,
+            // decorative image,
+            contentDescription = null,
         )
     }
 }
@@ -212,13 +213,13 @@ fun BookmarkButton(
         icon = {
             Icon(
                 imageVector = NiaIcons.BookmarkBorder,
-                contentDescription = stringResource(R.string.bookmark),
+                contentDescription = stringResource(R.string.core_ui_bookmark),
             )
         },
         checkedIcon = {
             Icon(
                 imageVector = NiaIcons.Bookmark,
-                contentDescription = stringResource(R.string.unbookmark),
+                contentDescription = stringResource(R.string.core_ui_unbookmark),
             )
         },
     )
@@ -229,7 +230,7 @@ fun NotificationDot(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
-    val description = stringResource(R.string.unread_resource_dot_content_description)
+    val description = stringResource(R.string.core_ui_unread_resource_dot_content_description)
     Canvas(
         modifier = modifier
             .semantics { contentDescription = description },
@@ -273,7 +274,7 @@ fun NewsResourceMetaData(
     val formattedDate = dateFormatted(publishDate)
     Text(
         if (resourceType.isNotBlank()) {
-            stringResource(R.string.card_meta_data_text, formattedDate, resourceType)
+            stringResource(R.string.core_ui_card_meta_data_text, formattedDate, resourceType)
         } else {
             formattedDate
         },
@@ -295,7 +296,8 @@ fun NewsResourceTopics(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.horizontalScroll(rememberScrollState()), // causes narrow chips
+        // causes narrow chips
+        modifier = modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         for (followableTopic in topics) {
@@ -305,12 +307,12 @@ fun NewsResourceTopics(
                 text = {
                     val contentDescription = if (followableTopic.isFollowed) {
                         stringResource(
-                            R.string.topic_chip_content_description_when_followed,
+                            R.string.core_ui_topic_chip_content_description_when_followed,
                             followableTopic.topic.name,
                         )
                     } else {
                         stringResource(
-                            R.string.topic_chip_content_description_when_not_followed,
+                            R.string.core_ui_topic_chip_content_description_when_not_followed,
                             followableTopic.topic.name,
                         )
                     }

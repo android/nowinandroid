@@ -50,12 +50,12 @@ class InterestsScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            interestsLoading = getString(R.string.loading)
-            interestsEmptyHeader = getString(R.string.empty_header)
+            interestsLoading = getString(R.string.feature_interests_loading)
+            interestsEmptyHeader = getString(R.string.feature_interests_empty_header)
             interestsTopicCardFollowButton =
-                getString(R.string.card_follow_button_content_desc)
+                getString(R.string.feature_interests_card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =
-                getString(R.string.card_unfollow_button_content_desc)
+                getString(R.string.feature_interests_card_unfollow_button_content_desc)
         }
     }
 
