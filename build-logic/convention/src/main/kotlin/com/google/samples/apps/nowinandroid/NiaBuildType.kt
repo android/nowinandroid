@@ -22,5 +22,4 @@ package com.google.samples.apps.nowinandroid
 enum class NiaBuildType(val applicationIdSuffix: String? = null) {
     DEBUG(".debug"),
     RELEASE,
-    BENCHMARK(".benchmark")
 }
