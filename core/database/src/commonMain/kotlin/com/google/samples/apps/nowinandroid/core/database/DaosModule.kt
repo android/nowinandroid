@@ -21,13 +21,10 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@Module
-@InstallIn(SingletonComponent::class)
+@Component
 internal object DaosModule {
     @Provides
     fun providesTopicsDao(

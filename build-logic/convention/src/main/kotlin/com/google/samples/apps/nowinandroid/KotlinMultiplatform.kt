@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.konan.target.HostManager
 
@@ -27,6 +28,10 @@ import org.jetbrains.kotlin.konan.target.HostManager
  */
 internal fun Project.configureKotlinMultiplatform() {
     extensions.configure<KotlinMultiplatformExtension> {
+        // Enable native group by default
+        // https://kotlinlang.org/docs/whatsnew1820.html#new-approach-to-source-set-hierarchy
+        applyDefaultHierarchyTemplate()
+
         jvm()
         androidTarget()
 
@@ -52,18 +57,19 @@ internal fun Project.configureKotlinMultiplatform() {
         iosSimulatorArm64()
         iosX64()
 
-        // tier 2
-        linuxArm64()
-        watchosSimulatorArm64()
-        watchosX64()
-        watchosArm32()
-        watchosArm64()
-        tvosSimulatorArm64()
-        tvosX64()
-        tvosArm64()
+// Fix :core:database:linuxArm64Main: Could not resolve me.tatarka.inject:kotlin-inject-runtime:0.6.3.
+//        // tier 2
+//        linuxArm64()
+//        watchosSimulatorArm64()
+//        watchosX64()
+//        watchosArm32()
+//        watchosArm64()
+//        tvosSimulatorArm64()
+//        tvosX64()
+//        tvosArm64()
         iosArm64()
 
-        // fix :core:model:androidNativeArm32Main: Could not resolve org.jetbrains.kotlinx:kotlinx-datetime
+// fix :core:model:androidNativeArm32Main: Could not resolve org.jetbrains.kotlinx:kotlinx-datetime
 //        // tier 3
 //        androidNativeArm32()
 //        androidNativeArm64()

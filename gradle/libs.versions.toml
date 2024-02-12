@@ -71,6 +71,7 @@ compose = "1.6.0"
 compose-plugin = "1.6.0-alpha01"
 junit = "4.13.2"
 sqldelight = "2.0.1"
+kotlinInject = '0.6.3'
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -160,6 +161,11 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 sqldelight-android-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
 sqldelight-native-driver = { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqldelight" }
 sqldelight-sqlite-driver = { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqldelight" }
+sqldelight-sqljs-driver = { group = "app.cash.sqldelight", name = "sqljs-driver", version.ref = "sqldelight" }
+sqldelight-webworker-driver = { group = "app.cash.sqldelight", name = "web-worker-driver", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
+kotlinInject-compiler = { module = 'me.tatarka.inject:kotlin-inject-compiler-ksp', version.ref = 'kotlinInject' }
+kotlinInject-runtime = { module = 'me.tatarka.inject:kotlin-inject-runtime', version.ref = 'kotlinInject' }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

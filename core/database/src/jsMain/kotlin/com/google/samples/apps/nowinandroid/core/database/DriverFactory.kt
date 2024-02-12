@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
-import android.content.Context
-import androidx.room.Room
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.worker.WebWorkerDriver
+import org.w3c.dom.Worker
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object DatabaseModule {
-    @Provides
-    @Singleton
-    fun providesNiaDatabase(
-        @ApplicationContext context: Context,
-    ): NiaDatabase = Room.databaseBuilder(
-        context,
-        NiaDatabase::class.java,
-        "nia-database",
-    ).build()
+actual class DriverFactory {
+    actual suspend fun provideDbDriver(
+        schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
+    ): SqlDriver {
+        return WebWorkerDriver(
+            Worker(
+                js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)"""),
+            ),
+        ).also { schema.create(it).await() }
+    }
 }

@@ -17,6 +17,7 @@
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.sqldelight.gradle.plugin)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -33,6 +34,8 @@ kotlin {
             dependencies {
                 api(projects.core.model)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinInject.runtime)
+                implementation(libs.sqldelight.coroutines.extensions)
             }
         }
         val androidMain by getting {
@@ -50,10 +53,36 @@ kotlin {
                 implementation(libs.sqldelight.sqlite.driver)
             }
         }
+        val jsMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.sqljs.driver)
+                implementation(libs.sqldelight.webworker.driver)
+                implementation(npm("sql.js", "1.6.2"))
+                implementation(devNpm("copy-webpack-plugin", "9.1.0"))
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
             }
         }
     }
+}
+
+sqldelight {
+    databases {
+        create("NiaDatabase") {
+            packageName.set("com.google.samples.apps.nowinandroid.core.database")
+            generateAsync.set(true)
+        }
+    }
+}
+
+dependencies {
+    // KSP will eventually have better multiplatform support and we'll be able to simply have
+    // `ksp libs.kotlinInject.compiler` in the dependencies block of each source set
+    // https://github.com/google/ksp/pull/1021
+    add("kspIosX64", libs.kotlinInject.compiler)
+    add("kspIosArm64", libs.kotlinInject.compiler)
+    add("kspIosSimulatorArm64", libs.kotlinInject.compiler)
 }
