@@ -1,0 +1,19 @@
+CREATE VIRTUAL TABLE news_resources_fts
+USING FTS4(
+    tokenizer = porter,
+    content = news_resources,
+    news_resource_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+);
+-- Triggers to keep the FTS index up to date.
+CREATE TRIGGER news_resources_ai AFTER INSERT ON news_resources BEGIN
+    INSERT INTO news_resources_fts (rowid, news_resource_id, title, content) VALUES (new.rowid, new.id, new.title, new.content);
+END;
+CREATE TRIGGER news_resources_ad AFTER DELETE ON news_resources BEGIN
+    INSERT INTO news_resources_fts (news_resources_fts, rowid, news_resource_id, title, content) VALUES ('delete', old.rowid, old.id, old.title, old.content);
+END;
+CREATE TRIGGER news_resources_au AFTER UPDATE ON news_resources BEGIN
+    INSERT INTO news_resources_fts (news_resources_fts, rowid, news_resource_id, title, content) VALUES ('delete', old.rowid, old.id, old.title, old.content);
+    INSERT INTO news_resources_fts (rowid, news_resource_id, title, content) VALUES (new.rowid, new.id, new.title, new.content);
+END;
