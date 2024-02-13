@@ -1,0 +1,8 @@
+CREATE TABLE topics (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    short_description TEXT NOT NULL,
+    long_description TEXT NOT NULL DEFAULT '',
+    url TEXT NOT NULL DEFAULT '',
+    image_url TEXT NOT NULL DEFAULT ''
+);

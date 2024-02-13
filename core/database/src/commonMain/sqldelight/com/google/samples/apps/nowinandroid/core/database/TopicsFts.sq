@@ -1,0 +1,27 @@
+CREATE VIRTUAL TABLE IF NOT EXISTS topics_fts
+USING FTS4(
+    topic_id TEXT,
+    name TEXT,
+    short_description TEXT,
+    long_description TEXT
+);
+
+CREATE TRIGGER IF NOT EXISTS topics_ai AFTER INSERT ON topics
+BEGIN
+    INSERT INTO topics_fts (topic_id, name, short_description, long_description)
+    VALUES (new.id, new.name, new.short_description, new.long_description);
+END;
+
+CREATE TRIGGER IF NOT EXISTS topics_ad AFTER DELETE ON topics
+BEGIN
+    DELETE FROM topics_fts WHERE topic_id = old.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS topics_au AFTER UPDATE ON topics
+BEGIN
+    UPDATE topics_fts SET
+    name = new.name,
+    short_description = new.short_description,
+    long_description = new.long_description
+    WHERE topic_id = new.id;
+END;
