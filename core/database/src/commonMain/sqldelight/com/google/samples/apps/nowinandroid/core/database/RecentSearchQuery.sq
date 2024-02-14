@@ -1,0 +1,5 @@
+CREATE TABLE recent_search_queries (
+    id INTEGER PRIMARY KEY NOT NULL ,
+    query TEXT NOT NULL,
+    queried_date INTEGER DEFAULT CURRENT_TIMESTAMP
+);
