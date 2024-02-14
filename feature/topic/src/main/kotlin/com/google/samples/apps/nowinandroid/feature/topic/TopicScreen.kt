@@ -109,7 +109,7 @@ internal fun TopicScreen(
                 TopicUiState.Loading -> item {
                     NiaLoadingWheel(
                         modifier = modifier,
-                        contentDesc = stringResource(id = string.topic_loading),
+                        contentDesc = stringResource(id = string.feature_topic_loading),
                     )
                 }
 

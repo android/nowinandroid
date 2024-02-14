@@ -45,14 +45,13 @@ data class UserNewsResource internal constructor(
         followableTopics = newsResource.topics.map { topic ->
             FollowableTopic(
                 topic = topic,
-                isFollowed = userData.followedTopics.contains(topic.id),
+                isFollowed = topic.id in userData.followedTopics,
             )
         },
-        isSaved = userData.bookmarkedNewsResources.contains(newsResource.id),
-        hasBeenViewed = userData.viewedNewsResources.contains(newsResource.id),
+        isSaved = newsResource.id in userData.bookmarkedNewsResources,
+        hasBeenViewed = newsResource.id in userData.viewedNewsResources,
     )
 }
 
-fun List<NewsResource>.mapToUserNewsResources(userData: UserData): List<UserNewsResource> {
-    return map { UserNewsResource(it, userData) }
-}
+fun List<NewsResource>.mapToUserNewsResources(userData: UserData): List<UserNewsResource> =
+    map { UserNewsResource(it, userData) }

@@ -65,7 +65,12 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+
     implementation(projects.core.designsystem)
     implementation(projects.core.ui)
-    implementation(libs.androidx.activity.compose)
+}
+
+dependencyGuard {
+    configuration("releaseRuntimeClasspath")
 }

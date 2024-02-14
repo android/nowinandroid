@@ -24,17 +24,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
+
 internal const val topicIdArg = "topicId"
-const val interestsRoute = "interests_route?$topicIdArg={$topicIdArg}"
+//const val interestsRoute = "interests_route?$topicIdArg={$topicIdArg}"
+const val INTERESTS_ROUTE = "interests_route"
 
 fun NavController.navigateToInterestsGraph(
     topicId: String? = null,
     navOptions: NavOptions? = null,
 ) {
     if (topicId == null) {
-        navigate("interests_route", navOptions)
+        navigate(INTERESTS_ROUTE, navOptions)
     } else {
-        navigate("interests_route?$topicIdArg=$topicId", navOptions)
+        navigate("$INTERESTS_ROUTE?$topicIdArg=$topicId", navOptions)
     }
 }
 
@@ -42,7 +44,7 @@ fun NavGraphBuilder.interestsGraph(
     detailsPane: @Composable (String) -> Unit,
 ) {
     composable(
-        route = interestsRoute,
+        route = INTERESTS_ROUTE,
         arguments = listOf(
             navArgument(topicIdArg) {
                 defaultValue = null

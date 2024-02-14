@@ -27,4 +27,11 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive) {
         isTransitive = false
     }
+
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
 }

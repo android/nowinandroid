@@ -47,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
@@ -113,8 +114,8 @@ internal fun BookmarksScreen(
     undoBookmarkRemoval: () -> Unit = {},
     clearUndoState: () -> Unit = {},
 ) {
-    val bookmarkRemovedMessage = stringResource(id = R.string.bookmark_removed)
-    val undoText = stringResource(id = R.string.undo)
+    val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_removed)
+    val undoText = stringResource(id = R.string.feature_bookmarks_undo)
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
@@ -163,7 +164,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentSize()
             .testTag("forYou:loading"),
-        contentDesc = stringResource(id = R.string.saved_loading),
+        contentDesc = stringResource(id = R.string.feature_bookmarks_loading),
     )
 }
 
@@ -236,15 +237,15 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.img_empty_bookmarks),
-            colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
+            painter = painterResource(id = R.drawable.feature_bookmarks_img_empty_bookmarks),
+            colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
             contentDescription = null,
         )
 
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = stringResource(id = R.string.bookmarks_empty_error),
+            text = stringResource(id = R.string.feature_bookmarks_empty_error),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
@@ -254,7 +255,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = stringResource(id = R.string.bookmarks_empty_description),
+            text = stringResource(id = R.string.feature_bookmarks_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,

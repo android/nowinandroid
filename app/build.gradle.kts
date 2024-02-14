@@ -25,6 +25,7 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -96,57 +97,49 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.analytics)
-
     implementation(projects.sync.work)
 
-    androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.datastoreTest)
-    androidTestImplementation(projects.core.dataTest)
-    androidTestImplementation(projects.core.network)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.accompanist.testharness)
-    androidTestImplementation(kotlin("test"))
-    debugImplementation(libs.androidx.compose.ui.testManifest)
-    debugImplementation(projects.uiTestHiltManifest)
-
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.compose.runtime.tracing)
-    implementation(libs.androidx.compose.material3.adaptive) {
-        this.isTransitive = false
-    }
-    implementation(libs.androidx.compose.material3.adaptive.navigation.suite) {
-        this.isTransitive = false
-    }
     implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.window.manager)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
 
-    baselineProfile(project(":benchmarks"))
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(projects.uiTestHiltManifest)
 
-    // Core functions
-    testImplementation(projects.core.testing)
-    testImplementation(projects.core.datastoreTest)
-    testImplementation(projects.core.dataTest)
-    testImplementation(projects.core.network)
-    testImplementation(libs.androidx.navigation.testing)
-    testImplementation(libs.accompanist.testharness)
-    testImplementation(libs.work.testing)
-    testImplementation(kotlin("test"))
     kspTest(libs.hilt.compiler)
 
+    testImplementation(projects.core.dataTest)
+    testImplementation(projects.core.testing)
+    testImplementation(libs.accompanist.testharness)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.work.testing)
+
+    testDemoImplementation(libs.robolectric)
+    testDemoImplementation(libs.roborazzi)
+
+    androidTestImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.dataTest)
+    androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.accompanist.testharness)
+    androidTestImplementation(libs.hilt.android.testing)
+
+    baselineProfile(projects.benchmarks)
 }
 
 baselineProfile {
     // Don't build on every iteration of a full assemble.
     // Instead enable generation directly for the release build variant.
     automaticGenerationDuringBuild = false
+}
+
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }

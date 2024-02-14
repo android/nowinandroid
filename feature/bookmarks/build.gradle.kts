@@ -23,3 +23,11 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks"
 }
+
+dependencies {
+    implementation(projects.core.data)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
+}

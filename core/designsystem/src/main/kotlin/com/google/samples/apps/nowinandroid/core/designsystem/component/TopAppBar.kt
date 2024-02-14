@@ -40,9 +40,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 fun NiaTopAppBar(
     @StringRes titleRes: Int,
     navigationIcon: ImageVector,
-    navigationIconContentDescription: String?,
+    navigationIconContentDescription: String,
     actionIcon: ImageVector,
-    actionIconContentDescription: String?,
+    actionIconContentDescription: String,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},

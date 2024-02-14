@@ -24,6 +24,6 @@ android {
 
 dependencies {
     api(projects.core.data)
-    implementation(projects.core.testing)
-    implementation(projects.core.common)
+
+    implementation(libs.hilt.android.testing)
 }

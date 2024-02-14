@@ -21,7 +21,7 @@ import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
-import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
+import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 /**
  * Type for the top level destinations in the application. Each of these destinations
@@ -37,19 +37,19 @@ enum class TopLevelDestination(
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
         unselectedIcon = NiaIcons.UpcomingBorder,
-        iconTextId = forYouR.string.for_you,
+        iconTextId = forYouR.string.feature_foryou_title,
         titleTextId = R.string.app_name,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
         unselectedIcon = NiaIcons.BookmarksBorder,
-        iconTextId = bookmarksR.string.saved,
-        titleTextId = bookmarksR.string.saved,
+        iconTextId = bookmarksR.string.feature_bookmarks_title,
+        titleTextId = bookmarksR.string.feature_bookmarks_title,
     ),
     INTERESTS(
         selectedIcon = NiaIcons.Grid3x3,
         unselectedIcon = NiaIcons.Grid3x3,
-        iconTextId = interestsR.string.interests,
-        titleTextId = interestsR.string.interests,
+        iconTextId = searchR.string.feature_search_interests,
+        titleTextId = searchR.string.feature_search_interests,
     ),
 }

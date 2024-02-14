@@ -20,7 +20,7 @@ import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 
-fun AnalyticsHelper.logNewsResourceBookmarkToggled(newsResourceId: String, isBookmarked: Boolean) {
+internal fun AnalyticsHelper.logNewsResourceBookmarkToggled(newsResourceId: String, isBookmarked: Boolean) {
     val eventType = if (isBookmarked) "news_resource_saved" else "news_resource_unsaved"
     val paramKey = if (isBookmarked) "saved_news_resource_id" else "unsaved_news_resource_id"
     logEvent(
@@ -33,7 +33,7 @@ fun AnalyticsHelper.logNewsResourceBookmarkToggled(newsResourceId: String, isBoo
     )
 }
 
-fun AnalyticsHelper.logTopicFollowToggled(followedTopicId: String, isFollowed: Boolean) {
+internal fun AnalyticsHelper.logTopicFollowToggled(followedTopicId: String, isFollowed: Boolean) {
     val eventType = if (isFollowed) "topic_followed" else "topic_unfollowed"
     val paramKey = if (isFollowed) "followed_topic_id" else "unfollowed_topic_id"
     logEvent(
@@ -46,7 +46,7 @@ fun AnalyticsHelper.logTopicFollowToggled(followedTopicId: String, isFollowed: B
     )
 }
 
-fun AnalyticsHelper.logThemeChanged(themeName: String) =
+internal fun AnalyticsHelper.logThemeChanged(themeName: String) =
     logEvent(
         AnalyticsEvent(
             type = "theme_changed",
@@ -56,7 +56,7 @@ fun AnalyticsHelper.logThemeChanged(themeName: String) =
         ),
     )
 
-fun AnalyticsHelper.logDarkThemeConfigChanged(darkThemeConfigName: String) =
+internal fun AnalyticsHelper.logDarkThemeConfigChanged(darkThemeConfigName: String) =
     logEvent(
         AnalyticsEvent(
             type = "dark_theme_config_changed",
@@ -66,7 +66,7 @@ fun AnalyticsHelper.logDarkThemeConfigChanged(darkThemeConfigName: String) =
         ),
     )
 
-fun AnalyticsHelper.logDynamicColorPreferenceChanged(useDynamicColor: Boolean) =
+internal fun AnalyticsHelper.logDynamicColorPreferenceChanged(useDynamicColor: Boolean) =
     logEvent(
         AnalyticsEvent(
             type = "dynamic_color_preference_changed",
@@ -76,7 +76,7 @@ fun AnalyticsHelper.logDynamicColorPreferenceChanged(useDynamicColor: Boolean) =
         ),
     )
 
-fun AnalyticsHelper.logOnboardingStateChanged(shouldHideOnboarding: Boolean) {
+internal fun AnalyticsHelper.logOnboardingStateChanged(shouldHideOnboarding: Boolean) {
     val eventType = if (shouldHideOnboarding) "onboarding_complete" else "onboarding_reset"
     logEvent(
         AnalyticsEvent(type = eventType),

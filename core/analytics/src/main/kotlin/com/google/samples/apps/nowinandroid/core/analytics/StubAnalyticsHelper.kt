@@ -27,7 +27,7 @@ private const val TAG = "StubAnalyticsHelper"
  * analytics events should be sent to a backend.
  */
 @Singleton
-class StubAnalyticsHelper @Inject constructor() : AnalyticsHelper {
+internal class StubAnalyticsHelper @Inject constructor() : AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
         Log.d(TAG, "Received analytics event: $event")
     }

@@ -24,13 +24,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterestsGraph
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_NAVIGATION_ROUTE
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicNavigationRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
@@ -47,7 +47,7 @@ fun NiaNavHost(
     appState: NiaAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    startDestination: String = forYouNavigationRoute,
+    startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
     NavHost(
@@ -70,7 +70,7 @@ fun NiaNavHost(
                 val nestedNavController = rememberNavController()
                 NavHost(
                     navController = nestedNavController,
-                    startDestination = topicNavigationRoute,
+                    startDestination = TOPIC_NAVIGATION_ROUTE,
                 ) {
                     topicScreen(onTopicClick = nestedNavController::navigateToTopic)
                 }

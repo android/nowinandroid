@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.feature.settings
 
 import android.content.Intent
@@ -108,7 +110,7 @@ fun SettingsDialog(
         onDismissRequest = { onDismiss() },
         title = {
             Text(
-                text = stringResource(string.settings_title),
+                text = stringResource(string.feature_settings_title),
                 style = MaterialTheme.typography.titleLarge,
             )
         },
@@ -118,7 +120,7 @@ fun SettingsDialog(
                 when (settingsUiState) {
                     Loading -> {
                         Text(
-                            text = stringResource(string.loading),
+                            text = stringResource(string.feature_settings_loading),
                             modifier = Modifier.padding(vertical = 16.dp),
                         )
                     }
@@ -140,7 +142,7 @@ fun SettingsDialog(
         },
         confirmButton = {
             Text(
-                text = stringResource(string.dismiss_dialog_button_text),
+                text = stringResource(string.feature_settings_dismiss_dialog_button_text),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -160,50 +162,50 @@ private fun ColumnScope.SettingsPanel(
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
 ) {
-    SettingsDialogSectionTitle(text = stringResource(string.theme))
+    SettingsDialogSectionTitle(text = stringResource(string.feature_settings_theme))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.brand_default),
+            text = stringResource(string.feature_settings_brand_default),
             selected = settings.brand == DEFAULT,
             onClick = { onChangeThemeBrand(DEFAULT) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.brand_android),
+            text = stringResource(string.feature_settings_brand_android),
             selected = settings.brand == ANDROID,
             onClick = { onChangeThemeBrand(ANDROID) },
         )
     }
     AnimatedVisibility(visible = settings.brand == DEFAULT && supportDynamicColor) {
         Column {
-            SettingsDialogSectionTitle(text = stringResource(string.dynamic_color_preference))
+            SettingsDialogSectionTitle(text = stringResource(string.feature_settings_dynamic_color_preference))
             Column(Modifier.selectableGroup()) {
                 SettingsDialogThemeChooserRow(
-                    text = stringResource(string.dynamic_color_yes),
+                    text = stringResource(string.feature_settings_dynamic_color_yes),
                     selected = settings.useDynamicColor,
                     onClick = { onChangeDynamicColorPreference(true) },
                 )
                 SettingsDialogThemeChooserRow(
-                    text = stringResource(string.dynamic_color_no),
+                    text = stringResource(string.feature_settings_dynamic_color_no),
                     selected = !settings.useDynamicColor,
                     onClick = { onChangeDynamicColorPreference(false) },
                 )
             }
         }
     }
-    SettingsDialogSectionTitle(text = stringResource(string.dark_mode_preference))
+    SettingsDialogSectionTitle(text = stringResource(string.feature_settings_dark_mode_preference))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.dark_mode_config_system_default),
+            text = stringResource(string.feature_settings_dark_mode_config_system_default),
             selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
             onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.dark_mode_config_light),
+            text = stringResource(string.feature_settings_dark_mode_config_light),
             selected = settings.darkThemeConfig == LIGHT,
             onClick = { onChangeDarkThemeConfig(LIGHT) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.dark_mode_config_dark),
+            text = stringResource(string.feature_settings_dark_mode_config_dark),
             selected = settings.darkThemeConfig == DARK,
             onClick = { onChangeDarkThemeConfig(DARK) },
         )
@@ -259,7 +261,7 @@ private fun LinksPanel() {
         NiaTextButton(
             onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
         ) {
-            Text(text = stringResource(string.privacy_policy))
+            Text(text = stringResource(string.feature_settings_privacy_policy))
         }
         val context = LocalContext.current
         NiaTextButton(
@@ -267,17 +269,17 @@ private fun LinksPanel() {
                 context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             },
         ) {
-            Text(text = stringResource(string.licenses))
+            Text(text = stringResource(string.feature_settings_licenses))
         }
         NiaTextButton(
             onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) },
         ) {
-            Text(text = stringResource(string.brand_guidelines))
+            Text(text = stringResource(string.feature_settings_brand_guidelines))
         }
         NiaTextButton(
             onClick = { uriHandler.openUri(FEEDBACK_URL) },
         ) {
-            Text(text = stringResource(string.feedback))
+            Text(text = stringResource(string.feature_settings_feedback))
         }
     }
 }
@@ -316,7 +318,6 @@ private fun PreviewSettingsDialogLoading() {
     }
 }
 
-/* ktlint-disable max-line-length */
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
 private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"

@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 data class TintTheme(
-    val iconTint: Color? = null,
+    val iconTint: Color = Color.Unspecified,
 )
 
 /**

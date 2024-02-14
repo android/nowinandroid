@@ -16,14 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.adaptive.navigationsuite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -35,11 +33,11 @@ import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BOOKMARKS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouNavigationRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterestsGraph
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -55,7 +53,7 @@ import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberNiaAppState(
-    windowSize: DpSize,
+    windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -65,14 +63,14 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        windowSize,
+        windowSizeClass,
         networkMonitor,
         userNewsResourceRepository,
     ) {
         NiaAppState(
             navController,
             coroutineScope,
-            windowSize,
+            windowSizeClass,
             networkMonitor,
             userNewsResourceRepository,
         )
@@ -83,7 +81,7 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
-    private val windowSize: DpSize,
+    val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
 ) {
@@ -93,11 +91,17 @@ class NiaAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            forYouNavigationRoute -> FOR_YOU
-            bookmarksRoute -> BOOKMARKS
-            interestsRoute -> INTERESTS
+            FOR_YOU_ROUTE -> FOR_YOU
+            BOOKMARKS_ROUTE -> BOOKMARKS
+            INTERESTS_ROUTE -> INTERESTS
             else -> null
         }
+
+    val shouldShowBottomBar: Boolean
+        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+
+    val shouldShowNavRail: Boolean
+        get() = !shouldShowBottomBar
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -111,7 +115,7 @@ class NiaAppState(
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
      * route.
      */
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     /**
      * The top level destinations that have unread news resources.
@@ -128,26 +132,6 @@ class NiaAppState(
                 SharingStarted.WhileSubscribed(5_000),
                 initialValue = emptySet(),
             )
-
-    /**
-     * Per <a href="https://m3.material.io/components/navigation-drawer/guidelines">Material Design 3 guidelines</a>,
-     * the selection of the appropriate navigation component should be contingent on the available
-     * window size:
-     * - Bottom Bar for compact window sizes (below 600dp)
-     * - Navigation Rail for medium and expanded window sizes up to 1240dp (between 600dp and 1240dp)
-     * - Navigation Drawer to window size above 1240dp
-     */
-    @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
-    val navigationSuiteType: NavigationSuiteType
-        @Composable get() {
-            return if (windowSize.width > 1240.dp) {
-                NavigationSuiteType.NavigationDrawer
-            } else if (windowSize.width >= 600.dp) {
-                NavigationSuiteType.NavigationRail
-            } else {
-                NavigationSuiteType.NavigationBar
-            }
-        }
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
@@ -180,9 +164,7 @@ class NiaAppState(
         }
     }
 
-    fun navigateToSearch() {
-        navController.navigateToSearch()
-    }
+    fun navigateToSearch() = navController.navigateToSearch()
 }
 
 /**
