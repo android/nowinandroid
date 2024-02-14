@@ -6,3 +6,29 @@ CREATE TABLE topics (
     url TEXT NOT NULL DEFAULT '',
     image_url TEXT NOT NULL DEFAULT ''
 );
+
+getTopicEntity:
+SELECT * FROM topics WHERE id = :topicId;
+
+getTopicEntities:
+SELECT * FROM topics;
+
+getOneOffTopicEntities:
+SELECT * FROM topics;
+
+insertOrIgnoreTopics:
+INSERT OR IGNORE INTO topics(id, name, short_description, long_description, url, image_url)
+VALUES (?, ?, ?, ?, ?, ?);
+
+upsertTopics:
+INSERT INTO topics(id, name, short_description, long_description, url, image_url)
+VALUES (?, ?, ?, ?, ?, ?)
+ON CONFLICT(id) DO UPDATE SET
+name = excluded.name,
+short_description = excluded.short_description,
+long_description = excluded.long_description,
+url = excluded.url,
+image_url = excluded.image_url;
+
+deleteTopics:
+DELETE FROM topics WHERE id IN (:ids);

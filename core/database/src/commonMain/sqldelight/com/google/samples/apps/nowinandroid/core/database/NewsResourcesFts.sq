@@ -17,3 +17,12 @@ CREATE TRIGGER news_resources_au AFTER UPDATE ON news_resources BEGIN
     INSERT INTO news_resources_fts (news_resources_fts, rowid, news_resource_id, title, content) VALUES ('delete', old.rowid, old.id, old.title, old.content);
     INSERT INTO news_resources_fts (rowid, news_resource_id, title, content) VALUES (new.rowid, new.id, new.title, new.content);
 END;
+
+insertAll:
+INSERT INTO news_resources_fts (news_resource_id, title, content) SELECT id, title, content FROM news_resources;
+
+searchAllNewsResources:
+SELECT news_resource_id FROM news_resources_fts WHERE news_resources_fts MATCH :query;
+
+getCount:
+SELECT count(*) FROM news_resources_fts;

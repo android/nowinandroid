@@ -3,3 +3,12 @@ CREATE TABLE recent_search_queries (
     query TEXT NOT NULL,
     queried_date INTEGER DEFAULT CURRENT_TIMESTAMP
 );
+
+getRecentSearchQueryEntities:
+SELECT * FROM recent_search_queries ORDER BY queried_date DESC LIMIT :limit;
+
+insertOrReplaceRecentSearchQuery:
+INSERT OR REPLACE INTO recent_search_queries (query) VALUES (:query);
+
+clearRecentSearchQueries:
+DELETE FROM recent_search_queries;
