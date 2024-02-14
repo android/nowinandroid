@@ -56,9 +56,7 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation(libs.sqldelight.sqljs.driver)
                 implementation(libs.sqldelight.webworker.driver)
-                implementation(npm("sql.js", "1.6.2"))
                 implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             }
         }
@@ -75,6 +73,7 @@ sqldelight {
         create("NiaDatabase") {
             packageName.set("com.google.samples.apps.nowinandroid.core.database")
             generateAsync.set(true)
+            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.1")
         }
     }
 }
