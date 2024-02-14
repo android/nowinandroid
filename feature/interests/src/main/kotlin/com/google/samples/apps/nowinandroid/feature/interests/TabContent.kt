@@ -34,7 +34,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldState
+import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -56,20 +56,20 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier,
     detailsPane: @Composable (String) -> Unit,
 ) {
-    val listDetailPaneState = rememberListDetailPaneScaffoldState()
+    val listDetailPaneNavigator = rememberListDetailPaneScaffoldNavigator<String>()
 
-    BackHandler(enabled = listDetailPaneState.canNavigateBack()) {
-        listDetailPaneState.navigateBack()
+    BackHandler(enabled = listDetailPaneNavigator.canNavigateBack()) {
+        listDetailPaneNavigator.navigateBack()
     }
 
     LaunchedEffect(selectedTopicId) {
         if (selectedTopicId != null) {
-            listDetailPaneState.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            listDetailPaneNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         }
     }
 
     ListDetailPaneScaffold(
-        scaffoldState = listDetailPaneState,
+        scaffoldState = listDetailPaneNavigator.scaffoldState,
         listPane = {
             ListPane(
                 topics = topics,
