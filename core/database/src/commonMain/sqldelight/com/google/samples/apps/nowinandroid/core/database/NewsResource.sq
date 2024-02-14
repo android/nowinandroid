@@ -1,4 +1,4 @@
-CREATE TABLE news_resources (
+CREATE TABLE news_resource (
   id TEXT NOT NULL PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE news_resources (
 );
 
 getNewsResources:
-SELECT * FROM news_resources
+SELECT * FROM news_resource
 WHERE
     CASE WHEN :useFilterNewsIds
         THEN id IN (:filterNewsIds)
@@ -27,7 +27,7 @@ WHERE
 ORDER BY publish_date DESC;
 
 getNewsResourceIds:
-SELECT id FROM news_resources
+SELECT id FROM news_resource
 WHERE
     CASE WHEN :useFilterNewsIds
         THEN id IN (:filterNewsIds)
@@ -45,11 +45,11 @@ WHERE
 ORDER BY publish_date DESC;
 
 insertOrIgnoreNewsResources:
-INSERT OR IGNORE INTO news_resources (id, title, content, url, header_image_url, publish_date, type)
+INSERT OR IGNORE INTO news_resource (id, title, content, url, header_image_url, publish_date, type)
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
 upsertNewsResources:
-INSERT INTO news_resources (id, title, content, url, header_image_url, publish_date, type)
+INSERT INTO news_resource (id, title, content, url, header_image_url, publish_date, type)
 VALUES (?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(id) DO UPDATE SET
 title = excluded.title,
@@ -64,5 +64,5 @@ INSERT OR IGNORE INTO news_resources_topics (news_resource_id, topic_id)
 VALUES (?, ?);
 
 deleteNewsResources:
-DELETE FROM news_resources
+DELETE FROM news_resource
 WHERE id IN (:ids);

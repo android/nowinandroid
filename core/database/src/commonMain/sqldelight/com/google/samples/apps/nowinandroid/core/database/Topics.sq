@@ -1,4 +1,4 @@
-CREATE TABLE topics (
+CREATE TABLE topic (
     id TEXT PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     short_description TEXT NOT NULL,
@@ -8,20 +8,20 @@ CREATE TABLE topics (
 );
 
 getTopicEntity:
-SELECT * FROM topics WHERE id = :topicId;
+SELECT * FROM topic WHERE id = :topicId;
 
 getTopicEntities:
-SELECT * FROM topics;
+SELECT * FROM topic;
 
 getOneOffTopicEntities:
-SELECT * FROM topics;
+SELECT * FROM topic;
 
 insertOrIgnoreTopics:
-INSERT OR IGNORE INTO topics(id, name, short_description, long_description, url, image_url)
+INSERT OR IGNORE INTO topic(id, name, short_description, long_description, url, image_url)
 VALUES (?, ?, ?, ?, ?, ?);
 
 upsertTopics:
-INSERT INTO topics(id, name, short_description, long_description, url, image_url)
+INSERT INTO topic(id, name, short_description, long_description, url, image_url)
 VALUES (?, ?, ?, ?, ?, ?)
 ON CONFLICT(id) DO UPDATE SET
 name = excluded.name,
@@ -31,4 +31,4 @@ url = excluded.url,
 image_url = excluded.image_url;
 
 deleteTopics:
-DELETE FROM topics WHERE id IN (:ids);
+DELETE FROM topic WHERE id IN (:ids);
