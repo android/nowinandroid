@@ -20,9 +20,12 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.worker.WebWorkerDriver
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 import org.w3c.dom.Worker
 
-actual class DriverFactory {
+actual class DriverModule {
+    @Provides
     actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
     ): SqlDriver {

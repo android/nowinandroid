@@ -16,38 +16,42 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
+import app.cash.sqldelight.db.SqlDriver
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
+import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-@Component
-internal object DaosModule {
+internal object DatabaseModule {
+    @Provides
+    fun providesNiaDatabase(driver: SqlDriver): NiaDatabase = NiaDatabase(driver)
+
     @Provides
     fun providesTopicsDao(
         database: NiaDatabase,
-    ): TopicDao = database.topicDao()
+    ): TopicDao = TopicDao(database, Dispatchers.Default)
 
     @Provides
     fun providesNewsResourceDao(
         database: NiaDatabase,
-    ): NewsResourceDao = database.newsResourceDao()
+    ): NewsResourceDao = NewsResourceDao(database, Dispatchers.Default)
 
     @Provides
     fun providesTopicFtsDao(
         database: NiaDatabase,
-    ): TopicFtsDao = database.topicFtsDao()
+    ): TopicFtsDao = TopicFtsDao(database, Dispatchers.Default)
 
     @Provides
     fun providesNewsResourceFtsDao(
         database: NiaDatabase,
-    ): NewsResourceFtsDao = database.newsResourceFtsDao()
+    ): NewsResourceFtsDao = NewsResourceFtsDao(database, Dispatchers.Default)
 
     @Provides
     fun providesRecentSearchQueryDao(
         database: NiaDatabase,
-    ): RecentSearchQueryDao = database.recentSearchQueryDao()
+    ): RecentSearchQueryDao = RecentSearchQueryDao(database, Dispatchers.Default)
 }

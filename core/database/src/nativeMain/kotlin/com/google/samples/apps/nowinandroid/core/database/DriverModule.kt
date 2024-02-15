@@ -16,12 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
+import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.native.NativeSqliteDriver
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-expect class DriverFactory {
-    suspend fun provideDbDriver(
+@Component
+actual class DriverModule {
+
+    @Provides
+    actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
-    ): SqlDriver
+    ): SqlDriver {
+        return NativeSqliteDriver(schema.synchronous(), "nia-database.db")
+    }
 }
