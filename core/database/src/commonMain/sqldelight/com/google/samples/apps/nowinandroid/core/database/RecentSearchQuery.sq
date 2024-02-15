@@ -1,6 +1,5 @@
 CREATE TABLE recent_search_query (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    query TEXT NOT NULL,
+    query TEXT NOT NULL PRIMARY KEY,
     queried_date INTEGER DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -8,7 +7,7 @@ getRecentSearchQueryEntities:
 SELECT * FROM recent_search_query ORDER BY queried_date DESC LIMIT :limit;
 
 insertOrReplaceRecentSearchQuery:
-INSERT OR REPLACE INTO recent_search_query (query) VALUES (:query);
+INSERT OR REPLACE INTO recent_search_query (query) VALUES :query;
 
 clearRecentSearchQueries:
 DELETE FROM recent_search_query;

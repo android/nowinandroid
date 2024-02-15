@@ -16,23 +16,43 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Upsert
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
+import com.google.samples.apps.nowinandroid.core.database.Recent_search_query
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Instant
 
 /**
  * DAO for [RecentSearchQueryEntity] access
  */
-@Dao
-interface RecentSearchQueryDao {
-    @Query(value = "SELECT * FROM recentSearchQueries ORDER BY queriedDate DESC LIMIT :limit")
-    fun getRecentSearchQueryEntities(limit: Int): Flow<List<RecentSearchQueryEntity>>
+class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
 
-    @Upsert
-    suspend fun insertOrReplaceRecentSearchQuery(recentSearchQuery: RecentSearchQueryEntity)
+    private val query = db.recentSearchQueryQueries
 
-    @Query(value = "DELETE FROM recentSearchQueries")
-    suspend fun clearRecentSearchQueries()
+    fun getRecentSearchQueryEntities(limit: Int): Flow<List<RecentSearchQueryEntity>> {
+        return query.getRecentSearchQueryEntities(limit.toLong()) { query, timestamp ->
+            RecentSearchQueryEntity(
+                query = query,
+                queriedDate = Instant.fromEpochMilliseconds(timestamp ?: 0L),
+            )
+        }
+            .asFlow()
+            .mapToList(dispatcher)
+    }
+
+    suspend fun insertOrReplaceRecentSearchQuery(recentSearchQuery: RecentSearchQueryEntity) {
+        query.insertOrReplaceRecentSearchQuery(
+            recent_search_query = Recent_search_query(
+                query = recentSearchQuery.query,
+                queried_date = recentSearchQuery.queriedDate.toEpochMilliseconds(),
+            )
+        )
+    }
+
+    suspend fun clearRecentSearchQueries() {
+        query.clearRecentSearchQueries()
+    }
 }
