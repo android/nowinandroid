@@ -28,10 +28,10 @@ import kotlinx.coroutines.flow.Flow
  * DAO for [NewsResourceFtsEntity] access.
  */
 class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
-    private val query = db.newsResourceFtsQueries
+    private val dbQuery = db.newsResourceFtsQueries
     suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
         newsResources.forEach {
-            query.insert(
+            dbQuery.insert(
                 news_resource_id = it.newsResourceId,
                 title = it.title,
                 content = it.content,
@@ -40,11 +40,13 @@ class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispa
     }
 
     fun searchAllNewsResources(query: String): Flow<List<String>> {
-        return query.searchAllNewsResources(query)
+        return dbQuery.searchAllNewsResources(query)
+            .asFlow()
+            .mapToList(dispatcher)
     }
 
     fun getCount(): Flow<Long> {
-        return query.getCount()
+        return dbQuery.getCount()
             .asFlow()
             .mapToOneNotNull(dispatcher)
     }
