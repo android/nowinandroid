@@ -16,24 +16,45 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * DAO for [TopicFtsEntity] access.
  */
-@Dao
-interface TopicFtsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(topics: List<TopicFtsEntity>)
+class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
 
-    @Query("SELECT topicId FROM topicsFts WHERE topicsFts MATCH :query")
-    fun searchAllTopics(query: String): Flow<List<String>>
+    private val dbQuery = db.topicFtsQueries
 
-    @Query("SELECT count(*) FROM topicsFts")
-    fun getCount(): Flow<Int>
+    suspend fun insertAll(topics: List<TopicFtsEntity>) {
+        topics.forEach {
+            dbQuery.insert(
+                topic_id = it.topicId,
+                name = it.name,
+                short_description = it.shortDescription,
+                long_description = it.longDescription,
+            )
+        }
+    }
+
+    fun searchAllTopics(query: String): Flow<List<String>> {
+        return dbQuery.searchAllTopics(query) {
+            it.orEmpty()
+        }
+            .asFlow()
+            .mapToList(dispatcher)
+    }
+
+    fun getCount(): Flow<Int> {
+        return dbQuery.getCount()
+            .asFlow()
+            .mapToOne(dispatcher)
+            .map { it.toInt() }
+    }
 }

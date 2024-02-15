@@ -26,7 +26,7 @@ BEGIN
     WHERE topic_id = new.id;
 END;
 
-insertAll:
+insert:
 INSERT INTO topic_fts (topic_id, name, short_description, long_description)
 VALUES (?, ?, ?, ?)
 ON CONFLICT(topic_id) DO UPDATE SET
