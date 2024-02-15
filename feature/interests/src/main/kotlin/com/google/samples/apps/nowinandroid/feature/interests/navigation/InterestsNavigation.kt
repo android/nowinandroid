@@ -24,7 +24,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
-
 internal const val TOPIC_ID_ARG = "topicId"
 const val INTERESTS_ROUTE = "interests_route"
 
