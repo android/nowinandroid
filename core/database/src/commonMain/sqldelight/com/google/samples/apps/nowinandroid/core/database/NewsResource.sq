@@ -12,7 +12,7 @@ getNewsResources:
 SELECT * FROM news_resource
 WHERE
     CASE WHEN :useFilterNewsIds
-        THEN id IN (:filterNewsIds)
+        THEN id IN :filterNewsIds
         ELSE 1
     END
  AND
@@ -20,7 +20,7 @@ WHERE
         THEN id IN
             (
                 SELECT news_resource_id FROM news_resources_topics
-                WHERE topic_id IN (:filterTopicIds)
+                WHERE topic_id IN :filterTopicIds
             )
         ELSE 1
     END
@@ -30,7 +30,7 @@ getNewsResourceIds:
 SELECT id FROM news_resource
 WHERE
     CASE WHEN :useFilterNewsIds
-        THEN id IN (:filterNewsIds)
+        THEN id IN :filterNewsIds
         ELSE 1
     END
  AND
@@ -38,17 +38,17 @@ WHERE
         THEN id IN
             (
                 SELECT news_resource_id FROM news_resources_topics
-                WHERE topic_id IN (:filterTopicIds)
+                WHERE topic_id IN :filterTopicIds
             )
         ELSE 1
     END
 ORDER BY publish_date DESC;
 
-insertOrIgnoreNewsResources:
+insertOrIgnoreNewsResource:
 INSERT OR IGNORE INTO news_resource (id, title, content, url, header_image_url, publish_date, type)
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
-upsertNewsResources:
+upsertNewsResource:
 INSERT INTO news_resource (id, title, content, url, header_image_url, publish_date, type)
 VALUES (?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(id) DO UPDATE SET
@@ -65,4 +65,4 @@ VALUES (?, ?);
 
 deleteNewsResources:
 DELETE FROM news_resource
-WHERE id IN (:ids);
+WHERE id IN :ids;

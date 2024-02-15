@@ -16,24 +16,36 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOneNotNull
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO for [NewsResourceFtsEntity] access.
  */
-@Dao
-interface NewsResourceFtsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>)
+class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+    private val query = db.newsResourceFtsQueries
+    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
+        newsResources.forEach {
+            query.insert(
+                news_resource_id = it.newsResourceId,
+                title = it.title,
+                content = it.content,
+            )
+        }
+    }
 
-    @Query("SELECT newsResourceId FROM newsResourcesFts WHERE newsResourcesFts MATCH :query")
-    fun searchAllNewsResources(query: String): Flow<List<String>>
+    fun searchAllNewsResources(query: String): Flow<List<String>> {
+        return query.searchAllNewsResources(query)
+    }
 
-    @Query("SELECT count(*) FROM newsResourcesFts")
-    fun getCount(): Flow<Int>
+    fun getCount(): Flow<Long> {
+        return query.getCount()
+            .asFlow()
+            .mapToOneNotNull(dispatcher)
+    }
 }

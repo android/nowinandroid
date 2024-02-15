@@ -18,11 +18,11 @@ CREATE TRIGGER news_resource_au AFTER UPDATE ON news_resource BEGIN
     INSERT INTO news_resource_fts (rowid, news_resource_id, title, content) VALUES (new.rowid, new.id, new.title, new.content);
 END;
 
-insertAll:
-INSERT INTO news_resource_fts (news_resource_id, title, content) SELECT id, title, content FROM news_resource;
+insert:
+INSERT INTO news_resource_fts (news_resource_id, title, content) VALUES (:news_resource_id, :title, :content);
 
 searchAllNewsResources:
-SELECT news_resource_id FROM news_resource_fts WHERE news_resource_fts MATCH :query;
+SELECT news_resource_id FROM news_resource_fts WHERE news_resource_fts.title MATCH :query;
 
 getCount:
 SELECT count(*) FROM news_resource_fts;

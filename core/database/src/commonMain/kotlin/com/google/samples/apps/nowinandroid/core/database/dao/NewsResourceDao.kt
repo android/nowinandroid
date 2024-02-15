@@ -16,111 +16,124 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Upsert
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Instant
 
 /**
  * DAO for [NewsResource] and [NewsResourceEntity] access
  */
-@Dao
-interface NewsResourceDao {
+class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+    private val query = db.newsResourceQueries
 
     /**
      * Fetches news resources that match the query parameters
      */
-    @Transaction
-    @Query(
-        value = """
-            SELECT * FROM news_resources
-            WHERE 
-                CASE WHEN :useFilterNewsIds
-                    THEN id IN (:filterNewsIds)
-                    ELSE 1
-                END
-             AND
-                CASE WHEN :useFilterTopicIds
-                    THEN id IN
-                        (
-                            SELECT news_resource_id FROM news_resources_topics
-                            WHERE topic_id IN (:filterTopicIds)
-                        )
-                    ELSE 1
-                END
-            ORDER BY publish_date DESC
-    """,
-    )
     fun getNewsResources(
         useFilterTopicIds: Boolean = false,
         filterTopicIds: Set<String> = emptySet(),
         useFilterNewsIds: Boolean = false,
         filterNewsIds: Set<String> = emptySet(),
-    ): Flow<List<PopulatedNewsResource>>
+    ): Flow<List<PopulatedNewsResource>> {
+        return query.getNewsResources(
+            useFilterTopicIds = useFilterTopicIds,
+            filterTopicIds = filterTopicIds,
+            useFilterNewsIds = useFilterNewsIds,
+            filterNewsIds = filterNewsIds,
+        ) { id, title, content, url, headerImageUrl, publishDate, type ->
+            PopulatedNewsResource(
+                entity = NewsResourceEntity(
+                    id = id,
+                    title = title,
+                    content = content,
+                    url = url,
+                    headerImageUrl = headerImageUrl,
+                    publishDate = Instant.fromEpochMilliseconds(publishDate),
+                    type = type,
+                ),
+                // TODO Dealing with NewsResources <-> Topics relationship
+                topics = emptyList(),
+            )
+        }
+            .asFlow()
+            .mapToList(dispatcher)
+    }
 
     /**
      * Fetches ids of news resources that match the query parameters
      */
-    @Transaction
-    @Query(
-        value = """
-            SELECT id FROM news_resources
-            WHERE 
-                CASE WHEN :useFilterNewsIds
-                    THEN id IN (:filterNewsIds)
-                    ELSE 1
-                END
-             AND
-                CASE WHEN :useFilterTopicIds
-                    THEN id IN
-                        (
-                            SELECT news_resource_id FROM news_resources_topics
-                            WHERE topic_id IN (:filterTopicIds)
-                        )
-                    ELSE 1
-                END
-            ORDER BY publish_date DESC
-    """,
-    )
     fun getNewsResourceIds(
         useFilterTopicIds: Boolean = false,
         filterTopicIds: Set<String> = emptySet(),
         useFilterNewsIds: Boolean = false,
         filterNewsIds: Set<String> = emptySet(),
-    ): Flow<List<String>>
+    ): Flow<List<String>> {
+        return query.getNewsResourceIds(
+            useFilterTopicIds = useFilterTopicIds,
+            filterTopicIds = filterTopicIds,
+            useFilterNewsIds = useFilterNewsIds,
+            filterNewsIds = filterNewsIds,
+        )
+            .asFlow()
+            .mapToList(dispatcher)
+    }
 
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long>
+    suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long> {
+        entities.forEach {
+            query.insertOrIgnoreNewsResource(
+                id = it.id,
+                title = it.title,
+                content = it.content,
+                url = it.url,
+                header_image_url = it.headerImageUrl,
+                publish_date = it.publishDate.toEpochMilliseconds(),
+                type = it.type,
+            )
+        }
+        // TODO Return the inserted ids
+        return entities.mapNotNull {
+            it.id.toLongOrNull()
+        }
+    }
 
     /**
      * Inserts or updates [newsResourceEntities] in the db under the specified primary keys
      */
-    @Upsert
-    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>)
+    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
+        newsResourceEntities.forEach {
+            query.upsertNewsResource(
+                id = it.id,
+                title = it.title,
+                content = it.content,
+                url = it.url,
+                header_image_url = it.headerImageUrl,
+                publish_date = it.publishDate.toEpochMilliseconds(),
+                type = it.type,
+            )
+        }
+    }
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreTopicCrossRefEntities(
         newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
-    )
+    ) {
+        // TODO Consider removing cross references
+//        query.insertOrIgnoreNewsResourceTopicCrossRefs(newsResourceTopicCrossReferences)
+    }
 
     /**
      * Deletes rows in the db matching the specified [ids]
      */
-    @Query(
-        value = """
-            DELETE FROM news_resources
-            WHERE id in (:ids)
-        """,
-    )
-    suspend fun deleteNewsResources(ids: List<String>)
+    suspend fun deleteNewsResources(ids: List<String>) {
+        query.deleteNewsResources(ids)
+    }
 }
