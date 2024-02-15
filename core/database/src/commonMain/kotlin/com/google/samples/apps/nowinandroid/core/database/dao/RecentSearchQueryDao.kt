@@ -48,7 +48,7 @@ class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDis
             recent_search_query = Recent_search_query(
                 query = recentSearchQuery.query,
                 queried_date = recentSearchQuery.queriedDate.toEpochMilliseconds(),
-            )
+            ),
         )
     }
 
