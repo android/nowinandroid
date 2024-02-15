@@ -61,10 +61,9 @@ kotlin {
                 implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

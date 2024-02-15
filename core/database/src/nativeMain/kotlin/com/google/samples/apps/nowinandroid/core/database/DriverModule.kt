@@ -24,7 +24,6 @@ import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-@Component
 actual class DriverModule {
 
     @Provides

@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * DAO for [NewsResourceFtsEntity] access.
@@ -45,9 +46,10 @@ class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispa
             .mapToList(dispatcher)
     }
 
-    fun getCount(): Flow<Long> {
+    fun getCount(): Flow<Int> {
         return dbQuery.getCount()
             .asFlow()
             .mapToOneNotNull(dispatcher)
+            .map { it.toInt() }
     }
 }
