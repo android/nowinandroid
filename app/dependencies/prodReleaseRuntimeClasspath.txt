@@ -168,8 +168,8 @@ com.google.guava:failureaccess:1.0.1
 com.google.guava:guava:31.1-android
 com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.google.j2objc:j2objc-annotations:1.3
-com.google.protobuf:protobuf-javalite:3.24.4
-com.google.protobuf:protobuf-kotlin-lite:3.24.4
+com.google.protobuf:protobuf-javalite:3.25.2
+com.google.protobuf:protobuf-kotlin-lite:3.25.2
 com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0
 com.squareup.okhttp3:logging-interceptor:4.12.0
 com.squareup.okhttp3:okhttp:4.12.0
