@@ -1,7 +1,5 @@
 CREATE VIRTUAL TABLE news_resource_fts
 USING FTS4(
-    tokenizer = porter,
-    content = news_resources,
     news_resource_id TEXT NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,

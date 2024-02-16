@@ -41,12 +41,11 @@ kotlin {
             implementation(libs.sqldelight.android.driver)
         }
         androidUnitTest.dependencies {
-            implementation(libs.androidx.test.core)
+            implementation(libs.sqldelight.sqlite.driver)
         }
         nativeMain.dependencies {
             implementation(libs.sqldelight.native.driver)
         }
-
         jvmMain.dependencies {
             implementation(libs.sqldelight.sqlite.driver)
         }

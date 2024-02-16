@@ -16,13 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
-import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
-import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 
 actual suspend fun createDriver(): SqlDriver {
-    val context: Context = ApplicationProvider.getApplicationContext()
-    return AndroidSqliteDriver(NiaDatabase.Schema.synchronous(), context, "nia-database-test.db")
+    return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        .also { NiaDatabase.Schema.create(it).await() }
 }
