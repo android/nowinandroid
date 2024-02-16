@@ -30,36 +30,30 @@ android {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(projects.core.model)
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.kotlinInject.runtime)
-                implementation(libs.sqldelight.coroutines.extensions)
-                implementation(libs.sqldelight.primitive.adapters)
-            }
+        commonMain.dependencies {
+            api(projects.core.model)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinInject.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
+            implementation(libs.sqldelight.primitive.adapters)
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.android.driver)
-            }
+        androidMain.dependencies {
+            implementation(libs.sqldelight.android.driver)
         }
-        val nativeMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.native.driver)
-            }
+        androidUnitTest.dependencies {
+            implementation(libs.androidx.test.core)
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.sqlite.driver)
-            }
+        nativeMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
         }
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.webworker.driver)
-                implementation(npm("sql.js", "1.6.2"))
-                implementation(devNpm("copy-webpack-plugin", "9.1.0"))
-            }
+
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
+        jsMain.dependencies {
+            implementation(libs.sqldelight.webworker.driver)
+            implementation(npm("sql.js", "1.6.2"))
+            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

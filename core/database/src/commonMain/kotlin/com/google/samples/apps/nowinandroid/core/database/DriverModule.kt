@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.core.database
 import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
-import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 expect class DriverModule {

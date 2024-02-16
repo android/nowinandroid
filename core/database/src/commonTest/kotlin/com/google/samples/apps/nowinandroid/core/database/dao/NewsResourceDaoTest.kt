@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,36 +16,30 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
+import com.google.samples.apps.nowinandroid.core.database.createDriver
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NewsResourceDaoTest {
 
     private lateinit var newsResourceDao: NewsResourceDao
     private lateinit var topicDao: TopicDao
-    private lateinit var db: NiaDatabase
 
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context,
-            NiaDatabase::class.java,
-        ).build()
-        newsResourceDao = db.newsResourceDao()
-        topicDao = db.topicDao()
+    @BeforeTest
+    fun setup() = runTest {
+        val db = NiaDatabase(createDriver())
+        newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
+        topicDao = TopicDao(db, Dispatchers.Unconfined)
     }
 
     @Test

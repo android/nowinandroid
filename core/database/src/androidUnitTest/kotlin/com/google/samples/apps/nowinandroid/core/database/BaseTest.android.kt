@@ -16,22 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.database
 
-import app.cash.sqldelight.db.QueryResult
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
-import app.cash.sqldelight.db.SqlSchema
-import app.cash.sqldelight.driver.worker.WebWorkerDriver
-import me.tatarka.inject.annotations.Provides
-import org.w3c.dom.Worker
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 
-actual class DriverModule {
-    @Provides
-    actual suspend fun provideDbDriver(
-        schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
-    ): SqlDriver {
-        return WebWorkerDriver(
-            Worker(
-                js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)"""),
-            ),
-        ).also { schema.create(it).await() }
-    }
+actual suspend fun createDriver(): SqlDriver {
+    val context: Context = ApplicationProvider.getApplicationContext()
+    return AndroidSqliteDriver(NiaDatabase.Schema.synchronous(), context, "nia-database-test.db")
 }
