@@ -18,8 +18,10 @@ package com.google.samples.apps.nowinandroid
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.target.HostManager
 
 /**
@@ -82,6 +84,16 @@ internal fun Project.configureKotlinMultiplatform() {
         // ensure the tests and linking for them is only done on linux hosts
         project.tasks.named("linuxX64Test") { enabled = HostManager.hostIsLinux }
         project.tasks.named("linkDebugTestLinuxX64") { enabled = HostManager.hostIsLinux }
+
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions {
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    // Suppress warning:'expect'/'actual' classes (including interfaces, objects,
+                    // annotations, enums, and 'actual' typealiases) are in Beta.
+                    "-Xexpect-actual-classes",
+                )
+            }
+        }
 
         // Fixes Cannot locate tasks that match ':core:model:testClasses' as task 'testClasses'
         // not found in project ':core:model'. Some candidates are: 'jsTestClasses', 'jvmTestClasses'.
