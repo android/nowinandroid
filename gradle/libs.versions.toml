@@ -164,8 +164,8 @@ sqldelight-sqlite-driver = { group = "app.cash.sqldelight", name = "sqlite-drive
 sqldelight-webworker-driver = { group = "app.cash.sqldelight", name = "web-worker-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-primitive-adapters = { group = "app.cash.sqldelight", name = "primitive-adapters", version.ref = "sqldelight" }
-kotlinInject-compiler = { module = 'me.tatarka.inject:kotlin-inject-compiler-ksp', version.ref = 'kotlinInject' }
-kotlinInject-runtime = { module = 'me.tatarka.inject:kotlin-inject-runtime', version.ref = 'kotlinInject' }
+kotlin-inject-compiler-ksp = { group = "me.tatarka.inject", name = "kotlin-inject-compiler-ksp", version.ref = "kotlinInject" }
+kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-runtime", version.ref = "kotlinInject" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -214,3 +214,6 @@ nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspe
 nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
 nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }
 nowinandroid-kmp-library = { id = "nowinandroid.kmp.library", version = "unspecified" }
+nowinandroid-kotlin-inject = { id = "nowinandroid.kmp.inject", version = "unspecified" }
+nowinandroid-sqldelight = { id = "nowinandroid.sqldelight", version = "unspecified" }
+
