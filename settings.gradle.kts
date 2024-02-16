@@ -24,7 +24,10 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // https://youtrack.jetbrains.com/issue/KT-55620
+    // Issue: Could not determine the dependencies of task ':kotlinNodeJsSetup'.
+    // Fix target versions: Kotlin 2.0.0-Beta1
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()

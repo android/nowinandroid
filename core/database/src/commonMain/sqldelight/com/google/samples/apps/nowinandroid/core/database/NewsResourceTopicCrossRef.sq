@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS news_resources_topics (
+    news_resource_id TEXT NOT NULL,
+    topic_id TEXT NOT NULL,
+    PRIMARY KEY (news_resource_id, topic_id),
+    FOREIGN KEY (news_resource_id) REFERENCES news_resource(id) ON DELETE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES topic(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_news_resource_id ON news_resource_topic(news_resource_id);
+
+CREATE INDEX idx_topic_id ON news_resource_topic(topic_id);

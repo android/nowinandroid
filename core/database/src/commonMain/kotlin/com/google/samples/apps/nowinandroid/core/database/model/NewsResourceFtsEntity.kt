@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-}
+package com.google.samples.apps.nowinandroid.core.database.model
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.model"
-}
-
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
-}
+/**
+ * Fts entity for the news resources. See https://developer.android.com/reference/androidx/room/Fts4.
+ */
+data class NewsResourceFtsEntity(
+    val newsResourceId: String,
+    val title: String,
+    val content: String,
+)

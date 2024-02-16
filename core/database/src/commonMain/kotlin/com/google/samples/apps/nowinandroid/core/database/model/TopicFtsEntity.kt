@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-}
+package com.google.samples.apps.nowinandroid.core.database.model
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.model"
-}
+/**
+ * Fts entity for the topic. See https://developer.android.com/reference/androidx/room/Fts4.
+ */
+data class TopicFtsEntity(
+    val topicId: String,
+    val name: String,
+    val shortDescription: String,
+    val longDescription: String,
+)
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
-}
+fun TopicEntity.asFtsEntity() = TopicFtsEntity(
+    topicId = id,
+    name = name,
+    shortDescription = shortDescription,
+    longDescription = longDescription,
+)

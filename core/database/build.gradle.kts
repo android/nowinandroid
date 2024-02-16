@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
-    alias(libs.plugins.nowinandroid.android.room)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.sqldelight.gradle.plugin)
 }
 
 android {
@@ -29,10 +28,44 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.core.database"
 }
 
-dependencies {
-    api(projects.core.model)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.model)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.sqldelight.coroutines.extensions)
+            implementation(libs.sqldelight.primitive.adapters)
+        }
+        androidMain.dependencies {
+            implementation(libs.sqldelight.android.driver)
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
+        nativeMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
+        }
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
+        jsMain.dependencies {
+            implementation(libs.sqldelight.webworker.driver)
+            implementation(npm("sql.js", "1.6.2"))
+            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+    }
+}
 
-    implementation(libs.kotlinx.datetime)
-
-    androidTestImplementation(projects.core.testing)
+sqldelight {
+    databases {
+        create("NiaDatabase") {
+            packageName.set("com.google.samples.apps.nowinandroid.core.database")
+            generateAsync.set(true)
+            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.1")
+        }
+    }
 }

@@ -1,0 +1,34 @@
+CREATE TABLE topic (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    short_description TEXT NOT NULL,
+    long_description TEXT NOT NULL DEFAULT '',
+    url TEXT NOT NULL DEFAULT '',
+    image_url TEXT NOT NULL DEFAULT ''
+);
+
+getTopicEntity:
+SELECT * FROM topic WHERE id = :topicId;
+
+getTopicEntities:
+SELECT * FROM topic;
+
+getOneOffTopicEntities:
+SELECT * FROM topic;
+
+insertOrIgnoreTopic:
+INSERT OR IGNORE INTO topic(id, name, short_description, long_description, url, image_url)
+VALUES (?, ?, ?, ?, ?, ?);
+
+upsertTopic:
+INSERT INTO topic(id, name, short_description, long_description, url, image_url)
+VALUES (?, ?, ?, ?, ?, ?)
+ON CONFLICT(id) DO UPDATE SET
+name = excluded.name,
+short_description = excluded.short_description,
+long_description = excluded.long_description,
+url = excluded.url,
+image_url = excluded.image_url;
+
+deleteTopics:
+DELETE FROM topic WHERE id IN :ids;

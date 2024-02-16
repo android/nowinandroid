@@ -110,5 +110,17 @@ gradlePlugin {
             id = "nowinandroid.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("kmpLibrary") {
+            id = "nowinandroid.kmp.library"
+            implementationClass = "KmpLibraryConventionPlugin"
+        }
+        register("kotlinInject") {
+            id = "nowinandroid.kmp.inject"
+            implementationClass = "KotlinInjectConventionPlugin"
+        }
+        register("sqldelight") {
+            id = "nowinandroid.sqldelight"
+            implementationClass = "SqlDelightConventionPlugin"
+        }
     }
 }

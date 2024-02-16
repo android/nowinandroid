@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-}
+package com.google.samples.apps.nowinandroid.core.database
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.model"
-}
+import app.cash.sqldelight.async.coroutines.synchronous
+import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.native.NativeSqliteDriver
+import me.tatarka.inject.annotations.Provides
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
+actual class DriverModule {
+
+    @Provides
+    actual suspend fun provideDbDriver(
+        schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
+    ): SqlDriver {
+        return NativeSqliteDriver(schema.synchronous(), "nia-database.db")
     }
 }

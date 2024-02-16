@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-}
+package com.google.samples.apps.nowinandroid.core.database.util
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.model"
-}
+import kotlinx.datetime.Instant
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
+internal class InstantConverter {
+
+    fun longToInstant(value: Long?): Instant? =
+        value?.let(Instant::fromEpochMilliseconds)
+
+    fun instantToLong(instant: Instant?): Long? =
+        instant?.toEpochMilliseconds()
 }

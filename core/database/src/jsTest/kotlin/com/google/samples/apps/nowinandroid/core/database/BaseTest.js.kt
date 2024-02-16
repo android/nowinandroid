@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-}
+package com.google.samples.apps.nowinandroid.core.database
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.model"
-}
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.worker.WebWorkerDriver
+import org.w3c.dom.Worker
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-    }
+actual suspend fun createDriver(): SqlDriver {
+    return WebWorkerDriver(
+        Worker(
+            js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)"""),
+        ),
+    ).also { NiaDatabase.Schema.create(it).await() }
 }
