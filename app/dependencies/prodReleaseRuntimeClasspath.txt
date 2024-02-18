@@ -97,9 +97,9 @@ androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05
 androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05
 androidx.profileinstaller:profileinstaller:1.3.1
 androidx.resourceinspection:resourceinspection-annotation:1.0.1
-androidx.room:room-common:2.6.1
-androidx.room:room-ktx:2.6.1
-androidx.room:room-runtime:2.6.1
+androidx.room:room-common:2.5.0
+androidx.room:room-ktx:2.5.0
+androidx.room:room-runtime:2.5.0
 androidx.savedstate:savedstate-ktx:1.2.1
 androidx.savedstate:savedstate:1.2.1
 androidx.sqlite:sqlite-framework:2.4.0
@@ -114,6 +114,15 @@ androidx.viewpager:viewpager:1.0.0
 androidx.window:window:1.0.0
 androidx.work:work-runtime-ktx:2.9.0
 androidx.work:work-runtime:2.9.0
+app.cash.sqldelight:android-driver:2.0.1
+app.cash.sqldelight:async-extensions-jvm:2.0.1
+app.cash.sqldelight:async-extensions:2.0.1
+app.cash.sqldelight:coroutines-extensions-jvm:2.0.1
+app.cash.sqldelight:coroutines-extensions:2.0.1
+app.cash.sqldelight:primitive-adapters-jvm:2.0.1
+app.cash.sqldelight:primitive-adapters:2.0.1
+app.cash.sqldelight:runtime-jvm:2.0.1
+app.cash.sqldelight:runtime:2.0.1
 com.caverock:androidsvg-aar:1.4
 com.google.accompanist:accompanist-drawablepainter:0.32.0
 com.google.accompanist:accompanist-permissions:0.32.0
@@ -184,6 +193,8 @@ io.coil-kt:coil:2.5.0
 io.github.aakira:napier-android:1.4.1
 io.github.aakira:napier:1.4.1
 javax.inject:javax.inject:1
+me.tatarka.inject:kotlin-inject-runtime-jvm:0.6.3
+me.tatarka.inject:kotlin-inject-runtime:0.6.3
 org.checkerframework:checker-qual:3.12.0
 org.jetbrains.kotlin:kotlin-stdlib-common:1.9.21
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10
