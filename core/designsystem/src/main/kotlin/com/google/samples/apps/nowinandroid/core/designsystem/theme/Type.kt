@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 /**
  * Now in Android typography.
  */
-val platformTextStyle = PlatformTextStyle(includeFontPadding = false)
+val platformTextStyle = PlatformTextStyle(includeFontPadding = true)
 
 internal val NiaTypography = Typography(
     displayLarge = TextStyle(
