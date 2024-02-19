@@ -508,7 +508,7 @@ fun ForYouScreenPopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
-    BoxWithConstraints {
+    Box {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
@@ -534,7 +534,7 @@ fun ForYouScreenOfflinePopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
-    BoxWithConstraints {
+    Box {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
@@ -560,7 +560,7 @@ fun ForYouScreenTopicSelection(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
-    BoxWithConstraints {
+    Box {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
@@ -586,7 +586,7 @@ fun ForYouScreenTopicSelection(
 @DevicePreviews
 @Composable
 fun ForYouScreenLoading() {
-    BoxWithConstraints {
+    Box {
         NiaTheme {
             ForYouScreen(
                 isSyncing = false,
@@ -610,7 +610,7 @@ fun ForYouScreenPopulatedAndLoading(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
     userNewsResources: List<UserNewsResource>,
 ) {
-    BoxWithConstraints {
+    Box {
         NiaTheme {
             ForYouScreen(
                 isSyncing = true,
