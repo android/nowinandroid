@@ -55,11 +55,10 @@ jobs:
         continue-on-error: false
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "::error::Dependency Guard failed, please run the following to update baselines:\n" \
-               "    ./gradlew dependencyGuardBaseline" && exit 1
+          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
 
         # Runs if previous job failed
-      - name: Generate new screenshots if verification failed and it's a PR
+      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
         id: dependencyguard_baseline
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
@@ -110,13 +109,9 @@ jobs:
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble
           -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
           -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
           -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectDemoNonMinifiedBenchmarkBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedBenchmarkBaselineProfile
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
