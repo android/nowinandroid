@@ -99,7 +99,7 @@ class SearchViewModelTest {
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
 
-        val result = viewModel.searchResultUiState.value
+        // val result = viewModel.searchResultUiState.value
         // TODO: Figure out to get the latest emitted ui State? The result is emitted as EmptyQuery
         // assertIs<Success>(result)
 
