@@ -154,8 +154,9 @@ jobs:
           tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
           dotnet: true # rm -rf /usr/share/dotnet
           haskell: true # rm -rf /opt/ghc...
-          large-packages: false # apt-get remove {google-cloud-sdk, aspnetcore, dotnet, llvm, php, mongo...}
-          swap-storage: true # rm -f /mnt/swapfile
+          swap-storage: true # rm -f /mnt/swapfile (4GiB)
+          docker-images: false # Takes 16s, enable if needed in the future
+          large-packages: false # includes google-cloud-sdk and it's slow
 
       - name: Enable KVM group perms
         run: |
