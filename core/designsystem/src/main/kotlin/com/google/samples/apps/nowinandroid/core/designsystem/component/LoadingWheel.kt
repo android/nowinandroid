@@ -96,8 +96,8 @@ fun NiaLoadingWheel(
             animationSpec = infiniteRepeatable(
                 animation = keyframes {
                     durationMillis = ROTATION_TIME / 2
-                    progressLineColor at ROTATION_TIME / NUM_OF_LINES / 2 with LinearEasing
-                    baseLineColor at ROTATION_TIME / NUM_OF_LINES with LinearEasing
+                    progressLineColor at ROTATION_TIME / NUM_OF_LINES / 2 using LinearEasing
+                    baseLineColor at ROTATION_TIME / NUM_OF_LINES using LinearEasing
                 },
                 repeatMode = RepeatMode.Restart,
                 initialStartOffset = StartOffset(ROTATION_TIME / NUM_OF_LINES / 2 * index),

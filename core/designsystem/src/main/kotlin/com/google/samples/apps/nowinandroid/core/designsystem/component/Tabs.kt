@@ -91,7 +91,7 @@ fun NiaTabRow(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onSurface,
         indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
+            TabRowDefaults.SecondaryIndicator(
                 modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
                 height = 2.dp,
                 color = MaterialTheme.colorScheme.onSurface,
