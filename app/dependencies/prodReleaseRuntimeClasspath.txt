@@ -185,10 +185,10 @@ io.github.aakira:napier-android:1.4.1
 io.github.aakira:napier:1.4.1
 javax.inject:javax.inject:1
 org.checkerframework:checker-qual:3.12.0
-org.jetbrains.kotlin:kotlin-stdlib-common:1.9.21
+org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10
-org.jetbrains.kotlin:kotlin-stdlib:1.9.21
+org.jetbrains.kotlin:kotlin-stdlib:1.9.22
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3
 org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3
