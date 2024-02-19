@@ -174,12 +174,11 @@ class BookmarksScreenTest {
 
     @Test
     fun feed_whenLifecycleStops_undoBookmarkedStateIsCleared() = runTest {
-
         var undoStateCleared = false
         val testLifecycleOwner = TestLifecycleOwner(initialState = Lifecycle.State.STARTED)
 
         composeTestRule.setContent {
-            CompositionLocalProvider(LocalLifecycleOwner provides testLifecycleOwner){
+            CompositionLocalProvider(LocalLifecycleOwner provides testLifecycleOwner) {
                 BookmarksScreen(
                     feedState = NewsFeedUiState.Success(emptyList()),
                     onShowSnackbar = { _, _ -> false },
@@ -188,7 +187,7 @@ class BookmarksScreenTest {
                     onNewsResourceViewed = {},
                     clearUndoState = {
                         undoStateCleared = true
-                    }
+                    },
                 )
             }
         }
