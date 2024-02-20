@@ -57,17 +57,6 @@ android {
             // Ensure Baseline Profile is fresh for release builds.
             baselineProfile.automaticGenerationDuringBuild = true
         }
-        create("benchmark") {
-            // Enable all the optimizations from release build through initWith(release).
-            initWith(release)
-            matchingFallbacks.add("release")
-            // Debug key signing is available to everyone.
-            signingConfig = signingConfigs.getByName("debug")
-            // Only use benchmark proguard rules
-            proguardFiles("benchmark-rules.pro")
-            isMinifyEnabled = true
-            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
-        }
     }
 
     packaging {
