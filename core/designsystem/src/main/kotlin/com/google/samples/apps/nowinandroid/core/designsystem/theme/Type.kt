@@ -25,112 +25,95 @@ import androidx.compose.ui.unit.sp
 /**
  * Now in Android typography.
  */
-val platformTextStyle = PlatformTextStyle(includeFontPadding = true)
-
 internal val NiaTypography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 57.sp,
         lineHeight = 64.sp,
         letterSpacing = (-0.25).sp,
-        platformStyle = platformTextStyle,
     ),
     displayMedium = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 45.sp,
         lineHeight = 52.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     displaySmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 36.sp,
         lineHeight = 44.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     headlineLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 32.sp,
+        fontSize = 64.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     headlineMedium = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     headlineSmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
     titleMedium = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.1.sp,
-        platformStyle = platformTextStyle,
     ),
     titleSmall = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
-        platformStyle = platformTextStyle,
     ),
     bodyLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
-        platformStyle = platformTextStyle,
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
-        platformStyle = platformTextStyle,
     ),
     bodySmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
-        platformStyle = platformTextStyle,
     ),
     labelLarge = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
-        platformStyle = platformTextStyle,
     ),
     labelMedium = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
-        platformStyle = platformTextStyle,
     ),
     labelSmall = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 10.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.sp,
-        platformStyle = platformTextStyle,
     ),
 )
