@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.filter
@@ -30,8 +32,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.testing.TestLifecycleOwner
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -165,5 +170,30 @@ class BookmarksScreenTest {
                 composeTestRule.activity.getString(R.string.feature_bookmarks_empty_description),
             )
             .assertExists()
+    }
+
+    @Test
+    fun feed_whenLifecycleStops_undoBookmarkedStateIsCleared() = runTest {
+        var undoStateCleared = false
+        val testLifecycleOwner = TestLifecycleOwner(initialState = Lifecycle.State.STARTED)
+
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalLifecycleOwner provides testLifecycleOwner) {
+                BookmarksScreen(
+                    feedState = NewsFeedUiState.Success(emptyList()),
+                    onShowSnackbar = { _, _ -> false },
+                    removeFromBookmarks = {},
+                    onTopicClick = {},
+                    onNewsResourceViewed = {},
+                    clearUndoState = {
+                        undoStateCleared = true
+                    },
+                )
+            }
+        }
+
+        assertEquals(false, undoStateCleared)
+        testLifecycleOwner.handleLifecycleEvent(event = Lifecycle.Event.ON_STOP)
+        assertEquals(true, undoStateCleared)
     }
 }

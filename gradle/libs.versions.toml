@@ -15,7 +15,7 @@ androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.6.2"
+androidxLifecycle = "2.7.0"
 androidxMacroBenchmark = "1.2.2"
 androidxMetrics = "1.0.0-alpha04"
 androidxNavigation = "2.7.4"
@@ -46,7 +46,7 @@ kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.0"
 ksp = "1.9.22-1.0.16"
 okhttp = "4.12.0"
-protobuf = "3.24.4"
+protobuf = "3.25.2"
 protobufPlugin = "0.9.4"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
@@ -83,6 +83,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtimeTesting = { group = "androidx.lifecycle", name = "lifecycle-runtime-testing", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
