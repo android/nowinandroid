@@ -45,7 +45,7 @@ internal val NiaTypography = Typography(
     ),
     headlineLarge = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 64.sp,
+        fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
     ),
