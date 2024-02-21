@@ -19,8 +19,17 @@ package com.google.samples.apps.nowinandroid.core.database
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
+import co.touchlab.sqliter.DatabaseConfiguration
 import com.google.samples.apps.nowinandroid.core.database.NiaDatabase.Companion.Schema
 
 actual suspend fun createDriver(): SqlDriver {
-    return NativeSqliteDriver(Schema.synchronous(), "nia-database-test.db")
+    return NativeSqliteDriver(
+        schema = Schema.synchronous(),
+        name = "nia-database-test.db",
+        onConfiguration = { config: DatabaseConfiguration ->
+            config.copy(
+                extendedConfig = DatabaseConfiguration.Extended(foreignKeyConstraints = true),
+            )
+        },
+    )
 }

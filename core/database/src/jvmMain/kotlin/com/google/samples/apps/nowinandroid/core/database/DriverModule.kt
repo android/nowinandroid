@@ -21,13 +21,17 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import me.tatarka.inject.annotations.Provides
+import java.util.Properties
 
 actual class DriverModule {
     @Provides
     actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
     ): SqlDriver {
-        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        return JdbcSqliteDriver(
+            url = JdbcSqliteDriver.IN_MEMORY,
+            properties = Properties().apply { put("foreign_keys", "true") },
+        )
             .also { schema.create(it).await() }
     }
 }

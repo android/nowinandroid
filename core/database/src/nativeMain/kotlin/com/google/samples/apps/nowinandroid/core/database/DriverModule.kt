@@ -21,6 +21,7 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
+import co.touchlab.sqliter.DatabaseConfiguration
 import me.tatarka.inject.annotations.Provides
 
 actual class DriverModule {
@@ -29,6 +30,15 @@ actual class DriverModule {
     actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
     ): SqlDriver {
-        return NativeSqliteDriver(schema.synchronous(), "nia-database.db")
+        val synchronousSchema = schema.synchronous()
+        return NativeSqliteDriver(
+            schema = synchronousSchema,
+            name = "nia-database.db",
+            onConfiguration = { config: DatabaseConfiguration ->
+                config.copy(
+                    extendedConfig = DatabaseConfiguration.Extended(foreignKeyConstraints = true),
+                )
+            },
+        )
     }
 }

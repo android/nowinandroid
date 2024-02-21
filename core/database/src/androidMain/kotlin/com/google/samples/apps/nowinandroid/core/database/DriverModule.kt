@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.database
 
 import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
@@ -32,6 +33,15 @@ actual class DriverModule(private val context: Context) {
     actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
     ): SqlDriver {
-        return AndroidSqliteDriver(schema.synchronous(), context, "nia-database.db")
+        val synchronousSchema = schema.synchronous()
+        return AndroidSqliteDriver(schema = synchronousSchema,
+            context = context,
+            name = "nia-database.db",
+            callback = object : AndroidSqliteDriver.Callback(synchronousSchema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    db.setForeignKeyConstraintsEnabled(true)
+                }
+            }
+        )
     }
 }
