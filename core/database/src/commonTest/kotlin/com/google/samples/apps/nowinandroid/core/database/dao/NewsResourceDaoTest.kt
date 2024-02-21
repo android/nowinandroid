@@ -31,19 +31,22 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NewsResourceDaoTest {
-
     private lateinit var newsResourceDao: NewsResourceDao
     private lateinit var topicDao: TopicDao
 
-    @BeforeTest
-    fun setup() = runTest {
-        val db = NiaDatabase(createDriver())
-        newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
-        topicDao = TopicDao(db, Dispatchers.Unconfined)
-    }
+    // BeforeTest seems not working properly in Kotlin JS
+    // UninitializedPropertyAccessException: lateinit property newsResourceDao has not been initialized
+//    @BeforeTest
+//    fun setup() = runTest {
+//        val db = NiaDatabase(createDriver())
+//        newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
+//        topicDao = TopicDao(db, Dispatchers.Unconfined)
+//    }
 
     @Test
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
+        val db = NiaDatabase(createDriver())
+        val newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
         val newsResourceEntities = listOf(
             testNewsResource(
                 id = "0",
@@ -79,6 +82,8 @@ class NewsResourceDaoTest {
 
     @Test
     fun newsResourceDao_filters_items_by_news_ids_by_descending_publish_date() = runTest {
+        val db = NiaDatabase(createDriver())
+        val newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
         val newsResourceEntities = listOf(
             testNewsResource(
                 id = "0",
@@ -117,6 +122,9 @@ class NewsResourceDaoTest {
 
     @Test
     fun newsResourceDao_filters_items_by_topic_ids_by_descending_publish_date() = runTest {
+        val db = NiaDatabase(createDriver())
+        val newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
+        val topicDao = TopicDao(db, Dispatchers.Unconfined)
         val topicEntities = listOf(
             testTopicEntity(
                 id = "1",
@@ -177,6 +185,9 @@ class NewsResourceDaoTest {
 
     @Test
     fun newsResourceDao_filters_items_by_news_and_topic_ids_by_descending_publish_date() = runTest {
+        val db = NiaDatabase(createDriver())
+        val newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
+        val topicDao = TopicDao(db, Dispatchers.Unconfined)
         val topicEntities = listOf(
             testTopicEntity(
                 id = "1",
@@ -238,42 +249,43 @@ class NewsResourceDaoTest {
     }
 
     @Test
-    fun newsResourceDao_deletes_items_by_ids() =
-        runTest {
-            val newsResourceEntities = listOf(
-                testNewsResource(
-                    id = "0",
-                    millisSinceEpoch = 0,
-                ),
-                testNewsResource(
-                    id = "1",
-                    millisSinceEpoch = 3,
-                ),
-                testNewsResource(
-                    id = "2",
-                    millisSinceEpoch = 1,
-                ),
-                testNewsResource(
-                    id = "3",
-                    millisSinceEpoch = 2,
-                ),
-            )
-            newsResourceDao.upsertNewsResources(newsResourceEntities)
+    fun newsResourceDao_deletes_items_by_ids() = runTest {
+        val db = NiaDatabase(createDriver())
+        val newsResourceDao = NewsResourceDao(db, Dispatchers.Unconfined)
+        val newsResourceEntities = listOf(
+            testNewsResource(
+                id = "0",
+                millisSinceEpoch = 0,
+            ),
+            testNewsResource(
+                id = "1",
+                millisSinceEpoch = 3,
+            ),
+            testNewsResource(
+                id = "2",
+                millisSinceEpoch = 1,
+            ),
+            testNewsResource(
+                id = "3",
+                millisSinceEpoch = 2,
+            ),
+        )
+        newsResourceDao.upsertNewsResources(newsResourceEntities)
 
-            val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
+        val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
 
-            newsResourceDao.deleteNewsResources(
-                toDelete.map(NewsResourceEntity::id),
-            )
+        newsResourceDao.deleteNewsResources(
+            toDelete.map(NewsResourceEntity::id),
+        )
 
-            assertEquals(
-                toKeep.map(NewsResourceEntity::id)
-                    .toSet(),
-                newsResourceDao.getNewsResources().first()
-                    .map { it.entity.id }
-                    .toSet(),
-            )
-        }
+        assertEquals(
+            toKeep.map(NewsResourceEntity::id)
+                .toSet(),
+            newsResourceDao.getNewsResources().first()
+                .map { it.entity.id }
+                .toSet(),
+        )
+    }
 }
 
 private fun testTopicEntity(
