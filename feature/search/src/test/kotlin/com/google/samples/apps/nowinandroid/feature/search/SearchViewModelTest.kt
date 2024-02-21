@@ -33,6 +33,7 @@ import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.E
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.SearchNotReady
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -127,5 +128,16 @@ class SearchViewModelTest {
         assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
 
         collectJob.cancel()
+    }
+
+    @Test
+    fun emptySearchText_NotAddToRecentSearches() = runTest {
+        viewModel.onSearchTriggered("")
+
+        val recentSearchQueriesStream = getRecentQueryUseCase()
+        val recentSearchQueries = recentSearchQueriesStream.first()
+        val recentSearchQuery = recentSearchQueries.firstOrNull()
+
+        assertEquals(null, recentSearchQuery)
     }
 }
