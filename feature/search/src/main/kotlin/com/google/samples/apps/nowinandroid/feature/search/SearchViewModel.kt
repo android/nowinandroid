@@ -103,12 +103,11 @@ class SearchViewModel @Inject constructor(
      * search query in the search text field, defining this method.
      */
     fun onSearchTriggered(query: String) {
-        if (query.isNotBlank()) {
-            viewModelScope.launch {
-                recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
-            }
-            analyticsHelper.logEventSearchTriggered(query = query)
+        if (query.isBlank()) return
+        viewModelScope.launch {
+            recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
         }
+        analyticsHelper.logEventSearchTriggered(query = query)
     }
 
     fun clearRecentSearches() {
