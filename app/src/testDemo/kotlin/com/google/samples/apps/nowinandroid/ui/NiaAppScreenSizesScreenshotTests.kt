@@ -22,6 +22,8 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
@@ -32,7 +34,6 @@ import androidx.work.Configuration
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -138,7 +139,7 @@ class NiaAppScreenSizesScreenshotTests {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
-                TestHarness(size = DpSize(width, height)) {
+                DeviceConfigurationOverride(override = DeviceConfigurationOverride.ForcedSize(size = DpSize(width, height))) {
                     BoxWithConstraints {
                         NiaApp(
                             windowSizeClass = WindowSizeClass.calculateFromSize(

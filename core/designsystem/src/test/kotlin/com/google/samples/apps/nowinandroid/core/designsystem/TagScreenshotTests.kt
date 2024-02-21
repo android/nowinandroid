@@ -20,10 +20,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.FontScale
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
@@ -61,7 +62,7 @@ class TagScreenshotTests() {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
-                TestHarness(fontScale = 2f) {
+                DeviceConfigurationOverride(override = DeviceConfigurationOverride.FontScale(fontScale = 2f)) {
                     NiaTheme {
                         NiaTopicTag(followed = true, onClick = {}) {
                             Text("LOOOOONG TOPIC")

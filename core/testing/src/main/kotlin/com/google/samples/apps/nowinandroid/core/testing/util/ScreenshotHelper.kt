@@ -25,6 +25,8 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.test.DarkMode
+import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -32,7 +34,6 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.robolectric.RuntimeEnvironment
 
@@ -75,7 +76,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
         CompositionLocalProvider(
             LocalInspectionMode provides true,
         ) {
-            TestHarness(darkMode = darkMode) {
+            DeviceConfigurationOverride(override = DeviceConfigurationOverride.DarkMode(isDarkMode = darkMode)) {
                 body()
             }
         }

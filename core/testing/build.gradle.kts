@@ -34,7 +34,7 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.testManifest)
 
-    implementation(libs.accompanist.testharness)
+    implementation(libs.androidx.compose.ui.uitest)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.test.rules)
     implementation(libs.hilt.android.testing)
