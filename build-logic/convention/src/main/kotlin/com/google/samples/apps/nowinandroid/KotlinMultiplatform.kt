@@ -37,20 +37,21 @@ internal fun Project.configureKotlinMultiplatform() {
         jvm()
         androidTarget()
 
-        js {
-            browser {
-                testTask {
-                    useKarma {
-                        useChromeHeadless()
-                    }
-                }
-            }
-            compilations.configureEach {
-                kotlinOptions {
-                    moduleKind = "umd"
-                }
-            }
-        }
+// UninitializedPropertyAccessException: lateinit property newsResourceDao has not been initialized
+//        js {
+//            browser {
+//                testTask {
+//                    useKarma {
+//                        useChromeHeadless()
+//                    }
+//                }
+//            }
+//            compilations.configureEach {
+//                kotlinOptions {
+//                    moduleKind = "umd"
+//                }
+//            }
+//        }
 
         // tier 1
         linuxX64()

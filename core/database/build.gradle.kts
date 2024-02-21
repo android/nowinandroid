@@ -70,3 +70,14 @@ sqldelight {
         }
     }
 }
+
+// Workaround yarn concurrency issue - https://youtrack.jetbrains.com/issue/KT-43320
+tasks.withType<org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask>()
+    .configureEach {
+        args.addAll(
+            listOf(
+                "--mutex",
+                "file:${file("../build/.yarn-mutex")}",
+            ),
+        )
+    }
