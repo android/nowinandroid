@@ -138,6 +138,6 @@ class SearchViewModelTest {
         val recentSearchQueries = recentSearchQueriesStream.first()
         val recentSearchQuery = recentSearchQueries.firstOrNull()
 
-        assertEquals(null, recentSearchQuery)
+        assertNull(recentSearchQuery)
     }
 }
