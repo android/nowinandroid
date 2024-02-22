@@ -23,11 +23,12 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Inject
 import me.tatarka.inject.annotations.Provides
 
-@Inject
-actual class DriverModule(private val context: Context) {
+@Component
+internal actual abstract class DriverModule(private val context: Context) {
 
     @Provides
     actual suspend fun provideDbDriver(

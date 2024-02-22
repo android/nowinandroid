@@ -22,9 +22,11 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import co.touchlab.sqliter.DatabaseConfiguration
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-actual class DriverModule {
+@Component
+internal actual abstract class DriverModule {
 
     @Provides
     actual suspend fun provideDbDriver(

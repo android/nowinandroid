@@ -20,10 +20,12 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 import java.util.Properties
 
-actual class DriverModule {
+@Component
+internal actual abstract class DriverModule {
     @Provides
     actual suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
