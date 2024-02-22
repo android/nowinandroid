@@ -33,6 +33,7 @@ kotlin {
         commonMain.dependencies {
             api(projects.core.model)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines.extensions)
             implementation(libs.sqldelight.primitive.adapters)
         }
@@ -44,6 +45,9 @@ kotlin {
         }
         nativeMain.dependencies {
             implementation(libs.sqldelight.native.driver)
+        }
+        nativeTest.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
         }
         jvmMain.dependencies {
             implementation(libs.sqldelight.sqlite.driver)
