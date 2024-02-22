@@ -55,7 +55,7 @@ class BookmarksViewModel @Inject constructor(
             )
 
     fun removeFromSavedResources(newsResourceId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             shouldDisplayUndoBookmark = true
             lastRemovedBookmarkId = newsResourceId
             userDataRepository.updateNewsResourceBookmark(newsResourceId, false)
@@ -63,13 +63,13 @@ class BookmarksViewModel @Inject constructor(
     }
 
     fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
     }
 
     fun undoBookmarkRemoval() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             lastRemovedBookmarkId?.let {
                 userDataRepository.updateNewsResourceBookmark(it, true)
             }
