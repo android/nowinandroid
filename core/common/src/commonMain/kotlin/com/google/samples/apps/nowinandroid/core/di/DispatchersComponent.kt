@@ -22,7 +22,7 @@ import me.tatarka.inject.annotations.Provides
 typealias DefaultDispatcher = CoroutineDispatcher
 typealias IODispatcher = CoroutineDispatcher
 
-expect object DispatchersComponent {
+expect abstract class DispatchersComponent {
     @Provides
     fun providesIODispatcher(): IODispatcher
 

@@ -17,9 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.di
 
 import kotlinx.coroutines.Dispatchers
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-actual object DispatchersComponent {
+@Component
+actual abstract class DispatchersComponent {
     @Provides
     actual fun providesIODispatcher(): IODispatcher = Dispatchers.IO
 
