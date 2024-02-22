@@ -32,7 +32,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.model)
+            implementation(projects.core.common)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines.extensions)
             implementation(libs.sqldelight.primitive.adapters)
         }
@@ -50,7 +52,8 @@ kotlin {
         }
         jsMain.dependencies {
             implementation(libs.sqldelight.webworker.driver)
-            implementation(npm("sql.js", "1.6.2"))
+            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
+            implementation(npm("sql.js", "1.8.0"))
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
         commonTest.dependencies {
@@ -69,3 +72,14 @@ sqldelight {
         }
     }
 }
+
+// Workaround yarn concurrency issue - https://youtrack.jetbrains.com/issue/KT-43320
+tasks.withType<org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask>()
+    .configureEach {
+        args.addAll(
+            listOf(
+                "--mutex",
+                "file:${file("../build/.yarn-mutex")}",
+            ),
+        )
+    }

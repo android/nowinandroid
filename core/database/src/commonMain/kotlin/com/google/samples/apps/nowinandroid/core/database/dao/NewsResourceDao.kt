@@ -126,8 +126,12 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
     suspend fun insertOrIgnoreTopicCrossRefEntities(
         newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
     ) {
-        // TODO Consider removing cross references
-//        query.insertOrIgnoreNewsResourceTopicCrossRefs(newsResourceTopicCrossReferences)
+        newsResourceTopicCrossReferences.forEach {
+            query.insertOrIgnoreTopicCrossRefEntitiy(
+                news_resource_id = it.newsResourceId,
+                topic_id = it.topicId,
+            )
+        }
     }
 
     /**

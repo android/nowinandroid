@@ -19,8 +19,12 @@ package com.google.samples.apps.nowinandroid.core.database
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.google.samples.apps.nowinandroid.core.database.NiaDatabase.Companion.Schema
+import java.util.Properties
 
 actual suspend fun createDriver(): SqlDriver {
-    return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+    return JdbcSqliteDriver(
+        url = JdbcSqliteDriver.IN_MEMORY,
+        properties = Properties().apply { put("foreign_keys", "true") },
+    )
         .also { Schema.create(it).await() }
 }

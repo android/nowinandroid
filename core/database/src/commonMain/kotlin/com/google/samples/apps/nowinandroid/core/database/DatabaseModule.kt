@@ -22,35 +22,43 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
+import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import kotlinx.coroutines.Dispatchers
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-internal object DatabaseModule {
+@Component
+internal abstract class DatabaseModule {
     @Provides
     fun providesNiaDatabase(driver: SqlDriver): NiaDatabase = NiaDatabase(driver)
 
     @Provides
     fun providesTopicsDao(
         database: NiaDatabase,
-    ): TopicDao = TopicDao(database, Dispatchers.Default)
+        dispatcher: IODispatcher,
+    ): TopicDao = TopicDao(database, dispatcher)
 
     @Provides
     fun providesNewsResourceDao(
         database: NiaDatabase,
-    ): NewsResourceDao = NewsResourceDao(database, Dispatchers.Default)
+        dispatcher: IODispatcher,
+    ): NewsResourceDao = NewsResourceDao(database, dispatcher)
 
     @Provides
     fun providesTopicFtsDao(
         database: NiaDatabase,
-    ): TopicFtsDao = TopicFtsDao(database, Dispatchers.Default)
+        dispatcher: IODispatcher,
+    ): TopicFtsDao = TopicFtsDao(database, dispatcher)
 
     @Provides
     fun providesNewsResourceFtsDao(
         database: NiaDatabase,
-    ): NewsResourceFtsDao = NewsResourceFtsDao(database, Dispatchers.Default)
+        dispatcher: IODispatcher,
+    ): NewsResourceFtsDao = NewsResourceFtsDao(database, dispatcher)
 
     @Provides
     fun providesRecentSearchQueryDao(
         database: NiaDatabase,
-    ): RecentSearchQueryDao = RecentSearchQueryDao(database, Dispatchers.Default)
+        dispatcher: IODispatcher,
+    ): RecentSearchQueryDao = RecentSearchQueryDao(database, dispatcher)
 }

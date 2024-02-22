@@ -21,7 +21,7 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import me.tatarka.inject.annotations.Provides
 
-expect class DriverModule {
+internal expect abstract class DriverModule {
     @Provides
     suspend fun provideDbDriver(
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
