@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network
+package com.google.samples.apps.nowinandroid.core.network.di
 
-import javax.inject.Qualifier
-import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@Qualifier
-@Retention(RUNTIME)
-annotation class Dispatcher(val niaDispatcher: NiaDispatchers)
+typealias ApplicationScope = CoroutineScope
 
-enum class NiaDispatchers {
-    Default,
-    IO,
+@Component
+abstract class CoroutineScopeComponent {
+    @Provides
+    fun providesCoroutineScope(
+        dispatcher: DefaultDispatcher,
+    ): ApplicationScope = CoroutineScope(SupervisorJob() + dispatcher)
 }
