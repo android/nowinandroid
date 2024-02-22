@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.di
+package com.google.samples.apps.nowinandroid.core.di
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-typealias DefaultDispatcher = CoroutineDispatcher
-typealias IODispatcher = CoroutineDispatcher
-@Component
-abstract class DispatchersComponent {
+actual object DispatchersComponent {
+
+    // TODO Provides an actual IODispatcher
     @Provides
-    fun providesIODispatcher(): IODispatcher = Dispatchers.Unconfined
+    actual fun providesIODispatcher(): IODispatcher = Dispatchers.Default
 
     @Provides
-    fun providesDefaultDispatcher(): DefaultDispatcher = Dispatchers.Default
+    actual fun providesDefaultDispatcher(): DefaultDispatcher = Dispatchers.Default
 }

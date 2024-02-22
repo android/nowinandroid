@@ -34,14 +34,15 @@ actual class DriverModule(private val context: Context) {
         schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
     ): SqlDriver {
         val synchronousSchema = schema.synchronous()
-        return AndroidSqliteDriver(schema = synchronousSchema,
+        return AndroidSqliteDriver(
+            schema = synchronousSchema,
             context = context,
             name = "nia-database.db",
             callback = object : AndroidSqliteDriver.Callback(synchronousSchema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     db.setForeignKeyConstraintsEnabled(true)
                 }
-            }
+            },
         )
     }
 }

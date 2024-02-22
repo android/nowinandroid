@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.di
+package com.google.samples.apps.nowinandroid.core.di
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import me.tatarka.inject.annotations.Component
+import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Provides
 
-typealias ApplicationScope = CoroutineScope
+actual object DispatchersComponent {
 
-@Component
-abstract class CoroutineScopeComponent {
+    // TODO Provides an actual IODispatcher
     @Provides
-    fun providesCoroutineScope(
-        dispatcher: DefaultDispatcher,
-    ): ApplicationScope = CoroutineScope(SupervisorJob() + dispatcher)
+    actual fun providesIODispatcher(): IODispatcher = Dispatchers.Default
+
+    @Provides
+    actual fun providesDefaultDispatcher(): DefaultDispatcher = Dispatchers.Default
 }

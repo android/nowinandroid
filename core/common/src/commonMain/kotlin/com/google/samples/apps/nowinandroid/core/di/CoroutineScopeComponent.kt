@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.kotlin.inject)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.common"
-}
+package com.google.samples.apps.nowinandroid.core.di
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.turbine)
-            implementation(libs.kotlinx.coroutines.test)
-        }
-    }
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+
+typealias ApplicationScope = CoroutineScope
+
+@Component
+abstract class CoroutineScopeComponent {
+    @Provides
+    fun providesCoroutineScope(
+        dispatcher: DefaultDispatcher,
+    ): ApplicationScope = CoroutineScope(SupervisorJob() + dispatcher)
 }
