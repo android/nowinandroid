@@ -57,7 +57,9 @@ class SearchViewModel @Inject constructor(
                     flowOf(SearchResultUiState.SearchNotReady)
                 } else {
                     searchQuery.flatMapLatest { query ->
-                        if (query.length < SEARCH_QUERY_MIN_LENGTH) {
+                        if ((query.length < SEARCH_QUERY_MIN_LENGTH)
+                                .or(query.isBlank())
+                        ) {
                             flowOf(SearchResultUiState.EmptyQuery)
                         } else {
                             getSearchContentsUseCase(query)
