@@ -85,13 +85,12 @@ internal fun Project.configureKotlinMultiplatform() {
         project.tasks.named("linuxX64Test") { enabled = HostManager.hostIsLinux }
         project.tasks.named("linkDebugTestLinuxX64") { enabled = HostManager.hostIsLinux }
 
-        tasks.withType<KotlinCompile>().configureEach {
-            kotlinOptions {
-                freeCompilerArgs = freeCompilerArgs + listOf(
-                    // Suppress warning:'expect'/'actual' classes (including interfaces, objects,
-                    // annotations, enums, and 'actual' typealiases) are in Beta.
-                    "-Xexpect-actual-classes",
-                )
+        // Suppress 'expect'/'actual' classes are in Beta.
+        targets.configureEach {
+            compilations.configureEach {
+                compilerOptions.configure {
+                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                }
             }
         }
 
