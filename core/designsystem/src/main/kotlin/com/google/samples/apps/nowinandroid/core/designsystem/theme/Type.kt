@@ -17,14 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.designsystem.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.LineHeightStyle.Alignment
-import androidx.compose.ui.text.style.LineHeightStyle.Alignment.Companion
 import androidx.compose.ui.text.style.LineHeightStyle.Trim
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 /**
@@ -68,7 +65,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Bottom,
-            trim = Trim.None
+            trim = Trim.None,
         ),
     ),
     titleLarge = TextStyle(
@@ -78,7 +75,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Bottom,
-            trim = Trim.LastLineBottom
+            trim = Trim.LastLineBottom,
         ),
     ),
     titleMedium = TextStyle(
@@ -100,7 +97,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.5.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Bottom,
-            trim = Trim.Both
+            trim = Trim.Both,
         ),
     ),
     bodyMedium = TextStyle(
@@ -128,7 +125,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.5.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Bottom,
-            trim = Trim.None
+            trim = Trim.None,
         ),
     ),
     labelSmall = TextStyle(
@@ -138,7 +135,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Bottom,
-            trim = Trim.Both
+            trim = Trim.Both,
         ),
     ),
 )
