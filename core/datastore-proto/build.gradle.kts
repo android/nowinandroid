@@ -15,7 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.protobuf)
 }
 
@@ -50,6 +50,10 @@ androidComponents.beforeVariants {
     }
 }
 
-dependencies {
-    api(libs.protobuf.kotlin.lite)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.protobuf.kotlin.lite)
+        }
+    }
 }
