@@ -25,6 +25,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.tooling.preview.Preview
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
@@ -83,25 +84,27 @@ class NavigationScreenshotTests() {
 
     @Composable
     private fun NiaNavigationBarExample(label: String = "Item") {
-        NiaNavigationBar {
-            (0..2).forEach { index ->
-                NiaNavigationBarItem(
-                    icon = {
-                        Icon(
-                            imageVector = NiaIcons.UpcomingBorder,
-                            contentDescription = "",
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = NiaIcons.Upcoming,
-                            contentDescription = "",
-                        )
-                    },
-                    label = { Text(label) },
-                    selected = index == 0,
-                    onClick = { },
-                )
+        NiaTheme {
+            NiaNavigationBar {
+                (0..2).forEach { index ->
+                    NiaNavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = NiaIcons.UpcomingBorder,
+                                contentDescription = "",
+                            )
+                        },
+                        selectedIcon = {
+                            Icon(
+                                imageVector = NiaIcons.Upcoming,
+                                contentDescription = "",
+                            )
+                        },
+                        label = { Text(label) },
+                        selected = index == 0,
+                        onClick = { },
+                    )
+                }
             }
         }
     }
