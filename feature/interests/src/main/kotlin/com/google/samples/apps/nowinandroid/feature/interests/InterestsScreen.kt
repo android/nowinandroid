@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +42,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 @Composable
 internal fun InterestsRoute(
     onTopicClick: (String) -> Unit,
+    detailPane: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
@@ -53,6 +55,7 @@ internal fun InterestsRoute(
             viewModel.onTopicClick(it)
             onTopicClick(it)
         },
+        detailPane,
         modifier = modifier,
     )
 }
@@ -63,6 +66,7 @@ internal fun InterestsListDetailScreen(
     uiState: InterestsUiState,
     followTopic: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
+    detailPane: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
@@ -77,10 +81,13 @@ internal fun InterestsListDetailScreen(
             InterestsScreen(
                 uiState = uiState,
                 followTopic = followTopic,
-                onTopicClick = onTopicClick,
+                onTopicClick = {
+                    onTopicClick(it)
+                    listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
             )
         },
-        detailPane = { /* TODO nested NavHost */ },
+        detailPane = { detailPane() },
     )
 }
 

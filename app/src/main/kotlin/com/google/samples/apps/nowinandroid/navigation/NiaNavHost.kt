@@ -16,13 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsScreen
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
@@ -44,28 +49,36 @@ fun NiaNavHost(
     startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
+    val nestedNavController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToTopic)
+        forYouScreen(onTopicClick = navController::navigateToInterests)
         bookmarksScreen(
-            onTopicClick = navController::navigateToTopic,
+            onTopicClick = navController::navigateToInterests,
             onShowSnackbar = onShowSnackbar,
         )
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = navController::navigateToTopic,
+            onTopicClick = navController::navigateToInterests,
         )
-        interestsGraph(
-            onTopicClick = navController::navigateToTopic,
-            nestedGraphs = {
-                topicScreen(
-                    onBackClick = navController::popBackStack,
-                    onTopicClick = navController::navigateToTopic,
-                )
+        interestsScreen(
+            onTopicClick = nestedNavController::navigateToTopic,
+            detailPane = {
+                NavHost(navController = nestedNavController, "placeholder") {
+                    topicScreen(
+                        onBackClick = nestedNavController::popBackStack,
+                        onTopicClick = nestedNavController::navigateToTopic
+                    )
+                    composable("placeholder") {
+                        Box {
+                           Text("Placeholder")
+                        }
+                    }
+                }
             },
         )
     }

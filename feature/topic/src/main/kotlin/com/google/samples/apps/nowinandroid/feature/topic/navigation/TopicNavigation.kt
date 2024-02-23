@@ -42,6 +42,9 @@ fun NavController.navigateToTopic(topicId: String) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
     navigate("topic_route/$encodedId") {
         launchSingleTop = true
+        popUpTo("placeholder") {
+            inclusive = true
+        }
     }
 }
 
