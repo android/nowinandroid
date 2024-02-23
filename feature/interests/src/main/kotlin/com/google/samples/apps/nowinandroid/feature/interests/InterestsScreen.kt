@@ -16,8 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,11 +46,38 @@ internal fun InterestsRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    InterestsScreen(
+    InterestsListDetailScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
         onTopicClick = onTopicClick,
         modifier = modifier,
+    )
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+internal fun InterestsListDetailScreen(
+    uiState: InterestsUiState,
+    followTopic: (String, Boolean) -> Unit,
+    onTopicClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    BackHandler(listDetailNavigator.canNavigateBack()) {
+        listDetailNavigator.navigateBack()
+    }
+
+    ListDetailPaneScaffold(
+        scaffoldState = listDetailNavigator.scaffoldState,
+        modifier = modifier,
+        listPane = {
+            InterestsScreen(
+                uiState = uiState,
+                followTopic = followTopic,
+                onTopicClick = onTopicClick,
+            )
+        },
+        detailPane = { /* TODO nested NavHost */ },
     )
 }
 
