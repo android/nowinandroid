@@ -24,6 +24,7 @@ import androidx.compose.material3.adaptive.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,9 +48,11 @@ internal fun InterestsRoute(
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val initialTopicId = viewModel.selectedTopicId.value // intentionally not remembered/observed
 
     InterestsListDetailScreen(
         uiState = uiState,
+        initialTopicId = initialTopicId,
         followTopic = viewModel::followTopic,
         onTopicClick = {
             viewModel.onTopicClick(it)
@@ -64,6 +67,7 @@ internal fun InterestsRoute(
 @Composable
 internal fun InterestsListDetailScreen(
     uiState: InterestsUiState,
+    initialTopicId: String?,
     followTopic: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     detailPane: @Composable () -> Unit,
@@ -74,6 +78,11 @@ internal fun InterestsListDetailScreen(
         listDetailNavigator.navigateBack()
     }
 
+    fun onTopicClickNavigateToDetailPane(topicId: String) {
+        onTopicClick(topicId)
+        listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+    }
+
     ListDetailPaneScaffold(
         scaffoldState = listDetailNavigator.scaffoldState,
         modifier = modifier,
@@ -81,14 +90,18 @@ internal fun InterestsListDetailScreen(
             InterestsScreen(
                 uiState = uiState,
                 followTopic = followTopic,
-                onTopicClick = {
-                    onTopicClick(it)
-                    listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                },
+                onTopicClick = ::onTopicClickNavigateToDetailPane,
             )
         },
         detailPane = { detailPane() },
     )
+
+    // This is ugly, but if there is an initialTopicId, we need to navigate to it right away.
+    LaunchedEffect(Unit) {
+        if (initialTopicId != null) {
+            onTopicClickNavigateToDetailPane(initialTopicId)
+        }
+    }
 }
 
 @Composable
