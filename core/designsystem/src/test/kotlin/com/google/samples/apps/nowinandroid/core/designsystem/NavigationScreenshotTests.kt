@@ -83,27 +83,25 @@ class NavigationScreenshotTests() {
 
     @Composable
     private fun NiaNavigationBarExample(label: String = "Item") {
-        NiaTheme {
-            NiaNavigationBar {
-                (0..2).forEach { index ->
-                    NiaNavigationBarItem(
-                        icon = {
-                            Icon(
-                                imageVector = NiaIcons.UpcomingBorder,
-                                contentDescription = "",
-                            )
-                        },
-                        selectedIcon = {
-                            Icon(
-                                imageVector = NiaIcons.Upcoming,
-                                contentDescription = "",
-                            )
-                        },
-                        label = { Text(label) },
-                        selected = index == 0,
-                        onClick = { },
-                    )
-                }
+        NiaNavigationBar {
+            (0..2).forEach { index ->
+                NiaNavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = NiaIcons.UpcomingBorder,
+                            contentDescription = "",
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = NiaIcons.Upcoming,
+                            contentDescription = "",
+                        )
+                    },
+                    label = { Text(label) },
+                    selected = index == 0,
+                    onClick = { },
+                )
             }
         }
     }
