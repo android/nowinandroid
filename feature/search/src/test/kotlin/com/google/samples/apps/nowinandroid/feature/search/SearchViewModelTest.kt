@@ -154,4 +154,17 @@ class SearchViewModelTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun stateIsEmptyQuery_withThreeWhiteSpacesAndOneLetterSearchQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("   a")
+
+        assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
+
+        collectJob.cancel()
+    }
 }
