@@ -49,7 +49,10 @@ internal fun InterestsRoute(
     InterestsListDetailScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
-        onTopicClick = onTopicClick,
+        onTopicClick = {
+            viewModel.onTopicClick(it)
+            onTopicClick(it)
+        },
         modifier = modifier,
     )
 }
@@ -98,6 +101,7 @@ internal fun InterestsScreen(
                     modifier = modifier,
                     contentDesc = stringResource(id = R.string.feature_interests_loading),
                 )
+
             is InterestsUiState.Interests ->
                 TopicsTabContent(
                     topics = uiState.topics,
@@ -105,6 +109,7 @@ internal fun InterestsScreen(
                     onFollowButtonClick = followTopic,
                     modifier = modifier,
                 )
+
             is InterestsUiState.Empty -> InterestsEmptyScreen()
         }
     }
@@ -126,6 +131,7 @@ fun InterestsScreenPopulated(
         NiaBackground {
             InterestsScreen(
                 uiState = InterestsUiState.Interests(
+                    selectedTopicId = null,
                     topics = followableTopics,
                 ),
                 followTopic = { _, _ -> },
