@@ -37,6 +37,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
@@ -140,13 +141,15 @@ class NiaAppScreenSizesScreenshotTests {
             ) {
                 TestHarness(size = DpSize(width, height)) {
                     BoxWithConstraints {
-                        NiaApp(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                        )
+                        NiaTheme {
+                            NiaApp(
+                                windowSizeClass = WindowSizeClass.calculateFromSize(
+                                    DpSize(maxWidth, maxHeight),
+                                ),
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                            )
+                        }
                     }
                 }
             }
