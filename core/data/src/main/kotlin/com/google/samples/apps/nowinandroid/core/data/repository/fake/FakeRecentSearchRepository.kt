@@ -26,10 +26,10 @@ import javax.inject.Inject
  * Fake implementation of the [RecentSearchRepository]
  */
 class FakeRecentSearchRepository @Inject constructor() : RecentSearchRepository {
-    override suspend fun insertOrReplaceRecentSearch(searchQuery: String) { /* no-op */ }
+    override suspend fun insertOrReplaceRecentSearch(searchQuery: String) = Unit
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
         flowOf(emptyList())
 
-    override suspend fun clearRecentSearches() { /* no-op */ }
+    override suspend fun clearRecentSearches() = Unit
 }

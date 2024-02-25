@@ -34,9 +34,7 @@ val nonPresentInterestsIds = setOf("2")
  */
 class TestNewsResourceDao : NewsResourceDao {
 
-    private var entitiesStateFlow = MutableStateFlow(
-        emptyList<NewsResourceEntity>(),
-    )
+    private val entitiesStateFlow = MutableStateFlow(emptyList<NewsResourceEntity>())
 
     internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
 
@@ -131,7 +129,7 @@ class TestNewsResourceDao : NewsResourceDao {
     override suspend fun deleteNewsResources(ids: List<String>) {
         val idSet = ids.toSet()
         entitiesStateFlow.update { entities ->
-            entities.filterNot { idSet.contains(it.id) }
+            entities.filterNot { it.id in idSet }
         }
     }
 }
