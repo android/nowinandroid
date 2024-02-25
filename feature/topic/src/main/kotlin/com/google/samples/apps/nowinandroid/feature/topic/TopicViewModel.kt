@@ -117,22 +117,16 @@ private fun topicUiState(
             when (followedTopicToTopicResult) {
                 is Result.Success -> {
                     val (followedTopics, topic) = followedTopicToTopicResult.data
-                    val followed = followedTopics.contains(topicId)
                     TopicUiState.Success(
                         followableTopic = FollowableTopic(
                             topic = topic,
-                            isFollowed = followed,
+                            isFollowed = topicId in followedTopics,
                         ),
                     )
                 }
 
-                is Result.Loading -> {
-                    TopicUiState.Loading
-                }
-
-                is Result.Error -> {
-                    TopicUiState.Error
-                }
+                is Result.Loading -> TopicUiState.Loading
+                is Result.Error -> TopicUiState.Error
             }
         }
 }
@@ -151,26 +145,13 @@ private fun newsUiState(
     val bookmark: Flow<Set<String>> = userDataRepository.userData
         .map { it.bookmarkedNewsResources }
 
-    return combine(
-        newsStream,
-        bookmark,
-        ::Pair,
-    )
+    return combine(newsStream, bookmark, ::Pair)
         .asResult()
         .map { newsToBookmarksResult ->
             when (newsToBookmarksResult) {
-                is Result.Success -> {
-                    val news = newsToBookmarksResult.data.first
-                    NewsUiState.Success(news)
-                }
-
-                is Result.Loading -> {
-                    NewsUiState.Loading
-                }
-
-                is Result.Error -> {
-                    NewsUiState.Error
-                }
+                is Result.Success -> NewsUiState.Success(newsToBookmarksResult.data.first)
+                is Result.Loading -> NewsUiState.Loading
+                is Result.Error -> NewsUiState.Error
             }
         }
 }

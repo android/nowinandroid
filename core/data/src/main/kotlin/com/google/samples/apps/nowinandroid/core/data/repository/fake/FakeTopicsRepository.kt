@@ -55,9 +55,8 @@ class FakeTopicsRepository @Inject constructor(
         )
     }.flowOn(ioDispatcher)
 
-    override fun getTopic(id: String): Flow<Topic> {
-        return getTopics().map { it.first { topic -> topic.id == id } }
-    }
+    override fun getTopic(id: String): Flow<Topic> = getTopics()
+        .map { it.first { topic -> topic.id == id } }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

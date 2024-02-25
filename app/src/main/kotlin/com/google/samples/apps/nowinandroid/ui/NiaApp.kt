@@ -97,9 +97,7 @@ fun NiaApp(
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
-    var showSettingsDialog by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground {
         NiaGradientBackground(
