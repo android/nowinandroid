@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
@@ -71,6 +72,7 @@ class SearchViewModelTest {
             recentSearchRepository = recentSearchRepository,
             analyticsHelper = NoOpAnalyticsHelper(),
         )
+        userDataRepository.setUserData(emptyUserData)
     }
 
     @Test
@@ -100,8 +102,7 @@ class SearchViewModelTest {
         searchContentsRepository.addTopics(topicsTestData)
 
         val result = viewModel.searchResultUiState.value
-        // TODO: Figure out to get the latest emitted ui State? The result is emitted as EmptyQuery
-        // assertIs<Success>(result)
+        assertIs<SearchResultUiState.Success>(result)
 
         collectJob.cancel()
     }

@@ -140,13 +140,15 @@ class NiaAppScreenSizesScreenshotTests {
             ) {
                 TestHarness(size = DpSize(width, height)) {
                     BoxWithConstraints {
-                        NiaApp(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                        )
+                        NiaTheme {
+                            NiaApp(
+                                windowSizeClass = WindowSizeClass.calculateFromSize(
+                                    DpSize(maxWidth, maxHeight),
+                                ),
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                            )
+                        }
                     }
                 }
             }
