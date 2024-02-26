@@ -121,7 +121,7 @@ fun NewsResourceCardExpanded(
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (!hasBeenViewed) {
                             NotificationDot(
@@ -132,7 +132,7 @@ fun NewsResourceCardExpanded(
                         }
                         NewsResourceMetaData(userNewsResource.publishDate, userNewsResource.type)
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
                     NewsResourceShortDescription(userNewsResource.content)
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceTopics(

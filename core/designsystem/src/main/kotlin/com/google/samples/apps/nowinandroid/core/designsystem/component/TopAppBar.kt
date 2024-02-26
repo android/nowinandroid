@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,11 +78,13 @@ fun NiaTopAppBar(
 @Preview("Top App Bar")
 @Composable
 private fun NiaTopAppBarPreview() {
-    NiaTopAppBar(
-        titleRes = android.R.string.untitled,
-        navigationIcon = NiaIcons.Search,
-        navigationIconContentDescription = "Navigation icon",
-        actionIcon = NiaIcons.MoreVert,
-        actionIconContentDescription = "Action icon",
-    )
+    NiaTheme {
+        NiaTopAppBar(
+            titleRes = android.R.string.untitled,
+            navigationIcon = NiaIcons.Search,
+            navigationIconContentDescription = "Navigation icon",
+            actionIcon = NiaIcons.MoreVert,
+            actionIconContentDescription = "Action icon",
+        )
+    }
 }
