@@ -16,23 +16,17 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
+import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -49,7 +43,6 @@ fun NiaNavHost(
     startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
-    val nestedNavController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -65,21 +58,6 @@ fun NiaNavHost(
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
             onTopicClick = navController::navigateToInterests,
         )
-        interestsScreen(
-            onTopicClick = nestedNavController::navigateToTopic,
-            detailPane = {
-                NavHost(navController = nestedNavController, "placeholder") {
-                    topicScreen(
-                        onBackClick = nestedNavController::popBackStack,
-                        onTopicClick = nestedNavController::navigateToTopic
-                    )
-                    composable("placeholder") {
-                        Box {
-                           Text("Placeholder")
-                        }
-                    }
-                }
-            },
-        )
+        interestsListDetailScreen()
     }
 }

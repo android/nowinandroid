@@ -32,6 +32,7 @@ private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
 internal const val TOPIC_ID_ARG = "topicId"
+const val TOPIC_ROUTE = "topic_route"
 
 internal class TopicArgs(val topicId: String) {
     constructor(savedStateHandle: SavedStateHandle) :
@@ -40,9 +41,9 @@ internal class TopicArgs(val topicId: String) {
 
 fun NavController.navigateToTopic(topicId: String) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    navigate("topic_route/$encodedId") {
-        launchSingleTop = true
-        popUpTo("placeholder") {
+    val newRoute = "$TOPIC_ROUTE/$encodedId"
+    navigate(newRoute) {
+        popUpTo(TOPIC_ROUTE) {
             inclusive = true
         }
     }

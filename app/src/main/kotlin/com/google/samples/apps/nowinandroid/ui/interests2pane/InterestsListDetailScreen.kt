@@ -1,0 +1,114 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.samples.apps.nowinandroid.ui.interests2pane
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+
+fun NavGraphBuilder.interestsListDetailScreen() {
+    composable(
+        route = INTERESTS_ROUTE,
+        arguments = listOf(
+            navArgument(TOPIC_ID_ARG) {
+                type = NavType.StringType
+                defaultValue = null
+                nullable = true
+            },
+        ),
+    ) { backStackEntry ->
+        InterestsListDetailScreen()
+        LaunchedEffect(Unit) {
+            val initialTopicId = backStackEntry.arguments?.getString(TOPIC_ID_ARG)
+            if (initialTopicId != null) {
+                // TODO navigate to topic
+            }
+        }
+    }
+}
+
+@Composable
+internal fun InterestsListDetailScreen(
+    viewModel: Interests2PaneViewModel = hiltViewModel(),
+) {
+    val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
+    InterestsListDetailScreen(
+        selectedTopicId = selectedTopicId,
+        onTopicClick = viewModel::onTopicClick,
+    )
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+internal fun InterestsListDetailScreen(
+    selectedTopicId: String?,
+    onTopicClick: (String) -> Unit,
+) {
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    BackHandler(listDetailNavigator.canNavigateBack()) {
+        listDetailNavigator.navigateBack()
+    }
+
+    val nestedNavController = rememberNavController()
+
+    fun onTopicClickShowDetailPane(topicId: String) {
+        onTopicClick(topicId)
+        nestedNavController.navigateToTopic(topicId)
+        listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+    }
+
+    ListDetailPaneScaffold(
+        scaffoldState = listDetailNavigator.scaffoldState,
+        listPane = {
+            InterestsRoute(onTopicClick = ::onTopicClickShowDetailPane)
+        },
+        detailPane = {
+            NavHost(navController = nestedNavController, TOPIC_ROUTE) {
+                topicScreen(
+                    onBackClick = nestedNavController::popBackStack,
+                    onTopicClick = ::onTopicClickShowDetailPane,
+                )
+                composable(route = TOPIC_ROUTE) {
+                    Box {
+                        Text("Placeholder")
+                    }
+                }
+            }
+        },
+    )
+}

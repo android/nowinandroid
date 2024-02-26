@@ -16,15 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.ListDetailPaneScaffold
-import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,67 +35,22 @@ import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParame
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
 @Composable
-internal fun InterestsRoute(
+fun InterestsRoute(
     onTopicClick: (String) -> Unit,
-    detailPane: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val initialTopicId = viewModel.selectedTopicId.value // intentionally not remembered/observed
 
-    InterestsListDetailScreen(
+    InterestsScreen(
         uiState = uiState,
-        initialTopicId = initialTopicId,
         followTopic = viewModel::followTopic,
         onTopicClick = {
             viewModel.onTopicClick(it)
             onTopicClick(it)
         },
-        detailPane,
         modifier = modifier,
     )
-}
-
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
-@Composable
-internal fun InterestsListDetailScreen(
-    uiState: InterestsUiState,
-    initialTopicId: String?,
-    followTopic: (String, Boolean) -> Unit,
-    onTopicClick: (String) -> Unit,
-    detailPane: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
-    BackHandler(listDetailNavigator.canNavigateBack()) {
-        listDetailNavigator.navigateBack()
-    }
-
-    fun onTopicClickNavigateToDetailPane(topicId: String) {
-        onTopicClick(topicId)
-        listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-    }
-
-    ListDetailPaneScaffold(
-        scaffoldState = listDetailNavigator.scaffoldState,
-        modifier = modifier,
-        listPane = {
-            InterestsScreen(
-                uiState = uiState,
-                followTopic = followTopic,
-                onTopicClick = ::onTopicClickNavigateToDetailPane,
-            )
-        },
-        detailPane = { detailPane() },
-    )
-
-    // This is ugly, but if there is an initialTopicId, we need to navigate to it right away.
-    LaunchedEffect(Unit) {
-        if (initialTopicId != null) {
-            onTopicClickNavigateToDetailPane(initialTopicId)
-        }
-    }
 }
 
 @Composable
