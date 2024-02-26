@@ -141,18 +141,16 @@ class NiaAppScreenSizesScreenshotTests {
                 LocalInspectionMode provides true,
             ) {
                 DeviceConfigurationOverride(
-                    DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
+                    override = DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
-                    BoxWithConstraints {
-                        NiaTheme {
-                            NiaApp(
-                                windowSizeClass = WindowSizeClass.calculateFromSize(
-                                    DpSize(maxWidth, maxHeight),
-                                ),
-                                networkMonitor = networkMonitor,
-                                userNewsResourceRepository = userNewsResourceRepository,
-                            )
-                        }
+                    NiaTheme {
+                        NiaApp(
+                            windowSizeClass = WindowSizeClass.calculateFromSize(
+                                DpSize(width, height),
+                            ),
+                            networkMonitor = networkMonitor,
+                            userNewsResourceRepository = userNewsResourceRepository,
+                        )
                     }
                 }
             }
