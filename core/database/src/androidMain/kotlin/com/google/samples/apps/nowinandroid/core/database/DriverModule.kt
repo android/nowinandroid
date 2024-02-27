@@ -24,7 +24,6 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Inject
 import me.tatarka.inject.annotations.Provides
 
 @Component

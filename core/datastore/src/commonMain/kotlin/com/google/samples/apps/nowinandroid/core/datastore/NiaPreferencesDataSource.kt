@@ -16,193 +16,199 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import android.util.Log
-import androidx.datastore.core.DataStore
+import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.russhwolf.settings.ExperimentalSettingsApi
-import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
-import com.russhwolf.settings.coroutines.FlowSettings
-import com.russhwolf.settings.coroutines.toFlowSettings
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import java.io.IOException
-import javax.inject.Inject
+import com.russhwolf.settings.serialization.decodeValue
+import com.russhwolf.settings.serialization.decodeValueOrNull
+import com.russhwolf.settings.serialization.encodeValue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 
-@OptIn(ExperimentalSettingsApi::class)
-class NiaPreferencesDataSource  constructor(
-    private val settings: FlowSettings,
+private const val USER_DATA_KEY = "userData"
+
+@OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+class NiaPreferencesDataSource(
+    private val settings: Settings,
+    private val dispatcher: IODispatcher,
 ) {
+    // FlowSettings did not support JS, use a workaround instead
+    // https://github.com/russhwolf/multiplatform-settings/issues/139
+    val userData = MutableStateFlow(
+        settings.decodeValue(
+            key = USER_DATA_KEY,
+            serializer = UserPreferences.serializer(),
+            defaultValue = settings.decodeValueOrNull(
+                key = USER_DATA_KEY,
+                serializer = UserPreferences.serializer(),
+            ) ?: UserPreferences.DEFAULT,
+        ),
+    )
 
-    val userData = userPreferences.data
-        .map {
-            UserData(
-                bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
-                viewedNewsResources = it.viewedNewsResourceIdsMap.keys,
-                followedTopics = it.followedTopicIdsMap.keys,
-                themeBrand = when (it.themeBrand) {
-                    null,
-                    ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
-                    ThemeBrandProto.UNRECOGNIZED,
-                    ThemeBrandProto.THEME_BRAND_DEFAULT,
-                    -> ThemeBrand.DEFAULT
-                    ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
+    suspend fun setFollowedTopicIds(topicIds: Set<String>) = withContext(dispatcher) {
+        val preference = settings.getUserPreference()
+            .copy(followedTopicIds = topicIds)
+            .updateShouldHideOnboardingIfNecessary()
+        settings.putUserPreference(preference)
+        userData.value = preference
+    }
+
+    suspend fun setTopicIdFollowed(topicId: String, followed: Boolean) = withContext(dispatcher) {
+        val preference = settings.getUserPreference()
+        val newPreference = preference
+            .copy(
+                followedTopicIds = if (followed) {
+                    preference.followedTopicIds + topicId
+                } else {
+                    preference.followedTopicIds - topicId
                 },
-                darkThemeConfig = when (it.darkThemeConfig) {
-                    null,
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
-                    DarkThemeConfigProto.UNRECOGNIZED,
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM,
-                    ->
-                        DarkThemeConfig.FOLLOW_SYSTEM
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT ->
-                        DarkThemeConfig.LIGHT
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
-                },
-                useDynamicColor = it.useDynamicColor,
-                shouldHideOnboarding = it.shouldHideOnboarding,
             )
-        }
-
-    suspend fun setFollowedTopicIds(topicIds: Set<String>) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    followedTopicIds.clear()
-                    followedTopicIds.putAll(topicIds.associateWith { true })
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
+            .updateShouldHideOnboardingIfNecessary()
+        settings.putUserPreference(newPreference)
+        userData.value = newPreference
     }
 
-    suspend fun setTopicIdFollowed(topicId: String, followed: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (followed) {
-                        followedTopicIds.put(topicId, true)
+    suspend fun setThemeBrand(themeBrand: ThemeBrand) = withContext(dispatcher) {
+        val newPreference = settings.getUserPreference()
+            .copy(themeBrand = themeBrand.toThemeBrandProto())
+        settings.putUserPreference(newPreference)
+        userData.value = newPreference
+    }
+
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean) = withContext(dispatcher) {
+        val newPreference = settings.getUserPreference()
+            .copy(useDynamicColor = useDynamicColor)
+        settings.putUserPreference(newPreference)
+        userData.value = newPreference
+    }
+
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) = withContext(dispatcher) {
+        val newPreference = settings.getUserPreference()
+            .copy(darkThemeConfig = darkThemeConfig.toDarkThemeConfigProto())
+        settings.putUserPreference(newPreference)
+        userData.value = newPreference
+    }
+
+    suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) =
+        withContext(dispatcher) {
+            val preference = settings.getUserPreference()
+            val newPreferences = preference
+                .copy(
+                    bookmarkedNewsResourceIds = if (bookmarked) {
+                        preference.bookmarkedNewsResourceIds + newsResourceId
                     } else {
-                        followedTopicIds.remove(topicId)
-                    }
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+                        preference.bookmarkedNewsResourceIds - newsResourceId
+                    },
+                )
+            settings.putUserPreference(newPreferences)
+            userData.value = newPreferences
         }
-    }
-
-    suspend fun setThemeBrand(themeBrand: ThemeBrand) {
-        userPreferences.updateData {
-            it.copy {
-                this.themeBrand = when (themeBrand) {
-                    ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
-                    ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
-                }
-            }
-        }
-    }
-
-    suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
-        userPreferences.updateData {
-            it.copy { this.useDynamicColor = useDynamicColor }
-        }
-    }
-
-    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        userPreferences.updateData {
-            it.copy {
-                this.darkThemeConfig = when (darkThemeConfig) {
-                    DarkThemeConfig.FOLLOW_SYSTEM ->
-                        DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
-                    DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
-                }
-            }
-        }
-    }
-
-    suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (bookmarked) {
-                        bookmarkedNewsResourceIds.put(newsResourceId, true)
-                    } else {
-                        bookmarkedNewsResourceIds.remove(newsResourceId)
-                    }
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
-        }
-    }
 
     suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         setNewsResourcesViewed(listOf(newsResourceId), viewed)
     }
 
-    suspend fun setNewsResourcesViewed(newsResourceIds: List<String>, viewed: Boolean) {
-        userPreferences.updateData { prefs ->
-            prefs.copy {
-                newsResourceIds.forEach { id ->
-                    if (viewed) {
-                        viewedNewsResourceIds.put(id, true)
+    suspend fun setNewsResourcesViewed(newsResourceIds: List<String>, viewed: Boolean) =
+        withContext(dispatcher) {
+            val preference = settings.getUserPreference()
+            val newPreferences = preference
+                .copy(
+                    viewedNewsResourceIds = if (viewed) {
+                        preference.viewedNewsResourceIds + newsResourceIds
                     } else {
-                        viewedNewsResourceIds.remove(id)
-                    }
-                }
-            }
+                        preference.viewedNewsResourceIds - newsResourceIds.toSet()
+                    },
+                )
+            settings.putUserPreference(newPreferences)
+            userData.value = newPreferences
         }
-    }
 
-    suspend fun getChangeListVersions() = userPreferences.data
-        .map {
-            ChangeListVersions(
-                topicVersion = it.topicChangeListVersion,
-                newsResourceVersion = it.newsResourceChangeListVersion,
-            )
-        }
-        .firstOrNull() ?: ChangeListVersions()
+    suspend fun getChangeListVersions(): ChangeListVersions = withContext(dispatcher) {
+        val preferences = settings.getUserPreference()
+        return@withContext ChangeListVersions(
+            topicVersion = preferences.topicChangeListVersion,
+            newsResourceVersion = preferences.newsResourceChangeListVersion,
+        )
+    }
 
     /**
      * Update the [ChangeListVersions] using [update].
      */
-    suspend fun updateChangeListVersion(update: ChangeListVersions.() -> ChangeListVersions) {
-        try {
-            userPreferences.updateData { currentPreferences ->
-                val updatedChangeListVersions = update(
-                    ChangeListVersions(
-                        topicVersion = currentPreferences.topicChangeListVersion,
-                        newsResourceVersion = currentPreferences.newsResourceChangeListVersion,
-                    ),
-                )
-
-                currentPreferences.copy {
-                    topicChangeListVersion = updatedChangeListVersions.topicVersion
-                    newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+    suspend fun updateChangeListVersion(update: ChangeListVersions.() -> ChangeListVersions) =
+        withContext(dispatcher) {
+            val currentPreferences = settings.getUserPreference()
+            val updatedChangeListVersions = update(
+                ChangeListVersions(
+                    topicVersion = currentPreferences.topicChangeListVersion,
+                    newsResourceVersion = currentPreferences.newsResourceChangeListVersion,
+                ),
+            )
+            val updatedPreference = currentPreferences.copy(
+                topicChangeListVersion = updatedChangeListVersions.topicVersion,
+                newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion,
+            )
+            settings.putUserPreference(updatedPreference)
+            userData.value = updatedPreference
         }
-    }
 
-    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
-        userPreferences.updateData {
-            it.copy { this.shouldHideOnboarding = shouldHideOnboarding }
-        }
+    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) = withContext(dispatcher) {
+        val newPreference = settings.getUserPreference()
+            .copy(shouldHideOnboarding = shouldHideOnboarding)
+        settings.putUserPreference(newPreference)
+        userData.value = newPreference
     }
 }
 
-private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
-    if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
-        shouldHideOnboarding = false
+private fun UserPreferences.updateShouldHideOnboardingIfNecessary(): UserPreferences {
+    return if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
+        this.copy(shouldHideOnboarding = false)
+    } else {
+        this
+    }
+}
+
+@OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+private fun Settings.putUserPreference(preference: UserPreferences) {
+    encodeValue(
+        key = USER_DATA_KEY,
+        serializer = UserPreferences.serializer(),
+        value = preference,
+    )
+}
+
+@OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
+private fun Settings.getUserPreference(): UserPreferences {
+    return decodeValue(
+        key = USER_DATA_KEY,
+        serializer = UserPreferences.serializer(),
+        defaultValue = UserPreferences.DEFAULT,
+    )
+}
+
+fun ThemeBrandProto.toThemeBrand(): ThemeBrand {
+    return when (this) {
+        ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
+        ThemeBrandProto.THEME_BRAND_DEFAULT,
+        -> ThemeBrand.DEFAULT
+
+        ThemeBrandProto.THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
+    }
+}
+
+private fun ThemeBrand.toThemeBrandProto(): ThemeBrandProto {
+    return when (this) {
+        ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
+        ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
+    }
+}
+
+private fun DarkThemeConfig.toDarkThemeConfigProto(): DarkThemeConfigProto {
+    return when (this) {
+        DarkThemeConfig.FOLLOW_SYSTEM -> DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
+        DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
+        DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
     }
 }

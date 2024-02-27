@@ -16,31 +16,30 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.russhwolf.settings.MapSettings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class NiaPreferencesDataSourceTest {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val testScope = TestScope(UnconfinedTestDispatcher())
 
     private lateinit var subject: NiaPreferencesDataSource
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
-    @Before
+    @BeforeTest
     fun setup() {
         subject = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            settings = MapSettings(),
+            dispatcher = Dispatchers.Unconfined,
         )
     }
 
@@ -84,7 +83,8 @@ class NiaPreferencesDataSourceTest {
         }
 
     @Test
-    fun shouldUseDynamicColorFalseByDefault() = testScope.runTest {
+    fun shouldUseDynamicColorFalseWhenSet() = testScope.runTest {
+        subject.setDynamicColorPreference(false)
         assertFalse(subject.userData.first().useDynamicColor)
     }
 

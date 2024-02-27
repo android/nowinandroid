@@ -23,7 +23,6 @@ import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryD
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import com.google.samples.apps.nowinandroid.core.di.IODispatcher
-import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 

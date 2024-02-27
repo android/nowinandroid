@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore.di
+package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.russhwolf.settings.Settings
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
-
-@Component
-abstract class SettingsComponent {
-    @Provides
-    fun providesSettings(): Settings = Settings()
+enum class DarkThemeConfigProto {
+    DARK_THEME_CONFIG_UNSPECIFIED,
+    DARK_THEME_CONFIG_FOLLOW_SYSTEM,
+    DARK_THEME_CONFIG_LIGHT,
+    DARK_THEME_CONFIG_DARK,
 }

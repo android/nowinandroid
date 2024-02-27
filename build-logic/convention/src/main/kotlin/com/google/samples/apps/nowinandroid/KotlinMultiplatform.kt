@@ -53,7 +53,9 @@ internal fun Project.configureKotlinMultiplatform() {
         }
 
         // tier 1
-        linuxX64()
+// :core:datastore:linuxMain: Could not resolve com.russhwolf:multiplatform-settings-no-arg:1.1.1.
+// https://github.com/russhwolf/multiplatform-settings/issues/113
+//        linuxX64()
         macosX64()
         macosArm64()
         iosSimulatorArm64()
@@ -82,8 +84,8 @@ internal fun Project.configureKotlinMultiplatform() {
 
         // linking fails for the linux test build if not built on a linux host
         // ensure the tests and linking for them is only done on linux hosts
-        project.tasks.named("linuxX64Test") { enabled = HostManager.hostIsLinux }
-        project.tasks.named("linkDebugTestLinuxX64") { enabled = HostManager.hostIsLinux }
+//        project.tasks.named("linuxX64Test") { enabled = HostManager.hostIsLinux }
+//        project.tasks.named("linkDebugTestLinuxX64") { enabled = HostManager.hostIsLinux }
 
         // Suppress 'expect'/'actual' classes are in Beta.
         targets.configureEach {

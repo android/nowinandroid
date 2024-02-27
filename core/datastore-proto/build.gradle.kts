@@ -17,6 +17,7 @@
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.protobuf)
+    id("kotlinx-serialization")
 }
 
 android {
@@ -31,9 +32,6 @@ protobuf {
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
-                register("java") {
-                    option("lite")
-                }
                 register("kotlin") {
                     option("lite")
                 }
@@ -42,18 +40,11 @@ protobuf {
     }
 }
 
-androidComponents.beforeVariants {
-    android.sourceSets.register(it.name) {
-        val buildDir = layout.buildDirectory.get().asFile
-        java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
-        kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))
-    }
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.protobuf.kotlin.lite)
+            implementation(libs.kotlinx.serialization.core)
         }
     }
 }
