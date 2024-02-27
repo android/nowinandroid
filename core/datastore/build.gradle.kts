@@ -39,17 +39,15 @@ kotlin {
             implementation(libs.multiplatform.settings.serialization)
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.core)
             implementation(projects.core.model)
             implementation(projects.core.common)
+            implementation(projects.core.datastoreProto)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
-        }
-        androidMain.dependencies {
-            implementation(libs.androidx.datastore.core)
-            implementation(libs.androidx.datastore.preferences)
-            implementation(libs.multiplatform.settings.datastore)
+            implementation(libs.multiplatform.settings.test)
         }
     }
 }

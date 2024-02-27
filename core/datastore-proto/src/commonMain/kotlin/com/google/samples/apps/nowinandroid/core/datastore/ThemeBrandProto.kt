@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore.di
+package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.russhwolf.settings.Settings
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
-
-@Component
-abstract class SettingsComponent {
-    @Provides
-    fun providesSettings(): Settings = Settings()
+enum class ThemeBrandProto {
+    THEME_BRAND_UNSPECIFIED,
+    THEME_BRAND_DEFAULT,
+    THEME_BRAND_ANDROID,
 }
