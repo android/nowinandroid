@@ -15,9 +15,9 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
 }
 
 android {
@@ -32,13 +32,24 @@ android {
     }
 }
 
-dependencies {
-    api(libs.androidx.dataStore.core)
-    api(projects.core.datastoreProto)
-    api(projects.core.model)
-
-    implementation(projects.core.common)
-
-    testImplementation(projects.core.datastoreTest)
-    testImplementation(libs.kotlinx.coroutines.test)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.serialization)
+            implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(projects.core.model)
+            implementation(projects.core.common)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.datastore.core)
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.multiplatform.settings.datastore)
+        }
+    }
 }

@@ -21,14 +21,22 @@ import androidx.datastore.core.DataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.russhwolf.settings.ExperimentalSettingsApi
+import com.russhwolf.settings.ObservableSettings
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.coroutines.FlowSettings
+import com.russhwolf.settings.coroutines.toFlowSettings
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class NiaPreferencesDataSource @Inject constructor(
-    private val userPreferences: DataStore<UserPreferences>,
+@OptIn(ExperimentalSettingsApi::class)
+class NiaPreferencesDataSource  constructor(
+    private val settings: FlowSettings,
 ) {
+
     val userData = userPreferences.data
         .map {
             UserData(
