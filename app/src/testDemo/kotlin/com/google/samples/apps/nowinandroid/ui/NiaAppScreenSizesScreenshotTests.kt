@@ -17,15 +17,16 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.util.Log
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -136,6 +137,9 @@ class NiaAppScreenSizesScreenshotTests {
     }
 
     private fun testNiaAppScreenshotWithSize(width: Dp, height: Dp, screenshotName: String) {
+        // TODO: Remove this when https://b.corp.google.com/issues/327149166 is fixed
+        val appTestTag = "APP"
+
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
@@ -150,13 +154,14 @@ class NiaAppScreenSizesScreenshotTests {
                             ),
                             networkMonitor = networkMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
+                            modifier = Modifier.testTag(appTestTag),
                         )
                     }
                 }
             }
         }
 
-        composeTestRule.onRoot()
+        composeTestRule.onNodeWithTag(appTestTag)
             .captureRoboImage(
                 "src/testDemo/screenshots/$screenshotName.png",
                 roborazziOptions = DefaultRoborazziOptions,
