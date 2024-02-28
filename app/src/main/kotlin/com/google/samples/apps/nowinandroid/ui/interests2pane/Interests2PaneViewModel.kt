@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class Interests2PaneViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     val selectedTopicId: StateFlow<String?> = savedStateHandle.getStateFlow(TOPIC_ID_ARG, null)
 
