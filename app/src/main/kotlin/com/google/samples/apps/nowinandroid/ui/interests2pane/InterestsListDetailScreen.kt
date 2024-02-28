@@ -53,14 +53,8 @@ fun NavGraphBuilder.interestsListDetailScreen() {
                 nullable = true
             },
         ),
-    ) { backStackEntry ->
+    ) {
         InterestsListDetailScreen()
-        LaunchedEffect(Unit) {
-            val initialTopicId = backStackEntry.arguments?.getString(TOPIC_ID_ARG)
-            if (initialTopicId != null) {
-                // TODO navigate to topic
-            }
-        }
     }
 }
 
@@ -119,4 +113,10 @@ internal fun InterestsListDetailScreen(
             }
         },
     )
+    LaunchedEffect(Unit) {
+        if (selectedTopicId != null) {
+            // Initial topic ID was provided when navigating to Interests, so show its details.
+            onTopicClickShowDetailPane(selectedTopicId)
+        }
+    }
 }
