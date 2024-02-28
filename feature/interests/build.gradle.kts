@@ -24,8 +24,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.compose.material3.adaptive)
-
     implementation(projects.core.data)
     implementation(projects.core.domain)
 
