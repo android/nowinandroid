@@ -20,6 +20,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -39,13 +40,11 @@ internal class TopicArgs(val topicId: String) {
         this(URLDecoder.decode(checkNotNull(savedStateHandle[TOPIC_ID_ARG]), URL_CHARACTER_ENCODING))
 }
 
-fun NavController.navigateToTopic(topicId: String) {
+fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
     val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
     val newRoute = "$TOPIC_ROUTE/$encodedId"
     navigate(newRoute) {
-        popUpTo(TOPIC_ROUTE) {
-            inclusive = true
-        }
+        navOptions()
     }
 }
 

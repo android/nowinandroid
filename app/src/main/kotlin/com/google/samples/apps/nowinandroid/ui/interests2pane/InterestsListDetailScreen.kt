@@ -41,6 +41,8 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 
+private const val DETAIL_PANE_NAVHOST_ROUTE = "detail_pane_route"
+
 fun NavGraphBuilder.interestsListDetailScreen() {
     composable(
         route = INTERESTS_ROUTE,
@@ -88,7 +90,9 @@ internal fun InterestsListDetailScreen(
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavController.navigateToTopic(topicId)
+        nestedNavController.navigateToTopic(topicId) {
+            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+        }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
 
@@ -98,9 +102,13 @@ internal fun InterestsListDetailScreen(
             InterestsRoute(onTopicClick = ::onTopicClickShowDetailPane)
         },
         detailPane = {
-            NavHost(navController = nestedNavController, TOPIC_ROUTE) {
+            NavHost(
+                navController = nestedNavController,
+                startDestination = TOPIC_ROUTE,
+                route = DETAIL_PANE_NAVHOST_ROUTE,
+            ) {
                 topicScreen(
-                    onBackClick = nestedNavController::popBackStack,
+                    onBackClick = listDetailNavigator::navigateBack,
                     onTopicClick = ::onTopicClickShowDetailPane,
                 )
                 composable(route = TOPIC_ROUTE) {
