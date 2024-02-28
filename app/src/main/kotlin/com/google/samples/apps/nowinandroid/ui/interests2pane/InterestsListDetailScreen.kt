@@ -95,7 +95,10 @@ internal fun InterestsListDetailScreen(
     ListDetailPaneScaffold(
         scaffoldState = listDetailNavigator.scaffoldState,
         listPane = {
-            InterestsRoute(onTopicClick = ::onTopicClickShowDetailPane)
+            InterestsRoute(
+                onTopicClick = ::onTopicClickShowDetailPane,
+                highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+            )
         },
         detailPane = {
             NavHost(
@@ -128,4 +131,10 @@ internal fun InterestsListDetailScreen(
 private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneHidden(): Boolean {
     // List pane is the "secondary" pane.
     return scaffoldState.scaffoldValue.secondary == PaneAdaptedValue.Hidden
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+private fun <T> ThreePaneScaffoldNavigator<T>.isDetailPaneVisible(): Boolean {
+    // Detail pane is the "primary" pane.
+    return scaffoldState.scaffoldValue.primary == PaneAdaptedValue.Expanded
 }

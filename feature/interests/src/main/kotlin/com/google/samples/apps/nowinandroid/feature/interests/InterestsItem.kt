@@ -49,6 +49,7 @@ fun InterestsItem(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     description: String = "",
+    isSelected: Boolean = false,
 ) {
     ListItem(
         leadingContent = {
@@ -83,7 +84,11 @@ fun InterestsItem(
             )
         },
         colors = ListItemDefaults.colors(
-            containerColor = Color.Transparent,
+            containerColor = if (isSelected) {
+                MaterialTheme.colorScheme.surfaceVariant
+            } else {
+                Color.Transparent
+            },
         ),
         modifier = modifier
             .semantics(mergeDescendants = true) { /* no-op */ }
@@ -175,6 +180,24 @@ private fun InterestsCardWithEmptyDescriptionPreview() {
                 topicImageUrl = "",
                 onClick = { },
                 onFollowButtonClick = { },
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun InterestsCardSelectedPreview() {
+    NiaTheme {
+        Surface {
+            InterestsItem(
+                name = "Compose",
+                description = "",
+                following = true,
+                topicImageUrl = "",
+                onClick = { },
+                onFollowButtonClick = { },
+                isSelected = true,
             )
         }
     }
