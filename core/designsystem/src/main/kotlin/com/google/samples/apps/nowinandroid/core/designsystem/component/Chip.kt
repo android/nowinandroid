@@ -73,6 +73,8 @@ fun NiaFilterChip(
         },
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
+            enabled = enabled,
+            selected = selected,
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
             disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(
@@ -82,8 +84,6 @@ fun NiaFilterChip(
                 alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
             selectedBorderWidth = NiaChipDefaults.ChipBorderWidth,
-            enabled = enabled,
-            selected = selected,
         ),
         colors = FilterChipDefaults.filterChipColors(
             labelColor = MaterialTheme.colorScheme.onBackground,

@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ShortText
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Upcoming
@@ -41,7 +43,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 object NiaIcons {
     val Add = Icons.Rounded.Add
-    val ArrowBack = Icons.Rounded.ArrowBack
+    val ArrowBack = Icons.AutoMirrored.Rounded.ArrowBack
     val Bookmark = Icons.Rounded.Bookmark
     val BookmarkBorder = Icons.Rounded.BookmarkBorder
     val Bookmarks = Icons.Rounded.Bookmarks
@@ -53,7 +55,7 @@ object NiaIcons {
     val Person = Icons.Rounded.Person
     val Search = Icons.Rounded.Search
     val Settings = Icons.Rounded.Settings
-    val ShortText = Icons.Rounded.ShortText
+    val ShortText = Icons.AutoMirrored.Rounded.ShortText
     val Upcoming = Icons.Rounded.Upcoming
     val UpcomingBorder = Icons.Outlined.Upcoming
     val ViewDay = Icons.Rounded.ViewDay
