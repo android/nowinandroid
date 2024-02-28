@@ -49,6 +49,7 @@ fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder
 }
 
 fun NavGraphBuilder.topicScreen(
+    showBackButton: Boolean,
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
@@ -58,6 +59,10 @@ fun NavGraphBuilder.topicScreen(
             navArgument(TOPIC_ID_ARG) { type = NavType.StringType },
         ),
     ) {
-        TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
+        TopicRoute(
+            showBackButton = showBackButton,
+            onBackClick = onBackClick,
+            onTopicClick = onTopicClick,
+        )
     }
 }

@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.PaneAdaptedValue
+import androidx.compose.material3.adaptive.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -102,6 +104,7 @@ internal fun InterestsListDetailScreen(
                 route = DETAIL_PANE_NAVHOST_ROUTE,
             ) {
                 topicScreen(
+                    showBackButton = listDetailNavigator.isListPaneHidden(),
                     onBackClick = listDetailNavigator::navigateBack,
                     onTopicClick = ::onTopicClickShowDetailPane,
                 )
@@ -119,4 +122,10 @@ internal fun InterestsListDetailScreen(
             onTopicClickShowDetailPane(selectedTopicId)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneHidden(): Boolean {
+    // List pane is the "secondary" pane.
+    return scaffoldState.scaffoldValue.secondary == PaneAdaptedValue.Hidden
 }
