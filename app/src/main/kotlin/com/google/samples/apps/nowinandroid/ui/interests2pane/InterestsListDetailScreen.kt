@@ -107,7 +107,7 @@ internal fun InterestsListDetailScreen(
                 route = DETAIL_PANE_NAVHOST_ROUTE,
             ) {
                 topicScreen(
-                    showBackButton = listDetailNavigator.isListPaneHidden(),
+                    showBackButton = !listDetailNavigator.isListPaneVisible(),
                     onBackClick = listDetailNavigator::navigateBack,
                     onTopicClick = ::onTopicClickShowDetailPane,
                 )
@@ -128,9 +128,9 @@ internal fun InterestsListDetailScreen(
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneHidden(): Boolean {
+private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneVisible(): Boolean {
     // List pane is the "secondary" pane.
-    return scaffoldState.scaffoldValue.secondary == PaneAdaptedValue.Hidden
+    return scaffoldState.scaffoldValue.secondary == PaneAdaptedValue.Expanded
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
