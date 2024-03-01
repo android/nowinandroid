@@ -73,6 +73,7 @@ junit = "4.13.2"
 sqldelight = "2.0.1"
 kotlinInject = '0.6.3'
 multiplatform-settings = "1.1.1"
+naiper = "2.7.1"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -176,6 +177,7 @@ multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settin
 multiplatform-settings-test = { group = "com.russhwolf", name = "multiplatform-settings-test", version.ref = "multiplatform-settings" }
 multiplatform-settings-serialization = { group = "com.russhwolf", name = "multiplatform-settings-serialization", version.ref = "multiplatform-settings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
+naiper = { group = "io.github.aakira", name = "naiper", version.ref = "naiper" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

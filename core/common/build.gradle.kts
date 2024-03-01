@@ -26,6 +26,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            api(libs.naiper)
             implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
