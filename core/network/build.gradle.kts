@@ -15,10 +15,12 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.ktrofit)
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
@@ -38,17 +40,45 @@ secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
 }
 
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.kotlinx.datetime)
+            api(projects.core.common)
+            api(projects.core.model)
+            implementation(libs.coil.kt)
+            implementation(libs.coil.kt.svg)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.json)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.serialization)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktorfit.lib)
+            implementation(libs.ktorfit.ksp)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.android)
+        }
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.java)
+        }
+        mingwMain.dependencies {
+            implementation(libs.ktor.client.winhttp)
+        }
+    }
+}
+
 dependencies {
-    api(libs.kotlinx.datetime)
-    api(projects.core.common)
-    api(projects.core.model)
-
-    implementation(libs.coil.kt)
-    implementation(libs.coil.kt.svg)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.okhttp.logging)
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
-
-    testImplementation(libs.kotlinx.coroutines.test)
+    add("kspCommonMainMetadata", libs.ktorfit.ksp)
 }
