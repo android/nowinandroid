@@ -39,19 +39,21 @@ internal fun Project.configureKotlinMultiplatform() {
 
         jvm()
         androidTarget()
+// SqlDelight does not support wasm yet
+// https://github.com/cashapp/sqldelight/pull/4965/files
 
-        wasmJs {
-            browser {
-                commonWebpackConfig {
-                    devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                        static = (static ?: mutableListOf()).apply {
-                            // Serve sources to debug inside browser
-                            add(project.projectDir.path)
-                        }
-                    }
-                }
-            }
-        }
+//        wasmJs {
+//            browser {
+//                commonWebpackConfig {
+//                    devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+//                        static = (static ?: mutableListOf()).apply {
+//                            // Serve sources to debug inside browser
+//                            add(project.projectDir.path)
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         // tier 1
 // :core:datastore:linuxMain: Could not resolve com.russhwolf:multiplatform-settings-no-arg:1.1.1.
