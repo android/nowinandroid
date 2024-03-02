@@ -26,6 +26,7 @@ buildscript {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
         }
+        classpath(libs.buildkonfig.gradlePlugin)
     }
 }
 
@@ -50,4 +51,5 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.sqldelight.gradle.plugin) apply false
     alias(libs.plugins.ktrofit) apply false
+    alias(libs.plugins.buildkonfig) apply false
 }

@@ -19,15 +19,13 @@ plugins {
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.nowinandroid.kotlin.inject)
     alias(libs.plugins.ktrofit)
+    alias(libs.plugins.buildkonfig)
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
-    buildFeatures {
-        buildConfig = true
-    }
     namespace = "com.google.samples.apps.nowinandroid.core.network"
     testOptions {
         unitTests {
@@ -38,6 +36,13 @@ android {
 
 secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
+}
+
+buildKonfig {
+    packageName = "com.google.samples.apps.nowinandroid.core.network"
+    defaultConfigs {
+        buildConfigField(STRING, "BACKEND_URL", "\"https://www.example.com\"")
+    }
 }
 
 kotlin {
