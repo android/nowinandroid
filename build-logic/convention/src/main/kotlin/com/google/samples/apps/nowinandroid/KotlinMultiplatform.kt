@@ -21,6 +21,8 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.target.HostManager
 
@@ -28,6 +30,7 @@ import org.jetbrains.kotlin.konan.target.HostManager
  * A plugin that applies the Kotlin Multiplatform plugin and configures it for the project.
  * https://github.com/cashapp/sqldelight/blob/master/buildLogic/multiplatform-convention/src/main/kotlin/app/cash/sqldelight/multiplatform/MultiplatformConventions.kt
  */
+@OptIn(ExperimentalWasmDsl::class)
 internal fun Project.configureKotlinMultiplatform() {
     extensions.configure<KotlinMultiplatformExtension> {
         // Enable native group by default
@@ -36,21 +39,21 @@ internal fun Project.configureKotlinMultiplatform() {
 
         jvm()
         androidTarget()
+// SqlDelight does not support wasm yet
+// https://github.com/cashapp/sqldelight/pull/4965/files
 
-        js {
-            browser {
-                testTask {
-                    useKarma {
-                        useChromeHeadless()
-                    }
-                }
-            }
-            compilations.configureEach {
-                kotlinOptions {
-                    moduleKind = "umd"
-                }
-            }
-        }
+//        wasmJs {
+//            browser {
+//                commonWebpackConfig {
+//                    devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+//                        static = (static ?: mutableListOf()).apply {
+//                            // Serve sources to debug inside browser
+//                            add(project.projectDir.path)
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         // tier 1
 // :core:datastore:linuxMain: Could not resolve com.russhwolf:multiplatform-settings-no-arg:1.1.1.
