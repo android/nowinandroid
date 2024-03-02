@@ -33,8 +33,8 @@ dependencies {
     api(projects.core.model)
 
     implementation(libs.androidx.browser)
-    implementation(libs.coil.kt)
-    implementation(libs.coil.kt.compose)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     androidTestImplementation(projects.core.testing)
 }

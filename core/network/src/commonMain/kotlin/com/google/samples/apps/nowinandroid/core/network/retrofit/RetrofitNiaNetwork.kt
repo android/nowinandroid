@@ -16,22 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.core.network.retrofit
 
-import androidx.tracing.trace
-import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import okhttp3.Call
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
-import retrofit2.http.GET
-import retrofit2.http.Query
-import javax.inject.Inject
-import javax.inject.Singleton
+import me.tatarka.inject.annotations.Inject
 
 /**
  * Retrofit API declaration for NIA Network API
@@ -58,8 +51,6 @@ private interface RetrofitNiaNetworkApi {
     ): List<NetworkChangeList>
 }
 
-private const val NIA_BASE_URL = BuildConfig.BACKEND_URL
-
 /**
  * Wrapper for data provided from the [NIA_BASE_URL]
  */
@@ -69,26 +60,13 @@ private data class NetworkResponse<T>(
 )
 
 /**
- * [Retrofit] backed [NiaNetworkDataSource]
+ * [Ktrofit] backed [NiaNetworkDataSource]
  */
-@Singleton
 internal class RetrofitNiaNetwork @Inject constructor(
-    networkJson: Json,
-    okhttpCallFactory: dagger.Lazy<Call.Factory>,
+    ktorfit: Ktorfit,
 ) : NiaNetworkDataSource {
 
-    private val networkApi = trace("RetrofitNiaNetwork") {
-        Retrofit.Builder()
-            .baseUrl(NIA_BASE_URL)
-            // We use callFactory lambda here with dagger.Lazy<Call.Factory>
-            // to prevent initializing OkHttp on the main thread.
-            .callFactory { okhttpCallFactory.get().newCall(it) }
-            .addConverterFactory(
-                networkJson.asConverterFactory("application/json".toMediaType()),
-            )
-            .build()
-            .create(RetrofitNiaNetworkApi::class.java)
-    }
+    private val networkApi = ktorfit.create<RetrofitNiaNetworkApi>()
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data

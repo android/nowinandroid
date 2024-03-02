@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
-import JvmUnitTestFakeAssetManager
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -27,6 +26,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 
 class FakeNiaNetworkDataSourceTest {
@@ -35,12 +35,11 @@ class FakeNiaNetworkDataSourceTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    @Before
+    @BeforeTest
     fun setUp() {
         subject = FakeNiaNetworkDataSource(
             ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true },
-            assets = JvmUnitTestFakeAssetManager,
         )
     }
 

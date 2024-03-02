@@ -40,7 +40,7 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.tooling)
 
-    implementation(libs.coil.kt.compose)
+    implementation(libs.coil.compose)
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.accompanist.testharness)

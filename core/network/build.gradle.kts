@@ -46,8 +46,10 @@ kotlin {
             api(libs.kotlinx.datetime)
             api(projects.core.common)
             api(projects.core.model)
-            implementation(libs.coil.kt)
-            implementation(libs.coil.kt.svg)
+            implementation(libs.coil)
+            implementation(libs.coil.core)
+            implementation(libs.coil.svg)
+            implementation(libs.coil.network.ktor)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.json)
@@ -56,9 +58,9 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktorfit.lib)
-            implementation(libs.ktorfit.ksp)
         }
         commonTest.dependencies {
+            implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
         }
         androidMain.dependencies {
@@ -67,9 +69,9 @@ kotlin {
         appleMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
+//        wasmJsMain.dependencies {
+//            implementation(libs.ktor.client.js)
+//        }
         jvmMain.dependencies {
             implementation(libs.ktor.client.java)
         }
@@ -81,4 +83,12 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
+    add("kspAndroid", libs.ktorfit.ksp)
+//    add("kspWasmJs", libs.ktorfit.ksp)
+    add("kspJvm", libs.ktorfit.ksp)
+    add("kspIosX64", libs.ktorfit.ksp)
+    add("kspIosArm64", libs.ktorfit.ksp)
+    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
+    add("kspMacosX64", libs.ktorfit.ksp)
+    add("kspMacosArm64", libs.ktorfit.ksp)
 }

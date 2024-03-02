@@ -16,39 +16,34 @@
 
 package com.google.samples.apps.nowinandroid.core.network.fake
 
-import JvmUnitTestFakeAssetManager
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
  */
 class FakeNiaNetworkDataSource @Inject constructor(
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: IODispatcher,
     private val networkJson: Json,
-    private val assets: FakeAssetManager = JvmUnitTestFakeAssetManager,
 ) : NiaNetworkDataSource {
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            assets.open(TOPICS_ASSET).use(networkJson::decodeFromStream)
+            networkJson.decodeFromString(TOPICS_ASSET)
         }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
+            networkJson.decodeFromString(NEWS_ASSET)
         }
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =

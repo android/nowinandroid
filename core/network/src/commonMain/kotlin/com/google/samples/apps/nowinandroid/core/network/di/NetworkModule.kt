@@ -16,61 +16,38 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
-import de.jensklingenberg.ktorfit.Call
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
+import de.jensklingenberg.ktorfit.converter.builtin.FlowConverterFactory
+import de.jensklingenberg.ktorfit.ktorfit
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-internal object NetworkModule {
+@Component
+internal abstract class NetworkModule {
 
+    @Provides
     fun providesNetworkJson(): Json = Json {
         ignoreUnknownKeys = true
     }
 
-    fun providesFakeAssetManager(
-        @ApplicationContext context: Context,
-    ): FakeAssetManager = FakeAssetManager(context.assets::open)
-
     @Provides
-    @Singleton
-    fun okHttpCallFactory(): Call.Factory = trace("NiaOkHttpClient") {
-        OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor()
-                    .apply {
-                        if (BuildConfig.DEBUG) {
-                            setLevel(HttpLoggingInterceptor.Level.BODY)
-                        }
-                    },
-            )
-            .build()
-    }
-
-    /**
-     * Since we're displaying SVGs in the app, Coil needs an ImageLoader which supports this
-     * format. During Coil's initialization it will call `applicationContext.newImageLoader()` to
-     * obtain an ImageLoader.
-     *
-     * @see <a href="https://github.com/coil-kt/coil/blob/main/coil-singleton/src/main/java/coil/Coil.kt">Coil</a>
-     */
-    @Provides
-    @Singleton
-    fun imageLoader(
-        // We specifically request dagger.Lazy here, so that it's not instantiated from Dagger.
-        okHttpCallFactory: dagger.Lazy<Call.Factory>,
-        @ApplicationContext application: Context,
-    ): ImageLoader = trace("NiaImageLoader") {
-        ImageLoader.Builder(application)
-            .callFactory { okHttpCallFactory.get() }
-            .components { add(SvgDecoder.Factory()) }
-            // Assume most content images are versioned urls
-            // but some problematic images are fetching each time
-            .respectCacheHeaders(false)
-            .apply {
-                if (BuildConfig.DEBUG) {
-                    logger(DebugLogger())
+    fun provideKtorfit(json: Json): Ktorfit = ktorfit {
+        baseUrl(BuildConfig.BACKEND_URL)
+        httpClient(
+            HttpClient {
+                install(ContentNegotiation) {
+                    json(json)
                 }
-            }
-            .build()
+            },
+        )
+        converterFactories(
+            FlowConverterFactory(),
+            CallConverterFactory(),
+        )
     }
 }
