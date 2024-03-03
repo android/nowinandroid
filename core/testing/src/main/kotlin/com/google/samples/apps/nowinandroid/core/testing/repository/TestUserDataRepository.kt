@@ -24,6 +24,7 @@ import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
+import org.jetbrains.annotations.TestOnly
 
 val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
@@ -35,6 +36,7 @@ val emptyUserData = UserData(
     shouldHideOnboarding = false,
 )
 
+@TestOnly
 class TestUserDataRepository : UserDataRepository {
     /**
      * The backing hot flow for the list of followed topic ids for testing.

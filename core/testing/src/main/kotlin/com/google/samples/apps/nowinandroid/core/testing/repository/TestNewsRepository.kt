@@ -25,7 +25,9 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import org.jetbrains.annotations.TestOnly
 
+@TestOnly
 class TestNewsRepository : NewsRepository {
 
     /**
