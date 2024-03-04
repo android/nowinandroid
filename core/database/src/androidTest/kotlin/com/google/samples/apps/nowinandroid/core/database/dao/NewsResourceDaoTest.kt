@@ -50,9 +50,7 @@ class NewsResourceDaoTest {
     }
 
     @After
-    fun closeDb() {
-        db.close()
-    }
+    fun closeDb() = db.close()
 
     @Test
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
