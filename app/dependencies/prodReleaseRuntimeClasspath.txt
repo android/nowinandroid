@@ -89,7 +89,7 @@ androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0
 androidx.lifecycle:lifecycle-viewmodel:2.7.0
 androidx.loader:loader:1.0.0
 androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
-androidx.metrics:metrics-performance:1.0.0-alpha04
+androidx.metrics:metrics-performance:1.0.0-beta01
 androidx.navigation:navigation-common-ktx:2.7.7
 androidx.navigation:navigation-common:2.7.7
 androidx.navigation:navigation-compose:2.7.7
