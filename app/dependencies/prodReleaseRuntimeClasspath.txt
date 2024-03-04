@@ -155,12 +155,12 @@ com.google.firebase:firebase-abt:21.1.1
 com.google.firebase:firebase-analytics-ktx:21.5.1
 com.google.firebase:firebase-analytics:21.5.1
 com.google.firebase:firebase-annotations:16.2.0
-com.google.firebase:firebase-bom:32.7.2
+com.google.firebase:firebase-bom:32.7.3
 com.google.firebase:firebase-common-ktx:20.4.2
 com.google.firebase:firebase-common:20.4.2
 com.google.firebase:firebase-components:17.1.5
 com.google.firebase:firebase-config-interop:16.0.1
-com.google.firebase:firebase-config:21.6.1
+com.google.firebase:firebase-config:21.6.2
 com.google.firebase:firebase-crashlytics-ktx:18.6.2
 com.google.firebase:firebase-crashlytics:18.6.2
 com.google.firebase:firebase-datatransport:18.1.8
