@@ -38,6 +38,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
@@ -144,15 +145,17 @@ class NiaAppScreenSizesScreenshotTests {
             ) {
                 TestHarness(size = DpSize(width, height)) {
                     BoxWithConstraints {
-                        val fakeAppState = rememberNiaAppState(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                            timeZoneMonitor = timeZoneMonitor,
-                        )
-                        NiaApp(fakeAppState)
+                        NiaTheme {
+                            val fakeAppState = rememberNiaAppState(
+                                windowSizeClass = WindowSizeClass.calculateFromSize(
+                                    DpSize(maxWidth, maxHeight),
+                                ),
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                                timeZoneMonitor = timeZoneMonitor,
+                            )
+                            NiaApp(fakeAppState)
+                        }
                     }
                 }
             }
