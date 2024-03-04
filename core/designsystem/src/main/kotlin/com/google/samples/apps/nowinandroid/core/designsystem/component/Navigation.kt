@@ -167,7 +167,7 @@ fun NiaNavigationRail(
 
 @ThemePreviews
 @Composable
-fun NiaNavigationPreview() {
+fun NiaNavigationBarPreview() {
     val items = listOf("For you", "Saved", "Interests")
     val icons = listOf(
         NiaIcons.UpcomingBorder,
@@ -184,6 +184,46 @@ fun NiaNavigationPreview() {
         NiaNavigationBar {
             items.forEachIndexed { index, item ->
                 NiaNavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = icons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = selectedIcons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    label = { Text(item) },
+                    selected = index == 0,
+                    onClick = { },
+                )
+            }
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaNavigationRailPreview() {
+    val items = listOf("For you", "Saved", "Interests")
+    val icons = listOf(
+        NiaIcons.UpcomingBorder,
+        NiaIcons.BookmarksBorder,
+        NiaIcons.Grid3x3,
+    )
+    val selectedIcons = listOf(
+        NiaIcons.Upcoming,
+        NiaIcons.Bookmarks,
+        NiaIcons.Grid3x3,
+    )
+
+    NiaTheme {
+        NiaNavigationRail {
+            items.forEachIndexed { index, item ->
+                NiaNavigationRailItem(
                     icon = {
                         Icon(
                             imageVector = icons[index],
