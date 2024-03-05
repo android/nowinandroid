@@ -34,13 +34,11 @@ dependencies {
     implementation(libs.hilt.ext.work)
     implementation(projects.core.analytics)
     implementation(projects.core.data)
-    implementation(libs.guava.android)
 
     prodImplementation(libs.firebase.cloud.messaging)
     prodImplementation(platform(libs.firebase.bom))
 
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.hilt.android.testing)
-    androidTestImplementation(libs.kotlinx.coroutines.guava)
     androidTestImplementation(projects.core.testing)
 }
