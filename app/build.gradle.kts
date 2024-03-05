@@ -45,7 +45,7 @@ android {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
-        val release = getByName("release") {
+        release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
