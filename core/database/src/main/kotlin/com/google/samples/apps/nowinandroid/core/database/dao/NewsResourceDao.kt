@@ -97,12 +97,6 @@ interface NewsResourceDao {
     ): Flow<List<String>>
 
     /**
-     * Inserts [entities] into the db if they don't exist, and ignores those that do
-     */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long>
-
-    /**
      * Inserts or updates [newsResourceEntities] in the db under the specified primary keys
      */
     @Upsert
