@@ -132,7 +132,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun emptySearchText_NotAddToRecentSearches() = runTest {
+    fun emptySearchText_isNotAddedToRecentSearches() = runTest {
         viewModel.onSearchTriggered("")
 
         val recentSearchQueriesStream = getRecentQueryUseCase()
