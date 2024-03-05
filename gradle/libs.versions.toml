@@ -36,7 +36,6 @@ firebasePerfPlugin = "1.4.2"
 gmsPlugin = "4.4.0"
 googleOss = "17.0.1"
 googleOssPlugin = "0.10.6"
-guavaAndroid = "33.0.0-android"
 hilt = "2.51"
 hiltExt = "1.1.0"
 jacoco = "0.8.7"
@@ -109,7 +108,6 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOss" }
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
-guava-android = { group = "com.google.guava", name = "guava", version.ref = "guavaAndroid" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
