@@ -42,6 +42,8 @@ internal fun Project.configureAndroidCompose(
             val bom = libs.findLibrary("androidx-compose-bom").get()
             add("implementation", platform(bom))
             add("androidTestImplementation", platform(bom))
+            add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+            add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
         testOptions {
@@ -54,7 +56,8 @@ internal fun Project.configureAndroidCompose(
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+            freeCompilerArgs += buildComposeMetricsParameters() 
+            freeCompilerArgs += stabilityConfiguration()
         }
     }
 }
@@ -84,3 +87,8 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     }
     return metricParameters.toList()
 }
+
+private fun Project.stabilityConfiguration() = listOf(
+    "-P",
+    "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=${project.rootDir.absolutePath}/compose_compiler_config.conf",
+)
