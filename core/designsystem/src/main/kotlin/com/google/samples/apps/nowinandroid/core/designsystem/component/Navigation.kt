@@ -53,12 +53,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 fun RowScope.NiaNavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
-    label: @Composable (() -> Unit)? = null,
     alwaysShowLabel: Boolean = true,
+    icon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = icon,
+    label: @Composable (() -> Unit)? = null,
 ) {
     NavigationBarItem(
         selected = selected,
@@ -117,12 +117,12 @@ fun NiaNavigationBar(
 fun NiaNavigationRailItem(
     selected: Boolean,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
-    label: @Composable (() -> Unit)? = null,
     alwaysShowLabel: Boolean = true,
+    icon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = icon,
+    label: @Composable (() -> Unit)? = null,
 ) {
     NavigationRailItem(
         selected = selected,
