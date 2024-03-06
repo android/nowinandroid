@@ -128,13 +128,9 @@ internal fun InterestsListDetailScreen(
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneVisible(): Boolean {
-    // List pane is the "secondary" pane.
-    return scaffoldState.scaffoldValue.secondary == PaneAdaptedValue.Expanded
-}
+private fun <T> ThreePaneScaffoldNavigator<T>.isListPaneVisible(): Boolean =
+    scaffoldState.scaffoldValue[ListDetailPaneScaffoldRole.List] == PaneAdaptedValue.Expanded
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-private fun <T> ThreePaneScaffoldNavigator<T>.isDetailPaneVisible(): Boolean {
-    // Detail pane is the "primary" pane.
-    return scaffoldState.scaffoldValue.primary == PaneAdaptedValue.Expanded
-}
+private fun <T> ThreePaneScaffoldNavigator<T>.isDetailPaneVisible(): Boolean =
+    scaffoldState.scaffoldValue[ListDetailPaneScaffoldRole.Detail] == PaneAdaptedValue.Expanded
