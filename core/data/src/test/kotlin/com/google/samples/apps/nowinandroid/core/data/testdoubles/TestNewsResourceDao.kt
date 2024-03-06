@@ -92,21 +92,6 @@ class TestNewsResourceDao : NewsResourceDao {
                 result.map { it.entity.id }
             }
 
-    override suspend fun insertOrIgnoreNewsResources(
-        entities: List<NewsResourceEntity>,
-    ): List<Long> {
-        entitiesStateFlow.update { oldValues ->
-            // Old values come first so new values don't overwrite them
-            (oldValues + entities)
-                .distinctBy(NewsResourceEntity::id)
-                .sortedWith(
-                    compareBy(NewsResourceEntity::publishDate).reversed(),
-                )
-        }
-        // Assume no conflicts on insert
-        return entities.map { it.id.toLong() }
-    }
-
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         entitiesStateFlow.update { oldValues ->
             // New values come first so they overwrite old values

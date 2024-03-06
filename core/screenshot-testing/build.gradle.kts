@@ -20,23 +20,15 @@ plugins {
 }
 
 android {
-    namespace = "com.google.samples.apps.nowinandroid.core.testing"
+    namespace = "com.google.samples.apps.nowinandroid.core.screenshottesting"
 }
 
 dependencies {
-    api(kotlin("test"))
-    api(libs.androidx.compose.ui.test)
-    api(projects.core.analytics)
-    api(projects.core.data)
-    api(projects.core.model)
-    api(projects.core.notifications)
-
-    debugApi(libs.androidx.compose.ui.testManifest)
-
-    implementation(libs.androidx.test.rules)
-    implementation(libs.hilt.android.testing)
-    implementation(libs.kotlinx.coroutines.test)
-    implementation(libs.kotlinx.datetime)
+    api(libs.roborazzi)
+    implementation(libs.accompanist.testharness)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui.test)
+    implementation(libs.robolectric)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
 }
