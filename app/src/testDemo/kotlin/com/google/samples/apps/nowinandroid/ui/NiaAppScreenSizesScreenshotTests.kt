@@ -137,7 +137,7 @@ class NiaAppScreenSizesScreenshotTests {
     }
 
     private fun testNiaAppScreenshotWithSize(width: Dp, height: Dp, screenshotName: String) {
-        // TODO: Remove this when https://b.corp.google.com/issues/327149166 is fixed
+        // TODO: Remove this when https://issuetracker.google.com/issues/327149166 is fixed
         val appTestTag = "APP"
 
         composeTestRule.setContent {
