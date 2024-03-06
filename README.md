@@ -1,3 +1,22 @@
+# Declarative Gradle DSL
+
+This branch has been modified to work with the prototype of the Declarative Gradle DSL.
+
+## Running
+
+First, checkout the `declarativize-nia` branch of the [declarative-gradle](https://github.com/gradle/declarative-gradle) project into a **sibling directory** of this project:
+
+```
+declarative-gradle/
+nowinandroid/
+```
+
+then run the following command in the `nowinandroid` directory to build the project:
+
+```shell
+gw buildDemoDebug
+```
+
 ![Now in Android](docs/images/nia-splash.jpg "Now in Android")
 
 <a href="https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>

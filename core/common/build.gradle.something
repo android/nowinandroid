@@ -1,0 +1,44 @@
+plugins {
+    id("org.gradle.experimental.android-library")
+    id("org.gradle.experimental.hilt")
+
+    // From Android Library convention plugin
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+
+    // From Jacoco convention plugin
+    id("org.gradle.jacoco")
+
+    // TODO: Apply "nowinandroid.android.lint" plugin
+}
+
+hilt2 {
+    dependencies {
+        ksp("com.google.dagger:hilt-android-compiler:2.50")
+        implementation("com.google.dagger:hilt-android:2.50")
+    }
+}
+
+androidLibrary {
+    // From Android Library convention plugin
+    jdkVersion = 17
+    compileSdk = 34
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
+
+    targets {
+        debug {
+            // From project build script
+            dependencies {
+                // TODO: Test dependencies
+            }
+
+            // From Android Library convention plugin
+            dependencies {
+                // TODO: More test dependencies
+            }
+        }
+    }
+}
+
+// TODO: Additional android configuration in AndroidLibraryConventionPlugin
+// TODO: Lots of JaCoCo configuration (see AndroidLibraryJacocoConventionPlugin and Jacoco.kt)
