@@ -20,9 +20,7 @@ import android.util.Log
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -39,6 +37,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
@@ -97,6 +96,9 @@ class NiaAppScreenSizesScreenshotTests {
     lateinit var networkMonitor: NetworkMonitor
 
     @Inject
+    lateinit var timeZoneMonitor: TimeZoneMonitor
+
+    @Inject
     lateinit var userDataRepository: UserDataRepository
 
     @Inject
@@ -148,14 +150,15 @@ class NiaAppScreenSizesScreenshotTests {
                     override = DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
                     NiaTheme {
-                        NiaApp(
+                        val fakeAppState = rememberNiaAppState(
                             windowSizeClass = WindowSizeClass.calculateFromSize(
                                 DpSize(width, height),
                             ),
                             networkMonitor = networkMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
-                            modifier = Modifier.testTag(appTestTag),
+                            timeZoneMonitor = timeZoneMonitor,
                         )
+                        NiaApp(fakeAppState)
                     }
                 }
             }
