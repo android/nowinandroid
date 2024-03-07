@@ -34,11 +34,15 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
+dependencies {
+    implementation("org.gradle.experimental:plugin-android:0.1")
+}
+
 gradlePlugin {
     plugins {
         register("hilt") {
-            id = "org.gradle.experimental.hilt"
-            implementationClass = "org.gradle.api.experimental.android.HiltPlugin"
+            id = "org.gradle.experimental.android-hilt"
+            implementationClass = "org.gradle.api.experimental.android.AndroidHiltPlugin"
         }
     }
 }

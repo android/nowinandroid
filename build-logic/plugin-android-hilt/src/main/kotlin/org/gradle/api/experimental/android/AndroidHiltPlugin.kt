@@ -19,17 +19,19 @@ package org.gradle.api.experimental.android
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-abstract class HiltPlugin : Plugin<Project> {
+abstract class AndroidHiltPlugin : Plugin<Project> {
     @Suppress("UnstableApiUsage")
     override fun apply(project: Project) {
         with(project.pluginManager) {
+            apply("org.gradle.experimental.android-library")
             apply("com.google.devtools.ksp")
             apply("dagger.hilt.android.plugin")
         }
 
         val hilt = createDslModel(project)
         project.configurations.getByName("ksp").dependencies.addAllLater(hilt.getDependencies().getKsp().getDependencies())
-        project.configurations.getByName("implementation").dependencies.addAllLater(hilt.getDependencies().getImplementation().getDependencies());
+
+        project.dependencies.add("implementation", "com.google.dagger:hilt-android:2.50")
     }
 
     private fun createDslModel(project: Project): HiltExtension {

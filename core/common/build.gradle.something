@@ -1,6 +1,5 @@
 plugins {
-    id("org.gradle.experimental.android-library")
-    id("org.gradle.experimental.hilt")
+    id("org.gradle.experimental.android-hilt")
 
     // From Jacoco convention plugin
     id("org.gradle.jacoco")
@@ -11,7 +10,6 @@ plugins {
 hilt2 {
     dependencies {
         ksp("com.google.dagger:hilt-android-compiler:2.50")
-        implementation("com.google.dagger:hilt-android:2.50")
     }
 }
 

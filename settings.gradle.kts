@@ -15,7 +15,6 @@
  */
 
 pluginManagement {
-    includeBuild("../declarative-prototypes/unified-prototype/unified-plugin")
     includeBuild("build-logic")
     repositories {
         google()
