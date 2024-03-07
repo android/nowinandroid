@@ -2,8 +2,8 @@
 accompanist = "0.32.0"
 androidDesugarJdkLibs = "2.0.4"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.2.2"
-androidTools = "31.2.2"
+androidGradlePlugin = "8.3.0"
+androidTools = "31.3.0"
 androidxActivity = "1.8.0"
 androidxAppCompat = "1.6.1"
 androidxBrowser = "1.6.0"
@@ -36,7 +36,7 @@ firebasePerfPlugin = "1.4.2"
 gmsPlugin = "4.4.1"
 googleOss = "17.0.1"
 googleOssPlugin = "0.10.6"
-hilt = "2.50"
+hilt = "2.51"
 hiltExt = "1.1.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
@@ -44,7 +44,7 @@ kotlin = "1.9.22"
 kotlinxCoroutines = "1.8.0"
 kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.0"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.22-1.0.18"
 okhttp = "4.12.0"
 protobuf = "3.25.2"
 protobufPlugin = "0.9.4"
@@ -54,7 +54,7 @@ robolectric = "4.11.1"
 roborazzi = "1.7.0"
 room = "2.6.1"
 secrets = "2.0.1"
-truth = "1.1.5"
+truth = "1.4.2"
 turbine = "1.0.0"
 agp = "8.2.0"
 android-compileSdk = "34"
@@ -94,6 +94,7 @@ androidx-compose-material-iconsExtended = { group = "androidx.compose.material",
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+androidx-compose-runtime-tracing = { group = "androidx.compose.runtime", name = "runtime-tracing", version.ref = "androidxComposeRuntimeTracing" }
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -154,7 +155,6 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-robolectric-shadows = { group = "org.robolectric", name = "shadows-framework", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

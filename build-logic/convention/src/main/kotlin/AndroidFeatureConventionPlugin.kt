@@ -34,6 +34,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                     testInstrumentationRunner =
                         "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
                 }
+                testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }
 
