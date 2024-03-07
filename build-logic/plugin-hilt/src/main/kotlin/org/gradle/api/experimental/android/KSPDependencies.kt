@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    versionCatalogs {
-        create("libs") {
-            from(files("../gradle/libs.versions.toml"))
-        }
-    }
+package org.gradle.api.experimental.android
+
+import org.gradle.api.artifacts.dsl.DependencyCollector
+import org.gradle.declarative.dsl.model.annotations.Restricted
+
+@Restricted
+interface KSPDependencies {
+    fun getKsp(): DependencyCollector
+    fun getImplementation(): DependencyCollector
 }
-
-rootProject.name = "build-logic"
-
-include(":convention")
-include(":plugin-hilt")

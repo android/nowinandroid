@@ -2,10 +2,6 @@ plugins {
     id("org.gradle.experimental.android-library")
     id("org.gradle.experimental.hilt")
 
-    // From Android Library convention plugin
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-
     // From Jacoco convention plugin
     id("org.gradle.jacoco")
 
