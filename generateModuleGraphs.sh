@@ -14,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-# Script to generate dependency graphs for each of the modules
-# Usage: generateModuleGraphs.sh --exclude-module :benchmarks --exclude-module :lint
-
-# Echo each command so the caller knows what's going on
-set -e
+#
+# Script to generate dependency graphs for each of the modules. The --exclude-module parameter can
+# be used to exclude modules which are not part of the root dependency graph (and which, if included
+# would cause the script to fail.
+#
+# Usage: generateModuleGraphs.sh --exclude-module :benchmarks --exclude-module :lint --exclude-module :ui-test-hilt-manifest
 
 # Check if the dot command is available
 if ! command -v dot &> /dev/null
@@ -47,14 +47,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Function to check and create README.md
+# Get the module paths
+module_paths=$(./gradlew -q printModulePaths --no-configuration-cache)
+
+# Function to check and create a README.md for modules which don't have one.
 check_and_create_readme() {
     local module_path="$1"
     local file_name="$2"
 
     local readme_path="${module_path:1}" # Remove leading colon
     readme_path=$(echo "$readme_path" | sed 's/:/\//g') # Replace colons with slashes using sed
-    readme_path="${readme_path}/README.md"
+    readme_path="${readme_path}/README.md" #Append the filename
 
     # Check if README.md exists and create it if not
     if [[ ! -f "$readme_path" ]]; then
@@ -66,9 +69,6 @@ check_and_create_readme() {
         echo "![Dependency graph](${relative_image_path})" >> "$readme_path"
     fi
 }
-
-# Get the module paths
-module_paths=$(./gradlew -q printModulePaths --no-configuration-cache)
 
 # Loop through each module path
 echo "$module_paths" | while read -r module_path; do
@@ -83,6 +83,7 @@ echo "$module_paths" | while read -r module_path; do
         # Generate the .gv file in a temporary location
         # </dev/null is used to stop ./gradlew from consuming input which prematurely ends the while loop
         ./gradlew generateModulesGraphvizText -Pmodules.graph.output.gv="/tmp/${file_name}.gv" -Pmodules.graph.of.module="${module_path}" </dev/null
+
         # Convert to SVG using dot
         dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs/${file_name}.svg"
         # Remove the temporary .gv file
