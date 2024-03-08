@@ -1,38 +1,17 @@
+// TODO: Will be applied via settings
 plugins {
-    id("org.gradle.experimental.android-hilt")
-
-    // From Jacoco convention plugin
-    id("org.gradle.jacoco")
-
-    // TODO: Apply "nowinandroid.android.lint" plugin
+    id("org.gradle.experimental.android-hilt-jacoco")
 }
 
-hilt2 {
-    dependencies {
-        ksp("com.google.dagger:hilt-android-compiler:2.50")
-    }
-}
-
-androidLibrary {
-    // From Android Library convention plugin
-    jdkVersion = 17
-    compileSdk = 34
+conventionalHiltJacocoAndroidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.common"
 
     targets {
         debug {
-            // From project build script
             dependencies {
-                // TODO: Test dependencies
-            }
-
-            // From Android Library convention plugin
-            dependencies {
-                // TODO: More test dependencies
+                // TODO: Add test dependencies from project build script
             }
         }
     }
 }
 
-// TODO: Additional android configuration in AndroidLibraryConventionPlugin
-// TODO: Lots of JaCoCo configuration (see AndroidLibraryJacocoConventionPlugin and Jacoco.kt)

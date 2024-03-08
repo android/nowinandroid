@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.gradle.api.experimental.android
+package org.gradle.api.experimental.android;
 
-import org.gradle.api.artifacts.dsl.DependencyCollector
-import org.gradle.declarative.dsl.model.annotations.Restricted
+import org.gradle.api.artifacts.dsl.DependencyCollector;
+import org.gradle.declarative.dsl.model.annotations.Restricted;
 
+@SuppressWarnings("UnstableApiUsage")
 @Restricted
-interface KSPDependencies {
-    fun getKsp(): DependencyCollector
-    fun getImplementation(): DependencyCollector
+public interface KSPAndroidLibraryDependencies extends AndroidLibraryDependencies {
+    DependencyCollector getKsp();
 }

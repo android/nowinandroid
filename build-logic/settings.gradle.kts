@@ -29,6 +29,6 @@ dependencyResolutionManagement {
 rootProject.name = "build-logic"
 
 include(":convention")
-include(":plugin-android-hilt")
+include(":plugin-android-hilt-jacoco")
 
 includeBuild("../../declarative-prototypes/unified-prototype/unified-plugin")
