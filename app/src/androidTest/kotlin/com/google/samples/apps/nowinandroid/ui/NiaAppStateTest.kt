@@ -167,7 +167,7 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
+    fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
