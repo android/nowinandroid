@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
@@ -38,7 +40,7 @@ secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
 }
 
-buildKonfig {
+buildkonfig {
     packageName = "com.google.samples.apps.nowinandroid.core.network"
     defaultConfigs {
         buildConfigField(STRING, "BACKEND_URL", "\"https://www.example.com\"")

@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.core.network.fake
 
 import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.assets.NEWS_DATA
+import com.google.samples.apps.nowinandroid.core.network.assets.TOPICS_DATA
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -37,13 +39,13 @@ class FakeNiaNetworkDataSource @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString(TOPICS_ASSET)
+            networkJson.decodeFromString(TOPICS_DATA)
         }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            networkJson.decodeFromString(NEWS_ASSET)
+            networkJson.decodeFromString(NEWS_DATA)
         }
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
@@ -51,11 +53,6 @@ class FakeNiaNetworkDataSource @Inject constructor(
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
-
-    companion object {
-        private const val NEWS_ASSET = "news.json"
-        private const val TOPICS_ASSET = "topics.json"
-    }
 }
 
 /**

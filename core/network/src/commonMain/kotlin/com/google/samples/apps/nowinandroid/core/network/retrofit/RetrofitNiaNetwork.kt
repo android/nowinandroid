@@ -29,7 +29,7 @@ import me.tatarka.inject.annotations.Inject
 /**
  * Retrofit API declaration for NIA Network API
  */
-private interface RetrofitNiaNetworkApi {
+internal interface RetrofitNiaNetworkApi {
     @GET(value = "topics")
     suspend fun getTopics(
         @Query("id") ids: List<String>?,
@@ -55,7 +55,7 @@ private interface RetrofitNiaNetworkApi {
  * Wrapper for data provided from the [NIA_BASE_URL]
  */
 @Serializable
-private data class NetworkResponse<T>(
+internal data class NetworkResponse<T>(
     val data: T,
 )
 

@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import coil3.ImageLoader
 import coil3.PlatformContext
-import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import coil3.util.DebugLogger
@@ -37,7 +36,6 @@ abstract class ImageLoaderComponent {
     @Provides
     fun provideImageLoader(
         context: PlatformContext,
-        diskCache: DiskCache?,
         debug: Boolean,
     ): ImageLoader {
         return ImageLoader.Builder(context)
@@ -46,9 +44,6 @@ abstract class ImageLoaderComponent {
                     // Set the max size to 25% of the app's available memory.
                     .maxSizePercent(context, percent = 0.25)
                     .build()
-            }
-            .diskCache {
-                diskCache
             }
             // Show a short crossfade when loading images asynchronously.
             .crossfade(true)

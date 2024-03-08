@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.di
 
+import com.google.samples.apps.nowinandroid.core.network.BuildKonfig
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
 import de.jensklingenberg.ktorfit.converter.builtin.FlowConverterFactory
@@ -37,7 +38,7 @@ internal abstract class NetworkModule {
 
     @Provides
     fun provideKtorfit(json: Json): Ktorfit = ktorfit {
-        baseUrl(BuildConfig.BACKEND_URL)
+        baseUrl(BuildKonfig.BACKEND_URL)
         httpClient(
             HttpClient {
                 install(ContentNegotiation) {

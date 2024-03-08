@@ -75,7 +75,7 @@ sqldelight = "2.0.1"
 kotlinInject = '0.6.3'
 multiplatform-settings = "1.1.1"
 kermit = "2.0.3"
-ktor = "3.0.0-beta-1"
+ktor = "2.3.9"
 ktrofit = "1.12.0"
 buildKonfig = "0.15.1"
 
