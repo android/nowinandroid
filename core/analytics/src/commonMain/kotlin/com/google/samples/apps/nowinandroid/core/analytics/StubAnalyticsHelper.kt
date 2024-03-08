@@ -16,27 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.analytics
 
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import co.touchlab.kermit.Logger
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class AnalyticsModule {
-    @Binds
-    abstract fun bindsAnalyticsHelper(analyticsHelperImpl: FirebaseAnalyticsHelper): AnalyticsHelper
-
-    companion object {
-        @Provides
-        @Singleton
-        fun provideFirebaseAnalytics(): FirebaseAnalytics {
-            return Firebase.analytics
-        }
+/**
+ * An implementation of AnalyticsHelper just writes the events to logcat. Used in builds where no
+ * analytics events should be sent to a backend.
+ */
+internal class StubAnalyticsHelper : AnalyticsHelper {
+    override fun logEvent(event: AnalyticsEvent) {
+        Logger.d { "Received analytics event: $event" }
     }
 }

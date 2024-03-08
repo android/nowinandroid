@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.analytics
+package com.google.samples.apps.nowinandroid.core.analytics.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.analytics.StubAnalyticsHelper
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@Module
-@InstallIn(SingletonComponent::class)
+@Component
 internal abstract class AnalyticsModule {
-    @Binds
-    abstract fun bindsAnalyticsHelper(analyticsHelperImpl: StubAnalyticsHelper): AnalyticsHelper
+    @Provides
+    fun providesAnalyticsHelper(): AnalyticsHelper = StubAnalyticsHelper()
 }

@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.compose)
-    alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.analytics"
 }
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-
-    prodImplementation(platform(libs.firebase.bom))
-    prodImplementation(libs.firebase.analytics)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.logging)
+            implementation(compose.runtime)
+        }
+    }
 }
