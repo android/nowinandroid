@@ -16,16 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.core.notifications
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class NotificationsModule {
-    @Binds
-    abstract fun bindNotifier(
-        notifier: NoOpNotifier,
-    ): Notifier
+/**
+ * Implementation of [Notifier] which does nothing. Useful for tests and previews.
+ */
+internal class NoOpNotifier : Notifier {
+    override fun postNewsNotifications(newsResources: List<NewsResource>) = Unit
 }

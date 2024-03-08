@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,6 @@ import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val MAX_NUM_NOTIFICATIONS = 5
 private const val TARGET_ACTIVITY_NAME = "com.google.samples.apps.nowinandroid.MainActivity"
@@ -49,9 +46,9 @@ private const val FOR_YOU_PATH = "foryou"
 /**
  * Implementation of [Notifier] that displays notifications in the system tray.
  */
-@Singleton
-internal class SystemTrayNotifier @Inject constructor(
-    @ApplicationContext private val context: Context,
+
+internal class SystemTrayNotifier constructor(
+    private val context: Context,
 ) : Notifier {
 
     override fun postNewsNotifications(

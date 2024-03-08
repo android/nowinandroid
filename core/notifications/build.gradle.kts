@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.notifications"
 }
 
-dependencies {
-    api(projects.core.model)
-
-    implementation(projects.core.common)
-
-    compileOnly(platform(libs.androidx.compose.bom))
-    compileOnly(libs.androidx.compose.runtime)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.model)
+            implementation(projects.core.common)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
+        }
+    }
 }
