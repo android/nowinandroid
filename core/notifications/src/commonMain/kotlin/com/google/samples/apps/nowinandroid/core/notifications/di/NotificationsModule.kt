@@ -22,6 +22,7 @@ import me.tatarka.inject.annotations.Provides
 
 internal abstract class NotificationsModule {
 
+    // TODO: Add a real implementation of Notifier foe each platform
     @Provides
     internal fun provideNotifier(): Notifier = NoOpNotifier()
 }
