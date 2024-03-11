@@ -26,11 +26,11 @@ import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRep
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
-import com.google.samples.apps.nowinandroid.core.result.Result
-import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -61,18 +61,15 @@ class SearchViewModel @Inject constructor(
                             flowOf(SearchResultUiState.EmptyQuery)
                         } else {
                             getSearchContentsUseCase(query)
-                                .asResult()
-                                .map { result ->
-                                    when (result) {
-                                        is Result.Success -> SearchResultUiState.Success(
-                                            topics = result.data.topics,
-                                            newsResources = result.data.newsResources,
-                                        )
-
-                                        is Result.Loading -> SearchResultUiState.Loading
-                                        is Result.Error -> SearchResultUiState.LoadFailed
-                                    }
+                                // Not using .asResult() here, because it emits Loading state every
+                                // time the user types a letter in the search box, which flickers the screen.
+                                .map<UserSearchResult, SearchResultUiState> { data ->
+                                    SearchResultUiState.Success(
+                                        topics = data.topics,
+                                        newsResources = data.newsResources,
+                                    )
                                 }
+                                .catch { emit(SearchResultUiState.LoadFailed) }
                         }
                     }
                 }
