@@ -56,7 +56,7 @@ check_and_create_readme() {
     local file_name="$2"
 
     local readme_path="${module_path:1}" # Remove leading colon
-    readme_path=$(echo "$readme_path" | sed 's/:/\//g') # Replace colons with slashes using sed
+    readme_path=${readme_path//:/\/} # Replace colons with slashes using sed
     readme_path="${readme_path}/README.md" #Append the filename
 
     # Check if README.md exists and create it if not
@@ -82,7 +82,9 @@ echo "$module_paths" | while read -r module_path; do
 
         # Generate the .gv file in a temporary location
         # </dev/null is used to stop ./gradlew from consuming input which prematurely ends the while loop
-        ./gradlew generateModulesGraphvizText -Pmodules.graph.output.gv="/tmp/${file_name}.gv" -Pmodules.graph.of.module="${module_path}" </dev/null
+        ./gradlew generateModulesGraphvizText \
+          -Pmodules.graph.output.gv="/tmp/${file_name}.gv" \
+          -Pmodules.graph.of.module="${module_path}" </dev/null
 
         # Convert to SVG using dot
         dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs/${file_name}.svg"
