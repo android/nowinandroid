@@ -79,7 +79,7 @@ internal fun TopicRoute(
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
-    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
+    val newsUiState: NewsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
 
     TrackScreenViewEvent(screenName = "Topic: ${viewModel.topicId}")
     TopicScreen(
