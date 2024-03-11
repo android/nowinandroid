@@ -57,6 +57,7 @@ import androidx.compose.ui.util.unpackFloat2
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
+import kotlin.jvm.JvmInline
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt

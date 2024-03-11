@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
@@ -164,9 +163,6 @@ private fun ScrollableState.DecorativeScrollbarThumb(
     )
 }
 
-// TODO: This lint is removed in 1.6 as the recommendation has changed
-// remove when project is upgraded
-@SuppressLint("ComposableModifierFactory")
 @Composable
 private fun Modifier.scrollThumb(
     scrollableState: ScrollableState,

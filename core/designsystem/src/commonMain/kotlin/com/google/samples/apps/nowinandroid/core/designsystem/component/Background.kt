@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -31,13 +30,14 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.math.PI
 import kotlin.math.tan
 
 /**
@@ -95,14 +95,14 @@ fun NiaGradientBackground(
                 .drawWithCache {
                     // Compute the start and end coordinates such that the gradients are angled 11.06
                     // degrees off the vertical axis
+                    // Math.toRadians is replaced by deg / 180.0 * PI
                     val offset = size.height * tan(
-                        Math
-                            .toRadians(11.06)
+                        (11.06) / 180.0 * PI
                             .toFloat(),
                     )
 
-                    val start = Offset(size.width / 2 + offset / 2, 0f)
-                    val end = Offset(size.width / 2 - offset / 2, size.height)
+                    val start = Offset((size.width / 2 + offset / 2).toFloat(), 0f)
+                    val end = Offset((size.width / 2 - offset / 2).toFloat(), size.height)
 
                     // Create the top gradient that fades out after the halfway point vertically
                     val topGradient = Brush.linearGradient(
@@ -143,8 +143,9 @@ fun NiaGradientBackground(
  * Multipreview annotation that represents light and dark themes. Add this annotation to a
  * composable to render the both themes.
  */
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+@Preview
 annotation class ThemePreviews
 
 @ThemePreviews

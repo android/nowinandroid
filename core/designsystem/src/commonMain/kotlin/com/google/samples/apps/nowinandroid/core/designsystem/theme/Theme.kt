@@ -17,8 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.designsystem.theme
 
 import android.os.Build
-import androidx.annotation.ChecksSdkIntAtLeast
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -35,7 +33,6 @@ import androidx.compose.ui.unit.dp
 /**
  * Light default theme color scheme
  */
-@VisibleForTesting
 val LightDefaultColorScheme = lightColorScheme(
     primary = Purple40,
     onPrimary = Color.White,

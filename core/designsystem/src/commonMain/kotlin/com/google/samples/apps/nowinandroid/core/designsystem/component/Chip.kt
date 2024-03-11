@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Now in Android filter chip with included leading checked icon as well as text content slot.
@@ -43,7 +44,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
  * @param label The text label content.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun NiaFilterChip(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
