@@ -205,9 +205,9 @@ org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.8.0
 org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0
 org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.5.0
 org.jetbrains.kotlinx:kotlinx-datetime:0.5.0
-org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0
+org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.3
+org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3
+org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3
+org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3
+org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3
 org.jetbrains:annotations:23.0.0
