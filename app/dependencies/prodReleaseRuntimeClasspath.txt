@@ -206,10 +206,10 @@ javax.inject:javax.inject:1
 me.tatarka.inject:kotlin-inject-runtime-jvm:0.6.3
 me.tatarka.inject:kotlin-inject-runtime:0.6.3
 org.checkerframework:checker-qual:3.12.0
-org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22
+org.jetbrains.kotlin:kotlin-stdlib-common:1.9.23
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0
-org.jetbrains.kotlin:kotlin-stdlib:1.9.22
+org.jetbrains.kotlin:kotlin-stdlib:1.9.23
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0
 org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0
