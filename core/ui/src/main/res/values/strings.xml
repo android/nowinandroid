@@ -26,4 +26,7 @@
 
     <string name="core_ui_topic_chip_content_description_when_followed">%1$s is followed</string>
     <string name="core_ui_topic_chip_content_description_when_not_followed">%1$s is not followed</string>
+
+    <string name="core_ui_interests_card_follow_button_content_desc">Follow interest</string>
+    <string name="core_ui_interests_card_unfollow_button_content_desc">Unfollow interest</string>
 </resources>
