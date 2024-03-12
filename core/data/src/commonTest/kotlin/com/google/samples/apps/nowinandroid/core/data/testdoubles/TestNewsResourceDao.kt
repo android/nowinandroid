@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
+import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDaoInterface
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
@@ -32,7 +33,7 @@ val nonPresentInterestsIds = setOf("2")
 /**
  * Test double for [NewsResourceDao]
  */
-class TestNewsResourceDao : NewsResourceDao {
+class TestNewsResourceDao : NewsResourceDaoInterface {
 
     private val entitiesStateFlow = MutableStateFlow(emptyList<NewsResourceEntity>())
 
@@ -91,6 +92,10 @@ class TestNewsResourceDao : NewsResourceDao {
                 }
                 result.map { it.entity.id }
             }
+
+    override suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         entitiesStateFlow.update { oldValues ->

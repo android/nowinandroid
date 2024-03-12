@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.map
 /**
  * DAO for [NewsResourceFtsEntity] access.
  */
-class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : NewsResourceFtsDaoInterface {
     private val dbQuery = db.newsResourceFtsQueries
-    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
+    override suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
         newsResources.forEach {
             dbQuery.insert(
                 news_resource_id = it.newsResourceId,
@@ -40,13 +40,13 @@ class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispa
         }
     }
 
-    fun searchAllNewsResources(query: String): Flow<List<String>> {
+    override fun searchAllNewsResources(query: String): Flow<List<String>> {
         return dbQuery.searchAllNewsResources(query)
             .asFlow()
             .mapToList(dispatcher)
     }
 
-    fun getCount(): Flow<Int> {
+    override fun getCount(): Flow<Int> {
         return dbQuery.getCount()
             .asFlow()
             .mapToOneNotNull(dispatcher)

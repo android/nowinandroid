@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore
+package com.google.samples.apps.nowinandroid.core.database.dao
 
-enum class DarkThemeConfigProto {
-    DARK_THEME_CONFIG_UNSPECIFIED,
-    DARK_THEME_CONFIG_FOLLOW_SYSTEM,
-    DARK_THEME_CONFIG_LIGHT,
-    DARK_THEME_CONFIG_DARK,
+import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
+import kotlinx.coroutines.flow.Flow
+
+interface RecentSearchQueryDaoInterface {
+    fun getRecentSearchQueryEntities(limit: Int): Flow<List<RecentSearchQueryEntity>>
+    suspend fun insertOrReplaceRecentSearchQuery(recentSearchQuery: RecentSearchQueryEntity)
+    suspend fun clearRecentSearchQueries()
 }

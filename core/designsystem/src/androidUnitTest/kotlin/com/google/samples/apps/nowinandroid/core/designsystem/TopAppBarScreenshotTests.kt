@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem
 
-import android.R.string
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable

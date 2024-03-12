@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore
+package com.google.samples.apps.nowinandroid.core.database.dao
 
-enum class ThemeBrandProto {
-    THEME_BRAND_UNSPECIFIED,
-    THEME_BRAND_DEFAULT,
-    THEME_BRAND_ANDROID,
+import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
+import kotlinx.coroutines.flow.Flow
+
+interface NewsResourceFtsDaoInterface {
+    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>)
+    fun searchAllNewsResources(query: String): Flow<List<String>>
+    fun getCount(): Flow<Int>
 }

@@ -121,7 +121,6 @@ dependencies {
 
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
-    androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.accompanist.testharness)
