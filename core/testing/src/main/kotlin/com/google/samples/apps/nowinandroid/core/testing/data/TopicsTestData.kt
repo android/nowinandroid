@@ -18,7 +18,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.domain.model.Topic
 
 val topicsTestData: List<Topic> = listOf(
     Topic(

@@ -30,7 +30,7 @@ dependencies {
     api(libs.androidx.metrics)
     api(projects.core.analytics)
     api(projects.core.designsystem)
-    api(projects.core.model)
+    api(projects.core.domain)
 
     implementation(libs.androidx.browser)
     implementation(libs.coil.kt)

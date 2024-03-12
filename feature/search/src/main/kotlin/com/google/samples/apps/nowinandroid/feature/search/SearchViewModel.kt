@@ -22,11 +22,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
-import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
-import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
-import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.domain.model.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.domain.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.domain.usecase.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.usecase.GetSearchContentsCountUseCase
+import com.google.samples.apps.nowinandroid.core.domain.usecase.GetSearchContentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

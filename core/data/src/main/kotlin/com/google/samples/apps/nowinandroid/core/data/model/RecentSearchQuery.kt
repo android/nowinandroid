@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.model
 
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-
-data class RecentSearchQuery(
-    val query: String,
-    val queriedDate: Instant = Clock.System.now(),
-)
+import com.google.samples.apps.nowinandroid.core.domain.model.RecentSearchQuery
 
 fun RecentSearchQueryEntity.asExternalModel() = RecentSearchQuery(
     query = query,

@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.Synchronizer
-import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
+import com.google.samples.apps.nowinandroid.core.domain.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 
 /**
  * Test synchronizer that delegates to [NiaPreferencesDataSource]

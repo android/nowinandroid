@@ -28,11 +28,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.domain.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.ANDROID
+import com.google.samples.apps.nowinandroid.core.domain.model.UserData
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import org.junit.Before

@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.data.test.repository
 
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
+import com.google.samples.apps.nowinandroid.core.domain.model.SearchResult
+import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject

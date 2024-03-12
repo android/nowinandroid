@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.network.model
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 

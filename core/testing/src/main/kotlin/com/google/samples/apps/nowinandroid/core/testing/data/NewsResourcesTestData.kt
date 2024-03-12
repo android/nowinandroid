@@ -18,7 +18,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
 import kotlinx.datetime.Instant
 
 val newsResourcesTestData: List<NewsResource> = listOf(

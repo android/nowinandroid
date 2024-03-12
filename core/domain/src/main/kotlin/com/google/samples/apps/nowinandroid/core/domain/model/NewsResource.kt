@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.data
+package com.google.samples.apps.nowinandroid.core.domain.model
+
+import kotlinx.datetime.Instant
 
 /**
- * Class summarizing user interest data
+ * External data layer representation of a fully populated NiA news resource
  */
-data class UserData(
-    val bookmarkedNewsResources: Set<String>,
-    val viewedNewsResources: Set<String>,
-    val followedTopics: Set<String>,
-    val themeBrand: ThemeBrand,
-    val darkThemeConfig: DarkThemeConfig,
-    val useDynamicColor: Boolean,
-    val shouldHideOnboarding: Boolean,
+data class NewsResource(
+    val id: String,
+    val title: String,
+    val content: String,
+    val url: String,
+    val headerImageUrl: String?,
+    val publishDate: Instant,
+    val type: String,
+    val topics: List<Topic>,
 )

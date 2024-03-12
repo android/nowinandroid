@@ -16,7 +16,7 @@
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.nowinandroid.android.hilt)
 }
 
 android {
@@ -24,8 +24,7 @@ android {
 }
 
 dependencies {
-    api(projects.core.data)
-    api(projects.core.model)
+    api(libs.kotlinx.datetime)
 
     implementation(libs.javax.inject)
 

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore
+package com.google.samples.apps.nowinandroid.core.domain.model
 
-/**
- * Class summarizing the local version of each model for sync
- */
-data class ChangeListVersions(
-    val topicVersion: Int = -1,
-    val newsResourceVersion: Int = -1,
-)
+enum class DarkThemeConfig {
+    FOLLOW_SYSTEM,
+    LIGHT,
+    DARK,
+}

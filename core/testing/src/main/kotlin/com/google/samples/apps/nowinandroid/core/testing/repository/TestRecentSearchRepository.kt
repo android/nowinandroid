@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
-import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.domain.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.domain.repository.RecentSearchRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -29,7 +29,11 @@ class TestRecentSearchRepository : RecentSearchRepository {
         flowOf(cachedRecentSearches.sortedByDescending { it.queriedDate }.take(limit))
 
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {
-        cachedRecentSearches.add(RecentSearchQuery(searchQuery))
+        cachedRecentSearches.add(
+            RecentSearchQuery(
+                searchQuery,
+            ),
+        )
     }
 
     override suspend fun clearRecentSearches() = cachedRecentSearches.clear()

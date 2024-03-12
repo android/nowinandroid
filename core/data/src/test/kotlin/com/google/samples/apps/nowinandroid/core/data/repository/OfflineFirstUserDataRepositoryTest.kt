@@ -19,9 +19,11 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.domain.model.UserData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.TestScope
@@ -68,8 +70,8 @@ class OfflineFirstUserDataRepositoryTest {
                     bookmarkedNewsResources = emptySet(),
                     viewedNewsResources = emptySet(),
                     followedTopics = emptySet(),
-                    themeBrand = ThemeBrand.DEFAULT,
-                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                    themeBrand = DEFAULT,
+                    darkThemeConfig = FOLLOW_SYSTEM,
                     useDynamicColor = false,
                     shouldHideOnboarding = false,
                 ),

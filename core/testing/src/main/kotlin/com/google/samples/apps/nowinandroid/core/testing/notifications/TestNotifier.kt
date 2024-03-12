@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.notifications
 
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
 import com.google.samples.apps.nowinandroid.core.notifications.Notifier
 
 /**

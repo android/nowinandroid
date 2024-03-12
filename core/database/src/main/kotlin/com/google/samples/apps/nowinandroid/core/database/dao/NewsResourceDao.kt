@@ -25,7 +25,6 @@ import androidx.room.Upsert
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.coroutines.flow.Flow
 
 /**

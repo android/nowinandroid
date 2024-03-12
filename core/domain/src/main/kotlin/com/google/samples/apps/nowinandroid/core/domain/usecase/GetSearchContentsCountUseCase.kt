@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain
+package com.google.samples.apps.nowinandroid.core.domain.usecase
 
-import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
-import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
- * A use case which returns the recent search queries.
+ * A use case which returns total count of *Fts tables
  */
-class GetRecentSearchQueriesUseCase @Inject constructor(
-    private val recentSearchRepository: RecentSearchRepository,
+class GetSearchContentsCountUseCase @Inject constructor(
+    private val searchContentsRepository: SearchContentsRepository,
 ) {
-    operator fun invoke(limit: Int = 10): Flow<List<RecentSearchQuery>> =
-        recentSearchRepository.getRecentSearchQueries(limit)
+    operator fun invoke(): Flow<Int> =
+        searchContentsRepository.getSearchContentsCount()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model.data
+package com.google.samples.apps.nowinandroid.core.domain.model
 
 /**
- * A [topic] with the additional information for whether or not it is followed.
+ * Class summarizing the local version of each model for sync
  */
-// TODO consider changing to UserTopic and flattening
-data class FollowableTopic(
-    val topic: Topic,
-    val isFollowed: Boolean,
+data class ChangeListVersions(
+    val topicVersion: Int = -1,
+    val newsResourceVersion: Int = -1,
 )

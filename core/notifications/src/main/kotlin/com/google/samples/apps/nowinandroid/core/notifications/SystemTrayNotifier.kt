@@ -32,7 +32,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,7 +55,7 @@ internal class SystemTrayNotifier @Inject constructor(
 ) : Notifier {
 
     override fun postNewsNotifications(
-        newsResources: List<NewsResource>,
+        newsResources: List<com.google.samples.apps.nowinandroid.core.domain.model.NewsResource>,
     ) = with(context) {
         if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
             return
@@ -108,7 +108,7 @@ internal class SystemTrayNotifier @Inject constructor(
      * Creates an inbox style summary notification for news updates
      */
     private fun newsNotificationStyle(
-        newsResources: List<NewsResource>,
+        newsResources: List<com.google.samples.apps.nowinandroid.core.domain.model.NewsResource>,
         title: String,
     ): InboxStyle = newsResources
         .fold(InboxStyle()) { inboxStyle, newsResource -> inboxStyle.addLine(newsResource.title) }
@@ -150,7 +150,7 @@ private fun Context.ensureNotificationChannelExists() {
 }
 
 private fun Context.newsPendingIntent(
-    newsResource: NewsResource,
+    newsResource: com.google.samples.apps.nowinandroid.core.domain.model.NewsResource,
 ): PendingIntent? = PendingIntent.getActivity(
     this,
     NEWS_NOTIFICATION_REQUEST_CODE,
@@ -165,4 +165,4 @@ private fun Context.newsPendingIntent(
     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
 )
 
-private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()
+private fun com.google.samples.apps.nowinandroid.core.domain.model.NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()

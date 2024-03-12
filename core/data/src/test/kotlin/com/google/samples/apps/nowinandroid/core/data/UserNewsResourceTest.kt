@@ -16,14 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import kotlinx.datetime.Clock
+import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.domain.model.UserData
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import kotlinx.datetime.Clock.System
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -43,7 +43,7 @@ class UserNewsResourceTest {
             content = "Test news content",
             url = "Test URL",
             headerImageUrl = "Test image URL",
-            publishDate = Clock.System.now(),
+            publishDate = System.now(),
             type = "Article 📚",
             topics = listOf(
                 Topic(

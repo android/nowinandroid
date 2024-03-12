@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 
 /**
  * Extension function for displaying a [List] of [NewsResourceCardExpanded] backed by a list of
@@ -34,8 +34,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
  * When a news resource card is tapped it will open the news resource URL in a Chrome Custom Tab.
  */
 fun LazyListScope.userNewsResourceCardItems(
-    items: List<UserNewsResource>,
-    onToggleBookmark: (item: UserNewsResource) -> Unit,
+    items: List<com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource>,
+    onToggleBookmark: (item: com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     itemModifier: Modifier = Modifier,

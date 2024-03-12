@@ -18,11 +18,11 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.ANDROID
+import com.google.samples.apps.nowinandroid.core.domain.model.UserData
+import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -32,8 +32,8 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
     bookmarkedNewsResources = setOf("1", "4"),
     viewedNewsResources = setOf("1", "2", "4"),
     followedTopics = emptySet(),
-    themeBrand = ThemeBrand.ANDROID,
-    darkThemeConfig = DarkThemeConfig.DARK,
+    themeBrand = ANDROID,
+    darkThemeConfig = DARK,
     shouldHideOnboarding = true,
     useDynamicColor = false,
 ).let { userData ->

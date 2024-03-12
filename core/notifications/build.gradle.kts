@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    api(projects.core.model)
+    api(projects.core.domain)
 
     implementation(projects.core.common)
 
