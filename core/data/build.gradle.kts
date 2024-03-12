@@ -43,10 +43,9 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.multiplatform.settings.test)
             implementation(libs.kotlinx.serialization.json)
-//            implementation(projects.core.datastoreTest)
-//            implementation(projects.core.testing)
+            implementation(projects.core.testing)
         }
 
         androidMain.dependencies {
