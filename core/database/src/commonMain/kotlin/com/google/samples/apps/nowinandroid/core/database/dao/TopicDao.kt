@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.map
  * DAO for [TopicEntity] access
  */
 
-class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): TopicDaoInterface {
+class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : TopicDaoInterface {
 
     private val query = db.topicsQueries
 

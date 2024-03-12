@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.di
 
-import com.google.samples.apps.nowinandroid.core.di.DispatchersComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import me.tatarka.inject.annotations.Component

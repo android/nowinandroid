@@ -49,7 +49,7 @@ fun DynamicAsyncImage(
     imageLoader: ImageLoader,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    //TODO Use Compose resources to present a placeholder
+    // TODO Use Compose resources to present a placeholder
 //    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder_default),
 ) {
     val iconTint = LocalTintTheme.current.iconTint

@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.map
 /**
  * DAO for [NewsResourceFtsEntity] access.
  */
-class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): NewsResourceFtsDaoInterface {
+class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : NewsResourceFtsDaoInterface {
     private val dbQuery = db.newsResourceFtsQueries
     override suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
         newsResources.forEach {

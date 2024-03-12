@@ -30,7 +30,7 @@ import kotlinx.datetime.Instant
 /**
  * DAO for [NewsResource] and [NewsResourceEntity] access
  */
-class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): NewsResourceDaoInterface {
+class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : NewsResourceDaoInterface {
     private val query = db.newsResourceQueries
 
     /**

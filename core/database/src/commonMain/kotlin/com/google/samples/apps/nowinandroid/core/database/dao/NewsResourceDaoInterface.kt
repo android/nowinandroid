@@ -26,14 +26,14 @@ interface NewsResourceDaoInterface {
         useFilterTopicIds: Boolean = false,
         filterTopicIds: Set<String> = emptySet(),
         useFilterNewsIds: Boolean = false,
-        filterNewsIds: Set<String> = emptySet()
+        filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<PopulatedNewsResource>>
 
     fun getNewsResourceIds(
         useFilterTopicIds: Boolean = false,
         filterTopicIds: Set<String> = emptySet(),
         useFilterNewsIds: Boolean = false,
-        filterNewsIds: Set<String> = emptySet()
+        filterNewsIds: Set<String> = emptySet(),
     ): Flow<List<String>>
 
     suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long>

@@ -236,7 +236,7 @@ fun NiaTheme(
     }
 }
 
-//@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-//fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+// @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+// fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 // A workaround for the dynamic theming support in Compose Multiplatform
 fun supportsDynamicTheming() = false

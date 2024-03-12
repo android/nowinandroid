@@ -28,7 +28,7 @@ import kotlinx.datetime.Instant
 /**
  * DAO for [RecentSearchQueryEntity] access
  */
-class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): RecentSearchQueryDaoInterface {
+class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : RecentSearchQueryDaoInterface {
 
     private val query = db.recentSearchQueryQueries
 
