@@ -2,8 +2,9 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
-Now in Android App
+Now in Android App - Kotlin Multiplatform Edition
 ==================
+Welcome to the Kotlin Multiplatform edition of Now in Android, a community-driven initiative to bring the best of Android development content to developers across platforms. This repository is a branch of the original Now in Android project, reimagined and re-engineered using Kotlin Multiplatform technology to make the project truly cross-platform.
 
 **Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
 
