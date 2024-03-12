@@ -58,7 +58,7 @@ class BookmarksViewModel @Inject constructor(
         viewModelScope.launch {
             shouldDisplayUndoBookmark = true
             lastRemovedBookmarkId = newsResourceId
-            userDataRepository.setNewsResourceBookmark(newsResourceId, false)
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, false)
         }
     }
 
@@ -71,7 +71,7 @@ class BookmarksViewModel @Inject constructor(
     fun undoBookmarkRemoval() {
         viewModelScope.launch {
             lastRemovedBookmarkId?.let {
-                userDataRepository.setNewsResourceBookmark(it, true)
+                userDataRepository.setNewsResourceBookmarked(it, true)
             }
         }
         clearUndoState()
