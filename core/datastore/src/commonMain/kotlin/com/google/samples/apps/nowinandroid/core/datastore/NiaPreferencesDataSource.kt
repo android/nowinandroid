@@ -19,12 +19,15 @@ package com.google.samples.apps.nowinandroid.core.datastore
 import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.decodeValueOrNull
 import com.russhwolf.settings.serialization.encodeValue
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 
@@ -37,7 +40,7 @@ class NiaPreferencesDataSource(
 ) {
     // FlowSettings did not support JS, use a workaround instead
     // https://github.com/russhwolf/multiplatform-settings/issues/139
-    val userData = MutableStateFlow(
+    private val _userData = MutableStateFlow(
         settings.decodeValue(
             key = USER_DATA_KEY,
             serializer = UserPreferences.serializer(),
@@ -48,12 +51,24 @@ class NiaPreferencesDataSource(
         ),
     )
 
+    val userData: Flow<UserData> = _userData.map {
+        UserData(
+            bookmarkedNewsResources = it.bookmarkedNewsResourceIds,
+            viewedNewsResources = it.viewedNewsResourceIds,
+            followedTopics = it.followedTopicIds,
+            themeBrand = it.themeBrand.toThemeBrand(),
+            darkThemeConfig = it.darkThemeConfig.toDarkThemeConfig(),
+            useDynamicColor = it.useDynamicColor,
+            shouldHideOnboarding = it.shouldHideOnboarding,
+        )
+    }
+
     suspend fun setFollowedTopicIds(topicIds: Set<String>) = withContext(dispatcher) {
         val preference = settings.getUserPreference()
             .copy(followedTopicIds = topicIds)
             .updateShouldHideOnboardingIfNecessary()
         settings.putUserPreference(preference)
-        userData.value = preference
+        _userData.value = preference
     }
 
     suspend fun setTopicIdFollowed(topicId: String, followed: Boolean) = withContext(dispatcher) {
@@ -68,28 +83,28 @@ class NiaPreferencesDataSource(
             )
             .updateShouldHideOnboardingIfNecessary()
         settings.putUserPreference(newPreference)
-        userData.value = newPreference
+        _userData.value = newPreference
     }
 
     suspend fun setThemeBrand(themeBrand: ThemeBrand) = withContext(dispatcher) {
         val newPreference = settings.getUserPreference()
             .copy(themeBrand = themeBrand.toThemeBrandProto())
         settings.putUserPreference(newPreference)
-        userData.value = newPreference
+        _userData.value = newPreference
     }
 
     suspend fun setDynamicColorPreference(useDynamicColor: Boolean) = withContext(dispatcher) {
         val newPreference = settings.getUserPreference()
             .copy(useDynamicColor = useDynamicColor)
         settings.putUserPreference(newPreference)
-        userData.value = newPreference
+        _userData.value = newPreference
     }
 
     suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) = withContext(dispatcher) {
         val newPreference = settings.getUserPreference()
             .copy(darkThemeConfig = darkThemeConfig.toDarkThemeConfigProto())
         settings.putUserPreference(newPreference)
-        userData.value = newPreference
+        _userData.value = newPreference
     }
 
     suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) =
@@ -104,7 +119,7 @@ class NiaPreferencesDataSource(
                     },
                 )
             settings.putUserPreference(newPreferences)
-            userData.value = newPreferences
+            _userData.value = newPreferences
         }
 
     suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
@@ -123,7 +138,7 @@ class NiaPreferencesDataSource(
                     },
                 )
             settings.putUserPreference(newPreferences)
-            userData.value = newPreferences
+            _userData.value = newPreferences
         }
 
     suspend fun getChangeListVersions(): ChangeListVersions = withContext(dispatcher) {
@@ -151,14 +166,14 @@ class NiaPreferencesDataSource(
                 newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion,
             )
             settings.putUserPreference(updatedPreference)
-            userData.value = updatedPreference
+            _userData.value = updatedPreference
         }
 
     suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) = withContext(dispatcher) {
         val newPreference = settings.getUserPreference()
             .copy(shouldHideOnboarding = shouldHideOnboarding)
         settings.putUserPreference(newPreference)
-        userData.value = newPreference
+        _userData.value = newPreference
     }
 }
 
@@ -210,5 +225,15 @@ private fun DarkThemeConfig.toDarkThemeConfigProto(): DarkThemeConfigProto {
         DarkThemeConfig.FOLLOW_SYSTEM -> DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
         DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
         DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
+    }
+}
+
+private fun DarkThemeConfigProto.toDarkThemeConfig(): DarkThemeConfig {
+    return when (this) {
+        DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
+        DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM,
+        -> DarkThemeConfig.FOLLOW_SYSTEM
+        DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
+        DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT -> DarkThemeConfig.LIGHT
     }
 }

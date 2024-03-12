@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
     id("kotlinx-serialization")
 }
 
@@ -30,17 +30,29 @@ android {
     }
 }
 
-dependencies {
-    api(projects.core.common)
-    api(projects.core.database)
-    api(projects.core.datastore)
-    api(projects.core.network)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.common)
+            api(projects.core.database)
+            api(projects.core.datastore)
+            api(projects.core.network)
 
-    implementation(projects.core.analytics)
-    implementation(projects.core.notifications)
+            implementation(projects.core.analytics)
+            implementation(projects.core.notifications)
+        }
 
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.kotlinx.serialization.json)
-    testImplementation(projects.core.datastoreTest)
-    testImplementation(projects.core.testing)
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotlinx.serialization.json)
+//            implementation(projects.core.datastoreTest)
+//            implementation(projects.core.testing)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.tracing.ktx)
+        }
+    }
 }
+

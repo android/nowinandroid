@@ -202,6 +202,8 @@ io.coil-kt:coil-compose-base:2.6.0
 io.coil-kt:coil-compose:2.6.0
 io.coil-kt:coil-svg:2.6.0
 io.coil-kt:coil:2.6.0
+io.github.aakira:napier-android:1.4.1
+io.github.aakira:napier:1.4.1
 javax.inject:javax.inject:1
 me.tatarka.inject:kotlin-inject-runtime-jvm:0.6.3
 me.tatarka.inject:kotlin-inject-runtime:0.6.3

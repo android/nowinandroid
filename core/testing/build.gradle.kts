@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.kotlin.inject)
     alias(libs.plugins.nowinandroid.android.library.compose)
     alias(libs.plugins.nowinandroid.android.hilt)
 }
@@ -23,24 +24,25 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.core.testing"
 }
 
-dependencies {
-    api(kotlin("test"))
-    api(libs.androidx.compose.ui.test)
-    api(libs.roborazzi)
-    api(projects.core.analytics)
-    api(projects.core.data)
-    api(projects.core.model)
-    api(projects.core.notifications)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(kotlin("test"))
+//            api(libs.androidx.compose.ui.test)
+            api(projects.core.analytics)
+            api(projects.core.data)
+            api(projects.core.model)
+            api(projects.core.notifications)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotlinx.datetime)
+            implementation(projects.core.common)
+            implementation(projects.core.designsystem)
+        }
 
-    debugApi(libs.androidx.compose.ui.testManifest)
-
-    implementation(libs.accompanist.testharness)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.test.rules)
-    implementation(libs.hilt.android.testing)
-    implementation(libs.kotlinx.coroutines.test)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.robolectric.shadows)
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
+        androidMain.dependencies {
+            api(libs.androidx.compose.ui.testManifest)
+            implementation(libs.androidx.test.rules)
+            implementation(libs.hilt.android.testing)
+        }
+    }
 }

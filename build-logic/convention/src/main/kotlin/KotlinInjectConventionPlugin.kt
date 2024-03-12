@@ -34,6 +34,11 @@ class KotlinInjectConventionPlugin: Plugin<Project> {
                 add("kspIosX64", libs.findLibrary("kotlin.inject.compiler.ksp").get())
                 add("kspIosArm64", libs.findLibrary("kotlin.inject.compiler.ksp").get())
                 add("kspIosSimulatorArm64", libs.findLibrary("kotlin.inject.compiler.ksp").get())
+//                add("kspWasmJs", libs.findLibrary("kotlin.inject.compiler.ksp").get())
+                add("kspAndroid", libs.findLibrary("kotlin.inject.compiler.ksp").get())
+                add("kspJvm", libs.findLibrary("kotlin.inject.compiler.ksp").get())
+                add("kspMacosX64", libs.findLibrary("kotlin.inject.compiler.ksp").get())
+                add("kspMacosArm64", libs.findLibrary("kotlin.inject.compiler.ksp").get())
             }
         }
     }

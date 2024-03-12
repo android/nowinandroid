@@ -50,16 +50,13 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.sqldelight.sqlite.driver)
         }
-        jsMain.dependencies {
-            implementation(libs.sqldelight.webworker.driver)
-            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
-            implementation(npm("sql.js", "1.8.0"))
-            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.kotlinx.coroutines.test)
-        }
+        // https://github.com/cashapp/sqldelight/pull/4965/files
+//        wasmJsMain.dependencies {
+//            implementation(libs.sqldelight.webworker.driver)
+//            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
+//            implementation(npm("sql.js", "1.8.0"))
+//            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
+//        }
     }
 }
 
