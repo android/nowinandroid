@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,13 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onRoot
-import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -41,39 +38,26 @@ import org.robolectric.annotation.LooperMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class TagScreenshotTests() {
+class BackgroundScreenshotTests {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun Tag_multipleThemes() {
-        composeTestRule.captureMultiTheme("Tag") {
-            NiaTopicTag(followed = true, onClick = {}) {
-                Text("TOPIC")
+    fun niaBackground_multipleThemes() {
+        composeTestRule.captureMultiTheme("Background") { description ->
+            NiaBackground(Modifier.size(100.dp)) {
+                Text("$description background")
             }
         }
     }
 
     @Test
-    fun tag_hugeFont() {
-        composeTestRule.setContent {
-            CompositionLocalProvider(
-                LocalInspectionMode provides true,
-            ) {
-                TestHarness(fontScale = 2f) {
-                    NiaTheme {
-                        NiaTopicTag(followed = true, onClick = {}) {
-                            Text("LOOOOONG TOPIC")
-                        }
-                    }
-                }
+    fun niaGradientBackground_multipleThemes() {
+        composeTestRule.captureMultiTheme("Background", "GradientBackground") { description ->
+            NiaGradientBackground(Modifier.size(100.dp)) {
+                Text("$description background")
             }
         }
-        composeTestRule.onRoot()
-            .captureRoboImage(
-                "src/test/screenshots/Tag/Tag_fontScale2.png",
-                roborazziOptions = DefaultRoborazziOptions,
-            )
     }
 }

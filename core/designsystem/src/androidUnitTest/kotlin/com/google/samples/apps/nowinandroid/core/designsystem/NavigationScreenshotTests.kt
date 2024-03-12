@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,19 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
@@ -45,54 +46,63 @@ import org.robolectric.annotation.LooperMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class FilterChipScreenshotTests() {
+class NavigationScreenshotTests() {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun filterChip_multipleThemes() {
-        composeTestRule.captureMultiTheme("FilterChip") {
+    fun navigation_multipleThemes() {
+        composeTestRule.captureMultiTheme("Navigation") {
             Surface {
-                NiaFilterChip(selected = false, onSelectedChange = {}) {
-                    Text("Unselected chip")
-                }
+                NiaNavigationBarExample()
             }
         }
     }
 
     @Test
-    fun filterChip_multipleThemes_selected() {
-        composeTestRule.captureMultiTheme("FilterChip", "FilterChipSelected") {
-            Surface {
-                NiaFilterChip(selected = true, onSelectedChange = {}) {
-                    Text("Selected Chip")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun filterChip_hugeFont() {
+    fun navigation_hugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
-                TestHarness(fontScale = 2f, size = DpSize(80.dp, 40.dp)) {
+                TestHarness(fontScale = 2f) {
                     NiaTheme {
-                        NiaBackground {
-                            NiaFilterChip(selected = true, onSelectedChange = {}) {
-                                Text("Chip")
-                            }
-                        }
+                        NiaNavigationBarExample("Looong item")
                     }
                 }
             }
         }
         composeTestRule.onRoot()
             .captureRoboImage(
-                "src/test/screenshots/FilterChip/FilterChip_fontScale2.png",
+                "src/test/screenshots/Navigation" +
+                    "/Navigation_fontScale2.png",
                 roborazziOptions = DefaultRoborazziOptions,
             )
+    }
+
+    @Composable
+    private fun NiaNavigationBarExample(label: String = "Item") {
+        NiaNavigationBar {
+            (0..2).forEach { index ->
+                NiaNavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = NiaIcons.UpcomingBorder,
+                            contentDescription = "",
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = NiaIcons.Upcoming,
+                            contentDescription = "",
+                        )
+                    },
+                    label = { Text(label) },
+                    selected = index == 0,
+                    onClick = { },
+                )
+            }
+        }
     }
 }

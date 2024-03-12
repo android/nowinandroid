@@ -33,8 +33,17 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
         }
+        androidInstrumentedTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+            implementation(projects.core.testing)
+        }
         androidUnitTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
+            implementation(libs.accompanist.testharness)
+            implementation(libs.robolectric)
+            implementation(libs.roborazzi)
+            implementation(libs.hilt.android.testing)
+            implementation(projects.core.screenshotTesting)
             implementation(projects.core.testing)
         }
         commonMain.dependencies {
@@ -51,13 +60,7 @@ kotlin {
         }
     }
 }
+
 dependencies {
     lintPublish(projects.lint)
-
-    testImplementation(libs.androidx.compose.ui.test)
-    testImplementation(libs.accompanist.testharness)
-    testImplementation(libs.robolectric)
-    testImplementation(libs.roborazzi)
-    testImplementation(projects.core.screenshotTesting)
-    testImplementation(projects.core.testing)
 }

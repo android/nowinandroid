@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
 package com.google.samples.apps.nowinandroid.core.designsystem
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOutlinedButton
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import androidx.compose.ui.test.onRoot
+import com.github.takahirom.roborazzi.captureRoboImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
@@ -38,43 +39,45 @@ import org.robolectric.annotation.LooperMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class ButtonScreenshotTests {
+class LoadingWheelScreenshotTests() {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun niaButton_multipleThemes() {
-        composeTestRule.captureMultiTheme("Button") { description ->
+    fun loadingWheel_multipleThemes() {
+        composeTestRule.captureMultiTheme("LoadingWheel") {
             Surface {
-                NiaButton(onClick = {}, text = { Text("$description Button") })
+                NiaLoadingWheel(contentDesc = "test")
             }
         }
     }
 
     @Test
-    fun niaOutlineButton_multipleThemes() {
-        composeTestRule.captureMultiTheme("Button", "OutlineButton") { description ->
+    fun overlayLoadingWheel_multipleThemes() {
+        composeTestRule.captureMultiTheme("LoadingWheel", "OverlayLoadingWheel") {
             Surface {
-                NiaOutlinedButton(onClick = {}, text = { Text("$description OutlineButton") })
+                NiaOverlayLoadingWheel(contentDesc = "test")
             }
         }
     }
 
     @Test
-    fun niaButton_leadingIcon_multipleThemes() {
-        composeTestRule.captureMultiTheme(
-            name = "Button",
-            overrideFileName = "ButtonLeadingIcon",
-            shouldCompareAndroidTheme = false,
-        ) { description ->
-            Surface {
-                NiaButton(
-                    onClick = {},
-                    text = { Text("$description Icon Button") },
-                    leadingIcon = { Icon(imageVector = NiaIcons.Add, contentDescription = null) },
+    fun loadingWheelAnimation() {
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.setContent {
+            NiaTheme {
+                NiaLoadingWheel(contentDesc = "")
+            }
+        }
+        // Try multiple frames of the animation; some arbitrary, some synchronized with duration.
+        listOf(20L, 115L, 724L, 1000L).forEach { deltaTime ->
+            composeTestRule.mainClock.advanceTimeBy(deltaTime)
+            composeTestRule.onRoot()
+                .captureRoboImage(
+                    "src/test/screenshots/LoadingWheel/LoadingWheel_animation_$deltaTime.png",
+                    roborazziOptions = DefaultRoborazziOptions,
                 )
-            }
         }
     }
 }

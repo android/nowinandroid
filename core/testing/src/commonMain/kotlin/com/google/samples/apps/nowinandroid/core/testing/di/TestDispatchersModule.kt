@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,13 @@
 package com.google.samples.apps.nowinandroid.core.testing.di
 
 import com.google.samples.apps.nowinandroid.core.di.DispatchersComponent
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.TestDispatcher
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [DispatchersComponent::class],
-)
-internal object TestDispatchersModule {
+@Component
+internal abstract class TestDispatchersModule {
     @Provides
-    @Dispatcher(IO)
-    fun providesIODispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
-
-    @Provides
-    @Dispatcher(Default)
-    fun providesDefaultDispatcher(
-        testDispatcher: TestDispatcher,
-    ): CoroutineDispatcher = testDispatcher
+    fun providesDispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
 }

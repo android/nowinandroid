@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem
 
+import android.R.string
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -26,8 +26,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.accompanist.testharness.TestHarness
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTab
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTabRow
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
@@ -40,55 +40,51 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class TabsScreenshotTests() {
+class TopAppBarScreenshotTests {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun tabs_multipleThemes() {
-        composeTestRule.captureMultiTheme("Tabs") {
-            NiaTabsExample()
+    fun topAppBar_multipleThemes() {
+        composeTestRule.captureMultiTheme("TopAppBar") {
+            NiaTopAppBarExample()
         }
     }
 
     @Test
-    fun tabs_hugeFont() {
+    fun topAppBar_hugeFont() {
         composeTestRule.setContent {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
                 TestHarness(fontScale = 2f) {
                     NiaTheme {
-                        NiaTabsExample("Looooong item")
+                        NiaTopAppBarExample()
                     }
                 }
             }
         }
         composeTestRule.onRoot()
             .captureRoboImage(
-                "src/test/screenshots/Tabs/Tabs_fontScale2.png",
+                "src/test/screenshots/TopAppBar/TopAppBar_fontScale2.png",
                 roborazziOptions = DefaultRoborazziOptions,
             )
     }
 
     @Composable
-    private fun NiaTabsExample(label: String = "Topics") {
-        Surface {
-            val titles = listOf(label, "People")
-            NiaTabRow(selectedTabIndex = 0) {
-                titles.forEachIndexed { index, title ->
-                    NiaTab(
-                        selected = index == 0,
-                        onClick = { },
-                        text = { Text(text = title) },
-                    )
-                }
-            }
-        }
+    private fun NiaTopAppBarExample() {
+        NiaTopAppBar(
+            title = "Untitled",
+            navigationIcon = NiaIcons.Search,
+            navigationIconContentDescription = "Navigation icon",
+            actionIcon = NiaIcons.MoreVert,
+            actionIconContentDescription = "Action icon",
+        )
     }
 }
