@@ -16,11 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.usecase
 
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.SearchResult
-import com.google.samples.apps.nowinandroid.core.model.UserData
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import kotlinx.coroutines.flow.Flow
@@ -37,22 +37,22 @@ class GetSearchContentsUseCase @Inject constructor(
 
     operator fun invoke(
         searchQuery: String,
-    ): Flow<com.google.samples.apps.nowinandroid.core.model.UserSearchResult> =
+    ): Flow<UserSearchResult> =
         searchContentsRepository.searchContents(searchQuery)
             .mapToUserSearchResult(userDataRepository.userData)
 }
 
-private fun Flow<com.google.samples.apps.nowinandroid.core.model.SearchResult>.mapToUserSearchResult(userDataStream: Flow<com.google.samples.apps.nowinandroid.core.model.UserData>): Flow<com.google.samples.apps.nowinandroid.core.model.UserSearchResult> =
+private fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Flow<UserSearchResult> =
     combine(userDataStream) { searchResult, userData ->
-        com.google.samples.apps.nowinandroid.core.model.UserSearchResult(
+        UserSearchResult(
             topics = searchResult.topics.map { topic ->
-                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                FollowableTopic(
                     topic = topic,
                     isFollowed = topic.id in userData.followedTopics,
                 )
             },
             newsResources = searchResult.newsResources.map { news ->
-                com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                UserNewsResource(
                     newsResource = news,
                     userData = userData,
                 )

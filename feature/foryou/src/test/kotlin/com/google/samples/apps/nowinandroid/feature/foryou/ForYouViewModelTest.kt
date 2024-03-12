@@ -20,11 +20,11 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.Topic
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -157,8 +157,8 @@ class ForYouViewModelTest {
         assertEquals(
             OnboardingUiState.Shown(
                 topics = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "0",
                             name = "Headlines",
                             shortDescription = "",
@@ -168,8 +168,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "1",
                             name = "UI",
                             shortDescription = "",
@@ -179,8 +179,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "2",
                             name = "Tools",
                             shortDescription = "",
@@ -218,8 +218,8 @@ class ForYouViewModelTest {
         assertEquals(
             OnboardingUiState.Shown(
                 topics = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "0",
                             name = "Headlines",
                             shortDescription = "",
@@ -229,8 +229,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "1",
                             name = "UI",
                             shortDescription = "",
@@ -240,8 +240,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "2",
                             name = "Tools",
                             shortDescription = "",
@@ -315,7 +315,7 @@ class ForYouViewModelTest {
         assertEquals(
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(it, false)
+                    FollowableTopic(it, false)
                 },
             ),
             viewModel.onboardingUiState.value,
@@ -333,7 +333,7 @@ class ForYouViewModelTest {
         assertEquals(
             OnboardingUiState.Shown(
                 topics = sampleTopics.map {
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                    FollowableTopic(
                         it,
                         it.id == followedTopicId
                     )
@@ -347,11 +347,11 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                    UserNewsResource(
                         sampleNewsResources[1],
                         userData
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                    UserNewsResource(
                         sampleNewsResources[2],
                         userData
                     ),
@@ -380,8 +380,8 @@ class ForYouViewModelTest {
         assertEquals(
             OnboardingUiState.Shown(
                 topics = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "0",
                             name = "Headlines",
                             shortDescription = "",
@@ -391,8 +391,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "1",
                             name = "UI",
                             shortDescription = "",
@@ -402,8 +402,8 @@ class ForYouViewModelTest {
                         ),
                         isFollowed = false,
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
-                        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
+                    FollowableTopic(
+                        topic = Topic(
                             id = "2",
                             name = "Tools",
                             shortDescription = "",
@@ -461,11 +461,11 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[1],
                         userDataExpected
                     ),
-                    com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                    UserNewsResource(
                         newsResource = sampleNewsResources[2],
                         userDataExpected
                     ),
@@ -488,7 +488,7 @@ class ForYouViewModelTest {
         savedStateHandle[LINKED_NEWS_RESOURCE_ID] = sampleNewsResources.first().id
 
         assertEquals(
-            expected = com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+            expected = UserNewsResource(
                 newsResource = sampleNewsResources.first(),
                 userData = emptyUserData,
             ),
@@ -522,7 +522,7 @@ class ForYouViewModelTest {
 }
 
 private val sampleTopics = listOf(
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+    Topic(
         id = "0",
         name = "Headlines",
         shortDescription = "",
@@ -530,7 +530,7 @@ private val sampleTopics = listOf(
         url = "URL",
         imageUrl = "image URL",
     ),
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+    Topic(
         id = "1",
         name = "UI",
         shortDescription = "",
@@ -538,7 +538,7 @@ private val sampleTopics = listOf(
         url = "URL",
         imageUrl = "image URL",
     ),
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+    Topic(
         id = "2",
         name = "Tools",
         shortDescription = "",
@@ -549,7 +549,7 @@ private val sampleTopics = listOf(
 )
 
 private val sampleNewsResources = listOf(
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "1",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -561,7 +561,7 @@ private val sampleNewsResources = listOf(
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = "Video 📺",
         topics = listOf(
-            com.google.samples.apps.nowinandroid.core.model.Topic(
+            Topic(
                 id = "0",
                 name = "Headlines",
                 shortDescription = "",
@@ -571,7 +571,7 @@ private val sampleNewsResources = listOf(
             ),
         ),
     ),
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "2",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed with Paging. " +
@@ -582,7 +582,7 @@ private val sampleNewsResources = listOf(
         publishDate = Instant.parse("2021-11-01T00:00:00.000Z"),
         type = "Video 📺",
         topics = listOf(
-            com.google.samples.apps.nowinandroid.core.model.Topic(
+            Topic(
                 id = "1",
                 name = "UI",
                 shortDescription = "",
@@ -592,7 +592,7 @@ private val sampleNewsResources = listOf(
             ),
         ),
     ),
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "3",
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",
@@ -601,7 +601,7 @@ private val sampleNewsResources = listOf(
         publishDate = Instant.parse("2021-11-08T00:00:00.000Z"),
         type = "Video 📺",
         topics = listOf(
-            com.google.samples.apps.nowinandroid.core.model.Topic(
+            Topic(
                 id = "1",
                 name = "UI",
                 shortDescription = "",

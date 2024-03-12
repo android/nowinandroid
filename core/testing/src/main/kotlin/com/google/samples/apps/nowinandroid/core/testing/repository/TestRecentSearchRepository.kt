@@ -16,21 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.model.data.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.domain.repository.RecentSearchRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class TestRecentSearchRepository : RecentSearchRepository {
 
-    private val cachedRecentSearches: MutableList<com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery> = mutableListOf()
+    private val cachedRecentSearches: MutableList<RecentSearchQuery> = mutableListOf()
 
-    override fun getRecentSearchQueries(limit: Int): Flow<List<com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery>> =
+    override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
         flowOf(cachedRecentSearches.sortedByDescending { it.queriedDate }.take(limit))
 
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {
         cachedRecentSearches.add(
-            com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery(
+            RecentSearchQuery(
                 searchQuery,
             ),
         )

@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
 /**
- * External data layer representation of a NiA Topic
+ * Class summarizing user interest data
  */
-data class Topic(
-    val id: String,
-    val name: String,
-    val shortDescription: String,
-    val longDescription: String,
-    val url: String,
-    val imageUrl: String,
+data class UserData(
+    val bookmarkedNewsResources: Set<String>,
+    val viewedNewsResources: Set<String>,
+    val followedTopics: Set<String>,
+    val themeBrand: ThemeBrand,
+    val darkThemeConfig: DarkThemeConfig,
+    val useDynamicColor: Boolean,
+    val shouldHideOnboarding: Boolean,
 )

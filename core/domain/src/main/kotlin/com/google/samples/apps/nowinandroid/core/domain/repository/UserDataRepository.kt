@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
-import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface UserDataRepository {
@@ -26,7 +26,7 @@ interface UserDataRepository {
     /**
      * Stream of [UserData]
      */
-    val userData: Flow<com.google.samples.apps.nowinandroid.core.model.UserData>
+    val userData: Flow<UserData>
 
     /**
      * Sets the user's currently followed topics
@@ -51,12 +51,12 @@ interface UserDataRepository {
     /**
      * Sets the desired theme brand.
      */
-    suspend fun setThemeBrand(themeBrand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand)
+    suspend fun setThemeBrand(themeBrand: ThemeBrand)
 
     /**
      * Sets the desired dark theme config.
      */
-    suspend fun setDarkThemeConfig(darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig)
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
 
     /**
      * Sets the preferred dynamic color config.

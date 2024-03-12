@@ -22,7 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
-import com.google.samples.apps.nowinandroid.core.model.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import com.google.samples.apps.nowinandroid.core.domain.repository.RecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetSearchContentsCountUseCase
@@ -63,7 +63,7 @@ class SearchViewModel @Inject constructor(
                             getSearchContentsUseCase(query)
                                 // Not using .asResult() here, because it emits Loading state every
                                 // time the user types a letter in the search box, which flickers the screen.
-                                .map<com.google.samples.apps.nowinandroid.core.model.UserSearchResult, SearchResultUiState> { data ->
+                                .map<UserSearchResult, SearchResultUiState> { data ->
                                     SearchResultUiState.Success(
                                         topics = data.topics,
                                         newsResources = data.newsResources,

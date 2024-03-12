@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.test.repository
 
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -40,10 +40,10 @@ internal class FakeTopicsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val datasource: FakeNiaNetworkDataSource,
 ) : TopicsRepository {
-    override fun getTopics(): Flow<List<com.google.samples.apps.nowinandroid.core.model.Topic>> = flow {
+    override fun getTopics(): Flow<List<Topic>> = flow {
         emit(
             datasource.getTopics().map {
-                com.google.samples.apps.nowinandroid.core.model.Topic(
+                Topic(
                     id = it.id,
                     name = it.name,
                     shortDescription = it.shortDescription,
@@ -55,7 +55,7 @@ internal class FakeTopicsRepository @Inject constructor(
         )
     }.flowOn(ioDispatcher)
 
-    override fun getTopic(id: String): Flow<com.google.samples.apps.nowinandroid.core.model.Topic> = getTopics()
+    override fun getTopic(id: String): Flow<Topic> = getTopics()
         .map { it.first { topic -> topic.id == id } }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true

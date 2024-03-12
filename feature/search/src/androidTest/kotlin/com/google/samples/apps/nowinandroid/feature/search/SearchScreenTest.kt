@@ -28,11 +28,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK
-import com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery
-import com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID
-import com.google.samples.apps.nowinandroid.core.model.UserData
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.model.data.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import org.junit.Before
@@ -57,8 +57,8 @@ class SearchScreenTest {
     private lateinit var tryAnotherSearchString: String
     private lateinit var searchNotReadyString: String
 
-    private val userData: com.google.samples.apps.nowinandroid.core.model.UserData =
-        com.google.samples.apps.nowinandroid.core.model.UserData(
+    private val userData: UserData =
+        UserData(
             bookmarkedNewsResources = setOf("1", "3"),
             viewedNewsResources = setOf("1", "2", "4"),
             followedTopics = emptySet(),
@@ -170,7 +170,7 @@ class SearchScreenTest {
             SearchScreen(
                 searchResultUiState = SearchResultUiState.Success(
                     newsResources = newsResourcesTestData.map {
-                        com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+                        UserNewsResource(
                             newsResource = it,
                             userData = userData,
                         )

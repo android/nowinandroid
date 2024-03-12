@@ -32,8 +32,8 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -150,8 +150,8 @@ class OfflineFirstNewsRepositoryTest {
                 .map(PopulatedNewsResource::asExternalModel)
 
             assertEquals(
-                newsResourcesFromNetwork.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
-                newsResourcesFromDb.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
+                newsResourcesFromNetwork.map(NewsResource::id).sorted(),
+                newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
@@ -176,7 +176,7 @@ class OfflineFirstNewsRepositoryTest {
 
             // Delete half of the items on the network
             val deletedItems = newsResourcesFromNetwork
-                .map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id)
+                .map(NewsResource::id)
                 .partition { it.chars().sum() % 2 == 0 }
                 .first
                 .toSet()
@@ -197,8 +197,8 @@ class OfflineFirstNewsRepositoryTest {
 
             // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
-                expected = (newsResourcesFromNetwork.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id) - deletedItems).sorted(),
-                actual = newsResourcesFromDb.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
+                expected = (newsResourcesFromNetwork.map(NewsResource::id) - deletedItems).sorted(),
+                actual = newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
@@ -242,8 +242,8 @@ class OfflineFirstNewsRepositoryTest {
                 .map(PopulatedNewsResource::asExternalModel)
 
             assertEquals(
-                expected = newsResourcesFromNetwork.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
-                actual = newsResourcesFromDb.map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
+                expected = newsResourcesFromNetwork.map(NewsResource::id).sorted(),
+                actual = newsResourcesFromDb.map(NewsResource::id).sorted(),
             )
 
             // After sync version should be updated
@@ -349,7 +349,7 @@ class OfflineFirstNewsRepositoryTest {
             // that the user follows
             assertEquals(
                 expected = followedNewsResourceIdsFromNetwork,
-                actual = notifier.addedNewsResources.first().map(com.google.samples.apps.nowinandroid.core.model.NewsResource::id).sorted(),
+                actual = notifier.addedNewsResources.first().map(NewsResource::id).sorted(),
             )
         }
 
@@ -369,8 +369,8 @@ class OfflineFirstNewsRepositoryTest {
             newsResourceDao.upsertNewsResources(networkNewsResources)
 
             val followedTopicIds = newsResources
-                .flatMap(com.google.samples.apps.nowinandroid.core.model.NewsResource::topics)
-                .map(com.google.samples.apps.nowinandroid.core.model.Topic::id)
+                .flatMap(NewsResource::topics)
+                .map(Topic::id)
                 .toSet()
 
             // Follow all topics

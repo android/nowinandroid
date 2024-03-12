@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
-/**
- * A [topic] with the additional information for whether or not it is followed.
- */
-// TODO consider changing to UserTopic and flattening
-data class FollowableTopic(
-    val topic: Topic,
-    val isFollowed: Boolean,
-)
+enum class DarkThemeConfig {
+    FOLLOW_SYSTEM,
+    LIGHT,
+    DARK,
+}

@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 import androidx.annotation.VisibleForTesting
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -31,7 +31,7 @@ internal class OfflineFirstUserDataRepository @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : UserDataRepository {
 
-    override val userData: Flow<com.google.samples.apps.nowinandroid.core.model.UserData> =
+    override val userData: Flow<UserData> =
         niaPreferencesDataSource.userData
 
     @VisibleForTesting
@@ -54,12 +54,12 @@ internal class OfflineFirstUserDataRepository @Inject constructor(
     override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) =
         niaPreferencesDataSource.setNewsResourceViewed(newsResourceId, viewed)
 
-    override suspend fun setThemeBrand(themeBrand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand) {
+    override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         niaPreferencesDataSource.setThemeBrand(themeBrand)
         analyticsHelper.logThemeChanged(themeBrand.name)
     }
 
-    override suspend fun setDarkThemeConfig(darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig) {
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         niaPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
         analyticsHelper.logDarkThemeConfigChanged(darkThemeConfig.name)
     }

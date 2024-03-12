@@ -18,10 +18,10 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 
-val topicsTestData: List<com.google.samples.apps.nowinandroid.core.model.Topic> = listOf(
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+val topicsTestData: List<Topic> = listOf(
+    Topic(
         id = "2",
         name = "Headlines",
         shortDescription = "News we want everyone to see",
@@ -29,7 +29,7 @@ val topicsTestData: List<com.google.samples.apps.nowinandroid.core.model.Topic> 
         imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
         url = "",
     ),
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+    Topic(
         id = "3",
         name = "UI",
         shortDescription = "Material Design, Navigation, Text, Paging, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
@@ -37,7 +37,7 @@ val topicsTestData: List<com.google.samples.apps.nowinandroid.core.model.Topic> 
         imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=0ee1842b-12e8-435f-87ba-a5bb02c47594",
         url = "",
     ),
-    com.google.samples.apps.nowinandroid.core.model.Topic(
+    Topic(
         id = "4",
         name = "Testing",
         shortDescription = "CI, Espresso, TestLab, etc",

@@ -18,11 +18,11 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.datetime.Instant
 
-val newsResourcesTestData: List<com.google.samples.apps.nowinandroid.core.model.NewsResource> = listOf(
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+val newsResourcesTestData: List<NewsResource> = listOf(
+    NewsResource(
         id = "1",
         title = "Android Basics with Compose",
         content = "We released the first two units of Android Basics with Compose, our first free course that teaches Android Development with Jetpack Compose to anyone; you do not need any prior programming experience other than basic computer literacy to get started. You’ll learn the fundamentals of programming in Kotlin while building Android apps using Jetpack Compose, Android’s modern toolkit that simplifies and accelerates native UI development. These two units are just the beginning; more will be coming soon. Check out Android Basics with Compose to get started on your Android development journey",
@@ -32,7 +32,7 @@ val newsResourcesTestData: List<com.google.samples.apps.nowinandroid.core.model.
         type = "Codelab",
         topics = listOf(topicsTestData[1]),
     ),
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "2",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -45,7 +45,7 @@ val newsResourcesTestData: List<com.google.samples.apps.nowinandroid.core.model.
         type = "Video 📺",
         topics = listOf(topicsTestData[0], topicsTestData[1]),
     ),
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "3",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed " +
@@ -58,7 +58,7 @@ val newsResourcesTestData: List<com.google.samples.apps.nowinandroid.core.model.
         type = "Video 📺",
         topics = listOf(topicsTestData[2]),
     ),
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = "4",
         title = "New Jetpack Release",
         content = "New Jetpack release includes updates to libraries such as CameraX, Benchmark, and" +

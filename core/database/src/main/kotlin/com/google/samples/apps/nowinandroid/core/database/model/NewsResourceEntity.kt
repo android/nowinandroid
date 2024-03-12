@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.datetime.Instant
 
 /**
@@ -42,7 +42,7 @@ data class NewsResourceEntity(
 )
 
 fun NewsResourceEntity.asExternalModel() =
-    com.google.samples.apps.nowinandroid.core.model.NewsResource(
+    NewsResource(
         id = id,
         title = title,
         content = content,

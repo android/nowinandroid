@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
-/**
- * An entity of [SearchResult] with additional user information such as whether the user is
- * following a topic.
- */
-data class UserSearchResult(
-    val topics: List<FollowableTopic> = emptyList(),
-    val newsResources: List<UserNewsResource> = emptyList(),
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+
+data class RecentSearchQuery(
+    val query: String,
+    val queriedDate: Instant = Clock.System.now(),
 )

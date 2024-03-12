@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 
 /**
  * A sealed hierarchy describing the onboarding state for the for you screen.
@@ -41,7 +41,7 @@ sealed interface OnboardingUiState {
      * There is a onboarding state, with the given lists of topics.
      */
     data class Shown(
-        val topics: List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>,
+        val topics: List<FollowableTopic>,
     ) : OnboardingUiState {
         /**
          * True if the onboarding can be dismissed.

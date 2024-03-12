@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField.NAME
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
@@ -54,15 +54,15 @@ class GetFollowableTopicsUseCaseTest {
         // Check that the order hasn't changed and that the correct topics are marked as followed.
         assertEquals(
             listOf(
-                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                FollowableTopic(
                     testTopics[0],
                     true
                 ),
-                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                FollowableTopic(
                     testTopics[1],
                     false
                 ),
-                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                FollowableTopic(
                     testTopics[2],
                     true
                 ),
@@ -88,14 +88,14 @@ class GetFollowableTopicsUseCaseTest {
             testTopics
                 .sortedBy { it.name }
                 .map {
-                    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(it, false)
+                    FollowableTopic(it, false)
                 },
         )
     }
 }
 
 private val testTopics = listOf(
-    com.google.samples.apps.nowinandroid.core.model.Topic("1", "Headlines", "", "", "", ""),
-    com.google.samples.apps.nowinandroid.core.model.Topic("2", "Android Studio", "", "", "", ""),
-    com.google.samples.apps.nowinandroid.core.model.Topic("3", "Compose", "", "", "", ""),
+    Topic("1", "Headlines", "", "", "", ""),
+    Topic("2", "Android Studio", "", "", "", ""),
+    Topic("3", "Compose", "", "", "", ""),
 )

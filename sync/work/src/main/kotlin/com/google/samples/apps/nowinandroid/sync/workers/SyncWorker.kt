@@ -26,7 +26,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkerParameters
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
@@ -86,11 +86,11 @@ internal class SyncWorker @AssistedInject constructor(
         }
     }
 
-    override suspend fun getChangeListVersions(): com.google.samples.apps.nowinandroid.core.model.ChangeListVersions =
+    override suspend fun getChangeListVersions(): ChangeListVersions =
         niaPreferences.getChangeListVersions()
 
     override suspend fun updateChangeListVersions(
-        update: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions.() -> com.google.samples.apps.nowinandroid.core.model.ChangeListVersions,
+        update: ChangeListVersions.() -> ChangeListVersions,
     ) = niaPreferences.updateChangeListVersion(update)
 
     companion object {

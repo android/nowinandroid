@@ -21,8 +21,8 @@ import com.google.samples.apps.nowinandroid.core.data.util.changeListSync
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
-import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
@@ -40,16 +40,16 @@ internal class OfflineFirstTopicsRepository @Inject constructor(
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
 
-    override fun getTopics(): Flow<List<com.google.samples.apps.nowinandroid.core.model.Topic>> =
+    override fun getTopics(): Flow<List<Topic>> =
         topicDao.getTopicEntities()
             .map { it.map(TopicEntity::asExternalModel) }
 
-    override fun getTopic(id: String): Flow<com.google.samples.apps.nowinandroid.core.model.Topic> =
+    override fun getTopic(id: String): Flow<Topic> =
         topicDao.getTopicEntity(id).map { it.asExternalModel() }
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
         synchronizer.changeListSync(
-            versionReader = com.google.samples.apps.nowinandroid.core.model.ChangeListVersions::topicVersion,
+            versionReader = ChangeListVersions::topicVersion,
             changeListFetcher = { currentVersion ->
                 network.getTopicChangeList(after = currentVersion)
             },

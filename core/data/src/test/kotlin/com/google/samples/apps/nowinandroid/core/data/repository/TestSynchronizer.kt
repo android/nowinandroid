@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 
 /**
@@ -26,10 +26,10 @@ import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 class TestSynchronizer(
     private val niaPreferences: NiaPreferencesDataSource,
 ) : Synchronizer {
-    override suspend fun getChangeListVersions(): com.google.samples.apps.nowinandroid.core.model.ChangeListVersions =
+    override suspend fun getChangeListVersions(): ChangeListVersions =
         niaPreferences.getChangeListVersions()
 
     override suspend fun updateChangeListVersions(
-        update: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions.() -> com.google.samples.apps.nowinandroid.core.model.ChangeListVersions,
+        update: ChangeListVersions.() -> ChangeListVersions,
     ) = niaPreferences.updateChangeListVersion(update)
 }

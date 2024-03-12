@@ -61,8 +61,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
@@ -274,7 +274,7 @@ private fun TopicBodyPreview() {
 
 @Composable
 private fun TopicToolbar(
-    uiState: com.google.samples.apps.nowinandroid.core.model.FollowableTopic,
+    uiState: FollowableTopic,
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
     onBackClick: () -> Unit = {},
@@ -319,7 +319,7 @@ private fun TopicToolbar(
 @Composable
 fun TopicScreenPopulated(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
         NiaBackground {

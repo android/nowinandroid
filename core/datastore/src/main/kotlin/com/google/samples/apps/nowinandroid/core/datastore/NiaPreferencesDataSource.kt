@@ -26,10 +26,10 @@ import com.google.samples.apps.nowinandroid.core.datastore.ThemeBrandProto.THEME
 import com.google.samples.apps.nowinandroid.core.datastore.ThemeBrandProto.THEME_BRAND_DEFAULT
 import com.google.samples.apps.nowinandroid.core.datastore.ThemeBrandProto.THEME_BRAND_UNSPECIFIED
 import com.google.samples.apps.nowinandroid.core.datastore.ThemeBrandProto.UNRECOGNIZED
-import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
@@ -40,7 +40,7 @@ class NiaPreferencesDataSource @Inject constructor(
 ) {
     val userData = userPreferences.data
         .map {
-            com.google.samples.apps.nowinandroid.core.model.UserData(
+            UserData(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
                 viewedNewsResources = it.viewedNewsResourceIdsMap.keys,
                 followedTopics = it.followedTopicIdsMap.keys,
@@ -49,9 +49,9 @@ class NiaPreferencesDataSource @Inject constructor(
                     THEME_BRAND_UNSPECIFIED,
                     UNRECOGNIZED,
                     THEME_BRAND_DEFAULT,
-                    -> com.google.samples.apps.nowinandroid.core.model.ThemeBrand.DEFAULT
+                    -> ThemeBrand.DEFAULT
 
-                    THEME_BRAND_ANDROID -> com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID
+                    THEME_BRAND_ANDROID -> ThemeBrand.ANDROID
                 },
                 darkThemeConfig = when (it.darkThemeConfig) {
                     null,
@@ -59,12 +59,12 @@ class NiaPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.UNRECOGNIZED,
                     DARK_THEME_CONFIG_FOLLOW_SYSTEM,
                     ->
-                        com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.FOLLOW_SYSTEM
+                        DarkThemeConfig.FOLLOW_SYSTEM
 
                     DARK_THEME_CONFIG_LIGHT ->
-                        com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.LIGHT
+                        DarkThemeConfig.LIGHT
 
-                    DARK_THEME_CONFIG_DARK -> com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK
+                    DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
                 useDynamicColor = it.useDynamicColor,
                 shouldHideOnboarding = it.shouldHideOnboarding,
@@ -102,12 +102,12 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setThemeBrand(themeBrand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand) {
+    suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         userPreferences.updateData {
             it.copy {
                 this.themeBrand = when (themeBrand) {
-                    com.google.samples.apps.nowinandroid.core.model.ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
-                    com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
+                    ThemeBrand.DEFAULT -> ThemeBrandProto.THEME_BRAND_DEFAULT
+                    ThemeBrand.ANDROID -> ThemeBrandProto.THEME_BRAND_ANDROID
                 }
             }
         }
@@ -119,14 +119,14 @@ class NiaPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setDarkThemeConfig(darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig) {
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         userPreferences.updateData {
             it.copy {
                 this.darkThemeConfig = when (darkThemeConfig) {
-                    com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.FOLLOW_SYSTEM ->
+                    DarkThemeConfig.FOLLOW_SYSTEM ->
                         DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
-                    com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
+                    DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
+                    DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
                 }
             }
         }
@@ -168,21 +168,21 @@ class NiaPreferencesDataSource @Inject constructor(
 
     suspend fun getChangeListVersions() = userPreferences.data
         .map {
-            com.google.samples.apps.nowinandroid.core.model.ChangeListVersions(
+            ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
                 newsResourceVersion = it.newsResourceChangeListVersion,
             )
         }
-        .firstOrNull() ?: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions()
+        .firstOrNull() ?: ChangeListVersions()
 
     /**
      * Update the [ChangeListVersions] using [update].
      */
-    suspend fun updateChangeListVersion(update: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions.() -> com.google.samples.apps.nowinandroid.core.model.ChangeListVersions) {
+    suspend fun updateChangeListVersion(update: ChangeListVersions.() -> ChangeListVersions) {
         try {
             userPreferences.updateData { currentPreferences ->
                 val updatedChangeListVersions = update(
-                    com.google.samples.apps.nowinandroid.core.model.ChangeListVersions(
+                    ChangeListVersions(
                         topicVersion = currentPreferences.topicChangeListVersion,
                         newsResourceVersion = currentPreferences.newsResourceChangeListVersion,
                     ),

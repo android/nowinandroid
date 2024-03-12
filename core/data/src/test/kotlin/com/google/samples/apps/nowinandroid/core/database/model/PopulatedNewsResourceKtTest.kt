@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.database.model
 
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.datetime.Instant
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -49,7 +49,7 @@ class PopulatedNewsResourceKtTest {
         val newsResource = populatedNewsResource.asExternalModel()
 
         assertEquals(
-            com.google.samples.apps.nowinandroid.core.model.NewsResource(
+            NewsResource(
                 id = "1",
                 title = "news",
                 content = "Hilt",
@@ -58,7 +58,7 @@ class PopulatedNewsResourceKtTest {
                 type = "Video 📺",
                 publishDate = Instant.fromEpochMilliseconds(1),
                 topics = listOf(
-                    com.google.samples.apps.nowinandroid.core.model.Topic(
+                    Topic(
                         id = "3",
                         name = "name",
                         shortDescription = "short description",

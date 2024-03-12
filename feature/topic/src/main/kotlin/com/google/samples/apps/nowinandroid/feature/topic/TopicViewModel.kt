@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.Topic
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
@@ -103,7 +103,7 @@ private fun topicUiState(
             .map { it.followedTopics }
 
     // Observe topic information
-    val topicStream: Flow<com.google.samples.apps.nowinandroid.core.model.Topic> = topicsRepository.getTopic(
+    val topicStream: Flow<Topic> = topicsRepository.getTopic(
         id = topicId,
     )
 
@@ -118,7 +118,7 @@ private fun topicUiState(
                 is Result.Success -> {
                     val (followedTopics, topic) = followedTopicToTopicResult.data
                     TopicUiState.Success(
-                        followableTopic = com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                        followableTopic = FollowableTopic(
                             topic = topic,
                             isFollowed = topicId in followedTopics,
                         ),
@@ -137,7 +137,7 @@ private fun newsUiState(
     userDataRepository: UserDataRepository,
 ): Flow<NewsUiState> {
     // Observe news
-    val newsStream: Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> = userNewsResourceRepository.observeAll(
+    val newsStream: Flow<List<UserNewsResource>> = userNewsResourceRepository.observeAll(
         NewsResourceQuery(filterTopicIds = setOf(element = topicId)),
     )
 
@@ -157,13 +157,13 @@ private fun newsUiState(
 }
 
 sealed interface TopicUiState {
-    data class Success(val followableTopic: com.google.samples.apps.nowinandroid.core.model.FollowableTopic) : TopicUiState
+    data class Success(val followableTopic: FollowableTopic) : TopicUiState
     data object Error : TopicUiState
     data object Loading : TopicUiState
 }
 
 sealed interface NewsUiState {
-    data class Success(val news: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>) : NewsUiState
+    data class Success(val news: List<UserNewsResource>) : NewsUiState
     data object Error : NewsUiState
     data object Loading : NewsUiState
 }

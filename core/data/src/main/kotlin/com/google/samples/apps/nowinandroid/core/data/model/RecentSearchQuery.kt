@@ -17,10 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.data.model
 
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
-import com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.model.data.RecentSearchQuery
 
 fun RecentSearchQueryEntity.asExternalModel() =
-    com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery(
+    RecentSearchQuery(
         query = query,
         queriedDate = queriedDate,
     )

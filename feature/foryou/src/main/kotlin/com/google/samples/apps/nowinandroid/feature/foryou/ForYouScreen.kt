@@ -96,7 +96,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
@@ -136,7 +136,7 @@ internal fun ForYouScreen(
     isSyncing: Boolean,
     onboardingUiState: OnboardingUiState,
     feedState: NewsFeedUiState,
-    deepLinkedUserNewsResource: com.google.samples.apps.nowinandroid.core.model.UserNewsResource?,
+    deepLinkedUserNewsResource: UserNewsResource?,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     onDeepLinkOpened: (String) -> Unit,
@@ -464,7 +464,7 @@ private fun NotificationPermissionEffect() {
 
 @Composable
 private fun DeepLinkEffect(
-    userNewsResource: com.google.samples.apps.nowinandroid.core.model.UserNewsResource?,
+    userNewsResource: UserNewsResource?,
     onDeepLinkOpened: (String) -> Unit,
 ) {
     val context = LocalContext.current
@@ -505,7 +505,7 @@ private fun feedItemsSize(
 @Composable
 fun ForYouScreenPopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
         ForYouScreen(
@@ -529,7 +529,7 @@ fun ForYouScreenPopulatedFeed(
 @Composable
 fun ForYouScreenOfflinePopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
         ForYouScreen(
@@ -553,7 +553,7 @@ fun ForYouScreenOfflinePopulatedFeed(
 @Composable
 fun ForYouScreenTopicSelection(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
         ForYouScreen(
@@ -599,7 +599,7 @@ fun ForYouScreenLoading() {
 @Composable
 fun ForYouScreenPopulatedAndLoading(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     NiaTheme {
         ForYouScreen(

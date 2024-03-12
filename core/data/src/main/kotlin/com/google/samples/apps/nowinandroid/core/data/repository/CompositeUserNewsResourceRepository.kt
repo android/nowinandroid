@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.model.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
@@ -44,7 +44,7 @@ class CompositeUserNewsResourceRepository @Inject constructor(
      */
     override fun observeAll(
         query: NewsResourceQuery,
-    ): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> =
+    ): Flow<List<UserNewsResource>> =
         newsRepository.getNewsResources(query)
             .combine(userDataRepository.userData) { newsResources, userData ->
                 newsResources.mapToUserNewsResources(userData)
@@ -53,7 +53,7 @@ class CompositeUserNewsResourceRepository @Inject constructor(
     /**
      * Returns available news resources (joined with user data) for the followed topics.
      */
-    override fun observeAllForFollowedTopics(): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> =
+    override fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>> =
         userDataRepository.userData.map { it.followedTopics }.distinctUntilChanged()
             .flatMapLatest { followedTopics ->
                 when {
@@ -62,7 +62,7 @@ class CompositeUserNewsResourceRepository @Inject constructor(
                 }
             }
 
-    override fun observeAllBookmarked(): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> =
+    override fun observeAllBookmarked(): Flow<List<UserNewsResource>> =
         userDataRepository.userData.map { it.bookmarkedNewsResources }.distinctUntilChanged()
             .flatMapLatest { bookmarkedNewsResources ->
                 when {

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.model
+package com.google.samples.apps.nowinandroid.core.model.data
 
-/** An entity that holds the search result */
-data class SearchResult(
-    val topics: List<Topic> = emptyList(),
-    val newsResources: List<NewsResource> = emptyList(),
+/**
+ * Class summarizing the local version of each model for sync
+ */
+data class ChangeListVersions(
+    val topicVersion: Int = -1,
+    val newsResourceVersion: Int = -1,
 )

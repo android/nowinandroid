@@ -64,9 +64,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconT
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import kotlinx.datetime.toJavaZoneId
@@ -81,7 +81,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResourceCardExpanded(
-    userNewsResource: com.google.samples.apps.nowinandroid.core.model.UserNewsResource,
+    userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
     hasBeenViewed: Boolean,
     onToggleBookmark: () -> Unit,
@@ -273,7 +273,7 @@ fun NewsResourceShortDescription(
 
 @Composable
 fun NewsResourceTopics(
-    topics: List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>,
+    topics: List<FollowableTopic>,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -334,7 +334,7 @@ private fun BookmarkButtonBookmarkedPreview() {
 @Composable
 private fun ExpandedNewsResourcePreview(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>,
+    userNewsResources: List<UserNewsResource>,
 ) {
     CompositionLocalProvider(
         LocalInspectionMode provides true,

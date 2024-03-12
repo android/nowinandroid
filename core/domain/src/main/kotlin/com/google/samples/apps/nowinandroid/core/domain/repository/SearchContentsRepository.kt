@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
-import com.google.samples.apps.nowinandroid.core.model.SearchResult
+import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -32,7 +32,7 @@ interface SearchContentsRepository {
     /**
      * Query the contents matched with the [searchQuery] and returns it as a [Flow] of [SearchResult]
      */
-    fun searchContents(searchQuery: String): Flow<com.google.samples.apps.nowinandroid.core.model.SearchResult>
+    fun searchContents(searchQuery: String): Flow<SearchResult>
 
     fun getSearchContentsCount(): Flow<Int>
 }
