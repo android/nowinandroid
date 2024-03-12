@@ -17,9 +17,9 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.lifecycle.SavedStateHandle
+import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule

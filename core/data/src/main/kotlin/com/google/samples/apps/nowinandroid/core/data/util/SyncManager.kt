@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.data.util
 
 import android.util.Log
-import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
+import com.google.samples.apps.nowinandroid.core.model.data.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.cancellation.CancellationException

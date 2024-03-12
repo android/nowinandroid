@@ -16,13 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.usecase
 
+import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
-import com.google.samples.apps.nowinandroid.core.domain.repository.SearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject

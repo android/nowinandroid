@@ -19,10 +19,10 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

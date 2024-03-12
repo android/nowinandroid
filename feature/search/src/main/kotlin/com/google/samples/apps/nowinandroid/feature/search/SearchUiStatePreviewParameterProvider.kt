@@ -33,7 +33,7 @@ class SearchUiStatePreviewParameterProvider : PreviewParameterProvider<SearchRes
             topics = topics.mapIndexed { i, topic ->
                 FollowableTopic(
                     topic = topic,
-                    isFollowed = i % 2 == 0
+                    isFollowed = i % 2 == 0,
                 )
             },
             newsResources = newsResources,

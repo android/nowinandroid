@@ -16,11 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.usecase
 
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField.NAME
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField.NONE
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject

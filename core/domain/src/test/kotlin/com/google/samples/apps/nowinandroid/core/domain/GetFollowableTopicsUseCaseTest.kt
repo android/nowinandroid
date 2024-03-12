@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField.NAME
+import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
@@ -56,15 +56,15 @@ class GetFollowableTopicsUseCaseTest {
             listOf(
                 FollowableTopic(
                     testTopics[0],
-                    true
+                    true,
                 ),
                 FollowableTopic(
                     testTopics[1],
-                    false
+                    false,
                 ),
                 FollowableTopic(
                     testTopics[2],
-                    true
+                    true,
                 ),
             ),
             followableTopics.first(),

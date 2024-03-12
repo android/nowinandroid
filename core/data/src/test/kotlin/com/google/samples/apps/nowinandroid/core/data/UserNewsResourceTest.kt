@@ -77,7 +77,7 @@ class UserNewsResourceTest {
 
         val userNewsResource = UserNewsResource(
             newsResource1,
-            userData
+            userData,
         )
 
         // Check that the simple field mappings have been done correctly.
