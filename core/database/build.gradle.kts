@@ -57,10 +57,6 @@ kotlin {
 //            implementation(npm("sql.js", "1.8.0"))
 //            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
 //        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.kotlinx.coroutines.test)
-        }
     }
 }
 
