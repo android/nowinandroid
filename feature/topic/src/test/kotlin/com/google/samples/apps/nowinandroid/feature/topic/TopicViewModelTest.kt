@@ -91,7 +91,7 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateNews_whenInitialized_thenShowLoading() = runTest {
-        assertEquals(NewsUiState.Loading, viewModel.newUiState.value)
+        assertEquals(NewsUiState.Loading, viewModel.newsUiState.value)
     }
 
     @Test
@@ -117,7 +117,7 @@ class TopicViewModelTest {
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             val topicUiState = viewModel.topicUiState.value
-            val newsUiState = viewModel.newUiState.value
+            val newsUiState = viewModel.newsUiState.value
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Loading>(newsUiState)
@@ -131,7 +131,7 @@ class TopicViewModelTest {
             val collectJob = launch(UnconfinedTestDispatcher()) {
                 combine(
                     viewModel.topicUiState,
-                    viewModel.newUiState,
+                    viewModel.newsUiState,
                     ::Pair,
                 ).collect()
             }
@@ -139,7 +139,7 @@ class TopicViewModelTest {
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
             newsRepository.sendNewsResources(sampleNewsResources)
             val topicUiState = viewModel.topicUiState.value
-            val newsUiState = viewModel.newUiState.value
+            val newsUiState = viewModel.newsUiState.value
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Success>(newsUiState)

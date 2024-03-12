@@ -9,7 +9,7 @@ androidx.appcompat:appcompat:1.6.1
 androidx.arch.core:core-common:2.2.0
 androidx.arch.core:core-runtime:2.2.0
 androidx.autofill:autofill:1.0.0
-androidx.browser:browser:1.7.0
+androidx.browser:browser:1.8.0
 androidx.collection:collection-jvm:1.4.0
 androidx.collection:collection-ktx:1.4.0
 androidx.collection:collection:1.4.0
@@ -68,8 +68,8 @@ androidx.emoji2:emoji2:1.3.0
 androidx.exifinterface:exifinterface:1.3.7
 androidx.fragment:fragment:1.5.1
 androidx.hilt:hilt-common:1.1.0
-androidx.hilt:hilt-navigation-compose:1.0.0
-androidx.hilt:hilt-navigation:1.0.0
+androidx.hilt:hilt-navigation-compose:1.2.0
+androidx.hilt:hilt-navigation:1.2.0
 androidx.hilt:hilt-work:1.1.0
 androidx.interpolator:interpolator:1.0.0
 androidx.legacy:legacy-support-core-utils:1.0.0
