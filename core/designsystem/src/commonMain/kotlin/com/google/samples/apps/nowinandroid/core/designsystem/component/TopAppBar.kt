@@ -18,7 +18,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
-import androidx.annotation.StringRes
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,15 +30,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NiaTopAppBar(
-    @StringRes titleRes: Int,
+    title: String,
     navigationIcon: ImageVector,
     navigationIconContentDescription: String,
     actionIcon: ImageVector,
@@ -50,7 +48,7 @@ fun NiaTopAppBar(
     onActionClick: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(id = titleRes)) },
+        title = { Text(text = title) },
         navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
@@ -75,12 +73,12 @@ fun NiaTopAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview("Top App Bar")
+@Preview
 @Composable
 private fun NiaTopAppBarPreview() {
     NiaTheme {
         NiaTopAppBar(
-            titleRes = android.R.string.untitled,
+            title = "Untitled",
             navigationIcon = NiaIcons.Search,
             navigationIconContentDescription = "Navigation icon",
             actionIcon = NiaIcons.MoreVert,
