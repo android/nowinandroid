@@ -28,11 +28,11 @@ import kotlinx.datetime.Instant
 /**
  * DAO for [RecentSearchQueryEntity] access
  */
-class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): RecentSearchQueryDaoInterface {
 
     private val query = db.recentSearchQueryQueries
 
-    fun getRecentSearchQueryEntities(limit: Int): Flow<List<RecentSearchQueryEntity>> {
+    override fun getRecentSearchQueryEntities(limit: Int): Flow<List<RecentSearchQueryEntity>> {
         return query.getRecentSearchQueryEntities(limit.toLong()) { query, timestamp ->
             RecentSearchQueryEntity(
                 query = query,
@@ -43,7 +43,7 @@ class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDis
             .mapToList(dispatcher)
     }
 
-    suspend fun insertOrReplaceRecentSearchQuery(recentSearchQuery: RecentSearchQueryEntity) {
+    override suspend fun insertOrReplaceRecentSearchQuery(recentSearchQuery: RecentSearchQueryEntity) {
         query.insertOrReplaceRecentSearchQuery(
             recent_search_query = Recent_search_query(
                 query = recentSearchQuery.query,
@@ -52,7 +52,7 @@ class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDis
         )
     }
 
-    suspend fun clearRecentSearchQueries() {
+    override suspend fun clearRecentSearchQueries() {
         query.clearRecentSearchQueries()
     }
 }

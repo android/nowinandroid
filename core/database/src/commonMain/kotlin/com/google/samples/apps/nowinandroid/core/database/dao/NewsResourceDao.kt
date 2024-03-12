@@ -30,17 +30,17 @@ import kotlinx.datetime.Instant
 /**
  * DAO for [NewsResource] and [NewsResourceEntity] access
  */
-class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): NewsResourceDaoInterface {
     private val query = db.newsResourceQueries
 
     /**
      * Fetches news resources that match the query parameters
      */
-    fun getNewsResources(
-        useFilterTopicIds: Boolean = false,
-        filterTopicIds: Set<String> = emptySet(),
-        useFilterNewsIds: Boolean = false,
-        filterNewsIds: Set<String> = emptySet(),
+    override fun getNewsResources(
+        useFilterTopicIds: Boolean,
+        filterTopicIds: Set<String>,
+        useFilterNewsIds: Boolean,
+        filterNewsIds: Set<String>,
     ): Flow<List<PopulatedNewsResource>> {
         return query.getNewsResources(
             useFilterTopicIds = useFilterTopicIds,
@@ -69,11 +69,11 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
     /**
      * Fetches ids of news resources that match the query parameters
      */
-    fun getNewsResourceIds(
-        useFilterTopicIds: Boolean = false,
-        filterTopicIds: Set<String> = emptySet(),
-        useFilterNewsIds: Boolean = false,
-        filterNewsIds: Set<String> = emptySet(),
+    override fun getNewsResourceIds(
+        useFilterTopicIds: Boolean,
+        filterTopicIds: Set<String>,
+        useFilterNewsIds: Boolean,
+        filterNewsIds: Set<String>,
     ): Flow<List<String>> {
         return query.getNewsResourceIds(
             useFilterTopicIds = useFilterTopicIds,
@@ -88,7 +88,7 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
     /**
      * Inserts [entities] into the db if they don't exist, and ignores those that do
      */
-    suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long> {
+    override suspend fun insertOrIgnoreNewsResources(entities: List<NewsResourceEntity>): List<Long> {
         entities.forEach {
             query.insertOrIgnoreNewsResource(
                 id = it.id,
@@ -109,7 +109,7 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
     /**
      * Inserts or updates [newsResourceEntities] in the db under the specified primary keys
      */
-    suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
+    override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         newsResourceEntities.forEach {
             query.upsertNewsResource(
                 id = it.id,
@@ -123,7 +123,7 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
         }
     }
 
-    suspend fun insertOrIgnoreTopicCrossRefEntities(
+    override suspend fun insertOrIgnoreTopicCrossRefEntities(
         newsResourceTopicCrossReferences: List<NewsResourceTopicCrossRef>,
     ) {
         newsResourceTopicCrossReferences.forEach {
@@ -137,7 +137,7 @@ class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatch
     /**
      * Deletes rows in the db matching the specified [ids]
      */
-    suspend fun deleteNewsResources(ids: List<String>) {
+    override suspend fun deleteNewsResources(ids: List<String>) {
         query.deleteNewsResources(ids)
     }
 }

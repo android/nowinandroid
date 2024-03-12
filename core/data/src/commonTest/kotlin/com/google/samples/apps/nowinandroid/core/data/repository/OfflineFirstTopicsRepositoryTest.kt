@@ -50,9 +50,6 @@ class OfflineFirstTopicsRepositoryTest {
 
     private lateinit var synchronizer: Synchronizer
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @BeforeTest
     fun setup() {
         topicDao = TestTopicDao()

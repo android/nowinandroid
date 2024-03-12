@@ -29,11 +29,11 @@ import kotlinx.coroutines.flow.map
  * DAO for [TopicEntity] access
  */
 
-class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): TopicDaoInterface {
 
     private val query = db.topicsQueries
 
-    fun getTopicEntity(topicId: String): Flow<TopicEntity> {
+    override fun getTopicEntity(topicId: String): Flow<TopicEntity> {
         return query.getTopicEntity(topicId) { id, name, shortDescription, longDescription, url, imageUrl ->
             TopicEntity(
                 id = id,
@@ -48,7 +48,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
             .mapToOne(dispatcher)
     }
 
-    fun getTopicEntities(): Flow<List<TopicEntity>> {
+    override fun getTopicEntities(): Flow<List<TopicEntity>> {
         return query.getOneOffTopicEntities { id, name, shortDescription, longDescription, url, imageUrl ->
             TopicEntity(
                 id = id,
@@ -63,7 +63,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
             .mapToList(dispatcher)
     }
 
-    suspend fun getOneOffTopicEntities(): List<TopicEntity> {
+    override suspend fun getOneOffTopicEntities(): List<TopicEntity> {
         // TODO: Use flow?
         return query.getOneOffTopicEntities { id, name, shortDescription, longDescription, url, imageUrl ->
             TopicEntity(
@@ -77,7 +77,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
         }.executeAsList()
     }
 
-    fun getTopicEntities(ids: Set<String>): Flow<List<TopicEntity>> {
+    override fun getTopicEntities(ids: Set<String>): Flow<List<TopicEntity>> {
         return query.getTopicEntities { id, name, shortDescription, longDescription, url, imageUrl ->
             TopicEntity(
                 id = id,
@@ -98,7 +98,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
     /**
      * Inserts [topicEntities] into the db if they don't exist, and ignores those that do
      */
-    suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
+    override suspend fun insertOrIgnoreTopics(topicEntities: List<TopicEntity>): List<Long> {
         topicEntities.map {
             query.insertOrIgnoreTopic(
                 id = it.id,
@@ -116,7 +116,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
     /**
      * Inserts or updates [entities] in the db under the specified primary keys
      */
-    suspend fun upsertTopics(entities: List<TopicEntity>) {
+    override suspend fun upsertTopics(entities: List<TopicEntity>) {
         entities.forEach {
             query.upsertTopic(
                 id = it.id,
@@ -132,7 +132,7 @@ class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
     /**
      * Deletes rows in the db matching the specified [ids]
      */
-    suspend fun deleteTopics(ids: List<String>) {
+    override suspend fun deleteTopics(ids: List<String>) {
         query.deleteTopics(ids)
     }
 }

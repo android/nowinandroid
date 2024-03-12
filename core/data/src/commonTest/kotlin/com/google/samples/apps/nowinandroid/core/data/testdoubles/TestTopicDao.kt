@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDaoInterface
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.update
 /**
  * Test double for [TopicDao]
  */
-class TestTopicDao : TopicDao {
+class TestTopicDao : TopicDaoInterface {
 
     private val entitiesStateFlow = MutableStateFlow(emptyList<TopicEntity>())
 

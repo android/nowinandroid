@@ -28,11 +28,11 @@ import kotlinx.coroutines.flow.map
 /**
  * DAO for [TopicFtsEntity] access.
  */
-class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) {
+class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher): TopicFtsDaoInterface {
 
     private val dbQuery = db.topicFtsQueries
 
-    suspend fun insertAll(topics: List<TopicFtsEntity>) {
+    override suspend fun insertAll(topics: List<TopicFtsEntity>) {
         topics.forEach {
             dbQuery.insert(
                 topic_id = it.topicId,
@@ -43,7 +43,7 @@ class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) 
         }
     }
 
-    fun searchAllTopics(query: String): Flow<List<String>> {
+    override fun searchAllTopics(query: String): Flow<List<String>> {
         return dbQuery.searchAllTopics(query) {
             it.orEmpty()
         }
@@ -51,7 +51,7 @@ class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) 
             .mapToList(dispatcher)
     }
 
-    fun getCount(): Flow<Int> {
+    override fun getCount(): Flow<Int> {
         return dbQuery.getCount()
             .asFlow()
             .mapToOne(dispatcher)

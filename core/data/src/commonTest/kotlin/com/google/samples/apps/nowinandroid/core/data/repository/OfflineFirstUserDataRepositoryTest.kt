@@ -18,10 +18,11 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import com.russhwolf.settings.MapSettings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.TestScope
@@ -35,7 +36,12 @@ import kotlin.test.assertTrue
 
 class OfflineFirstUserDataRepositoryTest {
 
-    private val testScope = TestScope(UnconfinedTestDispatcher())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val dispatcher = UnconfinedTestDispatcher()
+
+    private val settings = MapSettings()
+
+    private val testScope = TestScope(dispatcher)
 
     private lateinit var subject: OfflineFirstUserDataRepository
 
@@ -43,13 +49,11 @@ class OfflineFirstUserDataRepositoryTest {
 
     private val analyticsHelper = NoOpAnalyticsHelper()
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @BeforeTest
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            settings,
+            dispatcher,
         )
 
         subject = OfflineFirstUserDataRepository(
