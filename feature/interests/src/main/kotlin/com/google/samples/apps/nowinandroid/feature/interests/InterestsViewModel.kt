@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.interests
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField
@@ -67,7 +67,7 @@ sealed interface InterestsUiState {
 
     data class Interests(
         val selectedTopicId: String?,
-        val topics: List<FollowableTopic>,
+        val topics: List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>,
     ) : InterestsUiState
 
     data object Empty : InterestsUiState

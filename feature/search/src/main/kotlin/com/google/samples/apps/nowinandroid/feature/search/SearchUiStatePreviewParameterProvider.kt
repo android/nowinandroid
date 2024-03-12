@@ -19,7 +19,7 @@
 package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.topics
 
@@ -31,7 +31,10 @@ class SearchUiStatePreviewParameterProvider : PreviewParameterProvider<SearchRes
     override val values: Sequence<SearchResultUiState> = sequenceOf(
         SearchResultUiState.Success(
             topics = topics.mapIndexed { i, topic ->
-                FollowableTopic(topic = topic, isFollowed = i % 2 == 0)
+                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                    topic = topic,
+                    isFollowed = i % 2 == 0
+                )
             },
             newsResources = newsResources,
         ),

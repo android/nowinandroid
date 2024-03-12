@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.model
 
-/**
- * Class summarizing the local version of each model for sync
- */
-data class ChangeListVersions(
-    val topicVersion: Int = -1,
-    val newsResourceVersion: Int = -1,
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+
+data class RecentSearchQuery(
+    val query: String,
+    val queriedDate: Instant = Clock.System.now(),
 )

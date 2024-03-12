@@ -16,12 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
-import com.google.samples.apps.nowinandroid.core.domain.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery
 
 sealed interface RecentSearchQueriesUiState {
     data object Loading : RecentSearchQueriesUiState
 
     data class Success(
-        val recentQueries: List<RecentSearchQuery> = emptyList(),
+        val recentQueries: List<com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery> = emptyList(),
     ) : RecentSearchQueriesUiState
 }

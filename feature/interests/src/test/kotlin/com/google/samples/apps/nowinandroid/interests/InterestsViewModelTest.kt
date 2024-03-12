@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 import com.google.samples.apps.nowinandroid.core.domain.usecase.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -149,8 +149,8 @@ private const val TOPIC_URL = "URL"
 private const val TOPIC_IMAGE_URL = "Image URL"
 
 private val testInputTopics = listOf(
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -160,8 +160,8 @@ private val testInputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -171,8 +171,8 @@ private val testInputTopics = listOf(
         ),
         isFollowed = false,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -185,8 +185,8 @@ private val testInputTopics = listOf(
 )
 
 private val testOutputTopics = listOf(
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -196,8 +196,8 @@ private val testOutputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -207,8 +207,8 @@ private val testOutputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,

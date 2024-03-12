@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.notifications
 
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
 import com.google.samples.apps.nowinandroid.core.notifications.Notifier
 
 /**
@@ -24,11 +24,11 @@ import com.google.samples.apps.nowinandroid.core.notifications.Notifier
  */
 class TestNotifier : Notifier {
 
-    private val mutableAddedNewResources = mutableListOf<List<NewsResource>>()
+    private val mutableAddedNewResources = mutableListOf<List<com.google.samples.apps.nowinandroid.core.model.NewsResource>>()
 
-    val addedNewsResources: List<List<NewsResource>> = mutableAddedNewResources
+    val addedNewsResources: List<List<com.google.samples.apps.nowinandroid.core.model.NewsResource>> = mutableAddedNewResources
 
-    override fun postNewsNotifications(newsResources: List<NewsResource>) {
+    override fun postNewsNotifications(newsResources: List<com.google.samples.apps.nowinandroid.core.model.NewsResource>) {
         mutableAddedNewResources.add(newsResources)
     }
 }

@@ -16,18 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.DEFAULT
-import com.google.samples.apps.nowinandroid.core.domain.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.model.UserData
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-val emptyUserData = UserData(
+val emptyUserData = com.google.samples.apps.nowinandroid.core.model.UserData(
     bookmarkedNewsResources = emptySet(),
     viewedNewsResources = emptySet(),
     followedTopics = emptySet(),
@@ -41,11 +41,11 @@ class TestUserDataRepository : UserDataRepository {
     /**
      * The backing hot flow for the list of followed topic ids for testing.
      */
-    private val _userData = MutableSharedFlow<UserData>(replay = 1, onBufferOverflow = DROP_OLDEST)
+    private val _userData = MutableSharedFlow<com.google.samples.apps.nowinandroid.core.model.UserData>(replay = 1, onBufferOverflow = DROP_OLDEST)
 
     private val currentUserData get() = _userData.replayCache.firstOrNull() ?: emptyUserData
 
-    override val userData: Flow<UserData> = _userData.filterNotNull()
+    override val userData: Flow<com.google.samples.apps.nowinandroid.core.model.UserData> = _userData.filterNotNull()
 
     override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) {
         _userData.tryEmit(currentUserData.copy(followedTopics = followedTopicIds))
@@ -90,13 +90,13 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
+    override suspend fun setThemeBrand(themeBrand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand) {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(themeBrand = themeBrand))
         }
     }
 
-    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+    override suspend fun setDarkThemeConfig(darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig) {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(darkThemeConfig = darkThemeConfig))
         }
@@ -117,7 +117,7 @@ class TestUserDataRepository : UserDataRepository {
     /**
      * A test-only API to allow setting of user data directly.
      */
-    fun setUserData(userData: UserData) {
+    fun setUserData(userData: com.google.samples.apps.nowinandroid.core.model.UserData) {
         _userData.tryEmit(userData)
     }
 }

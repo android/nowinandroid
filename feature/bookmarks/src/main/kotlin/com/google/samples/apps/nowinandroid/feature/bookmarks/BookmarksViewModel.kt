@@ -21,7 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
@@ -46,7 +46,7 @@ class BookmarksViewModel @Inject constructor(
 
     val feedUiState: StateFlow<NewsFeedUiState> =
         userNewsResourceRepository.observeAllBookmarked()
-            .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+            .map<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
             .onStart { emit(Loading) }
             .stateIn(
                 scope = viewModelScope,

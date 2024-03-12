@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
@@ -53,13 +53,13 @@ class SettingsViewModel @Inject constructor(
                 initialValue = Loading,
             )
 
-    fun updateThemeBrand(themeBrand: ThemeBrand) {
+    fun updateThemeBrand(themeBrand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand) {
         viewModelScope.launch {
             userDataRepository.setThemeBrand(themeBrand)
         }
     }
 
-    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+    fun updateDarkThemeConfig(darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig) {
         viewModelScope.launch {
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
         }
@@ -76,9 +76,9 @@ class SettingsViewModel @Inject constructor(
  * Represents the settings which the user can edit within the app.
  */
 data class UserEditableSettings(
-    val brand: ThemeBrand,
+    val brand: com.google.samples.apps.nowinandroid.core.model.ThemeBrand,
     val useDynamicColor: Boolean,
-    val darkThemeConfig: DarkThemeConfig,
+    val darkThemeConfig: com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig,
 )
 
 sealed interface SettingsUiState {

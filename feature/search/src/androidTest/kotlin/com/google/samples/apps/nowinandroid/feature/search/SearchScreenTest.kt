@@ -28,11 +28,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.DARK
-import com.google.samples.apps.nowinandroid.core.domain.model.RecentSearchQuery
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.ANDROID
-import com.google.samples.apps.nowinandroid.core.domain.model.UserData
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID
+import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import org.junit.Before
@@ -57,15 +57,16 @@ class SearchScreenTest {
     private lateinit var tryAnotherSearchString: String
     private lateinit var searchNotReadyString: String
 
-    private val userData: UserData = UserData(
-        bookmarkedNewsResources = setOf("1", "3"),
-        viewedNewsResources = setOf("1", "2", "4"),
-        followedTopics = emptySet(),
-        themeBrand = ANDROID,
-        darkThemeConfig = DARK,
-        shouldHideOnboarding = true,
-        useDynamicColor = false,
-    )
+    private val userData: com.google.samples.apps.nowinandroid.core.model.UserData =
+        com.google.samples.apps.nowinandroid.core.model.UserData(
+            bookmarkedNewsResources = setOf("1", "3"),
+            viewedNewsResources = setOf("1", "2", "4"),
+            followedTopics = emptySet(),
+            themeBrand = ANDROID,
+            darkThemeConfig = DARK,
+            shouldHideOnboarding = true,
+            useDynamicColor = false,
+        )
 
     @Before
     fun setup() {
@@ -169,7 +170,7 @@ class SearchScreenTest {
             SearchScreen(
                 searchResultUiState = SearchResultUiState.Success(
                     newsResources = newsResourcesTestData.map {
-                        UserNewsResource(
+                        com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
                             newsResource = it,
                             userData = userData,
                         )

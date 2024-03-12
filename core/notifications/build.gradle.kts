@@ -23,8 +23,7 @@ android {
 }
 
 dependencies {
-    api(projects.core.domain)
-
+    implementation(projects.core.model)
     implementation(projects.core.common)
 
     compileOnly(platform(libs.androidx.compose.bom))

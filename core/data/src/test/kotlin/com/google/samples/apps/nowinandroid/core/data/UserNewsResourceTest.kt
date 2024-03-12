@@ -16,13 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.data
 
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.DEFAULT
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserData
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
 import kotlinx.datetime.Clock.System
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -37,7 +37,7 @@ class UserNewsResourceTest {
      */
     @Test
     fun userNewsResourcesAreConstructedFromNewsResourcesAndUserData() {
-        val newsResource1 = NewsResource(
+        val newsResource1 = com.google.samples.apps.nowinandroid.core.model.NewsResource(
             id = "N1",
             title = "Test news title",
             content = "Test news content",
@@ -46,7 +46,7 @@ class UserNewsResourceTest {
             publishDate = System.now(),
             type = "Article 📚",
             topics = listOf(
-                Topic(
+                com.google.samples.apps.nowinandroid.core.model.Topic(
                     id = "T1",
                     name = "Topic 1",
                     shortDescription = "Topic 1 short description",
@@ -54,7 +54,7 @@ class UserNewsResourceTest {
                     url = "Topic 1 URL",
                     imageUrl = "Topic 1 image URL",
                 ),
-                Topic(
+                com.google.samples.apps.nowinandroid.core.model.Topic(
                     id = "T2",
                     name = "Topic 2",
                     shortDescription = "Topic 2 short description",
@@ -65,7 +65,7 @@ class UserNewsResourceTest {
             ),
         )
 
-        val userData = UserData(
+        val userData = com.google.samples.apps.nowinandroid.core.model.UserData(
             bookmarkedNewsResources = setOf("N1"),
             viewedNewsResources = setOf("N1"),
             followedTopics = setOf("T1"),
@@ -75,7 +75,10 @@ class UserNewsResourceTest {
             shouldHideOnboarding = true,
         )
 
-        val userNewsResource = UserNewsResource(newsResource1, userData)
+        val userNewsResource = com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+            newsResource1,
+            userData
+        )
 
         // Check that the simple field mappings have been done correctly.
         assertEquals(newsResource1.id, userNewsResource.id)
@@ -89,7 +92,7 @@ class UserNewsResourceTest {
         assertEquals(newsResource1.topics.size, userNewsResource.followableTopics.size)
         for (topic in newsResource1.topics) {
             // Construct the expected FollowableTopic.
-            val followableTopic = FollowableTopic(
+            val followableTopic = com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
                 topic = topic,
                 isFollowed = topic.id in userData.followedTopics,
             )

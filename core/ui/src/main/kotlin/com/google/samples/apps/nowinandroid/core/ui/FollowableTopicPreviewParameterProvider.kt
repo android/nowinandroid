@@ -19,19 +19,19 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 
 /**
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)
  * provides list of [FollowableTopic] for Composable previews.
  */
-class FollowableTopicPreviewParameterProvider : PreviewParameterProvider<List<com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic>> {
-    override val values: Sequence<List<com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic>>
+class FollowableTopicPreviewParameterProvider : PreviewParameterProvider<List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>> {
+    override val values: Sequence<List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>>
         get() = sequenceOf(
             listOf(
-                com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic(
-                    topic = com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                    topic = com.google.samples.apps.nowinandroid.core.model.Topic(
                         id = "2",
                         name = "Headlines",
                         shortDescription = "News we want everyone to see",
@@ -41,8 +41,8 @@ class FollowableTopicPreviewParameterProvider : PreviewParameterProvider<List<co
                     ),
                     isFollowed = false,
                 ),
-                com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic(
-                    topic = com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                    topic = com.google.samples.apps.nowinandroid.core.model.Topic(
                         id = "3",
                         name = "UI",
                         shortDescription = "Material Design, Navigation, Text, Paging, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
@@ -52,8 +52,8 @@ class FollowableTopicPreviewParameterProvider : PreviewParameterProvider<List<co
                     ),
                     isFollowed = true,
                 ),
-                com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic(
-                    topic = com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+                    topic = com.google.samples.apps.nowinandroid.core.model.Topic(
                         id = "4",
                         name = "Testing",
                         shortDescription = "CI, Espresso, TestLab, etc",

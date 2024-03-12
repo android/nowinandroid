@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.model
 
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 import kotlinx.serialization.Serializable
 
 /**

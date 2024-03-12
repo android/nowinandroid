@@ -25,6 +25,7 @@ android {
 
 dependencies {
     api(libs.kotlinx.datetime)
+    implementation(projects.core.model)
 
     implementation(libs.javax.inject)
 

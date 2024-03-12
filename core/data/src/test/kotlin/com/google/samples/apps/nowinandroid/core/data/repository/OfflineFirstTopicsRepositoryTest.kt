@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.flow.first
@@ -144,7 +144,7 @@ class OfflineFirstTopicsRepositoryTest {
 
             // Delete half of the items on the network
             val deletedItems = networkTopics
-                .map(Topic::id)
+                .map(com.google.samples.apps.nowinandroid.core.model.Topic::id)
                 .partition { it.chars().sum() % 2 == 0 }
                 .first
                 .toSet()
@@ -165,8 +165,8 @@ class OfflineFirstTopicsRepositoryTest {
 
             // Assert that items marked deleted on the network have been deleted locally
             assertEquals(
-                networkTopics.map(Topic::id) - deletedItems,
-                dbTopics.map(Topic::id),
+                networkTopics.map(com.google.samples.apps.nowinandroid.core.model.Topic::id) - deletedItems,
+                dbTopics.map(com.google.samples.apps.nowinandroid.core.model.Topic::id),
             )
 
             // After sync version should be updated

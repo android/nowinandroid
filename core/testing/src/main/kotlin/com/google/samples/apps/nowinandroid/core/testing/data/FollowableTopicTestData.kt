@@ -18,12 +18,12 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.data
 
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 
-val followableTopicTestData: List<FollowableTopic> = listOf(
-    FollowableTopic(
-        topic = Topic(
+val followableTopicTestData: List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic> = listOf(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = "Headlines",
             shortDescription = "News we want everyone to see",
@@ -33,8 +33,8 @@ val followableTopicTestData: List<FollowableTopic> = listOf(
         ),
         isFollowed = false,
     ),
-    FollowableTopic(
-        topic = Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "3",
             name = "UI",
             shortDescription = "Material Design, Navigation, Text, Paging, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
@@ -44,8 +44,8 @@ val followableTopicTestData: List<FollowableTopic> = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        topic = Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        topic = com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "4",
             name = "Testing",
             shortDescription = "CI, Espresso, TestLab, etc",

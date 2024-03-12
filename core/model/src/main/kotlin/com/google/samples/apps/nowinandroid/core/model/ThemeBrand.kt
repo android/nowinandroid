@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.model
 
-/**
- * A [topic] with the additional information for whether or not it is followed.
- */
-// TODO consider changing to UserTopic and flattening
-data class FollowableTopic(
-    val topic: Topic,
-    val isFollowed: Boolean,
-)
+enum class ThemeBrand {
+    DEFAULT,
+    ANDROID,
+}

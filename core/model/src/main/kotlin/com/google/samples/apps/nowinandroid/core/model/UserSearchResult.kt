@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.model
+package com.google.samples.apps.nowinandroid.core.model
 
 /**
  * An entity of [SearchResult] with additional user information such as whether the user is

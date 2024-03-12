@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.Topic
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import kotlinx.coroutines.channels.BufferOverflow
@@ -28,18 +28,18 @@ class TestTopicsRepository : TopicsRepository {
     /**
      * The backing hot flow for the list of topics ids for testing.
      */
-    private val topicsFlow: MutableSharedFlow<List<Topic>> =
+    private val topicsFlow: MutableSharedFlow<List<com.google.samples.apps.nowinandroid.core.model.Topic>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getTopics(): Flow<List<Topic>> = topicsFlow
+    override fun getTopics(): Flow<List<com.google.samples.apps.nowinandroid.core.model.Topic>> = topicsFlow
 
-    override fun getTopic(id: String): Flow<Topic> =
+    override fun getTopic(id: String): Flow<com.google.samples.apps.nowinandroid.core.model.Topic> =
         topicsFlow.map { topics -> topics.find { it.id == id }!! }
 
     /**
      * A test-only API to allow controlling the list of topics from tests.
      */
-    fun sendTopics(topics: List<Topic>) {
+    fun sendTopics(topics: List<com.google.samples.apps.nowinandroid.core.model.Topic>) {
         topicsFlow.tryEmit(topics)
     }
 

@@ -18,9 +18,9 @@ package com.google.samples.apps.nowinandroid.feature.topic
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -75,7 +75,7 @@ class TopicViewModelTest {
     fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
-        topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
+        topicsRepository.sendTopics(testInputTopics.map(com.google.samples.apps.nowinandroid.core.model.FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         val item = viewModel.topicUiState.value
         assertIs<TopicUiState.Success>(item)
@@ -175,8 +175,8 @@ private const val TOPIC_URL = "URL"
 private const val TOPIC_IMAGE_URL = "Image URL"
 
 private val testInputTopics = listOf(
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -186,8 +186,8 @@ private val testInputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -197,8 +197,8 @@ private val testInputTopics = listOf(
         ),
         isFollowed = false,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -211,8 +211,8 @@ private val testInputTopics = listOf(
 )
 
 private val testOutputTopics = listOf(
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "0",
             name = TOPIC_1_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -222,8 +222,8 @@ private val testOutputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "1",
             name = TOPIC_2_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -233,8 +233,8 @@ private val testOutputTopics = listOf(
         ),
         isFollowed = true,
     ),
-    FollowableTopic(
-        Topic(
+    com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = TOPIC_3_NAME,
             shortDescription = TOPIC_SHORT_DESC,
@@ -247,7 +247,7 @@ private val testOutputTopics = listOf(
 )
 
 private val sampleNewsResources = listOf(
-    NewsResource(
+    com.google.samples.apps.nowinandroid.core.model.NewsResource(
         id = "1",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -259,7 +259,7 @@ private val sampleNewsResources = listOf(
         publishDate = Instant.parse("2021-11-09T00:00:00.000Z"),
         type = "Video 📺",
         topics = listOf(
-            Topic(
+            com.google.samples.apps.nowinandroid.core.model.Topic(
                 id = "0",
                 name = "Headlines",
                 shortDescription = "",

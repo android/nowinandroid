@@ -19,12 +19,12 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
-import com.google.samples.apps.nowinandroid.core.domain.model.UserData
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -35,26 +35,26 @@ import kotlinx.datetime.toInstant
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)
  * provides list of [UserNewsResource] for Composable previews.
  */
-class UserNewsResourcePreviewParameterProvider : PreviewParameterProvider<List<com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource>> {
+class UserNewsResourcePreviewParameterProvider : PreviewParameterProvider<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> {
 
-    override val values: Sequence<List<com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource>> = sequenceOf(newsResources)
+    override val values: Sequence<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>> = sequenceOf(newsResources)
 }
 
 object PreviewParameterData {
 
-    private val userData: com.google.samples.apps.nowinandroid.core.domain.model.UserData =
-        com.google.samples.apps.nowinandroid.core.domain.model.UserData(
+    private val userData: com.google.samples.apps.nowinandroid.core.model.UserData =
+        com.google.samples.apps.nowinandroid.core.model.UserData(
             bookmarkedNewsResources = setOf("1", "3"),
             viewedNewsResources = setOf("1", "2", "4"),
             followedTopics = emptySet(),
-            themeBrand = com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.ANDROID,
-            darkThemeConfig = com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.DARK,
+            themeBrand = com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID,
+            darkThemeConfig = com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK,
             shouldHideOnboarding = true,
             useDynamicColor = false,
         )
 
     val topics = listOf(
-        com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "2",
             name = "Headlines",
             shortDescription = "News we want everyone to see",
@@ -62,7 +62,7 @@ object PreviewParameterData {
             imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Headlines.svg?alt=media&token=506faab0-617a-4668-9e63-4a2fb996603f",
             url = "",
         ),
-        com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "3",
             name = "UI",
             shortDescription = "Material Design, Navigation, Text, Paging, Accessibility (a11y), Internationalization (i18n), Localization (l10n), Animations, Large Screens, Widgets",
@@ -70,7 +70,7 @@ object PreviewParameterData {
             imageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_UI.svg?alt=media&token=0ee1842b-12e8-435f-87ba-a5bb02c47594",
             url = "",
         ),
-        com.google.samples.apps.nowinandroid.core.domain.model.Topic(
+        com.google.samples.apps.nowinandroid.core.model.Topic(
             id = "4",
             name = "Testing",
             shortDescription = "CI, Espresso, TestLab, etc",
@@ -81,8 +81,8 @@ object PreviewParameterData {
     )
 
     val newsResources = listOf(
-        com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource(
-            newsResource = com.google.samples.apps.nowinandroid.core.domain.model.NewsResource(
+        com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+            newsResource = com.google.samples.apps.nowinandroid.core.model.NewsResource(
                 id = "1",
                 title = "Android Basics with Compose",
                 content = "We released the first two units of Android Basics with Compose, our first free course that teaches Android Development with Jetpack Compose to anyone; you do not need any prior programming experience other than basic computer literacy to get started. You’ll learn the fundamentals of programming in Kotlin while building Android apps using Jetpack Compose, Android’s modern toolkit that simplifies and accelerates native UI development. These two units are just the beginning; more will be coming soon. Check out Android Basics with Compose to get started on your Android development journey",
@@ -102,8 +102,8 @@ object PreviewParameterData {
             ),
             userData = userData,
         ),
-        com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource(
-            newsResource = com.google.samples.apps.nowinandroid.core.domain.model.NewsResource(
+        com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+            newsResource = com.google.samples.apps.nowinandroid.core.model.NewsResource(
                 id = "2",
                 title = "Thanks for helping us reach 1M YouTube Subscribers",
                 content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -118,8 +118,8 @@ object PreviewParameterData {
             ),
             userData = userData,
         ),
-        com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource(
-            newsResource = com.google.samples.apps.nowinandroid.core.domain.model.NewsResource(
+        com.google.samples.apps.nowinandroid.core.model.UserNewsResource(
+            newsResource = com.google.samples.apps.nowinandroid.core.model.NewsResource(
                 id = "3",
                 title = "Transformations and customisations in the Paging Library",
                 content = "A demonstration of different operations that can be performed " +

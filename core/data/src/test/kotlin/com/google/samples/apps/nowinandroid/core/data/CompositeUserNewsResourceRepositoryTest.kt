@@ -17,9 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.data
 
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
-import com.google.samples.apps.nowinandroid.core.domain.model.Topic
-import com.google.samples.apps.nowinandroid.core.domain.model.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.Topic
+import com.google.samples.apps.nowinandroid.core.model.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -134,7 +134,7 @@ class CompositeUserNewsResourceRepositoryTest {
     }
 }
 
-private val sampleTopic1 = Topic(
+private val sampleTopic1 = com.google.samples.apps.nowinandroid.core.model.Topic(
     id = "Topic1",
     name = "Headlines",
     shortDescription = "",
@@ -143,7 +143,7 @@ private val sampleTopic1 = Topic(
     imageUrl = "image URL",
 )
 
-private val sampleTopic2 = Topic(
+private val sampleTopic2 = com.google.samples.apps.nowinandroid.core.model.Topic(
     id = "Topic2",
     name = "UI",
     shortDescription = "",
@@ -153,7 +153,7 @@ private val sampleTopic2 = Topic(
 )
 
 private val sampleNewsResources = listOf(
-    NewsResource(
+    com.google.samples.apps.nowinandroid.core.model.NewsResource(
         id = "1",
         title = "Thanks for helping us reach 1M YouTube Subscribers",
         content = "Thank you everyone for following the Now in Android series and everything the " +
@@ -166,7 +166,7 @@ private val sampleNewsResources = listOf(
         type = "Video 📺",
         topics = listOf(sampleTopic1),
     ),
-    NewsResource(
+    com.google.samples.apps.nowinandroid.core.model.NewsResource(
         id = "2",
         title = "Transformations and customisations in the Paging Library",
         content = "A demonstration of different operations that can be performed with Paging. " +
@@ -178,7 +178,7 @@ private val sampleNewsResources = listOf(
         type = "Video 📺",
         topics = listOf(sampleTopic1, sampleTopic2),
     ),
-    NewsResource(
+    com.google.samples.apps.nowinandroid.core.model.NewsResource(
         id = "3",
         title = "Community tip on Paging",
         content = "Tips for using the Paging library from the developer community",

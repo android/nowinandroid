@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.repository
 
-import com.google.samples.apps.nowinandroid.core.domain.model.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.model.UserNewsResource
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -31,15 +31,15 @@ interface UserNewsResourceRepository {
             filterTopicIds = null,
             filterNewsIds = null,
         ),
-    ): Flow<List<UserNewsResource>>
+    ): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>>
 
     /**
      * Returns available news resources for the user's followed topics as a stream.
      */
-    fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>>
+    fun observeAllForFollowedTopics(): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>>
 
     /**
      * Returns the user's bookmarked news resources as a stream.
      */
-    fun observeAllBookmarked(): Flow<List<UserNewsResource>>
+    fun observeAllBookmarked(): Flow<List<com.google.samples.apps.nowinandroid.core.model.UserNewsResource>>
 }

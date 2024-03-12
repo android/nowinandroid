@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.util
 
 import android.util.Log
-import com.google.samples.apps.nowinandroid.core.domain.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import kotlinx.coroutines.flow.Flow
@@ -60,9 +60,9 @@ private suspend fun <T> suspendRunCatching(block: suspend () -> T): Result<T> = 
  * implementation must guarantee this.
  */
 suspend fun Synchronizer.changeListSync(
-    versionReader: (ChangeListVersions) -> Int,
+    versionReader: (com.google.samples.apps.nowinandroid.core.model.ChangeListVersions) -> Int,
     changeListFetcher: suspend (Int) -> List<NetworkChangeList>,
-    versionUpdater: ChangeListVersions.(Int) -> ChangeListVersions,
+    versionUpdater: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions.(Int) -> com.google.samples.apps.nowinandroid.core.model.ChangeListVersions,
     modelDeleter: suspend (List<String>) -> Unit,
     modelUpdater: suspend (List<String>) -> Unit,
 ) = suspendRunCatching {

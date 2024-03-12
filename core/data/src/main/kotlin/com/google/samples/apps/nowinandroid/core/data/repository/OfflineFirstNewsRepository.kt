@@ -26,8 +26,8 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.domain.model.ChangeListVersions
-import com.google.samples.apps.nowinandroid.core.domain.model.NewsResource
+import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.NewsResource
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.domain.utils.Synchronizer
@@ -57,7 +57,7 @@ internal class OfflineFirstNewsRepository @Inject constructor(
 
     override fun getNewsResources(
         query: NewsResourceQuery,
-    ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
+    ): Flow<List<com.google.samples.apps.nowinandroid.core.model.NewsResource>> = newsResourceDao.getNewsResources(
         useFilterTopicIds = query.filterTopicIds != null,
         filterTopicIds = query.filterTopicIds ?: emptySet(),
         useFilterNewsIds = query.filterNewsIds != null,
@@ -68,7 +68,7 @@ internal class OfflineFirstNewsRepository @Inject constructor(
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
         var isFirstSync = false
         return synchronizer.changeListSync(
-            versionReader = ChangeListVersions::newsResourceVersion,
+            versionReader = com.google.samples.apps.nowinandroid.core.model.ChangeListVersions::newsResourceVersion,
             changeListFetcher = { currentVersion ->
                 isFirstSync = currentVersion <= 0
                 network.getNewsResourceChangeList(after = currentVersion)

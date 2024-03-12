@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.utils
 
-import com.google.samples.apps.nowinandroid.core.domain.model.ChangeListVersions
+import com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -25,9 +25,9 @@ import kotlinx.coroutines.flow.combine
  * source for a [Syncable].
  */
 interface Synchronizer {
-    suspend fun getChangeListVersions(): ChangeListVersions
+    suspend fun getChangeListVersions(): com.google.samples.apps.nowinandroid.core.model.ChangeListVersions
 
-    suspend fun updateChangeListVersions(update: ChangeListVersions.() -> ChangeListVersions)
+    suspend fun updateChangeListVersions(update: com.google.samples.apps.nowinandroid.core.model.ChangeListVersions.() -> com.google.samples.apps.nowinandroid.core.model.ChangeListVersions)
 
     /**
      * Syntactic sugar to call [Syncable.syncWith] while omitting the synchronizer argument

@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.usecase
 
-import com.google.samples.apps.nowinandroid.core.domain.model.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.model.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.domain.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.domain.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.usecase.TopicSortField.NAME
@@ -37,13 +37,13 @@ class GetFollowableTopicsUseCase @Inject constructor(
      *
      * @param sortBy - the field used to sort the topics. Default NONE = no sorting.
      */
-    operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<FollowableTopic>> = combine(
+    operator fun invoke(sortBy: TopicSortField = NONE): Flow<List<com.google.samples.apps.nowinandroid.core.model.FollowableTopic>> = combine(
         userDataRepository.userData,
         topicsRepository.getTopics(),
     ) { userData, topics ->
         val followedTopics = topics
             .map { topic ->
-                FollowableTopic(
+                com.google.samples.apps.nowinandroid.core.model.FollowableTopic(
                     topic = topic,
                     isFollowed = topic.id in userData.followedTopics,
                 )

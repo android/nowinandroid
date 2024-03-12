@@ -19,11 +19,11 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.domain.model.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.domain.model.ThemeBrand.DEFAULT
-import com.google.samples.apps.nowinandroid.core.domain.model.UserData
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.model.ThemeBrand.DEFAULT
+import com.google.samples.apps.nowinandroid.core.model.UserData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.TestScope
@@ -66,7 +66,7 @@ class OfflineFirstUserDataRepositoryTest {
     fun offlineFirstUserDataRepository_default_user_data_is_correct() =
         testScope.runTest {
             assertEquals(
-                UserData(
+                com.google.samples.apps.nowinandroid.core.model.UserData(
                     bookmarkedNewsResources = emptySet(),
                     viewedNewsResources = emptySet(),
                     followedTopics = emptySet(),
@@ -197,16 +197,16 @@ class OfflineFirstUserDataRepositoryTest {
     @Test
     fun offlineFirstUserDataRepository_set_theme_brand_delegates_to_nia_preferences() =
         testScope.runTest {
-            subject.setThemeBrand(ThemeBrand.ANDROID)
+            subject.setThemeBrand(com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID)
 
             assertEquals(
-                ThemeBrand.ANDROID,
+                com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID,
                 subject.userData
                     .map { it.themeBrand }
                     .first(),
             )
             assertEquals(
-                ThemeBrand.ANDROID,
+                com.google.samples.apps.nowinandroid.core.model.ThemeBrand.ANDROID,
                 niaPreferencesDataSource
                     .userData
                     .map { it.themeBrand }
@@ -237,16 +237,16 @@ class OfflineFirstUserDataRepositoryTest {
     @Test
     fun offlineFirstUserDataRepository_set_dark_theme_config_delegates_to_nia_preferences() =
         testScope.runTest {
-            subject.setDarkThemeConfig(DarkThemeConfig.DARK)
+            subject.setDarkThemeConfig(com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK)
 
             assertEquals(
-                DarkThemeConfig.DARK,
+                com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK,
                 subject.userData
                     .map { it.darkThemeConfig }
                     .first(),
             )
             assertEquals(
-                DarkThemeConfig.DARK,
+                com.google.samples.apps.nowinandroid.core.model.DarkThemeConfig.DARK,
                 niaPreferencesDataSource
                     .userData
                     .map { it.darkThemeConfig }
