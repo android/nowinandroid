@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+import "com/google/samples/apps/nowinandroid/data/dark_theme_config.proto";
+import "com/google/samples/apps/nowinandroid/data/theme_brand.proto";
+
+option java_package = "com.google.samples.apps.nowinandroid.core.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+    reserved 2;
+    repeated int32 deprecated_int_followed_topic_ids = 1;
+    int32 topicChangeListVersion = 3;
+    int32 authorChangeListVersion = 4;
+    int32 newsResourceChangeListVersion = 6;
+    repeated int32 deprecated_int_followed_author_ids = 7;
+    bool has_done_int_to_string_id_migration = 8;
+    repeated string deprecated_followed_topic_ids = 9;
+    repeated string deprecated_followed_author_ids = 10;
+    repeated string deprecated_bookmarked_news_resource_ids = 11;
+    bool has_done_list_to_map_migration = 12;
+
+    // Each map is used to store a set of string IDs. The bool has no meaning, but proto3 doesn't
+    // have a Set type so this is the closest we can get to a Set.
+    map<string, bool> followed_topic_ids = 13;
+    map<string, bool> followed_author_ids = 14;
+    map<string, bool> bookmarked_news_resource_ids = 15;
+    map<string, bool> viewed_news_resource_ids = 20;
+
+    ThemeBrandProto theme_brand = 16;
+    DarkThemeConfigProto dark_theme_config = 17;
+
+    bool should_hide_onboarding = 18;
+
+    bool use_dynamic_color = 19;
+
+    // NEXT AVAILABLE ID: 21
+}
