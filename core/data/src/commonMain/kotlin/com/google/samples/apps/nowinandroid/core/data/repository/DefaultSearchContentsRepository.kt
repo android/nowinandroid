@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
 import com.google.samples.apps.nowinandroid.core.di.IODispatcher
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Inject
 internal class DefaultSearchContentsRepository(
     private val newsResourceDao: NewsResourceDao,

@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -30,6 +31,7 @@ import me.tatarka.inject.annotations.Inject
  * Implements a [UserNewsResourceRepository] by combining a [NewsRepository] with a
  * [UserDataRepository].
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Inject
 class CompositeUserNewsResourceRepository(
     val newsRepository: NewsRepository,

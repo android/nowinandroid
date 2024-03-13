@@ -43,6 +43,7 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.test)
             implementation(libs.kotlinx.serialization.json)
             implementation(projects.core.testing)

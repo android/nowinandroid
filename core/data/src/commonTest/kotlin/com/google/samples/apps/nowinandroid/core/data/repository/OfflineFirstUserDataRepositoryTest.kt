@@ -22,6 +22,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.russhwolf.settings.MapSettings
+import com.russhwolf.settings.Settings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -39,7 +40,7 @@ class OfflineFirstUserDataRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
-    private val settings = MapSettings()
+    private val settings: Settings = MapSettings()
 
     private val testScope = TestScope(dispatcher)
 
