@@ -16,16 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
+import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
 /**
- * A use case which returns total count of *Fts tables
+ * A use case which returns the recent search queries.
  */
-class GetSearchContentsCountUseCase @Inject constructor(
-    private val searchContentsRepository: SearchContentsRepository,
+@Inject
+class GetRecentSearchQueriesUseCase(
+    private val recentSearchRepository: RecentSearchRepository,
 ) {
-    operator fun invoke(): Flow<Int> =
-        searchContentsRepository.getSearchContentsCount()
+    operator fun invoke(limit: Int = 10): Flow<List<RecentSearchQuery>> =
+        recentSearchRepository.getRecentSearchQueries(limit)
 }
