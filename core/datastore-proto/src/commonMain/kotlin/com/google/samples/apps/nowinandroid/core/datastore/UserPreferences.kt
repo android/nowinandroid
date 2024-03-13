@@ -28,10 +28,10 @@ data class UserPreferences(
     val newsResourceChangeListVersion: Int,
     val hasDoneIntToStringIdMigration: Boolean,
     val hasDoneListToMapMigration: Boolean,
-    val followedTopicIds: Set<String> = emptySet(),
-    val followedAuthorIds: Set<String> = emptySet(),
-    val bookmarkedNewsResourceIds: Set<String> = emptySet(),
-    val viewedNewsResourceIds: Set<String> = emptySet(),
+    val followedTopicIds: Set<String>,
+    val followedAuthorIds: Set<String>,
+    val bookmarkedNewsResourceIds: Set<String>,
+    val viewedNewsResourceIds: Set<String>,
     val themeBrand: ThemeBrandProto,
     val darkThemeConfig: DarkThemeConfigProto,
     val shouldHideOnboarding: Boolean,
@@ -48,6 +48,10 @@ data class UserPreferences(
             darkThemeConfig = DARK_THEME_CONFIG_FOLLOW_SYSTEM,
             shouldHideOnboarding = false,
             useDynamicColor = false,
+            followedTopicIds = emptySet(),
+            followedAuthorIds = emptySet(),
+            bookmarkedNewsResourceIds = emptySet(),
+            viewedNewsResourceIds = emptySet(),
         )
     }
 }
