@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.data.Synchronizer
 import com.google.samples.apps.nowinandroid.core.data.changeListSync
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDaoInterface
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
@@ -36,7 +37,7 @@ import me.tatarka.inject.annotations.Inject
  */
 @Inject
 internal class OfflineFirstTopicsRepository(
-    private val topicDao: TopicDao,
+    private val topicDao: TopicDaoInterface,
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
 
