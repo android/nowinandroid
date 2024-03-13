@@ -38,7 +38,7 @@ class ResultKtTest {
                 when (val errorResult = awaitItem()) {
                     is Result.Error -> assertEquals(
                         "Test Done",
-                        errorResult.exception?.message,
+                        errorResult.exception.message,
                     )
                     Result.Loading,
                     is Result.Success,

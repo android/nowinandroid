@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.repository.fake
+package com.google.samples.apps.nowinandroid.core.data.test.repository
 
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
@@ -30,7 +30,7 @@ import javax.inject.Inject
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
  */
-class FakeUserDataRepository @Inject constructor(
+internal class FakeUserDataRepository @Inject constructor(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
 ) : UserDataRepository {
 

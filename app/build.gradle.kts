@@ -45,7 +45,7 @@ android {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
-        val release = getByName("release") {
+        release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -56,17 +56,6 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             // Ensure Baseline Profile is fresh for release builds.
             baselineProfile.automaticGenerationDuringBuild = true
-        }
-        create("benchmark") {
-            // Enable all the optimizations from release build through initWith(release).
-            initWith(release)
-            matchingFallbacks.add("release")
-            // Debug key signing is available to everyone.
-            signingConfig = signingConfigs.getByName("debug")
-            // Only use benchmark proguard rules
-            proguardFiles("benchmark-rules.pro")
-            isMinifyEnabled = true
-            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
@@ -100,15 +89,22 @@ dependencies {
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.tracing.ktx)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+
+    ksp(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(projects.uiTestHiltManifest)
@@ -123,10 +119,12 @@ dependencies {
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
+    testDemoImplementation(projects.core.screenshotTesting)
 
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.accompanist.testharness)
     androidTestImplementation(libs.hilt.android.testing)

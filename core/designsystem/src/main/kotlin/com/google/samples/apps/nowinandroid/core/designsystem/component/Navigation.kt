@@ -53,12 +53,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 fun RowScope.NiaNavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
-    label: @Composable (() -> Unit)? = null,
     alwaysShowLabel: Boolean = true,
+    icon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = icon,
+    label: @Composable (() -> Unit)? = null,
 ) {
     NavigationBarItem(
         selected = selected,
@@ -117,12 +117,12 @@ fun NiaNavigationBar(
 fun NiaNavigationRailItem(
     selected: Boolean,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
-    label: @Composable (() -> Unit)? = null,
     alwaysShowLabel: Boolean = true,
+    icon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = icon,
+    label: @Composable (() -> Unit)? = null,
 ) {
     NavigationRailItem(
         selected = selected,
@@ -167,7 +167,7 @@ fun NiaNavigationRail(
 
 @ThemePreviews
 @Composable
-fun NiaNavigationPreview() {
+fun NiaNavigationBarPreview() {
     val items = listOf("For you", "Saved", "Interests")
     val icons = listOf(
         NiaIcons.UpcomingBorder,
@@ -184,6 +184,46 @@ fun NiaNavigationPreview() {
         NiaNavigationBar {
             items.forEachIndexed { index, item ->
                 NiaNavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = icons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = selectedIcons[index],
+                            contentDescription = item,
+                        )
+                    },
+                    label = { Text(item) },
+                    selected = index == 0,
+                    onClick = { },
+                )
+            }
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun NiaNavigationRailPreview() {
+    val items = listOf("For you", "Saved", "Interests")
+    val icons = listOf(
+        NiaIcons.UpcomingBorder,
+        NiaIcons.BookmarksBorder,
+        NiaIcons.Grid3x3,
+    )
+    val selectedIcons = listOf(
+        NiaIcons.Upcoming,
+        NiaIcons.Bookmarks,
+        NiaIcons.Grid3x3,
+    )
+
+    NiaTheme {
+        NiaNavigationRail {
+            items.forEachIndexed { index, item ->
+                NiaNavigationRailItem(
                     icon = {
                         Icon(
                             imageVector = icons[index],

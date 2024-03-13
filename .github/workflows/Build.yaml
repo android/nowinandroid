@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -37,7 +37,7 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Check build-logic
         run: ./gradlew check -p build-logic
@@ -45,13 +45,40 @@ jobs:
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
+      - name: Check Dependency Guard
+        id: dependencyguard_verify
+        continue-on-error: true
+        run: ./gradlew dependencyGuard
+
+      - name: Prevent updating Dependency Guard baselines if this is a fork
+        id: checkfork_dependencyguard
+        continue-on-error: false
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
+
+        # Runs if previous job failed
+      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
+        id: dependencyguard_baseline
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        run: |
+          ./gradlew dependencyGuardBaseline
+
+      - name: Push new Dependency Guard baselines if available
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.dependencyguard_baseline.outcome == 'success'
+        with:
+          file_pattern: '**/dependencies/*.txt'
+          disable_globbing: true
+          commit_message: "🤖 Updates baselines for Dependency Guard"
+
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
         run: ./gradlew verifyRoborazziDemoDebug
 
       - name: Prevent pushing new screenshots if this is a fork
-        id: checkfork
+        id: checkfork_screenshots
         continue-on-error: false
         if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
@@ -82,13 +109,9 @@ jobs:
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble
           -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33ProdNonMinifiedBenchmarkAndroidTest
           -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedBenchmarkAndroidTest
           -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectDemoNonMinifiedBenchmarkBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedBenchmarkBaselineProfile
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -117,13 +140,31 @@ jobs:
         run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
-    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    runs-on: ubuntu-latest
     timeout-minutes: 55
     strategy:
       matrix:
         api-level: [26, 30]
 
     steps:
+      - name: Delete unnecessary tools 🔧
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          android: false # Don't remove Android tools
+          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
+          dotnet: true # rm -rf /usr/share/dotnet
+          haskell: true # rm -rf /opt/ghc...
+          swap-storage: true # rm -f /mnt/swapfile (4GiB)
+          docker-images: false # Takes 16s, enable if needed in the future
+          large-packages: false # includes google-cloud-sdk and it's slow
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -137,7 +178,7 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Build projects before running emulator
         run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
