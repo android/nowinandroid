@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkData
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.serialization.json.Json
@@ -33,6 +34,7 @@ enum class CollectionType {
 /**
  * Test double for [NiaNetworkDataSource]
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
     private val source = FakeNiaNetworkDataSource(

@@ -21,13 +21,14 @@ import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.CollectionType
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.data.testdoubles.TestTopicDao
-import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDaoInterface
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import com.russhwolf.settings.MapSettings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -38,11 +39,14 @@ import kotlin.test.assertEquals
 
 class OfflineFirstTopicsRepositoryTest {
 
-    private val testScope = TestScope(UnconfinedTestDispatcher())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val dispatcher = UnconfinedTestDispatcher()
+
+    private val testScope = TestScope(dispatcher)
 
     private lateinit var subject: OfflineFirstTopicsRepository
 
-    private lateinit var topicDao: TopicDao
+    private lateinit var topicDao: TopicDaoInterface
 
     private lateinit var network: TestNiaNetworkDataSource
 
@@ -55,7 +59,8 @@ class OfflineFirstTopicsRepositoryTest {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         niaPreferences = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            settings = MapSettings(),
+            dispatcher = dispatcher,
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
@@ -140,7 +145,7 @@ class OfflineFirstTopicsRepositoryTest {
             // Delete half of the items on the network
             val deletedItems = networkTopics
                 .map(Topic::id)
-                .partition { it.chars().sum() % 2 == 0 }
+                .partition { it.length % 2 == 0 }
                 .first
                 .toSet()
 

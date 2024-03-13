@@ -16,8 +16,6 @@
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.kotlin.inject)
-    alias(libs.plugins.nowinandroid.android.library.compose)
-    alias(libs.plugins.nowinandroid.android.hilt)
 }
 
 android {
@@ -28,7 +26,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(kotlin("test"))
-//            api(libs.androidx.compose.ui.test)
             api(projects.core.analytics)
             api(projects.core.data)
             api(projects.core.model)

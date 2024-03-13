@@ -21,8 +21,8 @@ import com.google.samples.apps.nowinandroid.core.data.changeListSync
 import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.model.topicCrossReferences
 import com.google.samples.apps.nowinandroid.core.data.model.topicEntityShells
-import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
-import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDaoInterface
+import com.google.samples.apps.nowinandroid.core.database.dao.TopicDaoInterface
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
@@ -48,8 +48,8 @@ private const val SYNC_BATCH_SIZE = 40
 @Inject
 internal class OfflineFirstNewsRepository(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
-    private val newsResourceDao: NewsResourceDao,
-    private val topicDao: TopicDao,
+    private val newsResourceDao: NewsResourceDaoInterface,
+    private val topicDao: TopicDaoInterface,
     private val network: NiaNetworkDataSource,
     private val notifier: Notifier,
 ) : NewsRepository {

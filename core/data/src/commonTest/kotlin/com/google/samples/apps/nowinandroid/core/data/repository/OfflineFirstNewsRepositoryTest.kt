@@ -32,18 +32,17 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.notifications.TestNotifier
+import com.russhwolf.settings.MapSettings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -51,7 +50,10 @@ import kotlin.test.assertTrue
 
 class OfflineFirstNewsRepositoryTest {
 
-    private val testScope = TestScope(UnconfinedTestDispatcher())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val dispatcher = UnconfinedTestDispatcher()
+
+    private val testScope = TestScope(dispatcher)
 
     private lateinit var subject: OfflineFirstNewsRepository
 
@@ -67,13 +69,11 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var synchronizer: Synchronizer
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @BeforeTest
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            settings = MapSettings(),
+            dispatcher = dispatcher,
         )
         newsResourceDao = TestNewsResourceDao()
         topicDao = TestTopicDao()
@@ -176,7 +176,7 @@ class OfflineFirstNewsRepositoryTest {
             // Delete half of the items on the network
             val deletedItems = newsResourcesFromNetwork
                 .map(NewsResource::id)
-                .partition { it.chars().sum() % 2 == 0 }
+                .partition { it.length % 2 == 0 }
                 .first
                 .toSet()
 
@@ -327,7 +327,7 @@ class OfflineFirstNewsRepositoryTest {
             val followedTopicIds = networkNewsResources
                 .flatMap(NetworkNewsResource::topicEntityShells)
                 .mapNotNull { topic ->
-                    when (topic.id.chars().sum() % 2) {
+                    when (topic.id.length % 2) {
                         0 -> topic.id
                         else -> null
                     }
