@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ fun InterestsItem(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     description: String = "",
+    isSelected: Boolean = false,
 ) {
     ListItem(
         leadingContent = {
@@ -83,10 +85,16 @@ fun InterestsItem(
             )
         },
         colors = ListItemDefaults.colors(
-            containerColor = Color.Transparent,
+            containerColor = if (isSelected) {
+                MaterialTheme.colorScheme.surfaceVariant
+            } else {
+                Color.Transparent
+            },
         ),
         modifier = modifier
-            .semantics(mergeDescendants = true) { /* no-op */ }
+            .semantics(mergeDescendants = true) {
+                selected = isSelected
+            }
             .clickable(enabled = true, onClick = onClick),
     )
 }
@@ -175,6 +183,24 @@ private fun InterestsCardWithEmptyDescriptionPreview() {
                 topicImageUrl = "",
                 onClick = { },
                 onFollowButtonClick = { },
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun InterestsCardSelectedPreview() {
+    NiaTheme {
+        Surface {
+            InterestsItem(
+                name = "Compose",
+                description = "",
+                following = true,
+                topicImageUrl = "",
+                onClick = { },
+                onFollowButtonClick = { },
+                isSelected = true,
             )
         }
     }

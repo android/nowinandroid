@@ -274,10 +274,10 @@ class NavigationTest {
 
             // Select the last topic
             val topic = runBlocking {
-                topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+                topicsRepository.getTopics().first().sortedBy(Topic::name).last()
             }
-            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
-            onNodeWithText(topic).performClick()
+            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic.name))
+            onNodeWithText(topic.name).performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
@@ -285,8 +285,8 @@ class NavigationTest {
             // Come back to Interests
             onNodeWithText(interests).performClick()
 
-            // Verify we're not in the list of interests
-            onNodeWithTag("interests:topics").assertDoesNotExist()
+            // Verify the topic is still shown
+            onNodeWithTag("topic:${topic.id}").assertExists()
         }
     }
 }
