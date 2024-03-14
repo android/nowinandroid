@@ -65,7 +65,7 @@ check_and_create_readme() {
         # Calculate the correct relative path to the image
         local relative_image_path="../../docs/images/graphs/${file_name}.svg"
         echo "# ${module_path} module" > "$readme_path"
-        echo "" >> "$readme_path"
+        echo "## Dependency graph" >> "$readme_path"
         echo "![Dependency graph](${relative_image_path})" >> "$readme_path"
     fi
 }
