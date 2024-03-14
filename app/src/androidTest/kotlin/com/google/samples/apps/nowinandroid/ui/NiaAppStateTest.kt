@@ -167,7 +167,7 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
+    fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
@@ -214,7 +214,7 @@ class NiaAppStateTest {
 @Composable
 private fun rememberTestNavController(): TestNavHostController {
     val context = LocalContext.current
-    return remember<TestNavHostController> {
+    return remember {
         TestNavHostController(context).apply {
             navigatorProvider.addNavigator(ComposeNavigator())
             graph = createGraph(startDestination = "a") {
