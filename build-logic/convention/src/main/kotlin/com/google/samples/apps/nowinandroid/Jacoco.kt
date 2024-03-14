@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -46,30 +47,52 @@ internal fun Project.configureJacoco(
         toolVersion = libs.findVersion("jacoco").get().toString()
     }
 
+
     val jacocoTestReport = tasks.create("jacocoTestReport")
 
     androidComponentsExtension.onVariants { variant ->
-        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+        val jvmTestTaskName = "test${variant.name.capitalize()}UnitTest"
+        val androidTestTaskName = "connected${variant.name.capitalize()}AndroidTest"
         val buildDir = layout.buildDirectory.get().asFile
-        val reportTask = tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
-            dependsOn(testTaskName)
+        listOf(jvmTestTaskName, androidTestTaskName).forEach { testTaskName ->
+            val reportTask =
+                tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+                    dependsOn(testTaskName)
 
-            reports {
-                xml.required.set(true)
-                html.required.set(true)
-            }
+                    reports {
+                        xml.required.set(true)
+                        html.required.set(true)
+                    }
 
-            classDirectories.setFrom(
-                fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
-                    exclude(coverageExclusions)
+                    classDirectories.setFrom(
+                        // TODO: Hack suggested in https://issuetracker.google.com/161300933
+//                        fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
+//                            exclude(coverageExclusions)
+//                        }
+
+                        fileTree("$buildDir/intermediates/classes/${variant.name}/transform${variant.name.capitalize()}ClassesWithAsm/dirs") {
+                            exclude(coverageExclusions)
+                        }
+                    )
+
+                    sourceDirectories.setFrom(
+                        files(
+                            "$projectDir/src/main/java",
+                            "$projectDir/src/main/kotlin"
+                        )
+                    )
+
+                    executionData.setFrom(
+                        file("$buildDir/jacoco/$testTaskName.exec"),
+                        file("$buildDir/**/coverage.ec"),
+                        // Beware of using '**' with directories that contain spaces!
+                        project.fileTree("$buildDir/outputs/code_coverage")
+                            .matching { include("**/*.ec") }
+                    )
                 }
-            )
 
-            sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-            executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+            jacocoTestReport.dependsOn(reportTask)
         }
-
-        jacocoTestReport.dependsOn(reportTask)
     }
 
     tasks.withType<Test>().configureEach {

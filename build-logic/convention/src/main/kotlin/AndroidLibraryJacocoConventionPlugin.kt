@@ -27,7 +27,8 @@ class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
                 apply("org.gradle.jacoco")
                 apply("com.android.library")
             }
-            val extension = extensions.getByType<LibraryAndroidComponentsExtension>()
+            val extension: LibraryAndroidComponentsExtension = extensions.getByType<LibraryAndroidComponentsExtension>()
+
             configureJacoco(extension)
         }
     }

@@ -43,6 +43,7 @@ android {
 
     buildTypes {
         debug {
+            enableAndroidTestCoverage = true
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         release {
