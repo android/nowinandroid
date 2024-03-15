@@ -88,14 +88,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
-import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsItem
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 @Composable
@@ -104,10 +101,7 @@ internal fun SearchRoute(
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
-    interestsViewModel: InterestsViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
-    forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
@@ -120,9 +114,9 @@ internal fun SearchRoute(
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onSearchTriggered = searchViewModel::onSearchTriggered,
         onClearRecentSearches = searchViewModel::clearRecentSearches,
-        onNewsResourcesCheckedChanged = forYouViewModel::updateNewsResourceSaved,
-        onNewsResourceViewed = { bookmarksViewModel.setNewsResourceViewed(it, true) },
-        onFollowButtonClick = interestsViewModel::followTopic,
+        onNewsResourcesCheckedChanged = searchViewModel::setNewsResourceBookmarked,
+        onNewsResourceViewed = { searchViewModel.setNewsResourceViewed(it, true) },
+        onFollowButtonClick = searchViewModel::followTopic,
         onBackClick = onBackClick,
         onInterestsClick = onInterestsClick,
         onTopicClick = onTopicClick,
