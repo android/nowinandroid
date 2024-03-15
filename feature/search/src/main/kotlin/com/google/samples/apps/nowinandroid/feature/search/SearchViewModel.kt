@@ -23,8 +23,8 @@ import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +41,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     getSearchContentsUseCase: GetSearchContentsUseCase,
-    getSearchContentsCountUseCase: GetSearchContentsCountUseCase,
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
+    private val searchContentsRepository: SearchContentsRepository,
     private val recentSearchRepository: RecentSearchRepository,
     private val savedStateHandle: SavedStateHandle,
     private val analyticsHelper: AnalyticsHelper,
@@ -51,7 +51,7 @@ class SearchViewModel @Inject constructor(
     val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
-        getSearchContentsCountUseCase()
+        searchContentsRepository.getSearchContentsCount()
             .flatMapLatest { totalCount ->
                 if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
                     flowOf(SearchResultUiState.SearchNotReady)
