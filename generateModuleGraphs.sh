@@ -56,14 +56,23 @@ check_and_create_readme() {
     local file_name="$2"
 
     local readme_path="${module_path:1}" # Remove leading colon
-    readme_path=${readme_path//:/\/} # Replace colons with slashes using sed
+    readme_path=${readme_path//:/\/} # Replace colons with slashes
     readme_path="${readme_path}/README.md" #Append the filename
 
     # Check if README.md exists and create it if not
     if [[ ! -f "$readme_path" ]]; then
         echo "Creating README.md for ${module_path}"
-        # Calculate the correct relative path to the image
-        local relative_image_path="../../docs/images/graphs/${file_name}.svg"
+
+        # Determine the depth of the module based on the number of colons
+        local depth=$(awk -F: '{print NF-1}' <<< "${module_path}")
+
+        # Construct the relative image path with the correct number of "../"
+        local relative_image_path="../"
+        for ((i=1; i<$depth; i++)); do
+            relative_image_path+="../"
+        done
+        relative_image_path+="docs/images/graphs/${file_name}.svg"
+
         echo "# ${module_path} module" > "$readme_path"
         echo "## Dependency graph" >> "$readme_path"
         echo "![Dependency graph](${relative_image_path})" >> "$readme_path"
