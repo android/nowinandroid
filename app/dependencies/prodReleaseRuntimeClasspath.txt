@@ -123,9 +123,9 @@ androidx.vectordrawable:vectordrawable:1.1.0
 androidx.versionedparcelable:versionedparcelable:1.1.1
 androidx.viewpager:viewpager:1.0.0
 androidx.window.extensions.core:core:1.0.0
-androidx.window:window-core-android:1.3.0-alpha02
-androidx.window:window-core:1.3.0-alpha02
-androidx.window:window:1.3.0-alpha02
+androidx.window:window-core-android:1.3.0-alpha03
+androidx.window:window-core:1.3.0-alpha03
+androidx.window:window:1.3.0-alpha03
 androidx.work:work-runtime-ktx:2.9.0
 androidx.work:work-runtime:2.9.0
 com.caverock:androidsvg-aar:1.4
