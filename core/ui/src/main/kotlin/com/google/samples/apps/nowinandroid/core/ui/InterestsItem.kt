@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.interests
+package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicA
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.feature.interests.R.string
+import com.google.samples.apps.nowinandroid.core.ui.R.string
 
 @Composable
 fun InterestsItem(
@@ -49,6 +50,7 @@ fun InterestsItem(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     description: String = "",
+    isSelected: Boolean = false,
 ) {
     ListItem(
         leadingContent = {
@@ -68,7 +70,7 @@ fun InterestsItem(
                     Icon(
                         imageVector = NiaIcons.Add,
                         contentDescription = stringResource(
-                            id = string.feature_interests_card_follow_button_content_desc,
+                            id = string.core_ui_interests_card_follow_button_content_desc,
                         ),
                     )
                 },
@@ -76,17 +78,23 @@ fun InterestsItem(
                     Icon(
                         imageVector = NiaIcons.Check,
                         contentDescription = stringResource(
-                            id = string.feature_interests_card_unfollow_button_content_desc,
+                            id = string.core_ui_interests_card_unfollow_button_content_desc,
                         ),
                     )
                 },
             )
         },
         colors = ListItemDefaults.colors(
-            containerColor = Color.Transparent,
+            containerColor = if (isSelected) {
+                MaterialTheme.colorScheme.surfaceVariant
+            } else {
+                Color.Transparent
+            },
         ),
         modifier = modifier
-            .semantics(mergeDescendants = true) { /* no-op */ }
+            .semantics(mergeDescendants = true) {
+                selected = isSelected
+            }
             .clickable(enabled = true, onClick = onClick),
     )
 }
@@ -175,6 +183,24 @@ private fun InterestsCardWithEmptyDescriptionPreview() {
                 topicImageUrl = "",
                 onClick = { },
                 onFollowButtonClick = { },
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun InterestsCardSelectedPreview() {
+    NiaTheme {
+        Surface {
+            InterestsItem(
+                name = "Compose",
+                description = "",
+                following = true,
+                topicImageUrl = "",
+                onClick = { },
+                onFollowButtonClick = { },
+                isSelected = true,
             )
         }
     }
