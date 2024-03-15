@@ -27,10 +27,11 @@ import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
-import com.google.samples.apps.nowinandroid.feature.interests.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
+import com.google.samples.apps.nowinandroid.feature.interests.R as InterestsR
 
 /**
  * UI test for checking the correct behaviour of the Interests screen;
@@ -50,12 +51,12 @@ class InterestsScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            interestsLoading = getString(R.string.feature_interests_loading)
-            interestsEmptyHeader = getString(R.string.feature_interests_empty_header)
+            interestsLoading = getString(InterestsR.string.feature_interests_loading)
+            interestsEmptyHeader = getString(InterestsR.string.feature_interests_empty_header)
             interestsTopicCardFollowButton =
-                getString(R.string.feature_interests_card_follow_button_content_desc)
+                getString(CoreUiR.string.core_ui_interests_card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =
-                getString(R.string.feature_interests_card_unfollow_button_content_desc)
+                getString(CoreUiR.string.core_ui_interests_card_unfollow_button_content_desc)
         }
     }
 
@@ -74,7 +75,10 @@ class InterestsScreenTest {
     fun interestsWithTopics_whenTopicsFollowed_showFollowedAndUnfollowedTopicsWithInfo() {
         composeTestRule.setContent {
             InterestsScreen(
-                uiState = InterestsUiState.Interests(topics = followableTopicTestData),
+                uiState = InterestsUiState.Interests(
+                    topics = followableTopicTestData,
+                    selectedTopicId = null,
+                ),
             )
         }
 
