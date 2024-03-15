@@ -36,6 +36,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -70,6 +71,7 @@ class ForYouViewModelTest {
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository,
     )
+
     private val savedStateHandle = SavedStateHandle()
     private lateinit var viewModel: ForYouViewModel
 
@@ -503,6 +505,24 @@ class ForYouViewModelTest {
         )
 
         collectJob.cancel()
+    }
+
+    @Test
+    fun whenUpdateNewsResourceSavedIsCalled_bookmarkStateIsUpdated() = runTest {
+        val newsResourceId = "123"
+        viewModel.updateNewsResourceSaved(newsResourceId, true)
+
+        assertEquals(
+            expected = setOf(newsResourceId),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
+
+        viewModel.updateNewsResourceSaved(newsResourceId, false)
+
+        assertEquals(
+            expected = emptySet(),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
     }
 }
 
