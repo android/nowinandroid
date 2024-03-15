@@ -168,6 +168,7 @@ class SearchViewModelTest {
         assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
 
         collectJob.cancel()
+    }
 
     @Test
     fun whenToggleNewsResourceSavedIsCalled_bookmarkStateIsUpdated() = runTest {
