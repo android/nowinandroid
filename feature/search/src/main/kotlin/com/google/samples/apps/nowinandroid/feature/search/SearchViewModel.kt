@@ -116,7 +116,7 @@ class SearchViewModel @Inject constructor(
 
     fun setNewsResourceBookmarked(newsResourceId: String, isChecked: Boolean) {
         viewModelScope.launch {
-            userDataRepository.updateNewsResourceBookmark(newsResourceId, isChecked)
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, isChecked)
         }
     }
 
