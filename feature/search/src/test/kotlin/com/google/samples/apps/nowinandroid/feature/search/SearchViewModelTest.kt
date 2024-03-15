@@ -62,6 +62,7 @@ class SearchViewModelTest {
     private val recentSearchRepository = TestRecentSearchRepository()
     private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
     private val getSearchContentsCountUseCase = GetSearchContentsCountUseCase(searchContentsRepository)
+
     private lateinit var viewModel: SearchViewModel
 
     @Before
@@ -72,6 +73,7 @@ class SearchViewModelTest {
             recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
             recentSearchRepository = recentSearchRepository,
+            userDataRepository = userDataRepository,
             analyticsHelper = NoOpAnalyticsHelper(),
         )
         userDataRepository.setUserData(emptyUserData)
@@ -166,5 +168,22 @@ class SearchViewModelTest {
         assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
 
         collectJob.cancel()
+
+    @Test
+    fun whenToggleNewsResourceSavedIsCalled_bookmarkStateIsUpdated() = runTest {
+        val newsResourceId = "123"
+        viewModel.setNewsResourceBookmarked(newsResourceId, true)
+
+        assertEquals(
+            expected = setOf(newsResourceId),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
+
+        viewModel.setNewsResourceBookmarked(newsResourceId, false)
+
+        assertEquals(
+            expected = emptySet(),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
     }
 }
