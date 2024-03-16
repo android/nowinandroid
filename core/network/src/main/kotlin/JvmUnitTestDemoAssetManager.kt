@@ -15,7 +15,7 @@
  */
 
 import androidx.annotation.VisibleForTesting
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoAssetManager
 import java.io.File
 import java.io.InputStream
 import java.util.Properties
@@ -26,7 +26,7 @@ import java.util.Properties
  * @see <a href="https://developer.android.com/reference/tools/gradle-api/7.3/com/android/build/api/dsl/UnitTestOptions">UnitTestOptions</a>
  */
 @VisibleForTesting
-internal object JvmUnitTestFakeAssetManager : FakeAssetManager {
+internal object JvmUnitTestDemoAssetManager : DemoAssetManager {
     private val config =
         requireNotNull(javaClass.getResource("com/android/tools/test_config.properties")) {
             """
