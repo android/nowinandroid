@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.fake
+package com.google.samples.apps.nowinandroid.core.network.demo
 
-import JvmUnitTestFakeAssetManager
+import JvmUnitTestDemoAssetManager
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -29,18 +29,18 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class FakeNiaNetworkDataSourceTest {
+class DemoNiaNetworkDataSourceTest {
 
-    private lateinit var subject: FakeNiaNetworkDataSource
+    private lateinit var subject: DemoNiaNetworkDataSource
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        subject = FakeNiaNetworkDataSource(
+        subject = DemoNiaNetworkDataSource(
             ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true },
-            assets = JvmUnitTestFakeAssetManager,
+            assets = JvmUnitTestDemoAssetManager,
         )
     }
 
