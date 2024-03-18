@@ -57,7 +57,7 @@ roborazzi = "1.7.0"
 room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.2"
-turbine = "1.0.0"
+turbine = "1.1.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
