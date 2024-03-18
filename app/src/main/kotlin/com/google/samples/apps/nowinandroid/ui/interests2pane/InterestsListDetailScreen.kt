@@ -17,8 +17,6 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -39,6 +37,7 @@ import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
@@ -113,9 +112,7 @@ internal fun InterestsListDetailScreen(
                     onTopicClick = ::onTopicClickShowDetailPane,
                 )
                 composable(route = TOPIC_ROUTE) {
-                    Box {
-                        Text("Placeholder")
-                    }
+                    TopicDetailPlaceholder()
                 }
             }
         },
