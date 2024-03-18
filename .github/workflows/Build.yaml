@@ -113,6 +113,15 @@ jobs:
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
 
+      - name: Display local test coverage
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          title: Local test coverage report
+          paths: |
+            ${{ github.workspace }}/**/build/reports/coverage/test/**/report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
