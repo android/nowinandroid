@@ -26,7 +26,7 @@ The app architecture has three layers: a [data layer](https://developer.android.
 </center>
 
 > [!NOTE]  
-> The official Android Architecture is different from other architectures, such as "Clean Architecture". Concepts from other architectures may not apply here, or be applied in different ways. [More discussion here](https://github.com/android/nowinandroid/discussions/1273).
+> The official Android architecture is different from other architectures, such as "Clean Architecture". Concepts from other architectures may not apply here, or be applied in different ways. [More discussion here](https://github.com/android/nowinandroid/discussions/1273).
 
 The architecture follows a reactive programming model with [unidirectional data flow](https://developer.android.com/jetpack/guide/ui-layer#udf). With the data layer at the bottom, the key concepts are:
 
