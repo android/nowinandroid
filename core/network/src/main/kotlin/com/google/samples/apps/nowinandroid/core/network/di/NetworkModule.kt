@@ -46,7 +46,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesFakeAssetManager(
+    fun providesDemoAssetManager(
         @ApplicationContext context: Context,
     ): DemoAssetManager = DemoAssetManager(context.assets::open)
 
