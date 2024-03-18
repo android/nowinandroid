@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write
 
     timeout-minutes: 60
 
