@@ -114,8 +114,9 @@ jobs:
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
 
+      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
       - name: Generate coverage reports for Debug variants
-        run: ./gradlew createDemoDebugUnitTestCoverageReport createProdDebugUnitTestCoverageReport
+        run: ./gradlew createDemoDebugUnitTestCoverageReport
 
       - name: Display local test coverage
         id: jacoco
