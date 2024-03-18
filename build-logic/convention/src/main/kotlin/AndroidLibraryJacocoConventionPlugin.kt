@@ -15,7 +15,6 @@
  */
 
 import com.android.build.api.dsl.LibraryExtension
-import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -23,17 +22,14 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            val androidExtension: LibraryExtension = extensions.getByType<LibraryExtension>()
+            val androidExtension = extensions.getByType<LibraryExtension>()
 
             androidExtension.buildTypes.configureEach {
                 // The jacoco plugin is applied automatically when any of these are set
+
                 enableAndroidTestCoverage = true
                 enableUnitTestCoverage = true
             }
-
-            val extension = extensions.getByType<LibraryAndroidComponentsExtension>()
-
         }
     }
-
 }
