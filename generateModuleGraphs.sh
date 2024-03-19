@@ -25,7 +25,9 @@
 if ! command -v dot &> /dev/null
 then
     echo "The 'dot' command is not found. This is required to generate SVGs from the Graphviz files."
-    echo "On macOS, you can install it using Homebrew: 'brew install graphviz'"
+    echo "Installation instructions:"
+    echo "  - On macOS: You can install Graphviz using Homebrew with the command: 'brew install graphviz'"
+    echo "  - On Ubuntu: You can install Graphviz using APT with the command: 'sudo apt-get install graphviz'"
     exit 1
 fi
 
@@ -49,6 +51,9 @@ done
 
 # Get the module paths
 module_paths=$(./gradlew -q printModulePaths --no-configuration-cache)
+
+# Ensure the output directory exists
+mkdir -p docs/images/graphs/
 
 # Function to check and create a README.md for modules which don't have one.
 check_and_create_readme() {
