@@ -75,6 +75,8 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -269,7 +271,10 @@ private fun LazyStaggeredGridScope.onboarding(
 
         is OnboardingUiState.Shown -> {
             item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
-                Column(modifier = interestsItemModifier) {
+                Column(
+                    modifier = interestsItemModifier
+                        .semantics(mergeDescendants = true) { },
+                ) {
                     Text(
                         text = stringResource(R.string.feature_foryou_onboarding_guidance_title),
                         textAlign = TextAlign.Center,
