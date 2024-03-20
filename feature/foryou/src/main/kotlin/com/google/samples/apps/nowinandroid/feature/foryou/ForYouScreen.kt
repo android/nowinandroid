@@ -423,6 +423,7 @@ private fun SingleTopicButton(
                         contentDescription = name,
                     )
                 },
+                modifier = Modifier.clearAndSetSemantics { },
             )
         }
     }
