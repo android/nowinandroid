@@ -124,7 +124,7 @@ jobs:
         with:
           title: Local test coverage report
           paths: |
-            ${{ github.workspace }}/**/build/reports/coverage/test/**/report.xml
+            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build outputs (APKs)
