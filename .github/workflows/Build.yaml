@@ -182,10 +182,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
-      - name: Build projects before running emulator
-        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
-
-      - name: Run instrumentation tests
+      - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
