@@ -200,12 +200,6 @@ jobs:
       - name: Generate coverage reports for Debug variants (only API 26)
         if: matrix.api-level == 26
         run: ./gradlew createDemoDebugCombinedCoverageReport
-
-      - name: Debug
-        run: pwd
-
-      - name: Debug
-        run: du -d 2 -h app/build/
         
       - name: Upload test reports
         if: always()
@@ -224,6 +218,13 @@ jobs:
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
+
+      - name: Debug
+        run: pwd
+
+      - name: Debug
+        run: du -d 2 -h app/build/
+        
       - name: Upload local coverage reports (XML + HTML) (only API 26)
         if: matrix.api-level == 26
         uses: actions/upload-artifact@v4
@@ -232,5 +233,4 @@ jobs:
           if-no-files-found: error
           compression-level: 1
           overwrite: false
-          path: |
-            '${{ github.workspace }}/**/build/reports/jacoco/'
+          path: '**/build/reports/jacoco/'
