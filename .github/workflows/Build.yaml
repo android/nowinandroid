@@ -136,7 +136,7 @@ jobs:
           if-no-files-found: error
           compression-level: 1
           overwrite: false
-          path: '**/build/reports/jacoco/*'
+          path: '**/build/reports/coverage/*'
 
       - name: Check lint
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
