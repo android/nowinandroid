@@ -24,11 +24,10 @@ android {
 }
 
 dependencies {
+    api(libs.androidx.activity.compose)
     api(libs.roborazzi)
+    api(libs.robolectric)
+    api(libs.bundles.androidx.compose.ui.test)
     implementation(libs.accompanist.testharness)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.ui.test)
-    implementation(libs.robolectric)
-    implementation(projects.core.common)
     implementation(projects.core.designsystem)
 }
