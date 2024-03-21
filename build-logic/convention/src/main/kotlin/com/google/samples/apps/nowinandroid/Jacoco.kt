@@ -67,12 +67,12 @@ internal fun Project.configureJacoco(
         val reportTask =
             tasks.register("create${variant.name.capitalize()}CombinedCoverageReport", JacocoReport::class) {
 
-                if (tasks.findByName(testTaskName) != null) {
-                    dependsOn(testTaskName)
-                }
-                if (tasks.findByName(androidtestTaskName) != null) {
-                    dependsOn(androidtestTaskName)
-                }
+//                if (tasks.findByName(testTaskName) != null) {
+//                    dependsOn(testTaskName)
+//                }
+//                if (tasks.findByName(androidtestTaskName) != null) {
+//                    dependsOn(androidtestTaskName)
+//                }
                 classDirectories.setFrom(
                     allJars,
                     allDirectories.map { dirs ->

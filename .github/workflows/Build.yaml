@@ -107,6 +107,7 @@ jobs:
       # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
+
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble
           -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
@@ -114,31 +115,28 @@ jobs:
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
 
-      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants
-        run: ./gradlew createDemoDebugCombinedCoverageReport
-
-      - name: Display local test coverage
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          title: Local test coverage report
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload test results (XML)
+      - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
+
+      - name: Upload local coverage reports (XML + HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          if-no-files-found: error
+          compression-level: 1
+          overwrite: false
+          path: '**/build/reports/jacoco/*'
 
       - name: Check lint
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
@@ -207,9 +205,28 @@ jobs:
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
+      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 26)
+        if: matrix.api-level == 26
+        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=true # Add Prod if we ever add JVM tests for prod
+
+      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
+      - name: Generate coverage reports for Debug variants (only API 26)
+        if: matrix.api-level == 26
+        run: ./gradlew createDemoDebugCombinedCoverageReport
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
+      - name: Display local test coverage (only API 26)
+        if: matrix.api-level == 26
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          title: Local test coverage report
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
