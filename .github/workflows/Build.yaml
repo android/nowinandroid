@@ -227,4 +227,4 @@ jobs:
           compression-level: 1
           overwrite: false
           path: |
-            '**/build/reports/jacoco'
+            '${{ github.workspace }}/**/build/reports/jacoco/'
