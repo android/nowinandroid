@@ -419,13 +419,19 @@ private fun SingleTopicButton(
                 icon = {
                     Icon(
                         imageVector = NiaIcons.Add,
-                        contentDescription = name,
+                        contentDescription = stringResource(
+                            id = R.string.feature_foryou_topic_icon_add,
+                            name,
+                        ),
                     )
                 },
                 checkedIcon = {
                     Icon(
                         imageVector = NiaIcons.Check,
-                        contentDescription = name,
+                        contentDescription = stringResource(
+                            id = R.string.feature_foryou_topic_icon_checked,
+                            name,
+                        ),
                     )
                 },
                 modifier = Modifier.clearAndSetSemantics { },
