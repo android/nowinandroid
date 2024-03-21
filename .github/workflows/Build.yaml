@@ -221,8 +221,8 @@ jobs:
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload local coverage reports (XML + HTML)
-        if: always()
+      - name: Upload local coverage reports (XML + HTML) (only API 26)
+        if: matrix.api-level == 26
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
