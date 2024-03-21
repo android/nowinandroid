@@ -50,6 +50,15 @@ private fun String.capitalize() = replaceFirstChar {
     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
 }
 
+/**
+ * Creates a new task that generates a combined coverage report with data from local and
+ * instrumented tests.
+ *
+ * `create{variant}CombinedCoverageReport`
+ *
+ * Note that coverage data must exist before running the task. This allows us to run device
+ * tests on CI using a different Github Action or an external device farm.
+ */
 internal fun Project.configureJacoco(
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
@@ -58,8 +67,6 @@ internal fun Project.configureJacoco(
     }
 
     androidComponentsExtension.onVariants { variant ->
-        val testTaskName = "test${variant.name.capitalize()}UnitTest"
-        val androidtestTaskName = "connected${variant.name.capitalize()}AndroidTest"
         val myObjFactory = project.objects
         val buildDir = layout.buildDirectory.get().asFile
         val allJars: ListProperty<RegularFile> = myObjFactory.listProperty(RegularFile::class.java)
@@ -67,12 +74,6 @@ internal fun Project.configureJacoco(
         val reportTask =
             tasks.register("create${variant.name.capitalize()}CombinedCoverageReport", JacocoReport::class) {
 
-//                if (tasks.findByName(testTaskName) != null) {
-//                    dependsOn(testTaskName)
-//                }
-//                if (tasks.findByName(androidtestTaskName) != null) {
-//                    dependsOn(androidtestTaskName)
-//                }
                 classDirectories.setFrom(
                     allJars,
                     allDirectories.map { dirs ->
