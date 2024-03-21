@@ -196,17 +196,17 @@ jobs:
         if: matrix.api-level == 26
         run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=true # Add Prod if we ever add JVM tests for prod
 
-      - name: Debug
-        run: pwd
-
-      - name: Debug
-        run: du -d 2 -h app/build/
-
       # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
       - name: Generate coverage reports for Debug variants (only API 26)
         if: matrix.api-level == 26
         run: ./gradlew createDemoDebugCombinedCoverageReport
 
+      - name: Debug
+        run: pwd
+
+      - name: Debug
+        run: du -d 2 -h app/build/
+        
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
