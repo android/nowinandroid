@@ -230,4 +230,4 @@ jobs:
           compression-level: 1
           overwrite: false
           path: |
-            '**/build/reports/jacoco/**/*Report.xml'
+            '**/build/reports/jacoco/*/*'
