@@ -387,9 +387,6 @@ private fun SingleTopicButton(
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit,
 ) = trace("SingleTopicButton") {
-
-    val actionLabel = "Follow or unfollow"
-
     Surface(
         modifier = Modifier
             .width(312.dp)
@@ -400,12 +397,6 @@ private fun SingleTopicButton(
                 } else {
                     "Not following"
                 }
-                customActions = listOf(
-                    CustomAccessibilityAction(actionLabel) {
-                        onClick(topicId, !isSelected)
-                        true
-                    }
-                )
             },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
