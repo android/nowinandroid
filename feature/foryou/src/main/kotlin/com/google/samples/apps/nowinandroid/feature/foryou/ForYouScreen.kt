@@ -75,6 +75,11 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -382,20 +387,38 @@ private fun SingleTopicButton(
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit,
 ) = trace("SingleTopicButton") {
+
+    val actionLabel = "Follow or unfollow"
+    val toggleTopicFollowed = { onClick(topicId, !isSelected) }
+    val accessibleToggleTopicFollowed : () -> Boolean = {
+        toggleTopicFollowed()
+        true
+    }
+
     Surface(
         modifier = Modifier
             .width(312.dp)
-            .heightIn(min = 56.dp),
+            .heightIn(min = 56.dp)
+            .semantics(mergeDescendants = true) {
+                stateDescription = if (isSelected){
+                    "Following"
+                } else {
+                    "Not following"
+                }
+                customActions = listOf(
+                    CustomAccessibilityAction(actionLabel, accessibleToggleTopicFollowed)
+                )
+            },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
         selected = isSelected,
-        onClick = {
-            onClick(topicId, !isSelected)
-        },
+        onClick = toggleTopicFollowed,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 12.dp, end = 8.dp),
+            modifier = Modifier
+                .padding(start = 12.dp, end = 8.dp)
+
         ) {
             TopicIcon(
                 imageUrl = imageUrl,
@@ -410,19 +433,20 @@ private fun SingleTopicButton(
             )
             NiaIconToggleButton(
                 checked = isSelected,
-                onCheckedChange = { checked -> onClick(topicId, checked) },
+                onCheckedChange = { },
                 icon = {
                     Icon(
                         imageVector = NiaIcons.Add,
-                        contentDescription = name,
+                        contentDescription = null,
                     )
                 },
                 checkedIcon = {
                     Icon(
                         imageVector = NiaIcons.Check,
-                        contentDescription = name,
+                        contentDescription = null,
                     )
                 },
+                modifier = Modifier.clearAndSetSemantics { },
             )
         }
     }
