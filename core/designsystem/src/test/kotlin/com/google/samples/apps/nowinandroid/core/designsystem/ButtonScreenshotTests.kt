@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOutlinedButton
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.testing.util.captureMultiTheme
 import dagger.hilt.android.testing.HiltTestApplication
@@ -72,6 +73,23 @@ class ButtonScreenshotTests {
                 NiaButton(
                     onClick = {},
                     text = { Text("$description Icon Button") },
+                    leadingIcon = { Icon(imageVector = NiaIcons.Add, contentDescription = null) },
+                )
+            }
+        }
+    }
+
+    @Test
+    fun niaTextButton_coverageTest() {
+        composeTestRule.captureMultiTheme(
+            name = "TextButton",
+            overrideFileName = "TextButton",
+            shouldCompareAndroidTheme = false,
+        ) { description ->
+            Surface {
+                NiaTextButton(
+                    onClick = {},
+                    text = { Text("Coverage test") },
                     leadingIcon = { Icon(imageVector = NiaIcons.Add, contentDescription = null) },
                 )
             }
