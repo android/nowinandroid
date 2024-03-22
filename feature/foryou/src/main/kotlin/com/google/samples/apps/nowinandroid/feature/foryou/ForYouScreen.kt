@@ -389,11 +389,6 @@ private fun SingleTopicButton(
 ) = trace("SingleTopicButton") {
 
     val actionLabel = "Follow or unfollow"
-    val toggleTopicFollowed = { onClick(topicId, !isSelected) }
-    val accessibleToggleTopicFollowed : () -> Boolean = {
-        toggleTopicFollowed()
-        true
-    }
 
     Surface(
         modifier = Modifier
@@ -406,13 +401,18 @@ private fun SingleTopicButton(
                     "Not following"
                 }
                 customActions = listOf(
-                    CustomAccessibilityAction(actionLabel, accessibleToggleTopicFollowed)
+                    CustomAccessibilityAction(actionLabel) {
+                        onClick(topicId, !isSelected)
+                        true
+                    }
                 )
             },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
-        selected = isSelected,
-        onClick = toggleTopicFollowed,
+        checked = isSelected,
+        onCheckedChange = {
+            onClick(topicId, it)
+        },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
