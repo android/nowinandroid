@@ -59,3 +59,12 @@ tasks.register("printModulePaths") {
         }
     }
 }
+
+/**
+ * Optimize the compiler
+ * Run the compiler as a separate process
+ * [documentation](https://docs.gradle.org/current/userguide/performance.html#optimize_the_compiler)
+ */
+tasks.withType<JavaCompile>().configureEach {
+    options.isFork = true
+}
