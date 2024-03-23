@@ -30,6 +30,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 class SettingsViewModelTest {
 
@@ -57,6 +58,7 @@ class SettingsViewModelTest {
 
         userDataRepository.setThemeBrand(ANDROID)
         userDataRepository.setDarkThemeConfig(DARK)
+        userDataRepository.setDynamicColorPreference(false)
 
         assertEquals(
             Success(
