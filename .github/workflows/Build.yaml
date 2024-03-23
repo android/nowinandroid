@@ -107,7 +107,7 @@ jobs:
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
         if: always()
-        run: ./gradlew testDemoDebug :lint:test -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.4.0-alpha13
+        run: ./gradlew testDemoDebug :lint:test -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.5.0-alpha02
       # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
@@ -117,7 +117,7 @@ jobs:
           -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
-          -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.4.0-alpha13
+          -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.5.0-alpha02
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -133,7 +133,7 @@ jobs:
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.4.0-alpha13
+        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.5.0-alpha02
 
       - name: Upload lint reports (HTML)
         if: always()
