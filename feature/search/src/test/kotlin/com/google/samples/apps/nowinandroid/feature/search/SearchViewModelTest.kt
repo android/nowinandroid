@@ -42,6 +42,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -117,6 +118,20 @@ class SearchViewModelTest {
 
         val result = viewModel.recentSearchQueriesUiState.value
         assertIs<Success>(result)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun recentSearches_verifyQueryHistoryClear() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
+
+        viewModel.onSearchTriggered("kotlin")
+        viewModel.clearRecentSearches()
+
+        val result = viewModel.recentSearchQueriesUiState.value
+        assertIs<Success>(result)
+        assertTrue(result.recentQueries.isEmpty())
 
         collectJob.cancel()
     }
