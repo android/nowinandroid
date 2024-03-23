@@ -24,6 +24,7 @@ import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
+import org.jetbrains.annotations.TestOnly
 
 val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
@@ -112,9 +113,7 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    /**
-     * A test-only API to allow setting of user data directly.
-     */
+    @TestOnly
     fun setUserData(userData: UserData) {
         _userData.tryEmit(userData)
     }
