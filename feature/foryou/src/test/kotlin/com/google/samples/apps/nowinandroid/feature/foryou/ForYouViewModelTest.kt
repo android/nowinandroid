@@ -524,6 +524,17 @@ class ForYouViewModelTest {
             actual = userDataRepository.userData.first().bookmarkedNewsResources,
         )
     }
+
+    @Test
+    fun whenSetNewsResourceViewedIsCalled_viewedStateIsUpdated() = runTest {
+        val newsResourceId = "123"
+        viewModel.setNewsResourceViewed(newsResourceId, true)
+
+        assertEquals(
+            expected = setOf(newsResourceId),
+            actual = userDataRepository.userData.first().viewedNewsResources,
+        )
+    }
 }
 
 private val sampleTopics = listOf(

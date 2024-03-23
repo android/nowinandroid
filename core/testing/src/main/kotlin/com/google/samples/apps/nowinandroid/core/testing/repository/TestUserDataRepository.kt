@@ -76,16 +76,13 @@ class TestUserDataRepository : UserDataRepository {
 
     override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    viewedNewsResources =
-                    if (viewed) {
-                        current.viewedNewsResources + newsResourceId
-                    } else {
-                        current.viewedNewsResources - newsResourceId
-                    },
-                ),
-            )
+            val viewedNews = if (viewed) {
+                current.viewedNewsResources + newsResourceId
+            } else {
+                current.viewedNewsResources - newsResourceId
+            }
+
+            _userData.tryEmit(current.copy(viewedNewsResources = viewedNews))
         }
     }
 
