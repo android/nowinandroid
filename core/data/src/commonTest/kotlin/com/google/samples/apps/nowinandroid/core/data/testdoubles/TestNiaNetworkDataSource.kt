@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -37,7 +37,7 @@ enum class CollectionType {
 @OptIn(ExperimentalCoroutinesApi::class)
 class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
-    private val source = FakeNiaNetworkDataSource(
+    private val source = DemoNiaNetworkDataSource(
         UnconfinedTestDispatcher(),
         Json { ignoreUnknownKeys = true },
     )

@@ -17,9 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
 
 internal interface FlavoredNetworkModule {
 
-    fun binds(impl: FakeNiaNetworkDataSource): NiaNetworkDataSource
+    fun binds(impl: DemoNiaNetworkDataSource): NiaNetworkDataSource
 }

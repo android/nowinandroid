@@ -33,6 +33,7 @@ import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.E
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.SearchNotReady
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -60,6 +61,7 @@ class SearchViewModelTest {
     private val recentSearchRepository = TestRecentSearchRepository()
     private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
     private val getSearchContentsCountUseCase = GetSearchContentsCountUseCase(searchContentsRepository)
+
     private lateinit var viewModel: SearchViewModel
 
     @Before
@@ -70,6 +72,7 @@ class SearchViewModelTest {
             recentSearchQueriesUseCase = getRecentQueryUseCase,
             savedStateHandle = SavedStateHandle(),
             recentSearchRepository = recentSearchRepository,
+            userDataRepository = userDataRepository,
             analyticsHelper = NoOpAnalyticsHelper(),
         )
         userDataRepository.setUserData(emptyUserData)
@@ -127,5 +130,23 @@ class SearchViewModelTest {
         assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
 
         collectJob.cancel()
+    }
+
+    @Test
+    fun whenToggleNewsResourceSavedIsCalled_bookmarkStateIsUpdated() = runTest {
+        val newsResourceId = "123"
+        viewModel.setNewsResourceBookmarked(newsResourceId, true)
+
+        assertEquals(
+            expected = setOf(newsResourceId),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
+
+        viewModel.setNewsResourceBookmarked(newsResourceId, false)
+
+        assertEquals(
+            expected = emptySet(),
+            actual = userDataRepository.userData.first().bookmarkedNewsResources,
+        )
     }
 }
