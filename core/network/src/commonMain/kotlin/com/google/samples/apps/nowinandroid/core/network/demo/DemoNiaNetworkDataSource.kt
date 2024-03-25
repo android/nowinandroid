@@ -16,13 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.network.demo
 
-<<<<<<<< HEAD:core/network/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/network/fake/FakeNiaNetworkDataSource.kt
 import com.google.samples.apps.nowinandroid.core.di.IODispatcher
-========
-import JvmUnitTestDemoAssetManager
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
->>>>>>>> upstream/main:core/network/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/network/demo/DemoNiaNetworkDataSource.kt
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.assets.NEWS_DATA
 import com.google.samples.apps.nowinandroid.core.network.assets.TOPICS_DATA
@@ -36,16 +30,9 @@ import me.tatarka.inject.annotations.Inject
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
  */
-<<<<<<<< HEAD:core/network/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/network/fake/FakeNiaNetworkDataSource.kt
-class FakeNiaNetworkDataSource @Inject constructor(
+class DemoNiaNetworkDataSource @Inject constructor(
     private val ioDispatcher: IODispatcher,
     private val networkJson: Json,
-========
-class DemoNiaNetworkDataSource @Inject constructor(
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val networkJson: Json,
-    private val assets: DemoAssetManager = JvmUnitTestDemoAssetManager,
->>>>>>>> upstream/main:core/network/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/network/demo/DemoNiaNetworkDataSource.kt
 ) : NiaNetworkDataSource {
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =

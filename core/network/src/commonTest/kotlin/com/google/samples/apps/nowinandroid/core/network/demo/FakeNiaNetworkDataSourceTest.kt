@@ -16,10 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.network.demo
 
-<<<<<<<< HEAD:core/network/src/commonTest/kotlin/com/google/samples/apps/nowinandroid/core/network/fake/FakeNiaNetworkDataSourceTest.kt
-========
-import JvmUnitTestDemoAssetManager
->>>>>>>> upstream/main:core/network/src/test/kotlin/com/google/samples/apps/nowinandroid/core/network/demo/DemoNiaNetworkDataSourceTest.kt
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -43,10 +39,6 @@ class DemoNiaNetworkDataSourceTest {
         subject = DemoNiaNetworkDataSource(
             ioDispatcher = testDispatcher,
             networkJson = Json { ignoreUnknownKeys = true },
-<<<<<<<< HEAD:core/network/src/commonTest/kotlin/com/google/samples/apps/nowinandroid/core/network/fake/FakeNiaNetworkDataSourceTest.kt
-========
-            assets = JvmUnitTestDemoAssetManager,
->>>>>>>> upstream/main:core/network/src/test/kotlin/com/google/samples/apps/nowinandroid/core/network/demo/DemoNiaNetworkDataSourceTest.kt
         )
     }
 
