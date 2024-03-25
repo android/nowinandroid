@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
@@ -26,15 +26,24 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.core.ui"
 }
 
-dependencies {
-    api(libs.androidx.metrics)
-    api(projects.core.analytics)
-    api(projects.core.designsystem)
-    api(projects.core.model)
-
-    implementation(libs.androidx.browser)
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-
-    androidTestImplementation(projects.core.testing)
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            api(libs.androidx.metrics)
+            implementation(libs.androidx.browser)
+        }
+        commonMain.dependencies {
+            api(projects.core.analytics)
+            api(projects.core.designsystem)
+            api(projects.core.model)
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.testing)
+        }
+    }
 }
