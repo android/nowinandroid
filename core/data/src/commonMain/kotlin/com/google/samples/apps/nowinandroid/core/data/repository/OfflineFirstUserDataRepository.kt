@@ -41,7 +41,7 @@ internal class OfflineFirstUserDataRepository(
         analyticsHelper.logTopicFollowToggled(followedTopicId, followed)
     }
 
-    override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
+    override suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) {
         niaPreferencesDataSource.setNewsResourceBookmarked(newsResourceId, bookmarked)
         analyticsHelper.logNewsResourceBookmarkToggled(
             newsResourceId = newsResourceId,

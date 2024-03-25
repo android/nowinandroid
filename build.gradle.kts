@@ -28,9 +28,10 @@ buildscript {
         }
         classpath(libs.buildkonfig.gradlePlugin)
     }
+
 }
 
-// Lists all plugins used throughout the project without applying them.
+// Lists all plugins used throughout the project
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -47,9 +48,20 @@ plugins {
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
+    alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
     alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.sqldelight.gradle.plugin) apply false
     alias(libs.plugins.ktrofit) apply false
     alias(libs.plugins.buildkonfig) apply false
+}
+
+// Task to print all the module paths in the project e.g. :core:data
+// Used by module graph generator script
+tasks.register("printModulePaths") {
+    subprojects {
+        if (subprojects.size == 0) {
+            println(this.path)
+        }
+    }
 }
