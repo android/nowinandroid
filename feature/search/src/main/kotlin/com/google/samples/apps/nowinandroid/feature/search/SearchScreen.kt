@@ -51,13 +51,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
@@ -515,7 +513,7 @@ private fun SearchTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .focusRequester(focusRequester)
+            .focusRestorer(focusRequester)
             .onKeyEvent {
                 if (it.key == Key.Enter) {
                     onSearchExplicitlyTriggered()
@@ -538,9 +536,6 @@ private fun SearchTextField(
         maxLines = 1,
         singleLine = true,
     )
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 }
 
 @Preview
