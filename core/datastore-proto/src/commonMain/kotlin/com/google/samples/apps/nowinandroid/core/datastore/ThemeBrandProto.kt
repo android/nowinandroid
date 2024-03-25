@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
+<<<<<<<< HEAD:core/datastore-proto/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/datastore/ThemeBrandProto.kt
 package com.google.samples.apps.nowinandroid.core.datastore
 
 enum class ThemeBrandProto {
     THEME_BRAND_UNSPECIFIED,
     THEME_BRAND_DEFAULT,
     THEME_BRAND_ANDROID,
+========
+package com.google.samples.apps.nowinandroid.core.network.demo
+
+import java.io.InputStream
+
+fun interface DemoAssetManager {
+    fun open(fileName: String): InputStream
+>>>>>>>> upstream/main:core/network/src/commonMain/kotlin/com/google/samples/apps/nowinandroid/core/network/demo/DemoAssetManager.kt
 }

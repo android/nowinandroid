@@ -18,8 +18,12 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 internal interface FlavoredNetworkModule {
 
-    fun binds(impl: FakeNiaNetworkDataSource): NiaNetworkDataSource
+    fun binds(impl: DemoNiaNetworkDataSource): NiaNetworkDataSource
 }

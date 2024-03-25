@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
@@ -44,6 +45,7 @@ class SearchViewModel @Inject constructor(
     getSearchContentsCountUseCase: GetSearchContentsCountUseCase,
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val recentSearchRepository: RecentSearchRepository,
+    private val userDataRepository: UserDataRepository,
     private val savedStateHandle: SavedStateHandle,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
@@ -109,6 +111,24 @@ class SearchViewModel @Inject constructor(
     fun clearRecentSearches() {
         viewModelScope.launch {
             recentSearchRepository.clearRecentSearches()
+        }
+    }
+
+    fun setNewsResourceBookmarked(newsResourceId: String, isChecked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, isChecked)
+        }
+    }
+
+    fun followTopic(followedTopicId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setTopicIdFollowed(followedTopicId, followed)
+        }
+    }
+
+    fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
     }
 }
