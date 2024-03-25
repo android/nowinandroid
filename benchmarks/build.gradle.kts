@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
@@ -46,9 +47,9 @@ android {
     }
 
     testOptions.managedDevices.devices {
-        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel6Api33") {
+        create<ManagedVirtualDevice>("pixel6Api31") {
             device = "Pixel 6"
-            apiLevel = 33
+            apiLevel = 31
             systemImageSource = "aosp"
         }
     }
@@ -59,7 +60,7 @@ android {
 
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on.
-    managedDevices += "pixel6Api33"
+    managedDevices += "pixel6Api31"
 
     // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
     useConnectedDevices = false
