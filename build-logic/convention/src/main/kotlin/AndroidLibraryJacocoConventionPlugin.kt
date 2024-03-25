@@ -29,7 +29,6 @@ class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
             val androidExtension = extensions.getByType<LibraryExtension>()
 
             androidExtension.buildTypes.configureEach {
-                // The jacoco plugin is applied automatically when any of these are set
                 enableAndroidTestCoverage = true
                 enableUnitTestCoverage = true
             }
