@@ -26,7 +26,6 @@ import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
@@ -76,7 +75,6 @@ class SearchViewModelTest {
             userDataRepository = userDataRepository,
             analyticsHelper = NoOpAnalyticsHelper(),
         )
-        userDataRepository.setUserData(emptyUserData)
     }
 
     @Test
@@ -104,6 +102,7 @@ class SearchViewModelTest {
         viewModel.onSearchQueryChanged("XXX")
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
+        userDataRepository.setFollowedTopicIds(emptySet())
 
         val result = viewModel.searchResultUiState.value
         assertIs<SearchResultUiState.Success>(result)

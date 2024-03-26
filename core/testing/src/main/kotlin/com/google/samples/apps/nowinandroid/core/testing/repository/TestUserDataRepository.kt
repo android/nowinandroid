@@ -24,7 +24,6 @@ import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
-import org.jetbrains.annotations.TestOnly
 
 val emptyUserData = UserData(
     bookmarkedNewsResources = emptySet(),
@@ -108,10 +107,5 @@ class TestUserDataRepository : UserDataRepository {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
         }
-    }
-
-    @TestOnly
-    fun setUserData(userData: UserData) {
-        _userData.tryEmit(userData)
     }
 }

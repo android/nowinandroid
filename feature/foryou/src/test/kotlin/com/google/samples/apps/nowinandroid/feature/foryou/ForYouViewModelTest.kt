@@ -29,7 +29,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResourc
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
@@ -277,8 +276,7 @@ class ForYouViewModelTest {
         topicsRepository.sendTopics(sampleTopics)
 
         val followedTopicIds = setOf("0", "1")
-        val userData = emptyUserData.copy(followedTopics = followedTopicIds)
-        userDataRepository.setUserData(userData)
+        userDataRepository.setFollowedTopicIds(followedTopicIds)
         viewModel.dismissOnboarding()
 
         assertEquals(
@@ -295,7 +293,7 @@ class ForYouViewModelTest {
         )
         assertEquals(
             NewsFeedUiState.Success(
-                feed = sampleNewsResources.mapToUserNewsResources(userData),
+                feed = sampleNewsResources.mapToUserNewsResources(userDataRepository.userData.first()),
             ),
             viewModel.feedState.value,
         )
@@ -341,13 +339,11 @@ class ForYouViewModelTest {
             viewModel.onboardingUiState.value,
         )
 
-        val userData = emptyUserData.copy(followedTopics = setOf(followedTopicId))
-
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    UserNewsResource(sampleNewsResources[1], userData),
-                    UserNewsResource(sampleNewsResources[2], userData),
+                    UserNewsResource(newsResource = sampleNewsResources[1], userData = userDataRepository.userData.first()),
+                    UserNewsResource(newsResource = sampleNewsResources[2], userData = userDataRepository.userData.first()),
                 ),
             ),
             viewModel.feedState.value,
@@ -427,24 +423,15 @@ class ForYouViewModelTest {
             launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
-        val followedTopicIds = setOf("1")
-        val userData = emptyUserData.copy(
-            followedTopics = followedTopicIds,
-            shouldHideOnboarding = true,
-        )
-
         topicsRepository.sendTopics(sampleTopics)
-        userDataRepository.setUserData(userData)
+        userDataRepository.setFollowedTopicIds(setOf("1"))
+        userDataRepository.setShouldHideOnboarding(true)
         newsRepository.sendNewsResources(sampleNewsResources)
 
         val bookmarkedNewsResourceId = "2"
         viewModel.updateNewsResourceSaved(
             newsResourceId = bookmarkedNewsResourceId,
             isChecked = true,
-        )
-
-        val userDataExpected = userData.copy(
-            bookmarkedNewsResources = setOf(bookmarkedNewsResourceId),
         )
 
         assertEquals(
@@ -454,8 +441,8 @@ class ForYouViewModelTest {
         assertEquals(
             NewsFeedUiState.Success(
                 feed = listOf(
-                    UserNewsResource(newsResource = sampleNewsResources[1], userDataExpected),
-                    UserNewsResource(newsResource = sampleNewsResources[2], userDataExpected),
+                    UserNewsResource(newsResource = sampleNewsResources[1], userData = userDataRepository.userData.first()),
+                    UserNewsResource(newsResource = sampleNewsResources[2], userData = userDataRepository.userData.first()),
                 ),
             ),
             viewModel.feedState.value,
@@ -471,13 +458,13 @@ class ForYouViewModelTest {
             launch(UnconfinedTestDispatcher()) { viewModel.deepLinkedNewsResource.collect() }
 
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setUserData(emptyUserData)
+        userDataRepository.setFollowedTopicIds(emptySet())
         savedStateHandle[LINKED_NEWS_RESOURCE_ID] = sampleNewsResources.first().id
 
         assertEquals(
             expected = UserNewsResource(
                 newsResource = sampleNewsResources.first(),
-                userData = emptyUserData,
+                userData = userDataRepository.userData.first(),
             ),
             actual = viewModel.deepLinkedNewsResource.value,
         )
