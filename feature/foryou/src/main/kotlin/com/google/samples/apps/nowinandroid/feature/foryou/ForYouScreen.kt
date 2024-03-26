@@ -75,9 +75,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
@@ -392,7 +390,7 @@ private fun SingleTopicButton(
             .width(312.dp)
             .heightIn(min = 56.dp)
             .semantics(mergeDescendants = true) {
-                stateDescription = if (isSelected){
+                stateDescription = if (isSelected) {
                     "Following"
                 } else {
                     "Not following"
@@ -408,7 +406,7 @@ private fun SingleTopicButton(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(start = 12.dp, end = 8.dp)
+                .padding(start = 12.dp, end = 8.dp),
 
         ) {
             TopicIcon(
