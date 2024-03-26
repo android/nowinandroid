@@ -57,6 +57,7 @@ class SettingsViewModelTest {
 
         userDataRepository.setThemeBrand(ANDROID)
         userDataRepository.setDarkThemeConfig(DARK)
+        userDataRepository.setDynamicColorPreference(false)
 
         assertEquals(
             Success(
