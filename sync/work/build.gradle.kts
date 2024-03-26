@@ -39,6 +39,7 @@ dependencies {
     prodImplementation(platform(libs.firebase.bom))
 
     androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation("com.google.guava:guava:33.0.0-android")
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(projects.core.testing)
 }
