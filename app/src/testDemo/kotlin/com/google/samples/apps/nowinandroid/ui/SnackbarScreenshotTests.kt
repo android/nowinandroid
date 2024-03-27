@@ -62,7 +62,7 @@ import org.robolectric.annotation.LooperMode
 import javax.inject.Inject
 
 /**
- * Tests that the navigation UI is rendered correctly on different screen sizes.
+ * Tests that the Snackbar is correctly displayed on different screen sizes.
  */
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -141,7 +141,7 @@ class SnackbarScreenshotTests {
             snackbarHostState,
             400.dp,
             500.dp,
-            "snackbar_compact_medium_none",
+            "snackbar_compact_medium_noSnackbar",
             action = { },
         )
     }
@@ -155,7 +155,11 @@ class SnackbarScreenshotTests {
             500.dp,
             "snackbar_compact_medium",
         ) {
-            snackbarHostState.showSnackbar("This is a test snackbar message", duration = Indefinite)
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
         }
     }
 
@@ -168,7 +172,11 @@ class SnackbarScreenshotTests {
             600.dp,
             "snackbar_medium_medium",
         ) {
-            snackbarHostState.showSnackbar("This is a test snackbar message", duration = Indefinite)
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
         }
     }
 
@@ -181,7 +189,11 @@ class SnackbarScreenshotTests {
             900.dp,
             "snackbar_expanded_expanded",
         ) {
-            snackbarHostState.showSnackbar("This is a test snackbar message", duration = Indefinite)
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
         }
     }
 
