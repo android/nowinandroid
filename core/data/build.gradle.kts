@@ -17,11 +17,18 @@ plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.nowinandroid.android.room)
     id("kotlinx-serialization")
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
+
+    defaultConfig {
+        testInstrumentationRunner =
+            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -43,4 +50,6 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(projects.core.datastoreTest)
     testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
 }
