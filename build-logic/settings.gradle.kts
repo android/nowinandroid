@@ -16,7 +16,12 @@
 
 dependencyResolutionManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex(".*google.*")
+                includeGroupByRegex(".*android.*")
+            }
+        }
         mavenCentral()
     }
     versionCatalogs {
