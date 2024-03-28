@@ -41,6 +41,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -130,6 +131,43 @@ class SearchViewModelTest {
         viewModel.onSearchQueryChanged("")
 
         assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun emptySearchText_isNotAddedToRecentSearches() = runTest {
+        viewModel.onSearchTriggered("")
+
+        val recentSearchQueriesStream = getRecentQueryUseCase()
+        val recentSearchQueries = recentSearchQueriesStream.first()
+        val recentSearchQuery = recentSearchQueries.firstOrNull()
+
+        assertNull(recentSearchQuery)
+    }
+
+    @Test
+    fun searchTextWithThreeSpaces_isEmptyQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("   ")
+
+        assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun searchTextWithThreeSpacesAndOneLetter_isEmptyQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("   a")
+
+        assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
 
         collectJob.cancel()
     }
