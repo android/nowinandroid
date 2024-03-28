@@ -23,14 +23,15 @@ import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
-import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsCountUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
-import com.google.samples.apps.nowinandroid.core.result.Result
-import com.google.samples.apps.nowinandroid.core.result.asResult
+import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -41,9 +42,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     getSearchContentsUseCase: GetSearchContentsUseCase,
-    getSearchContentsCountUseCase: GetSearchContentsCountUseCase,
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
+    private val searchContentsRepository: SearchContentsRepository,
     private val recentSearchRepository: RecentSearchRepository,
+    private val userDataRepository: UserDataRepository,
     private val savedStateHandle: SavedStateHandle,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
@@ -51,7 +53,7 @@ class SearchViewModel @Inject constructor(
     val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
 
     val searchResultUiState: StateFlow<SearchResultUiState> =
-        getSearchContentsCountUseCase()
+        searchContentsRepository.getSearchContentsCount()
             .flatMapLatest { totalCount ->
                 if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
                     flowOf(SearchResultUiState.SearchNotReady)
@@ -61,18 +63,15 @@ class SearchViewModel @Inject constructor(
                             flowOf(SearchResultUiState.EmptyQuery)
                         } else {
                             getSearchContentsUseCase(query)
-                                .asResult()
-                                .map { result ->
-                                    when (result) {
-                                        is Result.Success -> SearchResultUiState.Success(
-                                            topics = result.data.topics,
-                                            newsResources = result.data.newsResources,
-                                        )
-
-                                        is Result.Loading -> SearchResultUiState.Loading
-                                        is Result.Error -> SearchResultUiState.LoadFailed
-                                    }
+                                // Not using .asResult() here, because it emits Loading state every
+                                // time the user types a letter in the search box, which flickers the screen.
+                                .map<UserSearchResult, SearchResultUiState> { data ->
+                                    SearchResultUiState.Success(
+                                        topics = data.topics,
+                                        newsResources = data.newsResources,
+                                    )
                                 }
+                                .catch { emit(SearchResultUiState.LoadFailed) }
                         }
                     }
                 }
@@ -112,6 +111,24 @@ class SearchViewModel @Inject constructor(
     fun clearRecentSearches() {
         viewModelScope.launch {
             recentSearchRepository.clearRecentSearches()
+        }
+    }
+
+    fun setNewsResourceBookmarked(newsResourceId: String, isChecked: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, isChecked)
+        }
+    }
+
+    fun followTopic(followedTopicId: String, followed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setTopicIdFollowed(followedTopicId, followed)
+        }
+    }
+
+    fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
     }
 }

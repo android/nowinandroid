@@ -1,3 +1,3 @@
 # :core:ui module
-
-![Dependency graph](../../docs/images/graphs/dep_graph_core_ui.png)
+## Dependency graph
+![Dependency graph](../../docs/images/graphs/dep_graph_core_ui.svg)

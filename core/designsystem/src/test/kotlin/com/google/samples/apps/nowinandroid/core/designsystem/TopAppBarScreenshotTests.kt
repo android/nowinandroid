@@ -45,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-class TopAppBarScreenshotTests() {
+class TopAppBarScreenshotTests {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
