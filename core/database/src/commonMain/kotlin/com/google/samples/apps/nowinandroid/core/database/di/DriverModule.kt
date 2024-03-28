@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database
+package com.google.samples.apps.nowinandroid.core.database.di
 
-import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import me.tatarka.inject.annotations.Provides
@@ -24,6 +24,6 @@ import me.tatarka.inject.annotations.Provides
 internal expect abstract class DriverModule {
     @Provides
     suspend fun provideDbDriver(
-        schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
+        schema: SqlSchema<AsyncValue<Unit>>,
     ): SqlDriver
 }

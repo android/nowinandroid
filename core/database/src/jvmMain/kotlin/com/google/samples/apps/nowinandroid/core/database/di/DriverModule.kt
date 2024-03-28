@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database
+package com.google.samples.apps.nowinandroid.core.database.di
 
-import app.cash.sqldelight.async.coroutines.synchronous
-import app.cash.sqldelight.db.QueryResult
+import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
-import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import co.touchlab.sqliter.DatabaseConfiguration
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver.Companion
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
+import java.util.Properties
 
 @Component
 internal actual abstract class DriverModule {
-
     @Provides
     actual suspend fun provideDbDriver(
-        schema: SqlSchema<QueryResult.AsyncValue<Unit>>,
+        schema: SqlSchema<AsyncValue<Unit>>,
     ): SqlDriver {
-        val synchronousSchema = schema.synchronous()
-        return NativeSqliteDriver(
-            schema = synchronousSchema,
-            name = "nia-database.db",
-            onConfiguration = { config: DatabaseConfiguration ->
-                config.copy(
-                    extendedConfig = DatabaseConfiguration.Extended(foreignKeyConstraints = true),
-                )
-            },
+        return JdbcSqliteDriver(
+            url = JdbcSqliteDriver.IN_MEMORY,
+            properties = Properties().apply { put("foreign_keys", "true") },
         )
+            .also { schema.create(it).await() }
     }
 }
