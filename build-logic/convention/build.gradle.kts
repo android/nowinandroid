@@ -110,5 +110,9 @@ gradlePlugin {
             id = "nowinandroid.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("jvmHilt") {
+            id = "nowinandroid.jvm.hilt"
+            implementationClass = "JvmHiltConventionPlugin"
+        }
     }
 }
