@@ -31,20 +31,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -196,16 +192,6 @@ internal fun ForYouScreen(
                 onNewsResourceViewed = onNewsResourceViewed,
                 onTopicClick = onTopicClick,
             )
-
-            item(span = StaggeredGridItemSpan.FullLine, contentType = "bottomSpacing") {
-                Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    // Add space for the content to clear the "offline" snackbar.
-                    // TODO: Check that the Scaffold handles this correctly in NiaApp
-                    // if (isOffline) Spacer(modifier = Modifier.height(48.dp))
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                }
-            }
         }
         AnimatedVisibility(
             visible = isSyncing || isFeedLoading || isOnboardingLoading,

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.test
+package com.google.samples.apps.nowinandroid.extensions
 
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import kotlin.properties.ReadOnlyProperty
 
-class AlwaysOnlineNetworkMonitor @Inject constructor() : NetworkMonitor {
-    override val isOnline: Flow<Boolean> = flowOf(true)
-}
+/**
+ * Get [String] by [StringRes] Id
+ */
+fun AndroidComposeTestRule<*, *>.getStringById(@StringRes resId: Int) =
+    ReadOnlyProperty<Any, String> { _, _ -> activity.getString(resId) }
