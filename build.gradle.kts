@@ -53,9 +53,11 @@ plugins {
 // Task to print all the module paths in the project e.g. :core:data
 // Used by module graph generator script
 tasks.register("printModulePaths") {
-    subprojects {
-        if (subprojects.size == 0) {
-            println(this.path)
+    doLast {
+        subprojects {
+            if (subprojects.size == 0) {
+                println(this.path)
+            }
         }
     }
 }
