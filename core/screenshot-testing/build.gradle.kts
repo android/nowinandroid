@@ -25,7 +25,7 @@ android {
 
 dependencies {
     api(libs.roborazzi)
-    implementation(libs.accompanist.testharness)
+    implementation(libs.androidx.compose.ui.test)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui.test)
     implementation(libs.robolectric)

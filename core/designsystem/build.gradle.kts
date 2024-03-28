@@ -40,7 +40,6 @@ dependencies {
     implementation(libs.coil.kt.compose)
 
     testImplementation(libs.androidx.compose.ui.test)
-    testImplementation(libs.accompanist.testharness)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.robolectric)
     testImplementation(libs.roborazzi)
