@@ -49,6 +49,7 @@ class InterestsViewModelTest {
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository,
+        defaultDispatcher = mainDispatcherRule.testDispatcher,
     )
     private lateinit var viewModel: InterestsViewModel
 
