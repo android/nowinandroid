@@ -61,7 +61,7 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
-    override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
+    override suspend fun setNewsResourceBookmarked(newsResourceId: String, bookmarked: Boolean) {
         currentUserData.let { current ->
             val bookmarkedNews = if (bookmarked) {
                 current.bookmarkedNewsResources + newsResourceId
