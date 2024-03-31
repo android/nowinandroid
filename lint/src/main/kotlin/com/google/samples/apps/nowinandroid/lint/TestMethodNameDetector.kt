@@ -30,9 +30,9 @@ import com.android.tools.lint.detector.api.Severity.WARNING
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat.RAW
 import com.intellij.psi.PsiMethod
-import org.jetbrains.uast.UElement
 import java.util.EnumSet
 import kotlin.io.path.Path
+import org.jetbrains.uast.UElement
 
 /**
  * A detector that checks for common patterns in naming the test methods:
