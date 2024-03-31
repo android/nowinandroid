@@ -42,9 +42,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.TintTheme
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
 
 /**
  * Tests [NiaTheme] using different combinations of the theme mode parameters:

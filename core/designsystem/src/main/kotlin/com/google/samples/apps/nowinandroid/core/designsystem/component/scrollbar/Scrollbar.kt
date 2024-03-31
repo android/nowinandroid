@@ -54,12 +54,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.packFloats
 import androidx.compose.ui.util.unpackFloat1
 import androidx.compose.ui.util.unpackFloat2
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeout
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeout
 
 /**
  * The delay between scrolls when a user long presses on the scrollbar track to initiate a scroll
@@ -108,9 +108,7 @@ private val ScrollbarTrack.size
 /**
  * Returns the position of the scrollbar thumb on the track as a percentage
  */
-private fun ScrollbarTrack.thumbPosition(
-    dimension: Float,
-): Float = max(
+private fun ScrollbarTrack.thumbPosition(dimension: Float): Float = max(
     a = min(
         a = dimension / size,
         b = 1f,
@@ -149,10 +147,7 @@ private value class ScrollbarTrack(
  * @param thumbMovedPercent the distance the thumb has traveled as a percentage of total
  * track size.
  */
-fun scrollbarStateValue(
-    thumbSizePercent: Float,
-    thumbMovedPercent: Float,
-) = ScrollbarStateValue(
+fun scrollbarStateValue(thumbSizePercent: Float, thumbMovedPercent: Float) = ScrollbarStateValue(
     packFloats(
         val1 = thumbSizePercent,
         val2 = thumbMovedPercent,

@@ -37,15 +37,19 @@ class TestSearchContentsRepository : SearchContentsRepository {
         combine(cachedTopics, cachedNewsResources) { topics, news ->
             SearchResult(
                 topics = topics.filter {
-                    searchQuery in it.name || searchQuery in it.shortDescription || searchQuery in it.longDescription
+                    searchQuery in it.name ||
+                        searchQuery in it.shortDescription ||
+                        searchQuery in it.longDescription
                 },
                 newsResources = news.filter {
-                    searchQuery in it.content || searchQuery in it.title
+                    searchQuery in it.content ||
+                        searchQuery in it.title
                 },
             )
         }
 
-    override fun getSearchContentsCount(): Flow<Int> = combine(cachedTopics, cachedNewsResources) { topics, news -> topics.size + news.size }
+    override fun getSearchContentsCount(): Flow<Int> =
+        combine(cachedTopics, cachedNewsResources) { topics, news -> topics.size + news.size }
 
     @TestOnly
     fun addTopics(topics: List<Topic>) = cachedTopics.update { it + topics }

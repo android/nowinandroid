@@ -185,7 +185,8 @@ private data class ScrollThumbElement(val colorProducer: ColorProducer) :
     }
 }
 
-private class ScrollThumbNode(var colorProducer: ColorProducer) : DrawModifierNode, Modifier.Node() {
+private class ScrollThumbNode(var colorProducer: ColorProducer) :
+    DrawModifierNode, Modifier.Node() {
     private val shape = RoundedCornerShape(16.dp)
 
     // naive cache outline calculation if size is the same

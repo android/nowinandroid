@@ -57,10 +57,7 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
 
     private fun JavaContext.isAndroidTest() = Path("androidTest") in file.toPath()
 
-    private fun PsiMethod.detectPrefix(
-        context: JavaContext,
-        usageInfo: AnnotationUsageInfo,
-    ) {
+    private fun PsiMethod.detectPrefix(context: JavaContext, usageInfo: AnnotationUsageInfo) {
         if (!name.startsWith("test")) return
         context.report(
             issue = PREFIX,
@@ -76,10 +73,7 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
         )
     }
 
-    private fun PsiMethod.detectFormat(
-        context: JavaContext,
-        usageInfo: AnnotationUsageInfo,
-    ) {
+    private fun PsiMethod.detectFormat(context: JavaContext, usageInfo: AnnotationUsageInfo) {
         if (!context.isAndroidTest()) return
         if ("""[^\W_]+(_[^\W_]+){1,2}""".toRegex().matches(name)) return
         context.report(
@@ -92,22 +86,19 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
 
     companion object {
 
-        private fun issue(
-            id: String,
-            briefDescription: String,
-            explanation: String,
-        ): Issue = Issue.create(
-            id = id,
-            briefDescription = briefDescription,
-            explanation = explanation,
-            category = TESTING,
-            priority = 5,
-            severity = WARNING,
-            implementation = Implementation(
-                TestMethodNameDetector::class.java,
-                EnumSet.of(JAVA_FILE, TEST_SOURCES),
-            ),
-        )
+        private fun issue(id: String, briefDescription: String, explanation: String): Issue =
+            Issue.create(
+                id = id,
+                briefDescription = briefDescription,
+                explanation = explanation,
+                category = TESTING,
+                priority = 5,
+                severity = WARNING,
+                implementation = Implementation(
+                    TestMethodNameDetector::class.java,
+                    EnumSet.of(JAVA_FILE, TEST_SOURCES),
+                ),
+            )
 
         @JvmField
         val PREFIX: Issue = issue(
@@ -119,8 +110,10 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
         @JvmField
         val FORMAT: Issue = issue(
             id = "TestMethodFormat",
-            briefDescription = "Test method does not follow the `given_when_then` or `when_then` format",
-            explanation = "Test method should follow the `given_when_then` or `when_then` format.",
+            briefDescription = "Test method does not follow " +
+                "the `given_when_then` or `when_then` format",
+            explanation = "Test method should follow " +
+                "the `given_when_then` or `when_then` format.",
         )
     }
 }

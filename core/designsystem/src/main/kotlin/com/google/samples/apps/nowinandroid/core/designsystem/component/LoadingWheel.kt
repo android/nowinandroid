@@ -51,10 +51,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun NiaLoadingWheel(
-    contentDesc: String,
-    modifier: Modifier = Modifier,
-) {
+fun NiaLoadingWheel(contentDesc: String, modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "wheel transition")
 
     // Specifies the float animation for slowly drawing out the lines on entering
@@ -132,10 +129,7 @@ fun NiaLoadingWheel(
 }
 
 @Composable
-fun NiaOverlayLoadingWheel(
-    contentDesc: String,
-    modifier: Modifier = Modifier,
-) {
+fun NiaOverlayLoadingWheel(contentDesc: String, modifier: Modifier = Modifier) {
     Surface(
         shape = RoundedCornerShape(60.dp),
         shadowElevation = 8.dp,

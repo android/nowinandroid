@@ -27,9 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import kotlin.math.min
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlin.math.min
 
 /**
  * Calculates a [ScrollbarState] driven by the changes in a [LazyListState].

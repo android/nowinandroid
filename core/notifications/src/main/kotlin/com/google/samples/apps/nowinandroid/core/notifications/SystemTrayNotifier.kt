@@ -54,9 +54,7 @@ internal class SystemTrayNotifier @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Notifier {
 
-    override fun postNewsNotifications(
-        newsResources: List<NewsResource>,
-    ) = with(context) {
+    override fun postNewsNotifications(newsResources: List<NewsResource>) = with(context) {
         if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
             return
         }
@@ -150,20 +148,19 @@ private fun Context.ensureNotificationChannelExists() {
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 }
 
-private fun Context.newsPendingIntent(
-    newsResource: NewsResource,
-): PendingIntent? = PendingIntent.getActivity(
-    this,
-    NEWS_NOTIFICATION_REQUEST_CODE,
-    Intent().apply {
-        action = Intent.ACTION_VIEW
-        data = newsResource.newsDeepLinkUri()
-        component = ComponentName(
-            packageName,
-            TARGET_ACTIVITY_NAME,
-        )
-    },
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-)
+private fun Context.newsPendingIntent(newsResource: NewsResource): PendingIntent? =
+    PendingIntent.getActivity(
+        this,
+        NEWS_NOTIFICATION_REQUEST_CODE,
+        Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = newsResource.newsDeepLinkUri()
+            component = ComponentName(
+                packageName,
+                TARGET_ACTIVITY_NAME,
+            )
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
 
 private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()

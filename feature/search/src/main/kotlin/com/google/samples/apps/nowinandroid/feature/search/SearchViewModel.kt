@@ -29,6 +29,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUs
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -37,7 +38,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -133,13 +133,12 @@ class SearchViewModel @Inject constructor(
     }
 }
 
-private fun AnalyticsHelper.logEventSearchTriggered(query: String) =
-    logEvent(
-        event = AnalyticsEvent(
-            type = SEARCH_QUERY,
-            extras = listOf(element = Param(key = SEARCH_QUERY, value = query)),
-        ),
-    )
+private fun AnalyticsHelper.logEventSearchTriggered(query: String) = logEvent(
+    event = AnalyticsEvent(
+        type = SEARCH_QUERY,
+        extras = listOf(element = Param(key = SEARCH_QUERY, value = query)),
+    ),
+)
 
 /** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */
 private const val SEARCH_QUERY_MIN_LENGTH = 2

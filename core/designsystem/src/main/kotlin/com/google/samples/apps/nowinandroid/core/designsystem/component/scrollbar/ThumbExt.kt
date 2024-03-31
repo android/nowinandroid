@@ -33,24 +33,22 @@ import kotlin.math.roundToInt
  * @param itemsAvailable the amount of items in the list.
  */
 @Composable
-fun LazyListState.rememberDraggableScroller(
-    itemsAvailable: Int,
-): (Float) -> Unit = rememberDraggableScroller(
-    itemsAvailable = itemsAvailable,
-    scroll = ::scrollToItem,
-)
+fun LazyListState.rememberDraggableScroller(itemsAvailable: Int): (Float) -> Unit =
+    rememberDraggableScroller(
+        itemsAvailable = itemsAvailable,
+        scroll = ::scrollToItem,
+    )
 
 /**
  * Remembers a function to react to [Scrollbar] thumb position displacements for a [LazyGridState]
  * @param itemsAvailable the amount of items in the grid.
  */
 @Composable
-fun LazyGridState.rememberDraggableScroller(
-    itemsAvailable: Int,
-): (Float) -> Unit = rememberDraggableScroller(
-    itemsAvailable = itemsAvailable,
-    scroll = ::scrollToItem,
-)
+fun LazyGridState.rememberDraggableScroller(itemsAvailable: Int): (Float) -> Unit =
+    rememberDraggableScroller(
+        itemsAvailable = itemsAvailable,
+        scroll = ::scrollToItem,
+    )
 
 /**
  * Remembers a function to react to [Scrollbar] thumb position displacements for a
@@ -58,12 +56,11 @@ fun LazyGridState.rememberDraggableScroller(
  * @param itemsAvailable the amount of items in the staggered grid.
  */
 @Composable
-fun LazyStaggeredGridState.rememberDraggableScroller(
-    itemsAvailable: Int,
-): (Float) -> Unit = rememberDraggableScroller(
-    itemsAvailable = itemsAvailable,
-    scroll = ::scrollToItem,
-)
+fun LazyStaggeredGridState.rememberDraggableScroller(itemsAvailable: Int): (Float) -> Unit =
+    rememberDraggableScroller(
+        itemsAvailable = itemsAvailable,
+        scroll = ::scrollToItem,
+    )
 
 /**
  * Generic function to react to [Scrollbar] thumb displacements in a lazy layout.

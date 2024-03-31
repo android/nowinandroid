@@ -45,6 +45,8 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import java.util.TimeZone
+import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -56,8 +58,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
-import java.util.TimeZone
-import javax.inject.Inject
 
 /**
  * Tests that the navigation UI is rendered correctly on different screen sizes.

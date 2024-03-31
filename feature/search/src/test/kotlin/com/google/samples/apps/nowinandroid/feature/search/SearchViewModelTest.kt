@@ -31,6 +31,8 @@ import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUi
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.SearchNotReady
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -39,8 +41,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see

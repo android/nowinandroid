@@ -128,7 +128,9 @@ class NiaAppState(
      */
     val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
-            .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
+            .combine(
+                userNewsResourceRepository.observeAllBookmarked(),
+            ) { forYouNewsResources, bookmarkedNewsResources ->
                 setOfNotNull(
                     FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
                     BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
