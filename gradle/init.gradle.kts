@@ -35,11 +35,7 @@ rootProject {
             kotlin {
                 target("**/*.kt")
                 targetExclude("**/build/**/*.kt")
-                ktlint(ktlintVersion).editorConfigOverride(
-                    mapOf(
-                        "android" to "true",
-                    ),
-                )
+                ktlint(ktlintVersion)
                 licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
             }
             format("kts") {
