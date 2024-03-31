@@ -65,7 +65,7 @@ private fun Context.syncWorkNotification(): Notification {
 
         notificationManager?.createNotificationChannel(channel)
     }
-
+    @Suppress("ktlint:standard:max-line-length")
     return NotificationCompat.Builder(
         this,
         SYNC_NOTIFICATION_CHANNEL_ID,

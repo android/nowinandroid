@@ -63,7 +63,7 @@ internal class SystemTrayNotifier @Inject constructor(
 
         val newsNotifications = truncatedNewsResources.map { newsResource ->
             createNewsNotification {
-
+                @Suppress("ktlint:standard:max-line-length")
                 setSmallIcon(
                     com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                 )
@@ -79,6 +79,7 @@ internal class SystemTrayNotifier @Inject constructor(
                 R.string.core_notifications_news_notification_group_summary,
                 truncatedNewsResources.size,
             )
+            @Suppress("ktlint:standard:max-line-length")
             setContentTitle(title)
                 .setContentText(title)
                 .setSmallIcon(
