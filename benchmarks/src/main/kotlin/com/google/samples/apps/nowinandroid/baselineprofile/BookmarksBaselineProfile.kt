@@ -30,11 +30,10 @@ class BookmarksBaselineProfile {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun generate() =
-        baselineProfileRule.collect(PACKAGE_NAME) {
-            startActivityAndAllowNotifications()
+    fun generate() = baselineProfileRule.collect(PACKAGE_NAME) {
+        startActivityAndAllowNotifications()
 
-            // Navigate to saved screen
-            goToBookmarksScreen()
-        }
+        // Navigate to saved screen
+        goToBookmarksScreen()
+    }
 }

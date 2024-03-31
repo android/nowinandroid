@@ -25,13 +25,13 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
+import com.google.samples.apps.nowinandroid.feature.interests.R as InterestsR
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
-import com.google.samples.apps.nowinandroid.feature.interests.R as InterestsR
 
 /**
  * UI test for checking the correct behaviour of the Interests screen;

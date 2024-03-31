@@ -32,13 +32,12 @@ class ForYouBaselineProfile {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun generate() =
-        baselineProfileRule.collect(PACKAGE_NAME) {
-            startActivityAndAllowNotifications()
+    fun generate() = baselineProfileRule.collect(PACKAGE_NAME) {
+        startActivityAndAllowNotifications()
 
-            // Scroll the feed critical user journey
-            forYouWaitForContent()
-            forYouSelectTopics(true)
-            forYouScrollFeedDownUp()
-        }
+        // Scroll the feed critical user journey
+        forYouWaitForContent()
+        forYouSelectTopics(true)
+        forYouScrollFeedDownUp()
+    }
 }

@@ -27,6 +27,9 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.ZoneId
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -40,9 +43,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
-import java.time.ZoneId
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Utility for reporting current timezone the device has set.

@@ -172,18 +172,16 @@ internal fun TopicScreen(
     }
 }
 
-private fun topicItemsSize(
-    topicUiState: TopicUiState,
-    newsUiState: NewsUiState,
-) = when (topicUiState) {
-    TopicUiState.Error -> 0 // Nothing
-    TopicUiState.Loading -> 1 // Loading bar
-    is TopicUiState.Success -> when (newsUiState) {
-        NewsUiState.Error -> 0 // Nothing
-        NewsUiState.Loading -> 1 // Loading bar
-        is NewsUiState.Success -> 2 + newsUiState.news.size // Toolbar, header
+private fun topicItemsSize(topicUiState: TopicUiState, newsUiState: NewsUiState) =
+    when (topicUiState) {
+        TopicUiState.Error -> 0 // Nothing
+        TopicUiState.Loading -> 1 // Loading bar
+        is TopicUiState.Success -> when (newsUiState) {
+            NewsUiState.Error -> 0 // Nothing
+            NewsUiState.Loading -> 1 // Loading bar
+            is NewsUiState.Success -> 2 + newsUiState.news.size // Toolbar, header
+        }
     }
-}
 
 private fun LazyListScope.topicBody(
     name: String,

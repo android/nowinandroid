@@ -65,6 +65,7 @@ internal class SystemTrayNotifier @Inject constructor(
 
         val newsNotifications = truncatedNewsResources.map { newsResource ->
             createNewsNotification {
+
                 setSmallIcon(
                     com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                 )

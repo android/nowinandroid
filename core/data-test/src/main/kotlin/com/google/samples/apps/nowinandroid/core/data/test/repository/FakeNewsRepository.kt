@@ -27,11 +27,11 @@ import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
 /**
  * Fake implementation of the [NewsRepository] that retrieves the news resources from a JSON String.
@@ -44,30 +44,27 @@ internal class FakeNewsRepository @Inject constructor(
     private val datasource: DemoNiaNetworkDataSource,
 ) : NewsRepository {
 
-    override fun getNewsResources(
-        query: NewsResourceQuery,
-    ): Flow<List<NewsResource>> =
-        flow {
-            emit(
-                datasource
-                    .getNewsResources()
-                    .filter { networkNewsResource ->
-                        // Filter out any news resources which don't match the current query.
-                        // If no query parameters (filterTopicIds or filterNewsIds) are specified
-                        // then the news resource is returned.
-                        listOfNotNull(
-                            true,
-                            query.filterNewsIds?.contains(networkNewsResource.id),
-                            query.filterTopicIds?.let { filterTopicIds ->
-                                networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
-                            },
-                        )
-                            .all(true::equals)
-                    }
-                    .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel),
-            )
-        }.flowOn(ioDispatcher)
+    override fun getNewsResources(query: NewsResourceQuery): Flow<List<NewsResource>> = flow {
+        emit(
+            datasource
+                .getNewsResources()
+                .filter { networkNewsResource ->
+                    // Filter out any news resources which don't match the current query.
+                    // If no query parameters (filterTopicIds or filterNewsIds) are specified
+                    // then the news resource is returned.
+                    listOfNotNull(
+                        true,
+                        query.filterNewsIds?.contains(networkNewsResource.id),
+                        query.filterTopicIds?.let { filterTopicIds ->
+                            networkNewsResource.topics.intersect(filterTopicIds).isNotEmpty()
+                        },
+                    )
+                        .all(true::equals)
+                }
+                .map(NetworkNewsResource::asEntity)
+                .map(NewsResourceEntity::asExternalModel),
+        )
+    }.flowOn(ioDispatcher)
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true
 }

@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.core.data.model
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlin.test.assertEquals
 import kotlinx.datetime.Instant
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class NetworkEntityKtTest {
 

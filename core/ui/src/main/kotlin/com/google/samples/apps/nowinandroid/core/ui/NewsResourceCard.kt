@@ -66,12 +66,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toJavaZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
+import kotlinx.datetime.toJavaZoneId
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved
@@ -142,9 +142,7 @@ fun NewsResourceCardExpanded(
 }
 
 @Composable
-fun NewsResourceHeaderImage(
-    headerImageUrl: String?,
-) {
+fun NewsResourceHeaderImage(headerImageUrl: String?) {
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
     val imageLoader = rememberAsyncImagePainter(
@@ -189,19 +187,12 @@ fun NewsResourceHeaderImage(
 }
 
 @Composable
-fun NewsResourceTitle(
-    newsResourceTitle: String,
-    modifier: Modifier = Modifier,
-) {
+fun NewsResourceTitle(newsResourceTitle: String, modifier: Modifier = Modifier) {
     Text(newsResourceTitle, style = MaterialTheme.typography.headlineSmall, modifier = modifier)
 }
 
 @Composable
-fun BookmarkButton(
-    isBookmarked: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun BookmarkButton(isBookmarked: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     NiaIconToggleButton(
         checked = isBookmarked,
         onCheckedChange = { onClick() },
@@ -222,10 +213,7 @@ fun BookmarkButton(
 }
 
 @Composable
-fun NotificationDot(
-    color: Color,
-    modifier: Modifier = Modifier,
-) {
+fun NotificationDot(color: Color, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.core_ui_unread_resource_dot_content_description)
     Canvas(
         modifier = modifier
@@ -247,10 +235,7 @@ fun dateFormatted(publishDate: Instant): String = DateTimeFormatter
     .format(publishDate.toJavaInstant())
 
 @Composable
-fun NewsResourceMetaData(
-    publishDate: Instant,
-    resourceType: String,
-) {
+fun NewsResourceMetaData(publishDate: Instant, resourceType: String) {
     val formattedDate = dateFormatted(publishDate)
     Text(
         if (resourceType.isNotBlank()) {
@@ -263,9 +248,7 @@ fun NewsResourceMetaData(
 }
 
 @Composable
-fun NewsResourceShortDescription(
-    newsResourceShortDescription: String,
-) {
+fun NewsResourceShortDescription(newsResourceShortDescription: String) {
     Text(newsResourceShortDescription, style = MaterialTheme.typography.bodyLarge)
 }
 

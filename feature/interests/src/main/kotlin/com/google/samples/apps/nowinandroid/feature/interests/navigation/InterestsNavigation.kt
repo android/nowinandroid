@@ -37,9 +37,7 @@ fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOp
     navigate(route, navOptions)
 }
 
-fun NavGraphBuilder.interestsScreen(
-    onTopicClick: (String) -> Unit,
-) {
+fun NavGraphBuilder.interestsScreen(onTopicClick: (String) -> Unit) {
     composable(
         route = INTERESTS_ROUTE,
         arguments = listOf(

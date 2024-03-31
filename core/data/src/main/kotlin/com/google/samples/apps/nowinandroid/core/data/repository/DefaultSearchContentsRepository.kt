@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -34,7 +35,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 internal class DefaultSearchContentsRepository @Inject constructor(
     private val newsResourceDao: NewsResourceDao,
@@ -82,11 +82,10 @@ internal class DefaultSearchContentsRepository @Inject constructor(
         }
     }
 
-    override fun getSearchContentsCount(): Flow<Int> =
-        combine(
-            newsResourceFtsDao.getCount(),
-            topicFtsDao.getCount(),
-        ) { newsResourceCount, topicsCount ->
-            newsResourceCount + topicsCount
-        }
+    override fun getSearchContentsCount(): Flow<Int> = combine(
+        newsResourceFtsDao.getCount(),
+        topicFtsDao.getCount(),
+    ) { newsResourceCount, topicsCount ->
+        newsResourceCount + topicsCount
+    }
 }

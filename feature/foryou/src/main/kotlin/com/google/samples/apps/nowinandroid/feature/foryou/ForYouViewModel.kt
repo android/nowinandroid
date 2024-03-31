@@ -30,6 +30,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCa
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +40,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
@@ -147,15 +147,14 @@ class ForYouViewModel @Inject constructor(
     }
 }
 
-private fun AnalyticsHelper.logNewsDeepLinkOpen(newsResourceId: String) =
-    logEvent(
-        AnalyticsEvent(
-            type = "news_deep_link_opened",
-            extras = listOf(
-                Param(
-                    key = LINKED_NEWS_RESOURCE_ID,
-                    value = newsResourceId,
-                ),
+private fun AnalyticsHelper.logNewsDeepLinkOpen(newsResourceId: String) = logEvent(
+    AnalyticsEvent(
+        type = "news_deep_link_opened",
+        extras = listOf(
+            Param(
+                key = LINKED_NEWS_RESOURCE_ID,
+                value = newsResourceId,
             ),
         ),
-    )
+    ),
+)

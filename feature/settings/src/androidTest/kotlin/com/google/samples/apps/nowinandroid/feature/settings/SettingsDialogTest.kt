@@ -71,17 +71,29 @@ class SettingsDialogTest {
         }
 
         // Check that all the possible settings are displayed.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_default)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_android)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_brand_default),
+        ).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_brand_android),
+        ).assertExists()
         composeTestRule.onNodeWithText(
             getString(R.string.feature_settings_dark_mode_config_system_default),
         ).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_light)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_dark)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dark_mode_config_light),
+        ).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dark_mode_config_dark),
+        ).assertExists()
 
         // Check that the correct settings are selected.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_android)).assertIsSelected()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_dark)).assertIsSelected()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_brand_android),
+        ).assertIsSelected()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dark_mode_config_dark),
+        ).assertIsSelected()
     }
 
     @Test
@@ -103,12 +115,20 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_preference),
+        ).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_yes),
+        ).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_no),
+        ).assertExists()
 
         // Check that the correct default dynamic color setting is selected.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertIsSelected()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_no),
+        ).assertIsSelected()
     }
 
     @Test
@@ -129,10 +149,16 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference))
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_preference),
+        )
             .assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_yes),
+        ).assertDoesNotExist()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_no),
+        ).assertDoesNotExist()
     }
 
     @Test
@@ -153,10 +179,16 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference))
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_preference),
+        )
             .assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_yes),
+        ).assertDoesNotExist()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_dynamic_color_no),
+        ).assertDoesNotExist()
     }
 
     @Test
@@ -177,9 +209,13 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_privacy_policy)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_privacy_policy),
+        ).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.feature_settings_licenses)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_guidelines)).assertExists()
+        composeTestRule.onNodeWithText(
+            getString(R.string.feature_settings_brand_guidelines),
+        ).assertExists()
         composeTestRule.onNodeWithText(getString(R.string.feature_settings_feedback)).assertExists()
     }
 }

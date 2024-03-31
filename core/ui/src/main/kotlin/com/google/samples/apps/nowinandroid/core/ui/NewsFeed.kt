@@ -73,7 +73,11 @@ fun LazyStaggeredGridScope.newsFeed(
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
                         )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                        launchCustomChromeTab(
+                            context,
+                            Uri.parse(userNewsResource.url),
+                            backgroundColor,
+                        )
 
                         onNewsResourceViewed(userNewsResource.id)
                     },

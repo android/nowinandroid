@@ -24,13 +24,13 @@ import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEnti
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class NewsResourceDaoTest {
 
@@ -248,48 +248,44 @@ class NewsResourceDaoTest {
     }
 
     @Test
-    fun newsResourceDao_deletes_items_by_ids() =
-        runTest {
-            val newsResourceEntities = listOf(
-                testNewsResource(
-                    id = "0",
-                    millisSinceEpoch = 0,
-                ),
-                testNewsResource(
-                    id = "1",
-                    millisSinceEpoch = 3,
-                ),
-                testNewsResource(
-                    id = "2",
-                    millisSinceEpoch = 1,
-                ),
-                testNewsResource(
-                    id = "3",
-                    millisSinceEpoch = 2,
-                ),
-            )
-            newsResourceDao.upsertNewsResources(newsResourceEntities)
+    fun newsResourceDao_deletes_items_by_ids() = runTest {
+        val newsResourceEntities = listOf(
+            testNewsResource(
+                id = "0",
+                millisSinceEpoch = 0,
+            ),
+            testNewsResource(
+                id = "1",
+                millisSinceEpoch = 3,
+            ),
+            testNewsResource(
+                id = "2",
+                millisSinceEpoch = 1,
+            ),
+            testNewsResource(
+                id = "3",
+                millisSinceEpoch = 2,
+            ),
+        )
+        newsResourceDao.upsertNewsResources(newsResourceEntities)
 
-            val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
+        val (toDelete, toKeep) = newsResourceEntities.partition { it.id.toInt() % 2 == 0 }
 
-            newsResourceDao.deleteNewsResources(
-                toDelete.map(NewsResourceEntity::id),
-            )
+        newsResourceDao.deleteNewsResources(
+            toDelete.map(NewsResourceEntity::id),
+        )
 
-            assertEquals(
-                toKeep.map(NewsResourceEntity::id)
-                    .toSet(),
-                newsResourceDao.getNewsResources().first()
-                    .map { it.entity.id }
-                    .toSet(),
-            )
-        }
+        assertEquals(
+            toKeep.map(NewsResourceEntity::id)
+                .toSet(),
+            newsResourceDao.getNewsResources().first()
+                .map { it.entity.id }
+                .toSet(),
+        )
+    }
 }
 
-private fun testTopicEntity(
-    id: String = "0",
-    name: String,
-) = TopicEntity(
+private fun testTopicEntity(id: String = "0", name: String) = TopicEntity(
     id = id,
     name = name,
     shortDescription = "",
@@ -298,10 +294,7 @@ private fun testTopicEntity(
     imageUrl = "",
 )
 
-private fun testNewsResource(
-    id: String = "0",
-    millisSinceEpoch: Long = 0,
-) = NewsResourceEntity(
+private fun testNewsResource(id: String = "0", millisSinceEpoch: Long = 0) = NewsResourceEntity(
     id = id,
     title = "",
     content = "",

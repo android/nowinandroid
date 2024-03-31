@@ -429,10 +429,7 @@ private fun SingleTopicButton(
 }
 
 @Composable
-fun TopicIcon(
-    imageUrl: String,
-    modifier: Modifier = Modifier,
-) {
+fun TopicIcon(imageUrl: String, modifier: Modifier = Modifier) {
     DynamicAsyncImage(
         placeholder = painterResource(R.drawable.feature_foryou_ic_icon_placeholder),
         imageUrl = imageUrl,
@@ -482,10 +479,7 @@ private fun DeepLinkEffect(
     }
 }
 
-private fun feedItemsSize(
-    feedState: NewsFeedUiState,
-    onboardingUiState: OnboardingUiState,
-): Int {
+private fun feedItemsSize(feedState: NewsFeedUiState, onboardingUiState: OnboardingUiState): Int {
     val feedSize = when (feedState) {
         NewsFeedUiState.Loading -> 0
         is NewsFeedUiState.Success -> feedState.feed.size

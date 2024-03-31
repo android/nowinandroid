@@ -32,10 +32,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.notifications.Notifier
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 // Heuristic value to optimize for serialization and deserialization cost on client and server
 // for each news resource batch.
@@ -53,15 +53,14 @@ internal class OfflineFirstNewsRepository @Inject constructor(
     private val notifier: Notifier,
 ) : NewsRepository {
 
-    override fun getNewsResources(
-        query: NewsResourceQuery,
-    ): Flow<List<NewsResource>> = newsResourceDao.getNewsResources(
-        useFilterTopicIds = query.filterTopicIds != null,
-        filterTopicIds = query.filterTopicIds ?: emptySet(),
-        useFilterNewsIds = query.filterNewsIds != null,
-        filterNewsIds = query.filterNewsIds ?: emptySet(),
-    )
-        .map { it.map(PopulatedNewsResource::asExternalModel) }
+    override fun getNewsResources(query: NewsResourceQuery): Flow<List<NewsResource>> =
+        newsResourceDao.getNewsResources(
+            useFilterTopicIds = query.filterTopicIds != null,
+            filterTopicIds = query.filterTopicIds ?: emptySet(),
+            useFilterNewsIds = query.filterNewsIds != null,
+            filterNewsIds = query.filterNewsIds ?: emptySet(),
+        )
+            .map { it.map(PopulatedNewsResource::asExternalModel) }
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean {
         var isFirstSync = false

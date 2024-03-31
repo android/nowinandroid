@@ -46,17 +46,16 @@ fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
  * A shell [TopicEntity] to fulfill the foreign key constraint when inserting
  * a [NewsResourceEntity] into the DB
  */
-fun NetworkNewsResource.topicEntityShells() =
-    topics.map { topicId ->
-        TopicEntity(
-            id = topicId,
-            name = "",
-            url = "",
-            imageUrl = "",
-            shortDescription = "",
-            longDescription = "",
-        )
-    }
+fun NetworkNewsResource.topicEntityShells() = topics.map { topicId ->
+    TopicEntity(
+        id = topicId,
+        name = "",
+        url = "",
+        imageUrl = "",
+        shortDescription = "",
+        longDescription = "",
+    )
+}
 
 fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> =
     topics.map { topicId ->

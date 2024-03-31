@@ -22,6 +22,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferen
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.TestScope
@@ -31,9 +34,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class OfflineFirstUserDataRepositoryTest {
 
@@ -61,21 +61,20 @@ class OfflineFirstUserDataRepositoryTest {
     }
 
     @Test
-    fun offlineFirstUserDataRepository_default_user_data_is_correct() =
-        testScope.runTest {
-            assertEquals(
-                UserData(
-                    bookmarkedNewsResources = emptySet(),
-                    viewedNewsResources = emptySet(),
-                    followedTopics = emptySet(),
-                    themeBrand = ThemeBrand.DEFAULT,
-                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-                    useDynamicColor = false,
-                    shouldHideOnboarding = false,
-                ),
-                subject.userData.first(),
-            )
-        }
+    fun offlineFirstUserDataRepository_default_user_data_is_correct() = testScope.runTest {
+        assertEquals(
+            UserData(
+                bookmarkedNewsResources = emptySet(),
+                viewedNewsResources = emptySet(),
+                followedTopics = emptySet(),
+                themeBrand = ThemeBrand.DEFAULT,
+                darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                useDynamicColor = false,
+                shouldHideOnboarding = false,
+            ),
+            subject.userData.first(),
+        )
+    }
 
     @Test
     fun offlineFirstUserDataRepository_toggle_followed_topics_logic_delegates_to_nia_preferences() =

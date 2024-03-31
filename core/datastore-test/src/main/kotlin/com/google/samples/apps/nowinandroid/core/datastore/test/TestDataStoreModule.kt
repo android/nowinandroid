@@ -26,9 +26,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import org.junit.rules.TemporaryFolder
-import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
@@ -43,11 +43,10 @@ internal object TestDataStoreModule {
         @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer,
         tmpFolder: TemporaryFolder,
-    ): DataStore<UserPreferences> =
-        tmpFolder.testUserPreferencesDataStore(
-            coroutineScope = scope,
-            userPreferencesSerializer = userPreferencesSerializer,
-        )
+    ): DataStore<UserPreferences> = tmpFolder.testUserPreferencesDataStore(
+        coroutineScope = scope,
+        userPreferencesSerializer = userPreferencesSerializer,
+    )
 }
 
 fun TemporaryFolder.testUserPreferencesDataStore(
