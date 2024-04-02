@@ -23,6 +23,12 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.database"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
