@@ -44,7 +44,7 @@ fun NiaNavHost(
     startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
-    val onTopicClick : (String) -> Unit = remember(navController) {
+    val onTopicClick: (String) -> Unit = remember(navController) {
         return@remember navController::navigateToInterests
     }
 
