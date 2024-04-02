@@ -34,5 +34,6 @@ dependencies {
 
     implementation(libs.kotlinx.datetime)
 
-    androidTestImplementation(projects.core.testing)
+    testImplementation(projects.core.testing)
+    testImplementation(libs.robolectric)
 }
