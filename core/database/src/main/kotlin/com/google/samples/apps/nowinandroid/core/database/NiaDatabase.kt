@@ -63,7 +63,7 @@ import com.google.samples.apps.nowinandroid.core.database.util.InstantConverter
 @TypeConverters(
     InstantConverter::class,
 )
-abstract class NiaDatabase : RoomDatabase() {
+internal abstract class NiaDatabase : RoomDatabase() {
     abstract fun topicDao(): TopicDao
     abstract fun newsResourceDao(): NewsResourceDao
     abstract fun topicFtsDao(): TopicFtsDao

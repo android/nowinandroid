@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.core.testing.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.datetime.Instant
 
-/* ktlint-disable max-line-length */
 val newsResourcesTestData: List<NewsResource> = listOf(
     NewsResource(
         id = "1",

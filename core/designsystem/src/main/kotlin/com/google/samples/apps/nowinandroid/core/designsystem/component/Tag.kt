@@ -40,7 +40,7 @@ fun NiaTopicTag(
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(
-                alpha = NiaTagDefaults.UnfollowedTopicTagContainerAlpha,
+                alpha = NiaTagDefaults.UNFOLLOWED_TOPIC_TAG_CONTAINER_ALPHA,
             )
         }
         TextButton(
@@ -50,7 +50,7 @@ fun NiaTopicTag(
                 containerColor = containerColor,
                 contentColor = contentColorFor(backgroundColor = containerColor),
                 disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaTagDefaults.DisabledTopicTagContainerAlpha,
+                    alpha = NiaTagDefaults.DISABLED_TOPIC_TAG_CONTAINER_ALPHA,
                 ),
             ),
         ) {
@@ -75,9 +75,9 @@ fun TagPreview() {
  * Now in Android tag default values.
  */
 object NiaTagDefaults {
-    const val UnfollowedTopicTagContainerAlpha = 0.5f
+    const val UNFOLLOWED_TOPIC_TAG_CONTAINER_ALPHA = 0.5f
 
     // TODO: File bug
     // Button disabled container alpha value not exposed by ButtonDefaults
-    const val DisabledTopicTagContainerAlpha = 0.12f
+    const val DISABLED_TOPIC_TAG_CONTAINER_ALPHA = 0.12f
 }

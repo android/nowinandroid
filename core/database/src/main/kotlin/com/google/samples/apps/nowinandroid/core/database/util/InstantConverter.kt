@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.core.database.util
 import androidx.room.TypeConverter
 import kotlinx.datetime.Instant
 
-class InstantConverter {
+internal class InstantConverter {
     @TypeConverter
     fun longToInstant(value: Long?): Instant? =
         value?.let(Instant::fromEpochMilliseconds)

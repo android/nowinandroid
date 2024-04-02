@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.data.testdoubles
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
@@ -35,7 +35,7 @@ enum class CollectionType {
  */
 class TestNiaNetworkDataSource : NiaNetworkDataSource {
 
-    private val source = FakeNiaNetworkDataSource(
+    private val source = DemoNiaNetworkDataSource(
         UnconfinedTestDispatcher(),
         Json { ignoreUnknownKeys = true },
     )
@@ -91,11 +91,10 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
     }
 }
 
-fun List<NetworkChangeList>.after(version: Int?): List<NetworkChangeList> =
-    when (version) {
-        null -> this
-        else -> this.filter { it.changeListVersion > version }
-    }
+fun List<NetworkChangeList>.after(version: Int?): List<NetworkChangeList> = when (version) {
+    null -> this
+    else -> filter { it.changeListVersion > version }
+}
 
 /**
  * Return items from [this] whose id defined by [idGetter] is in [ids] if [ids] is not null
@@ -105,7 +104,7 @@ private fun <T> List<T>.matchIds(
     idGetter: (T) -> String,
 ) = when (ids) {
     null -> this
-    else -> ids.toSet().let { idSet -> this.filter { idSet.contains(idGetter(it)) } }
+    else -> ids.toSet().let { idSet -> filter { idGetter(it) in idSet } }
 }
 
 /**

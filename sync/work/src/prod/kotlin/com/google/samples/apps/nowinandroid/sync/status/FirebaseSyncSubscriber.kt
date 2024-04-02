@@ -24,7 +24,7 @@ import javax.inject.Inject
 /**
  * Implementation of [SyncSubscriber] that subscribes to the FCM [SYNC_TOPIC]
  */
-class FirebaseSyncSubscriber @Inject constructor(
+internal class FirebaseSyncSubscriber @Inject constructor(
     private val firebaseMessaging: FirebaseMessaging,
 ) : SyncSubscriber {
     override suspend fun subscribe() {

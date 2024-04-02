@@ -37,6 +37,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
@@ -65,7 +67,7 @@ import javax.inject.Inject
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
 // This allows enough room to render the content under test without clipping or scaling.
-@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi", sdk = [33])
+@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
 class NiaAppScreenSizesScreenshotTests {
@@ -92,6 +94,9 @@ class NiaAppScreenSizesScreenshotTests {
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
+
+    @Inject
+    lateinit var timeZoneMonitor: TimeZoneMonitor
 
     @Inject
     lateinit var userDataRepository: UserDataRepository
@@ -140,13 +145,17 @@ class NiaAppScreenSizesScreenshotTests {
             ) {
                 TestHarness(size = DpSize(width, height)) {
                     BoxWithConstraints {
-                        NiaApp(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                        )
+                        NiaTheme {
+                            val fakeAppState = rememberNiaAppState(
+                                windowSizeClass = WindowSizeClass.calculateFromSize(
+                                    DpSize(maxWidth, maxHeight),
+                                ),
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                                timeZoneMonitor = timeZoneMonitor,
+                            )
+                            NiaApp(fakeAppState)
+                        }
                     }
                 }
             }

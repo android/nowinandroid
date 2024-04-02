@@ -45,7 +45,7 @@ class ForYouScreenTest {
 
     private val doneButtonMatcher by lazy {
         hasText(
-            composeTestRule.activity.resources.getString(R.string.done),
+            composeTestRule.activity.resources.getString(R.string.feature_foryou_done),
         )
     }
 
@@ -70,7 +70,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
             )
             .assertExists()
     }
@@ -96,7 +96,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
             )
             .assertExists()
     }
@@ -215,7 +215,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
             )
             .assertExists()
     }
@@ -241,7 +241,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.for_you_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
             )
             .assertExists()
     }

@@ -25,5 +25,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
+    implementation(projects.core.data)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
 }

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.core.testing.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 
-/* ktlint-disable max-line-length */
 val followableTopicTestData: List<FollowableTopic> = listOf(
     FollowableTopic(
         topic = Topic(
