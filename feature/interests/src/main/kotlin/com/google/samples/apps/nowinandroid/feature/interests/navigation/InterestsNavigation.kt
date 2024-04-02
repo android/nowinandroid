@@ -37,6 +37,15 @@ fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOp
     navigate(route, navOptions)
 }
 
+fun NavController.navigateToInterests(topicId: String? = null) {
+    val route = if (topicId != null) {
+        "${INTERESTS_ROUTE_BASE}?${TOPIC_ID_ARG}=$topicId"
+    } else {
+        INTERESTS_ROUTE_BASE
+    }
+    navigate(route, null)
+}
+
 fun NavGraphBuilder.interestsScreen(
     onTopicClick: (String) -> Unit,
 ) {
