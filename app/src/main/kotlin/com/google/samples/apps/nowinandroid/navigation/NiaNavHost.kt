@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
@@ -43,20 +44,24 @@ fun NiaNavHost(
     startDestination: String = FOR_YOU_ROUTE,
 ) {
     val navController = appState.navController
+    val onTopicClick: (String) -> Unit = remember(navController) {
+        return@remember navController::navigateToInterests
+    }
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToInterests)
+        forYouScreen(onTopicClick)
         bookmarksScreen(
-            onTopicClick = navController::navigateToInterests,
+            onTopicClick = onTopicClick,
             onShowSnackbar = onShowSnackbar,
         )
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = navController::navigateToInterests,
+            onTopicClick = onTopicClick,
         )
         interestsListDetailScreen()
     }
