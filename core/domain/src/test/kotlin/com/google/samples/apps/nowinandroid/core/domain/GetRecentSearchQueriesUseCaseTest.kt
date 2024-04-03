@@ -33,7 +33,7 @@ class GetRecentSearchQueriesUseCaseTest {
     private val recentSearchRepository = TestRecentSearchRepository()
 
     private val useCase = GetRecentSearchQueriesUseCase(
-        recentSearchRepository
+        recentSearchRepository,
     )
 
     @Test
@@ -108,5 +108,5 @@ private val testRecentSearchQueries = listOf(
     "Testing", "Android Studio",
     "Performance", "New API",
     "Games", "Android TV",
-    "Camera", "Media"
+    "Camera", "Media",
 )

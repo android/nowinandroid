@@ -27,7 +27,7 @@ class TestRecentSearchRepository : RecentSearchRepository {
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
         flow {
-           emit(cachedRecentSearches.sortedByDescending { it.queriedDate }.take(limit))
+            emit(cachedRecentSearches.sortedByDescending { it.queriedDate }.take(limit))
         }
 
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {
