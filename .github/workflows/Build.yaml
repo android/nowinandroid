@@ -25,16 +25,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'gradle/declarative-gradle'
-          path: '../declarative-gradle'
+          path: 'declarative-gradle'
 
       - name: Checkout Now in Android
         uses: actions/checkout@v4
+        with:
+          path: 'now-in-android'
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
       - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+        run: mkdir -p ~/.gradle ; cp now-in-android/.github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -46,15 +48,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./now-in-android/gradlew check -p now-in-android/build-logic
 
       - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+        run: ./now-in-android/gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache -p now-in-android
 
       - name: Check Dependency Guard
         id: dependencyguard_verify
         continue-on-error: true
-        run: ./gradlew dependencyGuard
+        run: ./now-in-android/gradlew dependencyGuard -p now-in-android
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
@@ -68,7 +70,7 @@ jobs:
         id: dependencyguard_baseline
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
-          ./gradlew dependencyGuardBaseline
+          ./now-in-android/gradlew dependencyGuardBaseline -p now-in-android
 
       - name: Push new Dependency Guard baselines if available
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -81,7 +83,7 @@ jobs:
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
-        run: ./gradlew verifyRoborazziDemoDebug
+        run: ./now-in-android/gradlew verifyRoborazziDemoDebug -p now-in-android
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots
@@ -113,11 +115,12 @@ jobs:
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble
+        run: ./now-in-android/gradlew :app:assemble :benchmarks:assemble
           -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
           -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
+          -p now-in-android
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -143,7 +146,7 @@ jobs:
           path: '**/build/reports/lint-results-*.html'
 
       - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
+        run: ./now-in-android/gradlew :app:checkProdReleaseBadging -p now-in-android
 
   androidTest:
     runs-on: ubuntu-latest
@@ -175,7 +178,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+        run: mkdir -p ~/.gradle ; cp now-in-android/.github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -187,7 +190,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build projects before running emulator
-        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
+        run: ./now-in-android/gradlew packageDemoDebug packageDemoDebugAndroidTest -p now-in-android
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -197,7 +200,7 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          script: ./now-in-android/gradlew connectedDemoDebugAndroidTest --daemon -p now-in-android
 
       - name: Upload test reports
         if: always()
