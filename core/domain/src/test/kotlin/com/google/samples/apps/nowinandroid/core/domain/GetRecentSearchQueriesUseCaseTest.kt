@@ -93,7 +93,7 @@ class GetRecentSearchQueriesUseCaseTest {
             delay(10L)
         }
 
-        // Check that recent search queries are ordered by latest up to 10.
+        // Check that recent search queries are ordered by latest up to 5.
         assertEquals(
             testRecentSearchQueries.reversed().take(5),
             recentSearchQueries.first().map { it.query },
