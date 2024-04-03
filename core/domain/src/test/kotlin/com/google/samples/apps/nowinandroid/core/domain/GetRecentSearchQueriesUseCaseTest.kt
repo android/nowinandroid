@@ -18,7 +18,11 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
+import org.junit.Test
+import kotlin.test.assertEquals
 
 class GetRecentSearchQueriesUseCaseTest {
 
@@ -27,5 +31,34 @@ class GetRecentSearchQueriesUseCaseTest {
 
     private val recentSearchRepository = TestRecentSearchRepository()
 
+    private val useCase = GetRecentSearchQueriesUseCase(
+        recentSearchRepository
+    )
 
+    @Test
+    fun whenNoParams_recentSearchQueriesAreReturnedUpTo10() = runTest {
+        // Obtain a stream of recent search queries.
+        val recentSearchQueries = useCase()
+
+        // insert search queries.
+        for (query in testRecentSearchQueries) {
+            recentSearchRepository.insertOrReplaceRecentSearch(query)
+        }
+
+        // Check that recent search queries are ordered by latest up to 10.
+        assertEquals(
+            testRecentSearchQueries.reversed().take(10),
+            recentSearchQueries.first().map { it.query },
+        )
+    }
 }
+
+private val testRecentSearchQueries = listOf(
+    "Compose", "Wear OS",
+    "Jetpack", "Headlines",
+    "Architecture", "UI",
+    "Testing", "Android Studio",
+    "Performance", "New API",
+    "Games", "Android TV",
+    "Camera", "Media"
+)
