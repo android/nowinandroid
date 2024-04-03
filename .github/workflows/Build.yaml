@@ -30,6 +30,7 @@ jobs:
       - name: Checkout Now in Android
         uses: actions/checkout@v4
         with:
+          repository: 'gradle/nowinandroid'
           path: 'now-in-android'
 
       - name: Validate Gradle Wrapper
