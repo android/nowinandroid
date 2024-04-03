@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -37,12 +38,27 @@ class GetRecentSearchQueriesUseCaseTest {
 
     @Test
     fun whenNoParams_recentSearchQueriesAreReturnedUpTo10() = runTest {
-        // Obtain a stream of recent search queries.
+        // Obtain a stream of recent search queries with no param.
         val recentSearchQueries = useCase()
 
-        // insert search queries.
-        for (query in testRecentSearchQueries) {
-            recentSearchRepository.insertOrReplaceRecentSearch(query)
+        // insert 5 search queries.
+        for (index in 0 until 5) {
+            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
+            // delay for saving value
+            delay(10L)
+        }
+
+        // Check that 5 recent search queries are ordered by latest.
+        assertEquals(
+            testRecentSearchQueries.take(5).reversed(),
+            recentSearchQueries.first().map { it.query },
+        )
+
+        // insert 9 more search queries.
+        for (index in 5 until testRecentSearchQueries.size) {
+            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
+            // delay for saving value
+            delay(10L)
         }
 
         // Check that recent search queries are ordered by latest up to 10.
