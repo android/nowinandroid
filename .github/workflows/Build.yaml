@@ -21,7 +21,13 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - name: Checkout
+      - name: Checkout Declarative Gradle
+        uses: actions/checkout@v4
+        with:
+          repository: 'gradle/declarative-gradle'
+          path: 'declarative-gradle'
+
+      - name: Checkout Now in Android
         uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
