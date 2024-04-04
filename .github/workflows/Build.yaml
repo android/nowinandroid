@@ -137,7 +137,7 @@ jobs:
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
+        run: ./now-in-android/gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint -p now-in-android
 
       - name: Upload lint reports (HTML)
         if: always()
