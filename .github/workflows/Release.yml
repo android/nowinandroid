@@ -34,7 +34,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp ./now-in-android.github/ci-gradle.properties ~/.gradle/gradle.properties
+        run: mkdir -p ~/.gradle ; cp now-in-android.github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
