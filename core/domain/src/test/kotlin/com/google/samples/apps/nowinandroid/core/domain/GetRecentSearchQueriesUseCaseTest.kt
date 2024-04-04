@@ -18,13 +18,16 @@ package com.google.samples.apps.nowinandroid.core.domain
 
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
+/**
+ * Unit test for [GetRecentSearchQueriesUseCase]
+ */
 class GetRecentSearchQueriesUseCaseTest {
 
     @get:Rule
@@ -37,65 +40,36 @@ class GetRecentSearchQueriesUseCaseTest {
     )
 
     @Test
-    fun whenNoParams_recentSearchQueriesAreReturnedUpTo10() = runTest {
+    fun whenQueryLimitIsBy10_recentSearchQueriesAreReturnedUpTo10() = runTest {
         // Obtain a stream of recent search queries with no param.
         val recentSearchQueries = useCase()
 
-        // insert 5 search queries.
-        for (index in 0 until 5) {
-            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
-            // delay for saving value
-            delay(10L)
+        // insert search queries over 10.
+        testRecentSearchQueries.forEach { query ->
+            recentSearchRepository.insertOrReplaceRecentSearch(query)
         }
 
-        // Check that 5 recent search queries are ordered by latest.
+        // Check that the number of recent search queries are up to 10.
         assertEquals(
-            testRecentSearchQueries.take(5).reversed(),
-            recentSearchQueries.first().map { it.query },
-        )
-
-        // insert 9 more search queries.
-        for (index in 5 until testRecentSearchQueries.size) {
-            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
-            // delay for saving value
-            delay(10L)
-        }
-
-        // Check that recent search queries are ordered by latest up to 10.
-        assertEquals(
-            testRecentSearchQueries.reversed().take(10),
-            recentSearchQueries.first().map { it.query },
+            10,
+            recentSearchQueries.first().size
         )
     }
 
     @Test
-    fun whenParamIsSetTo5_recentSearchQueriesAreReturnedUpTo5() = runTest {
-        // Obtain a stream of recent search queries with param set 5.
-        val recentSearchQueries = useCase(5)
+    fun whenReceivingRecentSearchQueries_recentSearchQueriesAreReturnedInRecentOrder() = runTest {
+        // Obtain a stream of recent search queries with no param.
+        val recentSearchQueries = useCase()
 
-        // insert 2 search queries.
-        for (index in 0 until 2) {
-            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
-            // delay for saving value
-            delay(10L)
+        // insert search queries over 10.
+        testRecentSearchQueries.forEach { query ->
+            recentSearchRepository.insertOrReplaceRecentSearch(query)
+            advanceUntilIdle()
         }
 
-        // Check that 5 recent search queries are ordered by latest.
+        // Check that search queries is ordered in recently up to 10
         assertEquals(
-            testRecentSearchQueries.take(2).reversed(),
-            recentSearchQueries.first().map { it.query },
-        )
-
-        // insert 12 more search queries.
-        for (index in 2 until testRecentSearchQueries.size) {
-            recentSearchRepository.insertOrReplaceRecentSearch(testRecentSearchQueries[index])
-            // delay for saving value
-            delay(10L)
-        }
-
-        // Check that recent search queries are ordered by latest up to 5.
-        assertEquals(
-            testRecentSearchQueries.reversed().take(5),
+            testRecentSearchQueries.reversed().take(10),
             recentSearchQueries.first().map { it.query },
         )
     }
