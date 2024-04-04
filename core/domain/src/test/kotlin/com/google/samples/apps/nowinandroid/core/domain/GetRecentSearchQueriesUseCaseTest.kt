@@ -52,7 +52,7 @@ class GetRecentSearchQueriesUseCaseTest {
         // Check that the number of recent search queries are up to 10.
         assertEquals(
             10,
-            recentSearchQueries.first().size
+            recentSearchQueries.first().size,
         )
     }
 
