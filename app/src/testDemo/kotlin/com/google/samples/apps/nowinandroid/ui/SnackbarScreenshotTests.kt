@@ -19,8 +19,9 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.Posture
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -63,7 +65,6 @@ import javax.inject.Inject
 /**
  * Tests that the Snackbar is correctly displayed on different screen sizes.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
@@ -191,6 +192,7 @@ class SnackbarScreenshotTests {
         }
     }
 
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     private fun testSnackbarScreenshotWithSize(
         snackbarHostState: SnackbarHostState,
         width: Dp,
@@ -210,16 +212,26 @@ class SnackbarScreenshotTests {
                     DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
                     BoxWithConstraints {
-                        val appState = rememberNiaAppState(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                            timeZoneMonitor = timeZoneMonitor,
-                        )
                         NiaTheme {
-                            NiaApp(appState, snackbarHostState, false, {}, {})
+                            val appState = rememberNiaAppState(
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                                timeZoneMonitor = timeZoneMonitor,
+                            )
+                            NiaApp(
+                                appState = appState,
+                                snackbarHostState = snackbarHostState,
+                                showSettingsDialog = false,
+                                onSettingsDismissed = {},
+                                onTopAppBarActionClick = {},
+                                windowAdaptiveInfo = WindowAdaptiveInfo(
+                                    windowSizeClass = WindowSizeClass.compute(
+                                        maxWidth.value,
+                                        maxHeight.value,
+                                    ),
+                                    windowPosture = Posture(),
+                                ),
+                            )
                         }
                     }
                 }
