@@ -55,9 +55,9 @@ class SettingsViewModelTest {
         val collectJob =
             launch(UnconfinedTestDispatcher()) { viewModel.settingsUiState.collect() }
 
-        userDataRepository.setThemeBrand(ANDROID)
-        userDataRepository.setDarkThemeConfig(DARK)
-        userDataRepository.setDynamicColorPreference(false)
+        viewModel.updateThemeBrand(ANDROID)
+        viewModel.updateDarkThemeConfig(DARK)
+        viewModel.updateDynamicColorPreference(false)
 
         assertEquals(
             Success(
