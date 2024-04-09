@@ -28,9 +28,5 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.core.ui)
-
-    testImplementation(projects.core.testing)
-
-    androidTestImplementation(projects.core.testing)
 }
 
