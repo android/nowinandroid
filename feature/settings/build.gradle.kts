@@ -31,7 +31,6 @@ dependencies {
     implementation(projects.core.data)
 
     testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
 
     testImplementation(projects.core.screenshotTesting)

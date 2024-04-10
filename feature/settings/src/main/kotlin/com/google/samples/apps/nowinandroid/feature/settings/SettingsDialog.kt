@@ -88,6 +88,7 @@ fun SettingsDialog(
 
 @Composable
 fun SettingsDialog(
+    modifier: Modifier = Modifier,
     settingsUiState: SettingsUiState,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
@@ -106,7 +107,7 @@ fun SettingsDialog(
      */
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
+        modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(

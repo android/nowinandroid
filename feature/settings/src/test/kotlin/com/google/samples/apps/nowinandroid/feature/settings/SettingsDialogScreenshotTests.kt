@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.feature.settings
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
@@ -37,7 +39,7 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(application = HiltTestApplication::class, qualifiers = "w360dp-h640dp-xhdpi")
+@Config(application = HiltTestApplication::class, qualifiers = "w480dp-h960dp-480dpi")
 class SettingsDialogScreenshotTests {
 
     @get:Rule
@@ -53,7 +55,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogLoading() {
-        composeTestRule.captureDialog("SettingsDialogLoading") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogLoading",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 settingsUiState = SettingsUiState.Loading,
             )
@@ -62,7 +67,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogLoadingDark() {
-        composeTestRule.captureDialog("SettingsDialogLoadingDark") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogLoadingDark",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 darkMode = true,
                 settingsUiState = SettingsUiState.Loading,
@@ -72,14 +80,20 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogDefaultTheme() {
-        composeTestRule.captureDialog("SettingsDialogDefaultTheme") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogDefaultTheme",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme()
         }
     }
 
     @Test
     fun settingsDialogDefaultThemeDark() {
-        composeTestRule.captureDialog("SettingsDialogDefaultThemeDark") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogDefaultThemeDark",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 darkMode = true,
                 settingsUiState = Success(
@@ -93,7 +107,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogDynamicColor() {
-        composeTestRule.captureDialog("SettingsDialogDynamicColor") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogDynamicColor",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 disableDynamicTheming = false,
                 settingsUiState = Success(
@@ -107,7 +124,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogDynamicColorDark() {
-        composeTestRule.captureDialog("SettingsDialogDynamicColorDark") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogDynamicColorDark",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 darkMode = true,
                 disableDynamicTheming = false,
@@ -123,7 +143,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogAndroidTheme() {
-        composeTestRule.captureDialog("SettingsDialogAndroidTheme") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogAndroidTheme",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 androidTheme = true,
                 settingsUiState = Success(
@@ -137,7 +160,10 @@ class SettingsDialogScreenshotTests {
 
     @Test
     fun settingsDialogAndroidThemeDark() {
-        composeTestRule.captureDialog("SettingsDialogAndroidThemeDark") {
+        composeTestRule.captureDialog(
+            screenshotName = "SettingsDialogAndroidThemeDark",
+            nodeTag = "SettingsDialog",
+        ) {
             SettingsDialogDefaultTheme(
                 darkMode = true,
                 androidTheme = true,
@@ -164,6 +190,7 @@ class SettingsDialogScreenshotTests {
             disableDynamicTheming = disableDynamicTheming,
         ) {
             SettingsDialog(
+                modifier = Modifier.testTag("SettingsDialog"),
                 onDismiss = {},
                 settingsUiState = settingsUiState,
                 onChangeThemeBrand = {},
