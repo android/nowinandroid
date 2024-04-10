@@ -88,13 +88,13 @@ fun SettingsDialog(
 
 @Composable
 fun SettingsDialog(
-    modifier: Modifier = Modifier,
     settingsUiState: SettingsUiState,
-    supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
+    modifier: Modifier = Modifier,
+    supportDynamicColor: Boolean = supportsDynamicTheming(),
 ) {
     val configuration = LocalConfiguration.current
 
