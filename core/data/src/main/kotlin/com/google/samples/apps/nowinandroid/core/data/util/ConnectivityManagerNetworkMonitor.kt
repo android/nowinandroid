@@ -26,7 +26,6 @@ import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
-import androidx.tracing.Trace
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
@@ -82,8 +81,6 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
              * Sends the latest connectivity status to the underlying channel.
              */
             channel.trySend(connectivityManager.isCurrentlyConnected())
-
-            Trace.endSection()
 
             awaitClose {
                 connectivityManager.unregisterNetworkCallback(callback)
