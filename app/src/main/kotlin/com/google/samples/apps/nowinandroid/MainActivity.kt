@@ -125,7 +125,6 @@ class MainActivity : ComponentActivity() {
                                 ) { darkTheme },
                             )
                         }
-
                     }
             }
         }
