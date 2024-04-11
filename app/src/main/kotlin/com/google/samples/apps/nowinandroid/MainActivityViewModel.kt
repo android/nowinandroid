@@ -71,7 +71,7 @@ sealed interface MainActivityUiState {
     /**
      * Returns `true` if the dynamic color is disabled.
      */
-    val shouldDisableDynamicTheming: Boolean get() = false
+    val shouldDisableDynamicTheming: Boolean get() = true
 
     /**
      * Returns `true` if the Android theme should be used.

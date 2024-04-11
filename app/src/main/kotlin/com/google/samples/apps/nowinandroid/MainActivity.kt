@@ -35,6 +35,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
+import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -48,6 +49,8 @@ import com.google.samples.apps.nowinandroid.util.isSystemInDarkTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -83,8 +86,8 @@ class MainActivity : ComponentActivity() {
         var themeSettings by mutableStateOf(
             ThemeSettings(
                 darkTheme = resources.configuration.isSystemInDarkTheme,
-                androidTheme = false,
-                disableDynamicTheming = true,
+                androidTheme = Loading.shouldUseAndroidTheme,
+                disableDynamicTheming = Loading.shouldDisableDynamicTheming,
             ),
         )
 
@@ -101,8 +104,10 @@ class MainActivity : ComponentActivity() {
                         disableDynamicTheming = uiState.shouldDisableDynamicTheming,
                     )
                 }
+                    .onEach { themeSettings = it }
+                    .map { it.darkTheme }
                     .distinctUntilChanged()
-                    .collect { newThemeSettings ->
+                    .collect { darkTheme ->
                         trace("niaEdgeToEdge") {
                             // Turn off the decor fitting system windows, which allows us to handle insets,
                             // including IME animations, and go edge-to-edge.
@@ -113,15 +118,14 @@ class MainActivity : ComponentActivity() {
                                 statusBarStyle = SystemBarStyle.auto(
                                     lightScrim = android.graphics.Color.TRANSPARENT,
                                     darkScrim = android.graphics.Color.TRANSPARENT,
-                                ) { newThemeSettings.darkTheme },
+                                ) { darkTheme },
                                 navigationBarStyle = SystemBarStyle.auto(
                                     lightScrim = lightScrim,
                                     darkScrim = darkScrim,
-                                ) { newThemeSettings.darkTheme },
+                                ) { darkTheme },
                             )
                         }
 
-                        themeSettings = newThemeSettings
                     }
             }
         }
