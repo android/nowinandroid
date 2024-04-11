@@ -123,6 +123,7 @@ internal fun NiaApp(
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
@@ -133,7 +134,7 @@ internal fun NiaApp(
         )
     }
     Scaffold(
-        modifier = Modifier.semantics {
+        modifier = modifier.semantics {
             testTagsAsResourceId = true
         },
         containerColor = Color.Transparent,
