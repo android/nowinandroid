@@ -395,7 +395,14 @@ private fun SingleTopicButton(
     Surface(
         modifier = Modifier
             .width(312.dp)
-            .heightIn(min = 56.dp),
+            .heightIn(min = 56.dp)
+            .semantics(mergeDescendants = true) {
+                stateDescription = if (isSelected) {
+                    "Following"
+                } else {
+                    "Not Following"
+                }
+            },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
         selected = isSelected,
