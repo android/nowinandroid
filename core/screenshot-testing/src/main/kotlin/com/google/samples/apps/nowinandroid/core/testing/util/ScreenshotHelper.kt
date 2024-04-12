@@ -92,6 +92,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureDialog(
     screenshotName: String,
     nodeTag: String,
+    roborazziOptions: RoborazziOptions = DefaultRoborazziOptions,
     body: @Composable () -> Unit,
 ) {
     this.activity.setContent {
@@ -103,7 +104,10 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     }
 
     this.onNodeWithTag(nodeTag)
-        .captureRoboImage("src/test/screenshots/$screenshotName.png")
+        .captureRoboImage(
+            filePath = "src/test/screenshots/$screenshotName.png",
+            roborazziOptions = roborazziOptions,
+        )
 }
 
 /**
