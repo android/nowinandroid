@@ -180,6 +180,7 @@ internal fun NiaApp(
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
                 if (destination != null) {
+                    @Suppress("ktlint:standard:max-line-length")
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,
