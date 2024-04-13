@@ -406,6 +406,13 @@ private fun SingleTopicButton(
                 } else {
                     Off
                 }
+                stateDescription = if (isSelected) {
+                    "Following"
+                } else {
+                    "Not Following"
+                }
+
+                contentDescription = name
             },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
