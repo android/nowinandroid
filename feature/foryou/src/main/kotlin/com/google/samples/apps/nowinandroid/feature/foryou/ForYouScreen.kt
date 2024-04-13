@@ -76,8 +76,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState.Off
+import androidx.compose.ui.state.ToggleableState.On
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -397,10 +401,10 @@ private fun SingleTopicButton(
             .width(312.dp)
             .heightIn(min = 56.dp)
             .semantics(mergeDescendants = true) {
-                stateDescription = if (isSelected) {
-                    "Following"
+                toggleableState = if (isSelected) {
+                    On
                 } else {
-                    "Not Following"
+                    Off
                 }
             },
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
