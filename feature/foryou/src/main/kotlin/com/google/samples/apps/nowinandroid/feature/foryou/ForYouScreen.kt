@@ -416,7 +416,9 @@ private fun SingleTopicButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 12.dp, end = 8.dp),
+            modifier = Modifier
+                .padding(start = 12.dp, end = 8.dp)
+                .clearAndSetSemantics { },
         ) {
             TopicIcon(
                 imageUrl = imageUrl,
@@ -450,7 +452,6 @@ private fun SingleTopicButton(
                         ),
                     )
                 },
-                modifier = Modifier.clearAndSetSemantics { },
             )
         }
     }
