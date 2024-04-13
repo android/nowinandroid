@@ -128,7 +128,7 @@ class NavigationTest {
     fun navigationBar_navigateToPreviouslySelectedTab_restoresContent() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText(sampleTopic).performClick()
+            onNodeWithContentDescription(sampleTopic).performClick()
             // WHEN the user navigates to the Interests destination
             onNodeWithText(interests).performClick()
             // AND the user navigates to the For You destination
@@ -152,7 +152,7 @@ class NavigationTest {
     fun navigationBar_reselectTab_keepsState() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText(sampleTopic).performClick()
+            onNodeWithContentDescription(sampleTopic).performClick()
             // WHEN the user taps the For You navigation bar item
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
