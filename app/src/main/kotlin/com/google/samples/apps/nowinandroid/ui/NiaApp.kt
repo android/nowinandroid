@@ -179,6 +179,7 @@ internal fun NiaApp(
             Column(Modifier.fillMaxSize()) {
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
+                val shouldShowTopAppBar = destination != null
                 if (destination != null) {
                     @Suppress("ktlint:standard:max-line-length")
                     NiaTopAppBar(
@@ -207,6 +208,13 @@ internal fun NiaApp(
                             actionLabel = action,
                             duration = Short,
                         ) == ActionPerformed
+                    },
+                    modifier = if (shouldShowTopAppBar) {
+                        Modifier.consumeWindowInsets(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
+                        )
+                    } else {
+                        Modifier
                     },
                 )
             }
