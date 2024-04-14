@@ -25,9 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
@@ -40,6 +37,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
+          validate-wrappers: true
           gradle-home-cache-cleanup: true
 
       - name: Check build-logic
@@ -172,9 +170,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
@@ -187,6 +182,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
+          validate-wrappers: true
           gradle-home-cache-cleanup: true
 
       - name: Build projects and run instrumentation tests
