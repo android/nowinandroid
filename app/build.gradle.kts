@@ -113,7 +113,7 @@ dependencies {
 
     testImplementation(projects.core.dataTest)
     testImplementation(projects.core.testing)
-    testImplementation(libs.accompanist.testharness)
+    testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.work.testing)
 
@@ -126,7 +126,7 @@ dependencies {
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.accompanist.testharness)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
     baselineProfile(projects.benchmarks)
