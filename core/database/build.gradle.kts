@@ -65,7 +65,7 @@ sqldelight {
         create("NiaDatabase") {
             packageName.set("com.google.samples.apps.nowinandroid.core.database")
             generateAsync.set(true)
-            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.1")
+            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.2")
         }
     }
 }
