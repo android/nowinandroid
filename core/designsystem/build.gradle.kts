@@ -44,7 +44,6 @@ kotlin {
         }
         androidUnitTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
-            implementation(libs.accompanist.testharness)
             implementation(libs.robolectric)
             implementation(libs.roborazzi)
             implementation(libs.hilt.android.testing)
