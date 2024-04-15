@@ -76,7 +76,7 @@ internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
     onTopicClick: (String) -> Unit,
 ) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator()
     BackHandler(listDetailNavigator.canNavigateBack()) {
         listDetailNavigator.navigateBack()
     }
