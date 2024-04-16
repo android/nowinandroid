@@ -30,6 +30,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -98,7 +100,11 @@ internal fun InterestsListDetailScreen(
     var nestedNavHostStartDestination by remember {
         mutableStateOf(selectedTopicId?.let(::createTopicRoute) ?: TOPIC_ROUTE)
     }
-    var nestedNavKey by remember { mutableStateOf(UUID.randomUUID()) }
+    var nestedNavKey by rememberSaveable(
+        stateSaver = Saver({ it.toString() }, UUID::fromString),
+    ) {
+        mutableStateOf(UUID.randomUUID())
+    }
     val nestedNavController = key(nestedNavKey) {
         rememberNavController()
     }
