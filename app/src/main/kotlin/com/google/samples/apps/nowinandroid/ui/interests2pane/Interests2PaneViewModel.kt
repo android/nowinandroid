@@ -27,7 +27,8 @@ import javax.inject.Inject
 class Interests2PaneViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    val selectedTopicId: StateFlow<String?> = savedStateHandle.getStateFlow(TOPIC_ID_ARG, null)
+    val selectedTopicId: StateFlow<String?> =
+        savedStateHandle.getStateFlow(TOPIC_ID_ARG, savedStateHandle[TOPIC_ID_ARG])
 
     fun onTopicClick(topicId: String?) {
         savedStateHandle[TOPIC_ID_ARG] = topicId
