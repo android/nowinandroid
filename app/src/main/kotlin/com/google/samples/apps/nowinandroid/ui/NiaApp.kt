@@ -76,12 +76,12 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @Composable
-fun NiaApp(appState: NiaAppState) {
+fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
-    NiaBackground {
+    NiaBackground(modifier = modifier) {
         NiaGradientBackground(
             gradientColors = if (shouldShowGradientBackground) {
                 LocalGradientColors.current
@@ -179,6 +179,7 @@ internal fun NiaApp(
             Column(Modifier.fillMaxSize()) {
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
+                val shouldShowTopAppBar = destination != null
                 if (destination != null) {
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
@@ -206,6 +207,13 @@ internal fun NiaApp(
                             actionLabel = action,
                             duration = Short,
                         ) == ActionPerformed
+                    },
+                    modifier = if (shouldShowTopAppBar) {
+                        Modifier.consumeWindowInsets(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
+                        )
+                    } else {
+                        Modifier
                     },
                 )
             }
