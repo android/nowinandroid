@@ -41,11 +41,14 @@ internal class TopicArgs(val topicId: String) {
 }
 
 fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    val newRoute = "$TOPIC_ROUTE/$encodedId"
-    navigate(newRoute) {
+    navigate(createTopicRoute(topicId)) {
         navOptions()
     }
+}
+
+fun createTopicRoute(topicId: String): String {
+    val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
+    return "$TOPIC_ROUTE/$encodedId"
 }
 
 fun NavGraphBuilder.topicScreen(

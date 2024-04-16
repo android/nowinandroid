@@ -18,14 +18,20 @@ package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -76,17 +82,35 @@ internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
     onTopicClick: (String) -> Unit,
 ) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator()
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator(
+        initialDestinationHistory = listOfNotNull(
+            ThreePaneScaffoldDestinationItem(ListDetailPaneScaffoldRole.List),
+            ThreePaneScaffoldDestinationItem<Nothing>(ListDetailPaneScaffoldRole.Detail).takeIf {
+                selectedTopicId != null
+            },
+        ),
+    )
     BackHandler(listDetailNavigator.canNavigateBack()) {
         listDetailNavigator.navigateBack()
+    }
+
+    var isNestedNavHostInitialized by remember { mutableStateOf(false) }
+    var pendingNestedNavControllerNavigationTopicId by rememberSaveable {
+        mutableStateOf(selectedTopicId)
     }
 
     val nestedNavController = rememberNavController()
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavController.navigateToTopic(topicId) {
-            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+        if (isNestedNavHostInitialized) {
+            nestedNavController.navigateToTopic(topicId) {
+                popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+            }
+        } else {
+            // If the nested nav host hasn't been initialized, it isn't safe to call
+            // navigate yet. Put the topic id into a state to navigate later
+            pendingNestedNavControllerNavigationTopicId = topicId
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
@@ -95,34 +119,47 @@ internal fun InterestsListDetailScreen(
         value = listDetailNavigator.scaffoldValue,
         directive = listDetailNavigator.scaffoldDirective,
         listPane = {
-            InterestsRoute(
-                onTopicClick = ::onTopicClickShowDetailPane,
-                highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
-            )
+            AnimatedPane {
+                InterestsRoute(
+                    onTopicClick = ::onTopicClickShowDetailPane,
+                    highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+                )
+            }
         },
         detailPane = {
-            NavHost(
-                navController = nestedNavController,
-                startDestination = TOPIC_ROUTE,
-                route = DETAIL_PANE_NAVHOST_ROUTE,
-            ) {
-                topicScreen(
-                    showBackButton = !listDetailNavigator.isListPaneVisible(),
-                    onBackClick = listDetailNavigator::navigateBack,
-                    onTopicClick = ::onTopicClickShowDetailPane,
-                )
-                composable(route = TOPIC_ROUTE) {
-                    TopicDetailPlaceholder()
+            AnimatedPane {
+                NavHost(
+                    navController = nestedNavController,
+                    startDestination = TOPIC_ROUTE,
+                    route = DETAIL_PANE_NAVHOST_ROUTE,
+                ) {
+                    topicScreen(
+                        showBackButton = !listDetailNavigator.isListPaneVisible(),
+                        onBackClick = listDetailNavigator::navigateBack,
+                        onTopicClick = ::onTopicClickShowDetailPane,
+                    )
+                    composable(route = TOPIC_ROUTE) {
+                        TopicDetailPlaceholder()
+                    }
+                }
+                SideEffect {
+                    // We have now successfully ran NavHost
+                    isNestedNavHostInitialized = true
+                    // Check if there was a pending navigation to invoke
+                    val currentPendingNestedNavControllerNavigationTopicId =
+                        pendingNestedNavControllerNavigationTopicId
+                    if (currentPendingNestedNavControllerNavigationTopicId != null) {
+                        nestedNavController.navigateToTopic(
+                            currentPendingNestedNavControllerNavigationTopicId,
+                        ) {
+                            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+                        }
+                        pendingNestedNavControllerNavigationTopicId = null
+                    }
                 }
             }
         },
     )
-    LaunchedEffect(Unit) {
-        if (selectedTopicId != null) {
-            // Initial topic ID was provided when navigating to Interests, so show its details.
-            onTopicClickShowDetailPane(selectedTopicId)
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
