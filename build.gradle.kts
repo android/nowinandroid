@@ -25,6 +25,12 @@ buildscript {
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
+
+            constraints {
+                add("classpath", "com.android.tools.build:gradle:8.2.0") {
+                    because("Aligns the resolved versions of the com.android plugins")
+                }
+            }
         }
     }
 

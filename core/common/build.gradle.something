@@ -1,0 +1,13 @@
+androidLibrary {
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
+
+    buildTypes {
+        debug {
+
+        }
+
+        release {
+
+        }
+    }
+}

@@ -16,11 +16,16 @@
 
 pluginManagement {
     includeBuild("build-logic")
+    includeBuild("../declarative-gradle/unified-prototype/unified-plugin")
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
     }
+}
+
+plugins {
+    id("org.gradle.experimental.android-ecosystem")
 }
 
 dependencyResolutionManagement {
