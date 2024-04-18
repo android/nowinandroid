@@ -22,6 +22,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
+import org.junit.Assert.fail
 
 private const val TAG = "InterestsActions"
 
@@ -42,7 +43,8 @@ fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
         // TODO: Ensure topics are availble.
         device.flingElementDownUp(topicsList)
     } else {
-        Log.w(TAG, "No topics found, can't scroll during baseline profile generation.")
+        Log.e(TAG, "No topics found, can't scroll during baseline profile generation.")
+        fail()
     }
 }
 

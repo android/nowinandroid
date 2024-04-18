@@ -24,6 +24,7 @@ import androidx.test.uiautomator.untilHasChildren
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 import com.google.samples.apps.nowinandroid.waitAndFindObject
 import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
+import org.junit.Assert.fail
 
 private const val TAG = "ForYouActions"
 
@@ -46,8 +47,8 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
     val withChildren = topics.childCount != 0
     if (!withChildren) {
         // TODO: Ensure ForYou has topics.
-        Log.w(TAG, "no topics found, can't scroll for baseline profile generation.")
-        return
+        Log.e(TAG, "no topics found, can't scroll for baseline profile generation.")
+        fail()
     }
 
     // Set gesture margin from sides not to trigger system gesture navigation
