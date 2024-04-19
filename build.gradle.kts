@@ -56,6 +56,26 @@ plugins {
     alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
 }
 
+allprojects {
+    dependencies {
+        constraints {
+            configurations.configureEach {
+                @Suppress("UnstableApiUsage")
+                if (isCanBeDeclared) {
+                    add(name, "com.squareup:javapoet:1.13.0") {
+                        because("Avoids > A failure occurred while executing dagger.hilt.android.plugin.task.AggregateDepsTask\$WorkerAction\n" +
+                            "   > 'java.lang.String com.squareup.javapoet.ClassName.canonicalName()'")
+                    }
+                    add(name, "com.squareup:kotlinpoet:1.13.0") {
+                        because("Avoids > A failure occurred while executing dagger.hilt.android.plugin.task.AggregateDepsTask\$WorkerAction\n" +
+                            "   > 'java.lang.String com.squareup.javapoet.ClassName.canonicalName()'")
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Task to print all the module paths in the project e.g. :core:data
 // Used by module graph generator script
 tasks.register("printModulePaths") {
