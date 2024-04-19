@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.foryou
 
-import android.util.Log
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
