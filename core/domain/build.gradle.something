@@ -1,25 +1,21 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.domain"
 
+    dependencies {
+        // Previously handled by AndroidLibraryConventionPlugin
+        implementation("androidx.tracing:tracing-ktx:1.3.0-alpha02")
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+        implementation("javax.inject:javax.inject:1")
+
+        api(projects.core.data)
+        api(projects.core.model)
+    }
+
     buildTypes {
-        dependencies {
-            // Previously handled by AndroidLibraryConventionPlugin
-            implementation("androidx.tracing:tracing-ktx:1.3.0-alpha02")
-            coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-
-            implementation("javax.inject:javax.inject:1")
-        }
-
-        debug {
-            dependencies {
-                api(projects.core.data)
-                api(projects.core.model)
-            }
-        }
-
-        release {
-
-        }
+        // Need the empty closure to avoid "dangling pure expression" error
+        debug {}
+        release {}
     }
 }
 
