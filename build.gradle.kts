@@ -74,6 +74,14 @@ allprojects {
             }
         }
     }
+
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            when {
+                requested.name == "javapoet" -> useVersion("1.13.0")
+            }
+        }
+    }
 }
 
 // Task to print all the module paths in the project e.g. :core:data
