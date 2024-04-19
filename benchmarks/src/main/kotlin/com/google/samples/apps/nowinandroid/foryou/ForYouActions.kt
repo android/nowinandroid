@@ -47,8 +47,7 @@ fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fal
     val withChildren = topics.childCount != 0
     if (!withChildren) {
         // TODO: Ensure ForYou has topics.
-        Log.e(TAG, "no topics found, can't scroll for baseline profile generation.")
-        fail()
+        fail("No topics found, can't scroll for baseline profile generation.")
     }
 
     // Set gesture margin from sides not to trigger system gesture navigation
