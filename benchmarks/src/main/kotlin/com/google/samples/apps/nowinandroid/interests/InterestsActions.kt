@@ -43,8 +43,7 @@ fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
         // TODO: Ensure topics are availble.
         device.flingElementDownUp(topicsList)
     } else {
-        Log.e(TAG, "No topics found, can't scroll during baseline profile generation.")
-        fail()
+        fail("No topics found, can't scroll during baseline profile generation.")
     }
 }
 
