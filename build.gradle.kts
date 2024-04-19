@@ -28,7 +28,10 @@ buildscript {
 
             constraints {
                 add("classpath", "com.android.tools.build:gradle:8.2.0") {
-                    because("Aligns the resolved versions of the com.android plugins")
+                    because("Aligns the resolved versions of the com.android plugins, prevents: \n" +
+                        "Script compilation errors:\n" +
+                        "  Line 62:     packaging {\n" +
+                        "               ^ Unresolved reference: packaging\n")
                 }
             }
         }
@@ -54,34 +57,6 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
-}
-
-allprojects {
-    dependencies {
-        constraints {
-            configurations.configureEach {
-                @Suppress("UnstableApiUsage")
-                if (isCanBeDeclared) {
-                    add(name, "com.squareup:javapoet:1.13.0") {
-                        because("Avoids > A failure occurred while executing dagger.hilt.android.plugin.task.AggregateDepsTask\$WorkerAction\n" +
-                            "   > 'java.lang.String com.squareup.javapoet.ClassName.canonicalName()'")
-                    }
-                    add(name, "com.squareup:kotlinpoet:1.13.0") {
-                        because("Avoids > A failure occurred while executing dagger.hilt.android.plugin.task.AggregateDepsTask\$WorkerAction\n" +
-                            "   > 'java.lang.String com.squareup.javapoet.ClassName.canonicalName()'")
-                    }
-                }
-            }
-        }
-    }
-
-    configurations.all {
-        resolutionStrategy.eachDependency {
-            when {
-                requested.name == "javapoet" -> useVersion("1.13.0")
-            }
-        }
-    }
 }
 
 // Task to print all the module paths in the project e.g. :core:data
