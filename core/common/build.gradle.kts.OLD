@@ -13,10 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.CommonExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.android.build.api.dsl.ProductFlavor
+import com.android.build.api.dsl.ApplicationProductFlavor
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.ManagedVirtualDevice
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.HasAndroidTest
+import com.android.build.api.artifact.SingleArtifact
+import java.io.File
+import com.android.build.api.variant.BuiltArtifactsLoader
+import java.util.*
+
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+
+    id("org.gradle.jacoco")
+
+    id("com.google.devtools.ksp")
+    id("dagger.hilt.android.plugin")
+}
+
+/***************************************************************
+
+ * AndroidLibraryConventionPlugin
+ *
+ **************************************************************/
+
+project.extensions.configure<LibraryExtension> {
+    configureKotlinAndroid(this)
+    defaultConfig.targetSdk = 34
+    configureFlavors(this)
+    configureGradleManagedDevices(this)
+    // The resource prefix is derived from the module name,
+    // so resources inside ":core:module1" must be prefixed with "core_module1_"
+    resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
+}
+extensions.configure<LibraryAndroidComponentsExtension> {
+    configurePrintApksTask(this)
+    disableUnnecessaryAndroidTests(project)
+}
+dependencies {
+    add("testImplementation", kotlin("test"))
+
+    add("implementation", project.libs.findLibrary("androidx.tracing.ktx").get())
 }
 
 android {
@@ -24,6 +68,307 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+    add("testImplementation", project.libs.findLibrary("kotlinx.coroutines.test").get())
+    add("testImplementation", project.libs.findLibrary("turbine").get())
+}
+
+internal fun Project.configureKotlinAndroid(
+    commonExtension: CommonExtension<*, *, *, *, *>,
+) {
+    commonExtension.apply {
+        compileSdk = 34
+
+        defaultConfig {
+            minSdk = 21
+        }
+
+        compileOptions {
+            // Up to Java 11 APIs are available through desugaring
+            // https://developer.android.com/studio/write/java11-minimal-support-table
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+            isCoreLibraryDesugaringEnabled = true
+        }
+    }
+
+    configureKotlin()
+
+    dependencies {
+        add("coreLibraryDesugaring", project.libs.findLibrary("android.desugarJdkLibs").get())
+    }
+}
+
+/**
+ * Configure base Kotlin options
+ */
+private fun Project.configureKotlin() {
+    // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            // Set JVM target to 11
+            jvmTarget = JavaVersion.VERSION_11.toString()
+            // Treat all Kotlin warnings as errors (disabled by default)
+            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
+            val warningsAsErrors: String? by project
+            allWarningsAsErrors = warningsAsErrors.toBoolean()
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                // Enable experimental coroutines APIs, including Flow
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            )
+        }
+    }
+}
+
+@Suppress("EnumEntryName")
+enum class FlavorDimension {
+    contentType
+}
+
+// The content for the app can either come from local static data which is useful for demo
+// purposes, or from a production backend server which supplies up-to-date, real content.
+// These two product flavors reflect this behaviour.
+@Suppress("EnumEntryName")
+enum class NiaFlavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
+    demo(FlavorDimension.contentType, applicationIdSuffix = ".demo"),
+    prod(FlavorDimension.contentType)
+}
+
+fun configureFlavors(
+    commonExtension: CommonExtension<*, *, *, *, *>,
+    flavorConfigurationBlock: ProductFlavor.(flavor: NiaFlavor) -> Unit = {}
+) {
+    commonExtension.apply {
+        flavorDimensions += FlavorDimension.contentType.name
+        productFlavors {
+            NiaFlavor.values().forEach {
+                create(it.name) {
+                    dimension = it.dimension.name
+                    flavorConfigurationBlock(this, it)
+                    if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
+                        if (it.applicationIdSuffix != null) {
+                            applicationIdSuffix = it.applicationIdSuffix
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Configure project for Gradle managed devices
+ */
+internal fun configureGradleManagedDevices(
+    commonExtension: CommonExtension<*, *, *, *, *>,
+) {
+    val pixel4 = DeviceConfig("Pixel 4", 30, "aosp-atd")
+    val pixel6 = DeviceConfig("Pixel 6", 31, "aosp")
+    val pixelC = DeviceConfig("Pixel C", 30, "aosp-atd")
+
+    val allDevices = listOf(pixel4, pixel6, pixelC)
+    val ciDevices = listOf(pixel4, pixelC)
+
+    commonExtension.testOptions {
+        managedDevices {
+            devices {
+                allDevices.forEach { deviceConfig ->
+                    maybeCreate(deviceConfig.taskName, ManagedVirtualDevice::class.java).apply {
+                        device = deviceConfig.device
+                        apiLevel = deviceConfig.apiLevel
+                        systemImageSource = deviceConfig.systemImageSource
+                    }
+                }
+            }
+            groups {
+                maybeCreate("ci").apply {
+                    ciDevices.forEach { deviceConfig ->
+                        targetDevices.add(devices[deviceConfig.taskName])
+                    }
+                }
+            }
+        }
+    }
+}
+
+private data class DeviceConfig(
+    val device: String,
+    val apiLevel: Int,
+    val systemImageSource: String,
+) {
+    val taskName = buildString {
+        append(device.lowercase().replace(" ", ""))
+        append("api")
+        append(apiLevel.toString())
+        append(systemImageSource.replace("-", ""))
+    }
+}
+
+internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) {
+    extension.onVariants { variant ->
+        if (variant is HasAndroidTest) {
+            val loader = variant.artifacts.getBuiltArtifactsLoader()
+            val artifact = variant.androidTest?.artifacts?.get(SingleArtifact.APK)
+            val javaSources = variant.androidTest?.sources?.java?.all
+            val kotlinSources = variant.androidTest?.sources?.kotlin?.all
+
+            val testSources = if (javaSources != null && kotlinSources != null) {
+                javaSources.zip(kotlinSources) { javaDirs, kotlinDirs ->
+                    javaDirs + kotlinDirs
+                }
+            } else javaSources ?: kotlinSources
+
+            if (artifact != null && testSources != null) {
+                tasks.register(
+                    "${variant.name}PrintTestApk",
+                    PrintApkLocationTask::class.java
+                ) {
+                    apkFolder.set(artifact)
+                    builtArtifactsLoader.set(loader)
+                    variantName.set(variant.name)
+                    sources.set(testSources)
+                }
+            }
+        }
+    }
+}
+
+internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
+    project: Project,
+) = beforeVariants {
+    it.enableAndroidTest = it.enableAndroidTest
+        && project.projectDir.resolve("src/androidTest").exists()
+}
+
+val Project.libs
+    get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+@DisableCachingByDefault(because = "Prints output")
+internal abstract class PrintApkLocationTask : DefaultTask() {
+
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:InputDirectory
+    abstract val apkFolder: DirectoryProperty
+
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:InputFiles
+    abstract val sources: ListProperty<Directory>
+
+    @get:Internal
+    abstract val builtArtifactsLoader: Property<BuiltArtifactsLoader>
+
+    @get:Input
+    abstract val variantName: Property<String>
+
+    @TaskAction
+    fun taskAction() {
+        val hasFiles = sources.orNull?.any { directory ->
+            directory.asFileTree.files.any {
+                it.isFile && "build${File.separator}generated" !in it.parentFile.path
+            }
+        } ?: throw RuntimeException("Cannot check androidTest sources")
+
+        // Don't print APK location if there are no androidTest source files
+        if (!hasFiles) return
+
+        val builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
+            ?: throw RuntimeException("Cannot load APKs")
+        if (builtArtifacts.elements.size != 1)
+            throw RuntimeException("Expected one APK !")
+        val apk = File(builtArtifacts.elements.single().outputFile).toPath()
+        println(apk)
+    }
+}
+
+
+private val coverageExclusions = listOf(
+    // Android
+    "**/R.class",
+    "**/R\$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*"
+)
+
+/***************************************************************
+
+ * AndroidLibraryJacocoConventionPlugin
+ *
+ **************************************************************/
+
+val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>()
+project.configureJacoco(extension)
+
+internal fun Project.configureJacoco(
+    androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
+) {
+    configure<JacocoPluginExtension> {
+        toolVersion = libs.findVersion("jacoco").get().toString()
+    }
+
+    val jacocoTestReport = tasks.create("jacocoTestReport")
+
+    androidComponentsExtension.onVariants { variant ->
+        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+        val buildDir = layout.buildDirectory.get().asFile
+        val reportTask = tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+            dependsOn(testTaskName)
+
+            reports {
+                xml.required.set(true)
+                html.required.set(true)
+            }
+
+            classDirectories.setFrom(
+                fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
+                    exclude(coverageExclusions)
+                }
+            )
+
+            sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+            executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+        }
+
+        jacocoTestReport.dependsOn(reportTask)
+    }
+
+    tasks.withType<Test>().configureEach {
+        configure<JacocoTaskExtension> {
+            // Required for JaCoCo + Robolectric
+            // https://github.com/robolectric/robolectric/issues/2230
+            // TODO: Consider removing if not we don't add Robolectric
+            isIncludeNoLocationClasses = true
+
+            // Required for JDK 11 with the above
+            // https://github.com/gradle/gradle/issues/5184#issuecomment-391982009
+            excludes = listOf("jdk.internal.*")
+        }
+    }
+}
+
+// This is to avoid: 'capitalize(): String' is deprecated. Use replaceFirstChar instead.
+private fun String.capitalize() = replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+}
+
+/***************************************************************
+
+ * AndroidHiltConventionPlugin
+ *
+ **************************************************************/
+
+dependencies {
+    "implementation"(libs.findLibrary("hilt.android").get())
+    "ksp"(libs.findLibrary("hilt.compiler").get())
+}
+
+/***************************************************************
+
+ * AndroidLintConventionPlugin
+ *
+ **************************************************************/
+
+project.configure<LibraryExtension> { lint(Lint::configure) }
+
+private fun Lint.configure() {
+    xmlReport = true
+    checkDependencies = true
 }
