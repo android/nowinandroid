@@ -1,0 +1,40 @@
+name: NightlyBaselineProfiles
+
+on:
+  schedule:
+    - cron:  '42 4 * * *'
+
+jobs:
+  baseline_profiles:
+    name: "Generate Baseline Profiles"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
+      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
+      # release build
+      - name: Build all build type and flavor permutations including baseline profiles
+        run: ./gradlew :app:assemble
+             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
+             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
