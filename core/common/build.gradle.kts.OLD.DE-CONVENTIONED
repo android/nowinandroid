@@ -38,6 +38,15 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.common"
+}
+
+dependencies {
+    add("testImplementation", project.libs.findLibrary("kotlinx.coroutines.test").get())
+    add("testImplementation", project.libs.findLibrary("turbine").get())
+}
+
 /***************************************************************
 
  * AndroidLibraryConventionPlugin
@@ -61,15 +70,6 @@ dependencies {
     add("testImplementation", kotlin("test"))
 
     add("implementation", project.libs.findLibrary("androidx.tracing.ktx").get())
-}
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.common"
-}
-
-dependencies {
-    add("testImplementation", project.libs.findLibrary("kotlinx.coroutines.test").get())
-    add("testImplementation", project.libs.findLibrary("turbine").get())
 }
 
 internal fun Project.configureKotlinAndroid(
