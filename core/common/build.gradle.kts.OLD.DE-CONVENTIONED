@@ -91,7 +91,7 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 
-    configureKotlin() // TODO: Not converted
+    configureKotlin()
 
     dependencies {
         add("coreLibraryDesugaring", project.libs.findLibrary("android.desugarJdkLibs").get())
@@ -101,7 +101,7 @@ internal fun Project.configureKotlinAndroid(
 /**
  * Configure base Kotlin options
  */
-private fun Project.configureKotlin() { // TODO: Not converted
+private fun Project.configureKotlin() {
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
