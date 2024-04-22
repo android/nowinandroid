@@ -56,18 +56,18 @@ dependencies {
 project.extensions.configure<LibraryExtension> {
     configureKotlinAndroid(this)
     defaultConfig.targetSdk = 34
-    configureFlavors(this) // TODO
-    configureGradleManagedDevices(this) // TODO
+    configureFlavors(this)
+    configureGradleManagedDevices(this) // TODO: Not converted
     // The resource prefix is derived from the module name,
     // so resources inside ":core:module1" must be prefixed with "core_module1_"
     resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
 }
 extensions.configure<LibraryAndroidComponentsExtension> {
-    configurePrintApksTask(this)
-    disableUnnecessaryAndroidTests(project)
+    configurePrintApksTask(this) // TODO: Not converted
+    disableUnnecessaryAndroidTests(project) // TODO: Not converted
 }
 dependencies {
-    add("testImplementation", kotlin("test"))
+    add("testImplementation", kotlin("test")) // TODO: Not converted
 
     add("implementation", project.libs.findLibrary("androidx.tracing.ktx").get())
 }
@@ -91,7 +91,7 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 
-    configureKotlin()
+    configureKotlin() // TODO: Not converted
 
     dependencies {
         add("coreLibraryDesugaring", project.libs.findLibrary("android.desugarJdkLibs").get())
@@ -101,7 +101,7 @@ internal fun Project.configureKotlinAndroid(
 /**
  * Configure base Kotlin options
  */
-private fun Project.configureKotlin() {
+private fun Project.configureKotlin() { // TODO: Not converted
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
@@ -158,7 +158,7 @@ fun configureFlavors(
 /**
  * Configure project for Gradle managed devices
  */
-internal fun configureGradleManagedDevices(
+internal fun configureGradleManagedDevices( // TODO: Not converted
     commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     val pixel4 = DeviceConfig("Pixel 4", 30, "aosp-atd")
@@ -190,7 +190,7 @@ internal fun configureGradleManagedDevices(
     }
 }
 
-private data class DeviceConfig(
+private data class DeviceConfig( // TODO: Not converted
     val device: String,
     val apiLevel: Int,
     val systemImageSource: String,
@@ -203,7 +203,7 @@ private data class DeviceConfig(
     }
 }
 
-internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) {
+internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) { // TODO: Not converted
     extension.onVariants { variant ->
         if (variant is HasAndroidTest) {
             val loader = variant.artifacts.getBuiltArtifactsLoader()
@@ -232,7 +232,7 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
     }
 }
 
-internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
+internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests( // TODO: Not converted
     project: Project,
 ) = beforeVariants {
     it.enableAndroidTest = it.enableAndroidTest
@@ -242,7 +242,7 @@ internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-@DisableCachingByDefault(because = "Prints output")
+@DisableCachingByDefault(because = "Prints output") // TODO: Not converted
 internal abstract class PrintApkLocationTask : DefaultTask() {
 
     @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -280,7 +280,7 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
 }
 
 
-private val coverageExclusions = listOf(
+private val coverageExclusions = listOf( // TODO: Not converted
     // Android
     "**/R.class",
     "**/R\$*.class",
@@ -294,10 +294,10 @@ private val coverageExclusions = listOf(
  *
  **************************************************************/
 
-val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>()
+val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>() // TODO: Not converted
 project.configureJacoco(extension)
 
-internal fun Project.configureJacoco(
+internal fun Project.configureJacoco( // TODO: Not converted
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
     configure<JacocoPluginExtension> {
@@ -366,9 +366,9 @@ dependencies {
  *
  **************************************************************/
 
-project.configure<LibraryExtension> { lint(Lint::configure) }
+project.configure<LibraryExtension> { lint(Lint::configure) } // TODO: Not converted
 
-private fun Lint.configure() {
+private fun Lint.configure() { // TODO: Not converted
     xmlReport = true
     checkDependencies = true
 }
