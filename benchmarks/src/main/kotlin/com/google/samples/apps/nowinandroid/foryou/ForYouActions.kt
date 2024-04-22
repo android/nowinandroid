@@ -25,8 +25,6 @@ import com.google.samples.apps.nowinandroid.waitAndFindObject
 import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
 import org.junit.Assert.fail
 
-private const val TAG = "ForYouActions"
-
 fun MacrobenchmarkScope.forYouWaitForContent() {
     // Wait until content is loaded by checking if topics are loaded
     device.wait(Until.gone(By.res("loadingWheel")), 5_000)

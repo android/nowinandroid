@@ -23,8 +23,6 @@ import com.google.samples.apps.nowinandroid.flingElementDownUp
 import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
 import org.junit.Assert.fail
 
-private const val TAG = "InterestsActions"
-
 fun MacrobenchmarkScope.goToInterestsScreen() {
     device.findObject(By.text("Interests")).click()
     device.waitForIdle()
