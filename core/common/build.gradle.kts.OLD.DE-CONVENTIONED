@@ -365,9 +365,9 @@ dependencies {
  *
  **************************************************************/
 
-project.configure<LibraryExtension> { lint(Lint::configure) } // TODO: Not converted
+project.configure<LibraryExtension> { lint(Lint::configure) }
 
-private fun Lint.configure() { // TODO: Not converted
+private fun Lint.configure() {
     xmlReport = true
     checkDependencies = true
 }
