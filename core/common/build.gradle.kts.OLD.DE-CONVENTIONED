@@ -67,7 +67,7 @@ extensions.configure<LibraryAndroidComponentsExtension> {
     disableUnnecessaryAndroidTests(project) // TODO: Not converted
 }
 dependencies {
-    add("testImplementation", kotlin("test")) // TODO: Not converted
+    add("testImplementation", kotlin("test"))
 
     add("implementation", project.libs.findLibrary("androidx.tracing.ktx").get())
 }
