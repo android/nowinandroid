@@ -43,8 +43,8 @@ fun MacrobenchmarkScope.forYouWaitForContent() {
  */
 fun MacrobenchmarkScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = false) {
     val topics = device.findObject(By.res("forYou:topicSelection"))
-    val withChildren = topics.childCount != 0
-    if (!withChildren) {
+    val noChildren = topics.childCount == 0
+    if (noChildren) {
         // TODO: Ensure ForYou has topics.
         fail("No topics found, can't scroll for baseline profile generation.")
     }
