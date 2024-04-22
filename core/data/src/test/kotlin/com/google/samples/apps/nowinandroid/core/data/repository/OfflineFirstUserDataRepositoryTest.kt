@@ -133,7 +133,7 @@ class OfflineFirstUserDataRepositoryTest {
     @Test
     fun offlineFirstUserDataRepository_bookmark_news_resource_logic_delegates_to_nia_preferences() =
         testScope.runTest {
-            subject.updateNewsResourceBookmark(newsResourceId = "0", bookmarked = true)
+            subject.setNewsResourceBookmarked(newsResourceId = "0", bookmarked = true)
 
             assertEquals(
                 setOf("0"),
@@ -142,7 +142,7 @@ class OfflineFirstUserDataRepositoryTest {
                     .first(),
             )
 
-            subject.updateNewsResourceBookmark(newsResourceId = "1", bookmarked = true)
+            subject.setNewsResourceBookmarked(newsResourceId = "1", bookmarked = true)
 
             assertEquals(
                 setOf("0", "1"),
