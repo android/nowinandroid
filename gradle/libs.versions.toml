@@ -78,7 +78,7 @@ kotlinInject = '0.6.3'
 multiplatform-settings = "1.1.1"
 kermit = "2.0.3"
 ktor = "2.3.10"
-ktrofit = "1.13.0"
+ktrofit = "1.14.0"
 buildKonfig = "0.15.1"
 
 [libraries]
