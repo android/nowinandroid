@@ -64,7 +64,7 @@ project.extensions.configure<LibraryExtension> {
 }
 extensions.configure<LibraryAndroidComponentsExtension> {
     configurePrintApksTask(this) // TODO: Not converted
-    disableUnnecessaryAndroidTests(project) // TODO: Not converted
+    disableUnnecessaryAndroidTests(project)
 }
 dependencies {
     add("testImplementation", kotlin("test"))
@@ -232,7 +232,7 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
     }
 }
 
-internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests( // TODO: Not converted
+internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
     project: Project,
 ) = beforeVariants {
     it.enableAndroidTest = it.enableAndroidTest
@@ -279,6 +279,11 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
     }
 }
 
+/***************************************************************
+
+ * AndroidLibraryJacocoConventionPlugin
+ *
+ **************************************************************/
 
 private val coverageExclusions = listOf( // TODO: Not converted
     // Android
@@ -287,12 +292,6 @@ private val coverageExclusions = listOf( // TODO: Not converted
     "**/BuildConfig.*",
     "**/Manifest*.*"
 )
-
-/***************************************************************
-
- * AndroidLibraryJacocoConventionPlugin
- *
- **************************************************************/
 
 val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>() // TODO: Not converted
 project.configureJacoco(extension)
