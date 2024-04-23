@@ -63,7 +63,7 @@ project.extensions.configure<LibraryExtension> {
     resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
 }
 extensions.configure<LibraryAndroidComponentsExtension> {
-    configurePrintApksTask(this) // TODO: Not converted
+    configurePrintApksTask(this)
     disableUnnecessaryAndroidTests(project)
 }
 dependencies {
@@ -203,7 +203,7 @@ private data class DeviceConfig(
     }
 }
 
-internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) { // TODO: Not converted
+internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtension<*, *, *>) {
     extension.onVariants { variant ->
         if (variant is HasAndroidTest) {
             val loader = variant.artifacts.getBuiltArtifactsLoader()
@@ -242,7 +242,7 @@ internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-@DisableCachingByDefault(because = "Prints output") // TODO: Not converted
+@DisableCachingByDefault(because = "Prints output")
 internal abstract class PrintApkLocationTask : DefaultTask() {
 
     @get:PathSensitive(PathSensitivity.RELATIVE)
