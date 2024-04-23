@@ -57,7 +57,7 @@ project.extensions.configure<LibraryExtension> {
     configureKotlinAndroid(this)
     defaultConfig.targetSdk = 34
     configureFlavors(this)
-    configureGradleManagedDevices(this) // TODO: Not converted
+    configureGradleManagedDevices(this)
     // The resource prefix is derived from the module name,
     // so resources inside ":core:module1" must be prefixed with "core_module1_"
     resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
@@ -158,7 +158,7 @@ fun configureFlavors(
 /**
  * Configure project for Gradle managed devices
  */
-internal fun configureGradleManagedDevices( // TODO: Not converted
+internal fun configureGradleManagedDevices(
     commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     val pixel4 = DeviceConfig("Pixel 4", 30, "aosp-atd")
@@ -190,7 +190,7 @@ internal fun configureGradleManagedDevices( // TODO: Not converted
     }
 }
 
-private data class DeviceConfig( // TODO: Not converted
+private data class DeviceConfig(
     val device: String,
     val apiLevel: Int,
     val systemImageSource: String,
