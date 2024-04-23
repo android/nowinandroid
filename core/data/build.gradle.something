@@ -11,6 +11,10 @@ androidLibrary {
 
         implementation(projects.core.analytics)
         implementation(projects.core.notifications)
+
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+        testImplementation(projects.core.datastoreTest)
+        testImplementation(projects.core.testing)
     }
 
     buildTypes {
@@ -22,19 +26,11 @@ androidLibrary {
 
 /* TODO: Testing
 android {
-    namespace = "com.google.samples.apps.nowinandroid.core.data"
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
     }
-}
-
-dependencies {
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.kotlinx.serialization.json)
-    testImplementation(projects.core.datastoreTest)
-    testImplementation(projects.core.testing)
 }
 */

@@ -10,6 +10,8 @@ androidLibrary {
 
         api(projects.core.data)
         api(projects.core.model)
+
+        testImplementation(projects.core.testing)
     }
 
     buildTypes {
@@ -18,9 +20,3 @@ androidLibrary {
         release {}
     }
 }
-
-/* TODO: Testing
-dependencies {
-    testImplementation(projects.core.testing)
-}
-*/
