@@ -31,7 +31,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -88,6 +90,54 @@ class BookmarksViewModelTest {
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
         assertEquals(item.feed.size, 0)
+        assertTrue(viewModel.shouldDisplayUndoBookmark)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun whenResourceViewed_setResourcesViewed() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+
+        // Give
+        newsRepository.sendNewsResources(newsResourcesTestData)
+        userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[0].id, true)
+        val itemBeforeViewed = viewModel.feedUiState.value
+        check(itemBeforeViewed is Success)
+        check(!itemBeforeViewed.feed.first().hasBeenViewed)
+
+        // When
+        viewModel.setNewsResourceViewed(newsResourcesTestData[0].id, true)
+
+        // Then
+        val item = viewModel.feedUiState.value
+        assertIs<Success>(item)
+        assertTrue(item.feed.first().hasBeenViewed)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun whenUndoBookmarkRemoval_thenBookmarkIsRestored() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+
+        // Give
+        newsRepository.sendNewsResources(newsResourcesTestData)
+        userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[0].id, true)
+        viewModel.removeFromSavedResources(newsResourcesTestData[0].id)
+        check(viewModel.shouldDisplayUndoBookmark)
+        val itemBeforeUndo = viewModel.feedUiState.value
+        check(itemBeforeUndo is Success)
+        check(itemBeforeUndo.feed.isEmpty())
+
+        // When
+        viewModel.undoBookmarkRemoval()
+
+        // Then
+        assertFalse(viewModel.shouldDisplayUndoBookmark)
+        val item = viewModel.feedUiState.value
+        assertIs<Success>(item)
+        assertEquals(item.feed.size, 1)
 
         collectJob.cancel()
     }
