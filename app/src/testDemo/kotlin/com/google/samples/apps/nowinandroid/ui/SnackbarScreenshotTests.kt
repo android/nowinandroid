@@ -22,7 +22,9 @@ import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -207,22 +209,26 @@ class SnackbarScreenshotTests {
     ) {
         lateinit var scope: CoroutineScope
         composeTestRule.setContent {
-            scope = rememberCoroutineScope()
-
-            DeviceConfigurationOverride(
-                DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
+            CompositionLocalProvider(
+                LocalInspectionMode provides true,
             ) {
-                BoxWithConstraints {
-                    val appState = rememberNiaAppState(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                        timeZoneMonitor = timeZoneMonitor,
-                    )
-                    NiaTheme {
-                        NiaApp(appState, snackbarHostState, false, {}, {})
+                scope = rememberCoroutineScope()
+
+                DeviceConfigurationOverride(
+                    DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
+                ) {
+                    BoxWithConstraints {
+                        val appState = rememberNiaAppState(
+                            windowSizeClass = WindowSizeClass.calculateFromSize(
+                                DpSize(maxWidth, maxHeight),
+                            ),
+                            networkMonitor = networkMonitor,
+                            userNewsResourceRepository = userNewsResourceRepository,
+                            timeZoneMonitor = timeZoneMonitor,
+                        )
+                        NiaTheme {
+                            NiaApp(appState, snackbarHostState, false, {}, {})
+                        }
                     }
                 }
             }
