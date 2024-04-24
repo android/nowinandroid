@@ -70,10 +70,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @Composable
 fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
@@ -181,6 +181,7 @@ internal fun NiaApp(
                 val destination = appState.currentTopLevelDestination
                 val shouldShowTopAppBar = destination != null
                 if (destination != null) {
+                    @Suppress("ktlint:standard:max-line-length")
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,
@@ -294,24 +295,23 @@ private fun NiaBottomBar(
     }
 }
 
-private fun Modifier.notificationDot(): Modifier =
-    composed {
-        val tertiaryColor = MaterialTheme.colorScheme.tertiary
-        drawWithContent {
-            drawContent()
-            drawCircle(
-                tertiaryColor,
-                radius = 5.dp.toPx(),
-                // This is based on the dimensions of the NavigationBar's "indicator pill";
-                // however, its parameters are private, so we must depend on them implicitly
-                // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-                center = center + Offset(
-                    64.dp.toPx() * .45f,
-                    32.dp.toPx() * -.45f - 6.dp.toPx(),
-                ),
-            )
-        }
+private fun Modifier.notificationDot(): Modifier = composed {
+    val tertiaryColor = MaterialTheme.colorScheme.tertiary
+    drawWithContent {
+        drawContent()
+        drawCircle(
+            tertiaryColor,
+            radius = 5.dp.toPx(),
+            // This is based on the dimensions of the NavigationBar's "indicator pill";
+            // however, its parameters are private, so we must depend on them implicitly
+            // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
+            center = center + Offset(
+                64.dp.toPx() * .45f,
+                32.dp.toPx() * -.45f - 6.dp.toPx(),
+            ),
+        )
     }
+}
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {

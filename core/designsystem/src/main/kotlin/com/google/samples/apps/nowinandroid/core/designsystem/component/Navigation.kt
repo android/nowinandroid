@@ -86,10 +86,7 @@ fun RowScope.NiaNavigationBarItem(
  * [NavigationBarItem]s.
  */
 @Composable
-fun NiaNavigationBar(
-    modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
-) {
+fun NiaNavigationBar(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     NavigationBar(
         modifier = modifier,
         contentColor = NiaNavigationDefaults.navigationContentColor(),

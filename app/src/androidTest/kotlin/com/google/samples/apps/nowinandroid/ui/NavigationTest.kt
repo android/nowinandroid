@@ -38,21 +38,21 @@ import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
+import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import javax.inject.Inject
+import kotlin.properties.ReadOnlyProperty
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import javax.inject.Inject
-import kotlin.properties.ReadOnlyProperty
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
-import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.
@@ -93,15 +93,25 @@ class NavigationTest {
         ReadOnlyProperty<Any, String> { _, _ -> activity.getString(resId) }
 
     // The strings used for matching in these tests
-    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_navigate_up)
+    private val navigateUp by composeTestRule.stringResource(
+        FeatureForyouR.string.feature_foryou_navigate_up,
+    )
     private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_title)
-    private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_interests)
+    private val interests by composeTestRule.stringResource(
+        FeatureSearchR.string.feature_search_interests,
+    )
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
     private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_title)
-    private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_top_app_bar_action_icon_description)
-    private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_brand_android)
-    private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_dismiss_dialog_button_text)
+    private val settings by composeTestRule.stringResource(
+        SettingsR.string.feature_settings_top_app_bar_action_icon_description,
+    )
+    private val brand by composeTestRule.stringResource(
+        SettingsR.string.feature_settings_brand_android,
+    )
+    private val ok by composeTestRule.stringResource(
+        SettingsR.string.feature_settings_dismiss_dialog_button_text,
+    )
 
     @Before
     fun setup() = hiltRule.inject()

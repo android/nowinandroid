@@ -102,6 +102,7 @@ internal fun SearchRoute(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
+    @Suppress("ktlint:standard:max-line-length")
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
@@ -180,7 +181,8 @@ internal fun SearchScreen(
                                 onSearchQueryChanged(it)
                                 onSearchTriggered(it)
                             },
-                            recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
+                            recentSearchQueries =
+                            recentSearchesUiState.recentQueries.map { it.query },
                         )
                     }
                 } else {
@@ -202,15 +204,13 @@ internal fun SearchScreen(
 }
 
 @Composable
-fun EmptySearchResultBody(
-    searchQuery: String,
-    onInterestsClick: () -> Unit,
-) {
+fun EmptySearchResultBody(searchQuery: String, onInterestsClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
-        val message = stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
+        val message =
+            stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
             text = AnnotatedString(

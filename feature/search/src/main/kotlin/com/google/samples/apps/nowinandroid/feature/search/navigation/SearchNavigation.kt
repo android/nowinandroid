@@ -24,7 +24,10 @@ import com.google.samples.apps.nowinandroid.feature.search.SearchRoute
 
 const val SEARCH_ROUTE = "search_route"
 
-fun NavController.navigateToSearch(navOptions: NavOptions? = null) = navigate(SEARCH_ROUTE, navOptions)
+fun NavController.navigateToSearch(navOptions: NavOptions? = null) = navigate(
+    SEARCH_ROUTE,
+    navOptions,
+)
 
 fun NavGraphBuilder.searchScreen(
     onBackClick: () -> Unit,

@@ -42,8 +42,6 @@ object JankStatsModule {
     fun providesWindow(activity: Activity): Window = activity.window
 
     @Provides
-    fun providesJankStats(
-        window: Window,
-        frameListener: OnFrameListener,
-    ): JankStats = JankStats.createAndTrack(window, frameListener)
+    fun providesJankStats(window: Window, frameListener: OnFrameListener): JankStats =
+        JankStats.createAndTrack(window, frameListener)
 }

@@ -31,27 +31,19 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 internal object DaosModule {
     @Provides
-    fun providesTopicsDao(
-        database: NiaDatabase,
-    ): TopicDao = database.topicDao()
+    fun providesTopicsDao(database: NiaDatabase): TopicDao = database.topicDao()
 
     @Provides
-    fun providesNewsResourceDao(
-        database: NiaDatabase,
-    ): NewsResourceDao = database.newsResourceDao()
+    fun providesNewsResourceDao(database: NiaDatabase): NewsResourceDao = database.newsResourceDao()
 
     @Provides
-    fun providesTopicFtsDao(
-        database: NiaDatabase,
-    ): TopicFtsDao = database.topicFtsDao()
+    fun providesTopicFtsDao(database: NiaDatabase): TopicFtsDao = database.topicFtsDao()
 
     @Provides
-    fun providesNewsResourceFtsDao(
-        database: NiaDatabase,
-    ): NewsResourceFtsDao = database.newsResourceFtsDao()
+    fun providesNewsResourceFtsDao(database: NiaDatabase): NewsResourceFtsDao =
+        database.newsResourceFtsDao()
 
     @Provides
-    fun providesRecentSearchQueryDao(
-        database: NiaDatabase,
-    ): RecentSearchQueryDao = database.recentSearchQueryDao()
+    fun providesRecentSearchQueryDao(database: NiaDatabase): RecentSearchQueryDao =
+        database.recentSearchQueryDao()
 }

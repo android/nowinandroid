@@ -70,8 +70,10 @@ class SearchScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            clearSearchContentDesc = getString(R.string.feature_search_clear_search_text_content_desc)
-            clearRecentSearchesContentDesc = getString(R.string.feature_search_clear_recent_searches_content_desc)
+            clearSearchContentDesc =
+                getString(R.string.feature_search_clear_search_text_content_desc)
+            clearRecentSearchesContentDesc =
+                getString(R.string.feature_search_clear_recent_searches_content_desc)
             followButtonContentDesc =
                 getString(string.core_ui_interests_card_follow_button_content_desc)
             unfollowButtonContentDesc =
@@ -79,7 +81,8 @@ class SearchScreenTest {
             topicsString = getString(R.string.feature_search_topics)
             updatesString = getString(R.string.feature_search_updates)
             tryAnotherSearchString = getString(R.string.feature_search_try_another_search) +
-                " " + getString(R.string.feature_search_interests) + " " + getString(R.string.feature_search_to_browse_topics)
+                " " + getString(R.string.feature_search_interests) +
+                " " + getString(R.string.feature_search_to_browse_topics)
             searchNotReadyString = getString(R.string.feature_search_not_ready)
         }
     }

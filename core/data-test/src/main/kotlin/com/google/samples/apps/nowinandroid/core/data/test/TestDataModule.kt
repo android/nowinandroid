@@ -41,19 +41,13 @@ import dagger.hilt.testing.TestInstallIn
 )
 internal interface TestDataModule {
     @Binds
-    fun bindsTopicRepository(
-        fakeTopicsRepository: FakeTopicsRepository,
-    ): TopicsRepository
+    fun bindsTopicRepository(fakeTopicsRepository: FakeTopicsRepository): TopicsRepository
 
     @Binds
-    fun bindsNewsResourceRepository(
-        fakeNewsRepository: FakeNewsRepository,
-    ): NewsRepository
+    fun bindsNewsResourceRepository(fakeNewsRepository: FakeNewsRepository): NewsRepository
 
     @Binds
-    fun bindsUserDataRepository(
-        userDataRepository: FakeUserDataRepository,
-    ): UserDataRepository
+    fun bindsUserDataRepository(userDataRepository: FakeUserDataRepository): UserDataRepository
 
     @Binds
     fun bindsRecentSearchRepository(
@@ -66,9 +60,7 @@ internal interface TestDataModule {
     ): SearchContentsRepository
 
     @Binds
-    fun bindsNetworkMonitor(
-        networkMonitor: AlwaysOnlineNetworkMonitor,
-    ): NetworkMonitor
+    fun bindsNetworkMonitor(networkMonitor: AlwaysOnlineNetworkMonitor): NetworkMonitor
 
     @Binds
     fun binds(impl: DefaultZoneIdTimeZoneMonitor): TimeZoneMonitor

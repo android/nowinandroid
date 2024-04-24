@@ -31,6 +31,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Loa
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.NotShown
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Shown
 import dagger.hilt.android.testing.HiltTestApplication
+import java.util.TimeZone
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +40,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
-import java.util.TimeZone
 
 /**
  * Screenshot tests for the [ForYouScreen].

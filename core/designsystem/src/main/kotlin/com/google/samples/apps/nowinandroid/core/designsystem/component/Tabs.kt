@@ -80,11 +80,7 @@ fun NiaTab(
  * inside this lambda will be measured and placed evenly across the row, each taking up equal space.
  */
 @Composable
-fun NiaTabRow(
-    selectedTabIndex: Int,
-    modifier: Modifier = Modifier,
-    tabs: @Composable () -> Unit,
-) {
+fun NiaTabRow(selectedTabIndex: Int, modifier: Modifier = Modifier, tabs: @Composable () -> Unit) {
     TabRow(
         selectedTabIndex = selectedTabIndex,
         modifier = modifier,

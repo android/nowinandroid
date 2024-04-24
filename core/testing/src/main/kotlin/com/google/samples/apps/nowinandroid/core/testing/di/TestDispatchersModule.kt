@@ -39,7 +39,6 @@ internal object TestDispatchersModule {
 
     @Provides
     @Dispatcher(Default)
-    fun providesDefaultDispatcher(
-        testDispatcher: TestDispatcher,
-    ): CoroutineDispatcher = testDispatcher
+    fun providesDefaultDispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher =
+        testDispatcher
 }

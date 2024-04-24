@@ -34,7 +34,5 @@ abstract class SyncModule {
     ): SyncManager
 
     @Binds
-    internal abstract fun bindsSyncSubscriber(
-        syncSubscriber: StubSyncSubscriber,
-    ): SyncSubscriber
+    internal abstract fun bindsSyncSubscriber(syncSubscriber: StubSyncSubscriber): SyncSubscriber
 }

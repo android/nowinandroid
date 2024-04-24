@@ -31,12 +31,11 @@ class InterestsBaselineProfile {
     @get:Rule val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun generate() =
-        baselineProfileRule.collect(PACKAGE_NAME) {
-            startActivityAndAllowNotifications()
+    fun generate() = baselineProfileRule.collect(PACKAGE_NAME) {
+        startActivityAndAllowNotifications()
 
-            // Navigate to interests screen
-            goToInterestsScreen()
-            interestsScrollTopicsDownUp()
-        }
+        // Navigate to interests screen
+        goToInterestsScreen()
+        interestsScrollTopicsDownUp()
+    }
 }

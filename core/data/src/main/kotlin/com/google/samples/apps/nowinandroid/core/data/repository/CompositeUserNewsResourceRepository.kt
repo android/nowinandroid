@@ -18,13 +18,13 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 /**
  * Implements a [UserNewsResourceRepository] by combining a [NewsRepository] with a
@@ -38,9 +38,7 @@ class CompositeUserNewsResourceRepository @Inject constructor(
     /**
      * Returns available news resources (joined with user data) matching the given query.
      */
-    override fun observeAll(
-        query: NewsResourceQuery,
-    ): Flow<List<UserNewsResource>> =
+    override fun observeAll(query: NewsResourceQuery): Flow<List<UserNewsResource>> =
         newsRepository.getNewsResources(query)
             .combine(userDataRepository.userData) { newsResources, userData ->
                 newsResources.mapToUserNewsResources(userData)

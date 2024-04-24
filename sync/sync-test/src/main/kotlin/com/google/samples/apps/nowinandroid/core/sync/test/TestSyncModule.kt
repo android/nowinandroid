@@ -30,7 +30,5 @@ import dagger.hilt.testing.TestInstallIn
 )
 internal interface TestSyncModule {
     @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncManager,
-    ): SyncManager
+    fun bindsSyncStatusMonitor(syncStatusMonitor: NeverSyncingSyncManager): SyncManager
 }

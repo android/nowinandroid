@@ -26,9 +26,9 @@ import com.google.samples.apps.nowinandroid.core.datastore.ChangeListVersions
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 /**
  * Disk storage backed implementation of the [TopicsRepository].
@@ -39,9 +39,8 @@ internal class OfflineFirstTopicsRepository @Inject constructor(
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {
 
-    override fun getTopics(): Flow<List<Topic>> =
-        topicDao.getTopicEntities()
-            .map { it.map(TopicEntity::asExternalModel) }
+    override fun getTopics(): Flow<List<Topic>> = topicDao.getTopicEntities()
+        .map { it.map(TopicEntity::asExternalModel) }
 
     override fun getTopic(id: String): Flow<Topic> =
         topicDao.getTopicEntity(id).map { it.asExternalModel() }

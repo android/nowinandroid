@@ -23,12 +23,12 @@ import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import javax.inject.Inject
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
@@ -67,9 +67,7 @@ class DemoNiaNetworkDataSource @Inject constructor(
  * Converts a list of [T] to change list of all the items in it where [idGetter] defines the
  * [NetworkChangeList.id]
  */
-private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> String,
-) = mapIndexed { index, item ->
+private fun <T> List<T>.mapToChangeList(idGetter: (T) -> String) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),
         changeListVersion = index,

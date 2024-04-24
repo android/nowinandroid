@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 class ListToMapMigrationTest {
 

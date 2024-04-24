@@ -51,11 +51,10 @@ class TestNiaNetworkDataSource : NiaNetworkDataSource {
             .mapToChangeList(idGetter = NetworkNewsResource::id),
     )
 
-    override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
-        allTopics.matchIds(
-            ids = ids,
-            idGetter = NetworkTopic::id,
-        )
+    override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> = allTopics.matchIds(
+        ids = ids,
+        idGetter = NetworkTopic::id,
+    )
 
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         allNewsResources.matchIds(
@@ -99,10 +98,7 @@ fun List<NetworkChangeList>.after(version: Int?): List<NetworkChangeList> = when
 /**
  * Return items from [this] whose id defined by [idGetter] is in [ids] if [ids] is not null
  */
-private fun <T> List<T>.matchIds(
-    ids: List<String>?,
-    idGetter: (T) -> String,
-) = when (ids) {
+private fun <T> List<T>.matchIds(ids: List<String>?, idGetter: (T) -> String) = when (ids) {
     null -> this
     else -> ids.toSet().let { idSet -> filter { idGetter(it) in idSet } }
 }
@@ -111,9 +107,7 @@ private fun <T> List<T>.matchIds(
  * Maps items to a change list where the change list version is denoted by the index of each item.
  * [after] simulates which models have changed by excluding items before it
  */
-private fun <T> List<T>.mapToChangeList(
-    idGetter: (T) -> String,
-) = mapIndexed { index, item ->
+private fun <T> List<T>.mapToChangeList(idGetter: (T) -> String) = mapIndexed { index, item ->
     NetworkChangeList(
         id = idGetter(item),
         changeListVersion = index + 1,

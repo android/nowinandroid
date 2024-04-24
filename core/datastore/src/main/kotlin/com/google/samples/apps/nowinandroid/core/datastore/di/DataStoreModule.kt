@@ -31,9 +31,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -46,14 +46,13 @@ object DataStoreModule {
         @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer,
-    ): DataStore<UserPreferences> =
-        DataStoreFactory.create(
-            serializer = userPreferencesSerializer,
-            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
-            migrations = listOf(
-                IntToStringIdsMigration,
-            ),
-        ) {
-            context.dataStoreFile("user_preferences.pb")
-        }
+    ): DataStore<UserPreferences> = DataStoreFactory.create(
+        serializer = userPreferencesSerializer,
+        scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
+        migrations = listOf(
+            IntToStringIdsMigration,
+        ),
+    ) {
+        context.dataStoreFile("user_preferences.pb")
+    }
 }

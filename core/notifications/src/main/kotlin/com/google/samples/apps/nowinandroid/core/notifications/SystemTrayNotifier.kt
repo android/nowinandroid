@@ -54,9 +54,7 @@ internal class SystemTrayNotifier @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Notifier {
 
-    override fun postNewsNotifications(
-        newsResources: List<NewsResource>,
-    ) = with(context) {
+    override fun postNewsNotifications(newsResources: List<NewsResource>) = with(context) {
         if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
             return
         }
@@ -65,6 +63,7 @@ internal class SystemTrayNotifier @Inject constructor(
 
         val newsNotifications = truncatedNewsResources.map { newsResource ->
             createNewsNotification {
+                @Suppress("ktlint:standard:max-line-length")
                 setSmallIcon(
                     com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                 )
@@ -80,6 +79,7 @@ internal class SystemTrayNotifier @Inject constructor(
                 R.string.core_notifications_news_notification_group_summary,
                 truncatedNewsResources.size,
             )
+            @Suppress("ktlint:standard:max-line-length")
             setContentTitle(title)
                 .setContentText(title)
                 .setSmallIcon(
@@ -149,20 +149,19 @@ private fun Context.ensureNotificationChannelExists() {
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
 }
 
-private fun Context.newsPendingIntent(
-    newsResource: NewsResource,
-): PendingIntent? = PendingIntent.getActivity(
-    this,
-    NEWS_NOTIFICATION_REQUEST_CODE,
-    Intent().apply {
-        action = Intent.ACTION_VIEW
-        data = newsResource.newsDeepLinkUri()
-        component = ComponentName(
-            packageName,
-            TARGET_ACTIVITY_NAME,
-        )
-    },
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-)
+private fun Context.newsPendingIntent(newsResource: NewsResource): PendingIntent? =
+    PendingIntent.getActivity(
+        this,
+        NEWS_NOTIFICATION_REQUEST_CODE,
+        Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = newsResource.newsDeepLinkUri()
+            component = ComponentName(
+                packageName,
+                TARGET_ACTIVITY_NAME,
+            )
+        },
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
 
 private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()

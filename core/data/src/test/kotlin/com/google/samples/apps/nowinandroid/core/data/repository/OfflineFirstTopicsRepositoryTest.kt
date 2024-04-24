@@ -28,6 +28,7 @@ import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSou
 import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -36,7 +37,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import kotlin.test.assertEquals
 
 class OfflineFirstTopicsRepositoryTest {
 
@@ -71,69 +71,66 @@ class OfflineFirstTopicsRepositoryTest {
     }
 
     @Test
-    fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
-        testScope.runTest {
-            assertEquals(
-                topicDao.getTopicEntities()
-                    .first()
-                    .map(TopicEntity::asExternalModel),
-                subject.getTopics()
-                    .first(),
-            )
-        }
+    fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() = testScope.runTest {
+        assertEquals(
+            topicDao.getTopicEntities()
+                .first()
+                .map(TopicEntity::asExternalModel),
+            subject.getTopics()
+                .first(),
+        )
+    }
 
     @Test
-    fun offlineFirstTopicsRepository_sync_pulls_from_network() =
-        testScope.runTest {
-            subject.syncWith(synchronizer)
+    fun offlineFirstTopicsRepository_sync_pulls_from_network() = testScope.runTest {
+        subject.syncWith(synchronizer)
 
-            val networkTopics = network.getTopics()
-                .map(NetworkTopic::asEntity)
+        val networkTopics = network.getTopics()
+            .map(NetworkTopic::asEntity)
 
-            val dbTopics = topicDao.getTopicEntities()
-                .first()
+        val dbTopics = topicDao.getTopicEntities()
+            .first()
 
-            assertEquals(
-                networkTopics.map(TopicEntity::id),
-                dbTopics.map(TopicEntity::id),
-            )
+        assertEquals(
+            networkTopics.map(TopicEntity::id),
+            dbTopics.map(TopicEntity::id),
+        )
 
-            // After sync version should be updated
-            assertEquals(
-                network.latestChangeListVersion(CollectionType.Topics),
-                synchronizer.getChangeListVersions().topicVersion,
-            )
-        }
+        // After sync version should be updated
+        assertEquals(
+            network.latestChangeListVersion(CollectionType.Topics),
+            synchronizer.getChangeListVersions().topicVersion,
+        )
+    }
 
     @Test
-    fun offlineFirstTopicsRepository_incremental_sync_pulls_from_network() =
-        testScope.runTest {
-            // Set topics version to 10
-            synchronizer.updateChangeListVersions {
-                copy(topicVersion = 10)
-            }
-
-            subject.syncWith(synchronizer)
-
-            val networkTopics = network.getTopics()
-                .map(NetworkTopic::asEntity)
-                // Drop 10 to simulate the first 10 items being unchanged
-                .drop(10)
-
-            val dbTopics = topicDao.getTopicEntities()
-                .first()
-
-            assertEquals(
-                networkTopics.map(TopicEntity::id),
-                dbTopics.map(TopicEntity::id),
-            )
-
-            // After sync version should be updated
-            assertEquals(
-                network.latestChangeListVersion(CollectionType.Topics),
-                synchronizer.getChangeListVersions().topicVersion,
-            )
+    fun offlineFirstTopicsRepository_incremental_sync_pulls_from_network() = testScope.runTest {
+        // Set topics version to 10
+        synchronizer.updateChangeListVersions {
+            copy(topicVersion = 10)
         }
+
+        subject.syncWith(synchronizer)
+
+        val networkTopics = network.getTopics()
+            .map(NetworkTopic::asEntity)
+            // Drop 10 to simulate the first 10 items being unchanged
+            .drop(10)
+
+        val dbTopics = topicDao.getTopicEntities()
+            .first()
+
+        assertEquals(
+            networkTopics.map(TopicEntity::id),
+            dbTopics.map(TopicEntity::id),
+        )
+
+        // After sync version should be updated
+        assertEquals(
+            network.latestChangeListVersion(CollectionType.Topics),
+            synchronizer.getChangeListVersions().topicVersion,
+        )
+    }
 
     @Test
     fun offlineFirstTopicsRepository_sync_deletes_items_marked_deleted_on_network() =

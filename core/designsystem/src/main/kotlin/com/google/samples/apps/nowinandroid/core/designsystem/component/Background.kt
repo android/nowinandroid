@@ -48,10 +48,7 @@ import kotlin.math.tan
  * @param content The background content.
  */
 @Composable
-fun NiaBackground(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
+fun NiaBackground(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
     Surface(

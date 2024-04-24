@@ -35,6 +35,9 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -42,9 +45,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
@@ -167,7 +167,9 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
+    fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(
+        UnconfinedTestDispatcher(),
+    ) {
         composeTestRule.setContent {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),

@@ -43,54 +43,52 @@ class TestNewsResourceDao : NewsResourceDao {
         filterTopicIds: Set<String>,
         useFilterNewsIds: Boolean,
         filterNewsIds: Set<String>,
-    ): Flow<List<PopulatedNewsResource>> =
-        entitiesStateFlow
-            .map { newsResourceEntities ->
-                newsResourceEntities.map { entity ->
-                    entity.asPopulatedNewsResource(topicCrossReferences)
+    ): Flow<List<PopulatedNewsResource>> = entitiesStateFlow
+        .map { newsResourceEntities ->
+            newsResourceEntities.map { entity ->
+                entity.asPopulatedNewsResource(topicCrossReferences)
+            }
+        }
+        .map { resources ->
+            var result = resources
+            if (useFilterTopicIds) {
+                result = result.filter { resource ->
+                    resource.topics.any { it.id in filterTopicIds }
                 }
             }
-            .map { resources ->
-                var result = resources
-                if (useFilterTopicIds) {
-                    result = result.filter { resource ->
-                        resource.topics.any { it.id in filterTopicIds }
-                    }
+            if (useFilterNewsIds) {
+                result = result.filter { resource ->
+                    resource.entity.id in filterNewsIds
                 }
-                if (useFilterNewsIds) {
-                    result = result.filter { resource ->
-                        resource.entity.id in filterNewsIds
-                    }
-                }
-                result
             }
+            result
+        }
 
     override fun getNewsResourceIds(
         useFilterTopicIds: Boolean,
         filterTopicIds: Set<String>,
         useFilterNewsIds: Boolean,
         filterNewsIds: Set<String>,
-    ): Flow<List<String>> =
-        entitiesStateFlow
-            .map { newsResourceEntities ->
-                newsResourceEntities.map { entity ->
-                    entity.asPopulatedNewsResource(topicCrossReferences)
+    ): Flow<List<String>> = entitiesStateFlow
+        .map { newsResourceEntities ->
+            newsResourceEntities.map { entity ->
+                entity.asPopulatedNewsResource(topicCrossReferences)
+            }
+        }
+        .map { resources ->
+            var result = resources
+            if (useFilterTopicIds) {
+                result = result.filter { resource ->
+                    resource.topics.any { it.id in filterTopicIds }
                 }
             }
-            .map { resources ->
-                var result = resources
-                if (useFilterTopicIds) {
-                    result = result.filter { resource ->
-                        resource.topics.any { it.id in filterTopicIds }
-                    }
+            if (useFilterNewsIds) {
+                result = result.filter { resource ->
+                    resource.entity.id in filterNewsIds
                 }
-                if (useFilterNewsIds) {
-                    result = result.filter { resource ->
-                        resource.entity.id in filterNewsIds
-                    }
-                }
-                result.map { it.entity.id }
             }
+            result.map { it.entity.id }
+        }
 
     override suspend fun upsertNewsResources(newsResourceEntities: List<NewsResourceEntity>) {
         entitiesStateFlow.update { oldValues ->

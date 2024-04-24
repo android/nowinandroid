@@ -72,10 +72,7 @@ import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loa
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 
 @Composable
-fun SettingsDialog(
-    onDismiss: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel(),
-) {
+fun SettingsDialog(onDismiss: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
         onDismiss = onDismiss,
@@ -177,7 +174,9 @@ private fun ColumnScope.SettingsPanel(
     }
     AnimatedVisibility(visible = settings.brand == DEFAULT && supportDynamicColor) {
         Column {
-            SettingsDialogSectionTitle(text = stringResource(string.feature_settings_dynamic_color_preference))
+            SettingsDialogSectionTitle(
+                text = stringResource(string.feature_settings_dynamic_color_preference),
+            )
             Column(Modifier.selectableGroup()) {
                 SettingsDialogThemeChooserRow(
                     text = stringResource(string.feature_settings_dynamic_color_yes),
@@ -222,11 +221,7 @@ private fun SettingsDialogSectionTitle(text: String) {
 }
 
 @Composable
-fun SettingsDialogThemeChooserRow(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
+fun SettingsDialogThemeChooserRow(text: String, selected: Boolean, onClick: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()

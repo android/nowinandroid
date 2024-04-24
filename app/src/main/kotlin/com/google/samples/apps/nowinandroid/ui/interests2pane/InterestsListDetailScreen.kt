@@ -60,9 +60,7 @@ fun NavGraphBuilder.interestsListDetailScreen() {
 }
 
 @Composable
-internal fun InterestsListDetailScreen(
-    viewModel: Interests2PaneViewModel = hiltViewModel(),
-) {
+internal fun InterestsListDetailScreen(viewModel: Interests2PaneViewModel = hiltViewModel()) {
     val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
     InterestsListDetailScreen(
         selectedTopicId = selectedTopicId,
@@ -72,10 +70,7 @@ internal fun InterestsListDetailScreen(
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-internal fun InterestsListDetailScreen(
-    selectedTopicId: String?,
-    onTopicClick: (String) -> Unit,
-) {
+internal fun InterestsListDetailScreen(selectedTopicId: String?, onTopicClick: (String) -> Unit) {
     val listDetailNavigator = rememberListDetailPaneScaffoldNavigator()
     BackHandler(listDetailNavigator.canNavigateBack()) {
         listDetailNavigator.navigateBack()
