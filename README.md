@@ -14,8 +14,24 @@ nowinandroid/
 then run the following command in the `nowinandroid` directory to build the project:
 
 ```shell
-gw buildDemoDebug
+./gradlew buildDemoDebug
 ```
+
+### Running tests
+**Note:** See the note in [Screenshot tests](#screenshot-tests) about setting up Roborazzi for non-Linux test runs.
+
+```shell
+./gradlew testDemoDebug :lint:test
+```
+
+```shell
+./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false
+```
+
+After starting a local Android emulator in Android Studio:
+```shell
+./gradlew connectedDemoDebugAndroidTest --daemon
+````
 
 ![Now in Android](docs/images/nia-splash.jpg "Now in Android")
 
