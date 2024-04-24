@@ -21,7 +21,6 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import com.google.samples.apps.nowinandroid.flingElementDownUp
 import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
-import org.junit.Assert.fail
 
 fun MacrobenchmarkScope.goToInterestsScreen() {
     device.findObject(By.text("Interests")).click()
@@ -36,12 +35,7 @@ fun MacrobenchmarkScope.goToInterestsScreen() {
 fun MacrobenchmarkScope.interestsScrollTopicsDownUp() {
     device.wait(Until.hasObject(By.res("interests:topics")), 5_000)
     val topicsList = device.findObject(By.res("interests:topics"))
-    if (topicsList != null) {
-        // TODO: Ensure topics are availble.
-        device.flingElementDownUp(topicsList)
-    } else {
-        fail("No topics found, can't scroll during baseline profile generation.")
-    }
+    device.flingElementDownUp(topicsList)
 }
 
 fun MacrobenchmarkScope.interestsWaitForTopics() {
