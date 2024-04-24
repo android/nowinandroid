@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.samples.apps.nowinandroid.configureFlavors
 
 plugins {
@@ -47,7 +46,7 @@ android {
     }
 
     testOptions.managedDevices.devices {
-        create<ManagedVirtualDevice>("pixel6Api33") {
+        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel6Api33") {
             device = "Pixel 6"
             apiLevel = 33
             systemImageSource = "aosp"
