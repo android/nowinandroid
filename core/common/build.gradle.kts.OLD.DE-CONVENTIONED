@@ -285,7 +285,16 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
  *
  **************************************************************/
 
-private val coverageExclusions = listOf( // TODO: Not converted
+ val androidExtension = project.extensions.getByType<LibraryExtension>()
+
+ androidExtension.buildTypes.configureEach {
+     enableAndroidTestCoverage = true
+     enableUnitTestCoverage = true
+ }
+
+configureJacoco(project.extensions.getByType<LibraryAndroidComponentsExtension>())
+
+private val coverageExclusions = listOf(
     // Android
     "**/R.class",
     "**/R\$*.class",
@@ -293,10 +302,10 @@ private val coverageExclusions = listOf( // TODO: Not converted
     "**/Manifest*.*"
 )
 
-val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>() // TODO: Not converted
+val extension = project.extensions.getByType<LibraryAndroidComponentsExtension>()
 project.configureJacoco(extension)
 
-internal fun Project.configureJacoco( // TODO: Not converted
+internal fun Project.configureJacoco(
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
     configure<JacocoPluginExtension> {
@@ -333,7 +342,7 @@ internal fun Project.configureJacoco( // TODO: Not converted
         configure<JacocoTaskExtension> {
             // Required for JaCoCo + Robolectric
             // https://github.com/robolectric/robolectric/issues/2230
-            // TODO: Consider removing if not we don't add Robolectric
+            // Consider removing if not we don't add Robolectric
             isIncludeNoLocationClasses = true
 
             // Required for JDK 11 with the above

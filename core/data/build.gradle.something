@@ -2,6 +2,7 @@ androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
 
     includeKotlinSerialization = true
+    configureJacoco = true
 
     dependencies {
         api(projects.core.common)
