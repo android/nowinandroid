@@ -54,10 +54,10 @@ internal fun Project.configureAndroidCompose(
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs += buildComposeMetricsParameters() 
-            freeCompilerArgs += stabilityConfiguration()
-            freeCompilerArgs += strongSkippingConfiguration()
+        compilerOptions {
+            freeCompilerArgs.addAll(buildComposeMetricsParameters())
+            freeCompilerArgs.addAll(stabilityConfiguration())
+            freeCompilerArgs.addAll(strongSkippingConfiguration())
         }
     }
 }
