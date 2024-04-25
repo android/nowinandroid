@@ -18,23 +18,18 @@ jobs:
           sudo udevadm trigger --name-match=kvm
           ls /dev/kvm
 
+      - name: Checkout
+        uses: actions/checkout@v4   
       - name: Checkout Declarative Gradle
         uses: actions/checkout@v4
         with:
           repository: 'gradle/declarative-gradle'
           path: 'declarative-gradle'
-
-      - name: Checkout Now in Android
-        uses: actions/checkout@v4
-        with:
-          repository: 'gradle/nowinandroid'
-          path: 'now-in-android'
-
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v2
 
       - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp now-in-android.github/ci-gradle.properties ~/.gradle/gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4

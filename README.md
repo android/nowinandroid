@@ -4,11 +4,11 @@ This branch has been modified to work with the prototype of the Declarative Grad
 
 ## Running
 
-First, checkout the `declarative-no-conventions-nia` branch of the [declarative-gradle](https://github.com/gradle/declarative-gradle) project into a **sibling directory** of this project:
+First, checkout `main` branch of the [declarative-gradle](https://github.com/gradle/declarative-gradle) project into the **root** of this project:
 
 ```
-declarative-gradle/
-nowinandroid/
+  nowinandroid/
+    declarative-gradle/
 ```
 
 then run the following command in the `nowinandroid` directory to build the project:
