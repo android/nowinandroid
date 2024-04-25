@@ -5,18 +5,18 @@ androidLibrary {
     configureJacoco = true
 
     dependencies {
-        api(projects.core.common)
-        api(projects.core.database)
-        api(projects.core.datastore)
-        api(projects.core.network)
+        api(project(":core:common"))
+        api(project(":core:database"))
+        api(project(":core:datastore"))
+        api(project(":core:network"))
 
-        implementation(projects.core.analytics)
-        implementation(projects.core.notifications)
+        implementation(project(":core:analytics"))
+        implementation(project(":core:notifications"))
 
         testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-        testImplementation(projects.core.datastoreTest)
-        testImplementation(projects.core.testing)
-        testImplementation(projects.core.network)
+        testImplementation(project(":core:datastore-test"))
+        testImplementation(project(":core:testing"))
+        testImplementation(project(":core:network"))
     }
 
     testOptions {

@@ -6,10 +6,10 @@ androidLibrary {
     dependencies {
         implementation("javax.inject:javax.inject:1")
 
-        api(projects.core.data)
-        api(projects.core.model)
+        api(project(":core:data"))
+        api(project(":core:model"))
 
-        testImplementation(projects.core.testing)
+        testImplementation(project(":core:testing"))
     }
 
     buildTypes {
