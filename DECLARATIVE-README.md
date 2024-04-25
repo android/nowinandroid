@@ -46,7 +46,7 @@ You can assemble the project with the following command:
 ```
 
 ### Running tests
-**Note:** See the note in [Screenshot tests](README.md#screenshot-tests) about setting up Roborazzi for non-Linux test runs.
+**Note:** See the note in [Screenshot tests](README.md#screenshot-tests) about setting up Roborazzi for non-Linux test runs. You may need to run `recordRoborazziDemoDebug` to regenerate screenshots that will work on your machine.
 
 ```shell
 ./gradlew testDemoDebug :lint:test
@@ -60,4 +60,10 @@ After starting a local Android emulator in Android Studio:
 ```shell
 ./gradlew connectedDemoDebugAndroidTest --daemon
 ````
+
+### IDE editing
+
+Syntax highlighting should work in Android Studio nightlies that understand Gradle DCL files.
+
+Code completion and content assist is currently unsupported.
 
