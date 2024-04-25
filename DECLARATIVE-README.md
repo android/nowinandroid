@@ -13,11 +13,15 @@ Converted subprojects:
 - [`:core:data`](core/data/build.gradle.dcl)
 - [`:core:domain`](core/domain/build.gradle.dcl)
 
+The `androidLibrary` software type exposes [several configuration options](https://github.com/gradle/declarative-gradle/blob/main/unified-prototype/unified-plugin/plugin-android/src/main/java/org/gradle/api/experimental/android/library/AndroidLibrary.java) and dependencies. Test related configuration mimics the existing Android extension for now. 
+
 Syntax highlighting is limited to the latest nightly for Android Studio that understand Gradle DCL files.
+
+NOTE: The build logic and conventions used by declarative and non-declarative projects is currently duplicated. Subsequent milestones/feedback points will bring these back together. 
 
 ## Setup
 
-```
+```shell
 git clone https://github.com/gradle/nowinandroid.git
 cd nowinandroid
 git clone https://github.com/gradle/declarative-gradle.git
@@ -42,7 +46,7 @@ You can assemble the project with the following command:
 ```
 
 ### Running tests
-**Note:** See the note in [Screenshot tests](#screenshot-tests) about setting up Roborazzi for non-Linux test runs.
+**Note:** See the note in [Screenshot tests](README.md#screenshot-tests) about setting up Roborazzi for non-Linux test runs.
 
 ```shell
 ./gradlew testDemoDebug :lint:test
