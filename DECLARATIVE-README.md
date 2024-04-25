@@ -24,10 +24,11 @@ NOTE: The build logic and conventions used by declarative and non-declarative pr
 ```shell
 git clone https://github.com/gradle/nowinandroid.git
 cd nowinandroid
+git checkout main-declarative
 git clone https://github.com/gradle/declarative-gradle.git
 ```
 
-This should checkout the `main` branch of the [Declarative Gradle prototype plugins](https://github.com/gradle/declarative-gradle) inside the **root** of a NowInAndroid fork.
+This should checkout the `main` branch of the [Declarative Gradle prototype plugins](https://github.com/gradle/declarative-gradle) inside the **root** of Gradle's NowInAndroid fork. 
 
 You should have this project structure:
 ```
