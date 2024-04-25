@@ -79,7 +79,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.dependencyguard_baseline.outcome == 'success'
         with:
-          file_pattern: '**/dependencies/*.txt'
+          file_pattern: './now-in-android/**/dependencies/*.txt'
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
