@@ -67,6 +67,7 @@ internal class SyncWorker @AssistedInject constructor(
         traceAsync("Sync", 0) {
             analyticsHelper.logSyncStarted()
 
+            setForeground(getForegroundInfo())
             syncSubscriber.subscribe()
 
             // First sync the repositories in parallel
