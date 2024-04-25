@@ -1,14 +1,19 @@
 # Declarative Gradle DSL
 
-This branch has been modified to work with the prototype of the Declarative Gradle DSL.
+## Current status
 
-## Feedback on basics
+This branch has been modified to work with the prototype of the Declarative Gradle DSL. This build relies on nightly versions of Gradle, Android Studio and [Declarative Gradle prototype plugins](https://github.com/gradle/declarative-gradle).
 
-- "Hybrid" mode where some projects can use declarative files and some do not
-- Ecosystem plugin in settings file and software type in declarative project file
-- Importable and buildable (e.g., gradle build works)
-- Syntax highlighting available in Android Studio
-- Demonstrate NowInAndroid has at least one project file converted
+The NowInAndroid project is a "hybrid" build now where there's a mix of declarative and non-declarative (Kotlin DSL) build files. The build can be imported and builds.
+
+The [settings file](settings.gradle.dcl) applies a new "Android ecosystem plugin", which exposes `androidLibrary` and `androidApplication` software types that can be used in subprojects. The current prototype is limited to a single `androidLibrary` software type convention, so only a few subprojects have been converted.
+
+Converted subprojects:
+- [`:core:common`](core/common/build.gradle.dcl)
+- [`:core:data`](core/data/build.gradle.dcl)
+- [`:core:domain`](core/domain/build.gradle.dcl)
+
+Syntax highlighting is limited to the latest nightly for Android Studio that understand Gradle DCL files.
 
 ## Setup
 
@@ -18,12 +23,15 @@ cd nowinandroid
 git clone https://github.com/gradle/declarative-gradle.git
 ```
 
-This should checkout the `main` branch of [declarative-gradle](https://github.com/gradle/declarative-gradle) inside the **root** of a NowInAndroid fork.
+This should checkout the `main` branch of the [Declarative Gradle prototype plugins](https://github.com/gradle/declarative-gradle) inside the **root** of a NowInAndroid fork.
 
+You should have this project structure:
 ```
 nowinandroid/
     declarative-gradle/
 ```
+
+## Trying things out
 
 ### Building the project
 
