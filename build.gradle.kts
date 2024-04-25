@@ -25,6 +25,15 @@ buildscript {
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
+
+            constraints {
+                add("classpath", "com.android.tools.build:gradle:8.3.0") {
+                    because("Aligns the resolved versions of the com.android plugins, prevents: \n" +
+                        "Script compilation errors:\n" +
+                        "  Line 62:     packaging {\n" +
+                        "               ^ Unresolved reference: packaging\n")
+                }
+            }
         }
     }
 
