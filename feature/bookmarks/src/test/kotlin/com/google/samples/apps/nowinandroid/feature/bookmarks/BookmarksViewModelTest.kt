@@ -92,15 +92,15 @@ class BookmarksViewModelTest {
     }
 
     @Test
-    fun whenResourceViewed_setResourcesViewed() = runTest {
+    fun feedUiState_resourceIsViewed_setResourcesViewed() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
-        // Give
+        // Given
         newsRepository.sendNewsResources(newsResourcesTestData)
         userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[0].id, true)
         val itemBeforeViewed = viewModel.feedUiState.value
-        check(itemBeforeViewed is Success)
-        check(!itemBeforeViewed.feed.first().hasBeenViewed)
+        assertIs<Success>(itemBeforeViewed)
+        assertFalse(itemBeforeViewed.feed.first().hasBeenViewed)
 
         // When
         viewModel.setNewsResourceViewed(newsResourcesTestData[0].id, true)
@@ -114,17 +114,17 @@ class BookmarksViewModelTest {
     }
 
     @Test
-    fun whenUndoBookmarkRemoval_thenBookmarkIsRestored() = runTest {
+    fun feedUiState_undoneBookmarkRemoval_bookmarkIsRestored() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
-        // Give
+        // Given
         newsRepository.sendNewsResources(newsResourcesTestData)
         userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[0].id, true)
         viewModel.removeFromSavedResources(newsResourcesTestData[0].id)
-        check(viewModel.shouldDisplayUndoBookmark)
+        assertTrue(viewModel.shouldDisplayUndoBookmark)
         val itemBeforeUndo = viewModel.feedUiState.value
-        check(itemBeforeUndo is Success)
-        check(itemBeforeUndo.feed.isEmpty())
+        assertIs<Success>(itemBeforeUndo)
+        assertEquals(0, itemBeforeUndo.feed.size)
 
         // When
         viewModel.undoBookmarkRemoval()
@@ -133,7 +133,7 @@ class BookmarksViewModelTest {
         assertFalse(viewModel.shouldDisplayUndoBookmark)
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
-        assertEquals(item.feed.size, 1)
+        assertEquals(1, item.feed.size)
 
         collectJob.cancel()
     }
