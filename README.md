@@ -114,7 +114,8 @@ To run the tests execute the following gradle tasks:
 - `testDemoDebug` run all local tests against the `demoDebug` variant.
 - `connectedDemoDebugAndroidTest` run all instrumented tests against the `demoDebug` variant. 
 
-**Note:** You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
+> [!NOTE]
+> You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
 tests against _all_ build variants which is both unecessary and will result in failures as only the
 `demoDebug` variant is supported. No other variants have any tests (although this might change in future). 
 
