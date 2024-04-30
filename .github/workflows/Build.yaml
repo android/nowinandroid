@@ -134,6 +134,13 @@ jobs:
           name: local-test-results-${{ matrix.useKSP2 }}-${{ matrix.useK2Uast }}
           path: '**/build/test-results/test*UnitTest/**.xml'
 
+      - name: Upload screenshot results (PNG)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-test-results
+          path: '**/build/outputs/roborazzi/*_compare.png'
+
       - name: Check lint
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.5.0-alpha07
 
