@@ -28,7 +28,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -47,12 +47,14 @@ class TopicViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    private val topicArgs: TopicArgs = TopicArgs(savedStateHandle)
+    // TODO: Remove when alpha08 is released
+    private val topicDestination = TopicDestination(savedStateHandle["id"]!!)
+    //private val topicDestination : TopicDestination = savedStateHandle.toRoute()
 
-    val topicId = topicArgs.topicId
+    val topicId = topicDestination.id
 
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
-        topicId = topicArgs.topicId,
+        topicId = topicDestination.id,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository,
     )
@@ -63,7 +65,7 @@ class TopicViewModel @Inject constructor(
         )
 
     val newsUiState: StateFlow<NewsUiState> = newsUiState(
-        topicId = topicArgs.topicId,
+        topicId = topicDestination.id,
         userDataRepository = userDataRepository,
         userNewsResourceRepository = userNewsResourceRepository,
     )
@@ -75,7 +77,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setTopicIdFollowed(topicArgs.topicId, followed)
+            userDataRepository.setTopicIdFollowed(topicDestination.id, followed)
         }
     }
 
