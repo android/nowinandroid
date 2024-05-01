@@ -28,6 +28,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("nowinandroid.android.library")
                 apply("nowinandroid.android.hilt")
+                // Serialization is used for type-safe navigation.
+                // TODO: Use the plugin ID from the version catalog when
+                //  https://github.com/gradle/gradle/issues/15383# is resolved
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
@@ -45,7 +49,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+                add("implementation", libs.findLibrary("androidx.navigation.compose").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
 
                 add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
             }

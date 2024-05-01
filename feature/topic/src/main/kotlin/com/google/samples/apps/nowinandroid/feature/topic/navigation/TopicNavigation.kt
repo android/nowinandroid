@@ -17,33 +17,23 @@
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
-import java.net.URLDecoder
-import java.net.URLEncoder
-import kotlin.text.Charsets.UTF_8
+import kotlinx.serialization.Serializable
 
-private val URL_CHARACTER_ENCODING = UTF_8.name()
-
+// TODO: Remove
 @VisibleForTesting
 internal const val TOPIC_ID_ARG = "topicId"
 const val TOPIC_ROUTE = "topic_route"
 
-internal class TopicArgs(val topicId: String) {
-    constructor(savedStateHandle: SavedStateHandle) :
-        this(URLDecoder.decode(checkNotNull(savedStateHandle[TOPIC_ID_ARG]), URL_CHARACTER_ENCODING))
-}
+@Serializable
+data class TopicDestination(val id: String)
 
 fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    val newRoute = "$TOPIC_ROUTE/$encodedId"
-    navigate(newRoute) {
+    navigate(TopicDestination(topicId)) {
         navOptions()
     }
 }
@@ -53,12 +43,7 @@ fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
-    composable(
-        route = "topic_route/{$TOPIC_ID_ARG}",
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) { type = NavType.StringType },
-        ),
-    ) {
+    composable<TopicDestination> {
         TopicRoute(
             showBackButton = showBackButton,
             onBackClick = onBackClick,
@@ -66,3 +51,4 @@ fun NavGraphBuilder.topicScreen(
         )
     }
 }
+
