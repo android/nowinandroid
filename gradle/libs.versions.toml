@@ -3,14 +3,14 @@ accompanist = "0.34.0"
 androidDesugarJdkLibs = "2.0.4"
 # AGP and tools should be updated together
 androidGradlePlugin = "8.3.2"
-androidTools = "31.3.2"
+androidTools = "31.4.0"
 androidxActivity = "1.9.0"
 androidxAppCompat = "1.6.1"
 androidxBrowser = "1.8.0"
-androidxComposeBom = "2024.04.01"
-androidxComposeCompiler = "1.5.12"
-androidxComposeUiTest = "1.7.0-alpha06"
-androidxComposeMaterial3Adaptive = "1.0.0-alpha11"
+androidxComposeBom = "2024.05.00"
+androidxComposeCompiler = "1.5.13"
+androidxComposeUiTest = "1.7.0-alpha08"
+androidxComposeMaterial3Adaptive = "1.0.0-alpha12"
 androidxComposeRuntimeTracing = "1.0.0-beta01"
 androidxCore = "1.13.0"
 androidxCoreSplashscreen = "1.0.1"
@@ -42,11 +42,11 @@ hilt = "2.51.1"
 hiltExt = "1.2.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
-kotlin = "1.9.23"
+kotlin = "2.0.0-RC2"
 kotlinxCoroutines = "1.8.0"
 kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.3"
-ksp = "1.9.23-1.0.20"
+ksp = "2.0.0-RC2-1.0.20"
 moduleGraph = "2.5.0"
 okhttp = "4.12.0"
 protobuf = "4.26.1"
@@ -70,8 +70,8 @@ androidx-core-ktx = "1.12.0"
 androidx-espresso-core = "3.5.1"
 androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
-compose = "1.6.6"
-compose-plugin = "1.6.2"
+compose-ui-tooling = "1.6.7"
+compose-plugin = "1.6.10-beta03"
 junit = "4.13.2"
 sqldelight = "2.0.2"
 kotlinInject = '0.6.3'
@@ -174,8 +174,8 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui-tooling" }
 sqldelight-android-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
 sqldelight-native-driver = { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqldelight" }
 sqldelight-sqlite-driver = { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqldelight" }
@@ -232,7 +232,9 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 sqldelight-gradle-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 ktrofit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktrofit" }

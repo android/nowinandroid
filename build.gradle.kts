@@ -50,6 +50,7 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
     alias(libs.plugins.jetbrains.compose) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.sqldelight.gradle.plugin) apply false
     alias(libs.plugins.ktrofit) apply false
