@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 plugins {
+    alias(libs.plugins.dependencyGuard)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.compose)
@@ -25,10 +27,8 @@ plugins {
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
+        compilerOptions {
+            jvmTarget.set(JVM_11)
         }
     }
 
@@ -40,7 +40,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "NiaCatalog"
             isStatic = true
         }
     }
@@ -125,4 +125,8 @@ compose.desktop {
 
 compose.experimental {
     web.application {}
+}
+
+dependencyGuard {
+    configuration("releaseRuntimeClasspath")
 }
