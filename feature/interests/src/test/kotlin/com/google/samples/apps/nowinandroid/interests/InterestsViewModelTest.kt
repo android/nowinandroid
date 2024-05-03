@@ -55,7 +55,8 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
-            savedStateHandle = SavedStateHandle(mapOf(TOPIC_ID_ARG to testInputTopics[0].topic.id)),
+            //TODO: Figure out how to supply the correct dependency: InterestsDestination(topicId = testInputTopics[0].topic.id)
+            savedStateHandle = SavedStateHandle(mapOf("topicId" to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )

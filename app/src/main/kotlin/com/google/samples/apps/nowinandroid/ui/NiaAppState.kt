@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,11 +35,11 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BOOKMARKS_ROUTE
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -96,11 +97,13 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            FOR_YOU_ROUTE -> FOR_YOU
-            BOOKMARKS_ROUTE -> BOOKMARKS
-            INTERESTS_ROUTE -> INTERESTS
-            else -> null
+        @Composable get(){
+            with(currentDestination) {
+                if (this?.hasRoute<ForYouDestination>() == true) return FOR_YOU
+                if (this?.hasRoute<BookmarksDestination>() == true) return BOOKMARKS
+                if (this?.hasRoute<InterestsDestination>() == true) return INTERESTS
+            }
+            return null
         }
 
     val shouldShowBottomBar: Boolean

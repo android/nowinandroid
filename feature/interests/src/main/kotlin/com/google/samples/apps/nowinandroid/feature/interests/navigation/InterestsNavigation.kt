@@ -17,49 +17,14 @@
 package com.google.samples.apps.nowinandroid.feature.interests.navigation
 
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import kotlinx.serialization.Serializable
 
+
 const val TOPIC_ID_ARG = "topicId"
-const val INTERESTS_ROUTE_BASE = "interests_route"
-const val INTERESTS_ROUTE = "$INTERESTS_ROUTE_BASE?$TOPIC_ID_ARG={$TOPIC_ID_ARG}"
 
 @Serializable data class InterestsDestination(val topicId: String?)
-
-fun NavController.navigateToInterestsOld(topicId: String? = null, navOptions: NavOptions? = null) {
-    val route = if (topicId != null) {
-        "${INTERESTS_ROUTE_BASE}?${TOPIC_ID_ARG}=$topicId"
-    } else {
-        INTERESTS_ROUTE_BASE
-    }
-    navigate(route, navOptions)
-}
 
 fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOptions? = null) {
     navigate(route = InterestsDestination(topicId), navOptions)
 }
-
-
-/*fun NavGraphBuilder.interestsScreenOld(
-    onTopicClick: (String) -> Unit,
-) {
-    composable(
-        route = INTERESTS_ROUTE,
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) {
-                defaultValue = null
-                nullable = true
-                type = NavType.StringType
-            },
-        ),
-    ) {
-        InterestsRoute(onTopicClick = onTopicClick)
-    }
-}*/
-
-

@@ -16,18 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
-import androidx.annotation.VisibleForTesting
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import kotlinx.serialization.Serializable
-
-// TODO: Remove
-@VisibleForTesting
-internal const val TOPIC_ID_ARG = "topicId"
-const val TOPIC_ROUTE = "topic_route"
 
 @Serializable data class TopicDestination(val id: String)
 
