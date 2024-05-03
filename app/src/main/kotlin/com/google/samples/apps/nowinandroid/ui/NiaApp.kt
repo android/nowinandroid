@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -200,15 +201,7 @@ internal fun NiaApp(
                     )
                 }
 
-                NiaNavHost(
-                    appState = appState,
-                    onShowSnackbar = { message, action ->
-                        snackbarHostState.showSnackbar(
-                            message = message,
-                            actionLabel = action,
-                            duration = Short,
-                        ) == ActionPerformed
-                    },
+                Box(
                     modifier = if (shouldShowTopAppBar) {
                         Modifier.consumeWindowInsets(
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
@@ -216,7 +209,18 @@ internal fun NiaApp(
                     } else {
                         Modifier
                     },
-                )
+                ) {
+                    NiaNavHost(
+                        appState = appState,
+                        onShowSnackbar = { message, action ->
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = action,
+                                duration = Short,
+                            ) == ActionPerformed
+                        },
+                    )
+                }
             }
 
             // TODO: We may want to add padding or spacer when the snackbar is shown so that
