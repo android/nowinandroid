@@ -38,11 +38,13 @@ import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import kotlinx.serialization.Serializable
 
-private const val DETAIL_PANE_NAVHOST_ROUTE = "detail_pane_route"
+
+@Serializable object TopicPlaceholderDestination
+@Serializable object DetailPaneNavHostDestination
 
 fun NavGraphBuilder.interestsListDetailScreen() {
     composable(
@@ -86,7 +88,7 @@ internal fun InterestsListDetailScreen(
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
         nestedNavController.navigateToTopic(topicId) {
-            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+            popUpTo<DetailPaneNavHostDestination>()
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
@@ -103,15 +105,15 @@ internal fun InterestsListDetailScreen(
         detailPane = {
             NavHost(
                 navController = nestedNavController,
-                startDestination = TOPIC_ROUTE,
-                route = DETAIL_PANE_NAVHOST_ROUTE,
-            ) {
+                startDestination = TopicPlaceholderDestination::class,
+                route = DetailPaneNavHostDestination::class
+            ){
                 topicScreen(
                     showBackButton = !listDetailNavigator.isListPaneVisible(),
                     onBackClick = listDetailNavigator::navigateBack,
                     onTopicClick = ::onTopicClickShowDetailPane,
                 )
-                composable(route = TOPIC_ROUTE) {
+                composable<TopicPlaceholderDestination> {
                     TopicDetailPlaceholder()
                 }
             }
