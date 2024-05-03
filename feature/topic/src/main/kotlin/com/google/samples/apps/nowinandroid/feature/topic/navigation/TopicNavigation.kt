@@ -44,4 +44,3 @@ fun NavGraphBuilder.topicScreen(
         )
     }
 }
-

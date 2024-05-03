@@ -41,17 +41,18 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import kotlinx.serialization.Serializable
 
 @Serializable object TopicPlaceholderDestination
+
 @Serializable object DetailPaneNavHostDestination
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable<InterestsDestination>{
+    composable<InterestsDestination> {
         InterestsListDetailScreen()
     }
 }
 
 @Composable
 internal fun InterestsListDetailScreen() {
-    var selectedTopicId : String? by rememberSaveable { mutableStateOf(null) }
+    var selectedTopicId: String? by rememberSaveable { mutableStateOf(null) }
     InterestsListDetailScreen(
         selectedTopicId = selectedTopicId,
         onTopicClick = { topicId -> selectedTopicId = topicId },
@@ -92,8 +93,8 @@ internal fun InterestsListDetailScreen(
             NavHost(
                 navController = nestedNavController,
                 startDestination = TopicPlaceholderDestination::class,
-                route = DetailPaneNavHostDestination::class
-            ){
+                route = DetailPaneNavHostDestination::class,
+            ) {
                 topicScreen(
                     showBackButton = !listDetailNavigator.isListPaneVisible(),
                     onBackClick = listDetailNavigator::navigateBack,

@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 
-
 const val TOPIC_ID_ARG = "topicId"
 
 @Serializable data class InterestsDestination(val topicId: String?)

@@ -48,7 +48,7 @@ class TopicViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    private val topicDestination : TopicDestination = savedStateHandle.toRoute()
+    private val topicDestination: TopicDestination = savedStateHandle.toRoute()
 
     val topicId = topicDestination.id
 
