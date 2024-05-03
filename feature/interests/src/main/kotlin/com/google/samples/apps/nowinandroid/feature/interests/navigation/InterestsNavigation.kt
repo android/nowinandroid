@@ -23,12 +23,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
+import kotlinx.serialization.Serializable
 
 const val TOPIC_ID_ARG = "topicId"
 const val INTERESTS_ROUTE_BASE = "interests_route"
 const val INTERESTS_ROUTE = "$INTERESTS_ROUTE_BASE?$TOPIC_ID_ARG={$TOPIC_ID_ARG}"
 
-fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOptions? = null) {
+@Serializable data class InterestsDestination(val topicId: String?)
+
+fun NavController.navigateToInterestsOld(topicId: String? = null, navOptions: NavOptions? = null) {
     val route = if (topicId != null) {
         "${INTERESTS_ROUTE_BASE}?${TOPIC_ID_ARG}=$topicId"
     } else {
@@ -37,7 +40,12 @@ fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOp
     navigate(route, navOptions)
 }
 
-fun NavGraphBuilder.interestsScreen(
+fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOptions? = null) {
+    navigate(route = InterestsDestination(topicId), navOptions)
+}
+
+
+/*fun NavGraphBuilder.interestsScreenOld(
     onTopicClick: (String) -> Unit,
 ) {
     composable(
@@ -52,4 +60,6 @@ fun NavGraphBuilder.interestsScreen(
     ) {
         InterestsRoute(onTopicClick = onTopicClick)
     }
-}
+}*/
+
+

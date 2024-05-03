@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
@@ -47,16 +48,7 @@ import kotlinx.serialization.Serializable
 @Serializable object DetailPaneNavHostDestination
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable(
-        route = INTERESTS_ROUTE,
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) {
-                type = NavType.StringType
-                defaultValue = null
-                nullable = true
-            },
-        ),
-    ) {
+    composable<InterestsDestination>{
         InterestsListDetailScreen()
     }
 }
