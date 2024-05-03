@@ -33,6 +33,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
@@ -45,18 +46,11 @@ import kotlinx.serialization.Serializable
 @Serializable object DetailPaneNavHostDestination
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable<InterestsDestination> {
-        InterestsListDetailScreen()
+    composable<InterestsDestination> { backStackEntry ->
+        val topicIdArgument = backStackEntry.toRoute<InterestsDestination>().topicId
+        var topicId: String? by rememberSaveable { mutableStateOf(topicIdArgument) }
+        InterestsListDetailScreen(selectedTopicId = topicId, onTopicClick = { topicId = it })
     }
-}
-
-@Composable
-internal fun InterestsListDetailScreen() {
-    var selectedTopicId: String? by rememberSaveable { mutableStateOf(null) }
-    InterestsListDetailScreen(
-        selectedTopicId = selectedTopicId,
-        onTopicClick = { topicId -> selectedTopicId = topicId },
-    )
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
