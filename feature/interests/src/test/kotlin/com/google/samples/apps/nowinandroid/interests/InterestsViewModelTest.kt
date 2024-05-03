@@ -25,7 +25,6 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -55,7 +54,7 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
-            //TODO: Figure out how to supply the correct dependency: InterestsDestination(topicId = testInputTopics[0].topic.id)
+            // TODO: Figure out how to supply the correct dependency: InterestsDestination(topicId = testInputTopics[0].topic.id)
             savedStateHandle = SavedStateHandle(mapOf("topicId" to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,

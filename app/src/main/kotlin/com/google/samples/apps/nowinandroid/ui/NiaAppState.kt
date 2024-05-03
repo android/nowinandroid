@@ -97,7 +97,7 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get(){
+        @Composable get() {
             with(currentDestination) {
                 if (this?.hasRoute<ForYouDestination>() == true) return FOR_YOU
                 if (this?.hasRoute<BookmarksDestination>() == true) return BOOKMARKS

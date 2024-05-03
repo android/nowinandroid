@@ -59,7 +59,7 @@ class TopicViewModelTest {
     @Before
     fun setup() {
         viewModel = TopicViewModel(
-            //TODO: Figure out how to supply the correct dependency TopicDestination(id = testInputTopics[0].topic.id)
+            // TODO: Figure out how to supply the correct dependency TopicDestination(id = testInputTopics[0].topic.id)
             savedStateHandle = SavedStateHandle(mapOf("id" to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,

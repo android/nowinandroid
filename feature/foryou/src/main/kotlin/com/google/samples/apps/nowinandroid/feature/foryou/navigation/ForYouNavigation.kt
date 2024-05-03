@@ -27,6 +27,7 @@ import kotlinx.serialization.Serializable
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
 private const val DEEP_LINK_URI_PATTERN =
     "https://www.nowinandroid.apps.samples.google.com/foryou/{$LINKED_NEWS_RESOURCE_ID}"
+
 @Serializable data class ForYouDestination(val linkedNewsResourceId: String? = null)
 
 fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(), navOptions)
@@ -35,7 +36,7 @@ fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouDestination>(
         deepLinks = listOf(
             navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
-        )
+        ),
     ) {
         ForYouRoute(onTopicClick)
     }

@@ -36,4 +36,3 @@ fun NavGraphBuilder.bookmarksScreen(
         BookmarksRoute(onTopicClick, onShowSnackbar)
     }
 }
-
