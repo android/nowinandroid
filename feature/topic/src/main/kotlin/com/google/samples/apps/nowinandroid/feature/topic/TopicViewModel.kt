@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.topic
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -47,9 +48,7 @@ class TopicViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    // TODO: Remove when alpha08 is released
-    private val topicDestination = TopicDestination(savedStateHandle["id"]!!)
-    //private val topicDestination : TopicDestination = savedStateHandle.toRoute()
+    private val topicDestination : TopicDestination = savedStateHandle.toRoute()
 
     val topicId = topicDestination.id
 
