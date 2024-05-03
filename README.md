@@ -9,7 +9,7 @@ Welcome to the Kotlin Multiplatform edition of Now in Android, a community-drive
 **Learn how this app was designed and built in the [design case study](https://goo.gle/nia-figma), [architecture learning journey](docs/ArchitectureLearningJourney.md) and [modularization learning journey](docs/ModularizationLearningJourney.md).**
 
 This is the repository for the [Now in Android](https://developer.android.com/series/now-in-android)
-app. It is a **work in progress** 🚧.
+app.
 
 **Now in Android** is a fully functional Android app built entirely with Kotlin and Jetpack Compose. It
 follows Android design and development best practices and is intended to be a useful reference
@@ -17,6 +17,93 @@ for developers. As a running app, it's intended to help developers keep up-to-da
 of Android development by providing regular news updates.
 
 The app is currently in development. The `prodRelease` variant is [available on the Play Store](https://play.google.com/store/apps/details?id=com.google.samples.apps.nowinandroid).
+
+# Project Status
+
+This project is a **work in progress** 🚧. Please note that the CI may not function normally at this time.
+
+# Changes to Convention Plugins
+
+Numerous changes have been made on top of the original Now in Android app. We've replaced several third-party libraries with ones that support Kotlin Multiplatform. Here are some conventions I've documented:
+
+- [KmpLibraryConventionPlugin](build-logic/convention/src/main/kotlin/KmpLibraryConventionPlugin.kt): Convention for Kotlin Multiplatform Libraries
+- [KotlinInjectConventionPlugin](build-logic/convention/src/main/kotlin/KotlinInjectConventionPlugin.kt): Convention for using [kotlin-inject](https://github.com/evant/kotlin-inject) as a replacement for [Hilt](https://dagger.dev/hilt/)
+- [SqlDelightConventionPlugin](build-logic/convention/src/main/kotlin/SqlDelightConventionPlugin.kt): Convention for using [SQLDelight](https://github.com/cashapp/sqldelight) for storing local data, replacing [Android Room](https://developer.android.com/jetpack/androidx/releases/room).
+
+## Changes to Modules
+
+To transform the main app into a Compose Multiplatform app capable of running on multiple platforms, all modules need to be converted to Kotlin Multiplatform libraries. The project structure of these modules should be adjusted to align with [Kotlin Multiplatform source sets](https://kotlinlang.org/docs/multiplatform-discover-project.html#source-sets). 
+
+As Firebase Analytics does not yet support Kotlin Multiplatform, the implementation in `:core:analytics` has been removed, leaving an empty implementation in its place.
+
+
+## Status for modules
+
+| Module                    | Progress         | Desktop supported | Android supported | iOS supported | Web supported |
+|---------------------------|------------------|-------------------|-------------------|---------------|---------------|
+| app                       | Not started      | ❌                | ❌                | ❌            | ❌            |
+| app-nia-catalog           | Done             | ✅                | ✅                | ❔            | ❌            |
+| :core:analytics           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:common              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:data                | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:data-test           | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :core:database            | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore-proto     | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore-test      | Removed          | ❌                | ❌                | ❌            | ❌            |
+| :core:designsystem        | Done             | ✅                | ✅                | ❔            | ❌            |
+| :core:domain              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:model               | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:network             | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:notification        | Done             | No implmentaion   | ✔️                 |No implmentaion| ❌           |
+| :core:screenshot-testing  | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :core:testing             | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:ui                  | In progress      | ❌                | ❌                | ❌            | ❌            |
+| :feature:bookmarks        | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :feature:foryou           | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :feature:interests        | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :feature:search           | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :feature:settings         | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :feature:topic            | Not started      | ❌                | ❌                | ❌            | ❌            |
+| lint                      | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :sync:sync-test           | Not started      | ❌                | ❌                | ❌            | ❌            |
+| :sync:work                | Not started      | ❌                | ❌                | ❌            | ❌            |
+| ui-test-manifest          | Not started      | ❌                | ❌                | ❌            | ❌            |
+
+
+
+✅: Functioning properly  
+❔: Not yet tested, but expected to work  
+✔️: Successfully compiled  
+❌: Not functioning, requires further attention  
+
+# Running the Project
+
+This project currently supports running the `app-nia-catalog` module in Compose Multiplatform. The `app` module is still working in progress.
+
+## Running on Android
+
+1. Create an Android Virtual Device (AVD).
+2. Select `app-nia-catalog` from the list of run configurations.
+3. Choose your AVD and click "Run".
+
+## Running on Desktop
+
+To run the desktop application, follow these steps:
+
+1. Navigate to `Run | Edit Configurations`.
+2. Click the plus button and select "Gradle" from the dropdown menu.
+3. In the "Tasks and arguments" field, paste the following command: 
+   ```
+   desktopRun -DmainClass=MainKt --quiet
+   ```
+4. Choose the Gradle project: `nowinandroid:app-nia-catalog`.
+5. Click "OK" to save the configuration.
+
+## Running on iOS
+
+For instructions on running the application on iOS, please refer to [this guide](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform-create-first-app.html#run-your-application-on-ios).
+
 
 # Features
 
