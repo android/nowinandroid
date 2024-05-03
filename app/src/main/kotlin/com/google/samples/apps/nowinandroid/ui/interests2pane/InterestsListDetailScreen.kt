@@ -26,8 +26,9 @@ import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,7 +40,6 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToT
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import kotlinx.serialization.Serializable
 
-
 @Serializable object TopicPlaceholderDestination
 @Serializable object DetailPaneNavHostDestination
 
@@ -50,13 +50,11 @@ fun NavGraphBuilder.interestsListDetailScreen() {
 }
 
 @Composable
-internal fun InterestsListDetailScreen(
-    viewModel: Interests2PaneViewModel = hiltViewModel(),
-) {
-    val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
+internal fun InterestsListDetailScreen() {
+    var selectedTopicId : String? by rememberSaveable { mutableStateOf(null) }
     InterestsListDetailScreen(
         selectedTopicId = selectedTopicId,
-        onTopicClick = viewModel::onTopicClick,
+        onTopicClick = { topicId -> selectedTopicId = topicId },
     )
 }
 
