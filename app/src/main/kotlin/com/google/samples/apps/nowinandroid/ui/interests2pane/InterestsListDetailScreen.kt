@@ -29,15 +29,11 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
