@@ -25,6 +25,10 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
+    // Serialization is used for type-safe navigation.
+    // TODO: Use the plugin ID from the version catalog when
+    //  https://github.com/gradle/gradle/issues/15383# is resolved
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -103,6 +107,7 @@ dependencies {
     implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.kotlinx.serialization.json)
 
     ksp(libs.hilt.compiler)
 

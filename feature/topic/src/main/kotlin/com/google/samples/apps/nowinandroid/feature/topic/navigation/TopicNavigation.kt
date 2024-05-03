@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.feature.topic.TopicRoute
+import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import kotlinx.serialization.Serializable
 
 // TODO: Remove
@@ -29,11 +29,10 @@ import kotlinx.serialization.Serializable
 internal const val TOPIC_ID_ARG = "topicId"
 const val TOPIC_ROUTE = "topic_route"
 
-@Serializable
-data class TopicDestination(val id: String)
+@Serializable data class TopicDestination(val id: String)
 
 fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(TopicDestination(topicId)) {
+    navigate(route = TopicDestination(topicId)) {
         navOptions()
     }
 }
@@ -44,7 +43,7 @@ fun NavGraphBuilder.topicScreen(
     onTopicClick: (String) -> Unit,
 ) {
     composable<TopicDestination> {
-        TopicRoute(
+        TopicScreen(
             showBackButton = showBackButton,
             onBackClick = onBackClick,
             onTopicClick = onTopicClick,
