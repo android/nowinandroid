@@ -201,13 +201,13 @@ internal fun NiaApp(
                 }
 
                 Box(
-                    modifier = if (shouldShowTopAppBar) {
-                        Modifier.consumeWindowInsets(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
-                        )
-                    } else {
-                        Modifier
-                    },
+                    modifier = Modifier.consumeWindowInsets(
+                        if (shouldShowTopAppBar) {
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                        } else {
+                            WindowInsets(0, 0, 0, 0)
+                        },
+                    ),
                 ) {
                     NiaNavHost(
                         appState = appState,
