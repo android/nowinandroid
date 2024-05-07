@@ -10,13 +10,15 @@ androidLibrary {
         testImplementation(project(":core:testing"))
     }
 
-    jacoco {
-        version = "0.8.7"
-    }
-
     buildTypes {
         // Need the empty closure to avoid "dangling pure expression" error
         debug {}
         release {}
+    }
+
+    testing {
+        jacoco {
+            version = "0.8.7"
+        }
     }
 }

@@ -21,18 +21,20 @@ androidLibrary {
         json()
     }
 
-    jacoco {
-        version = "0.8.7"
-    }
-
-    testOptions {
-        includeAndroidResources = true
-        returnDefaultValues = true
-    }
-
     buildTypes {
         // Need the empty closure to avoid "dangling pure expression" error
         debug {}
         release {}
+    }
+
+    testing {
+        jacoco {
+            version = "0.8.7"
+        }
+
+        testOptions {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
     }
 }
