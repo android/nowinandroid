@@ -20,7 +20,6 @@ import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver.Companion
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 import java.util.Properties
