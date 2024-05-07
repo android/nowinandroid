@@ -35,7 +35,7 @@ fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = Fo
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouDestination>(
         deepLinks = listOf(
-            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
+            navDeepLink<ForYouDestination>(basePath = DEEP_LINK_URI_PATTERN),
         ),
     ) {
         ForYouRoute(onTopicClick)

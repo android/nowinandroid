@@ -48,12 +48,10 @@ class TopicViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    private val topicDestination: TopicDestination = savedStateHandle.toRoute()
-
-    val topicId = topicDestination.id
+    val topicId = savedStateHandle.toRoute<TopicDestination>().id
 
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
-        topicId = topicDestination.id,
+        topicId = topicId,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository,
     )
@@ -64,7 +62,7 @@ class TopicViewModel @Inject constructor(
         )
 
     val newsUiState: StateFlow<NewsUiState> = newsUiState(
-        topicId = topicDestination.id,
+        topicId = topicId,
         userDataRepository = userDataRepository,
         userNewsResourceRepository = userNewsResourceRepository,
     )
@@ -76,7 +74,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setTopicIdFollowed(topicDestination.id, followed)
+            userDataRepository.setTopicIdFollowed(topicId, followed)
         }
     }
 
