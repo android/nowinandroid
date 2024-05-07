@@ -1,7 +1,6 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
 
-    includeKotlinSerialization = true
     configureJacoco = true
 
     dependencies {
@@ -17,6 +16,11 @@ androidLibrary {
         testImplementation(project(":core:datastore-test"))
         testImplementation(project(":core:testing"))
         testImplementation(project(":core:network"))
+    }
+
+    kotlinSerialization {
+        version = "1.6.3"
+        json()
     }
 
     testOptions {
