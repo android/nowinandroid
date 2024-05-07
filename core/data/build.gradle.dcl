@@ -1,8 +1,6 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
 
-    configureJacoco = true
-
     dependencies {
         api(project(":core:common"))
         api(project(":core:database"))
@@ -21,6 +19,10 @@ androidLibrary {
     kotlinSerialization {
         version = "1.6.3"
         json()
+    }
+
+    jacoco {
+        version = "0.8.7"
     }
 
     testOptions {

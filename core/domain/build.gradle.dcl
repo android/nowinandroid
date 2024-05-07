@@ -1,8 +1,6 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.domain"
 
-    configureJacoco = true
-
     dependencies {
         implementation("javax.inject:javax.inject:1")
 
@@ -10,6 +8,10 @@ androidLibrary {
         api(project(":core:model"))
 
         testImplementation(project(":core:testing"))
+    }
+
+    jacoco {
+        version = "0.8.7"
     }
 
     buildTypes {
