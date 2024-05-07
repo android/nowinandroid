@@ -46,7 +46,10 @@ fun InterestsRoute(
     InterestsScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
-        onTopicClick = onTopicClick,
+        onTopicClick = {
+            viewModel.onTopicClick(it)
+            onTopicClick(it)
+        },
         highlightSelectedTopic = highlightSelectedTopic,
         modifier = modifier,
     )

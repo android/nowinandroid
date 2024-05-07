@@ -25,36 +25,46 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCa
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class InterestsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
     private val interestsDestination: InterestsDestination = savedStateHandle.toRoute()
+    private val selectedTopicId = savedStateHandle.getStateFlow(
+        key = TOPIC_ID_KEY,
+        initialValue = interestsDestination.initialTopicId,
+    )
 
-    val uiState: StateFlow<InterestsUiState> =
-        getFollowableTopics(sortBy = TopicSortField.NAME).map { topics ->
-            InterestsUiState.Interests(interestsDestination.topicId, topics)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = InterestsUiState.Loading,
-        )
+    val uiState: StateFlow<InterestsUiState> = combine(
+        selectedTopicId,
+        getFollowableTopics(sortBy = TopicSortField.NAME),
+        InterestsUiState::Interests,
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = InterestsUiState.Loading,
+    )
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
             userDataRepository.setTopicIdFollowed(followedTopicId, followed)
         }
+    }
+
+    fun onTopicClick(topicId: String?) {
+        savedStateHandle[TOPIC_ID_KEY] = topicId
     }
 }
 

@@ -20,10 +20,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 
-const val TOPIC_ID_ARG = "topicId"
+const val TOPIC_ID_KEY = "topicId"
 
-@Serializable data class InterestsDestination(val topicId: String?)
+@Serializable data class InterestsDestination(
+    // The ID of the topic which will be initially selected at this destination
+    val initialTopicId: String?,
+)
 
-fun NavController.navigateToInterests(topicId: String? = null, navOptions: NavOptions? = null) {
-    navigate(route = InterestsDestination(topicId), navOptions)
+fun NavController.navigateToInterests(
+    initialTopicId: String? = null,
+    navOptions: NavOptions? = null,
+) {
+    navigate(route = InterestsDestination(initialTopicId), navOptions)
 }
