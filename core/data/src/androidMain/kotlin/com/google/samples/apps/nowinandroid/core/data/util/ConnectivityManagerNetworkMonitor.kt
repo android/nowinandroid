@@ -26,15 +26,18 @@ import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 internal class ConnectivityManagerNetworkMonitor(
     private val context: Context,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
@@ -62,12 +65,10 @@ internal class ConnectivityManagerNetworkMonitor(
                 channel.trySend(networks.isNotEmpty())
             }
         }
-
         val request = Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
         connectivityManager.registerNetworkCallback(request, callback)
-
         /**
          * Sends the latest connectivity status to the underlying channel.
          */
@@ -77,6 +78,7 @@ internal class ConnectivityManagerNetworkMonitor(
             connectivityManager.unregisterNetworkCallback(callback)
         }
     }
+        .flowOn(ioDispatcher)
         .conflate()
 
     @Suppress("DEPRECATION")
