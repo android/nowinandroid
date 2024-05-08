@@ -28,9 +28,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("nowinandroid.android.library")
                 apply("nowinandroid.android.hilt")
-                // Serialization is used for type-safe navigation.
-                // TODO: Use the plugin ID from the version catalog when
-                //  https://github.com/gradle/gradle/issues/15383# is resolved
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
             extensions.configure<LibraryExtension> {
