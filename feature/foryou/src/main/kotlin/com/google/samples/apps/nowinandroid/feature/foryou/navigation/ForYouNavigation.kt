@@ -30,14 +30,17 @@ const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
 
 private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH"
 
-@Serializable data class ForYouDestination(val linkedNewsResourceId: String?)
+@Serializable data class ForYouDestination(val linkedNewsResourceId: String? = null)
+// For deeplinks the news resource ID cannot be null so we use a different type with the same
+// argument name to enforce this requirement.
+@Serializable data class ForYouDeeplink(val linkedNewsResourceId: String)
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(linkedNewsResourceId = null), navOptions)
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(), navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouDestination>(
         deepLinks = listOf(
-            navDeepLink<ForYouDestination>(basePath = DEEP_LINK_BASE_PATH),
+            navDeepLink<ForYouDeeplink>(basePath = DEEP_LINK_BASE_PATH),
         ),
     ) {
         ForYouRoute(onTopicClick)
