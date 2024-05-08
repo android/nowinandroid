@@ -21,21 +21,23 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_SCHEME_AND_HOST
+import com.google.samples.apps.nowinandroid.core.notifications.FOR_YOU_PATH
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 import kotlinx.serialization.Serializable
 
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
-private const val DEEP_LINK_URI_PATTERN =
-    "https://www.nowinandroid.apps.samples.google.com/foryou/{$LINKED_NEWS_RESOURCE_ID}"
 
-@Serializable data class ForYouDestination(val linkedNewsResourceId: String? = null)
+private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH"
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(), navOptions)
+@Serializable data class ForYouDestination(val linkedNewsResourceId: String?)
+
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(linkedNewsResourceId = null), navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouDestination>(
         deepLinks = listOf(
-            navDeepLink<ForYouDestination>(basePath = DEEP_LINK_URI_PATTERN),
+            navDeepLink<ForYouDestination>(basePath = DEEP_LINK_BASE_PATH),
         ),
     ) {
         ForYouRoute(onTopicClick)

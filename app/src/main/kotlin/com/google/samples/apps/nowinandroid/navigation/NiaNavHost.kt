@@ -44,7 +44,7 @@ fun NiaNavHost(
     val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = ForYouDestination(),
+        startDestination = ForYouDestination(linkedNewsResourceId = null),
         modifier = modifier,
     ) {
         forYouScreen(onTopicClick = navController::navigateToInterests)
