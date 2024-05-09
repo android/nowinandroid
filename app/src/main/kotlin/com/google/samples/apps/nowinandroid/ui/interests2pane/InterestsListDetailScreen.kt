@@ -18,14 +18,22 @@ package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,8 +44,10 @@ import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import java.util.UUID
 import kotlinx.serialization.Serializable
 
 @Serializable object TopicPlaceholderDestination
@@ -67,18 +77,46 @@ internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
     onTopicClick: (String) -> Unit,
 ) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator()
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator(
+        initialDestinationHistory = listOfNotNull(
+            ThreePaneScaffoldDestinationItem(ListDetailPaneScaffoldRole.List),
+            ThreePaneScaffoldDestinationItem<Nothing>(ListDetailPaneScaffoldRole.Detail).takeIf {
+                selectedTopicId != null
+            },
+        ),
+    )
     BackHandler(listDetailNavigator.canNavigateBack()) {
         listDetailNavigator.navigateBack()
     }
 
-    val nestedNavController = rememberNavController()
+    var nestedNavHostStartDestination by remember {
+        val destination = selectedTopicId?.let { TopicDestination(id = it) } ?: TopicPlaceholderDestination
+        mutableStateOf(destination)
+    }
+    var nestedNavKey by rememberSaveable(
+        stateSaver = Saver({ it.toString() }, UUID::fromString),
+    ) {
+        mutableStateOf(UUID.randomUUID())
+    }
+    val nestedNavController = key(nestedNavKey) {
+        rememberNavController()
+    }
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavController.navigateToTopic(topicId) {
-            popUpTo<DetailPaneNavHostDestination>()
-        }
+
+        // TODO (merge): Fix this
+        //if (listDetailNavigator.isDetailPaneVisible()) {
+            // If the detail pane was visible, then use the nestedNavController navigate call
+            // directly
+            nestedNavController.navigateToTopic(topicId) {
+                popUpTo<DetailPaneNavHostDestination>()
+            }
+        /*} else {
+            // Otherwise, recreate the NavHost entirely, and start at the new destination
+            nestedNavHostStartDestination = TopicDestination(id = topicId)
+            nestedNavKey = UUID.randomUUID()
+        }*/
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
 
@@ -86,28 +124,37 @@ internal fun InterestsListDetailScreen(
         value = listDetailNavigator.scaffoldValue,
         directive = listDetailNavigator.scaffoldDirective,
         listPane = {
-            InterestsRoute(
-                onTopicClick = ::onTopicClickShowDetailPane,
-                highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
-            )
+            // TODO (merge): Fix this
+            //AnimatedPane {
+                InterestsRoute(
+                    onTopicClick = ::onTopicClickShowDetailPane,
+                    highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+                )
+            //}
         },
         detailPane = {
-            NavHost(
-                navController = nestedNavController,
-                startDestination = TopicPlaceholderDestination,
-                route = DetailPaneNavHostDestination::class,
-            ) {
-                topicScreen(
-                    showBackButton = !listDetailNavigator.isListPaneVisible(),
-                    onBackClick = listDetailNavigator::navigateBack,
-                    onTopicClick = ::onTopicClickShowDetailPane,
-                )
-                composable<TopicPlaceholderDestination> {
-                    TopicDetailPlaceholder()
-                }
-            }
+            // TODO (merge): Fix this
+            //AnimatedPane {
+            //    key(nestedNavKey) {
+                    NavHost(
+                        navController = nestedNavController,
+                        startDestination = nestedNavHostStartDestination,
+                        route = DetailPaneNavHostDestination::class,
+                    ) {
+                        topicScreen(
+                            showBackButton = !listDetailNavigator.isListPaneVisible(),
+                            onBackClick = listDetailNavigator::navigateBack,
+                            onTopicClick = ::onTopicClickShowDetailPane,
+                        )
+                        composable<TopicPlaceholderDestination> {
+                            TopicDetailPlaceholder()
+                        }
+                    }
+            //    }
+            //}
         },
     )
+    // TODO (merge): Remove
     LaunchedEffect(Unit) {
         if (selectedTopicId != null) {
             // Initial topic ID was provided when navigating to Interests, so show its details.
