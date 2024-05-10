@@ -10,8 +10,8 @@ androidLibrary {
     feature {
         // Calling the configure method enables this lib to be treated as a feature
     }
+
+    compose {
+        // Calling the configure method enables compose support
+    }
 }
-
-
-// TODO
-// alias(libs.plugins.nowinandroid.android.library.compose)
