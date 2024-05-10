@@ -1,9 +1,6 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
 
-    includeKotlinSerialization = true
-    configureJacoco = true
-
     dependencies {
         api(project(":core:common"))
         api(project(":core:database"))
@@ -19,14 +16,25 @@ androidLibrary {
         testImplementation(project(":core:network"))
     }
 
-    testOptions {
-        includeAndroidResources = true
-        returnDefaultValues = true
+    kotlinSerialization {
+        version = "1.6.3"
+        json()
     }
 
     buildTypes {
         // Need the empty closure to avoid "dangling pure expression" error
         debug {}
         release {}
+    }
+
+    testing {
+        jacoco {
+            version = "0.8.7"
+        }
+
+        testOptions {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
     }
 }

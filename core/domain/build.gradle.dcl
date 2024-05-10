@@ -1,8 +1,6 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.domain"
 
-    configureJacoco = true
-
     dependencies {
         implementation("javax.inject:javax.inject:1")
 
@@ -16,5 +14,11 @@ androidLibrary {
         // Need the empty closure to avoid "dangling pure expression" error
         debug {}
         release {}
+    }
+
+    testing {
+        jacoco {
+            version = "0.8.7"
+        }
     }
 }
