@@ -70,7 +70,7 @@ fun InterestsItem(
                     Icon(
                         imageVector = NiaIcons.Add,
                         contentDescription = stringResource(
-                            id = string.core_ui_interests_card_follow_button_content_desc,
+                            id = string.core_ui_interests_card_unfollow_button_content_desc,
                         ),
                     )
                 },
@@ -78,7 +78,7 @@ fun InterestsItem(
                     Icon(
                         imageVector = NiaIcons.Check,
                         contentDescription = stringResource(
-                            id = string.core_ui_interests_card_unfollow_button_content_desc,
+                            id = string.core_ui_interests_card_follow_button_content_desc,
                         ),
                     )
                 },

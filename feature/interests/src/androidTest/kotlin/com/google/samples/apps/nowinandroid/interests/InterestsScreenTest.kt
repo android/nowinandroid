@@ -93,7 +93,7 @@ class InterestsScreenTest {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithContentDescription(interestsTopicCardFollowButton)
+            .onAllNodesWithContentDescription(interestsTopicCardUnfollowButton)
             .assertCountEquals(numberOfUnfollowedTopics)
     }
 

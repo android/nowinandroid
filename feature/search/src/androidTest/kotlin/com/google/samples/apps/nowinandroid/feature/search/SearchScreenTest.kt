@@ -157,10 +157,10 @@ class SearchScreenTest {
 
         composeTestRule
             .onAllNodesWithContentDescription(followButtonContentDesc)
-            .assertCountEquals(2)
+            .assertCountEquals(1)
         composeTestRule
             .onAllNodesWithContentDescription(unfollowButtonContentDesc)
-            .assertCountEquals(1)
+            .assertCountEquals(2)
     }
 
     @Test
