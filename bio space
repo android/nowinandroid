@@ -1,2 +1,52 @@
-~$
+# 
+import os
+import json 
+
+def get_config():
+    config = {}
+    with open('config.json') as f:
+        config = json.load(f)
+    return config 
+
+def get_secret_key():
+    config = get_config()
+    return config['secret_key'] 
+
+def get_database_url():
+    config = get_config()
+    return config['database_url'] 
+
+def main():
+    secret_key = get_secret_key()
+    database_url = get_database_url()
+    print(f"Secret Key: {secret_key}")
+    print(f"Database URL: {database_url}") 
+
+if __name__ == "__main__":
+    main()# 
+import os
+import json 
+
+def get_config():
+    config = {}
+    with open('config.json') as f:
+        config = json.load(f)
+    return config 
+
+def get_secret_key():
+    config = get_config()
+    return config['secret_key'] 
+
+def get_database_url():
+    config = get_config()
+    return config['database_url'] 
+
+def main():
+    secret_key = get_secret_key()
+    database_url = get_database_url()
+    print(f"Secret Key: {secret_key}")
+    print(f"Database URL: {database_url}") 
+
+if __name__ == "__main__":
+    main()~$
 ;+**;0,0;
