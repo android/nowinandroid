@@ -62,10 +62,6 @@ gradlePlugin {
             id = "nowinandroid.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationJacoco") {
-            id = "nowinandroid.android.application.jacoco"
-            implementationClass = "AndroidApplicationJacocoConventionPlugin"
-        }
         register("androidLibraryCompose") {
             id = "nowinandroid.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
@@ -78,9 +74,9 @@ gradlePlugin {
             id = "nowinandroid.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
-        register("androidLibraryJacoco") {
-            id = "nowinandroid.android.library.jacoco"
-            implementationClass = "AndroidLibraryJacocoConventionPlugin"
+        register("androidJacoco") {
+            id = "nowinandroid.android.jacoco"
+            implementationClass = "AndroidJacocoConventionPlugin"
         }
         register("androidTest") {
             id = "nowinandroid.android.test"
