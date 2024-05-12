@@ -54,14 +54,16 @@ import kotlinx.coroutines.launch
 fun NiaLoadingWheel(
     contentDesc: String,
     modifier: Modifier = Modifier,
+    rotationTimeInMillis: Int = 12000,
+    numberOfLines: Int = 12,
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "wheel transition")
 
     // Specifies the float animation for slowly drawing out the lines on entering
     val startValue = if (LocalInspectionMode.current) 0F else 1F
-    val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(startValue) } }
+    val floatAnimValues = (0 until numberOfLines).map { remember { Animatable(startValue) } }
     LaunchedEffect(floatAnimValues) {
-        (0 until NUM_OF_LINES).map { index ->
+        (0 until numberOfLines).map { index ->
             launch {
                 floatAnimValues[index].animateTo(
                     targetValue = 0F,
@@ -80,7 +82,7 @@ fun NiaLoadingWheel(
         initialValue = 0F,
         targetValue = 360F,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = ROTATION_TIME, easing = LinearEasing),
+            animation = tween(durationMillis = rotationTimeInMillis, easing = LinearEasing),
         ),
         label = "wheel rotation animation",
     )
@@ -89,18 +91,18 @@ fun NiaLoadingWheel(
     val baseLineColor = MaterialTheme.colorScheme.onBackground
     val progressLineColor = MaterialTheme.colorScheme.inversePrimary
 
-    val colorAnimValues = (0 until NUM_OF_LINES).map { index ->
+    val colorAnimValues = (0 until numberOfLines).map { index ->
         infiniteTransition.animateColor(
             initialValue = baseLineColor,
             targetValue = baseLineColor,
             animationSpec = infiniteRepeatable(
                 animation = keyframes {
-                    durationMillis = ROTATION_TIME / 2
-                    progressLineColor at ROTATION_TIME / NUM_OF_LINES / 2 using LinearEasing
-                    baseLineColor at ROTATION_TIME / NUM_OF_LINES using LinearEasing
+                    durationMillis = rotationTimeInMillis / 2
+                    progressLineColor at rotationTimeInMillis / numberOfLines / 2 using LinearEasing
+                    baseLineColor at rotationTimeInMillis / numberOfLines using LinearEasing
                 },
                 repeatMode = RepeatMode.Restart,
-                initialStartOffset = StartOffset(ROTATION_TIME / NUM_OF_LINES / 2 * index),
+                initialStartOffset = StartOffset(rotationTimeInMillis / numberOfLines / 2 * index),
             ),
             label = "wheel color animation",
         )
@@ -115,8 +117,8 @@ fun NiaLoadingWheel(
             .semantics { contentDescription = contentDesc }
             .testTag("loadingWheel"),
     ) {
-        repeat(NUM_OF_LINES) { index ->
-            rotate(degrees = index * 30f) {
+        repeat(numberOfLines) { index ->
+            rotate(degrees = (360 / numberOfLines * index).toFloat()) {
                 drawLine(
                     color = colorAnimValues[index].value,
                     // Animates the initially drawn 1 pixel alpha from 0 to 1
@@ -168,6 +170,3 @@ fun NiaOverlayLoadingWheelPreview() {
         }
     }
 }
-
-private const val ROTATION_TIME = 12000
-private const val NUM_OF_LINES = 12
