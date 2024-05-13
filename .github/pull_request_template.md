@@ -1,4 +1,4 @@
-**DO NOT HIT SUBMIT WITHOUT READING THESE INSTRUCTIONS**
+**DO NOT CREATE A PULL REQUEST WITHOUT READING THESE INSTRUCTIONS**
 
 ## Instructions
 Thanks for submitting a pull request. To accept your pull request we need you do a few things: 
