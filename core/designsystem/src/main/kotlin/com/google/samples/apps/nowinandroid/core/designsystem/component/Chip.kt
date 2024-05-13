@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.designsystem.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -43,7 +42,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
  * @param label The text label content.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun NiaFilterChip(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
@@ -73,6 +71,8 @@ fun NiaFilterChip(
         },
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
+            enabled = enabled,
+            selected = selected,
             borderColor = MaterialTheme.colorScheme.onBackground,
             selectedBorderColor = MaterialTheme.colorScheme.onBackground,
             disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(

@@ -19,14 +19,18 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -81,6 +85,9 @@ class NavigationUiTest {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
+    @Inject
+    lateinit var timeZoneMonitor: TimeZoneMonitor
+
     @Before
     fun setup() {
         hiltRule.inject()
@@ -89,15 +96,11 @@ class NavigationUiTest {
     @Test
     fun compactWidth_compactHeight_showsNavigationBar() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(400.dp, 400.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(400.dp, 400.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -109,15 +112,11 @@ class NavigationUiTest {
     @Test
     fun mediumWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(610.dp, 400.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(610.dp, 400.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -129,15 +128,11 @@ class NavigationUiTest {
     @Test
     fun expandedWidth_compactHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(900.dp, 400.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 400.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -149,15 +144,11 @@ class NavigationUiTest {
     @Test
     fun compactWidth_mediumHeight_showsNavigationBar() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(400.dp, 500.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(400.dp, 500.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -169,15 +160,11 @@ class NavigationUiTest {
     @Test
     fun mediumWidth_mediumHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(610.dp, 500.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(610.dp, 500.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -189,15 +176,11 @@ class NavigationUiTest {
     @Test
     fun expandedWidth_mediumHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(900.dp, 500.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 500.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -209,15 +192,11 @@ class NavigationUiTest {
     @Test
     fun compactWidth_expandedHeight_showsNavigationBar() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(400.dp, 1000.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(400.dp, 1000.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -229,15 +208,11 @@ class NavigationUiTest {
     @Test
     fun mediumWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(610.dp, 1000.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(610.dp, 1000.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -249,15 +224,11 @@ class NavigationUiTest {
     @Test
     fun expandedWidth_expandedHeight_showsNavigationRail() {
         composeTestRule.setContent {
-            TestHarness(size = DpSize(900.dp, 1000.dp)) {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(900.dp, 1000.dp)),
+            ) {
                 BoxWithConstraints {
-                    NiaApp(
-                        windowSizeClass = WindowSizeClass.calculateFromSize(
-                            DpSize(maxWidth, maxHeight),
-                        ),
-                        networkMonitor = networkMonitor,
-                        userNewsResourceRepository = userNewsResourceRepository,
-                    )
+                    NiaApp(fakeAppState(maxWidth, maxHeight))
                 }
             }
         }
@@ -265,4 +236,12 @@ class NavigationUiTest {
         composeTestRule.onNodeWithTag("NiaNavRail").assertIsDisplayed()
         composeTestRule.onNodeWithTag("NiaBottomBar").assertDoesNotExist()
     }
+
+    @Composable
+    private fun fakeAppState(maxWidth: Dp, maxHeight: Dp) = rememberNiaAppState(
+        windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(maxWidth, maxHeight)),
+        networkMonitor = networkMonitor,
+        userNewsResourceRepository = userNewsResourceRepository,
+        timeZoneMonitor = timeZoneMonitor,
+    )
 }

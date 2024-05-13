@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -47,6 +48,9 @@ class NewsResourceDaoTest {
         newsResourceDao = db.newsResourceDao()
         topicDao = db.topicDao()
     }
+
+    @After
+    fun closeDb() = db.close()
 
     @Test
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
