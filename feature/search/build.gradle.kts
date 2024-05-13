@@ -27,9 +27,7 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
-    implementation(projects.feature.bookmarks)
-    implementation(projects.feature.foryou)
-    implementation(projects.feature.interests)
+    implementation(projects.core.ui)
 
     testImplementation(projects.core.testing)
 
