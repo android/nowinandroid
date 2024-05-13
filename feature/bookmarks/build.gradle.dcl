@@ -8,10 +8,10 @@ androidLibrary {
     }
 
     feature {
-        // Calling the configure method enables this lib to be treated as a feature
+        description = "Calling the configure method enables this lib to be treated as a feature"
     }
 
     compose {
-        // Calling the configure method enables compose support
+        description = "Calling the configure method enables compose support"
     }
 }
