@@ -23,7 +23,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NotificationsModule {
+internal abstract class NotificationsModule {
     @Binds
     abstract fun bindNotifier(
         notifier: SystemTrayNotifier,

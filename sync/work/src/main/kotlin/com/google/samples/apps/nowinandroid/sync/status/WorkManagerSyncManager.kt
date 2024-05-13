@@ -33,7 +33,7 @@ import javax.inject.Inject
 /**
  * [SyncManager] backed by [WorkInfo] from [WorkManager]
  */
-class WorkManagerSyncManager @Inject constructor(
+internal class WorkManagerSyncManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : SyncManager {
     override val isSyncing: Flow<Boolean> =

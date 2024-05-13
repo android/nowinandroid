@@ -51,5 +51,5 @@ androidComponents.beforeVariants {
 }
 
 dependencies {
-    implementation(libs.protobuf.kotlin.lite)
+    api(libs.protobuf.kotlin.lite)
 }

@@ -16,7 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem
 
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -219,60 +220,41 @@ class ThemeTest {
     }
 
     @Composable
-    private fun dynamicLightColorSchemeWithFallback(): ColorScheme {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            dynamicLightColorScheme(LocalContext.current)
-        } else {
-            LightDefaultColorScheme
-        }
+    private fun dynamicLightColorSchemeWithFallback(): ColorScheme = when {
+        SDK_INT >= VERSION_CODES.S -> dynamicLightColorScheme(LocalContext.current)
+        else -> LightDefaultColorScheme
     }
 
     @Composable
-    private fun dynamicDarkColorSchemeWithFallback(): ColorScheme {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            dynamicDarkColorScheme(LocalContext.current)
-        } else {
-            DarkDefaultColorScheme
-        }
+    private fun dynamicDarkColorSchemeWithFallback(): ColorScheme = when {
+        SDK_INT >= VERSION_CODES.S -> dynamicDarkColorScheme(LocalContext.current)
+        else -> DarkDefaultColorScheme
     }
 
-    private fun emptyGradientColors(colorScheme: ColorScheme): GradientColors {
-        return GradientColors(container = colorScheme.surfaceColorAtElevation(2.dp))
+    private fun emptyGradientColors(colorScheme: ColorScheme): GradientColors =
+        GradientColors(container = colorScheme.surfaceColorAtElevation(2.dp))
+
+    private fun defaultGradientColors(colorScheme: ColorScheme): GradientColors = GradientColors(
+        top = colorScheme.inverseOnSurface,
+        bottom = colorScheme.primaryContainer,
+        container = colorScheme.surface,
+    )
+
+    private fun dynamicGradientColorsWithFallback(colorScheme: ColorScheme): GradientColors = when {
+        SDK_INT >= VERSION_CODES.S -> emptyGradientColors(colorScheme)
+        else -> defaultGradientColors(colorScheme)
     }
 
-    private fun defaultGradientColors(colorScheme: ColorScheme): GradientColors {
-        return GradientColors(
-            top = colorScheme.inverseOnSurface,
-            bottom = colorScheme.primaryContainer,
-            container = colorScheme.surface,
-        )
-    }
+    private fun defaultBackgroundTheme(colorScheme: ColorScheme): BackgroundTheme = BackgroundTheme(
+        color = colorScheme.surface,
+        tonalElevation = 2.dp,
+    )
 
-    private fun dynamicGradientColorsWithFallback(colorScheme: ColorScheme): GradientColors {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            emptyGradientColors(colorScheme)
-        } else {
-            defaultGradientColors(colorScheme)
-        }
-    }
+    private fun defaultTintTheme(): TintTheme = TintTheme()
 
-    private fun defaultBackgroundTheme(colorScheme: ColorScheme): BackgroundTheme {
-        return BackgroundTheme(
-            color = colorScheme.surface,
-            tonalElevation = 2.dp,
-        )
-    }
-
-    private fun defaultTintTheme(): TintTheme {
-        return TintTheme()
-    }
-
-    private fun dynamicTintThemeWithFallback(colorScheme: ColorScheme): TintTheme {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            TintTheme(colorScheme.primary)
-        } else {
-            TintTheme()
-        }
+    private fun dynamicTintThemeWithFallback(colorScheme: ColorScheme): TintTheme = when {
+        SDK_INT >= VERSION_CODES.S -> TintTheme(colorScheme.primary)
+        else -> TintTheme()
     }
 
     /**

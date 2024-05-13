@@ -24,13 +24,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
-    implementation(projects.core.model)
-    implementation(libs.hilt.android)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.datetime)
+    api(projects.core.data)
+    api(projects.core.model)
 
-    ksp(libs.hilt.compiler)
+    implementation(libs.javax.inject)
 
     testImplementation(projects.core.testing)
 }

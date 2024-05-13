@@ -91,14 +91,14 @@ class UserNewsResourceTest {
             // Construct the expected FollowableTopic.
             val followableTopic = FollowableTopic(
                 topic = topic,
-                isFollowed = userData.followedTopics.contains(topic.id),
+                isFollowed = topic.id in userData.followedTopics,
             )
             assertTrue(userNewsResource.followableTopics.contains(followableTopic))
         }
 
         // Check that the saved flag is set correctly.
         assertEquals(
-            userData.bookmarkedNewsResources.contains(newsResource1.id),
+            newsResource1.id in userData.bookmarkedNewsResources,
             userNewsResource.isSaved,
         )
     }
