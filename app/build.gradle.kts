@@ -113,9 +113,10 @@ dependencies {
 
     testImplementation(projects.core.dataTest)
     testImplementation(projects.core.testing)
+    testImplementation(projects.sync.syncTest)
     testImplementation(libs.androidx.compose.ui.test)
+    testImplementation(libs.androidx.work.testing)
     testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.work.testing)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
