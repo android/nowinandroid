@@ -104,19 +104,17 @@ internal fun InterestsListDetailScreen(
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-
-        // TODO (merge): Fix this
-        //if (listDetailNavigator.isDetailPaneVisible()) {
+        if (listDetailNavigator.isDetailPaneVisible()) {
             // If the detail pane was visible, then use the nestedNavController navigate call
             // directly
             nestedNavController.navigateToTopic(topicId) {
                 popUpTo<DetailPaneNavHostDestination>()
             }
-        /*} else {
+        } else {
             // Otherwise, recreate the NavHost entirely, and start at the new destination
             nestedNavHostStartDestination = TopicDestination(id = topicId)
             nestedNavKey = UUID.randomUUID()
-        }*/
+        }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
 
@@ -124,22 +122,19 @@ internal fun InterestsListDetailScreen(
         value = listDetailNavigator.scaffoldValue,
         directive = listDetailNavigator.scaffoldDirective,
         listPane = {
-            // TODO (merge): Fix this
-            //AnimatedPane {
+            AnimatedPane {
                 InterestsRoute(
                     onTopicClick = ::onTopicClickShowDetailPane,
                     highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
                 )
-            //}
+            }
         },
         detailPane = {
-            // TODO (merge): Fix this
-            //AnimatedPane {
-            //    key(nestedNavKey) {
+            AnimatedPane {
+                key(nestedNavKey) {
                     NavHost(
                         navController = nestedNavController,
-                        startDestination = nestedNavHostStartDestination,
-                        route = DetailPaneNavHostDestination::class,
+                        startDestination = nestedNavHostStartDestination
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
@@ -150,17 +145,10 @@ internal fun InterestsListDetailScreen(
                             TopicDetailPlaceholder()
                         }
                     }
-            //    }
-            //}
+                }
+            }
         },
     )
-    // TODO (merge): Remove
-    LaunchedEffect(Unit) {
-        if (selectedTopicId != null) {
-            // Initial topic ID was provided when navigating to Interests, so show its details.
-            onTopicClickShowDetailPane(selectedTopicId)
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
