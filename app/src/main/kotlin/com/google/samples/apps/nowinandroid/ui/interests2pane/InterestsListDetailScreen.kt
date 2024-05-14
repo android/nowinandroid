@@ -26,14 +26,12 @@ import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationIt
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,8 +45,8 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
-import java.util.UUID
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 @Serializable object TopicPlaceholderDestination
 
@@ -135,7 +133,7 @@ internal fun InterestsListDetailScreen(
                     NavHost(
                         navController = nestedNavController,
                         startDestination = nestedNavHostStartDestination,
-                        route = DetailPaneNavHostDestination::class
+                        route = DetailPaneNavHostDestination::class,
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
