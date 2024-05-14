@@ -134,7 +134,8 @@ internal fun InterestsListDetailScreen(
                 key(nestedNavKey) {
                     NavHost(
                         navController = nestedNavController,
-                        startDestination = nestedNavHostStartDestination
+                        startDestination = nestedNavHostStartDestination,
+                        route = DetailPaneNavHostDestination::class
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
