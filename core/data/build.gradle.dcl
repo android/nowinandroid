@@ -24,10 +24,10 @@ androidLibrary {
 
     testing {
         dependencies {
-            testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-            testImplementation(project(":core:datastore-test"))
-            testImplementation(project(":core:testing"))
-            testImplementation(project(":core:network"))
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            implementation(project(":core:datastore-test"))
+            implementation(project(":core:testing"))
+            implementation(project(":core:network"))
         }
 
         jacoco {

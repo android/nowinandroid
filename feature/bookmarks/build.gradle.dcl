@@ -15,8 +15,8 @@ androidLibrary {
 
     testing {
         dependencies {
-            testImplementation(project(":core:testing"))
-            androidTestImplementation(project(":core:testing"))
+            implementation(project(":core:testing"))
+            androidImplementation(project(":core:testing"))
         }
     }
 }

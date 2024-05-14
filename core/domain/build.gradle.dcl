@@ -16,7 +16,7 @@ androidLibrary {
 
     testing {
         dependencies {
-            testImplementation(project(":core:testing"))
+            implementation(project(":core:testing"))
         }
 
         jacoco {
