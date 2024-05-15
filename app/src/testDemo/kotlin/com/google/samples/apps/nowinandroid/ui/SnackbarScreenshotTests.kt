@@ -199,6 +199,8 @@ class SnackbarScreenshotTests {
         action: suspend () -> Unit,
     ) {
         lateinit var scope: CoroutineScope
+        val fakeBottomSystemUiHeight = 80.dp
+
         composeTestRule.setContent {
             CompositionLocalProvider(
                 // Replaces images with placeholders
@@ -219,7 +221,14 @@ class SnackbarScreenshotTests {
                             timeZoneMonitor = timeZoneMonitor,
                         )
                         NiaTheme {
-                            NiaApp(appState, snackbarHostState, false, {}, {})
+                            NiaApp(
+                                appState = appState,
+                                snackbarHostState = snackbarHostState,
+                                showSettingsDialog = false,
+                                onSettingsDismissed = {},
+                                onTopAppBarActionClick = {},
+                                bottomSystemUiHeight = fakeBottomSystemUiHeight,
+                            )
                         }
                     }
                 }

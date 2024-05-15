@@ -19,10 +19,12 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -52,10 +54,13 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -81,6 +86,13 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
+
+    val density = LocalDensity.current
+    val bottomSystemUiHeight = density.run {
+        WindowInsets.safeDrawing
+            .getBottom(density = density)
+            .toDp()
+    }
 
     NiaBackground(modifier = modifier) {
         NiaGradientBackground(
@@ -111,6 +123,7 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
                 showSettingsDialog = showSettingsDialog,
                 onSettingsDismissed = { showSettingsDialog = false },
                 onTopAppBarActionClick = { showSettingsDialog = true },
+                bottomSystemUiHeight = bottomSystemUiHeight,
             )
         }
     }
@@ -124,6 +137,7 @@ internal fun NiaApp(
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
+    bottomSystemUiHeight: Dp,
     modifier: Modifier = Modifier,
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
@@ -141,7 +155,12 @@ internal fun NiaApp(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.testTag("Snackbar"),
+            )
+        },
         bottomBar = {
             if (appState.shouldShowBottomBar) {
                 NiaBottomBar(
@@ -150,6 +169,14 @@ internal fun NiaApp(
                     onNavigateToDestination = appState::navigateToTopLevelDestination,
                     currentDestination = appState.currentDestination,
                     modifier = Modifier.testTag("NiaBottomBar"),
+                )
+            } else {
+                Spacer(
+                    modifier = Modifier
+                        .height(bottomSystemUiHeight)
+                        .semantics {
+                            testTag = "Bottom padding for snackbar"
+                        },
                 )
             }
         },
@@ -221,9 +248,6 @@ internal fun NiaApp(
                     )
                 }
             }
-
-            // TODO: We may want to add padding or spacer when the snackbar is shown so that
-            //  content doesn't display behind it.
         }
     }
 }
