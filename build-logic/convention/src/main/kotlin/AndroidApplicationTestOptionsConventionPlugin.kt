@@ -23,6 +23,8 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidApplicationTestOptionsConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
+            pluginManager.apply("com.android.application")
+
             val extension = extensions.getByType<ApplicationExtension>()
             configureTestOptions(extension)
         }
