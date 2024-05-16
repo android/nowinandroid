@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.interests
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.testing.invoke
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -25,7 +26,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_KEY
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -55,9 +56,11 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
-            // TODO: Construct from destination when aosp/3073537 lands (due 14th May 2024)
-            //  savedStateHandle = SavedStateHandle(InterestsDestination(initialTopicId = testInputTopics[0].topic.id)),
-            savedStateHandle = SavedStateHandle(mapOf("initialTopicId" to testInputTopics[0].topic.id)),
+            // TODO: This line causes tests to fail since it introduces an Android dependency
+            //  see b/340966212 for more information
+            savedStateHandle = SavedStateHandle(
+                route = InterestsDestination(initialTopicId = testInputTopics[0].topic.id),
+            ),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
