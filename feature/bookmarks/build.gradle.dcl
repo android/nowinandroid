@@ -5,13 +5,8 @@ androidLibrary {
         implementation(project(":core:data"))
     }
 
-    feature {
-        description = "Calling the configure method enables this lib to be treated as a feature"
-    }
-
-    compose {
-        description = "Calling the configure method enables compose support"
-    }
+    feature {}
+    compose {}
 
     testing {
         dependencies {

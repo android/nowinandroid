@@ -16,12 +16,6 @@ androidLibrary {
         json()
     }
 
-    buildTypes {
-        // Need the empty closure to avoid "dangling pure expression" error
-        debug {}
-        release {}
-    }
-
     testing {
         dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")

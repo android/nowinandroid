@@ -8,12 +8,6 @@ androidLibrary {
         api(project(":core:model"))
     }
 
-    buildTypes {
-        // Need the empty closure to avoid "dangling pure expression" error
-        debug {}
-        release {}
-    }
-
     testing {
         dependencies {
             implementation(project(":core:testing"))
