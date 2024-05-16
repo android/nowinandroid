@@ -3,8 +3,6 @@ androidLibrary {
 
     dependencies {
         implementation(project(":core:data"))
-        testImplementation(project(":core:testing"))
-        androidTestImplementation(project(":core:testing"))
     }
 
     feature {
@@ -13,5 +11,12 @@ androidLibrary {
 
     compose {
         description = "Calling the configure method enables compose support"
+    }
+
+    testing {
+        dependencies {
+            implementation(project(":core:testing"))
+            androidImplementation(project(":core:testing"))
+        }
     }
 }

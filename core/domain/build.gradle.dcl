@@ -6,8 +6,6 @@ androidLibrary {
 
         api(project(":core:data"))
         api(project(":core:model"))
-
-        testImplementation(project(":core:testing"))
     }
 
     buildTypes {
@@ -17,6 +15,10 @@ androidLibrary {
     }
 
     testing {
+        dependencies {
+            implementation(project(":core:testing"))
+        }
+
         jacoco {
             version = "0.8.7"
         }

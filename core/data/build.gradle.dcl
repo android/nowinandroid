@@ -9,11 +9,6 @@ androidLibrary {
 
         implementation(project(":core:analytics"))
         implementation(project(":core:notifications"))
-
-        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-        testImplementation(project(":core:datastore-test"))
-        testImplementation(project(":core:testing"))
-        testImplementation(project(":core:network"))
     }
 
     kotlinSerialization {
@@ -28,6 +23,13 @@ androidLibrary {
     }
 
     testing {
+        dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            implementation(project(":core:datastore-test"))
+            implementation(project(":core:testing"))
+            implementation(project(":core:network"))
+        }
+
         jacoco {
             version = "0.8.7"
         }
