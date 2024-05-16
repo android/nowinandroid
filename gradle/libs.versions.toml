@@ -181,6 +181,7 @@ nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspe
 nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
 nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose", version = "unspecified" }
 nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco", version = "unspecified" }
+nowinandroid-android-library-testoptions = { id = "nowinandroid.android.library.testoptions", version = "unspecified" }
 nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspecified" }
 nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
 nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
