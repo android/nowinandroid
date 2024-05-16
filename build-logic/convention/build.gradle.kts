@@ -66,6 +66,10 @@ gradlePlugin {
             id = "nowinandroid.android.application.jacoco"
             implementationClass = "AndroidApplicationJacocoConventionPlugin"
         }
+        register("androidApplicationTestOptions") {
+            id = "nowinandroid.android.application.testoptions"
+            implementationClass = "AndroidApplicationTestOptionsConventionPlugin"
+        }
 
         register("androidLibrary") {
             id = "nowinandroid.android.library"
