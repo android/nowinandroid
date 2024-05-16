@@ -15,9 +15,10 @@
  */
 
 plugins {
+    alias(libs.plugins.nowinandroid.android.hilt)
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.nowinandroid.android.library.testoptions)
     id("kotlinx-serialization")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -27,11 +28,6 @@ android {
         buildConfig = true
     }
     namespace = "com.google.samples.apps.nowinandroid.core.network"
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
 }
 
 secrets {
