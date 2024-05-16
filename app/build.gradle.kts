@@ -16,15 +16,16 @@
 import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
+    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.nowinandroid.android.application)
     alias(libs.plugins.nowinandroid.android.application.compose)
     alias(libs.plugins.nowinandroid.android.application.flavors)
     alias(libs.plugins.nowinandroid.android.application.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
     alias(libs.plugins.nowinandroid.android.application.firebase)
-    id("com.google.android.gms.oss-licenses-plugin")
-    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.nowinandroid.android.application.testoptions)
+    alias(libs.plugins.nowinandroid.android.hilt)
     alias(libs.plugins.roborazzi)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -61,11 +62,6 @@ android {
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        }
-    }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
         }
     }
     namespace = "com.google.samples.apps.nowinandroid"
