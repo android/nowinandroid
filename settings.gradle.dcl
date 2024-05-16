@@ -36,6 +36,16 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+// Conventions for NiA libraries
+androidLibrary {
+    jdkVersion = 11
+
+    dependencies {
+        implementation("androidx.tracing:tracing-ktx:1.3.0-alpha02")
+    }
+}
+
 rootProject.name = "nowinandroid"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -69,4 +79,3 @@ include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
 include(":ui-test-hilt-manifest")
-

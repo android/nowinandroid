@@ -7,6 +7,9 @@ androidLibrary {
         api(project(":core:datastore"))
         api(project(":core:network"))
 
+        // TODO: once deps in conventions are not REPLACED by project deps, this can be removed
+        implementation("androidx.tracing:tracing-ktx:1.3.0-alpha02")
+
         implementation(project(":core:analytics"))
         implementation(project(":core:notifications"))
 
