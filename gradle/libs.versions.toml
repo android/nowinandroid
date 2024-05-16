@@ -175,6 +175,7 @@ nowinandroid-android-application-compose = { id = "nowinandroid.android.applicat
 nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase", version = "unspecified" }
 nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors", version = "unspecified" }
 nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco", version = "unspecified" }
+nowinandroid-android-application-testoptions = { id = "nowinandroid.android.application.testoptions", version = "unspecified" }
 nowinandroid-android-feature = { id = "nowinandroid.android.feature", version = "unspecified" }
 nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspecified" }
 nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
