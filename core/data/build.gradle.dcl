@@ -11,6 +11,8 @@ androidLibrary {
         implementation(project(":core:notifications"))
     }
 
+    hilt {}
+
     kotlinSerialization {
         jsonEnabled = true
     }

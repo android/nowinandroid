@@ -1,6 +1,8 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.common"
 
+    hilt {}
+
     testing {
         dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
