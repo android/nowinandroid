@@ -1,10 +1,3 @@
-
-import com.android.build.api.dsl.LibraryExtension
-import com.google.samples.apps.nowinandroid.configureTestOptions
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
-
 /*
  * Copyright 2024 The Android Open Source Project
  *
@@ -20,6 +13,12 @@ import org.gradle.kotlin.dsl.getByType
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.android.build.api.dsl.LibraryExtension
+import com.google.samples.apps.nowinandroid.configureTestOptions
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 
 class AndroidLibraryTestOptionsConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
