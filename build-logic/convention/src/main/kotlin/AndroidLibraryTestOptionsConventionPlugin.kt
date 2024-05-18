@@ -24,10 +24,9 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryTestOptionsConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("com.android.library")
-
-            val extension = extensions.getByType<LibraryExtension>()
-            configureTestOptions(extension)
+            extensions.configure<LibraryExtension> {
+                configureTestOptions(this)
+            }
         }
     }
 }
