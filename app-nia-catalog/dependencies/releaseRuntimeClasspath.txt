@@ -81,10 +81,10 @@ androidx.versionedparcelable:versionedparcelable:1.1.1
 androidx.viewpager:viewpager:1.0.0
 com.google.accompanist:accompanist-drawablepainter:0.32.0
 com.google.code.findbugs:jsr305:3.0.2
-com.google.dagger:dagger-lint-aar:2.51
-com.google.dagger:dagger:2.51
-com.google.dagger:hilt-android:2.51
-com.google.dagger:hilt-core:2.51
+com.google.dagger:dagger-lint-aar:2.51.1
+com.google.dagger:dagger:2.51.1
+com.google.dagger:hilt-android:2.51.1
+com.google.dagger:hilt-core:2.51.1
 com.google.guava:listenablefuture:1.0
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.8.0

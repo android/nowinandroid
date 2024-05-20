@@ -154,10 +154,10 @@ com.google.android.gms:play-services-oss-licenses:17.0.1
 com.google.android.gms:play-services-stats:17.0.2
 com.google.android.gms:play-services-tasks:18.0.2
 com.google.code.findbugs:jsr305:3.0.2
-com.google.dagger:dagger-lint-aar:2.51
-com.google.dagger:dagger:2.51
-com.google.dagger:hilt-android:2.51
-com.google.dagger:hilt-core:2.51
+com.google.dagger:dagger-lint-aar:2.51.1
+com.google.dagger:dagger:2.51.1
+com.google.dagger:hilt-android:2.51.1
+com.google.dagger:hilt-core:2.51.1
 com.google.errorprone:error_prone_annotations:2.11.0
 com.google.firebase:firebase-abt:21.1.1
 com.google.firebase:firebase-analytics-ktx:21.4.0
