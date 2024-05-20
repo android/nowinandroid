@@ -1,0 +1,56 @@
+/*
+ * Copyright 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.samples.apps.nowinandroid.core.ui
+
+import androidx.compose.material3.SnackbarHostState
+import com.google.samples.apps.nowinandroid.core.ui.Error.Default
+import com.google.samples.apps.nowinandroid.core.ui.Error.Exception
+import com.google.samples.apps.nowinandroid.core.ui.Error.Offline
+import com.google.samples.apps.nowinandroid.core.ui.Error.Specific
+
+class ErrorHandler(private val snackbarHostState: SnackbarHostState) {
+
+    suspend fun handleError(error: Error<*>) {
+        // Log the error or show a generic error message
+        when (error) {
+            is Specific -> {
+                snackbarHostState.showSnackbar(error.data.toString())
+            }
+            is Exception -> {
+                snackbarHostState.showSnackbar("Exception: ${error.exception.message.toString()}")
+            }
+            is Offline -> {
+                snackbarHostState.showSnackbar("No internet connection")
+            }
+            is Default -> {
+                snackbarHostState.showSnackbar("An error occurred")
+            }
+            is UnknownError -> {
+                snackbarHostState.showSnackbar("An unknown error occurred")
+            }
+        }
+    }
+}
+
+
+// Generic error types
+sealed interface Error<out T> {
+    data class Specific<T>(val data: T) : Error<T>
+    data class Exception(val exception: Throwable) : Error<Nothing>
+    data object Default: Error<Nothing>
+    data object Offline: Error<Nothing>
+}
