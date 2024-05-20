@@ -5,12 +5,12 @@ androidLibrary {
         implementation(project(":core:data"))
     }
 
-    feature {
-        description = "Calling the configure method enables this lib to be treated as a feature"
-    }
+    feature {}
 
     compose {
-        description = "Calling the configure method enables compose support"
+        // TODO: This should be a file property, and not assume it's a path from the root project
+        stabilityConfigurationFilePath = "/compose_compiler_config.conf"
+        experimentalStrongSkipping = true
     }
 
     testing {

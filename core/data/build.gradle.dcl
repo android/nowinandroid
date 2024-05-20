@@ -11,15 +11,10 @@ androidLibrary {
         implementation(project(":core:notifications"))
     }
 
-    kotlinSerialization {
-        version = "1.6.3"
-        json()
-    }
+    hilt {}
 
-    buildTypes {
-        // Need the empty closure to avoid "dangling pure expression" error
-        debug {}
-        release {}
+    kotlinSerialization {
+        jsonEnabled = true
     }
 
     testing {

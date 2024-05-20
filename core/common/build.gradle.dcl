@@ -1,13 +1,7 @@
 androidLibrary {
     namespace = "com.google.samples.apps.nowinandroid.core.common"
 
-    buildTypes {
-        buildTypes {
-            // Need the empty closure to avoid "dangling pure expression" error
-            debug {}
-            release {}
-        }
-    }
+    hilt {}
 
     testing {
         dependencies {
