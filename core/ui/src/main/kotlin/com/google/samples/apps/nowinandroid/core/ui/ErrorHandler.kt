@@ -18,9 +18,9 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.material3.SnackbarHostState
 import com.google.samples.apps.nowinandroid.core.ui.HandledError.Default
+import com.google.samples.apps.nowinandroid.core.ui.HandledError.Exception
 import com.google.samples.apps.nowinandroid.core.ui.HandledError.Offline
 import com.google.samples.apps.nowinandroid.core.ui.HandledError.Specific
-import com.google.samples.apps.nowinandroid.core.ui.HandledError.Exception
 
 class ErrorHandler(private val snackbarHostState: SnackbarHostState) {
 
@@ -31,7 +31,7 @@ class ErrorHandler(private val snackbarHostState: SnackbarHostState) {
                 snackbarHostState.showSnackbar(error.data.toString())
             }
             is Exception -> {
-                snackbarHostState.showSnackbar("Exception: ${error.exception.message.toString()}")
+                snackbarHostState.showSnackbar("Exception: ${error.exception.message}")
             }
             is Offline -> {
                 snackbarHostState.showSnackbar("No internet connection")

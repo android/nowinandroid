@@ -20,6 +20,6 @@ package com.google.samples.apps.nowinandroid.core.ui
 sealed interface HandledError<out T> {
     data class Specific<T>(val data: T) : HandledError<T>
     data class Exception(val exception: Throwable) : HandledError<Nothing>
-    data object Default: HandledError<Nothing>
-    data object Offline: HandledError<Nothing>
+    data object Default : HandledError<Nothing>
+    data object Offline : HandledError<Nothing>
 }
