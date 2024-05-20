@@ -71,6 +71,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.ui.ErrorHandler
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -128,6 +129,8 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
+
+    val errorHandler = ErrorHandler(snackbarHostState)
 
     if (showSettingsDialog) {
         SettingsDialog(
@@ -218,6 +221,7 @@ internal fun NiaApp(
                                 duration = Short,
                             ) == ActionPerformed
                         },
+                        errorHandler = errorHandler,
                     )
                 }
             }
