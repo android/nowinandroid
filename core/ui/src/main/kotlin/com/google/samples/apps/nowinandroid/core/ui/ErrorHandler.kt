@@ -17,14 +17,14 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import androidx.compose.material3.SnackbarHostState
-import com.google.samples.apps.nowinandroid.core.ui.Error.Default
-import com.google.samples.apps.nowinandroid.core.ui.Error.Exception
-import com.google.samples.apps.nowinandroid.core.ui.Error.Offline
-import com.google.samples.apps.nowinandroid.core.ui.Error.Specific
+import com.google.samples.apps.nowinandroid.core.ui.HandledError.Default
+import com.google.samples.apps.nowinandroid.core.ui.HandledError.Offline
+import com.google.samples.apps.nowinandroid.core.ui.HandledError.Specific
+import com.google.samples.apps.nowinandroid.core.ui.HandledError.Exception
 
 class ErrorHandler(private val snackbarHostState: SnackbarHostState) {
 
-    suspend fun handleError(error: Error<*>) {
+    suspend fun handleError(error: HandledError<*>) {
         // Log the error or show a generic error message
         when (error) {
             is Specific -> {
@@ -44,13 +44,4 @@ class ErrorHandler(private val snackbarHostState: SnackbarHostState) {
             }
         }
     }
-}
-
-
-// Generic error types
-sealed interface Error<out T> {
-    data class Specific<T>(val data: T) : Error<T>
-    data class Exception(val exception: Throwable) : Error<Nothing>
-    data object Default: Error<Nothing>
-    data object Offline: Error<Nothing>
 }
