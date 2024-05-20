@@ -13,8 +13,6 @@ androidLibrary {
             implementation(project(":core:testing"))
         }
 
-        jacoco {
-            version = "0.8.7"
-        }
+        jacoco {}
     }
 }

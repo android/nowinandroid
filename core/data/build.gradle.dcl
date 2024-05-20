@@ -12,10 +12,7 @@ androidLibrary {
     }
 
     hilt {}
-
-    kotlinSerialization {
-        jsonEnabled = true
-    }
+    kotlinSerialization {}
 
     testing {
         dependencies {
@@ -25,9 +22,7 @@ androidLibrary {
             implementation(project(":core:network"))
         }
 
-        jacoco {
-            version = "0.8.7"
-        }
+        jacoco {}
 
         testOptions {
             includeAndroidResources = true

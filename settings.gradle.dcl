@@ -38,6 +38,27 @@ dependencyResolutionManagement {
 }
 rootProject.name = "nowinandroid"
 
+conventions {
+    androidLibrary {
+        jdkVersion = 11
+        compileSdk = 34
+
+        dependencies {
+            implementation("androidx.tracing:tracing-ktx:1.3.0-alpha02")
+        }
+
+        kotlinSerialization {
+            jsonEnabled = true
+        }
+
+        testing {
+            jacoco {
+                version = "0.8.7"
+            }
+        }
+    }
+}
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":app-nia-catalog")
@@ -69,4 +90,3 @@ include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
 include(":ui-test-hilt-manifest")
-
