@@ -40,7 +40,6 @@ import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetai
 fun NiaNavHost(
     appState: NiaAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    snackbarErrorHandler: SnackbarErrorHandler,
     modifier: Modifier = Modifier,
     startDestination: String = FOR_YOU_ROUTE,
 ) {
