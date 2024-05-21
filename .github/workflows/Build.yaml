@@ -189,7 +189,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
-      - name: Build projects and run instrumentation tests
+      - name: Build projects and run instrumentation tests including screenshots
+        id: dropshotsverify
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -197,7 +198,42 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
+          profile: pixel_5
+          ram-size: 4096M
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
+
+      - name: Prevent pushing new screenshots if this is a fork (instrumented)
+        id: checkfork_screenshots_instrumented
+        continue-on-error: false
+        if: steps.dropshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Instrumented screenshot tests failed, please create a PR in your fork first." && exit 1
+
+
+      - name: Record new instrumented screenshots
+        id: screenshotsrecordinstrumented
+        if: steps.dropshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          heap-size: 600M
+          profile: pixel_5
+          force-avd-creation: false
+          ram-size: 4096M
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
+
+      - name: Push new screenshots if available
+        uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
+        if: steps.screenshotsrecordinstrumented.outcome == 'success'
+        with:
+          file_pattern: '*/*.png'
+          disable_globbing: true
+          commit_message: "🤖 Updates instrumented screenshots"
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30

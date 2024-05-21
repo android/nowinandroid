@@ -34,6 +34,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
                 apply("nowinandroid.android.lint")
                 apply("com.dropbox.dependency-guard")
+                apply("com.dropbox.dropshots")
             }
 
             extensions.configure<ApplicationExtension> {
