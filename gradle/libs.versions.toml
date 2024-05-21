@@ -2,9 +2,9 @@
 accompanist = "0.34.0"
 androidDesugarJdkLibs = "2.0.4"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.3.2"
+androidGradlePlugin = "8.4.0"
 androidTools = "31.4.0"
-androidxActivity = "1.9.0"
+androidxActivity = "1.9.2"
 androidxAppCompat = "1.6.1"
 androidxBrowser = "1.8.0"
 androidxComposeBom = "2024.05.00"
@@ -212,7 +212,6 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
-work-testing = { group = "androidx.work", name = "work-testing", version = "2.9.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -258,4 +257,3 @@ nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspeci
 nowinandroid-kmp-library = { id = "nowinandroid.kmp.library", version = "unspecified" }
 nowinandroid-kotlin-inject = { id = "nowinandroid.kmp.inject", version = "unspecified" }
 nowinandroid-sqldelight = { id = "nowinandroid.sqldelight", version = "unspecified" }
-
