@@ -54,7 +54,8 @@ class EdgeToEdgeTest {
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     /**
-     * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission.
+     * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission to prevent the
+     * permissions dialog from showing on top.
      */
     @get:Rule(order = 2)
     val postNotificationsPermission = GrantPostNotificationsPermissionRule()
