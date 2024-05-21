@@ -21,6 +21,7 @@ import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Default
 import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Exception
 import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Offline
 import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Specific
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Unknown
 
 class SnackbarErrorHandler(private val snackbarHostState: SnackbarHostState) {
 
@@ -39,7 +40,7 @@ class SnackbarErrorHandler(private val snackbarHostState: SnackbarHostState) {
             is Default -> {
                 snackbarHostState.showSnackbar("An error occurred")
             }
-            is UnknownError -> {
+            is Unknown -> {
                 snackbarHostState.showSnackbar("An unknown error occurred")
             }
         }
