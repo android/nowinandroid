@@ -213,6 +213,7 @@ jobs:
 
       - name: Record new instrumented screenshots
         id: screenshotsrecordinstrumented
+        continue-on-error: true
         if: steps.dropshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         uses: reactivecircus/android-emulator-runner@v2
         with:
