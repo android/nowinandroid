@@ -191,6 +191,7 @@ jobs:
 
       - name: Build projects and run instrumentation tests including screenshots
         id: dropshotsverify
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -213,7 +214,6 @@ jobs:
 
       - name: Record new instrumented screenshots
         id: screenshotsrecordinstrumented
-        continue-on-error: true
         if: steps.dropshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -228,7 +228,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
 
-      - name: Push new screenshots if available
+      - name: Push new device screenshots if available
         uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
         if: steps.screenshotsrecordinstrumented.outcome == 'success'
         with:
