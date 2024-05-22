@@ -108,13 +108,13 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
             LaunchedEffect(errorMessage) {
                 errorMessage?.let {
                     val snackBarResult = snackbarHostState.showSnackbar(
-                        message = it,
+                        message = it.message,
                         actionLabel = "Continue",
                         duration = Indefinite,
                     ) == ActionPerformed
 
                     if (snackBarResult) {
-                        appState.clearErrorMessage()
+                        appState.clearErrorMessage(it.id)
                     }
                 }
             }

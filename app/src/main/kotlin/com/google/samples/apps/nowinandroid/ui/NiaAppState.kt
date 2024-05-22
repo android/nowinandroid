@@ -121,17 +121,22 @@ class NiaAppState(
         )
 
     private val errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
-    val errorMessage: StateFlow<String?> = errorMessages.map { it.filter { it.message.isNotEmpty() && it.message.isNotBlank() }.firstOrNull()?.message }.stateIn(
+    val errorMessage: StateFlow<ErrorMessage?> = errorMessages.map { it.firstOrNull() }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,
     )
-    fun addErrorMessage(error: String) {
-        if(error.isNotEmpty() && error.isNotBlank()) errorMessages.update { it + ErrorMessage(error) }
+    fun addErrorMessage(error: String): String? {
+        if(error.isNotBlank()) {
+            val newError = ErrorMessage(error)
+            errorMessages.update { it + newError }
+            return newError.id
+        }
+        return null
     }
 
-    fun clearErrorMessage() {
-        errorMessages.update { it.drop(1) }
+    fun clearErrorMessage(id: String) {
+        errorMessages.update { it.filter { item -> item.id != id } }
     }
 
     /**
