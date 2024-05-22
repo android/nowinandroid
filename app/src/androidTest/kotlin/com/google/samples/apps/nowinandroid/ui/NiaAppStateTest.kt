@@ -153,10 +153,10 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+
             )
         }
 
@@ -173,7 +173,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -194,7 +193,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -216,7 +214,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -240,7 +237,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -258,9 +254,6 @@ class NiaAppStateTest {
             )
         }
     }
-
-    private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
-
 }
 
 @Composable
