@@ -16,9 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
@@ -29,8 +33,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -40,7 +44,9 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -55,7 +61,7 @@ import java.util.TimeZone
 import javax.inject.Inject
 
 /**
- * Tests that the navigation UI is rendered correctly on different screen sizes.
+ * Tests that the Snackbar is correctly displayed on different screen sizes.
  */
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -65,7 +71,7 @@ import javax.inject.Inject
 @Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
-class NiaAppScreenSizesScreenshotTests {
+class SnackbarScreenshotTests {
 
     /**
      * Manages the components' state and is used to perform injection on your test
@@ -94,7 +100,7 @@ class NiaAppScreenSizesScreenshotTests {
     lateinit var timeZoneMonitor: TimeZoneMonitor
 
     @Inject
-    lateinit var userDataRepository: UserDataRepository
+    lateinit var userDataRepository: FakeUserDataRepository
 
     @Inject
     lateinit var topicsRepository: TopicsRepository
@@ -122,27 +128,106 @@ class NiaAppScreenSizesScreenshotTests {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
-    private fun testNiaAppScreenshotWithSize(width: Dp, height: Dp, screenshotName: String) {
+    @Test
+    fun phone_noSnackbar() {
+        val snackbarHostState = SnackbarHostState()
+        testSnackbarScreenshotWithSize(
+            snackbarHostState,
+            400.dp,
+            500.dp,
+            "snackbar_compact_medium_noSnackbar",
+            action = { },
+        )
+    }
+
+    @Test
+    fun snackbarShown_phone() {
+        val snackbarHostState = SnackbarHostState()
+        testSnackbarScreenshotWithSize(
+            snackbarHostState,
+            400.dp,
+            500.dp,
+            "snackbar_compact_medium",
+        ) {
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
+        }
+    }
+
+    @Test
+    fun snackbarShown_foldable() {
+        val snackbarHostState = SnackbarHostState()
+        testSnackbarScreenshotWithSize(
+            snackbarHostState,
+            600.dp,
+            600.dp,
+            "snackbar_medium_medium",
+        ) {
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
+        }
+    }
+
+    @Test
+    fun snackbarShown_tablet() {
+        val snackbarHostState = SnackbarHostState()
+        testSnackbarScreenshotWithSize(
+            snackbarHostState,
+            900.dp,
+            900.dp,
+            "snackbar_expanded_expanded",
+        ) {
+            snackbarHostState.showSnackbar(
+                "This is a test snackbar message",
+                actionLabel = "Action Label",
+                duration = Indefinite,
+            )
+        }
+    }
+
+    private fun testSnackbarScreenshotWithSize(
+        snackbarHostState: SnackbarHostState,
+        width: Dp,
+        height: Dp,
+        screenshotName: String,
+        action: suspend () -> Unit,
+    ) {
+        lateinit var scope: CoroutineScope
         composeTestRule.setContent {
             CompositionLocalProvider(
+                // Replaces images with placeholders
                 LocalInspectionMode provides true,
             ) {
+                scope = rememberCoroutineScope()
+
                 DeviceConfigurationOverride(
-                    override = DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
+                    DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
-                    NiaTheme {
-                        val fakeAppState = rememberNiaAppState(
+                    BoxWithConstraints {
+                        val appState = rememberNiaAppState(
                             windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(width, height),
+                                DpSize(maxWidth, maxHeight),
                             ),
                             networkMonitor = networkMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
                             timeZoneMonitor = timeZoneMonitor,
                         )
-                        NiaApp(fakeAppState)
+                        NiaTheme {
+                            NiaApp(appState, snackbarHostState, false, {}, {})
+                        }
                     }
                 }
             }
+        }
+
+        scope.launch {
+            action()
         }
 
         composeTestRule.onRoot()
@@ -150,86 +235,5 @@ class NiaAppScreenSizesScreenshotTests {
                 "src/testDemo/screenshots/$screenshotName.png",
                 roborazziOptions = DefaultRoborazziOptions,
             )
-    }
-
-    @Test
-    fun compactWidth_compactHeight_showsNavigationBar() {
-        testNiaAppScreenshotWithSize(
-            400.dp,
-            400.dp,
-            "compactWidth_compactHeight_showsNavigationBar",
-        )
-    }
-
-    @Test
-    fun mediumWidth_compactHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            610.dp,
-            400.dp,
-            "mediumWidth_compactHeight_showsNavigationRail",
-        )
-    }
-
-    @Test
-    fun expandedWidth_compactHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            900.dp,
-            400.dp,
-            "expandedWidth_compactHeight_showsNavigationRail",
-        )
-    }
-
-    @Test
-    fun compactWidth_mediumHeight_showsNavigationBar() {
-        testNiaAppScreenshotWithSize(
-            400.dp,
-            500.dp,
-            "compactWidth_mediumHeight_showsNavigationBar",
-        )
-    }
-
-    @Test
-    fun mediumWidth_mediumHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            610.dp,
-            500.dp,
-            "mediumWidth_mediumHeight_showsNavigationRail",
-        )
-    }
-
-    @Test
-    fun expandedWidth_mediumHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            900.dp,
-            500.dp,
-            "expandedWidth_mediumHeight_showsNavigationRail",
-        )
-    }
-
-    @Test
-    fun compactWidth_expandedHeight_showsNavigationBar() {
-        testNiaAppScreenshotWithSize(
-            400.dp,
-            1000.dp,
-            "compactWidth_expandedHeight_showsNavigationBar",
-        )
-    }
-
-    @Test
-    fun mediumWidth_expandedHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            610.dp,
-            1000.dp,
-            "mediumWidth_expandedHeight_showsNavigationRail",
-        )
-    }
-
-    @Test
-    fun expandedWidth_expandedHeight_showsNavigationRail() {
-        testNiaAppScreenshotWithSize(
-            900.dp,
-            1000.dp,
-            "expandedWidth_expandedHeight_showsNavigationRail",
-        )
     }
 }
