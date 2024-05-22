@@ -20,6 +20,6 @@
     java.lang.IllegalStateException: () -> kotlin.String at org.jetbrains.kotlin.asJava.classes.KtLightClassForFacadeImpl$Companion.createForFacadeNoCache
     -->
     <issue id="LintError">
-        <ignore path="**/JvmUnitTestFakeAssetManager.kt" />
+        <ignore path="**/JvmUnitTestDemoAssetManager.kt" />
     </issue>
 </lint>

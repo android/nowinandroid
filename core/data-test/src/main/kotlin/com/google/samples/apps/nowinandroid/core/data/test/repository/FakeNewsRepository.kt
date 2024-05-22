@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeNiaNetworkDataSource
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -39,9 +39,9 @@ import javax.inject.Inject
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
  */
-internal class FakeNewsRepository @Inject constructor(
+class FakeNewsRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    private val datasource: FakeNiaNetworkDataSource,
+    private val datasource: DemoNiaNetworkDataSource,
 ) : NewsRepository {
 
     override fun getNewsResources(
