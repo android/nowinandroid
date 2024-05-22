@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 // Generic error types
 sealed interface SnackbarError<out T> {
-    data class Specific<T>(val data: T) : SnackbarError<T>
-    data class Exception(val exception: Throwable) : SnackbarError<Nothing>
+    data class Custom<T>(val data: T) : SnackbarError<T>
+    data object Exception: SnackbarError<Nothing>
     data object Default : SnackbarError<Nothing>
     data object Unknown : SnackbarError<Nothing>
     data object Offline : SnackbarError<Nothing>
