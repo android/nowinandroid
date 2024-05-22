@@ -333,24 +333,34 @@ suspend fun SnackbarHostState.handleError(ctx: Context, error: SnackbarError<*>)
     // Log the error or show a generic error message
     when (error) {
         is Custom -> {
-            showSnackbar(message = error.data.toString(),
-                duration = SnackbarDuration.Long)
+            showSnackbar(
+                message = error.data.toString(),
+                duration = SnackbarDuration.Long,
+            )
         }
         is Exception -> {
-            showSnackbar(message = ctx.getString(R.string.error_exception),
-                duration = Indefinite)
+            showSnackbar(
+                message = ctx.getString(R.string.error_exception),
+                duration = Indefinite,
+            )
         }
         is Offline -> {
-            showSnackbar(message = ctx.getString(R.string.not_connected),
-                duration = Indefinite)
+            showSnackbar(
+                message = ctx.getString(R.string.not_connected),
+                duration = Indefinite,
+            )
         }
         is Default -> {
-            showSnackbar(message = ctx.getString(R.string.error_default),
-                duration = Short)
+            showSnackbar(
+                message = ctx.getString(R.string.error_default),
+                duration = Short,
+            )
         }
         is Unknown -> {
-            showSnackbar(message = ctx.getString(R.string.error_unknown),
-                duration = Short)
+            showSnackbar(
+                message = ctx.getString(R.string.error_unknown),
+                duration = Short,
+            )
         }
     }
 }
