@@ -127,7 +127,7 @@ class NiaAppState(
         initialValue = null,
     )
     fun addErrorMessage(error: String): String? {
-        if(error.isNotBlank()) {
+        if (error.isNotBlank()) {
             val newError = ErrorMessage(error)
             errorMessages.update { it + newError }
             return newError.id
