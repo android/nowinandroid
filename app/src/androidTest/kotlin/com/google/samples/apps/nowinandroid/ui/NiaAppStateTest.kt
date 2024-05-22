@@ -242,10 +242,10 @@ class NiaAppStateTest {
         }
 
         backgroundScope.launch { state.errorMessage.collect() }
-        state.addErrorMessage("Test Error Message")
+        val id = state.addErrorMessage("Test Error Message")
         assertEquals(
-            "Test Error Message",
-            state.errorMessage.value,
+            id,
+            state.errorMessage.value?.id,
         )
     }
 
@@ -263,11 +263,11 @@ class NiaAppStateTest {
         }
 
         backgroundScope.launch { state.errorMessage.collect() }
-        state.addErrorMessage("Test Error Message 1")
-        state.addErrorMessage("Test Error Message 2")
+        val id1 = state.addErrorMessage("Test Error Message 1")
+        val id2 = state.addErrorMessage("Test Error Message 2")
         assertEquals(
-            "Test Error Message 1",
-            state.errorMessage.value,
+            id1,
+            state.errorMessage.value?.id,
         )
     }
 
@@ -285,12 +285,14 @@ class NiaAppStateTest {
         }
 
         backgroundScope.launch { state.errorMessage.collect() }
-        state.addErrorMessage("Test Error Message")
-        state.clearErrorMessage()
-        assertEquals(
-            null,
-            state.errorMessage.value,
-        )
+        val id = state.addErrorMessage("Test Error Message 1")
+        if (id != null) {
+            state.clearErrorMessage(id)
+            assertEquals(
+                null,
+                state.errorMessage.value,
+            )
+        }
     }
 
     @Test
@@ -307,14 +309,15 @@ class NiaAppStateTest {
         }
 
         backgroundScope.launch { state.errorMessage.collect() }
-        state.addErrorMessage("Test Error Message 1")
-        state.addErrorMessage("Test Error Message 2")
-        state.clearErrorMessage()
-
-        assertEquals(
-            "Test Error Message 2",
-            state.errorMessage.value,
-        )
+        val id1 = state.addErrorMessage("Test Error Message 1")
+        val id2 = state.addErrorMessage("Test Error Message 2")
+        if (id1 != null) {
+            state.clearErrorMessage(id1)
+            assertEquals(
+                id2,
+                state.errorMessage.value?.id,
+            )
+        }
     }
 
     private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
