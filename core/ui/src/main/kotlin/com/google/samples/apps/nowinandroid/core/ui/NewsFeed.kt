@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.ColorInt
@@ -52,6 +53,7 @@ fun LazyStaggeredGridScope.newsFeed(
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     onExpandedCardClick: () -> Unit = {},
+    onLaunchFailed: () -> Unit = {},
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
@@ -73,7 +75,7 @@ fun LazyStaggeredGridScope.newsFeed(
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
                         )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor, onLaunchFailed)
 
                         onNewsResourceViewed(userNewsResource.id)
                     },
@@ -94,14 +96,18 @@ fun LazyStaggeredGridScope.newsFeed(
     }
 }
 
-fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int) {
+fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int, onLaunchFailed: () -> Unit) {
     val customTabBarColor = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(toolbarColor).build()
     val customTabsIntent = CustomTabsIntent.Builder()
         .setDefaultColorSchemeParams(customTabBarColor)
         .build()
 
-    customTabsIntent.launchUrl(context, uri)
+    try {
+        customTabsIntent.launchUrl(context, uri)
+    } catch (e: ActivityNotFoundException) {
+        onLaunchFailed()
+    }
 }
 
 /**

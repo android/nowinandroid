@@ -39,6 +39,7 @@ import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetai
 fun NiaNavHost(
     appState: NiaAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    errorHandler: (String) -> Unit,
     modifier: Modifier = Modifier,
     startDestination: String = FOR_YOU_ROUTE,
 ) {
@@ -57,6 +58,7 @@ fun NiaNavHost(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
             onTopicClick = navController::navigateToInterests,
+            errorHandler = errorHandler,
         )
         interestsListDetailScreen()
     }

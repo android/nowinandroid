@@ -232,6 +232,7 @@ internal fun NiaApp(
                                 duration = Short,
                             ) == ActionPerformed
                         },
+                        errorHandler = { message -> appState.addErrorMessage(message) }
                     )
                 }
             }

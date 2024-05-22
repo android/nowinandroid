@@ -38,6 +38,7 @@ fun LazyListScope.userNewsResourceCardItems(
     onToggleBookmark: (item: UserNewsResource) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
+    onLaunchFailed: () -> Unit = {},
     itemModifier: Modifier = Modifier,
 ) = items(
     items = items,
@@ -57,7 +58,7 @@ fun LazyListScope.userNewsResourceCardItems(
                 analyticsHelper.logNewsResourceOpened(
                     newsResourceId = userNewsResource.id,
                 )
-                launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                launchCustomChromeTab(context, resourceUrl, backgroundColor, onLaunchFailed)
                 onNewsResourceViewed(userNewsResource.id)
             },
             onTopicClick = onTopicClick,
