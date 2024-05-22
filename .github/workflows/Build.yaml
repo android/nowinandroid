@@ -200,7 +200,6 @@ jobs:
           disk-size: 6000M
           heap-size: 600M
           profile: pixel_5
-          ram-size: 4096M
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
@@ -224,7 +223,6 @@ jobs:
           heap-size: 600M
           profile: pixel_5
           force-avd-creation: false
-          ram-size: 4096M
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
 
