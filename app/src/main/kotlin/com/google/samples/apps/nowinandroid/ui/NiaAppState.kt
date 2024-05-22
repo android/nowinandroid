@@ -46,14 +46,11 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.TimeZone
@@ -123,18 +120,18 @@ class NiaAppState(
             initialValue = false,
         )
 
-    private val _errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
-    val errorMessage: StateFlow<String?> = _errorMessages.map{ it.firstOrNull()?.message }.stateIn(
+    private val errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
+    val errorMessage: StateFlow<String?> = errorMessages.map { it.firstOrNull()?.message }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,
     )
     fun addErrorMessage(error: String) {
-        _errorMessages.update { it + ErrorMessage(error) }
+        errorMessages.update { it + ErrorMessage(error) }
     }
 
     fun clearErrorMessage() {
-        _errorMessages.update { it.drop(1) }
+        errorMessages.update { it.drop(1) }
     }
 
     /**

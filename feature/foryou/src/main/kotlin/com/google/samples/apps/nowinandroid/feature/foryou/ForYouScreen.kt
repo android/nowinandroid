@@ -478,6 +478,7 @@ private fun DeepLinkEffect(
             context = context,
             uri = Uri.parse(userNewsResource.url),
             toolbarColor = backgroundColor,
+            onLaunchFailed = {},
         )
     }
 }

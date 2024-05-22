@@ -123,7 +123,7 @@ internal fun SearchRoute(
         onBackClick = onBackClick,
         onInterestsClick = onInterestsClick,
         onTopicClick = onTopicClick,
-        onLaunchFailed =  { errorHandler(launchFailedString) },
+        onLaunchFailed = { errorHandler(launchFailedString) },
     )
 }
 
@@ -371,7 +371,7 @@ private fun SearchResultBody(
                     },
                     onLaunchFailed = {
                         onLaunchFailed()
-                    }
+                    },
                 )
             }
         }

@@ -110,7 +110,7 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
                     val snackBarResult = snackbarHostState.showSnackbar(
                         message = it,
                         actionLabel = "Continue",
-                        duration = Indefinite
+                        duration = Indefinite,
                     ) == ActionPerformed
 
                     if (snackBarResult) {
@@ -232,7 +232,7 @@ internal fun NiaApp(
                                 duration = Short,
                             ) == ActionPerformed
                         },
-                        errorHandler = { message -> appState.addErrorMessage(message) }
+                        errorHandler = { message -> appState.addErrorMessage(message) },
                     )
                 }
             }

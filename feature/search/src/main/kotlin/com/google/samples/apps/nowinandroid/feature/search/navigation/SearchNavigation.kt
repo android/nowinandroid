@@ -39,7 +39,7 @@ fun NavGraphBuilder.searchScreen(
             onBackClick = onBackClick,
             onInterestsClick = onInterestsClick,
             onTopicClick = onTopicClick,
-            errorHandler = errorHandler
+            errorHandler = errorHandler,
         )
     }
 }
