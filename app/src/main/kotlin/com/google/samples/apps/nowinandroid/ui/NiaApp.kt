@@ -33,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
@@ -108,10 +109,6 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
             val notConnectedMessage = stringResource(R.string.not_connected)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
-                    snackbarHostState.showSnackbar(
-                        message = notConnectedMessage,
-                        duration = Indefinite,
-                    )
                     snackbarHostState.handleError(ctx, Offline)
                 }
             }
@@ -337,19 +334,24 @@ suspend fun SnackbarHostState.handleError(ctx: Context, error: SnackbarError<*>)
     // Log the error or show a generic error message
     when (error) {
         is Custom -> {
-            showSnackbar(error.data.toString())
+            showSnackbar(message = error.data.toString(),
+                duration = SnackbarDuration.Long)
         }
         is Exception -> {
-            showSnackbar(ctx.getString(R.string.error_exception))
+            showSnackbar(message = ctx.getString(R.string.error_exception),
+                duration = Indefinite)
         }
         is Offline -> {
-            showSnackbar(ctx.getString(R.string.not_connected))
+            showSnackbar(message = ctx.getString(R.string.not_connected),
+                duration = Indefinite)
         }
         is Default -> {
-            showSnackbar(ctx.getString(R.string.error_default))
+            showSnackbar(message = ctx.getString(R.string.error_default),
+                duration = Short)
         }
         is Unknown -> {
-            showSnackbar(ctx.getString(R.string.error_unknown))
+            showSnackbar(message = ctx.getString(R.string.error_unknown),
+                duration = Short)
         }
     }
 }
