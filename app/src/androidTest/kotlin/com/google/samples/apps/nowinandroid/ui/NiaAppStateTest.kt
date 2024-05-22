@@ -208,6 +208,97 @@ class NiaAppStateTest {
         )
     }
 
+    @Test
+    fun niaAppState_whenErrorIsAdded_ErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.errorMessage.collect() }
+        state.addErrorMessage("Test Error Message")
+        assertEquals(
+            "Test Error Message",
+            state.errorMessage.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_whenErrorsAreAdded_FirstErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.errorMessage.collect() }
+        state.addErrorMessage("Test Error Message 1")
+        state.addErrorMessage("Test Error Message 2")
+        assertEquals(
+            "Test Error Message 1",
+            state.errorMessage.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_whenErrorIsCleared_ErrorMessageIsNotPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.errorMessage.collect() }
+        state.addErrorMessage("Test Error Message")
+        state.clearErrorMessage()
+        assertEquals(
+            null,
+            state.errorMessage.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_whenErrorsAreCleared_NextErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.errorMessage.collect() }
+        state.addErrorMessage("Test Error Message 1")
+        state.addErrorMessage("Test Error Message 2")
+        state.clearErrorMessage()
+
+        assertEquals(
+            "Test Error Message 2",
+            state.errorMessage.value,
+        )
+    }
+
+
+
     private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
 }
 
