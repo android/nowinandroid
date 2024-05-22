@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +53,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -71,7 +73,12 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.core.ui.SnackbarErrorHandler
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Custom
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Default
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Exception
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Offline
+import com.google.samples.apps.nowinandroid.core.ui.SnackbarError.Unknown
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -82,6 +89,8 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
+
+    val ctx = LocalContext.current
 
     NiaBackground(modifier = modifier) {
         NiaGradientBackground(
@@ -103,6 +112,7 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
                         message = notConnectedMessage,
                         duration = Indefinite,
                     )
+                    snackbarHostState.handleError(ctx, Offline)
                 }
             }
 
@@ -129,8 +139,6 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
-
-    val snackbarErrorHandler = SnackbarErrorHandler(snackbarHostState)
 
     if (showSettingsDialog) {
         SettingsDialog(
@@ -221,7 +229,6 @@ internal fun NiaApp(
                                 duration = Short,
                             ) == ActionPerformed
                         },
-                        snackbarErrorHandler = snackbarErrorHandler,
                     )
                 }
             }
@@ -325,3 +332,24 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLev
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
+
+suspend fun SnackbarHostState.handleError(ctx: Context, error: SnackbarError<*>) {
+    // Log the error or show a generic error message
+    when (error) {
+        is Custom -> {
+            showSnackbar(error.data.toString())
+        }
+        is Exception -> {
+            showSnackbar(ctx.getString(R.string.error_exception))
+        }
+        is Offline -> {
+            showSnackbar(ctx.getString(R.string.not_connected))
+        }
+        is Default -> {
+            showSnackbar(ctx.getString(R.string.error_default))
+        }
+        is Unknown -> {
+            showSnackbar(ctx.getString(R.string.error_unknown))
+        }
+    }
+}
