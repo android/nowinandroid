@@ -93,6 +93,7 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
             val snackbarHostState = remember { SnackbarHostState() }
 
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+            val errorMessage by appState.errorMessage.collectAsStateWithLifecycle()
 
             // If user is not connected to the internet show a snack bar to inform them.
             val notConnectedMessage = stringResource(R.string.not_connected)
@@ -102,6 +103,19 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
                         message = notConnectedMessage,
                         duration = Indefinite,
                     )
+                }
+            }
+            LaunchedEffect(errorMessage) {
+                errorMessage?.let {
+                    val snackBarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = "Continue",
+                        duration = Indefinite
+                    ) == ActionPerformed
+
+                    if (snackBarResult) {
+                        appState.clearErrorMessage()
+                    }
                 }
             }
 
