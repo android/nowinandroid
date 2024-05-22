@@ -26,4 +26,5 @@
     <string name="feature_search_updates">Updates</string>
     <string name="feature_search_recent_searches">Recent searches</string>
     <string name="feature_search_clear_recent_searches_content_desc">Clear searches</string>
+    <string name="feature_search_custom_tab_activity_not_found">Please install a browser to open this news resource</string>
 </resources>
