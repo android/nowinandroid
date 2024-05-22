@@ -200,7 +200,7 @@ jobs:
           disk-size: 6000M
           heap-size: 600M
           profile: pixel_5
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
       - name: Prevent pushing new screenshots if this is a fork (instrumented)
