@@ -209,6 +209,26 @@ class NiaAppStateTest {
     }
 
     @Test
+    fun niaAppState_whenErrorIsNotAdded_NullIsPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.errorMessage.collect() }
+        assertEquals(
+            null,
+            state.errorMessage.value,
+        )
+    }
+
+    @Test
     fun niaAppState_whenErrorIsAdded_ErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
@@ -296,8 +316,6 @@ class NiaAppStateTest {
             state.errorMessage.value,
         )
     }
-
-
 
     private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
 }
