@@ -30,9 +30,4 @@
     <string name="core_ui_interests_card_follow_button_content_desc">Follow interest</string>
     <string name="core_ui_interests_card_unfollow_button_content_desc">Unfollow interest</string>
 
-    <string name="core_ui_error_offline">No internet connection</string>
-    <string name="core_ui_error_default">An error occurred</string>
-    <string name="core_ui_error_unknown">An unknown error occurred</string>
-    <string name="core_ui_error_exception">An exception occurred: %1$s</string>
-
 </resources>
