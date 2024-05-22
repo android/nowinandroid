@@ -12,13 +12,8 @@ concurrency:
 
 jobs:
   test_and_apk:
-    name: "Local tests and APKs [useKSP2=${{ matrix.useKSP2 }}, useK2Uast=${{ matrix.useK2Uast }}]"
+    name: "Local tests and APKs"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        useKSP2: [true, false]
-        useK2Uast: [true, false]
 
     permissions:
       contents: write
@@ -108,7 +103,7 @@ jobs:
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests and create report
         if: always()
-        run: ./gradlew testDemoDebug :lint:test -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.6.0-alpha01
+        run: ./gradlew testDemoDebug :lint:test
       # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
       # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
       # release build
@@ -119,19 +114,18 @@ jobs:
           -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
           -x collectDemoNonMinifiedReleaseBaselineProfile
           -x collectProdNonMinifiedReleaseBaselineProfile
-          -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.6.0-alpha01
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
-          name: APKs-${{ matrix.useKSP2 }}-${{ matrix.useK2Uast }}
+          name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: local-test-results-${{ matrix.useKSP2 }}-${{ matrix.useK2Uast }}
+          name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Upload screenshot results (PNG)
@@ -142,13 +136,13 @@ jobs:
           path: '**/build/outputs/roborazzi/*_compare.png'
 
       - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint -Pksp.useKSP2=${{ matrix.useKSP2 }} -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.6.0-alpha01
+        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
 
       - name: Upload lint reports (HTML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lint-reports-${{ matrix.useKSP2 }}-${{ matrix.useK2Uast }}
+          name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
       - name: Check badging
