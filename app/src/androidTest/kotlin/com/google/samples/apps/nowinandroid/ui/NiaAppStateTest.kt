@@ -146,7 +146,7 @@ class NiaAppStateTest {
             state.currentTimeZone.value,
         )
     }
-    
+
     @Test
     fun niaAppState_whenErrorIsNotAdded_NullIsPresent() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
