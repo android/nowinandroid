@@ -227,13 +227,17 @@ jobs:
 #          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
 #          script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
 
+      - name: Pull Remote Changes (in case another job already uploaded screenshots)
+        if: steps.dropshotsverify.outcome == 'failure'
+        run: git pull
+
       - name: Push new device screenshots if available
         uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
         if: steps.dropshotsverify.outcome == 'failure'
         with:
           file_pattern: 'app/src/androidTest/screenshots/*.png'
           disable_globbing: true
-          commit_message: "🤖 Updates instrumented screenshots"
+          commit_message: "🤖 Updates instrumented screenshots. API ${{ matrix.api-level }}"
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30
