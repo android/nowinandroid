@@ -203,6 +203,30 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
+      # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/391
+      # From https://github.com/TWiStErRob/github-workflows/blob/main/.github/workflows/instrumentation.yml
+      - name: "Workaround for emulator bug."
+        id: script
+        env:
+          SCRIPT: |
+            # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
+            pre_terminate_crashpad() {
+              # For some reason pgrep/pkill sees only crashpad_handle, not crashpad_handler,
+              # but it's definitely called ${ANDROID_HOME}/emulator/crashpad_handler.
+
+              # Best-effort gracefully terminate all crashpad_handler processes.
+              pkill --exact --echo --signal SIGTERM crashpad_handle || return
+              sleep 10
+              pkill --exact --echo --signal SIGKILL crashpad_handle || return
+            }
+            trap pre_terminate_crashpad EXIT
+            
+            ${{ inputs.script }}
+        run: |
+          script_file="${RUNNER_TEMP}/reactivecircus-android-emulator-runner-prepared-script.sh"
+          echo "${SCRIPT}" > "${script_file}"
+          echo "file=${script_file}" >> "${GITHUB_OUTPUT}"
+
       - name: Prevent pushing new screenshots if this is a fork (instrumented)
         id: checkfork_screenshots_instrumented
         continue-on-error: false

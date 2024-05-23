@@ -88,17 +88,17 @@ class EdgeToEdgeTest {
     }
 
     @RequiresDisplay(WidthSizeClassEnum.COMPACT, HeightSizeClassEnum.MEDIUM)
-    @SdkSuppress(minSdkVersion = 26, maxSdkVersion = 26)
+    @SdkSuppress(minSdkVersion = 27, maxSdkVersion = 27)
     @Test
-    fun edgeToEdge_Phone_Api26() {
-        testEdgeToEdge("edgeToEdge_Phone_Api26")
+    fun edgeToEdge_Phone_Api27() {
+        testEdgeToEdge("edgeToEdge_Phone_Api27")
     }
 
     @RequiresDisplay(WidthSizeClassEnum.COMPACT, HeightSizeClassEnum.MEDIUM)
-    @SdkSuppress(minSdkVersion = 30, maxSdkVersion = 30)
+    @SdkSuppress(minSdkVersion = 31, maxSdkVersion = 31)
     @Test
-    fun edgeToEdge_Phone_Api30() {
-        testEdgeToEdge("edgeToEdge_Phone_Api30")
+    fun edgeToEdge_Phone_Api31() {
+        testEdgeToEdge("edgeToEdge_Phone_Api31")
     }
 
     @RequiresDisplay(WidthSizeClassEnum.EXPANDED, HeightSizeClassEnum.MEDIUM)
