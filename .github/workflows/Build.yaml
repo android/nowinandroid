@@ -202,7 +202,7 @@ jobs:
           profile: pixel_5
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon || echo "Recording new screenshots" ; ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --daemon --stacktrace
+          script: ./gradlew connectedDemoDebugAndroidTest --daemon || echo "Recording new screenshots" ; ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --daemon --stacktrace ; exit $?
 
       - name: Prevent pushing new screenshots if this is a fork (instrumented)
         id: checkfork_screenshots_instrumented
