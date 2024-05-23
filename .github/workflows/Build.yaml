@@ -227,9 +227,10 @@ jobs:
 #          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
 #          script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
 
-      - name: Pull Remote Changes (in case another job already uploaded screenshots)
-        if: steps.dropshotsverify.outcome == 'failure'
-        run: git pull
+      - name: Checkout new changes (in case another job already uploaded screenshots)
+        uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: Push new device screenshots if available
         uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
