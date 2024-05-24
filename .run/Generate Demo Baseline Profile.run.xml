@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright 2022 The Android Open Source Project
 
@@ -34,7 +33,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":benchmark:pixel6Api31atdDemoBenchmarkAndroidTest" />
+          <option value=":benchmarks:pixel6Api33DemoBenchmarkReleaseAndroidTest" />
           <option value="--rerun" />
           <option value="--enable-display" />
         </list>
@@ -44,6 +43,7 @@
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
     <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
     <method v="2" />
   </configuration>
 </component>
