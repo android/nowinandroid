@@ -89,7 +89,7 @@ class NiaAppState(
     errorMonitor: ErrorMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
-) {
+) : ErrorMonitor by errorMonitor {
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -110,7 +110,7 @@ class NiaAppState(
             initialValue = false,
         )
 
-    val errorMessage = errorMonitor.errorMessage.stateIn(
+    val snackbarMessage = errorMessage.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,

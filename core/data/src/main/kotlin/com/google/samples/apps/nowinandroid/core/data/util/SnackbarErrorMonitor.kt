@@ -21,12 +21,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.util.UUID
+import javax.inject.Inject
 
 /**
  * Interface implementation for handling general errors.
  */
 
-class SnackbarErrorMonitor : ErrorMonitor {
+class SnackbarErrorMonitor @Inject constructor() : ErrorMonitor {
     /**
      * List of [ErrorMessage] to be shown to the user, via Snackbar.
      */
