@@ -295,6 +295,10 @@ jobs:
         with:
           cmdline-tools-version: 11076708
 
+      - name: Download build-tools;35.0.0-rc4
+        run: |
+          $ANDROID_HOME/tools/bin/sdkmanager --install "build-tools;35.0.0-rc4"
+
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
