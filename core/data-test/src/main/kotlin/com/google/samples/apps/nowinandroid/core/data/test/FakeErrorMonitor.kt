@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.util
+package com.google.samples.apps.nowinandroid.core.data.test
 
 import com.google.samples.apps.nowinandroid.core.data.util.ErrorMessage
 import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-class TestErrorMonitor : ErrorMonitor {
+class FakeErrorMonitor @Inject constructor() : ErrorMonitor {
     override fun addErrorMessage(error: String): String? {
         return "1"
     }
@@ -31,5 +32,5 @@ class TestErrorMonitor : ErrorMonitor {
     }
 
     override val errorMessage: Flow<ErrorMessage?>
-        get() = flowOf(ErrorMessage("Error Message", "1"))
+        get() = flowOf(null)
 }
