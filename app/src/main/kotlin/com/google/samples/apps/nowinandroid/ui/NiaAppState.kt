@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
@@ -44,19 +45,17 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.datetime.TimeZone
-import java.util.UUID
 
 @Composable
 fun rememberNiaAppState(
     networkMonitor: NetworkMonitor,
+    errorMonitor: ErrorMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -67,6 +66,7 @@ fun rememberNiaAppState(
         navController,
         coroutineScope,
         networkMonitor,
+        errorMonitor,
         userNewsResourceRepository,
         timeZoneMonitor,
     ) {
@@ -74,6 +74,7 @@ fun rememberNiaAppState(
             navController = navController,
             coroutineScope = coroutineScope,
             networkMonitor = networkMonitor,
+            errorMonitor = errorMonitor,
             userNewsResourceRepository = userNewsResourceRepository,
             timeZoneMonitor = timeZoneMonitor,
         )
@@ -85,6 +86,7 @@ class NiaAppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
+    errorMonitor: ErrorMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
 ) {
@@ -108,43 +110,11 @@ class NiaAppState(
             initialValue = false,
         )
 
-    /**
-     * List of [ErrorMessage] to be shown to the user, via Snackbar.
-     */
-    private val errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
-
-    /**
-     * Current [ErrorMessage] or null if there isn't any.
-     */
-    val errorMessage: StateFlow<ErrorMessage?> = errorMessages.map { it.firstOrNull() }.stateIn(
+    val errorMessage = errorMonitor.errorMessage.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,
     )
-
-    /**
-     * Creates an [ErrorMessage] from String value and adds it to the list.
-     *
-     * @param error: String value of the error message.
-     *
-     * Returns the ID of the new [ErrorMessage] if success
-     * Returns null if [error] is Blank
-     */
-    fun addErrorMessage(error: String): String? {
-        if (error.isNotBlank()) {
-            val newError = ErrorMessage(error)
-            errorMessages.update { it + newError }
-            return newError.id
-        }
-        return null
-    }
-
-    /**
-     * Removes the [ErrorMessage] with the specified [id] from the list.
-     */
-    fun clearErrorMessage(id: String) {
-        errorMessages.update { it.filter { item -> item.id != id } }
-    }
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
@@ -227,11 +197,3 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
         }
     }
 }
-
-/**
- * Models the data needed for an error message to be displayed and tracked.
- */
-data class ErrorMessage(
-    val message: String,
-    val id: String = UUID.randomUUID().toString(),
-)
