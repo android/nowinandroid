@@ -155,7 +155,7 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_whenErrorIsNotAdded_NullIsPresent() = runTest(UnconfinedTestDispatcher()) {
+    fun niaAppState_FirstErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
@@ -164,14 +164,16 @@ class NiaAppStateTest {
                 errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-
             )
         }
 
-        backgroundScope.launch { state.errorMessage.collect() }
+        val id = state.addErrorMessage("Test Error Message 1")
+
+        backgroundScope.launch { state.snackbarMessage.collect() }
+
         assertEquals(
-            null,
-            state.errorMessage.value,
+            id,
+            state.snackbarMessage.value?.id,
         )
     }
 }
