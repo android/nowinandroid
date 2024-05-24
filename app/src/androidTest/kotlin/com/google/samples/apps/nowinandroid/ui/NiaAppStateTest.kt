@@ -29,6 +29,7 @@ import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.util.TestErrorMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import kotlinx.coroutines.flow.collect
@@ -55,6 +56,8 @@ class NiaAppStateTest {
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
 
+    private val errorMonitor = TestErrorMonitor()
+
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
@@ -74,6 +77,7 @@ class NiaAppStateTest {
                     navController = navController,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
+                    errorMonitor = errorMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
                 )
@@ -96,6 +100,7 @@ class NiaAppStateTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -114,6 +119,7 @@ class NiaAppStateTest {
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -134,6 +140,7 @@ class NiaAppStateTest {
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -154,6 +161,7 @@ class NiaAppStateTest {
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
 
@@ -165,94 +173,6 @@ class NiaAppStateTest {
             null,
             state.errorMessage.value,
         )
-    }
-
-    @Test
-    fun niaAppState_whenErrorIsAdded_ErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-                timeZoneMonitor = timeZoneMonitor,
-            )
-        }
-
-        backgroundScope.launch { state.errorMessage.collect() }
-        val id = state.addErrorMessage("Test Error Message")
-        assertEquals(
-            id,
-            state.errorMessage.value?.id,
-        )
-    }
-
-    @Test
-    fun niaAppState_whenErrorsAreAdded_FirstErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-                timeZoneMonitor = timeZoneMonitor,
-            )
-        }
-
-        backgroundScope.launch { state.errorMessage.collect() }
-        val id1 = state.addErrorMessage("Test Error Message 1")
-        val id2 = state.addErrorMessage("Test Error Message 2")
-        assertEquals(
-            id1,
-            state.errorMessage.value?.id,
-        )
-    }
-
-    @Test
-    fun niaAppState_whenErrorIsCleared_ErrorMessageIsNotPresent() = runTest(UnconfinedTestDispatcher()) {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-                timeZoneMonitor = timeZoneMonitor,
-            )
-        }
-
-        backgroundScope.launch { state.errorMessage.collect() }
-        val id = state.addErrorMessage("Test Error Message 1")
-        if (id != null) {
-            state.clearErrorMessage(id)
-            assertEquals(
-                null,
-                state.errorMessage.value,
-            )
-        }
-    }
-
-    @Test
-    fun niaAppState_whenErrorsAreCleared_NextErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-                timeZoneMonitor = timeZoneMonitor,
-            )
-        }
-
-        backgroundScope.launch { state.errorMessage.collect() }
-        val id1 = state.addErrorMessage("Test Error Message 1")
-        val id2 = state.addErrorMessage("Test Error Message 2")
-        if (id1 != null) {
-            state.clearErrorMessage(id1)
-            assertEquals(
-                id2,
-                state.errorMessage.value?.id,
-            )
-        }
     }
 }
 
