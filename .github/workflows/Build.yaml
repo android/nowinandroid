@@ -308,11 +308,11 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
-          script: |
-            ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon \ 
-            || echo "Recording new screenshots" \
-            ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace \ 
-            ;  echo "Done recording new screenshots, exiting with failure" \ 
+          script: >
+            ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon  
+            || echo "Recording new screenshots" 
+            ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace  
+            ;  echo "Done recording new screenshots, exiting with failure" 
             ; exit 5
 
       - name: Prevent pushing new screenshots if this is a fork
