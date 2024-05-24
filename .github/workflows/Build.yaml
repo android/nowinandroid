@@ -289,6 +289,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
+        # TODO this workflow needs cmdline-tools 13.0 (for pixel_fold). Remove when not necessary.
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
