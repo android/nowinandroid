@@ -108,12 +108,28 @@ class NiaAppState(
             initialValue = false,
         )
 
+    /**
+     * List of [ErrorMessage] to be shown to the user, via Snackbar.
+     */
     private val errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
+
+    /**
+     * Current [ErrorMessage] or null if there isn't any.
+     */
     val errorMessage: StateFlow<ErrorMessage?> = errorMessages.map { it.firstOrNull() }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null,
     )
+
+    /**
+     * Creates an [ErrorMessage] from String value and adds it to the list.
+     *
+     * @param error: String value of the error message.
+     *
+     * Returns the ID of the new [ErrorMessage] if success
+     * Returns null if [error] is Blank
+     */
     fun addErrorMessage(error: String): String? {
         if (error.isNotBlank()) {
             val newError = ErrorMessage(error)
@@ -123,6 +139,9 @@ class NiaAppState(
         return null
     }
 
+    /**
+     * Removes the [ErrorMessage] with the specified [id] from the list.
+     */
     fun clearErrorMessage(id: String) {
         errorMessages.update { it.filter { item -> item.id != id } }
     }
@@ -209,6 +228,9 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
     }
 }
 
+/**
+ * Models the data needed for an error message to be displayed and tracked.
+ */
 data class ErrorMessage(
     val message: String,
     val id: String = UUID.randomUUID().toString(),
