@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.data.util
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 import javax.inject.Inject
@@ -31,12 +30,8 @@ class SnackbarErrorMonitor @Inject constructor() : ErrorMonitor {
     /**
      * List of [ErrorMessage] to be shown to the user, via Snackbar.
      */
-    private val errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
-
-    /**
-     * Current [ErrorMessage] or null if there are none.
-     */
-    override val errorMessage: Flow<ErrorMessage?> = errorMessages.map { it.firstOrNull() }
+    private val _errorMessages = MutableStateFlow<List<ErrorMessage>>(emptyList())
+    override val errorMessages: Flow<List<ErrorMessage>> = _errorMessages
 
     /**
      * Creates an [ErrorMessage] from String value and adds it to the list.
@@ -49,7 +44,7 @@ class SnackbarErrorMonitor @Inject constructor() : ErrorMonitor {
     override fun addErrorMessage(error: String): String? {
         if (error.isNotBlank()) {
             val newError = ErrorMessage(error)
-            errorMessages.update { it + newError }
+            _errorMessages.update { it + newError }
             return newError.id
         }
         return null
@@ -59,7 +54,7 @@ class SnackbarErrorMonitor @Inject constructor() : ErrorMonitor {
      * Removes the [ErrorMessage] with the specified [id] from the list.
      */
     override fun clearErrorMessage(id: String) {
-        errorMessages.update { it.filter { item -> item.id != id } }
+        _errorMessages.update { it.filter { item -> item.id != id } }
     }
 }
 

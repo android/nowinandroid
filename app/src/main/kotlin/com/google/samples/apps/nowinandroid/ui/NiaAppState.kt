@@ -110,11 +110,13 @@ class NiaAppState(
             initialValue = false,
         )
 
-    val snackbarMessage = errorMessage.stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = null,
-    )
+    val snackbarMessage = errorMessages
+        .map { it.firstOrNull() }
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null,
+        )
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the

@@ -36,7 +36,7 @@ class SnackbarErrorMonitorTest {
 
     @Test
     fun whenErrorIsNotAdded_NullIsPresent() = runTest(UnconfinedTestDispatcher()) {
-        backgroundScope.launch { state.errorMessage.collect() }
+        backgroundScope.launch { state.errorMessages.collect() }
         assertEquals(
             null,
             message,
@@ -46,8 +46,8 @@ class SnackbarErrorMonitorTest {
     @Test
     fun whenErrorIsAdded_ErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
         backgroundScope.launch {
-            state.errorMessage.collect {
-                message = it
+            state.errorMessages.collect {
+                message = it.firstOrNull()
             }
         }
 
@@ -66,8 +66,8 @@ class SnackbarErrorMonitorTest {
             state.addErrorMessage("Test Error Message 2")
 
             backgroundScope.launch {
-                state.errorMessage.collect {
-                    message = it
+                state.errorMessages.collect {
+                    message = it.firstOrNull()
                 }
             }
 
@@ -81,8 +81,8 @@ class SnackbarErrorMonitorTest {
     fun whenErrorIsCleared_ErrorMessageIsNotPresent() =
         runTest(UnconfinedTestDispatcher()) {
             backgroundScope.launch {
-                state.errorMessage.collect {
-                    message = it
+                state.errorMessages.collect {
+                    message = it.firstOrNull()
                 }
             }
             val id = state.addErrorMessage("Test Error Message 1")
@@ -99,8 +99,8 @@ class SnackbarErrorMonitorTest {
     fun whenErrorsAreCleared_NextErrorMessageIsPresent() =
         runTest(UnconfinedTestDispatcher()) {
             backgroundScope.launch {
-                state.errorMessage.collect {
-                    message = it
+                state.errorMessages.collect {
+                    message = it.firstOrNull()
                 }
             }
             val id1 = state.addErrorMessage("Test Error Message 1")

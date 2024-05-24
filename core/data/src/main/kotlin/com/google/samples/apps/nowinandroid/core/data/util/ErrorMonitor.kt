@@ -24,5 +24,5 @@ import kotlinx.coroutines.flow.Flow
 interface ErrorMonitor {
     fun addErrorMessage(error: String): String?
     fun clearErrorMessage(id: String)
-    val errorMessage: Flow<ErrorMessage?>
+    val errorMessages: Flow<List<ErrorMessage?>>
 }

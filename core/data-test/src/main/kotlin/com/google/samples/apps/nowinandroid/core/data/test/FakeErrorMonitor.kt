@@ -31,6 +31,6 @@ class FakeErrorMonitor @Inject constructor() : ErrorMonitor {
         // Do nothing
     }
 
-    override val errorMessage: Flow<ErrorMessage?>
-        get() = flowOf(null)
+    override val errorMessages: Flow<List<ErrorMessage?>>
+        get() = flowOf(emptyList())
 }

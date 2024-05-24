@@ -30,6 +30,6 @@ class TestErrorMonitor : ErrorMonitor {
         // Do nothing
     }
 
-    override val errorMessage: Flow<ErrorMessage?>
-        get() = flowOf(ErrorMessage("Error Message", "1"))
+    override val errorMessages: Flow<List<ErrorMessage?>>
+        get() = flowOf(listOf(ErrorMessage("Error Message", "1")))
 }
