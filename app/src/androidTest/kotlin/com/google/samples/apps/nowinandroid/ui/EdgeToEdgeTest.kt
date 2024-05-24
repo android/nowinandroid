@@ -16,8 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.graphics.Bitmap
+import android.view.WindowInsets
 import androidx.test.core.app.takeScreenshot
+import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
+import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
+import androidx.test.espresso.device.EspressoDevice.Companion.onDevice
 import androidx.test.espresso.device.common.executeShellCommand
+import androidx.test.espresso.device.controller.DeviceMode.CLOSED
+import androidx.test.espresso.device.controller.DeviceMode.FLAT
+import androidx.test.espresso.device.filter.RequiresDeviceMode
 import androidx.test.espresso.device.filter.RequiresDisplay
 import androidx.test.espresso.device.sizeclass.HeightSizeClass.Companion.HeightSizeClassEnum
 import androidx.test.espresso.device.sizeclass.WidthSizeClass.Companion.WidthSizeClassEnum
@@ -31,13 +39,20 @@ import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPer
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+/**
+ * These tests must be run on the following devices:
+ *  - A phone on API 27 (pixel_5)
+ *  - A foldable on API 33 (pixel_fold)
+ *  - A foldable on API 35 (pixel_fold)
+ */
 @HiltAndroidTest
+@InstrumentedScreenshotTests
 class EdgeToEdgeTest {
     /**
      * Manages the components' state and is used to perform injection on your test
@@ -72,7 +87,6 @@ class EdgeToEdgeTest {
     @Before
     fun enableDemoMode() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-            executeShellCommand("cmd overlay enable-exclusive com.android.internal.systemui.navbar.threebutton")
             executeShellCommand("settings put global sysui_demo_allowed 1")
             executeShellCommand("am broadcast -a com.android.systemui.demo -e command enter")
             executeShellCommand("am broadcast -a com.android.systemui.demo -e command notifications -e visible false")
@@ -82,33 +96,109 @@ class EdgeToEdgeTest {
         }
     }
 
-    @After
-    fun resetDemoMode() {
-        executeShellCommand("am broadcast -a com.android.systemui.demo -e command exit")
+    companion object {
+        @JvmStatic
+        @AfterClass
+        fun resetDemoMode(): Unit {
+            executeShellCommand("am broadcast -a com.android.systemui.demo -e command exit")
+        }
     }
 
     @RequiresDisplay(WidthSizeClassEnum.COMPACT, HeightSizeClassEnum.MEDIUM)
     @SdkSuppress(minSdkVersion = 27, maxSdkVersion = 27)
     @Test
     fun edgeToEdge_Phone_Api27() {
-        testEdgeToEdge("edgeToEdge_Phone_Api27")
+        screenshotSystemBar("edgeToEdge_Phone_systemBar_Api27")
+        screenshotNavigationBar("edgeToEdge_Phone_navBar_Api27")
     }
 
-    @RequiresDisplay(WidthSizeClassEnum.COMPACT, HeightSizeClassEnum.MEDIUM)
-    @SdkSuppress(minSdkVersion = 31, maxSdkVersion = 31)
+    @RequiresDeviceMode(mode = FLAT)
+    @RequiresDeviceMode(mode = CLOSED)
+    @SdkSuppress(minSdkVersion = 33, maxSdkVersion = 33)
     @Test
-    fun edgeToEdge_Phone_Api31() {
-        testEdgeToEdge("edgeToEdge_Phone_Api31")
+    fun edgeToEdge_Foldable_api33() {
+        runFoldableTests(apiName = "api33")
     }
 
-    @RequiresDisplay(WidthSizeClassEnum.EXPANDED, HeightSizeClassEnum.MEDIUM)
-    @SdkSuppress(minSdkVersion = 30, maxSdkVersion = 30)
+    @RequiresDeviceMode(mode = FLAT)
+    @RequiresDeviceMode(mode = CLOSED)
+    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
     @Test
-    fun edgeToEdge_Tablet_Api30() {
-        testEdgeToEdge("edgeToEdge_Tablet_Api30")
+    fun edgeToEdge_Foldable_api35() {
+        runFoldableTests(apiName = "api35")
     }
 
-    private fun testEdgeToEdge(screenshotFileName: String) {
-        dropshots.assertSnapshot(takeScreenshot(), screenshotFileName)
+    private fun runFoldableTests(apiName: String) {
+        onDevice().setClosedMode()
+        screenshotSystemBar("edgeToEdge_Foldable_closed_system_${apiName}")
+        forceThreeButtonNavigation()
+        screenshotNavigationBar("edgeToEdge_Foldable_closed_nav3button_${apiName}")
+        forceGestureNavigation()
+        screenshotNavigationBar("edgeToEdge_Foldable_closed_navGesture_${apiName}")
+
+        onDevice().setFlatMode()
+        enableDemoMode() // Flat mode resets demo mode!
+        screenshotSystemBar("edgeToEdge_Foldable_flat_system_${apiName}")
+        forceThreeButtonNavigation()
+        screenshotNavigationBar("edgeToEdge_Foldable_flat_nav3button_${apiName}")
+        forceGestureNavigation()
+        screenshotNavigationBar("edgeToEdge_Foldable_flat_navGesture_${apiName}")
+    }
+
+    private fun screenshotSystemBar(screenshotFileName: String) {
+        var topInset: Int? = null
+        var width: Int? = null
+        waitForWindowUpdate()
+        activityScenarioRule.scenario.onActivity { activity ->
+            topInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
+                WindowInsets.Type.systemBars()).top
+            width = activity.windowManager.maximumWindowMetrics.bounds.width()
+        }
+        // Crop the top, adding extra pixels to check continuity
+        val bitmap = takeScreenshot().let {
+            Bitmap.createBitmap(it, 0, 0, width!!, (topInset!! * 2))
+        }
+        dropshots.assertSnapshot(bitmap, screenshotFileName)
+    }
+
+    private fun screenshotNavigationBar(screenshotFileName: String) {
+        var bottomInset: Int? = null
+        var width: Int? = null
+        var height: Int? = null
+        waitForWindowUpdate()
+        activityScenarioRule.scenario.onActivity { activity ->
+            bottomInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
+                WindowInsets.Type.navigationBars()).bottom
+            width = activity.windowManager.maximumWindowMetrics.bounds.width()
+            height = activity.windowManager.maximumWindowMetrics.bounds.height()
+        }
+        // Crop the top, adding extra pixels to check continuity
+        val bitmap = takeScreenshot().let {
+            Bitmap.createBitmap(it, 0, height!! - (bottomInset!! * 2), width!!, (bottomInset!! * 2))
+        }
+        dropshots.assertSnapshot(bitmap, screenshotFileName)
+    }
+
+    private fun forceThreeButtonNavigation() {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+            executeShellCommand("cmd overlay enable-exclusive " +
+                "com.android.internal.systemui.navbar.threebutton")
+        }
+    }
+
+    private fun forceGestureNavigation() {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+            executeShellCommand("cmd overlay enable-exclusive " +
+                "com.android.internal.systemui.navbar.gestural")
+        }
+    }
+
+    private fun waitForWindowUpdate() {
+        // TODO: This works but it's unclear if it's making it wait too long. Investigate.
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .waitForWindowUpdate(
+                InstrumentationRegistry.getInstrumentation().targetContext.packageName,
+                4000
+            );
     }
 }

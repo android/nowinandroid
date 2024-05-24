@@ -67,6 +67,10 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+        // Espresso Device
+        emulatorControl {
+            enable = true
+        }
     }
     namespace = "com.google.samples.apps.nowinandroid"
 }

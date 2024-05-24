@@ -153,7 +153,104 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [27, 31]
+        api-level: [26, 30]
+
+    steps:
+      - name: Delete unnecessary tools 🔧
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          android: false # Don't remove Android tools
+          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
+          dotnet: true # rm -rf /usr/share/dotnet
+          haskell: true # rm -rf /opt/ghc...
+          swap-storage: true # rm -f /mnt/swapfile (4GiB)
+          docker-images: false # Takes 16s, enable if needed in the future
+          large-packages: false # includes google-cloud-sdk and it's slow
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build projects and run instrumentation tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          heap-size: 600M
+          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+
+      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
+        if: matrix.api-level == 30
+        # There is no need to verify Roborazzi tests to generate coverage.
+        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
+
+      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
+      - name: Generate coverage reports for Debug variants (only API 30)
+        if: matrix.api-level == 30
+        run: ./gradlew createDemoDebugCombinedCoverageReport
+        
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ matrix.api-level }}
+          path: '**/build/reports/androidTests'
+
+      - name: Display local test coverage (only API 30)
+        if: matrix.api-level == 30
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          title: Combined test coverage report
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Upload local coverage reports (XML + HTML) (only API 30)
+        if: matrix.api-level == 30
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          if-no-files-found: error
+          compression-level: 1
+          overwrite: false
+          path: '**/build/reports/jacoco/'
+
+
+  androidTestScreenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      matrix:
+        include:
+          - api-level: 27
+            profile: pixel_5
+          - api-level: 33
+            profile: pixel_fold
+          - api-level: "VanillaIceCream"
+            profile: pixel_fold
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -202,7 +299,12 @@ jobs:
           profile: pixel_5
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon || echo "Recording new screenshots" ; ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --daemon --stacktrace ;  echo "Done recording new screenshots, exiting with failure" ; exit 5
+          script: |
+            ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon 
+            || echo "Recording new screenshots" 
+            ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace 
+            ;  echo "Done recording new screenshots, exiting with failure" 
+            ; exit 5
 
       - name: Prevent pushing new screenshots if this is a fork (instrumented)
         id: checkfork_screenshots_instrumented
@@ -210,22 +312,6 @@ jobs:
         if: steps.dropshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Instrumented screenshot tests failed, please create a PR in your fork first." && exit 1
-
-#
-#      - name: Record new instrumented screenshots
-#        id: screenshotsrecordinstrumented
-#        if: steps.dropshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: ${{ matrix.api-level }}
-#          arch: x86_64
-#          disable-animations: true
-#          disk-size: 6000M
-#          heap-size: 600M
-#          profile: pixel_5
-#          force-avd-creation: false
-#          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#          script: adb shell rm -rf /storage/emulated/0/Download/screenshots && ./gradlew connectedDemoDebugAndroidTest -Pdropshots.record --stacktrace
 
       - name: Checkout new changes (in case another job already uploaded screenshots)
         uses: actions/checkout@v4
@@ -239,42 +325,3 @@ jobs:
           file_pattern: 'app/src/androidTest/screenshots/*.png'
           disable_globbing: true
           commit_message: "🤖 Updates instrumented screenshots. API ${{ matrix.api-level }}"
-
-      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
-        if: matrix.api-level == 30
-        # There is no need to verify Roborazzi tests to generate coverage.
-        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
-
-      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants (only API 30)
-        if: matrix.api-level == 30
-        run: ./gradlew createDemoDebugCombinedCoverageReport
-        
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests'
-
-      - name: Display local test coverage (only API 30)
-        if: matrix.api-level == 30
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          title: Combined test coverage report
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-        
-      - name: Upload local coverage reports (XML + HTML) (only API 30)
-        if: matrix.api-level == 30
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-reports
-          if-no-files-found: error
-          compression-level: 1
-          overwrite: false
-          path: '**/build/reports/jacoco/'
