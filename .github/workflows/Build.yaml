@@ -298,6 +298,10 @@ jobs:
       - name: Download build-tools;35.0.0-rc4
         run: |
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;35.0.0-rc4"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --list_installed
+
+      - name: Print debug
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
@@ -308,6 +312,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           disk-size: 6000M
+          emulator-build: 11834374 # 34.2.14
           heap-size: 600M
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
