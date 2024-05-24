@@ -99,7 +99,7 @@ class EdgeToEdgeTest {
     companion object {
         @JvmStatic
         @AfterClass
-        fun resetDemoMode(): Unit {
+        fun resetDemoMode() {
             executeShellCommand("am broadcast -a com.android.systemui.demo -e command exit")
         }
     }
@@ -130,19 +130,19 @@ class EdgeToEdgeTest {
 
     private fun runFoldableTests(apiName: String) {
         onDevice().setClosedMode()
-        screenshotSystemBar("edgeToEdge_Foldable_closed_system_${apiName}")
+        screenshotSystemBar("edgeToEdge_Foldable_closed_system_$apiName")
         forceThreeButtonNavigation()
-        screenshotNavigationBar("edgeToEdge_Foldable_closed_nav3button_${apiName}")
+        screenshotNavigationBar("edgeToEdge_Foldable_closed_nav3button_$apiName")
         forceGestureNavigation()
-        screenshotNavigationBar("edgeToEdge_Foldable_closed_navGesture_${apiName}")
+        screenshotNavigationBar("edgeToEdge_Foldable_closed_navGesture_$apiName")
 
         onDevice().setFlatMode()
         enableDemoMode() // Flat mode resets demo mode!
-        screenshotSystemBar("edgeToEdge_Foldable_flat_system_${apiName}")
+        screenshotSystemBar("edgeToEdge_Foldable_flat_system_$apiName")
         forceThreeButtonNavigation()
-        screenshotNavigationBar("edgeToEdge_Foldable_flat_nav3button_${apiName}")
+        screenshotNavigationBar("edgeToEdge_Foldable_flat_nav3button_$apiName")
         forceGestureNavigation()
-        screenshotNavigationBar("edgeToEdge_Foldable_flat_navGesture_${apiName}")
+        screenshotNavigationBar("edgeToEdge_Foldable_flat_navGesture_$apiName")
     }
 
     private fun screenshotSystemBar(screenshotFileName: String) {
@@ -151,7 +151,8 @@ class EdgeToEdgeTest {
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
             topInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
-                WindowInsets.Type.systemBars()).top
+                WindowInsets.Type.systemBars(),
+            ).top
             width = activity.windowManager.maximumWindowMetrics.bounds.width()
         }
         // Crop the top, adding extra pixels to check continuity
@@ -168,7 +169,8 @@ class EdgeToEdgeTest {
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
             bottomInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
-                WindowInsets.Type.navigationBars()).bottom
+                WindowInsets.Type.navigationBars(),
+            ).bottom
             width = activity.windowManager.maximumWindowMetrics.bounds.width()
             height = activity.windowManager.maximumWindowMetrics.bounds.height()
         }
@@ -181,15 +183,19 @@ class EdgeToEdgeTest {
 
     private fun forceThreeButtonNavigation() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-            executeShellCommand("cmd overlay enable-exclusive " +
-                "com.android.internal.systemui.navbar.threebutton")
+            executeShellCommand(
+                "cmd overlay enable-exclusive " +
+                    "com.android.internal.systemui.navbar.threebutton",
+            )
         }
     }
 
     private fun forceGestureNavigation() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-            executeShellCommand("cmd overlay enable-exclusive " +
-                "com.android.internal.systemui.navbar.gestural")
+            executeShellCommand(
+                "cmd overlay enable-exclusive " +
+                    "com.android.internal.systemui.navbar.gestural",
+            )
         }
     }
 
@@ -198,7 +204,7 @@ class EdgeToEdgeTest {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
             .waitForWindowUpdate(
                 InstrumentationRegistry.getInstrumentation().targetContext.packageName,
-                4000
-            );
+                4000,
+            )
     }
 }

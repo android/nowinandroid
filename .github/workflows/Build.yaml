@@ -249,8 +249,11 @@ jobs:
             profile: pixel_5
           - api-level: 33
             profile: pixel_fold
-          - api-level: "VanillaIceCream"
-            profile: pixel_fold
+            # Enable when a new version of the runner is released. Currently v2.30.1
+            # https://github.com/ReactiveCircus/android-emulator-runner/releases/tag/v2.30.1
+            # Also, change from VanillaIceCream to 35 when that image is available
+#          - api-level: VanillaIceCream
+#            profile: pixel_fold
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -286,7 +289,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
-      - name: Build projects and run instrumentation tests including screenshots
+      - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
@@ -306,7 +309,7 @@ jobs:
             ;  echo "Done recording new screenshots, exiting with failure" 
             ; exit 5
 
-      - name: Prevent pushing new screenshots if this is a fork (instrumented)
+      - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
         continue-on-error: false
         if: steps.dropshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
