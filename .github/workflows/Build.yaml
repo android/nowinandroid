@@ -299,14 +299,6 @@ jobs:
         run: |
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 
-      - name: Print debug
-        run: avdmanager list
-
-      - name: Print debug
-        run: |
-          sdkmanager --version
-          which sdkmanager
-
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
