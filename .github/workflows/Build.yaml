@@ -303,6 +303,11 @@ jobs:
       - name: Print debug
         run: avdmanager list
 
+      - name: Print debug
+        run: |
+          sdkmanager --version
+          which sdkmanager
+
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
