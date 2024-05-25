@@ -295,10 +295,9 @@ jobs:
         with:
           cmdline-tools-version: 11479570
 
-      - name: Download build-tools;35.0.0-rc4
+      - name: Replace cmdlinetools
         run: |
-          sdkmanager --install "build-tools;35.0.0-rc4"
-          sdkmanager --list_installed
+          mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 
       - name: Print debug
         run: avdmanager list
@@ -329,6 +328,14 @@ jobs:
             ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace  
             ;  echo "Done recording new screenshots, exiting with failure" 
             ; exit 5
+
+      - name: Print debug avdmanager list
+        run: avdmanager list
+
+      - name: Print debug sdkmanager
+        run: |
+          sdkmanager --version
+          which sdkmanager
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
