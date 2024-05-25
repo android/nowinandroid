@@ -17,7 +17,9 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.WindowInsets
+import androidx.core.view.WindowInsetsCompat
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
@@ -33,6 +35,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import androidx.window.core.ExperimentalWindowApi
+import androidx.window.layout.WindowMetricsCalculator
 import com.dropbox.dropshots.Dropshots
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
@@ -51,6 +55,7 @@ import org.junit.rules.TemporaryFolder
  *  - A foldable on API 33 (pixel_fold)
  *  - A foldable on API 35 (pixel_fold)
  */
+@OptIn(ExperimentalWindowApi::class)
 @HiltAndroidTest
 @InstrumentedScreenshotTests
 class EdgeToEdgeTest {
@@ -150,11 +155,15 @@ class EdgeToEdgeTest {
         var width: Int? = null
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
-            topInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
-                WindowInsets.Type.systemBars(),
-            ).top
-            width = activity.windowManager.maximumWindowMetrics.bounds.width()
+            val metrics = WindowMetricsCalculator.getOrCreate()
+                .computeCurrentWindowMetrics(activity)
+            topInset = metrics.getWindowInsets().getInsets(
+                WindowInsetsCompat.Type.systemBars(),
+            ).bottom
+            width = metrics.bounds.width()
         }
+        Log.d("jalc", "width: $width" )
+        Log.d("jalc", "topInset: $topInset" )
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, 0, width!!, (topInset!! * 2))
@@ -168,12 +177,17 @@ class EdgeToEdgeTest {
         var height: Int? = null
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
-            bottomInset = activity.windowManager.maximumWindowMetrics.windowInsets.getInsets(
-                WindowInsets.Type.navigationBars(),
+            val metrics = WindowMetricsCalculator.getOrCreate()
+                .computeCurrentWindowMetrics(activity)
+            bottomInset = metrics.getWindowInsets().getInsets(
+                WindowInsetsCompat.Type.navigationBars(),
             ).bottom
-            width = activity.windowManager.maximumWindowMetrics.bounds.width()
-            height = activity.windowManager.maximumWindowMetrics.bounds.height()
+
+            width = metrics.bounds.width()
+            height = metrics.bounds.height()
         }
+        Log.d("jalc", "height: $height" )
+        Log.d("jalc", "bottomInset: $bottomInset" )
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, height!! - (bottomInset!! * 2), width!!, (bottomInset!! * 2))
@@ -197,6 +211,7 @@ class EdgeToEdgeTest {
                     "com.android.internal.systemui.navbar.gestural",
             )
         }
+        waitForWindowUpdate()
     }
 
     private fun waitForWindowUpdate() {
