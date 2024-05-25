@@ -297,11 +297,11 @@ jobs:
 
       - name: Download build-tools;35.0.0-rc4
         run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "build-tools;35.0.0-rc4"
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --list_installed
+          sdkmanager --install "build-tools;35.0.0-rc4"
+          sdkmanager --list_installed
 
       - name: Print debug
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list
+        run: avdmanager list
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
