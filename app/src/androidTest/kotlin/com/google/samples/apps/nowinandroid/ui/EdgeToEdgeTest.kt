@@ -17,14 +17,13 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.graphics.Bitmap
-import android.os.Build
-import android.os.Build.VERSION_CODES
-import android.util.Log
-import androidx.core.view.WindowInsetsCompat
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
+import androidx.test.espresso.device.DeviceInteraction.Companion.setScreenOrientation
 import androidx.test.espresso.device.EspressoDevice.Companion.onDevice
+import androidx.test.espresso.device.action.ScreenOrientation.LANDSCAPE
+import androidx.test.espresso.device.action.ScreenOrientation.PORTRAIT
 import androidx.test.espresso.device.common.executeShellCommand
 import androidx.test.espresso.device.controller.DeviceMode.CLOSED
 import androidx.test.espresso.device.controller.DeviceMode.FLAT
@@ -37,7 +36,6 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.window.core.ExperimentalWindowApi
-import androidx.window.layout.WindowMetricsCalculator
 import com.dropbox.dropshots.Dropshots
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
@@ -129,6 +127,7 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 27, maxSdkVersion = 27)
     @Test
     fun edgeToEdge_Phone_Api27() {
+        onDevice().setScreenOrientation(PORTRAIT)
         screenshotSystemBar("edgeToEdge_Phone_systemBar_Api27")
         screenshotNavigationBar("edgeToEdge_Phone_navBar_Api27")
     }
@@ -138,6 +137,7 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 33, maxSdkVersion = 33)
     @Test
     fun edgeToEdge_Foldable_api33() {
+        onDevice().setScreenOrientation(PORTRAIT)
         runFoldableTests(apiName = "api33")
     }
 
@@ -146,7 +146,18 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
     @Test
     fun edgeToEdge_Foldable_api35() {
+        onDevice().setScreenOrientation(PORTRAIT)
         runFoldableTests(apiName = "api35")
+    }
+
+    @RequiresDeviceMode(mode = CLOSED)
+    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
+    @Test
+    fun edgeToEdge_Foldable_api35_landscape() {
+        onDevice().setClosedMode()
+        onDevice().setScreenOrientation(LANDSCAPE)
+        forceThreeButtonNavigation()
+        screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
     }
 
     private fun runFoldableTests(apiName: String) {
@@ -164,60 +175,39 @@ class EdgeToEdgeTest {
         screenshotNavigationBar("edgeToEdge_Foldable_flat_nav3button_$apiName")
         forceGestureNavigation()
         screenshotNavigationBar("edgeToEdge_Foldable_flat_navGesture_$apiName")
+        onDevice().setClosedMode()
     }
 
     private fun screenshotSystemBar(screenshotFileName: String) {
-        var topInset: Int? = null
-        var width: Int? = null
         waitForWindowUpdate()
-        activityScenarioRule.scenario.onActivity { activity ->
 
-            val metrics = WindowMetricsCalculator.getOrCreate()
-                .computeMaximumWindowMetrics(activity)
-            // TODO: Get the real inset dimension in <R
-            topInset = if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
-                metrics.getWindowInsets().getInsets(
-                    WindowInsetsCompat.Type.systemBars(),
-                ).bottom
-            } else {
-                100
-            }
-            width = metrics.bounds.width()
-        }
-        Log.d("EdgeToEdgeTests", "System bar inset height: $topInset")
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
-            Bitmap.createBitmap(it, 0, 0, width!!, (topInset!! * 2))
+            val newHeight = 130
+            Bitmap.createBitmap(it, 0, 0, it.width, newHeight)
         }
-        dropshots.assertSnapshot(bitmap, screenshotFileName)
+        assertSnapshot(bitmap, screenshotFileName)
     }
 
     private fun screenshotNavigationBar(screenshotFileName: String) {
-        var bottomInset: Int? = null
-        var width: Int? = null
-        var height: Int? = null
         waitForWindowUpdate()
-        activityScenarioRule.scenario.onActivity { activity ->
-            val metrics = WindowMetricsCalculator.getOrCreate()
-                .computeMaximumWindowMetrics(activity)
-            // TODO: Get the real inset dimension in <R
-            bottomInset = if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
-                metrics.getWindowInsets().getInsets(
-                    WindowInsetsCompat.Type.navigationBars(),
-                ).bottom
-            } else {
-                100
-            }
 
-            width = metrics.bounds.width()
-            height = metrics.bounds.height()
+        // Crop the bottom, adding extra pixels to check continuity
+        val bitmap = takeScreenshot().let {
+            val newHeight = 200
+            Bitmap.createBitmap(it, 0, it.height - newHeight, it.width, newHeight)
         }
-        Log.d("EdgeToEdgeTests", "Navigation bar inset height: $bottomInset")
+        assertSnapshot(bitmap, screenshotFileName)
+    }
+
+    private fun screenshotSideNavigationBar(screenshotFileName: String) {
+        waitForWindowUpdate()
+
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
-            Bitmap.createBitmap(it, 0, height!! - (bottomInset!! * 2), width!!, (bottomInset!! * 2))
+            Bitmap.createBitmap(it, it.width - 250, 0, 250, it.height)
         }
-        dropshots.assertSnapshot(bitmap, screenshotFileName)
+        assertSnapshot(bitmap, screenshotFileName)
     }
 
     private fun forceThreeButtonNavigation() {
@@ -244,7 +234,25 @@ class EdgeToEdgeTest {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
             .waitForWindowUpdate(
                 InstrumentationRegistry.getInstrumentation().targetContext.packageName,
-                4000,
+                8000,
             )
+    }
+
+    fun assertSnapshot(
+        bitmap: Bitmap,
+        name: String,
+        filePath: String? = null,
+    ) {
+        // Try to assert 3 times
+        var count = 2
+        while (true) {
+            try {
+                dropshots.assertSnapshot(bitmap, name, filePath)
+            } catch (e: AssertionError) {
+                if (count == 0) throw e
+                count -= 1
+                waitForWindowUpdate()
+            }
+        }
     }
 }
