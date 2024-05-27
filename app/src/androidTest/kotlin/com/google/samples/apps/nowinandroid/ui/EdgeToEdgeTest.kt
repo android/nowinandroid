@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
@@ -251,6 +252,7 @@ class EdgeToEdgeTest {
             } catch (e: AssertionError) {
                 if (count == 0) throw e
                 count -= 1
+                Log.i("EdgeToEdgeTest", "Test failed, retrying (count=$count)")
                 waitForWindowUpdate()
             }
         }
