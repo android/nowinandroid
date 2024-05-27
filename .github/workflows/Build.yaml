@@ -299,6 +299,11 @@ jobs:
         run: |
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 
+      - name: Print debug avdmanager list
+        run: |
+          avdmanager list
+          which avdmanager
+
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
         continue-on-error: true
@@ -309,7 +314,6 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           emulator-build: 11834374 # 34.2.14
-          channel: canary
           heap-size: 600M
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
