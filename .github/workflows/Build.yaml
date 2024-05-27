@@ -324,11 +324,13 @@ jobs:
           # Run tests, if they fail, record screenshots and exit with a failure
           script: |
             set +e ;
-            if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then  
+            if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ;
+            then  
               echo "All screenshot tests passed"
             else
               echo "Verification failed. Recording new reference images"
-              if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ; then
+              if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ; 
+              then
                 echo "New goldens recorded, no issues"
                 echo "newgoldens=true" >> $GITHUB_OUTPUT
               else
