@@ -304,6 +304,10 @@ jobs:
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
           echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest/bin >> $GITHUB_PATH
 
+      # https://github.com/ReactiveCircus/android-emulator-runner/issues/197
+      - name: Create directory for AVD
+        run: mkdir -p /home/runner/.android/avd
+
       - name: Print debug avd
         run: |
           ls -alR ~/.android/avd/
