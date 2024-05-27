@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import android.graphics.Bitmap
+import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.util.Log
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.core.app.takeScreenshot
@@ -92,11 +94,26 @@ class EdgeToEdgeTest {
     fun enableDemoMode() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
             executeShellCommand("settings put global sysui_demo_allowed 1")
-            executeShellCommand("am broadcast -a com.android.systemui.demo -e command enter")
-            executeShellCommand("am broadcast -a com.android.systemui.demo -e command notifications -e visible false")
-            executeShellCommand("am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1234")
-            executeShellCommand("am broadcast -a com.android.systemui.demo -e command network -e wifi hide")
-            executeShellCommand("am broadcast -a com.android.systemui.demo -e command network -e mobile hide")
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "enter",
+            )
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "notifications -e visible false",
+            )
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "clock -e hhmm 1234",
+            )
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "network -e wifi hide",
+            )
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "network -e mobile hide",
+            )
         }
     }
 
@@ -154,15 +171,20 @@ class EdgeToEdgeTest {
         var width: Int? = null
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
+
             val metrics = WindowMetricsCalculator.getOrCreate()
-                .computeCurrentWindowMetrics(activity)
-            topInset = metrics.getWindowInsets().getInsets(
-                WindowInsetsCompat.Type.systemBars(),
-            ).bottom
+                .computeMaximumWindowMetrics(activity)
+            // TODO: Get the real inset dimension in <R
+            topInset = if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+                metrics.getWindowInsets().getInsets(
+                    WindowInsetsCompat.Type.systemBars(),
+                ).bottom
+            } else {
+                100
+            }
             width = metrics.bounds.width()
         }
-        Log.d("jalc", "width: $width")
-        Log.d("jalc", "topInset: $topInset")
+        Log.d("EdgeToEdgeTests", "System bar inset height: $topInset")
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, 0, width!!, (topInset!! * 2))
@@ -177,16 +199,20 @@ class EdgeToEdgeTest {
         waitForWindowUpdate()
         activityScenarioRule.scenario.onActivity { activity ->
             val metrics = WindowMetricsCalculator.getOrCreate()
-                .computeCurrentWindowMetrics(activity)
-            bottomInset = metrics.getWindowInsets().getInsets(
-                WindowInsetsCompat.Type.navigationBars(),
-            ).bottom
+                .computeMaximumWindowMetrics(activity)
+            // TODO: Get the real inset dimension in <R
+            bottomInset = if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
+                metrics.getWindowInsets().getInsets(
+                    WindowInsetsCompat.Type.navigationBars(),
+                ).bottom
+            } else {
+                100
+            }
 
             width = metrics.bounds.width()
             height = metrics.bounds.height()
         }
-        Log.d("jalc", "height: $height")
-        Log.d("jalc", "bottomInset: $bottomInset")
+        Log.d("EdgeToEdgeTests", "Navigation bar inset height: $bottomInset")
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, height!! - (bottomInset!! * 2), width!!, (bottomInset!! * 2))
