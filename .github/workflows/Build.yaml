@@ -322,7 +322,7 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
-          script: >
+          script: |
             set +e ;
             if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then  
               echo "All screenshot tests passed"
@@ -330,10 +330,10 @@ jobs:
               echo "Verification failed. Recording new reference images"
               if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ; then
                 echo "New goldens recorded, no issues"
-                ; echo "newgoldens=true" >> $GITHUB_OUTPUT
+                echo "newgoldens=true" >> $GITHUB_OUTPUT
               else
                 echo "Error while recording new goldens"
-                ; exit 5
+                exit 5
               fi
             fi
 
