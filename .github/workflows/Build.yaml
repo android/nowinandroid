@@ -310,7 +310,7 @@ jobs:
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
-        continue-on-error: true
+        continue-on-error: false
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -323,11 +323,12 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
           script: >
+            set +o pipefail &&
             ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon  
             || echo "Recording new screenshots" 
             ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace  
             ;  echo "Done recording new screenshots, exiting with failure" 
-            ; exit 5
+            ; echo ::set-output name=newgoldens::true
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
@@ -338,12 +339,13 @@ jobs:
 
       - name: Checkout new changes (in case another job already uploaded screenshots)
         uses: actions/checkout@v4
+        if: steps.dropshotsverify.outputs.newgoldens == 'true'
         with:
           clean: false
 
       - name: Push new device screenshots if available
         uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
-        if: steps.dropshotsverify.outcome == 'failure'
+        if: steps.dropshotsverify.outputs.newgoldens == 'true'
         with:
           file_pattern: 'app/src/androidTest/screenshots/*.png'
           disable_globbing: true
