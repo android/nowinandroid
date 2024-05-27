@@ -299,10 +299,11 @@ jobs:
         run: |
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 
-      - name: Print debug avdmanager list
+      - name: Debug Environment
         run: |
-          echo ${{ env.PATH}}
-          ls -al ${{ env.ANDROID_HOME}}/cmdline-tools/which avdmanager
+          echo "PATH: $PATH"
+          echo "SHELL: $SHELL"
+        shell: bash
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
