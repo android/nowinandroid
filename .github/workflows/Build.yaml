@@ -299,7 +299,7 @@ jobs:
       - name: Replace cmdlinetools and set path
         run: |
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
-          echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest >> $GITHUB_PATH
+          echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest/bin >> $GITHUB_PATH
 
       - name: Debug Environment
         run: |
