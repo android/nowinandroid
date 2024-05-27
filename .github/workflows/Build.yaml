@@ -247,8 +247,10 @@ jobs:
         include:
           - api-level: 27
             profile: pixel_5
+            target: google_apis
           - api-level: 33
             profile: pixel_fold
+            target: google_apis
             # Enable when a new version of the runner is released. Currently v2.30.1
             # https://github.com/ReactiveCircus/android-emulator-runner/releases/tag/v2.30.1
             # Also, change from VanillaIceCream to 35 when that image is available
@@ -302,20 +304,9 @@ jobs:
           mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
           echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest/bin >> $GITHUB_PATH
 
-      - name: Debug Environment
+      - name: Print debug avd
         run: |
-          echo "PATH: $PATH"
-          echo "SHELL: $SHELL"
-        shell: bash
-
-      - name: Print debug avdmanager list
-        run: avdmanager list
-
-      - name: Print debug sdkmanager
-        run: |
-          sdkmanager --version
-          which sdkmanager
-          which avdmanager
+          ls -alR ~/.android/avd/
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
@@ -330,6 +321,11 @@ jobs:
           heap-size: 600M
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          # TODO DEBUG
+          pre-emulator-launch-script: |
+            which sdkmanager
+            sdkmanager --version
+            sdkmanager --install 'system-images;android-33;default;x86_64' --channel=0
           # Run tests, if they fail, record screenshots and exit with a failure
           script: >
             ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon  

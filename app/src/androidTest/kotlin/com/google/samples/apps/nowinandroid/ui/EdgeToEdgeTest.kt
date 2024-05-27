@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.ui
 
 import android.graphics.Bitmap
 import android.util.Log
-import android.view.WindowInsets
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
@@ -162,8 +161,8 @@ class EdgeToEdgeTest {
             ).bottom
             width = metrics.bounds.width()
         }
-        Log.d("jalc", "width: $width" )
-        Log.d("jalc", "topInset: $topInset" )
+        Log.d("jalc", "width: $width")
+        Log.d("jalc", "topInset: $topInset")
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, 0, width!!, (topInset!! * 2))
@@ -186,8 +185,8 @@ class EdgeToEdgeTest {
             width = metrics.bounds.width()
             height = metrics.bounds.height()
         }
-        Log.d("jalc", "height: $height" )
-        Log.d("jalc", "bottomInset: $bottomInset" )
+        Log.d("jalc", "height: $height")
+        Log.d("jalc", "bottomInset: $bottomInset")
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
             Bitmap.createBitmap(it, 0, height!! - (bottomInset!! * 2), width!!, (bottomInset!! * 2))
