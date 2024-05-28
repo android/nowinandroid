@@ -254,6 +254,7 @@ jobs:
             # TODO: change from VanillaIceCream to 35 when that image is available
           - api-level: VanillaIceCream
             profile: pixel_fold
+            target: google_apis
 
     steps:
       - name: Delete unnecessary tools 🔧
