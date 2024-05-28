@@ -324,7 +324,7 @@ jobs:
           # Run tests, if they fail, record screenshots and exit with a failure
           #TODO: Split the script in multiple lines (note that the action does some parsing that breaks multiline)
           script:
-            set +e ; if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then echo "All screenshot tests passed" ; else echo "Recording new goldens" ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ; echo "newgoldens=true" >> $GITHUB_OUTPUT ; fi
+            set +e ; if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then echo "All screenshot tests passed" ; else echo "Recording new goldens" ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace && echo "newgoldens=true" >> $GITHUB_OUTPUT ; fi
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
