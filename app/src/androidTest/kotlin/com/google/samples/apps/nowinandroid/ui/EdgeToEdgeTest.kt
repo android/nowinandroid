@@ -23,7 +23,6 @@ import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setScreenOrientation
 import androidx.test.espresso.device.EspressoDevice.Companion.onDevice
-import androidx.test.espresso.device.action.ScreenOrientation.LANDSCAPE
 import androidx.test.espresso.device.action.ScreenOrientation.PORTRAIT
 import androidx.test.espresso.device.common.executeShellCommand
 import androidx.test.espresso.device.controller.DeviceMode.CLOSED
@@ -151,15 +150,18 @@ class EdgeToEdgeTest {
         runFoldableTests(apiName = "api35")
     }
 
-    @RequiresDeviceMode(mode = CLOSED)
-    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
-    @Test
-    fun edgeToEdge_Foldable_api35_landscape() {
-        onDevice().setClosedMode()
-        onDevice().setScreenOrientation(LANDSCAPE)
-        forceThreeButtonNavigation()
-        screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
-    }
+    // Very flaky:DeviceControllerOperationException: Device could not be set to the
+    // requested screen orientation.
+
+//    @RequiresDeviceMode(mode = CLOSED)
+//    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
+//    @Test
+//    fun edgeToEdge_Foldable_api35_landscape() {
+//        onDevice().setClosedMode()
+//        onDevice().setScreenOrientation(LANDSCAPE)
+//        forceThreeButtonNavigation()
+//        screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
+//    }
 
     private fun runFoldableTests(apiName: String) {
         onDevice().setClosedMode()
