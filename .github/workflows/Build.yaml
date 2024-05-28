@@ -251,11 +251,9 @@ jobs:
           - api-level: 33
             profile: pixel_fold
             target: google_apis
-            # Enable when a new version of the runner is released. Currently v2.30.1
-            # https://github.com/ReactiveCircus/android-emulator-runner/releases/tag/v2.30.1
-            # Also, change from VanillaIceCream to 35 when that image is available
-#          - api-level: VanillaIceCream
-#            profile: pixel_fold
+            # TODO: change from VanillaIceCream to 35 when that image is available
+          - api-level: VanillaIceCream
+            profile: pixel_fold
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -322,15 +320,8 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           # Run tests, if they fail, record screenshots and exit with a failure
-          script: >
-            set +e ;
-            if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then 
-              echo "All screenshot tests passed" ;
-            else
-              echo "Recording new goldens" ;
-              ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ;
-              echo "newgoldens=true" >> $GITHUB_OUTPUT ;
-            fi
+          script:
+            set +e ; if ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon ; then echo "All screenshot tests passed" ; else echo "Recording new goldens" ; ./gradlew connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace ; echo "newgoldens=true" >> $GITHUB_OUTPUT ; fi
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
