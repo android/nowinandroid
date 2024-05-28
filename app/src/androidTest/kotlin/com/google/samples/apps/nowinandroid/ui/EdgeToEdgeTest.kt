@@ -21,9 +21,7 @@ import android.util.Log
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
-import androidx.test.espresso.device.DeviceInteraction.Companion.setScreenOrientation
 import androidx.test.espresso.device.EspressoDevice.Companion.onDevice
-import androidx.test.espresso.device.action.ScreenOrientation.PORTRAIT
 import androidx.test.espresso.device.common.executeShellCommand
 import androidx.test.espresso.device.controller.DeviceMode.CLOSED
 import androidx.test.espresso.device.controller.DeviceMode.FLAT
@@ -127,7 +125,6 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 27, maxSdkVersion = 27)
     @Test
     fun edgeToEdge_Phone_Api27() {
-        onDevice().setScreenOrientation(PORTRAIT)
         screenshotSystemBar("edgeToEdge_Phone_systemBar_Api27")
         screenshotNavigationBar("edgeToEdge_Phone_navBar_Api27")
     }
@@ -137,7 +134,6 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 33, maxSdkVersion = 33)
     @Test
     fun edgeToEdge_Foldable_api33() {
-        onDevice().setScreenOrientation(PORTRAIT)
         runFoldableTests(apiName = "api33")
     }
 
@@ -146,7 +142,6 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
     @Test
     fun edgeToEdge_Foldable_api35() {
-        onDevice().setScreenOrientation(PORTRAIT)
         runFoldableTests(apiName = "api35")
     }
 
