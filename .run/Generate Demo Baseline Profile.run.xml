@@ -36,7 +36,6 @@
         <list>
           <option value=":app:generateDemoReleaseBaselineProfile" />
           <option value="--rerun" />
-          <option value="--enable-display" />
         </list>
       </option>
       <option name="vmOptions" />
