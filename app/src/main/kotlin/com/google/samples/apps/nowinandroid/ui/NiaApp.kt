@@ -201,6 +201,7 @@ internal fun NiaApp(
                 }
 
                 Box(
+                    // Workaround for https://issuetracker.google.com/338478720
                     modifier = Modifier.consumeWindowInsets(
                         if (shouldShowTopAppBar) {
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
