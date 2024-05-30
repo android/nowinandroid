@@ -23,16 +23,16 @@ import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksRoute
 import kotlinx.serialization.Serializable
 
-@Serializable object BookmarksDestination
+@Serializable object BookmarksRoute
 
 fun NavController.navigateToBookmarks(navOptions: NavOptions) =
-    navigate(route = BookmarksDestination, navOptions)
+    navigate(route = BookmarksRoute, navOptions)
 
 fun NavGraphBuilder.bookmarksScreen(
     onTopicClick: (String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
-    composable<BookmarksDestination> {
+    composable<BookmarksRoute> {
         BookmarksRoute(onTopicClick, onShowSnackbar)
     }
 }

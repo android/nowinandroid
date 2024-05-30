@@ -35,11 +35,11 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -99,9 +99,9 @@ class NiaAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() {
             with(currentDestination) {
-                if (this?.hasRoute<ForYouDestination>() == true) return FOR_YOU
-                if (this?.hasRoute<BookmarksDestination>() == true) return BOOKMARKS
-                if (this?.hasRoute<InterestsDestination>() == true) return INTERESTS
+                if (this?.hasRoute<ForYouRoute>() == true) return FOR_YOU
+                if (this?.hasRoute<BookmarksRoute>() == true) return BOOKMARKS
+                if (this?.hasRoute<InterestsRoute>() == true) return INTERESTS
             }
             return null
         }

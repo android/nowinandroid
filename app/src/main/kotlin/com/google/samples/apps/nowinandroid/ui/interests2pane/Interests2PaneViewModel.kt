@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.ui.interests2pane
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
@@ -32,10 +32,10 @@ class Interests2PaneViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    val destination = savedStateHandle.toRoute<InterestsDestination>()
+    val route = savedStateHandle.toRoute<InterestsRoute>()
     val selectedTopicId: StateFlow<String?> = savedStateHandle.getStateFlow(
         key = TOPIC_ID_KEY,
-        initialValue = destination.initialTopicId,
+        initialValue = route.initialTopicId,
     )
 
     fun onTopicClick(topicId: String?) {

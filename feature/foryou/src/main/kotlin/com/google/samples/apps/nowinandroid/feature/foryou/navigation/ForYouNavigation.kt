@@ -30,14 +30,14 @@ const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
 
 private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH"
 
-@Serializable data class ForYouDestination(val linkedNewsResourceId: String? = null)
+@Serializable data class ForYouRoute(val linkedNewsResourceId: String? = null)
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouDestination(), navOptions)
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute(), navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
-    composable<ForYouDestination>(
+    composable<ForYouRoute>(
         deepLinks = listOf(
-            navDeepLink<ForYouDestination>(basePath = DEEP_LINK_BASE_PATH),
+            navDeepLink<ForYouRoute>(basePath = DEEP_LINK_BASE_PATH),
         ),
     ) {
         ForYouRoute(onTopicClick)

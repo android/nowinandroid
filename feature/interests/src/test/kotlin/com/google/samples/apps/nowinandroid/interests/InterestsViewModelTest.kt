@@ -26,7 +26,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -59,7 +59,7 @@ class InterestsViewModelTest {
             // TODO: This line causes tests to fail since it introduces an Android dependency
             //  see b/340966212 for more information
             savedStateHandle = SavedStateHandle(
-                route = InterestsDestination(initialTopicId = testInputTopics[0].topic.id),
+                route = InterestsRoute(initialTopicId = testInputTopics[0].topic.id),
             ),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
