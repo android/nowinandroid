@@ -114,9 +114,10 @@ To run the tests execute the following gradle tasks:
 - `testDemoDebug` run all local tests against the `demoDebug` variant.
 - `connectedDemoDebugAndroidTest` run all instrumented tests against the `demoDebug` variant. 
 
-**Note:** You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
-tests against _all_ build variants which is both unecessary and will result in failures as only the
-`demoDebug` variant is supported. No other variants have any tests (although this might change in future). 
+> [!NOTE]
+> You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
+> tests against _all_ build variants which is both unecessary and will result in failures as only the
+> `demoDebug` variant is supported. No other variants have any tests (although this might change in future). 
 
 ## Screenshot tests
 A screenshot test takes a screenshot of a screen or a UI component within the app, and compares it 
@@ -137,11 +138,12 @@ stored in `modulename/src/test/screenshots`.
 - `compareRoborazziDemoDebug` create comparison images between failed tests and the known correct
 images. These can also be found in `modulename/src/test/screenshots`. 
 
-**Note:** The known correct screenshots stored in this repository are recorded on CI using Linux. Other
-platforms may (and probably will) generate slightly different images, making the screenshot tests fail. 
-When working on a non-Linux platform, a workaround to this is to run `recordRoborazziDemoDebug` on the
-`main` branch before starting work. After making changes, `verifyRoborazziDemoDebug` will identify only
-legitimate changes. 
+> [!NOTE]
+> The known correct screenshots stored in this repository are recorded on CI using Linux. Other
+> platforms may (and probably will) generate slightly different images, making the screenshot tests fail. 
+> When working on a non-Linux platform, a workaround to this is to run `recordRoborazziDemoDebug` on the
+> `main` branch before starting work. After making changes, `verifyRoborazziDemoDebug` will identify only
+> legitimate changes. 
 
 For more information about screenshot testing 
 [check out this talk](https://www.droidcon.com/2023/11/15/easy-screenshot-testing-with-compose/).
