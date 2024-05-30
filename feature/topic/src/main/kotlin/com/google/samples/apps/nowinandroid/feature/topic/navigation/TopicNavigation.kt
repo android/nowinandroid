@@ -23,10 +23,10 @@ import androidx.navigation.compose.composable
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import kotlinx.serialization.Serializable
 
-@Serializable data class TopicDestination(val id: String)
+@Serializable data class TopicRoute(val id: String)
 
 fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(route = TopicDestination(topicId)) {
+    navigate(route = TopicRoute(topicId)) {
         navOptions()
     }
 }
@@ -36,7 +36,7 @@ fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
-    composable<TopicDestination> {
+    composable<TopicRoute> {
         TopicScreen(
             showBackButton = showBackButton,
             onBackClick = onBackClick,

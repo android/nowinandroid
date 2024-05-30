@@ -40,20 +40,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
-@Serializable object TopicPlaceholderDestination
+@Serializable internal object TopicPlaceholderRoute
 
-@Serializable object DetailPaneNavHostDestination
+@Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable<InterestsDestination> {
+    composable<InterestsRoute> {
         InterestsListDetailScreen()
     }
 }
@@ -87,9 +87,9 @@ internal fun InterestsListDetailScreen(
         listDetailNavigator.navigateBack()
     }
 
-    var nestedNavHostStartDestination by remember {
-        val destination = selectedTopicId?.let { TopicDestination(id = it) } ?: TopicPlaceholderDestination
-        mutableStateOf(destination)
+    var nestedNavHostStartRoute by remember {
+        val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
+        mutableStateOf(route)
     }
     var nestedNavKey by rememberSaveable(
         stateSaver = Saver({ it.toString() }, UUID::fromString),
@@ -106,11 +106,11 @@ internal fun InterestsListDetailScreen(
             // If the detail pane was visible, then use the nestedNavController navigate call
             // directly
             nestedNavController.navigateToTopic(topicId) {
-                popUpTo<DetailPaneNavHostDestination>()
+                popUpTo<DetailPaneNavHostRoute>()
             }
         } else {
             // Otherwise, recreate the NavHost entirely, and start at the new destination
-            nestedNavHostStartDestination = TopicDestination(id = topicId)
+            nestedNavHostStartRoute = TopicRoute(id = topicId)
             nestedNavKey = UUID.randomUUID()
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
@@ -132,15 +132,15 @@ internal fun InterestsListDetailScreen(
                 key(nestedNavKey) {
                     NavHost(
                         navController = nestedNavController,
-                        startDestination = nestedNavHostStartDestination,
-                        route = DetailPaneNavHostDestination::class,
+                        startDestination = nestedNavHostStartRoute,
+                        route = DetailPaneNavHostRoute::class,
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
                             onBackClick = listDetailNavigator::navigateBack,
                             onTopicClick = ::onTopicClickShowDetailPane,
                         )
-                        composable<TopicPlaceholderDestination> {
+                        composable<TopicPlaceholderRoute> {
                             TopicDetailPlaceholder()
                         }
                     }

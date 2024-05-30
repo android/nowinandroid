@@ -19,9 +19,9 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksDestination
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouDestination
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
@@ -44,20 +44,20 @@ enum class TopLevelDestination(
         unselectedIcon = NiaIcons.UpcomingBorder,
         iconTextId = forYouR.string.feature_foryou_title,
         titleTextId = R.string.app_name,
-        route = ForYouDestination::class,
+        route = ForYouRoute::class,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
         unselectedIcon = NiaIcons.BookmarksBorder,
         iconTextId = bookmarksR.string.feature_bookmarks_title,
         titleTextId = bookmarksR.string.feature_bookmarks_title,
-        route = BookmarksDestination::class,
+        route = BookmarksRoute::class,
     ),
     INTERESTS(
         selectedIcon = NiaIcons.Grid3x3,
         unselectedIcon = NiaIcons.Grid3x3,
         iconTextId = searchR.string.feature_search_interests,
         titleTextId = searchR.string.feature_search_interests,
-        route = InterestsDestination::class,
+        route = InterestsRoute::class,
     ),
 }

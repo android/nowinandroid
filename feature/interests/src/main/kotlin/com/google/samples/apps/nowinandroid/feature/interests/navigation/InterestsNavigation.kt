@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
 
 const val TOPIC_ID_KEY = "topicId"
 
-@Serializable data class InterestsDestination(
+@Serializable data class InterestsRoute(
     // The ID of the topic which will be initially selected at this destination
     val initialTopicId: String?,
 )
@@ -31,5 +31,5 @@ fun NavController.navigateToInterests(
     initialTopicId: String? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = InterestsDestination(initialTopicId), navOptions)
+    navigate(route = InterestsRoute(initialTopicId), navOptions)
 }

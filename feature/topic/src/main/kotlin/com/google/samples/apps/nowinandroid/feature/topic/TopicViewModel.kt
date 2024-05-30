@@ -29,7 +29,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicDestination
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,7 +48,7 @@ class TopicViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    val topicId = savedStateHandle.toRoute<TopicDestination>().id
+    val topicId = savedStateHandle.toRoute<TopicRoute>().id
 
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicId,

@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsDestination
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,10 +41,10 @@ class InterestsViewModel @Inject constructor(
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
-    private val interestsDestination: InterestsDestination = savedStateHandle.toRoute()
+    private val interestsRoute: InterestsRoute = savedStateHandle.toRoute()
     private val selectedTopicId = savedStateHandle.getStateFlow(
         key = TOPIC_ID_KEY,
-        initialValue = interestsDestination.initialTopicId,
+        initialValue = interestsRoute.initialTopicId,
     )
 
     val uiState: StateFlow<InterestsUiState> = combine(
