@@ -106,11 +106,11 @@ androidx.lifecycle:lifecycle-viewmodel:2.8.0
 androidx.loader:loader:1.0.0
 androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
 androidx.metrics:metrics-performance:1.0.0-alpha04
-androidx.navigation:navigation-common-ktx:2.8.0-alpha08
-androidx.navigation:navigation-common:2.8.0-alpha08
-androidx.navigation:navigation-compose:2.8.0-alpha08
-androidx.navigation:navigation-runtime-ktx:2.8.0-alpha08
-androidx.navigation:navigation-runtime:2.8.0-alpha08
+androidx.navigation:navigation-common-ktx:2.8.0-beta01
+androidx.navigation:navigation-common:2.8.0-beta01
+androidx.navigation:navigation-compose:2.8.0-beta01
+androidx.navigation:navigation-runtime-ktx:2.8.0-beta01
+androidx.navigation:navigation-runtime:2.8.0-beta01
 androidx.print:print:1.0.0
 androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05
 androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05
