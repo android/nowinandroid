@@ -518,6 +518,7 @@ private fun SearchTextField(
             .focusRequester(focusRequester)
             .onKeyEvent {
                 if (it.key == Key.Enter) {
+                    if (searchQuery.isBlank()) return@onKeyEvent false
                     onSearchExplicitlyTriggered()
                     true
                 } else {
@@ -532,6 +533,7 @@ private fun SearchTextField(
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
+                if (searchQuery.isBlank()) return@KeyboardActions
                 onSearchExplicitlyTriggered()
             },
         ),
