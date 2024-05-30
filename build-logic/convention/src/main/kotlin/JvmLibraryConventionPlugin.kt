@@ -14,9 +14,10 @@
  *   limitations under the License.
  */
 
-import com.google.samples.apps.nowinandroid.configureKotlinJvm
+import com.google.samples.apps.nowinandroid.configureKotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -25,7 +26,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.jvm")
                 apply("nowinandroid.android.lint")
             }
-            configureKotlinJvm()
+            configureKotlin<KotlinJvmProjectExtension>()
         }
     }
 }
