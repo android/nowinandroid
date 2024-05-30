@@ -31,6 +31,19 @@ then
     exit 1
 fi
 
+# Check for a version of grep which supports Perl regex.
+# On MacOS the OS installed grep doesn't support Perl regex so check for the existence of the
+# GNU version instead which is prefixed with 'g' to distinguish it from the OS installed version.
+    if grep -P "" /dev/null > /dev/null 2>&1; then
+    GREP_COMMAND=grep
+elif command -v ggrep &> /dev/null; then
+    GREP_COMMAND=ggrep
+else
+    echo "You don't have a version of 'grep' installed which supports Perl regular expressions."
+    echo "On MacOS you can install one using Homebrew with the command: 'brew install grep'"
+    exit 1
+fi
+
 # Initialize an array to store excluded modules
 excluded_modules=()
 
@@ -50,7 +63,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Get the module paths
-module_paths=$(./gradlew -q printModulePaths --no-configuration-cache)
+module_paths=$(${GREP_COMMAND} -oP 'include\("\K[^"]+' settings.gradle.kts)
 
 # Ensure the output directory exists
 mkdir -p docs/images/graphs/
@@ -100,8 +113,11 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.output.gv="/tmp/${file_name}.gv" \
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
-        # Convert to SVG using dot
-        dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs/${file_name}.svg"
+        # Convert to SVG using dot, remove unnecessary comments, and reformat
+        dot -Tsvg "/tmp/${file_name}.gv" |
+          sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' | grep -zv '^<!--' | tr -d '\0' |
+          xmllint --format - \
+          > "docs/images/graphs/${file_name}.svg"
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi
