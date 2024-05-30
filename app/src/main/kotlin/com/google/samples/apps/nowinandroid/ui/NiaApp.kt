@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -26,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +37,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,10 +65,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBar
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationBarItem
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRail
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationRailItem
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationSuiteScaffold
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
@@ -77,8 +75,13 @@ import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
+fun NiaApp(
+    appState: NiaAppState,
+    modifier: Modifier = Modifier,
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
@@ -112,13 +115,18 @@ fun NiaApp(appState: NiaAppState, modifier: Modifier = Modifier) {
                 showSettingsDialog = showSettingsDialog,
                 onSettingsDismissed = { showSettingsDialog = false },
                 onTopAppBarActionClick = { showSettingsDialog = true },
+                windowAdaptiveInfo = windowAdaptiveInfo,
             )
         }
     }
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
+)
 internal fun NiaApp(
     appState: NiaAppState,
     snackbarHostState: SnackbarHostState,
@@ -126,59 +134,69 @@ internal fun NiaApp(
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
     modifier: Modifier = Modifier,
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
+    val currentDestination = appState.currentDestination
 
     if (showSettingsDialog) {
         SettingsDialog(
             onDismiss = { onSettingsDismissed() },
         )
     }
-    Scaffold(
-        modifier = modifier.semantics {
-            testTagsAsResourceId = true
-        },
-        containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onBackground,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            if (appState.shouldShowBottomBar) {
-                NiaBottomBar(
-                    destinations = appState.topLevelDestinations,
-                    destinationsWithUnreadResources = unreadDestinations,
-                    onNavigateToDestination = appState::navigateToTopLevelDestination,
-                    currentDestination = appState.currentDestination,
-                    modifier = Modifier.testTag("NiaBottomBar"),
-                )
-            }
-        },
-    ) { padding ->
-        Row(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal,
-                    ),
-                ),
-        ) {
-            if (appState.shouldShowNavRail) {
-                NiaNavRail(
-                    destinations = appState.topLevelDestinations,
-                    destinationsWithUnreadResources = unreadDestinations,
-                    onNavigateToDestination = appState::navigateToTopLevelDestination,
-                    currentDestination = appState.currentDestination,
-                    modifier = Modifier
-                        .testTag("NiaNavRail")
-                        .safeDrawingPadding(),
-                )
-            }
 
-            Column(Modifier.fillMaxSize()) {
+    NiaNavigationSuiteScaffold(
+        navigationSuiteItems = {
+            appState.topLevelDestinations.forEach { destination ->
+                val hasUnread = unreadDestinations.contains(destination)
+                val selected = currentDestination
+                    .isTopLevelDestinationInHierarchy(destination)
+                item(
+                    selected = selected,
+                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    icon = {
+                        Icon(
+                            imageVector = destination.unselectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = destination.selectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(destination.iconTextId)) },
+                    modifier =
+                    Modifier
+                        .testTag("NiaNavItem")
+                        .then(if (hasUnread) Modifier.notificationDot() else Modifier),
+                )
+            }
+        },
+        windowAdaptiveInfo = windowAdaptiveInfo,
+    ) {
+        Scaffold(
+            modifier = modifier.semantics {
+                testTagsAsResourceId = true
+            },
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+        ) { padding ->
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal,
+                        ),
+                    ),
+            ) {
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
                 val shouldShowTopAppBar = destination != null
@@ -202,13 +220,14 @@ internal fun NiaApp(
                 }
 
                 Box(
-                    modifier = if (shouldShowTopAppBar) {
-                        Modifier.consumeWindowInsets(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
-                        )
-                    } else {
-                        Modifier
-                    },
+                    // Workaround for https://issuetracker.google.com/338478720
+                    modifier = Modifier.consumeWindowInsets(
+                        if (shouldShowTopAppBar) {
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                        } else {
+                            WindowInsets(0, 0, 0, 0)
+                        },
+                    ),
                 ) {
                     NiaNavHost(
                         appState = appState,
@@ -221,80 +240,10 @@ internal fun NiaApp(
                         },
                     )
                 }
+
+                // TODO: We may want to add padding or spacer when the snackbar is shown so that
+                //  content doesn't display behind it.
             }
-
-            // TODO: We may want to add padding or spacer when the snackbar is shown so that
-            //  content doesn't display behind it.
-        }
-    }
-}
-
-@Composable
-private fun NiaNavRail(
-    destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
-    modifier: Modifier = Modifier,
-) {
-    NiaNavigationRail(modifier = modifier) {
-        destinations.forEach { destination ->
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
-            NiaNavigationRailItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.unselectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
-            )
-        }
-    }
-}
-
-@Composable
-private fun NiaBottomBar(
-    destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
-    modifier: Modifier = Modifier,
-) {
-    NiaNavigationBar(
-        modifier = modifier,
-    ) {
-        destinations.forEach { destination ->
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            NiaNavigationBarItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.unselectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
-            )
         }
     }
 }
