@@ -23,7 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_SCHEME_AND_HOST
 import com.google.samples.apps.nowinandroid.core.notifications.FOR_YOU_PATH
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import kotlinx.serialization.Serializable
 
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
@@ -40,6 +40,6 @@ fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
             navDeepLink<ForYouRoute>(basePath = DEEP_LINK_BASE_PATH),
         ),
     ) {
-        ForYouRoute(onTopicClick)
+        ForYouScreen(onTopicClick)
     }
 }
