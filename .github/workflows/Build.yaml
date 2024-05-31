@@ -327,8 +327,6 @@ jobs:
           script:
             ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
 
-      - name: Breakpoint if tests failed
-        run: top
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
