@@ -67,10 +67,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toJavaZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import java.text.DateFormat
 import java.util.Locale
 
 /**
@@ -239,12 +236,10 @@ fun NotificationDot(
     )
 }
 
-@Composable
-fun dateFormatted(publishDate: Instant): String = DateTimeFormatter
-    .ofLocalizedDate(FormatStyle.MEDIUM)
-    .withLocale(Locale.getDefault())
-    .withZone(LocalTimeZone.current.toJavaZoneId())
-    .format(publishDate.toJavaInstant())
+ @Composable
+ fun dateFormatted(publishDate: Instant): String = DateFormat
+     .getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+     .format(publishDate.toEpochMilliseconds())
 
 @Composable
 fun NewsResourceMetaData(
