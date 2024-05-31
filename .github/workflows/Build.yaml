@@ -323,6 +323,12 @@ jobs:
           script:
             ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
 
+      - name: Breakpoint if tests failed
+        uses: namespacelabs/breakpoint-action@v0
+        with:
+          duration: 30m
+          authorized-users: jack123, alice321
+
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
         continue-on-error: false
@@ -348,11 +354,6 @@ jobs:
           script:
             ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace
 
-      - name: Breakpoint if tests failed
-        uses: namespacelabs/breakpoint-action@v0
-        with:
-          duration: 30m
-          authorized-users: jack123, alice321
 
       - name: Checkout new changes (in case another job already uploaded screenshots)
         uses: actions/checkout@v4
