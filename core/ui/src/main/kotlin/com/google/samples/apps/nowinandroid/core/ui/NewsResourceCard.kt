@@ -236,10 +236,10 @@ fun NotificationDot(
     )
 }
 
- @Composable
- fun dateFormatted(publishDate: Instant): String = DateFormat
-     .getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-     .format(publishDate.toEpochMilliseconds())
+@Composable
+fun dateFormatted(publishDate: Instant): String = DateFormat
+    .getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+    .format(publishDate.toEpochMilliseconds())
 
 @Composable
 fun NewsResourceMetaData(
