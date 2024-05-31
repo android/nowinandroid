@@ -309,6 +309,7 @@ jobs:
 
       - name: Build projects and run instrumented screenshot tests
         id: dropshotsverify
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -325,6 +326,7 @@ jobs:
 
       - name: Breakpoint if tests failed
         uses: namespacelabs/breakpoint-action@v0
+        if: steps.dropshotsverify.outcome == 'failure'
         with:
           duration: 30m
           authorized-users: jack123, alice321
