@@ -114,10 +114,10 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
         # Convert to SVG using dot, remove unnecessary comments, and reformat
-                dot -Tsvg "/tmp/${file_name}.gv" |
-                  sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' | grep -zv '^<!--' | tr -d '\0' |
-                  xmllint --format - \
-                  > "docs/images/graphs/${file_name}.svg"
+        dot -Tsvg "/tmp/${file_name}.gv" |
+            sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' | grep -zv '^<!--' | tr -d '\0' |
+            xmllint --format - \
+            > "docs/images/graphs/${file_name}.svg"
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi
