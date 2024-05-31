@@ -334,7 +334,7 @@ jobs:
           echo "::error::Instrumented screenshot tests failed, please create a PR in your fork first." && exit 1
 
       - name: Record new screenshots if verification failed
-        id: dropshotsverify
+        id: dropshotsrecord
         continue-on-error: false
         if: steps.dropshotsverify.outcome == 'failure'
         uses: reactivecircus/android-emulator-runner@v2
