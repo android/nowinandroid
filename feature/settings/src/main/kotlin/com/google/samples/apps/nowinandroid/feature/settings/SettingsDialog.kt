@@ -87,7 +87,7 @@ fun SettingsDialog(
 }
 
 @Composable
-fun SettingsDialog(
+internal fun SettingsDialog(
     settingsUiState: SettingsUiState,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
