@@ -75,16 +75,13 @@ class TestUserDataRepository : UserDataRepository {
 
     override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         currentUserData.let { current ->
-            _userData.tryEmit(
-                current.copy(
-                    viewedNewsResources =
-                    if (viewed) {
-                        current.viewedNewsResources + newsResourceId
-                    } else {
-                        current.viewedNewsResources - newsResourceId
-                    },
-                ),
-            )
+            val viewedNews = if (viewed) {
+                current.viewedNewsResources + newsResourceId
+            } else {
+                current.viewedNewsResources - newsResourceId
+            }
+
+            _userData.tryEmit(current.copy(viewedNewsResources = viewedNews))
         }
     }
 
@@ -110,12 +107,5 @@ class TestUserDataRepository : UserDataRepository {
         currentUserData.let { current ->
             _userData.tryEmit(current.copy(shouldHideOnboarding = shouldHideOnboarding))
         }
-    }
-
-    /**
-     * A test-only API to allow setting of user data directly.
-     */
-    fun setUserData(userData: UserData) {
-        _userData.tryEmit(userData)
     }
 }
