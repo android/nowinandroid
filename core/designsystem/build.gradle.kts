@@ -45,8 +45,6 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.testManifest)
     
     testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.robolectric)
-    testImplementation(libs.roborazzi)
     testImplementation(projects.core.screenshotTesting)
     testImplementation(projects.core.testing)
 

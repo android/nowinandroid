@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.nowinandroid.android.feature)
     alias(libs.plugins.nowinandroid.android.library.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -29,7 +30,8 @@ dependencies {
     implementation(libs.google.oss.licenses)
     implementation(projects.core.data)
 
-    testImplementation(projects.core.testing)
+    testImplementation(libs.hilt.android.testing)
+    testDemoImplementation(libs.roborazzi)
 
-    androidTestImplementation(projects.core.testing)
+    testImplementation(projects.core.screenshotTesting)
 }

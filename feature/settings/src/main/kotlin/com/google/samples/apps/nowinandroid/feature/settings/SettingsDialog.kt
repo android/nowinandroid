@@ -89,11 +89,12 @@ fun SettingsDialog(
 @Composable
 fun SettingsDialog(
     settingsUiState: SettingsUiState,
-    supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
+    modifier: Modifier = Modifier,
+    supportDynamicColor: Boolean = supportsDynamicTheming(),
 ) {
     val configuration = LocalConfiguration.current
 
@@ -106,7 +107,7 @@ fun SettingsDialog(
      */
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
+        modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(

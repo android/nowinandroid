@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.DarkMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.RoborazziOptions
@@ -50,6 +51,7 @@ enum class DefaultTestDevices(val description: String, val spec: String) {
     FOLDABLE("foldable", "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480"),
     TABLET("tablet", "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"),
 }
+
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
     body: @Composable () -> Unit,
@@ -86,6 +88,27 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     this.onRoot()
         .captureRoboImage(
             "src/test/screenshots/${screenshotName}_$deviceName.png",
+            roborazziOptions = roborazziOptions,
+        )
+}
+
+fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureDialog(
+    screenshotName: String,
+    nodeTag: String,
+    roborazziOptions: RoborazziOptions = DefaultRoborazziOptions,
+    body: @Composable () -> Unit,
+) {
+    this.activity.setContent {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true,
+        ) {
+            body()
+        }
+    }
+
+    this.onNodeWithTag(nodeTag)
+        .captureRoboImage(
+            filePath = "src/test/screenshots/$screenshotName.png",
             roborazziOptions = roborazziOptions,
         )
 }
