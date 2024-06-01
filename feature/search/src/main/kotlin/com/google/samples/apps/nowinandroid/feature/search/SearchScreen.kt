@@ -63,6 +63,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -443,11 +444,18 @@ private fun SearchToolbar(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth(),
     ) {
-        IconButton(onClick = { onBackClick() }) {
+        IconButton(
+            onClick = {
+                keyboardController?.hide()
+                onBackClick()
+            },
+        ) {
             Icon(
                 imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
@@ -459,6 +467,7 @@ private fun SearchToolbar(
             onSearchQueryChanged = onSearchQueryChanged,
             onSearchTriggered = onSearchTriggered,
             searchQuery = searchQuery,
+            keyboardController = keyboardController
         )
     }
 }
@@ -466,11 +475,11 @@ private fun SearchToolbar(
 @Composable
 private fun SearchTextField(
     searchQuery: String,
+    keyboardController: SoftwareKeyboardController?,
     onSearchQueryChanged: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     val onSearchExplicitlyTriggered = {
         keyboardController?.hide()
