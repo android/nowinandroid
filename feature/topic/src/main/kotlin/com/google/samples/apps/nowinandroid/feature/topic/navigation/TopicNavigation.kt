@@ -57,7 +57,7 @@ fun NavGraphBuilder.topicScreen(
     onTopicClick: (String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$TOPIC_ID_ARG}",
+        route = "$TOPIC_ROUTE/{$TOPIC_ID_ARG}",
         arguments = listOf(
             navArgument(TOPIC_ID_ARG) { type = NavType.StringType },
         ),
