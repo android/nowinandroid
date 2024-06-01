@@ -21,9 +21,6 @@ plugins {
 }
 
 android {
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
     namespace = "com.google.samples.apps.nowinandroid.core.designsystem"
 }
 
@@ -49,7 +46,4 @@ dependencies {
     testImplementation(libs.roborazzi)
     testImplementation(projects.core.screenshotTesting)
     testImplementation(projects.core.testing)
-
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(projects.core.testing)
 }
