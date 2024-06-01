@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="274pt" height="116pt" viewBox="0.00 0.00 273.97 116.00">
+  <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+    <title>G</title>
+    <polygon fill="white" stroke="none" points="-4,4 -4,-112 269.97,-112 269.97,4 -4,4"/>
+    <g id="node1" class="node">
+      <title>:core:network</title>
+      <ellipse fill="none" stroke="black" cx="137.81" cy="-90" rx="64.66" ry="18"/>
+      <text text-anchor="middle" x="137.81" y="-85.8" font-family="Times,serif" font-size="14.00">:core:network</text>
+    </g>
+    <g id="node2" class="node">
+      <title>:core:common</title>
+      <ellipse fill="none" stroke="black" cx="66.81" cy="-18" rx="66.81" ry="18"/>
+      <text text-anchor="middle" x="66.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:common</text>
+    </g>
+    <g id="edge1" class="edge">
+      <title>:core:network-&gt;:core:common</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M120.99,-72.41C112.23,-63.78 101.36,-53.06 91.66,-43.5"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="95.25,-42.12 85.67,-37.6 90.34,-47.11 95.25,-42.12"/>
+    </g>
+    <g id="node3" class="node">
+      <title>:core:model</title>
+      <ellipse fill="none" stroke="black" cx="208.81" cy="-18" rx="57.16" ry="18"/>
+      <text text-anchor="middle" x="208.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:model</text>
+    </g>
+    <g id="edge2" class="edge">
+      <title>:core:network-&gt;:core:model</title>
+      <path fill="none" stroke="black" d="M154.64,-72.41C163.39,-63.78 174.27,-53.06 183.97,-43.5"/>
+      <polygon fill="black" stroke="black" points="186.37,-46.05 191.03,-36.53 181.45,-41.06 186.37,-46.05"/>
+    </g>
+  </g>
+</svg>

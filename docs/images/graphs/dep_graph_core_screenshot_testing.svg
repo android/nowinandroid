@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="330pt" height="116pt" viewBox="0.00 0.00 329.87 116.00">
+  <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+    <title>G</title>
+    <polygon fill="white" stroke="none" points="-4,4 -4,-112 325.87,-112 325.87,4 -4,4"/>
+    <g id="node1" class="node">
+      <title>:core:screenshot-testing</title>
+      <ellipse fill="none" stroke="black" cx="151.81" cy="-90" rx="102.74" ry="18"/>
+      <text text-anchor="middle" x="151.81" y="-85.8" font-family="Times,serif" font-size="14.00">:core:screenshot-testing</text>
+    </g>
+    <g id="node2" class="node">
+      <title>:core:common</title>
+      <ellipse fill="none" stroke="black" cx="66.81" cy="-18" rx="66.81" ry="18"/>
+      <text text-anchor="middle" x="66.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:common</text>
+    </g>
+    <g id="edge1" class="edge">
+      <title>:core:screenshot-testing-&gt;:core:common</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M131.24,-72.05C120.51,-63.22 107.22,-52.27 95.49,-42.62"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="99.19,-41.13 89.24,-37.47 94.74,-46.53 99.19,-41.13"/>
+    </g>
+    <g id="node3" class="node">
+      <title>:core:designsystem</title>
+      <ellipse fill="none" stroke="black" cx="236.81" cy="-18" rx="85.06" ry="18"/>
+      <text text-anchor="middle" x="236.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:designsystem</text>
+    </g>
+    <g id="edge2" class="edge">
+      <title>:core:screenshot-testing-&gt;:core:designsystem</title>
+      <path fill="none" stroke="black" d="M172.39,-72.05C183.04,-63.28 196.22,-52.43 207.88,-42.83"/>
+      <polygon fill="black" stroke="black" points="209.76,-45.81 215.26,-36.75 205.31,-40.41 209.76,-45.81"/>
+    </g>
+  </g>
+</svg>

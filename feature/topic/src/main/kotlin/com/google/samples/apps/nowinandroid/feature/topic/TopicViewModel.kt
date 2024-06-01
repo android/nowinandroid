@@ -81,7 +81,7 @@ class TopicViewModel @Inject constructor(
 
     fun bookmarkNews(newsResourceId: String, bookmarked: Boolean) {
         viewModelScope.launch {
-            userDataRepository.updateNewsResourceBookmark(newsResourceId, bookmarked)
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, bookmarked)
         }
     }
 

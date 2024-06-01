@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="462pt" height="188pt" viewBox="0.00 0.00 462.21 188.00">
+  <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+    <title>G</title>
+    <polygon fill="white" stroke="none" points="-4,4 -4,-184 458.21,-184 458.21,4 -4,4"/>
+    <g id="node1" class="node">
+      <title>:app-nia-catalog</title>
+      <ellipse fill="none" stroke="black" cx="169.06" cy="-162" rx="73.77" ry="18"/>
+      <text text-anchor="middle" x="169.06" y="-157.8" font-family="Times,serif" font-size="14.00">:app-nia-catalog</text>
+    </g>
+    <g id="node2" class="node">
+      <title>:core:designsystem</title>
+      <ellipse fill="none" stroke="black" cx="85.06" cy="-18" rx="85.06" ry="18"/>
+      <text text-anchor="middle" x="85.06" y="-13.8" font-family="Times,serif" font-size="14.00">:core:designsystem</text>
+    </g>
+    <g id="edge1" class="edge">
+      <title>:app-nia-catalog-&gt;:core:designsystem</title>
+      <path fill="none" stroke="black" d="M158.93,-143.87C144.55,-119.56 118.08,-74.82 101.04,-46.01"/>
+      <polygon fill="black" stroke="black" points="104.1,-44.32 96,-37.49 98.08,-47.88 104.1,-44.32"/>
+    </g>
+    <g id="node3" class="node">
+      <title>:core:ui</title>
+      <ellipse fill="none" stroke="black" cx="229.06" cy="-90" rx="40.53" ry="18"/>
+      <text text-anchor="middle" x="229.06" y="-85.8" font-family="Times,serif" font-size="14.00">:core:ui</text>
+    </g>
+    <g id="edge2" class="edge">
+      <title>:app-nia-catalog-&gt;:core:ui</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M183.58,-144.05C190.84,-135.59 199.75,-125.19 207.76,-115.84"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="209.26,-119.48 213.11,-109.61 203.94,-114.92 209.26,-119.48"/>
+    </g>
+    <g id="edge4" class="edge">
+      <title>:core:ui-&gt;:core:designsystem</title>
+      <path fill="none" stroke="black" d="M202.31,-76C181.55,-65.91 152.35,-51.71 128.28,-40.01"/>
+      <polygon fill="black" stroke="black" points="129.87,-36.89 119.34,-35.67 126.81,-43.19 129.87,-36.89"/>
+    </g>
+    <g id="node4" class="node">
+      <title>:core:analytics</title>
+      <ellipse fill="none" stroke="black" cx="255.06" cy="-18" rx="67.34" ry="18"/>
+      <text text-anchor="middle" x="255.06" y="-13.8" font-family="Times,serif" font-size="14.00">:core:analytics</text>
+    </g>
+    <g id="edge3" class="edge">
+      <title>:core:ui-&gt;:core:analytics</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M235.35,-72.05C238.15,-64.52 241.52,-55.44 244.68,-46.94"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="247.39,-49.71 247.59,-39.11 240.82,-47.27 247.39,-49.71"/>
+    </g>
+    <g id="node5" class="node">
+      <title>:core:model</title>
+      <ellipse fill="none" stroke="black" cx="397.06" cy="-18" rx="57.16" ry="18"/>
+      <text text-anchor="middle" x="397.06" y="-13.8" font-family="Times,serif" font-size="14.00">:core:model</text>
+    </g>
+    <g id="edge5" class="edge">
+      <title>:core:ui-&gt;:core:model</title>
+      <path fill="none" stroke="black" d="M257.94,-76.97C284.09,-66.07 323.01,-49.86 353.03,-37.34"/>
+      <polygon fill="black" stroke="black" points="354.37,-40.58 362.26,-33.5 351.68,-34.12 354.37,-40.58"/>
+    </g>
+  </g>
+</svg>

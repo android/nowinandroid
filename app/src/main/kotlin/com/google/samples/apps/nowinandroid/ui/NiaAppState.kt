@@ -16,8 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -55,7 +53,6 @@ import kotlinx.datetime.TimeZone
 
 @Composable
 fun rememberNiaAppState(
-    windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
@@ -66,7 +63,6 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        windowSizeClass,
         networkMonitor,
         userNewsResourceRepository,
         timeZoneMonitor,
@@ -74,7 +70,6 @@ fun rememberNiaAppState(
         NiaAppState(
             navController = navController,
             coroutineScope = coroutineScope,
-            windowSizeClass = windowSizeClass,
             networkMonitor = networkMonitor,
             userNewsResourceRepository = userNewsResourceRepository,
             timeZoneMonitor = timeZoneMonitor,
@@ -86,7 +81,6 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
@@ -102,12 +96,6 @@ class NiaAppState(
             INTERESTS_ROUTE -> INTERESTS
             else -> null
         }
-
-    val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    val shouldShowNavRail: Boolean
-        get() = !shouldShowBottomBar
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)

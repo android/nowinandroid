@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="475pt" height="188pt" viewBox="0.00 0.00 474.97 188.00">
+  <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+    <title>G</title>
+    <polygon fill="white" stroke="none" points="-4,4 -4,-184 470.97,-184 470.97,4 -4,4"/>
+    <g id="node1" class="node">
+      <title>:core:datastore-test</title>
+      <ellipse fill="none" stroke="black" cx="154.81" cy="-162" rx="84.5" ry="18"/>
+      <text text-anchor="middle" x="154.81" y="-157.8" font-family="Times,serif" font-size="14.00">:core:datastore-test</text>
+    </g>
+    <g id="node2" class="node">
+      <title>:core:common</title>
+      <ellipse fill="none" stroke="black" cx="66.81" cy="-18" rx="66.81" ry="18"/>
+      <text text-anchor="middle" x="66.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:common</text>
+    </g>
+    <g id="edge1" class="edge">
+      <title>:core:datastore-test-&gt;:core:common</title>
+      <path fill="none" stroke="black" d="M144.2,-143.87C129.07,-119.46 101.16,-74.43 83.32,-45.64"/>
+      <polygon fill="black" stroke="black" points="86.51,-44.13 78.26,-37.48 80.56,-47.82 86.51,-44.13"/>
+    </g>
+    <g id="node3" class="node">
+      <title>:core:datastore</title>
+      <ellipse fill="none" stroke="black" cx="222.81" cy="-90" rx="67.87" ry="18"/>
+      <text text-anchor="middle" x="222.81" y="-85.8" font-family="Times,serif" font-size="14.00">:core:datastore</text>
+    </g>
+    <g id="edge2" class="edge">
+      <title>:core:datastore-test-&gt;:core:datastore</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M171.27,-144.05C179.46,-135.63 189.51,-125.28 198.56,-115.97"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="199.94,-119.57 204.4,-109.96 194.92,-114.69 199.94,-119.57"/>
+    </g>
+    <g id="edge5" class="edge">
+      <title>:core:datastore-&gt;:core:common</title>
+      <path fill="none" stroke="black" d="M189.35,-73.98C166.32,-63.65 135.5,-49.82 110.53,-38.61"/>
+      <polygon fill="black" stroke="black" points="112.16,-35.51 101.61,-34.61 109.3,-41.9 112.16,-35.51"/>
+    </g>
+    <g id="node4" class="node">
+      <title>:core:datastore-proto</title>
+      <ellipse fill="none" stroke="black" cx="242.81" cy="-18" rx="91.47" ry="18"/>
+      <text text-anchor="middle" x="242.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:datastore-proto</text>
+    </g>
+    <g id="edge3" class="edge">
+      <title>:core:datastore-&gt;:core:datastore-proto</title>
+      <path fill="none" stroke="red" stroke-width="2" d="M227.76,-71.7C229.89,-64.24 232.44,-55.32 234.82,-46.97"/>
+      <polygon fill="red" stroke="red" stroke-width="2" points="237.71,-49.59 237.1,-39.01 230.98,-47.67 237.71,-49.59"/>
+    </g>
+    <g id="node5" class="node">
+      <title>:core:model</title>
+      <ellipse fill="none" stroke="black" cx="409.81" cy="-18" rx="57.16" ry="18"/>
+      <text text-anchor="middle" x="409.81" y="-13.8" font-family="Times,serif" font-size="14.00">:core:model</text>
+    </g>
+    <g id="edge4" class="edge">
+      <title>:core:datastore-&gt;:core:model</title>
+      <path fill="none" stroke="black" d="M260.66,-74.83C290.25,-63.76 331.54,-48.3 363.18,-36.46"/>
+      <polygon fill="black" stroke="black" points="364.38,-39.75 372.51,-32.96 361.92,-33.19 364.38,-39.75"/>
+    </g>
+  </g>
+</svg>
