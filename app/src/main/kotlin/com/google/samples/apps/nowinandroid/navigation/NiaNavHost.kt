@@ -55,7 +55,10 @@ fun NiaNavHost(
         )
         searchScreen(
             onBackClick = navController::popBackStack,
-            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
+            onInterestsClick = {
+                appState.navController.popBackStack()
+                appState.navigateToTopLevelDestination(INTERESTS)
+                               },
             onTopicClick = navController::navigateToInterests,
         )
         interestsListDetailScreen()
