@@ -20,6 +20,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -36,4 +37,17 @@ interface NewsResourceFtsDao {
 
     @Query("SELECT count(*) FROM newsResourcesFts")
     fun getCount(): Flow<Int>
+
+    @Query(
+        """
+            DELETE FROM newsResourcesFts
+        """,
+    )
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun deleteAllAndInsertAll(newsResources: List<NewsResourceFtsEntity>) {
+        deleteAll()
+        insertAll(newsResources = newsResources)
+    }
 }
