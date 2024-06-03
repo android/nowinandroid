@@ -11,250 +11,251 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test_and_apk:
-    name: "Local tests and APKs"
-    runs-on: ubuntu-latest
+  # test_and_apk:
+  #   name: "Local tests and APKs"
+  #   runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
 
-    timeout-minutes: 60
+  #   timeout-minutes: 60
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+  #     - name: Validate Gradle Wrapper
+  #       uses: gradle/wrapper-validation-action@v3
 
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+  #     - name: Copy CI gradle.properties
+  #       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
+  #     - name: Set up JDK 17
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+  #     - name: Setup Gradle
+  #       uses: gradle/gradle-build-action@v3
 
-      - name: Check build-logic
-        run: ./gradlew check -p build-logic
+  #     - name: Check build-logic
+  #       run: ./gradlew check -p build-logic
 
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+  #     - name: Check spotless
+  #       run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
-      - name: Check Dependency Guard
-        id: dependencyguard_verify
-        continue-on-error: true
-        run: ./gradlew dependencyGuard
+  #     - name: Check Dependency Guard
+  #       id: dependencyguard_verify
+  #       continue-on-error: true
+  #       run: ./gradlew dependencyGuard
 
-      - name: Prevent updating Dependency Guard baselines if this is a fork
-        id: checkfork_dependencyguard
-        continue-on-error: false
-        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
-        run: |
-          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
+  #     - name: Prevent updating Dependency Guard baselines if this is a fork
+  #       id: checkfork_dependencyguard
+  #       continue-on-error: false
+  #       if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+  #       run: |
+  #         echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
 
-        # Runs if previous job failed
-      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
-        id: dependencyguard_baseline
-        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
-        run: |
-          ./gradlew dependencyGuardBaseline
+  #       # Runs if previous job failed
+  #     - name: Generate new Dependency Guard baselines if verification failed and it's a PR
+  #       id: dependencyguard_baseline
+  #       if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
+  #       run: |
+  #         ./gradlew dependencyGuardBaseline
 
-      - name: Push new Dependency Guard baselines if available
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.dependencyguard_baseline.outcome == 'success'
-        with:
-          file_pattern: '**/dependencies/*.txt'
-          disable_globbing: true
-          commit_message: "🤖 Updates baselines for Dependency Guard"
+  #     - name: Push new Dependency Guard baselines if available
+  #       uses: stefanzweifel/git-auto-commit-action@v5
+  #       if: steps.dependencyguard_baseline.outcome == 'success'
+  #       with:
+  #         file_pattern: '**/dependencies/*.txt'
+  #         disable_globbing: true
+  #         commit_message: "🤖 Updates baselines for Dependency Guard"
 
-      - name: Run all local screenshot tests (Roborazzi)
-        id: screenshotsverify
-        continue-on-error: true
-        run: ./gradlew verifyRoborazziDemoDebug
+  #     - name: Run all local screenshot tests (Roborazzi)
+  #       id: screenshotsverify
+  #       continue-on-error: true
+  #       run: ./gradlew verifyRoborazziDemoDebug
 
-      - name: Prevent pushing new screenshots if this is a fork
-        id: checkfork_screenshots
-        continue-on-error: false
-        if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
-        run: |
-          echo "::error::Screenshot tests failed, please create a PR in your fork first." && exit 1
+  #     - name: Prevent pushing new screenshots if this is a fork
+  #       id: checkfork_screenshots
+  #       continue-on-error: false
+  #       if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+  #       run: |
+  #         echo "::error::Screenshot tests failed, please create a PR in your fork first." && exit 1
 
-      # Runs if previous job failed
-      - name: Generate new screenshots if verification failed and it's a PR
-        id: screenshotsrecord
-        if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
-        run: |
-          ./gradlew recordRoborazziDemoDebug
+  #     # Runs if previous job failed
+  #     - name: Generate new screenshots if verification failed and it's a PR
+  #       id: screenshotsrecord
+  #       if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
+  #       run: |
+  #         ./gradlew recordRoborazziDemoDebug
 
-      - name: Push new screenshots if available
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.screenshotsrecord.outcome == 'success'
-        with:
-          file_pattern: '*/*.png'
-          disable_globbing: true
-          commit_message: "🤖 Updates screenshots"
+  #     - name: Push new screenshots if available
+  #       uses: stefanzweifel/git-auto-commit-action@v5
+  #       if: steps.screenshotsrecord.outcome == 'success'
+  #       with:
+  #         file_pattern: '*/*.png'
+  #         disable_globbing: true
+  #         commit_message: "🤖 Updates screenshots"
 
-      # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
-      - name: Run local tests and create report
-        if: always()
-        run: ./gradlew testDemoDebug :lint:test
-      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
-      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
-      # release build
+  #     # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
+  #     - name: Run local tests and create report
+  #       if: always()
+  #       run: ./gradlew testDemoDebug :lint:test
+  #     # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
+  #     # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
+  #     # release build
 
-      - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedReleaseBaselineProfile
+  #     - name: Build all build type and flavor permutations
+  #       run: ./gradlew :app:assemble :benchmarks:assemble
+  #         -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
+  #         -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
+  #         -x collectDemoNonMinifiedReleaseBaselineProfile
+  #         -x collectProdNonMinifiedReleaseBaselineProfile
 
-      - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v4
-        with:
-          name: APKs
-          path: '**/build/outputs/apk/**/*.apk'
+  #     - name: Upload build outputs (APKs)
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: APKs
+  #         path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload JVM local results (XML)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: local-test-results
-          path: '**/build/test-results/test*UnitTest/**.xml'
+  #     - name: Upload JVM local results (XML)
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: local-test-results
+  #         path: '**/build/test-results/test*UnitTest/**.xml'
 
-      - name: Upload screenshot results (PNG)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshot-test-results
-          path: '**/build/outputs/roborazzi/*_compare.png'
+  #     - name: Upload screenshot results (PNG)
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: screenshot-test-results
+  #         path: '**/build/outputs/roborazzi/*_compare.png'
 
-      - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
+  #     - name: Check lint
+  #       run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
 
-      - name: Upload lint reports (HTML)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lint-reports
-          path: '**/build/reports/lint-results-*.html'
+  #     - name: Upload lint reports (HTML)
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: lint-reports
+  #         path: '**/build/reports/lint-results-*.html'
 
-      - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
+  #     - name: Check badging
+  #       run: ./gradlew :app:checkProdReleaseBadging
 
-  androidTest:
-    runs-on: ubuntu-latest
-    timeout-minutes: 55
-    strategy:
-      matrix:
-        api-level: [26, 30]
+  # androidTest:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 55
+  #   strategy:
+  #     matrix:
+  #       api-level: [26, 30]
 
-    steps:
-      - name: Delete unnecessary tools 🔧
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          android: false # Don't remove Android tools
-          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
-          dotnet: true # rm -rf /usr/share/dotnet
-          haskell: true # rm -rf /opt/ghc...
-          swap-storage: true # rm -f /mnt/swapfile (4GiB)
-          docker-images: false # Takes 16s, enable if needed in the future
-          large-packages: false # includes google-cloud-sdk and it's slow
+  #   steps:
+  #     - name: Delete unnecessary tools 🔧
+  #       uses: jlumbroso/free-disk-space@v1.3.1
+  #       with:
+  #         android: false # Don't remove Android tools
+  #         tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
+  #         dotnet: true # rm -rf /usr/share/dotnet
+  #         haskell: true # rm -rf /opt/ghc...
+  #         swap-storage: true # rm -f /mnt/swapfile (4GiB)
+  #         docker-images: false # Takes 16s, enable if needed in the future
+  #         large-packages: false # includes google-cloud-sdk and it's slow
 
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
+  #     - name: Enable KVM group perms
+  #       run: |
+  #         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+  #         sudo udevadm control --reload-rules
+  #         sudo udevadm trigger --name-match=kvm
+  #         ls /dev/kvm
 
-      - name: Checkout
-        uses: actions/checkout@v4
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+  #     - name: Copy CI gradle.properties
+  #       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
+  #     - name: Set up JDK 17
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+  #     - name: Setup Gradle
+  #       uses: gradle/gradle-build-action@v3
 
-      - name: Build projects and run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+  #     - name: Build projects and run instrumentation tests
+  #       uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         api-level: ${{ matrix.api-level }}
+  #         arch: x86_64
+  #         disable-animations: true
+  #         disk-size: 6000M
+  #         heap-size: 600M
+  #         script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
-      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
-        if: matrix.api-level == 30
-        # There is no need to verify Roborazzi tests to generate coverage.
-        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
+  #     - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
+  #       if: matrix.api-level == 30
+  #       # There is no need to verify Roborazzi tests to generate coverage.
+  #       run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
 
-      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants (only API 30)
-        if: matrix.api-level == 30
-        run: ./gradlew createDemoDebugCombinedCoverageReport
+  #     # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
+  #     - name: Generate coverage reports for Debug variants (only API 30)
+  #       if: matrix.api-level == 30
+  #       run: ./gradlew createDemoDebugCombinedCoverageReport
         
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests'
+  #     - name: Upload test reports
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: test-reports-${{ matrix.api-level }}
+  #         path: '**/build/reports/androidTests'
 
-      - name: Display local test coverage (only API 30)
-        if: matrix.api-level == 30
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          title: Combined test coverage report
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Display local test coverage (only API 30)
+  #       if: matrix.api-level == 30
+  #       id: jacoco
+  #       uses: madrapps/jacoco-report@v1.6.1
+  #       with:
+  #         title: Combined test coverage report
+  #         min-coverage-overall: 40
+  #         min-coverage-changed-files: 60
+  #         paths: |
+  #           ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
+  #         token: ${{ secrets.GITHUB_TOKEN }}
         
-      - name: Upload local coverage reports (XML + HTML) (only API 30)
-        if: matrix.api-level == 30
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-reports
-          if-no-files-found: error
-          compression-level: 1
-          overwrite: false
-          path: '**/build/reports/jacoco/'
+  #     - name: Upload local coverage reports (XML + HTML) (only API 30)
+  #       if: matrix.api-level == 30
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: coverage-reports
+  #         if-no-files-found: error
+  #         compression-level: 1
+  #         overwrite: false
+  #         path: '**/build/reports/jacoco/'
 
 
   androidTestScreenshots:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 30
+    # needs: [test_and_apk, androidTest]
     strategy:
       matrix:
         include:
-          - api-level: 27
-            profile: pixel_5
-            target: default
+          # - api-level: 27
+          #   profile: pixel_5
+          #   target: default
           - api-level: 33
             profile: pixel_fold
             target: google_apis
             # TODO: change from VanillaIceCream to 35 when that image is available
-          - api-level: VanillaIceCream
-            profile: pixel_fold
-            target: google_apis
+          # - api-level: VanillaIceCream
+          #   profile: pixel_fold
+          #   target: google_apis
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -325,7 +326,7 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script:
-            ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
+            ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests
 
 
       - name: Prevent pushing new screenshots if this is a fork
@@ -351,7 +352,7 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script:
-            ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace
+            adb logcat > logcat.log & ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record
 
 
       - name: Checkout new changes (in case another job already uploaded screenshots)
@@ -374,3 +375,10 @@ jobs:
         with:
           name: test-reports-${{ matrix.profile }}-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
+      - name: Upload logcat
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logcat-${{ matrix.profile }}-${{ matrix.api-level }}
+          path: logcat.log
