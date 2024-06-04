@@ -237,11 +237,11 @@ class EdgeToEdgeTest {
             )
     }
 
-//    fun assertSnapshot(
-//        bitmap: Bitmap,
-//        name: String,
-//        filePath: String? = null,
-//    ) {
+    fun assertSnapshot(
+        bitmap: Bitmap,
+        name: String,
+        filePath: String? = null,
+    ) {
 //        // Try to assert 3 times
 //        var count = 2
 //        while (true) {
@@ -254,5 +254,6 @@ class EdgeToEdgeTest {
 //                waitForWindowUpdate()
 //            }
 //        }
-//    }
+    }
+
 }
