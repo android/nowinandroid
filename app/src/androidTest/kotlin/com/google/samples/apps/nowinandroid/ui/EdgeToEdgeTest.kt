@@ -159,21 +159,21 @@ class EdgeToEdgeTest {
 //    }
 
     private fun runFoldableTests(apiName: String) {
-        onDevice().setClosedMode()
+        //onDevice().setClosedMode()
         screenshotSystemBar("edgeToEdge_Foldable_closed_system_$apiName")
         forceThreeButtonNavigation()
         screenshotNavigationBar("edgeToEdge_Foldable_closed_nav3button_$apiName")
         forceGestureNavigation()
         screenshotNavigationBar("edgeToEdge_Foldable_closed_navGesture_$apiName")
 
-        onDevice().setFlatMode()
+        //onDevice().setFlatMode()
         enableDemoMode() // Flat mode resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_flat_system_$apiName")
         forceThreeButtonNavigation()
         screenshotNavigationBar("edgeToEdge_Foldable_flat_nav3button_$apiName")
         forceGestureNavigation()
         screenshotNavigationBar("edgeToEdge_Foldable_flat_navGesture_$apiName")
-        onDevice().setClosedMode()
+        //onDevice().setClosedMode()
     }
 
     private fun screenshotSystemBar(screenshotFileName: String) {
