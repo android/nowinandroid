@@ -80,8 +80,8 @@ class EdgeToEdgeTest {
     @get:Rule(order = 3)
     val activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
-//    @get:Rule(order = 4)
-//    val dropshots = Dropshots()
+    @get:Rule(order = 4)
+    val dropshots = Dropshots()
 
     @Before
     fun setup() = hiltRule.inject()
@@ -135,6 +135,7 @@ class EdgeToEdgeTest {
     @Test
     fun edgeToEdge_Foldable_api33() {
         assert(true)
+        screenshotSystemBar("edgeToEdge_Foldable_closed_system")
         //runFoldableTests(apiName = "api33")
     }
 //
@@ -242,18 +243,18 @@ class EdgeToEdgeTest {
         name: String,
         filePath: String? = null,
     ) {
-//        // Try to assert 3 times
-//        var count = 2
-//        while (true) {
-//            try {
-//                dropshots.assertSnapshot(bitmap, name, filePath)
-//            } catch (e: AssertionError) {
-//                if (count == 0) throw e
-//                count -= 1
-//                Log.i("EdgeToEdgeTest", "Test failed, retrying (count=$count)")
-//                waitForWindowUpdate()
-//            }
-//        }
+        // Try to assert 3 times
+        var count = 2
+        while (true) {
+            try {
+                dropshots.assertSnapshot(bitmap, name, filePath)
+            } catch (e: AssertionError) {
+                if (count == 0) throw e
+                count -= 1
+                Log.i("EdgeToEdgeTest", "Test failed, retrying (count=$count)")
+                waitForWindowUpdate()
+            }
+        }
     }
 
 }
