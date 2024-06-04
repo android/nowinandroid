@@ -41,6 +41,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.AfterClass
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -189,6 +190,7 @@ class EdgeToEdgeTest {
         }
         // Crop the top, adding extra pixels to check continuity
 
+        fail()
         //assertSnapshot(bitmap, screenshotFileName)
     }
 
