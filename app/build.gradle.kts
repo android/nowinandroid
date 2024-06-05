@@ -16,7 +16,6 @@
 import com.google.samples.apps.nowinandroid.NiaBuildType
 
 plugins {
-    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.nowinandroid.android.application)
     alias(libs.plugins.nowinandroid.android.application.compose)
     alias(libs.plugins.nowinandroid.android.application.flavors)
@@ -24,6 +23,7 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.firebase)
     alias(libs.plugins.nowinandroid.android.application.testoptions)
     alias(libs.plugins.nowinandroid.android.hilt)
+    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
 }
