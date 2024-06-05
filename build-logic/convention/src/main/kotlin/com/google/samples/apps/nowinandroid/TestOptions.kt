@@ -24,6 +24,7 @@ internal fun Project.configureTestOptions(
 ) {
     commonExtension.apply {
         testOptions {
+            // For Robolectric
             unitTests {
                 isIncludeAndroidResources = true
             }
