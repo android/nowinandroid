@@ -66,7 +66,7 @@ gradlePlugin {
             id = "nowinandroid.android.application.jacoco"
             implementationClass = "AndroidApplicationJacocoConventionPlugin"
         }
-        register("androidApplicationTestOptions") {
+        register("androidApplicationTestOptionsUnitTests") {
             id = "nowinandroid.android.application.testoptions"
             implementationClass = "AndroidApplicationTestOptionsUnitTestsConventionPlugin"
         }
