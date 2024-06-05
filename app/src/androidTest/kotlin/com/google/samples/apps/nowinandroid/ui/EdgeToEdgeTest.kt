@@ -52,7 +52,6 @@ import org.junit.rules.TemporaryFolder
  *  - A foldable on API 33 (pixel_fold)
  *  - A foldable on API 35 (pixel_fold)
  */
-@OptIn(ExperimentalWindowApi::class)
 @HiltAndroidTest
 @InstrumentedScreenshotTests
 class EdgeToEdgeTest {
@@ -251,7 +250,9 @@ class EdgeToEdgeTest {
                 count -= 1
                 Log.i("EdgeToEdgeTest", "Test failed, retrying (count=$count)")
                 waitForWindowUpdate()
+                continue
             }
+            break
         }
     }
 }
