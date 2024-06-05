@@ -33,7 +33,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import androidx.window.core.ExperimentalWindowApi
 import com.dropbox.dropshots.Dropshots
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule

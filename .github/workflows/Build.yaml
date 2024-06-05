@@ -325,8 +325,14 @@ jobs:
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script:
-            ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
+            adb logcat > logcat.log & ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
 
+      - name: Upload logcat
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logcat-${{ matrix.profile }}-${{ matrix.api-level }}
+          path: logcat.log
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots_instrumented
@@ -374,3 +380,4 @@ jobs:
         with:
           name: test-reports-${{ matrix.profile }}-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
