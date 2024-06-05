@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 
-internal fun Project.configureTestOptions(
+internal fun Project.configureTestOptionsUnitTests(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
