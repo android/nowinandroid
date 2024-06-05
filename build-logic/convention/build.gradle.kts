@@ -85,7 +85,7 @@ gradlePlugin {
         }
         register("androidLibraryTestOptions") {
             id = "nowinandroid.android.library.testoptions"
-            implementationClass = "AndroidLibraryTestOptionsConventionPlugin"
+            implementationClass = "AndroidLibraryTestOptionsUnitTestsConventionPlugin"
         }
 
         register("androidFeature") {
