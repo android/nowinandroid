@@ -21,7 +21,10 @@ import android.util.Log
 import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.device.DeviceInteraction.Companion.setClosedMode
 import androidx.test.espresso.device.DeviceInteraction.Companion.setFlatMode
+import androidx.test.espresso.device.DeviceInteraction.Companion.setScreenOrientation
 import androidx.test.espresso.device.EspressoDevice.Companion.onDevice
+import androidx.test.espresso.device.action.ScreenOrientation.LANDSCAPE
+import androidx.test.espresso.device.action.ScreenOrientation.PORTRAIT
 import androidx.test.espresso.device.common.executeShellCommand
 import androidx.test.espresso.device.controller.DeviceMode.CLOSED
 import androidx.test.espresso.device.controller.DeviceMode.FLAT
@@ -143,18 +146,36 @@ class EdgeToEdgeTest {
         runFoldableTests(apiName = "api35")
     }
 
+    @RequiresDeviceMode(mode = FLAT)
+    @RequiresDeviceMode(mode = CLOSED)
+    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
+    @Test
+    fun edgeToEdge_Foldable_api35_tallCutout() {
+        forceTallCutout()
+        onDevice().setClosedMode()
+        screenshotSystemBar("edgeToEdge_Foldable_closed_system_tallCutout_api35")
+
+        onDevice().setFlatMode()
+        enableDemoMode() // Flat mode resets demo mode!
+        screenshotSystemBar("edgeToEdge_Foldable_flat_system_tallCutout_api35")
+        forceThreeButtonNavigation()
+        onDevice().setClosedMode()
+        resetCutout()
+    }
+
     // Very flaky:DeviceControllerOperationException: Device could not be set to the
     // requested screen orientation.
 
-//    @RequiresDeviceMode(mode = CLOSED)
-//    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
-//    @Test
-//    fun edgeToEdge_Foldable_api35_landscape() {
-//        onDevice().setClosedMode()
-//        onDevice().setScreenOrientation(LANDSCAPE)
-//        forceThreeButtonNavigation()
-//        screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
-//    }
+    @RequiresDeviceMode(mode = CLOSED)
+    @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
+    @Test
+    fun edgeToEdge_Foldable_api35_landscape() {
+        onDevice().setClosedMode()
+        onDevice().setScreenOrientation(LANDSCAPE)
+        forceThreeButtonNavigation()
+        screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
+        onDevice().setScreenOrientation(PORTRAIT)
+    }
 
     private fun runFoldableTests(apiName: String) {
         onDevice().setClosedMode()
@@ -225,6 +246,25 @@ class EdgeToEdgeTest {
         waitForWindowUpdate()
     }
 
+    private fun forceTallCutout() {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+            executeShellCommand(
+                "cmd overlay enable-exclusive " +
+                    "--category com.android.internal.display.cutout.emulation.tall ",
+            )
+        }
+        waitForWindowUpdate()
+    }
+    private fun resetCutout() {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+            executeShellCommand(
+                "cmd overlay enable-exclusive " +
+                    "--category com.android.internal.display.cutout.emulation.noCutout ",
+            )
+        }
+        waitForWindowUpdate()
+    }
+
     private fun waitForWindowUpdate() {
         // TODO: This works but it's unclear if it's making it wait too long. Investigate.
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -234,7 +274,7 @@ class EdgeToEdgeTest {
             )
     }
 
-    fun assertSnapshot(
+    private fun assertSnapshot(
         bitmap: Bitmap,
         name: String,
         filePath: String? = null,
