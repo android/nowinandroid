@@ -20,6 +20,7 @@ import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
+import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -35,6 +36,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
         super.onCreate()
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
+        ProfileVerifierLogger.start()
     }
 
     override fun newImageLoader(): ImageLoader = imageLoader.get()
