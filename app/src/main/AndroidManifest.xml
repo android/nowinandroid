@@ -65,8 +65,6 @@
             tools:node="merge">
             <meta-data android:name="com.google.samples.apps.nowinandroid.initializer.ProfileVerifierLoggerInitializer"
                 android:value="androidx.startup" />
-            <meta-data android:name="com.google.samples.apps.nowinandroid.sync.initializers.SyncInitializer"
-                android:value="androidx.startup" />
         </provider>
 
     </application>
