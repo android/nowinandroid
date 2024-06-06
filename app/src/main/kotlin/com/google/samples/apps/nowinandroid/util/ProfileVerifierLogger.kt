@@ -46,14 +46,15 @@ import kotlinx.coroutines.launch
  *
  * @see androidx.profileinstaller.ProfileVerifier.CompilationStatus.ResultCode
  */
-class ProfileVerifierLogger (
-    private val scope: CoroutineScope,
-) {
-    companion object {
-        private const val TAG = "ProfileInstaller"
+object ProfileVerifierLogger {
+    private const val TAG = "ProfileInstaller"
+    private var scope: CoroutineScope? = null
+
+    fun setScope(scope: CoroutineScope) {
+        this.scope = scope
     }
 
-    operator fun invoke() = scope.launch {
+    fun start() = scope?.launch {
         val status = ProfileVerifier.getCompilationStatusAsync().await()
         Log.d(TAG, "Status code: ${status.profileInstallResultCode}")
         Log.d(
