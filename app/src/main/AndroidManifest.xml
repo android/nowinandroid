@@ -56,6 +56,17 @@
         <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+
+        <!-- App Startup library       -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data android:name="com.google.samples.apps.nowinandroid.initializer.ProfileVerifierLoggerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
     </application>
 
 </manifest>
