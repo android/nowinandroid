@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 /**
  * App startup initializer for [Sync]
  */
-class SyncInitializer: Initializer<Sync> {
+class SyncInitializer : Initializer<Sync> {
     override fun create(context: Context): Sync {
         return Sync
     }

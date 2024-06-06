@@ -26,7 +26,7 @@ import kotlinx.coroutines.Job
 /**
  * Startup initializer for [ProfileVerifierLogger]
  */
-class ProfileVerifierLoggerInitializer: Initializer<ProfileVerifierLogger> {
+class ProfileVerifierLoggerInitializer : Initializer<ProfileVerifierLogger> {
     override fun create(context: Context): ProfileVerifierLogger {
         ProfileVerifierLogger.setScope(scope = CoroutineScope(Dispatchers.Default + Job()))
         return ProfileVerifierLogger
