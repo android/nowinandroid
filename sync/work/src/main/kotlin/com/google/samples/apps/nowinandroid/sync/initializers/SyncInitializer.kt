@@ -17,9 +17,23 @@
 package com.google.samples.apps.nowinandroid.sync.initializers
 
 import android.content.Context
+import androidx.startup.Initializer
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
+
+/**
+ * App startup initializer for [Sync]
+ */
+class SyncInitializer: Initializer<Sync> {
+    override fun create(context: Context): Sync {
+        return Sync
+    }
+
+    override fun dependencies(): MutableList<Class<out Initializer<*>>> {
+        return mutableListOf()
+    }
+}
 
 object Sync {
     // This method is initializes sync, the process that keeps the app's data current.
