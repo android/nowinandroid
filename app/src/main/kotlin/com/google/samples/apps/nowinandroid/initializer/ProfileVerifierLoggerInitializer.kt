@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.initializer
 
 import android.content.Context
-import android.util.Log
 import androidx.startup.Initializer
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import kotlinx.coroutines.CoroutineScope
@@ -29,9 +28,8 @@ import kotlinx.coroutines.Job
  */
 class ProfileVerifierLoggerInitializer: Initializer<ProfileVerifierLogger> {
     override fun create(context: Context): ProfileVerifierLogger {
-        return ProfileVerifierLogger(scope = CoroutineScope(Dispatchers.Default + Job())).apply {
-            this()
-        }
+        ProfileVerifierLogger.setScope(scope = CoroutineScope(Dispatchers.Default + Job()))
+        return ProfileVerifierLogger
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> {
