@@ -153,12 +153,13 @@ class EdgeToEdgeTest {
     fun edgeToEdge_Foldable_api35_tallCutout() {
         forceTallCutout()
         onDevice().setClosedMode()
+        enableDemoMode() // Mode change resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_closed_system_tallCutout_api35")
 
         onDevice().setFlatMode()
-        enableDemoMode() // Flat mode resets demo mode!
+        enableDemoMode() // Mode change resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_flat_system_tallCutout_api35")
-        forceThreeButtonNavigation()
+
         onDevice().setClosedMode()
         resetCutout()
     }
@@ -178,6 +179,7 @@ class EdgeToEdgeTest {
     }
 
     private fun runFoldableTests(apiName: String) {
+        resetCutout()
         onDevice().setClosedMode()
         screenshotSystemBar("edgeToEdge_Foldable_closed_system_$apiName")
         forceThreeButtonNavigation()
@@ -200,7 +202,7 @@ class EdgeToEdgeTest {
 
         // Crop the top, adding extra pixels to check continuity
         val bitmap = takeScreenshot().let {
-            val newHeight = 130
+            val newHeight = 200
             Bitmap.createBitmap(it, 0, 0, it.width, newHeight)
         }
         assertSnapshot(bitmap, screenshotFileName)
@@ -234,6 +236,7 @@ class EdgeToEdgeTest {
                     "com.android.internal.systemui.navbar.threebutton",
             )
         }
+        waitForWindowUpdate()
     }
 
     private fun forceGestureNavigation() {
