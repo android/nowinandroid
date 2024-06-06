@@ -21,14 +21,14 @@ import androidx.startup.Initializer
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 
 /**
  * Startup initializer for [ProfileVerifierLogger]
  */
 class ProfileVerifierLoggerInitializer : Initializer<ProfileVerifierLogger> {
     override fun create(context: Context): ProfileVerifierLogger {
-        ProfileVerifierLogger.setScope(scope = CoroutineScope(Dispatchers.Default + Job()))
+        ProfileVerifierLogger.setScope(scope = CoroutineScope(SupervisorJob() + Dispatchers.Default))
         return ProfileVerifierLogger
     }
 
