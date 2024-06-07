@@ -17,10 +17,10 @@
 package com.google.samples.apps.nowinandroid
 
 import android.app.Application
+import android.util.Log
+import androidx.work.Configuration
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.google.samples.apps.nowinandroid.sync.initializers.Sync
-import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -28,16 +28,21 @@ import javax.inject.Inject
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApplication : Application(), ImageLoaderFactory {
+class NiaApplication : Application(), ImageLoaderFactory, Configuration.Provider{
     @Inject
     lateinit var imageLoader: dagger.Lazy<ImageLoader>
 
-    override fun onCreate() {
-        super.onCreate()
+    override val workManagerConfiguration: Configuration =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(Log.INFO)
+            .build()
+
+//    override fun onCreate() {
+//        super.onCreate()
         // Initialize Sync; the system responsible for keeping data in the app up to date.
-        Sync.initialize(context = this)
-        ProfileVerifierLogger.start()
-    }
+//        Sync.initialize()
+//        ProfileVerifierLogger.start()
+//    }
 
     override fun newImageLoader(): ImageLoader = imageLoader.get()
 }
