@@ -28,8 +28,8 @@ import kotlinx.coroutines.SupervisorJob
  */
 class ProfileVerifierLoggerInitializer : Initializer<ProfileVerifierLogger> {
     override fun create(context: Context): ProfileVerifierLogger {
-        ProfileVerifierLogger.setScope(scope = CoroutineScope(SupervisorJob() + Dispatchers.Default))
-        return ProfileVerifierLogger
+        val applicationScope = SupervisorJob() + Dispatchers.Default
+        return ProfileVerifierLogger.setScope(scope = CoroutineScope(applicationScope))
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> {
