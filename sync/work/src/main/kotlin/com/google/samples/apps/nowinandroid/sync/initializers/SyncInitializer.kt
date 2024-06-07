@@ -27,7 +27,8 @@ import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
  */
 class SyncInitializer : Initializer<Sync> {
     override fun create(context: Context): Sync {
-        return Sync
+        val workManager = WorkManager.getInstance(context)
+        return Sync.setWorkManager(workManager)
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> {
@@ -36,10 +37,21 @@ class SyncInitializer : Initializer<Sync> {
 }
 
 object Sync {
+    private var workManager: WorkManager? = null
+
+    /**
+     * setWorkManager to [Sync]
+     */
+    fun setWorkManager(workManager: WorkManager): Sync {
+        this.workManager = workManager
+        this.initialize()
+        return this
+    }
+
     // This method is initializes sync, the process that keeps the app's data current.
     // It is called from the app module's Application.onCreate() and should be only done once.
-    fun initialize(context: Context) {
-        WorkManager.getInstance(context).apply {
+    private fun initialize() {
+        workManager?.apply {
             // Run sync on app startup and ensure only one sync worker runs at any time
             enqueueUniqueWork(
                 SYNC_WORK_NAME,
