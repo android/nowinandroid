@@ -26,6 +26,10 @@
             tools:node="merge">
             <meta-data android:name="com.google.samples.apps.nowinandroid.sync.initializers.SyncInitializer"
                 android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
     </application>
 
