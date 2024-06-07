@@ -50,11 +50,13 @@ object ProfileVerifierLogger {
     private const val TAG = "ProfileInstaller"
     private var scope: CoroutineScope? = null
 
-    fun setScope(scope: CoroutineScope) {
+    fun setScope(scope: CoroutineScope): ProfileVerifierLogger {
         this.scope = scope
+        this.start()
+        return this
     }
 
-    fun start() = scope?.launch {
+    private fun start() = scope?.launch {
         val status = ProfileVerifier.getCompilationStatusAsync().await()
         Log.d(TAG, "Status code: ${status.profileInstallResultCode}")
         Log.d(
