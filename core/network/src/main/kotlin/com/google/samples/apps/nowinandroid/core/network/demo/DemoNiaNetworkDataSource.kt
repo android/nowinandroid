@@ -48,20 +48,26 @@ class DemoNiaNetworkDataSource @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 assets.open(TOPICS_ASSET).use(networkJson::decodeFromStream)
             } else {
-                networkJson.decodeFromString(assets.open(TOPICS_ASSET).toString())
+                // Use decodeFromString to capability with API 24 below.
+                // https://github.com/Kotlin/kotlinx.serialization/issues/2457#issuecomment-1786923342
+                val topicsJsonString = convertStreamToString(assets.open(TOPICS_ASSET))
+                networkJson.decodeFromString(topicsJsonString)
             }
         }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
             } else {
-                networkJson.decodeFromString(assets.open(TOPICS_ASSET).toString())
+                // Use decodeFromString to capability with API 24 below.
+                // https://github.com/Kotlin/kotlinx.serialization/issues/2457#issuecomment-1786923342
+                val newsJsonString = convertStreamToString(assets.open(NEWS_ASSET))
+                networkJson.decodeFromString(newsJsonString)
             }
         }
 
