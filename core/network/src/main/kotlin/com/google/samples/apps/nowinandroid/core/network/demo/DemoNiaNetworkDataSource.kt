@@ -30,7 +30,11 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import okio.use
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
@@ -66,6 +70,21 @@ class DemoNiaNetworkDataSource @Inject constructor(
 
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
+
+    private suspend fun convertStreamToString(inputStream: InputStream): String = withContext(
+        coroutineContext,
+    ) {
+        val result = ByteArrayOutputStream()
+        val buffer = ByteArray(1024)
+        var length = 0
+        while (true) {
+            length = inputStream.read(buffer)
+            if (length == -1) break
+            result.write(buffer, 0, length)
+        }
+
+        result.toString(StandardCharsets.UTF_8.name())
+    }
 
     companion object {
         private const val NEWS_ASSET = "news.json"
