@@ -77,6 +77,9 @@ class DemoNiaNetworkDataSource @Inject constructor(
     override suspend fun getNewsResourceChangeList(after: Int?): List<NetworkChangeList> =
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
 
+    /**
+     * Convert [InputStream] to [String].
+     */
     private suspend fun convertStreamToString(inputStream: InputStream): String = withContext(
         coroutineContext,
     ) {
