@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.demo
 
 import JvmUnitTestDemoAssetManager
+import android.os.Build
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
@@ -28,6 +29,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import okio.use
 import javax.inject.Inject
 
 /**
@@ -42,13 +44,21 @@ class DemoNiaNetworkDataSource @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         withContext(ioDispatcher) {
-            assets.open(TOPICS_ASSET).use(networkJson::decodeFromStream)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                assets.open(TOPICS_ASSET).use(networkJson::decodeFromStream)
+            } else {
+                networkJson.decodeFromString(assets.open(TOPICS_ASSET).toString())
+            }
         }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
         withContext(ioDispatcher) {
-            assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                assets.open(NEWS_ASSET).use(networkJson::decodeFromStream)
+            } else {
+                networkJson.decodeFromString(assets.open(TOPICS_ASSET).toString())
+            }
         }
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
