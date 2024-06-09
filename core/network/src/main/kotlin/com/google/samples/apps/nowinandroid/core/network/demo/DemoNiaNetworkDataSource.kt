@@ -29,7 +29,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import okio.use
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -85,7 +84,7 @@ class DemoNiaNetworkDataSource @Inject constructor(
     ) {
         val result = ByteArrayOutputStream()
         val buffer = ByteArray(1024)
-        var length = 0
+        var length: Int
         while (true) {
             length = inputStream.read(buffer)
             if (length == -1) break
