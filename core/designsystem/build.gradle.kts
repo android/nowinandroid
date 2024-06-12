@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.jetbrains.compose)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.roborazzi)
 }

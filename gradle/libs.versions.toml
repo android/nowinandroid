@@ -4,7 +4,7 @@ androidDesugarJdkLibs = "2.0.4"
 # AGP and tools should be updated together
 androidGradlePlugin = "8.4.2"
 androidTools = "31.4.2"
-androidxActivity = "1.9.2"
+androidxActivity = "1.9.0"
 androidxAppCompat = "1.6.1"
 androidxBrowser = "1.8.0"
 androidxComposeAlpha = "1.7.0-beta01"
@@ -234,7 +234,6 @@ room = { id = "androidx.room", version.ref = "room" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 sqldelight-gradle-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 ktrofit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktrofit" }

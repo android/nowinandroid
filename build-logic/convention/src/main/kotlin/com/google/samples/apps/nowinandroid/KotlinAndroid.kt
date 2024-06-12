@@ -50,8 +50,8 @@ internal fun Project.configureKotlinAndroid(
             isCoreLibraryDesugaringEnabled = true
         }
     }
-
-    configureKotlin<KotlinAndroidProjectExtension>()
+// Extension of type 'KotlinAndroidProjectExtension' does not exist.
+//    configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {
         add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
