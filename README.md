@@ -42,7 +42,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 | Module                    | Progress         | Desktop supported | Android supported | iOS supported | Web supported |
 |---------------------------|------------------|-------------------|-------------------|---------------|---------------|
 | app                       | Not started      | ❌                | ❌                | ❌            | ❌            |
-| app-nia-catalog           | Done             | ✅                | ✅                | ❔            | ❌            |
+| app-nia-catalog           | Done             | ✅                | ✅                | ❔            | ✅            |
 | :core:analytics           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:common              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:data                | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
@@ -51,7 +51,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 | :core:datastore           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:datastore-proto     | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:datastore-test      | Removed          | ❌                | ❌                | ❌            | ❌            |
-| :core:designsystem        | Done             | ✅                | ✅                | ❔            | ❌            |
+| :core:designsystem        | Done             | ✅                | ✅                | ❔            | ✅            |
 | :core:domain              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:model               | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:network             | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
