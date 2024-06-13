@@ -35,9 +35,8 @@ import kotlinx.browser.document
  * limitations under the License.
  */
 
-
 @OptIn(ExperimentalComposeUiApi::class)
-fun main () {
+fun main() {
     ComposeViewport(document.body!!) {
         NiaCatalog()
     }

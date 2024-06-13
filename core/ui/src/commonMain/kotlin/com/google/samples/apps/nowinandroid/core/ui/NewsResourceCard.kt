@@ -53,10 +53,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
-import coil3.ImageLoader
-import coil3.PlatformContext
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -183,9 +180,9 @@ fun NewsResourceHeaderImage(
                 .fillMaxWidth()
                 .height(180.dp),
             contentScale = ContentScale.Crop,
-            painter =
+            painter = imagePainter,
 //            if (isError.not() && !isLocalInspection) {
-            imagePainter,
+//            imagePainter,
 //            } else {
 //                painterResource(drawable.core_designsystem_ic_placeholder_default)
 //            },
@@ -312,7 +309,7 @@ fun NewsResourceTopics(
     }
 }
 
-//@Preview("Bookmark Button")
+// @Preview("Bookmark Button")
 @Preview
 @Composable
 private fun BookmarkButtonPreview() {
@@ -323,7 +320,7 @@ private fun BookmarkButtonPreview() {
     }
 }
 
-//@Preview("Bookmark Button Bookmarked")
+// @Preview("Bookmark Button Bookmarked")
 @Preview
 @Composable
 private fun BookmarkButtonBookmarkedPreview() {
@@ -335,7 +332,7 @@ private fun BookmarkButtonBookmarkedPreview() {
 }
 
 @Preview
-//@Preview("NewsResourceCardExpanded")
+// @Preview("NewsResourceCardExpanded")
 @Composable
 private fun ExpandedNewsResourcePreview(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)

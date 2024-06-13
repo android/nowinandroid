@@ -21,9 +21,9 @@ import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-abstract class ApplicationComponent (
+abstract class ApplicationComponent(
     @get:Provides val context: Context,
-): PlatformComponent
+) : PlatformComponent
 
 interface ApplicationComponentProvider {
     val component: ApplicationComponent

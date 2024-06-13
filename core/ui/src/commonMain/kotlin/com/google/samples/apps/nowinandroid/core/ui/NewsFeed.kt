@@ -122,7 +122,7 @@ private fun NewsFeedLoadingPreview() {
 }
 
 @Preview
-//@Preview(device = Devices.TABLET)
+// @Preview(device = Devices.TABLET)
 @Composable
 private fun NewsFeedContentPreview(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
