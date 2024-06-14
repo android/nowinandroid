@@ -13,26 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.kotlin.inject)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.common"
-}
+package com.google.samples.apps.nowinandroid.core.di
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(libs.logging)
-            api(libs.coil)
-            api(libs.coil.core)
-            api(libs.coil.svg)
-            api(libs.coil.network.ktor)
-            implementation(libs.kotlin.inject.runtime)
-            implementation(libs.kotlinx.coroutines.core)
-        }
-    }
+import android.content.Context
+import coil3.PlatformContext
+import me.tatarka.inject.annotations.Inject
+
+@Inject
+class AndroidPlatformContextProvider(private val context: Context) : PlatformContextProvider {
+    override val platformContext: PlatformContext get() = context
 }

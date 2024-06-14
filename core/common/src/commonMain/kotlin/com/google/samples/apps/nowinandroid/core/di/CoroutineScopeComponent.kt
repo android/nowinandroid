@@ -20,13 +20,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Scope
 
-typealias ApplicationScope = CoroutineScope
+/**
+ * The application-level scope. There will only be one instance of anything annotated with this.
+ */
+@Scope
+annotation class ApplicationScope
 
 @Component
 abstract class CoroutineScopeComponent {
     @Provides
     fun providesCoroutineScope(
         dispatcher: DefaultDispatcher,
-    ): ApplicationScope = CoroutineScope(SupervisorJob() + dispatcher)
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 }

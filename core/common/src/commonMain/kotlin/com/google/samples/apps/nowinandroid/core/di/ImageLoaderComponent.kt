@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network.di
+package com.google.samples.apps.nowinandroid.core.di
 
 import coil3.ImageLoader
 import coil3.PlatformContext
@@ -36,7 +36,6 @@ abstract class ImageLoaderComponent {
     @Provides
     fun provideImageLoader(
         context: PlatformContext,
-        debug: Boolean,
     ): ImageLoader {
         return ImageLoader.Builder(context)
             .memoryCache {
@@ -49,9 +48,7 @@ abstract class ImageLoaderComponent {
             .crossfade(true)
             // Enable logging if this is a debug build.
             .apply {
-                if (debug) {
-                    logger(DebugLogger())
-                }
+                logger(DebugLogger())
             }
             .build()
     }
