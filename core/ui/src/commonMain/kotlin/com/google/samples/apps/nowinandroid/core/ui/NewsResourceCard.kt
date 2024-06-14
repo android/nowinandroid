@@ -54,7 +54,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import coil3.ImageLoader
 import coil3.compose.AsyncImagePainter
+import coil3.compose.LocalPlatformContext
 import coil3.compose.rememberAsyncImagePainter
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
@@ -104,7 +106,9 @@ fun NewsResourceCardExpanded(
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
                 Row {
-                    NewsResourceHeaderImage(userNewsResource.headerImageUrl)
+                    NewsResourceHeaderImage(
+                        userNewsResource.headerImageUrl,
+                    )
                 }
             }
             Box(
@@ -156,7 +160,7 @@ fun NewsResourceHeaderImage(
             isLoading = state is AsyncImagePainter.State.Loading
             isError = state is AsyncImagePainter.State.Error
         },
-        imageLoader = imageLoader,
+        imageLoader = ImageLoader(LocalPlatformContext.current),
     )
     val isLocalInspection = LocalInspectionMode.current
     Box(
@@ -182,7 +186,7 @@ fun NewsResourceHeaderImage(
             contentScale = ContentScale.Crop,
             painter = imagePainter,
 //            if (isError.not() && !isLocalInspection) {
-//            imagePainter,
+//                imagePainter,
 //            } else {
 //                painterResource(drawable.core_designsystem_ic_placeholder_default)
 //            },

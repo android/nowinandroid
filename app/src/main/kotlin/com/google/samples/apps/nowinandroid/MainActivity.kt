@@ -44,6 +44,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.di.ApplicationComponent
+import com.google.samples.apps.nowinandroid.core.di.ApplicationComponentProvider
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
@@ -58,7 +60,7 @@ import javax.inject.Inject
 private const val TAG = "MainActivity"
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), ApplicationComponentProvider {
 
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
@@ -79,6 +81,10 @@ class MainActivity : ComponentActivity() {
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
     val viewModel: MainActivityViewModel by viewModels()
+
+    override val component by lazy(LazyThreadSafetyMode.NONE) {
+        ApplicationComponent::class.create(applicationContext)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()

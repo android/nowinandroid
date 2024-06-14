@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.network
+package com.google.samples.apps.nowinandroid.core.di
 
-import android.content.Context
-import coil3.PlatformContext
+import android.app.Application
+import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
-interface PlatformComponent {
-    @Provides
-    fun providePlatformContext(context: Context): PlatformContext = context
-}
+@Component
+@ApplicationScope
+abstract class AndroidApplicationComponent(
+    @get:Provides val application: Application,
+)
