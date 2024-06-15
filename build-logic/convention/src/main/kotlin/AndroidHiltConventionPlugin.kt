@@ -14,7 +14,10 @@
  *   limitations under the License.
  */
 
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.implementation
+import com.google.samples.apps.nowinandroid.extension.ksp
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -23,15 +26,14 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.google.devtools.ksp")
-                apply("dagger.hilt.android.plugin")
+                apply(libs.plugins.ksp)
+                apply(libs.plugins.hilt)
             }
 
             dependencies {
-                "implementation"(libs.findLibrary("hilt.android").get())
-                "ksp"(libs.findLibrary("hilt.compiler").get())
+                implementation(libs.hilt.android)
+                ksp(libs.hilt.compiler)
             }
-
         }
     }
 

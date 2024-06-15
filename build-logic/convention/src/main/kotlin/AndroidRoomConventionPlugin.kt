@@ -16,7 +16,10 @@
 
 import androidx.room.gradle.RoomExtension
 import com.google.devtools.ksp.gradle.KspExtension
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.implementation
+import com.google.samples.apps.nowinandroid.extension.ksp
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -26,8 +29,10 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("androidx.room")
-            pluginManager.apply("com.google.devtools.ksp")
+            with(pluginManager) {
+                apply(libs.plugins.room)
+                apply(libs.plugins.ksp)
+            }
 
             extensions.configure<KspExtension> {
                 arg("room.generateKotlin", "true")
@@ -41,9 +46,9 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", libs.findLibrary("room.runtime").get())
-                add("implementation", libs.findLibrary("room.ktx").get())
-                add("ksp", libs.findLibrary("room.compiler").get())
+                implementation(libs.room.runtime)
+                implementation(libs.room.ktx)
+                ksp(libs.room.compiler)
             }
         }
     }

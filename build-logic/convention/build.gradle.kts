@@ -46,6 +46,9 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
     implementation(libs.truth)
+    // Accessing the Version Catalog in convention plugins according to
+    // https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
 tasks {

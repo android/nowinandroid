@@ -16,20 +16,22 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.google.samples.apps.nowinandroid.configureAndroidCompose
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "com.android.application")
-            apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            with(pluginManager) {
+                apply(libs.plugins.android.application)
+                apply(libs.plugins.compose)
+            }
 
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)
         }
     }
-
 }

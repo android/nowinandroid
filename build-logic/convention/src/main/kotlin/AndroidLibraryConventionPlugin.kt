@@ -21,7 +21,10 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.implementation
+import com.google.samples.apps.nowinandroid.extension.libs
+import com.google.samples.apps.nowinandroid.extension.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -32,9 +35,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
-                apply("nowinandroid.android.lint")
+                apply(libs.plugins.android.library)
+                apply(libs.plugins.kotlin.android)
+                apply(libs.plugins.nowinandroid.android.lint)
             }
 
             extensions.configure<LibraryExtension> {
@@ -52,9 +55,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 disableUnnecessaryAndroidTests(target)
             }
             dependencies {
-                add("testImplementation", kotlin("test"))
+                testImplementation(kotlin("test"))
 
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                implementation(libs.androidx.tracing.ktx)
             }
         }
     }

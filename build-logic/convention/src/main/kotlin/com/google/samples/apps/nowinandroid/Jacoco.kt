@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
@@ -59,7 +60,7 @@ internal fun Project.configureJacoco(
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
     configure<JacocoPluginExtension> {
-        toolVersion = libs.findVersion("jacoco").get().toString()
+        toolVersion = libs.versions.jacoco.get()
     }
 
     androidComponentsExtension.onVariants { variant ->

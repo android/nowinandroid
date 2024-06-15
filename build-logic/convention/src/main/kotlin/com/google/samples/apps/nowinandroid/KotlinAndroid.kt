@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.dsl.CommonExtension
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -54,7 +55,7 @@ internal fun Project.configureKotlinAndroid(
     configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
+        add("coreLibraryDesugaring", libs.android.desugarJdkLibs)
     }
 }
 

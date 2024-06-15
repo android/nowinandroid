@@ -17,6 +17,10 @@
 package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.dsl.CommonExtension
+import com.google.samples.apps.nowinandroid.extension.androidTestImplementation
+import com.google.samples.apps.nowinandroid.extension.debugImplementation
+import com.google.samples.apps.nowinandroid.extension.implementation
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.assign
@@ -36,11 +40,10 @@ internal fun Project.configureAndroidCompose(
         }
 
         dependencies {
-            val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
-            add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
+            implementation(platform(libs.androidx.compose.bom))
+            androidTestImplementation(platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.ui.tooling.preview)
+            debugImplementation(libs.androidx.compose.ui.tooling)
         }
 
         testOptions {

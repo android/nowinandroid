@@ -16,7 +16,10 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
-import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.extension.androidTestImplementation
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.implementation
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -25,9 +28,9 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply {
-                apply("nowinandroid.android.library")
-                apply("nowinandroid.android.hilt")
+            with(pluginManager) {
+                apply(libs.plugins.nowinandroid.android.library)
+                apply(libs.plugins.nowinandroid.android.hilt)
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
@@ -39,15 +42,15 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":core:ui"))
-                add("implementation", project(":core:designsystem"))
+                implementation(project(":core:ui"))
+                implementation(project(":core:designsystem"))
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+                implementation(libs.androidx.hilt.navigation.compose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.androidx.lifecycle.viewModelCompose)
+                implementation(libs.androidx.tracing.ktx)
 
-                add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
+                androidTestImplementation(libs.androidx.lifecycle.runtimeTesting)
             }
         }
     }

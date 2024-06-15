@@ -15,9 +15,10 @@
  */
 
 import com.android.build.api.dsl.LibraryExtension
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureJacoco
+import com.google.samples.apps.nowinandroid.extension.apply
+import com.google.samples.apps.nowinandroid.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -25,7 +26,7 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("jacoco")
+            pluginManager.apply(libs.plugins.jacoco)
             val androidExtension = extensions.getByType<LibraryExtension>()
 
             androidExtension.buildTypes.configureEach {
