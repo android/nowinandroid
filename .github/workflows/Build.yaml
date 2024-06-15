@@ -39,6 +39,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Check build-logic
         run: ./gradlew check -p build-logic
@@ -188,6 +190,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -208,7 +212,7 @@ jobs:
       - name: Generate coverage reports for Debug variants (only API 30)
         if: matrix.api-level == 30
         run: ./gradlew createDemoDebugCombinedCoverageReport
-        
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -227,7 +231,7 @@ jobs:
           paths: |
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-        
+
       - name: Upload local coverage reports (XML + HTML) (only API 30)
         if: matrix.api-level == 30
         uses: actions/upload-artifact@v4
