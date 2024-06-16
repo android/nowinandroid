@@ -121,10 +121,9 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.output.gv="/tmp/${file_name}.gv" \
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
-        # Convert to SVG using dot, remove unnecessary comments, and reformat
-        dot -Tsvg "/tmp/${file_name}.gv" > "docs/images/graphs/${file_name}.svg"
-        # Compress and cleanup SVG file
-        svgo --multipass --pretty "docs/images/graphs/${file_name}.svg"
+        # Convert to SVG using dot, then compress and cleanup output
+        dot -Tsvg "/tmp/${file_name}.gv" |
+          svgo --multipass --pretty --output="docs/images/graphs/${file_name}.svg" -
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi
