@@ -115,7 +115,7 @@ echo "$module_paths" | while read -r module_path; do
 
         # Convert to SVG using dot, remove unnecessary comments, and reformat
         dot -Tsvg "/tmp/${file_name}.gv" |
-          sed -e 's/<!--.*//g' -e 's/-->.*//g' | grep -zv '^<!--' | tr -d '\0' |
+          sed -e 's/<!--.*//g' -e 's/-->.*//g' | tr -d '\0' |
           xmllint --format - \
           > "docs/images/graphs/${file_name}.svg"
         # Remove the temporary .gv file
