@@ -56,7 +56,7 @@ class NiaAppStateTest {
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
 
-    private val errorMonitor = TestErrorMonitor()
+    private val errorMonitor = TestErrorMonitor(networkMonitor)
 
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
@@ -122,10 +122,30 @@ class NiaAppStateTest {
             )
         }
 
-        backgroundScope.launch { state.isOffline.collect() }
+        backgroundScope.launch { state.isOfflineState.collect() }
         networkMonitor.setConnected(false)
         assertEquals(
             true,
+            state.isOfflineState.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_whenNetworkMonitorIsOnline_StateIsOnline() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                errorMonitor = errorMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.isOfflineState.collect() }
+        networkMonitor.setConnected(true)
+        assertEquals(
+            false,
             state.isOfflineState.value,
         )
     }

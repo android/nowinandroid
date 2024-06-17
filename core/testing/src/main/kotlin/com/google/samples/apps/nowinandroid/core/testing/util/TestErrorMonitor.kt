@@ -20,11 +20,11 @@ import com.google.samples.apps.nowinandroid.core.data.util.ErrorMessage
 import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
-class TestErrorMonitor : ErrorMonitor {
+class TestErrorMonitor(networkMonitor: TestNetworkMonitor) : ErrorMonitor {
     override var offlineMessage: String? = "offline"
-    override val isOffline: Flow<Boolean>
-        get() = flowOf(false)
+    override val isOffline: Flow<Boolean> = networkMonitor.isOnline.map { !it }
     override fun addShortErrorMessage(
         error: String,
         label: String?,
