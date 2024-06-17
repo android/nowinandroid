@@ -49,17 +49,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
@@ -71,16 +64,29 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import me.tatarka.inject.annotations.Inject
+import nowinandroid.feature.bookmarks.generated.resources.Res
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_empty_description
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_empty_error
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_img_empty_bookmarks
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_loading
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_removed
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_undo
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
+@Inject
 internal fun BookmarksRoute(
     onTopicClick: (String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    viewModel: BookmarksViewModel = hiltViewModel(),
+    viewModel: BookmarksViewModel,
 ) {
     val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
     BookmarksScreen(
@@ -112,8 +118,8 @@ internal fun BookmarksScreen(
     undoBookmarkRemoval: () -> Unit = {},
     clearUndoState: () -> Unit = {},
 ) {
-    val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_removed)
-    val undoText = stringResource(id = R.string.feature_bookmarks_undo)
+    val bookmarkRemovedMessage = stringResource(Res.string.feature_bookmarks_removed)
+    val undoText = stringResource(Res.string.feature_bookmarks_undo)
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
@@ -125,10 +131,10 @@ internal fun BookmarksScreen(
             }
         }
     }
-
-    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-        clearUndoState()
-    }
+    // Could not import LifecycleEventEffect
+//    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+//        clearUndoState()
+//    }
 
     when (feedState) {
         Loading -> LoadingState(modifier)
@@ -155,7 +161,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentSize()
             .testTag("forYou:loading"),
-        contentDesc = stringResource(id = R.string.feature_bookmarks_loading),
+        contentDesc = stringResource(Res.string.feature_bookmarks_loading),
     )
 }
 
@@ -168,7 +174,6 @@ private fun BookmarksGrid(
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyStaggeredGridState()
-    TrackScrollJank(scrollableState = scrollableState, stateName = "bookmarks:grid")
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -228,7 +233,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.feature_bookmarks_img_empty_bookmarks),
+            painter = painterResource(Res.drawable.feature_bookmarks_img_empty_bookmarks),
             colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
             contentDescription = null,
         )
@@ -236,7 +241,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = stringResource(id = R.string.feature_bookmarks_empty_error),
+            text = stringResource(Res.string.feature_bookmarks_empty_error),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
@@ -246,7 +251,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = stringResource(id = R.string.feature_bookmarks_empty_description),
+            text = stringResource(Res.string.feature_bookmarks_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,

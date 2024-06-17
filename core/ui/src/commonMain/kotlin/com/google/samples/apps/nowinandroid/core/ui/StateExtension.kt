@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.analytics
+package com.google.samples.apps.nowinandroid.core.ui
 
-import co.touchlab.kermit.Logger
-import me.tatarka.inject.annotations.Inject
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.flow.StateFlow
 
-/**
- * An implementation of AnalyticsHelper just writes the events to logcat. Used in builds where no
- * analytics events should be sent to a backend.
- */
-@Inject
-internal class StubAnalyticsHelper : AnalyticsHelper {
-    override fun logEvent(event: AnalyticsEvent) {
-        Logger.d { "Received analytics event: $event" }
-    }
-}
+// collectAsStateWithLifecycle is an Android-only API
+// Replaced with collectAsState in shared code
+@Composable
+fun <T> StateFlow<T>.collectAsStateWithLifecycle(): State<T> = collectAsState()

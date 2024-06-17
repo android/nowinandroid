@@ -46,7 +46,7 @@ private const val SYNC_BATCH_SIZE = 40
  * Reads are exclusively from local storage to support offline access.
  */
 @Inject
-internal class OfflineFirstNewsRepository(
+class OfflineFirstNewsRepository(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
     private val newsResourceDao: NewsResourceDaoInterface,
     private val topicDao: TopicDaoInterface,

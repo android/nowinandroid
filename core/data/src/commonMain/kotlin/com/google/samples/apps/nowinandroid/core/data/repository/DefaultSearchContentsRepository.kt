@@ -37,7 +37,7 @@ import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Inject
-internal class DefaultSearchContentsRepository(
+class DefaultSearchContentsRepository(
     private val newsResourceDao: NewsResourceDao,
     private val newsResourceFtsDao: NewsResourceFtsDao,
     private val topicDao: TopicDao,

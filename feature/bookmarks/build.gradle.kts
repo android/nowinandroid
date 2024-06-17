@@ -15,8 +15,9 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
-    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.cmp.feature)
+    alias(libs.plugins.jetbrains.compose)
+    alias(libs.plugins.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
@@ -24,10 +25,22 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks"
 }
 
-dependencies {
-    implementation(projects.core.data)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.data)
+            implementation(compose.material3)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
 
-    testImplementation(projects.core.testing)
-
-    androidTestImplementation(projects.core.testing)
+        }
+        commonTest.dependencies {
+            implementation(projects.core.testing)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.testing)
+        }
+    }
 }

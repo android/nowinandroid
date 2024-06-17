@@ -33,27 +33,27 @@ import me.tatarka.inject.annotations.Provides
 abstract class DataModule {
 
     @Provides
-    internal fun bindsTopicRepository(
+    fun bindsTopicRepository(
         topicsRepository: OfflineFirstTopicsRepository,
     ): TopicsRepository = topicsRepository
 
     @Provides
-    internal fun bindsNewsResourceRepository(
+    fun bindsNewsResourceRepository(
         newsRepository: OfflineFirstNewsRepository,
     ): NewsRepository = newsRepository
 
     @Provides
-    internal fun bindsUserDataRepository(
+    fun userDataRepository(
         userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository = userDataRepository
 
     @Provides
-    internal fun bindsRecentSearchRepository(
+    fun bindsRecentSearchRepository(
         recentSearchRepository: DefaultRecentSearchRepository,
     ): RecentSearchRepository = recentSearchRepository
 
     @Provides
-    internal fun bindsSearchContentsRepository(
+    fun bindsSearchContentsRepository(
         searchContentsRepository: DefaultSearchContentsRepository,
     ): SearchContentsRepository = searchContentsRepository
 }

@@ -17,7 +17,7 @@ androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.1"
 androidxEspresso = "3.5.1"
 androidxHiltNavigationCompose = "1.2.0"
-androidxLifecycle = "2.7.0"
+androidxLifecycle = "2.8.2"
 androidxMacroBenchmark = "1.2.4"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.0-beta03"
@@ -72,6 +72,8 @@ kermit = "2.0.4"
 ktor = "2.3.11"
 ktrofit = "1.14.0"
 buildKonfig = "0.15.1"
+lifecycle-viewmodel-compose = "2.8.0"
+navigation-compose = "2.7.0-alpha07"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -194,6 +196,8 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktrofit" }
 ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktrofit" }
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildKonfig" }
+jetbrains-compose-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
+jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -249,3 +253,4 @@ nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspeci
 nowinandroid-kmp-library = { id = "nowinandroid.kmp.library", version = "unspecified" }
 nowinandroid-kotlin-inject = { id = "nowinandroid.kmp.inject", version = "unspecified" }
 nowinandroid-sqldelight = { id = "nowinandroid.sqldelight", version = "unspecified" }
+nowinandroid-cmp-feature = { id = "nowinandroid.cmp.feature", version = "unspecified" }
