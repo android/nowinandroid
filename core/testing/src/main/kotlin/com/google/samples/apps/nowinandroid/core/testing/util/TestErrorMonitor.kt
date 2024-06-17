@@ -22,14 +22,40 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class TestErrorMonitor : ErrorMonitor {
-    override fun addErrorMessage(error: String): String? {
+    override var offlineMessage: String? = "offline"
+    override val isOffline: Flow<Boolean>
+        get() = flowOf(false)
+    override fun addShortErrorMessage(
+        error: String,
+        label: String?,
+        successAction: (() -> Unit)?,
+        failureAction: (() -> Unit)?,
+    ): String? {
         return "1"
+    }
+
+    override fun addLongErrorMessage(
+        error: String,
+        label: String?,
+        successAction: (() -> Unit)?,
+        failureAction: (() -> Unit)?,
+    ): String? {
+        return "2"
+    }
+
+    override fun addIndefiniteErrorMessage(
+        error: String,
+        label: String?,
+        successAction: (() -> Unit)?,
+        failureAction: (() -> Unit)?,
+    ): String? {
+        return "3"
     }
 
     override fun clearErrorMessage(id: String) {
         // Do nothing
     }
 
-    override val errorMessages: Flow<List<ErrorMessage?>>
-        get() = flowOf(listOf(ErrorMessage("Error Message", "1")))
+    override val errorMessage: Flow<ErrorMessage?>
+        get() = flowOf(ErrorMessage("Error Message", "1"))
 }
