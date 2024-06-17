@@ -24,11 +24,12 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 
 /**
  * DAO for [TopicEntity] access
  */
-
+@Inject
 class TopicDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : TopicDaoInterface {
 
     private val query = db.topicsQueries

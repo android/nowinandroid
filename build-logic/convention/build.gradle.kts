@@ -125,5 +125,9 @@ gradlePlugin {
             id = "nowinandroid.sqldelight"
             implementationClass = "SqlDelightConventionPlugin"
         }
+        register("cmpFeature") {
+            id = "nowinandroid.cmp.feature"
+            implementationClass = "CmpFeatureConventionPlugin"
+        }
     }
 }

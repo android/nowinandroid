@@ -35,7 +35,7 @@ import me.tatarka.inject.annotations.Inject
  * Reads are exclusively from local storage to support offline access.
  */
 @Inject
-internal class OfflineFirstTopicsRepository(
+class OfflineFirstTopicsRepository(
     private val topicDao: TopicDaoInterface,
     private val network: NiaNetworkDataSource,
 ) : TopicsRepository {

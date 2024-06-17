@@ -26,7 +26,7 @@ import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-internal class DefaultRecentSearchRepository(
+class DefaultRecentSearchRepository(
     private val recentSearchQueryDao: RecentSearchQueryDao,
 ) : RecentSearchRepository {
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {

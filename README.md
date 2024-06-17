@@ -39,36 +39,36 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 
 ## Status for modules
 
-| Module                    | Progress         | Desktop supported | Android supported | iOS supported | Web supported |
-|---------------------------|------------------|-------------------|-------------------|---------------|---------------|
-| app                       | Not started      | ❌                | ❌                | ❌            | ❌            |
-| app-nia-catalog           | Done             | ✅                | ✅                | ❔            | ✅            |
-| :core:analytics           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:common              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:data                | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:data-test           | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :core:database            | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:datastore           | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:datastore-proto     | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:datastore-test      | Removed          | ❌                | ❌                | ❌            | ❌            |
-| :core:designsystem        | Done             | ✅                | ✅                | ❔            | ✅            |
-| :core:domain              | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:model               | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:network             | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:notification        | Done             | No implmentaion   | ✔️                 |No implmentaion| ❌           |
-| :core:screenshot-testing  | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :core:testing             | Done             | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:ui                  | In progress      | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :feature:bookmarks        | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :feature:foryou           | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :feature:interests        | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :feature:search           | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :feature:settings         | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :feature:topic            | Not started      | ❌                | ❌                | ❌            | ❌            |
-| lint                      | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :sync:sync-test           | Not started      | ❌                | ❌                | ❌            | ❌            |
-| :sync:work                | Not started      | ❌                | ❌                | ❌            | ❌            |
-| ui-test-manifest          | Not started      | ❌                | ❌                | ❌            | ❌            |
+| Module                    | Progress    | Desktop supported | Android supported | iOS supported | Web supported |
+|---------------------------|-------------|-------------------|-------------------|---------------|---------------|
+| app                       | Not started | ❌                | ❌                | ❌            | ❌            |
+| app-nia-catalog           | Done        | ✅                | ✅                | ❔            | ✅            |
+| :core:analytics           | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:common              | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:data                | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:data-test           | Not started | ❌                | ❌                | ❌            | ❌            |
+| :core:database            | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore           | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore-proto     | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:datastore-test      | Removed     | ❌                | ❌                | ❌            | ❌            |
+| :core:designsystem        | Done        | ✅                | ✅                | ❔            | ✅            |
+| :core:domain              | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:model               | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:network             | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:notification        | Done        | No implmentaion   | ✔️                 |No implmentaion| ❌           |
+| :core:screenshot-testing  | Not started | ❌                | ❌                | ❌            | ❌            |
+| :core:testing             | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :core:ui                  | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
+| :feature:bookmarks        | In progress | ❌                | ❌                | ❌            | ❌            |
+| :feature:foryou           | Not started | ❌                | ❌                | ❌            | ❌            |
+| :feature:interests        | Not started | ❌                | ❌                | ❌            | ❌            |
+| :feature:search           | Not started | ❌                | ❌                | ❌            | ❌            |
+| :feature:settings         | Not started | ❌                | ❌                | ❌            | ❌            |
+| :feature:topic            | Not started | ❌                | ❌                | ❌            | ❌            |
+| lint                      | Not started | ❌                | ❌                | ❌            | ❌            |
+| :sync:sync-test           | Not started | ❌                | ❌                | ❌            | ❌            |
+| :sync:work                | Not started | ❌                | ❌                | ❌            | ❌            |
+| ui-test-manifest          | Not started | ❌                | ❌                | ❌            | ❌            |
 
 
 

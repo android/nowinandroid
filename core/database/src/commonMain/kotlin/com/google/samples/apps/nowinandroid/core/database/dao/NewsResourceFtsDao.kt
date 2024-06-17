@@ -24,10 +24,12 @@ import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceFtsE
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 
 /**
  * DAO for [NewsResourceFtsEntity] access.
  */
+@Inject
 class NewsResourceFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : NewsResourceFtsDaoInterface {
     private val dbQuery = db.newsResourceFtsQueries
     override suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>) {
