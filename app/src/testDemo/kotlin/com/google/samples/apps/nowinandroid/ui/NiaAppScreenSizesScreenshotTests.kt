@@ -138,7 +138,6 @@ class NiaAppScreenSizesScreenshotTests {
                 ) {
                     NiaTheme {
                         val fakeAppState = rememberNiaAppState(
-                            networkMonitor = networkMonitor,
                             errorMonitor = errorMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
                             timeZoneMonitor = timeZoneMonitor,

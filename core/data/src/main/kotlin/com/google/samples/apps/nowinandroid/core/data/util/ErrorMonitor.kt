@@ -22,7 +22,11 @@ import kotlinx.coroutines.flow.Flow
  * Interface for handling error messages.
  */
 interface ErrorMonitor {
-    fun addErrorMessage(error: String): String?
+    fun addShortErrorMessage(error: String, label: String? = null, successAction: (() -> Unit)? = null, failureAction: (() -> Unit)? = null): String?
+    fun addLongErrorMessage(error: String, label: String? = null, successAction: (() -> Unit)? = null, failureAction: (() -> Unit)? = null): String?
+    fun addIndefiniteErrorMessage(error: String, label: String? = null, successAction: (() -> Unit)? = null, failureAction: (() -> Unit)? = null): String?
     fun clearErrorMessage(id: String)
-    val errorMessages: Flow<List<ErrorMessage?>>
+    val errorMessage: Flow<ErrorMessage?>
+    val isOffline: Flow<Boolean>
+    var offlineMessage: String?
 }

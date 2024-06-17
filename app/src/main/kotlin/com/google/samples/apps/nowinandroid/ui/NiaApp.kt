@@ -30,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
@@ -42,6 +43,7 @@ import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +64,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.util.ErrorMessage
+import com.google.samples.apps.nowinandroid.core.data.util.MessageDuration
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationSuiteScaffold
@@ -95,30 +99,24 @@ fun NiaApp(
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
 
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+            val offlineMessage = stringResource(R.string.not_connected)
+            SideEffect {
+                appState.offlineMessage = offlineMessage
+            }
+
             val snackbarMessage by appState.snackbarMessage.collectAsStateWithLifecycle()
 
-            // If user is not connected to the internet show a snack bar to inform them.
-            val notConnectedMessage = stringResource(R.string.not_connected)
-            LaunchedEffect(isOffline) {
-                if (isOffline) {
-                    snackbarHostState.showSnackbar(
-                        message = notConnectedMessage,
-                        duration = Indefinite,
-                    )
-                }
-            }
             LaunchedEffect(snackbarMessage) {
                 snackbarMessage?.let {
                     val snackBarResult = snackbarHostState.showSnackbar(
                         message = it.message,
-                        actionLabel = "Continue",
-                        duration = Indefinite,
+                        actionLabel = it.label,
+                        duration = snackbarDurationOf(it.duration),
                     ) == ActionPerformed
 
-                    if (snackBarResult) {
-                        appState.clearErrorMessage(it.id)
-                    }
+                    handleSnackbarResult(snackBarResult, it)
+                    // Remove Message from Queue
+                    appState.clearErrorMessage(it.id)
                 }
             }
 
@@ -243,14 +241,6 @@ internal fun NiaApp(
                 ) {
                     NiaNavHost(
                         appState = appState,
-                        onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        },
-                        errorHandler = { message -> appState.addErrorMessage(message) },
                     )
                 }
 
@@ -284,3 +274,20 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLev
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
+
+private fun snackbarDurationOf(duration: MessageDuration?): SnackbarDuration {
+    return when (duration) {
+        MessageDuration.Short -> SnackbarDuration.Short
+        MessageDuration.Long -> SnackbarDuration.Long
+        MessageDuration.Indefinite -> SnackbarDuration.Indefinite
+        else -> SnackbarDuration.Short
+    }
+}
+
+private fun handleSnackbarResult(snackBarResult: Boolean, message: ErrorMessage) {
+    if (snackBarResult) {
+        message.actionPerformed?.invoke()
+    } else {
+        message.actionNotPerformed?.invoke()
+    }
+}

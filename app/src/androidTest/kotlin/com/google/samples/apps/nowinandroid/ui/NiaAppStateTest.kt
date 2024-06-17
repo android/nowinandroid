@@ -76,7 +76,6 @@ class NiaAppStateTest {
                 NiaAppState(
                     navController = navController,
                     coroutineScope = backgroundScope,
-                    networkMonitor = networkMonitor,
                     errorMonitor = errorMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
@@ -99,7 +98,6 @@ class NiaAppStateTest {
     fun niaAppState_destinations() = runTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
-                networkMonitor = networkMonitor,
                 errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -118,7 +116,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
                 errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -129,7 +126,7 @@ class NiaAppStateTest {
         networkMonitor.setConnected(false)
         assertEquals(
             true,
-            state.isOffline.value,
+            state.isOfflineState.value,
         )
     }
 
@@ -139,7 +136,6 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
                 errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
@@ -160,14 +156,13 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
                 errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
         }
 
-        val id = state.addErrorMessage("Test Error Message 1")
+        val id = state.addShortErrorMessage("Test Error Message 1")
 
         backgroundScope.launch { state.snackbarMessage.collect() }
 

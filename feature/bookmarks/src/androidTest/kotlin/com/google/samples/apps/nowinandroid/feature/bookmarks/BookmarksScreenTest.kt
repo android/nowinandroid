@@ -55,7 +55,7 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Loading,
-                onShowSnackbar = { _, _ -> false },
+                onShowSnackbar = { _, _, _, _ -> Unit },
                 removeFromBookmarks = {},
                 onTopicClick = {},
                 onNewsResourceViewed = {},
@@ -76,7 +76,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Success(
                     userNewsResourcesTestData.take(2),
                 ),
-                onShowSnackbar = { _, _ -> false },
+                onShowSnackbar = { _, _, _, _ -> Unit },
                 removeFromBookmarks = {},
                 onTopicClick = {},
                 onNewsResourceViewed = {},
@@ -117,7 +117,7 @@ class BookmarksScreenTest {
                 feedState = NewsFeedUiState.Success(
                     userNewsResourcesTestData.take(2),
                 ),
-                onShowSnackbar = { _, _ -> false },
+                onShowSnackbar = { _, _, _, _ -> Unit },
                 removeFromBookmarks = { newsResourceId ->
                     assertEquals(userNewsResourcesTestData[0].id, newsResourceId)
                     removeFromBookmarksCalled = true
@@ -152,7 +152,7 @@ class BookmarksScreenTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(emptyList()),
-                onShowSnackbar = { _, _ -> false },
+                onShowSnackbar = { _, _, _, _ -> Unit },
                 removeFromBookmarks = {},
                 onTopicClick = {},
                 onNewsResourceViewed = {},
@@ -181,7 +181,7 @@ class BookmarksScreenTest {
             CompositionLocalProvider(LocalLifecycleOwner provides testLifecycleOwner) {
                 BookmarksScreen(
                     feedState = NewsFeedUiState.Success(emptyList()),
-                    onShowSnackbar = { _, _ -> false },
+                    onShowSnackbar = { _, _, _, _ -> Unit },
                     removeFromBookmarks = {},
                     onTopicClick = {},
                     onNewsResourceViewed = {},

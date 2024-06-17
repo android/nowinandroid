@@ -218,7 +218,6 @@ class SnackbarScreenshotTests {
                     BoxWithConstraints {
                         NiaTheme {
                             val appState = rememberNiaAppState(
-                                networkMonitor = networkMonitor,
                                 errorMonitor = errorMonitor,
                                 userNewsResourceRepository = userNewsResourceRepository,
                                 timeZoneMonitor = timeZoneMonitor,
