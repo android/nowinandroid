@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.sync.test
+package com.google.samples.apps.nowinandroid.core.sync.di
 
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.sync.di.SyncModule
+import com.google.samples.apps.nowinandroid.sync.status.NeverSyncingSyncManager
 import com.google.samples.apps.nowinandroid.sync.status.StubSyncSubscriber
 import com.google.samples.apps.nowinandroid.sync.status.SyncSubscriber
 import dagger.Binds
@@ -32,12 +33,8 @@ import dagger.hilt.testing.TestInstallIn
 )
 internal interface TestSyncModule {
     @Binds
-    fun bindsSyncStatusMonitor(
-        syncStatusMonitor: NeverSyncingSyncManager,
-    ): SyncManager
+    fun bindsSyncManager(it: NeverSyncingSyncManager): SyncManager
 
     @Binds
-    fun bindsSyncSubscriber(
-        syncSubscriber: StubSyncSubscriber,
-    ): SyncSubscriber
+    fun bindsSyncSubscriber(it: StubSyncSubscriber): SyncSubscriber
 }

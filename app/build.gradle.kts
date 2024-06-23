@@ -85,7 +85,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.analytics)
-    implementation(projects.sync.work)
+    implementation(projects.sync)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)
@@ -112,11 +112,11 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.testing)
-    testImplementation(projects.sync.syncTest)
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.androidx.work.testing)
     testImplementation(libs.hilt.android.testing)
     testImplementation(testFixtures(projects.core.data))
+    testImplementation(testFixtures(projects.sync))
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)

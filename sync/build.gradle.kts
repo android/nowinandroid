@@ -23,6 +23,7 @@ android {
     defaultConfig {
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
+    testFixtures.enable = true
     namespace = "com.google.samples.apps.nowinandroid.sync"
 }
 
@@ -42,4 +43,8 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlinx.coroutines.guava)
     androidTestImplementation(projects.core.testing)
+
+    kspTestFixtures(libs.hilt.compiler)
+    testFixturesImplementation(libs.hilt.android.testing)
+    testFixturesImplementation(projects.core.data)
 }

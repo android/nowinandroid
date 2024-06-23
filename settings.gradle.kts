@@ -59,7 +59,6 @@ include(":feature:topic")
 include(":feature:search")
 include(":feature:settings")
 include(":lint")
-include(":sync:work")
-include(":sync:sync-test")
+include(":sync")
 include(":ui-test-hilt-manifest")
 

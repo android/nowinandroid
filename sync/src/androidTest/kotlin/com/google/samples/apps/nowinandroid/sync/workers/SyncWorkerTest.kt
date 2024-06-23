@@ -23,11 +23,13 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
+import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import kotlin.test.assertEquals
 
 @HiltAndroidTest
@@ -35,6 +37,10 @@ class SyncWorkerTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
+
+    @BindValue
+    @get:Rule(order = 1)
+    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
 
     private val context get() = InstrumentationRegistry.getInstrumentation().context
 

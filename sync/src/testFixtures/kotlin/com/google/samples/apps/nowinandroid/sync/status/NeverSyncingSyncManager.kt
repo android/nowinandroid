@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.hilt)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.sync.test"
-}
+package com.google.samples.apps.nowinandroid.sync.status
 
-dependencies {
-    implementation(libs.hilt.android.testing)
-    implementation(projects.core.data)
-    implementation(projects.sync.work)
+import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+
+internal class NeverSyncingSyncManager @Inject constructor() : SyncManager {
+    override val isSyncing: Flow<Boolean> = flowOf(false)
+    override fun requestSync() = Unit
 }
