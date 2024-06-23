@@ -124,12 +124,12 @@ dependencies {
     testDemoImplementation(testFixtures(projects.core.data))
 
     androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(testFixtures(projects.core.data))
+    androidTestImplementation(testFixtures(projects.core.datastore))
 
     baselineProfile(projects.benchmarks)
 }

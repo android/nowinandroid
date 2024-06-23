@@ -42,8 +42,8 @@ dependencies {
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.serialization.json)
-    testImplementation(projects.core.datastoreTest)
     testImplementation(projects.core.testing)
+    testImplementation(testFixtures(projects.core.datastore))
 
     kspTestFixtures(libs.hilt.compiler)
     testFixturesImplementation(libs.hilt.android.testing)

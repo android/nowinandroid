@@ -30,6 +30,7 @@ android {
             isReturnDefaultValues = true
         }
     }
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -39,6 +40,10 @@ dependencies {
 
     implementation(projects.core.common)
 
-    testImplementation(projects.core.datastoreTest)
     testImplementation(libs.kotlinx.coroutines.test)
+
+    kspTestFixtures(libs.hilt.compiler)
+    testFixturesImplementation(libs.hilt.android.testing)
+    testFixturesImplementation(projects.core.common)
+    testFixturesImplementation(projects.core.datastore)
 }
