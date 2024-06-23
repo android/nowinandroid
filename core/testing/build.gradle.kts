@@ -39,4 +39,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(testFixtures(projects.core.data))
+    implementation(testFixtures(projects.core.datastore))
+    implementation(testFixtures(projects.sync))
 }

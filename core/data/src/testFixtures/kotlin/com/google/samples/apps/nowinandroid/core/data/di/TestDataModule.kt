@@ -40,7 +40,7 @@ import dagger.hilt.testing.TestInstallIn
     components = [SingletonComponent::class],
     replaces = [DataModule::class],
 )
-internal interface TestDataModule {
+interface TestDataModule {
     @Binds
     fun bindsTopicRepository(it: FakeTopicsRepository): TopicsRepository
 
