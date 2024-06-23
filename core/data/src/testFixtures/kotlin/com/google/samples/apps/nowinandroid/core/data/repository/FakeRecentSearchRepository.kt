@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.test
+package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.datetime.TimeZone
 import javax.inject.Inject
 
-class DefaultZoneIdTimeZoneMonitor @Inject constructor() : TimeZoneMonitor {
-    override val currentTimeZone: Flow<TimeZone> = flowOf(TimeZone.of("Europe/Warsaw"))
+/**
+ * Fake implementation of the [RecentSearchRepository]
+ */
+internal class FakeRecentSearchRepository @Inject constructor() : RecentSearchRepository {
+    override suspend fun insertOrReplaceRecentSearch(searchQuery: String) = Unit
+
+    override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
+        flowOf(emptyList())
+
+    override suspend fun clearRecentSearches() = Unit
 }

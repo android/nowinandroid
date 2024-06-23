@@ -111,24 +111,25 @@ dependencies {
 
     kspTest(libs.hilt.compiler)
 
-    testImplementation(projects.core.dataTest)
     testImplementation(projects.core.testing)
     testImplementation(projects.sync.syncTest)
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.androidx.work.testing)
     testImplementation(libs.hilt.android.testing)
+    testImplementation(testFixtures(projects.core.data))
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
     testDemoImplementation(projects.core.screenshotTesting)
+    testDemoImplementation(testFixtures(projects.core.data))
 
     androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(testFixtures(projects.core.data))
 
     baselineProfile(projects.benchmarks)
 }

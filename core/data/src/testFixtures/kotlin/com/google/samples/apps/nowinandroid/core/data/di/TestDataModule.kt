@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.data.test
+package com.google.samples.apps.nowinandroid.core.data.di
 
-import com.google.samples.apps.nowinandroid.core.data.di.DataModule
+import com.google.samples.apps.nowinandroid.core.data.repository.FakeNewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.FakeRecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.FakeSearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.FakeTopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.FakeUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeNewsRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeRecentSearchRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeSearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeTopicsRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.AlwaysOnlineNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.DefaultZoneIdTimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import dagger.Binds
@@ -41,35 +42,23 @@ import dagger.hilt.testing.TestInstallIn
 )
 internal interface TestDataModule {
     @Binds
-    fun bindsTopicRepository(
-        fakeTopicsRepository: FakeTopicsRepository,
-    ): TopicsRepository
+    fun bindsTopicRepository(it: FakeTopicsRepository): TopicsRepository
 
     @Binds
-    fun bindsNewsResourceRepository(
-        fakeNewsRepository: FakeNewsRepository,
-    ): NewsRepository
+    fun bindsNewsResourceRepository(it: FakeNewsRepository): NewsRepository
 
     @Binds
-    fun bindsUserDataRepository(
-        userDataRepository: FakeUserDataRepository,
-    ): UserDataRepository
+    fun bindsUserDataRepository(it: FakeUserDataRepository): UserDataRepository
 
     @Binds
-    fun bindsRecentSearchRepository(
-        recentSearchRepository: FakeRecentSearchRepository,
-    ): RecentSearchRepository
+    fun bindsRecentSearchRepository(it: FakeRecentSearchRepository): RecentSearchRepository
 
     @Binds
-    fun bindsSearchContentsRepository(
-        searchContentsRepository: FakeSearchContentsRepository,
-    ): SearchContentsRepository
+    fun bindsSearchContentsRepository(it: FakeSearchContentsRepository): SearchContentsRepository
 
     @Binds
-    fun bindsNetworkMonitor(
-        networkMonitor: AlwaysOnlineNetworkMonitor,
-    ): NetworkMonitor
+    fun bindsNetworkMonitor(it: AlwaysOnlineNetworkMonitor): NetworkMonitor
 
     @Binds
-    fun binds(impl: DefaultZoneIdTimeZoneMonitor): TimeZoneMonitor
+    fun bindsTimeZoneMonitor(it: DefaultZoneIdTimeZoneMonitor): TimeZoneMonitor
 }

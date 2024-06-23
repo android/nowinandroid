@@ -28,6 +28,7 @@ android {
             isReturnDefaultValues = true
         }
     }
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -43,4 +44,7 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(projects.core.datastoreTest)
     testImplementation(projects.core.testing)
+
+    kspTestFixtures(libs.hilt.compiler)
+    testFixturesImplementation(libs.hilt.android.testing)
 }

@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.hilt)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.data.test"
-}
+package com.google.samples.apps.nowinandroid.core.data.util
 
-dependencies {
-    api(projects.core.data)
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-    implementation(libs.hilt.android.testing)
+class AlwaysOnlineNetworkMonitor @Inject constructor() : NetworkMonitor {
+    override val isOnline: Flow<Boolean> = flowOf(true)
 }

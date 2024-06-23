@@ -40,35 +40,23 @@ import dagger.hilt.components.SingletonComponent
 abstract class DataModule {
 
     @Binds
-    internal abstract fun bindsTopicRepository(
-        topicsRepository: OfflineFirstTopicsRepository,
-    ): TopicsRepository
+    internal abstract fun bindsTopicRepository(it: OfflineFirstTopicsRepository): TopicsRepository
 
     @Binds
-    internal abstract fun bindsNewsResourceRepository(
-        newsRepository: OfflineFirstNewsRepository,
-    ): NewsRepository
+    internal abstract fun bindsNewsResourceRepository(it: OfflineFirstNewsRepository): NewsRepository
 
     @Binds
-    internal abstract fun bindsUserDataRepository(
-        userDataRepository: OfflineFirstUserDataRepository,
-    ): UserDataRepository
+    internal abstract fun bindsUserDataRepository(it: OfflineFirstUserDataRepository): UserDataRepository
 
     @Binds
-    internal abstract fun bindsRecentSearchRepository(
-        recentSearchRepository: DefaultRecentSearchRepository,
-    ): RecentSearchRepository
+    internal abstract fun bindsRecentSearchRepository(it: DefaultRecentSearchRepository): RecentSearchRepository
 
     @Binds
-    internal abstract fun bindsSearchContentsRepository(
-        searchContentsRepository: DefaultSearchContentsRepository,
-    ): SearchContentsRepository
+    internal abstract fun bindsSearchContentsRepository(it: DefaultSearchContentsRepository): SearchContentsRepository
 
     @Binds
-    internal abstract fun bindsNetworkMonitor(
-        networkMonitor: ConnectivityManagerNetworkMonitor,
-    ): NetworkMonitor
+    internal abstract fun bindsNetworkMonitor(it: ConnectivityManagerNetworkMonitor): NetworkMonitor
 
     @Binds
-    internal abstract fun binds(impl: TimeZoneBroadcastMonitor): TimeZoneMonitor
+    internal abstract fun bindsTimeZoneMonitor(it: TimeZoneBroadcastMonitor): TimeZoneMonitor
 }
