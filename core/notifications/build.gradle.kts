@@ -20,6 +20,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.notifications"
+    testFixtures.enable = true
 }
 
 dependencies {

@@ -22,8 +22,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
-import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.model.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.model.data.userNewsResourcesTestData
 import org.junit.Rule
 import org.junit.Test
 

@@ -16,6 +16,7 @@
 
 plugins {
     alias(libs.plugins.nowinandroid.jvm.library)
+    `java-test-fixtures`
 }
 
 dependencies {

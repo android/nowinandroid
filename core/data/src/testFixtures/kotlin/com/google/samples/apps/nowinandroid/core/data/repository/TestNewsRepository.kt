@@ -14,33 +14,43 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.repository
+package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
-import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 
-class TestTopicsRepository : TopicsRepository {
+class TestNewsRepository : NewsRepository {
+
     /**
      * The backing hot flow for the list of topics ids for testing.
      */
-    private val topicsFlow: MutableSharedFlow<List<Topic>> =
+    private val newsResourcesFlow: MutableSharedFlow<List<NewsResource>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun getTopics(): Flow<List<Topic>> = topicsFlow
-
-    override fun getTopic(id: String): Flow<Topic> =
-        topicsFlow.map { topics -> topics.find { it.id == id }!! }
+    override fun getNewsResources(query: NewsResourceQuery): Flow<List<NewsResource>> =
+        newsResourcesFlow.map { newsResources ->
+            var result = newsResources
+            query.filterTopicIds?.let { filterTopicIds ->
+                result = newsResources.filter {
+                    it.topics.map(Topic::id).intersect(filterTopicIds).isNotEmpty()
+                }
+            }
+            query.filterNewsIds?.let { filterNewsIds ->
+                result = newsResources.filter { it.id in filterNewsIds }
+            }
+            result
+        }
 
     /**
-     * A test-only API to allow controlling the list of topics from tests.
+     * A test-only API to allow controlling the list of news resources from tests.
      */
-    fun sendTopics(topics: List<Topic>) {
-        topicsFlow.tryEmit(topics)
+    fun sendNewsResources(newsResources: List<NewsResource>) {
+        newsResourcesFlow.tryEmit(newsResources)
     }
 
     override suspend fun syncWith(synchronizer: Synchronizer) = true

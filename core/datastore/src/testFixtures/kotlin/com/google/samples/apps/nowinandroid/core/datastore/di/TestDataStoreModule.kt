@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore
+package com.google.samples.apps.nowinandroid.core.datastore.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
-import com.google.samples.apps.nowinandroid.core.datastore.di.DataStoreModule
+import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.UserPreferencesSerializer
 import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
@@ -33,7 +34,7 @@ import javax.inject.Singleton
     components = [SingletonComponent::class],
     replaces = [DataStoreModule::class],
 )
-internal object TestDataStoreModule {
+object TestDataStoreModule {
 
     @Provides
     @Singleton

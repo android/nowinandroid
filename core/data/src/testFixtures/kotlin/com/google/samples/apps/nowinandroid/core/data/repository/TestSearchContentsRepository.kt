@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.repository
+package com.google.samples.apps.nowinandroid.core.data.repository
 
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import com.google.samples.apps.nowinandroid.core.model.data.Topic

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.util
+package com.google.samples.apps.nowinandroid.core.notifications
 
-import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
-import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 
-class TestAnalyticsHelper : AnalyticsHelper {
+/**
+ * Aggregates news resources that have been notified for addition
+ */
+class TestNotifier : Notifier {
 
-    private val events = mutableListOf<AnalyticsEvent>()
-    override fun logEvent(event: AnalyticsEvent) {
-        events.add(event)
+    private val mutableAddedNewResources = mutableListOf<List<NewsResource>>()
+
+    val addedNewsResources: List<List<NewsResource>> = mutableAddedNewResources
+
+    override fun postNewsNotifications(newsResources: List<NewsResource>) {
+        mutableAddedNewResources.add(newsResources)
     }
-
-    fun hasLogged(event: AnalyticsEvent) = event in events
 }

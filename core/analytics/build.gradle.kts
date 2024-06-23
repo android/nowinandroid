@@ -21,6 +21,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.analytics"
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -28,4 +29,8 @@ dependencies {
 
     prodImplementation(platform(libs.firebase.bom))
     prodImplementation(libs.firebase.analytics)
+
+    testFixturesImplementation(libs.androidx.compose.runtime) {
+        because("https://issuetracker.google.com/issues/259523353#comment32")
+    }
 }

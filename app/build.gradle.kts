@@ -105,11 +105,11 @@ dependencies {
     implementation(libs.coil.kt)
 
     ksp(libs.hilt.compiler)
+    kspTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(projects.uiTestHiltManifest)
-
-    kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.testing)
     testImplementation(libs.androidx.compose.ui.test)
@@ -130,6 +130,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(testFixtures(projects.core.data))
     androidTestImplementation(testFixtures(projects.core.datastore))
+    androidTestImplementation(testFixtures(projects.sync))
 
     baselineProfile(projects.benchmarks)
 }

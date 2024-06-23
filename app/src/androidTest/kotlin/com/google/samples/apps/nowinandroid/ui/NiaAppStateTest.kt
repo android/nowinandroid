@@ -27,10 +27,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
-import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.data.repository.TestNewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.util.TestNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TestTimeZoneMonitor
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

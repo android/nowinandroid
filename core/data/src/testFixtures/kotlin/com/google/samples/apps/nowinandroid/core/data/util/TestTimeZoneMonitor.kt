@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.testing.util
+package com.google.samples.apps.nowinandroid.core.data.util
 
-import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.datetime.TimeZone
 
-class TestSyncManager : SyncManager {
+class TestTimeZoneMonitor : TimeZoneMonitor {
 
-    private val syncStatusFlow = MutableStateFlow(false)
+    private val timeZoneFlow = MutableStateFlow(defaultTimeZone)
 
-    override val isSyncing: Flow<Boolean> = syncStatusFlow
-
-    override fun requestSync(): Unit = TODO("Not yet implemented")
+    override val currentTimeZone: Flow<TimeZone> = timeZoneFlow
 
     /**
-     * A test-only API to set the sync status from tests.
+     * A test-only API to set the from tests.
      */
-    fun setSyncing(isSyncing: Boolean) {
-        syncStatusFlow.value = isSyncing
+    fun setTimeZone(zoneId: TimeZone) {
+        timeZoneFlow.value = zoneId
+    }
+
+    companion object {
+        val defaultTimeZone: TimeZone = TimeZone.of("Europe/Warsaw")
     }
 }

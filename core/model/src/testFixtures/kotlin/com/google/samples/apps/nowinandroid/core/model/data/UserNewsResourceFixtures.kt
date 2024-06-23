@@ -16,13 +16,8 @@
 
 @file:Suppress("ktlint:standard:max-line-length")
 
-package com.google.samples.apps.nowinandroid.core.testing.data
+package com.google.samples.apps.nowinandroid.core.model.data
 
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
-import com.google.samples.apps.nowinandroid.core.model.data.UserData
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
