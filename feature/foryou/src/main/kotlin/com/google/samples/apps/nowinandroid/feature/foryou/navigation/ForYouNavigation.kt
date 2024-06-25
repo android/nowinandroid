@@ -19,29 +19,27 @@ package com.google.samples.apps.nowinandroid.feature.foryou.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_SCHEME_AND_HOST
+import com.google.samples.apps.nowinandroid.core.notifications.FOR_YOU_PATH
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
+import kotlinx.serialization.Serializable
 
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
-const val FOR_YOU_ROUTE = "for_you_route/{$LINKED_NEWS_RESOURCE_ID}"
-private const val DEEP_LINK_URI_PATTERN =
-    "https://www.nowinandroid.apps.samples.google.com/foryou/{$LINKED_NEWS_RESOURCE_ID}"
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(FOR_YOU_ROUTE, navOptions)
+private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH"
+
+@Serializable data class ForYouRoute(val linkedNewsResourceId: String? = null)
+
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute(), navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
-    composable(
-        route = FOR_YOU_ROUTE,
+    composable<ForYouRoute>(
         deepLinks = listOf(
-            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
-        ),
-        arguments = listOf(
-            navArgument(LINKED_NEWS_RESOURCE_ID) { type = NavType.StringType },
+            navDeepLink<ForYouRoute>(basePath = DEEP_LINK_BASE_PATH),
         ),
     ) {
-        ForYouRoute(onTopicClick)
+        ForYouScreen(onTopicClick)
     }
 }

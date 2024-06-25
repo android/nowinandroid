@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.core.domain)
 
     testImplementation(projects.core.testing)
+    testImplementation(libs.robolectric)
 
     androidTestImplementation(projects.core.testing)
 }
