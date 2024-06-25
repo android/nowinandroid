@@ -34,12 +34,21 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import kotlin.test.assertEquals
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
  * https://developer.android.com/kotlin/flow/test#statein
+ *
+ * These tests use Robolectric because the subject under test (the ViewModel) uses
+ * `SavedStateHandle.toRoute` which has a dependency on `android.os.Bundle`.
+ *
+ * TODO: Remove Robolectric if/when AndroidX Navigation API is updated to remove Android dependency.
+ *  See b/340966212.
  */
+@RunWith(RobolectricTestRunner::class)
 class InterestsViewModelTest {
 
     @get:Rule
@@ -56,8 +65,6 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
-            // TODO: This line causes tests to fail since it introduces an Android dependency
-            //  see b/340966212 for more information
             savedStateHandle = SavedStateHandle(
                 route = InterestsRoute(initialTopicId = testInputTopics[0].topic.id),
             ),
