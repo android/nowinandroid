@@ -15,8 +15,9 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
-    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.cmp.feature)
+    alias(libs.plugins.jetbrains.compose)
+    alias(libs.plugins.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.roborazzi)
 }
@@ -25,16 +26,32 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.foryou"
 }
 
-dependencies {
-    implementation(libs.accompanist.permissions)
-    implementation(projects.core.data)
-    implementation(projects.core.domain)
-
-    testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.robolectric)
-    testImplementation(projects.core.testing)
-    testImplementation(projects.core.screenshotTesting)
-    testDemoImplementation(libs.roborazzi)
-
-    androidTestImplementation(projects.core.testing)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.data)
+            implementation(projects.core.domain)
+            implementation(compose.material3)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+        }
+        androidMain.dependencies {
+            implementation(libs.accompanist.permissions)
+        }
+        commonMain.dependencies {
+            implementation(projects.core.testing)
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.roborazzi)
+            implementation(projects.core.screenshotTesting)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.testing)
+        }
+    }
 }
