@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.assertIsDisplayed
@@ -27,7 +28,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -43,7 +43,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import javax.inject.Inject
-import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
 
 @HiltAndroidTest
@@ -156,10 +156,16 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun expandedWidth_backPressFromTopicDetail_leavesInterests() {
+        var unhandledBackPress = false
         composeTestRule.apply {
             setContent {
                 DeviceConfigurationOverride(override = expandedWidth) {
                     NiaTheme {
+                        // Back press should not be handled by the two pane layout, and thus
+                        // "fall through" to this BackHandler.
+                        BackHandler {
+                            unhandledBackPress = true
+                        }
                         InterestsListDetailScreen()
                     }
                 }
@@ -170,10 +176,9 @@ class InterestsListDetailScreenTest {
             }
             onNodeWithText(firstTopic.name).performClick()
 
-            assertFailsWith(NoActivityResumedException::class) {
-                // Back would exit the app, which causes Espresso to throw this exception.
-                Espresso.pressBack()
-            }
+            Espresso.pressBack()
+
+            assertTrue(unhandledBackPress)
         }
     }
 
@@ -195,7 +200,6 @@ class InterestsListDetailScreenTest {
             composeTestRule.waitForIdle()
 
             Espresso.pressBack()
-            composeTestRule.waitForIdle()
 
             onNodeWithTag(listPaneTag).assertIsDisplayed()
             onNodeWithText(placeholderText).assertIsNotDisplayed()
