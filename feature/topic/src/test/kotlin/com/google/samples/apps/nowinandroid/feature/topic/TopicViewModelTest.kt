@@ -52,7 +52,7 @@ import kotlin.test.assertIs
  * TODO: Remove Robolectric if/when AndroidX Navigation API is updated to remove Android dependency.
  *  *  See b/340966212.
  */
-@RunWith(RobolectricTestRunner::class)
+//@RunWith(RobolectricTestRunner::class)
 class TopicViewModelTest {
 
     @get:Rule
