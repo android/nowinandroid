@@ -29,7 +29,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -39,9 +39,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-@HiltViewModel
 class ForYouViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     syncManager: SyncManager,
@@ -54,6 +53,7 @@ class ForYouViewModel @Inject constructor(
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userData.map { !it.shouldHideOnboarding }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val deepLinkedNewsResource = savedStateHandle.getStateFlow<String?>(
         key = LINKED_NEWS_RESOURCE_ID,
         null,

@@ -16,10 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import android.net.Uri
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
-import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -63,29 +59,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tracing.trace
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus.Denied
-import com.google.accompanist.permissions.rememberPermissionState
+import coil3.ImageLoader
+import coil3.compose.LocalPlatformContext
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -100,16 +85,22 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
-import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import nowinandroid.feature.foryou.generated.resources.Res
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_done
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_loading
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_subtitle
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_title
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun ForYouRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ForYouViewModel = hiltViewModel(),
+    viewModel: ForYouViewModel,
 ) {
     val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
@@ -148,8 +139,8 @@ internal fun ForYouScreen(
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
 
-    // This code should be called when the UI is ready for use and relates to Time To Full Display.
-    ReportDrawnWhen { !isSyncing && !isOnboardingLoading && !isFeedLoading }
+//    // This code should be called when the UI is ready for use and relates to Time To Full Display.
+//    ReportDrawnWhen { !isSyncing && !isOnboardingLoading && !isFeedLoading }
 
     val itemsAvailable = feedItemsSize(feedState, onboardingUiState)
 
@@ -157,7 +148,7 @@ internal fun ForYouScreen(
     val scrollbarState = state.scrollbarState(
         itemsAvailable = itemsAvailable,
     )
-    TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
+//    TrackScrollJank(scrollableState = state, stateName = "forYou:feed")
 
     Box(
         modifier = modifier
@@ -216,7 +207,7 @@ internal fun ForYouScreen(
                 targetOffsetY = { fullHeight -> -fullHeight },
             ) + fadeOut(),
         ) {
-            val loadingContentDescription = stringResource(id = R.string.feature_foryou_loading)
+            val loadingContentDescription = stringResource(Res.string.feature_foryou_loading)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -243,7 +234,7 @@ internal fun ForYouScreen(
         )
     }
     TrackScreenViewEvent(screenName = "ForYou")
-    NotificationPermissionEffect()
+//    NotificationPermissionEffect()
     DeepLinkEffect(
         deepLinkedUserNewsResource,
         onDeepLinkOpened,
@@ -271,7 +262,7 @@ private fun LazyStaggeredGridScope.onboarding(
             item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
                 Column(modifier = interestsItemModifier) {
                     Text(
-                        text = stringResource(R.string.feature_foryou_onboarding_guidance_title),
+                        text = stringResource(Res.string.feature_foryou_onboarding_guidance_title),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -279,7 +270,7 @@ private fun LazyStaggeredGridScope.onboarding(
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
-                        text = stringResource(R.string.feature_foryou_onboarding_guidance_subtitle),
+                        text = stringResource(Res.string.feature_foryou_onboarding_guidance_subtitle),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp, start = 24.dp, end = 24.dp),
@@ -305,7 +296,7 @@ private fun LazyStaggeredGridScope.onboarding(
                                 .fillMaxWidth(),
                         ) {
                             Text(
-                                text = stringResource(R.string.feature_foryou_done),
+                                text = stringResource(Res.string.feature_foryou_done),
                             )
                         }
                     }
@@ -320,11 +311,11 @@ private fun TopicSelection(
     onboardingUiState: OnboardingUiState.Shown,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
-) = trace("TopicSelection") {
+) {
     val lazyGridState = rememberLazyGridState()
     val topicSelectionTestTag = "forYou:topicSelection"
 
-    TrackScrollJank(scrollableState = lazyGridState, stateName = topicSelectionTestTag)
+//    TrackScrollJank(scrollableState = lazyGridState, stateName = topicSelectionTestTag)
 
     Box(
         modifier = modifier
@@ -381,7 +372,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit,
-) = trace("SingleTopicButton") {
+) {
     Surface(
         modifier = Modifier
             .width(312.dp)
@@ -434,52 +425,53 @@ fun TopicIcon(
     modifier: Modifier = Modifier,
 ) {
     DynamicAsyncImage(
-        placeholder = painterResource(R.drawable.feature_foryou_ic_icon_placeholder),
+//        placeholder = painterResource(R.drawable.feature_foryou_ic_icon_placeholder),
         imageUrl = imageUrl,
         // decorative
         contentDescription = null,
         modifier = modifier
             .padding(10.dp)
             .size(32.dp),
+        imageLoader = ImageLoader(LocalPlatformContext.current),
     )
 }
 
-@Composable
-@OptIn(ExperimentalPermissionsApi::class)
-private fun NotificationPermissionEffect() {
-    // Permission requests should only be made from an Activity Context, which is not present
-    // in previews
-    if (LocalInspectionMode.current) return
-    if (VERSION.SDK_INT < VERSION_CODES.TIRAMISU) return
-    val notificationsPermissionState = rememberPermissionState(
-        android.Manifest.permission.POST_NOTIFICATIONS,
-    )
-    LaunchedEffect(notificationsPermissionState) {
-        val status = notificationsPermissionState.status
-        if (status is Denied && !status.shouldShowRationale) {
-            notificationsPermissionState.launchPermissionRequest()
-        }
-    }
-}
+// @Composable
+// @OptIn(ExperimentalPermissionsApi::class)
+// private fun NotificationPermissionEffect() {
+//    // Permission requests should only be made from an Activity Context, which is not present
+//    // in previews
+//    if (LocalInspectionMode.current) return
+//    if (VERSION.SDK_INT < VERSION_CODES.TIRAMISU) return
+//    val notificationsPermissionState = rememberPermissionState(
+//        android.Manifest.permission.POST_NOTIFICATIONS,
+//    )
+//    LaunchedEffect(notificationsPermissionState) {
+//        val status = notificationsPermissionState.status
+//        if (status is Denied && !status.shouldShowRationale) {
+//            notificationsPermissionState.launchPermissionRequest()
+//        }
+//    }
+// }
 
 @Composable
 private fun DeepLinkEffect(
     userNewsResource: UserNewsResource?,
     onDeepLinkOpened: (String) -> Unit,
 ) {
-    val context = LocalContext.current
-    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
-
-    LaunchedEffect(userNewsResource) {
-        if (userNewsResource == null) return@LaunchedEffect
-        if (!userNewsResource.hasBeenViewed) onDeepLinkOpened(userNewsResource.id)
-
-        launchCustomChromeTab(
-            context = context,
-            uri = Uri.parse(userNewsResource.url),
-            toolbarColor = backgroundColor,
-        )
-    }
+//    val context = LocalContext.current
+//    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+//
+//    LaunchedEffect(userNewsResource) {
+//        if (userNewsResource == null) return@LaunchedEffect
+//        if (!userNewsResource.hasBeenViewed) onDeepLinkOpened(userNewsResource.id)
+//
+//        launchCustomChromeTab(
+//            context = context,
+//            uri = Uri.parse(userNewsResource.url),
+//            toolbarColor = backgroundColor,
+//        )
+//    }
 }
 
 private fun feedItemsSize(

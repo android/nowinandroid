@@ -20,10 +20,10 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import me.tatarka.inject.annotations.Provides
 
-internal expect abstract class PlatformDependentDataModule {
+abstract class PlatformDependentDataModule {
     @Provides
-    internal fun bindsNetworkMonitor(): NetworkMonitor
+    abstract fun bindsNetworkMonitor(): NetworkMonitor
 
     @Provides
-    internal fun bindsTimeZoneMonitor(): TimeZoneMonitor
+    abstract fun bindsTimeZoneMonitor(): TimeZoneMonitor
 }

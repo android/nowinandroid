@@ -16,13 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.network.demo
 
-import com.google.samples.apps.nowinandroid.core.di.IODispatcher
+import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.assets.NEWS_DATA
 import com.google.samples.apps.nowinandroid.core.network.assets.TOPICS_DATA
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
@@ -31,7 +32,7 @@ import me.tatarka.inject.annotations.Inject
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
  */
 class DemoNiaNetworkDataSource @Inject constructor(
-    private val ioDispatcher: IODispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
 ) : NiaNetworkDataSource {
 

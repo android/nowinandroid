@@ -18,18 +18,31 @@ package com.google.samples.apps.nowinandroid.core.data.di
 
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.datetime.TimeZone
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
+/**
+ * JVM module that provides platform dependent data
+ * Leave empty for now
+ */
 @Component
-internal actual abstract class PlatformDependentDataModule {
+abstract class JvmPlatformDependentDataModule : PlatformDependentDataModule() {
     @Provides
-    internal actual fun bindsNetworkMonitor(): NetworkMonitor {
-        TODO()
+    override fun bindsNetworkMonitor(): NetworkMonitor {
+        return object : NetworkMonitor {
+            override val isOnline: Flow<Boolean>
+                get() = flowOf(true)
+        }
     }
 
     @Provides
-    internal actual fun bindsTimeZoneMonitor(): TimeZoneMonitor {
-        TODO()
+    override fun bindsTimeZoneMonitor(): TimeZoneMonitor {
+        return object : TimeZoneMonitor {
+            override val currentTimeZone: Flow<TimeZone>
+                get() = flowOf(TimeZone.UTC)
+        }
     }
 }

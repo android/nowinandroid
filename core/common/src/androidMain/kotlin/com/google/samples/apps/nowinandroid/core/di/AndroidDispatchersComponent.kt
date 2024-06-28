@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.bookmarks.di
+package com.google.samples.apps.nowinandroid.core.di
 
-import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
 @Component
-abstract class BookmarkComponent {
-    abstract val viewModel: BookmarksViewModel
+abstract class AndroidDispatchersComponent : DispatchersComponent() {
+    @Provides
+    override fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    override fun providesDefaultDispatcher(): @DefaultDispatcher CoroutineDispatcher =
+        Dispatchers.Default
 }

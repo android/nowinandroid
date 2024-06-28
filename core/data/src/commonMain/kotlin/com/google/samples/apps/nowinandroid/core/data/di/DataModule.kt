@@ -43,7 +43,7 @@ abstract class DataModule {
     ): NewsRepository = newsRepository
 
     @Provides
-    fun userDataRepository(
+    fun bindsUserDataRepository(
         userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository = userDataRepository
 

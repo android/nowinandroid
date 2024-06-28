@@ -20,16 +20,15 @@ import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNe
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
@@ -38,9 +37,6 @@ import kotlin.test.assertIs
  * https://developer.android.com/kotlin/flow/test#statein
  */
 class BookmarksViewModelTest {
-    @get:Rule
-    val dispatcherRule = MainDispatcherRule()
-
     private val userDataRepository = TestUserDataRepository()
     private val newsRepository = TestNewsRepository()
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
@@ -49,7 +45,7 @@ class BookmarksViewModelTest {
     )
     private lateinit var viewModel: BookmarksViewModel
 
-    @Before
+    @BeforeTest
     fun setup() {
         viewModel = BookmarksViewModel(
             userDataRepository = userDataRepository,
@@ -75,6 +71,7 @@ class BookmarksViewModelTest {
         collectJob.cancel()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun oneBookmark_whenRemoving_removesFromFeed() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }

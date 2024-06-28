@@ -19,13 +19,10 @@ package com.google.samples.apps.nowinandroid.core.di
 import kotlinx.coroutines.CoroutineDispatcher
 import me.tatarka.inject.annotations.Provides
 
-typealias DefaultDispatcher = CoroutineDispatcher
-typealias IODispatcher = CoroutineDispatcher
-
-expect abstract class DispatchersComponent {
+abstract class DispatchersComponent {
     @Provides
-    fun providesIODispatcher(): IODispatcher
+    abstract fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher
 
     @Provides
-    fun providesDefaultDispatcher(): DefaultDispatcher
+    abstract fun providesDefaultDispatcher(): @DefaultDispatcher CoroutineDispatcher
 }

@@ -22,8 +22,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.navDeepLink
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
 const val FOR_YOU_ROUTE = "for_you_route/{$LINKED_NEWS_RESOURCE_ID}"
@@ -36,12 +34,12 @@ fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable(
         route = FOR_YOU_ROUTE,
         deepLinks = listOf(
-            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
+//            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
         ),
         arguments = listOf(
             navArgument(LINKED_NEWS_RESOURCE_ID) { type = NavType.StringType },
         ),
     ) {
-        ForYouRoute(onTopicClick)
+//        ForYouRoute(onTopicClick)
     }
 }
