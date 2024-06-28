@@ -24,7 +24,7 @@ import me.tatarka.inject.annotations.Qualifier
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
-     AnnotationTarget.PROPERTY
+    AnnotationTarget.PROPERTY,
 )
 annotation class IoDispatcher
 
@@ -34,7 +34,7 @@ annotation class IoDispatcher
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
-    AnnotationTarget.PROPERTY
+    AnnotationTarget.PROPERTY,
 )
 annotation class MainDispatcher
 
@@ -44,6 +44,6 @@ annotation class MainDispatcher
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
-    AnnotationTarget.PROPERTY
+    AnnotationTarget.PROPERTY,
 )
 annotation class DefaultDispatcher

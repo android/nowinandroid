@@ -22,7 +22,7 @@ import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-abstract class JvmDispatchersComponent: DispatchersComponent() {
+abstract class JvmDispatchersComponent : DispatchersComponent() {
     @Provides
     override fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher = Dispatchers.IO
 

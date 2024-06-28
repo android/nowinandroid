@@ -31,7 +31,7 @@ annotation class ApplicationScope
 
 @Component
 abstract class CoroutineScopeComponent(
-    @Component val dispatchersComponent: DispatchersComponent
+    @Component val dispatchersComponent: DispatchersComponent,
 ) {
     @DefaultDispatcher abstract val defaultDispatcher: CoroutineDispatcher
 

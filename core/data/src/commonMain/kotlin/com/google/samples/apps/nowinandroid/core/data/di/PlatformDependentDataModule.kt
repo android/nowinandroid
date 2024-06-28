@@ -18,9 +18,7 @@ package com.google.samples.apps.nowinandroid.core.data.di
 
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import com.google.samples.apps.nowinandroid.core.di.ApplicationScope
 import me.tatarka.inject.annotations.Provides
-
 
 abstract class PlatformDependentDataModule {
     @Provides

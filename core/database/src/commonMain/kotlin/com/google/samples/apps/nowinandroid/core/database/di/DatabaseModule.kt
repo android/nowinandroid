@@ -38,7 +38,7 @@ abstract class DatabaseModule(@Component val dispatchersComponent: DispatchersCo
 
     @Provides
     fun providesTopicsDao(
-        database: NiaDatabase
+        database: NiaDatabase,
     ): TopicDao = TopicDao(database, dispatcher)
 
     @Provides

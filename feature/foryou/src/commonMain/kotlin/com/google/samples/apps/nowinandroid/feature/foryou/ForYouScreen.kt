@@ -59,15 +59,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalContext
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -91,14 +87,12 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
-import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import nowinandroid.feature.foryou.generated.resources.Res
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_done
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_loading
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_subtitle
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_title
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -442,9 +436,9 @@ fun TopicIcon(
     )
 }
 
-//@Composable
-//@OptIn(ExperimentalPermissionsApi::class)
-//private fun NotificationPermissionEffect() {
+// @Composable
+// @OptIn(ExperimentalPermissionsApi::class)
+// private fun NotificationPermissionEffect() {
 //    // Permission requests should only be made from an Activity Context, which is not present
 //    // in previews
 //    if (LocalInspectionMode.current) return
@@ -458,7 +452,7 @@ fun TopicIcon(
 //            notificationsPermissionState.launchPermissionRequest()
 //        }
 //    }
-//}
+// }
 
 @Composable
 private fun DeepLinkEffect(

@@ -22,7 +22,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
 
 const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
 const val FOR_YOU_ROUTE = "for_you_route/{$LINKED_NEWS_RESOURCE_ID}"
