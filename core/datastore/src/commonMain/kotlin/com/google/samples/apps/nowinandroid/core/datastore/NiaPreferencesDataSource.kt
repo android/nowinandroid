@@ -15,7 +15,8 @@
  */
 
 package com.google.samples.apps.nowinandroid.core.datastore
-import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
+import com.google.samples.apps.nowinandroid.core.di.Dispatcher
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
@@ -38,7 +39,7 @@ private const val USER_DATA_KEY = "userData"
 @Inject
 class NiaPreferencesDataSource(
     private val settings: Settings,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @Dispatcher(IO) private val dispatcher: CoroutineDispatcher,
 ) {
     // FlowSettings did not support JS, use a workaround instead
     // https://github.com/russhwolf/multiplatform-settings/issues/139

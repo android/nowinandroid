@@ -36,6 +36,7 @@ import kotlin.test.assertIs
  * To learn more about how this test handles Flows created with stateIn, see
  * https://developer.android.com/kotlin/flow/test#statein
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class BookmarksViewModelTest {
     private val userDataRepository = TestUserDataRepository()
     private val newsRepository = TestNewsRepository()
@@ -71,7 +72,6 @@ class BookmarksViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun oneBookmark_whenRemoving_removesFromFeed() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }

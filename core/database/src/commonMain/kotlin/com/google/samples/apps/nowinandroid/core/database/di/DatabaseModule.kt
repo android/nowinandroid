@@ -23,15 +23,17 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
+import com.google.samples.apps.nowinandroid.core.di.Dispatcher
 import com.google.samples.apps.nowinandroid.core.di.DispatchersComponent
-import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
 import kotlinx.coroutines.CoroutineDispatcher
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
 abstract class DatabaseModule(@Component val dispatchersComponent: DispatchersComponent) {
-    @IoDispatcher abstract val dispatcher: CoroutineDispatcher
+    @Dispatcher(IO)
+    abstract val dispatcher: CoroutineDispatcher
 
     @Provides
     fun providesNiaDatabase(driver: SqlDriver): NiaDatabase = NiaDatabase(driver)

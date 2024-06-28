@@ -23,8 +23,9 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMoni
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.di.AndroidApplicationComponent
 import com.google.samples.apps.nowinandroid.core.di.CoroutineScopeComponent
+import com.google.samples.apps.nowinandroid.core.di.Dispatcher
 import com.google.samples.apps.nowinandroid.core.di.DispatchersComponent
-import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import me.tatarka.inject.annotations.Component
@@ -38,7 +39,8 @@ abstract class AndroidPlatformDependentDataModule(
 ) : PlatformDependentDataModule() {
     abstract val application: Application
 
-    @IoDispatcher abstract val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(IO)
+    abstract val ioDispatcher: CoroutineDispatcher
     abstract val coroutineScope: CoroutineScope
 
     @Provides
