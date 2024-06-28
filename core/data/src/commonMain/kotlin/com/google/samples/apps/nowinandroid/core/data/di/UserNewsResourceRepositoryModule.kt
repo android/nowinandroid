@@ -22,7 +22,7 @@ import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-internal abstract class UserNewsResourceRepositoryModule {
+abstract class UserNewsResourceRepositoryModule {
     @Provides
     fun bindsUserNewsResourceRepository(
         userDataRepository: CompositeUserNewsResourceRepository,

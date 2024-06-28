@@ -29,9 +29,9 @@ import me.tatarka.inject.annotations.Provides
  * Leave empty for now
  */
 @Component
-internal actual abstract class PlatformDependentDataModule {
+abstract class NativePlatformDependentDataModule : PlatformDependentDataModule() {
     @Provides
-    internal actual fun bindsNetworkMonitor(): NetworkMonitor {
+    override fun bindsNetworkMonitor(): NetworkMonitor {
         return object : NetworkMonitor {
             override val isOnline: Flow<Boolean>
                 get() = flowOf(true)
@@ -39,7 +39,7 @@ internal actual abstract class PlatformDependentDataModule {
     }
 
     @Provides
-    internal actual fun bindsTimeZoneMonitor(): TimeZoneMonitor {
+    override fun bindsTimeZoneMonitor(): TimeZoneMonitor {
         return object : TimeZoneMonitor {
             override val currentTimeZone: Flow<TimeZone>
                 get() = flowOf(TimeZone.UTC)
