@@ -20,14 +20,17 @@ import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNe
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.di.AndroidApplicationComponent
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-abstract class AndroidPlatformDependentDataModule: PlatformDependentDataModule() {
+abstract class AndroidPlatformDependentDataModule(
+    @Component val applicationComponent: AndroidApplicationComponent,
+): PlatformDependentDataModule() {
     @Provides
     override fun bindsNetworkMonitor(): NetworkMonitor {
-        return ConnectivityManagerNetworkMonitor()
+        return ConnectivityManagerNetworkMonitor(applicationComponent.application)
     }
 
     @Provides

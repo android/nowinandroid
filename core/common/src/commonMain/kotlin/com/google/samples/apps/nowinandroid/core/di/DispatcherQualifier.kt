@@ -16,13 +16,31 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import kotlinx.coroutines.CoroutineDispatcher
-import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Qualifier
 
-abstract class DispatchersComponent {
-    @Provides
-    abstract fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher
+@Qualifier
+@Target(
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE
+)
+annotation class IoDispatcher
 
-    @Provides
-    abstract fun providesDefaultDispatcher(): @DefaultDispatcher CoroutineDispatcher
-}
+@Qualifier
+@Target(
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE
+)
+annotation class MainDispatcher
+
+@Qualifier
+@Target(
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE
+)
+annotation class DefaultDispatcher

@@ -16,17 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-actual abstract class DispatchersComponent {
-
-    // TODO Provides an actual IODispatcher
+abstract class JvmDispatchersComponent: DispatchersComponent() {
     @Provides
-    actual fun providesIODispatcher(): IODispatcher = Dispatchers.Default
+    override fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher = Dispatchers.IO
 
     @Provides
-    actual fun providesDefaultDispatcher(): DefaultDispatcher = Dispatchers.Default
+    override fun providesDefaultDispatcher(): @DefaultDispatcher CoroutineDispatcher = Dispatchers.Default
 }
