@@ -87,7 +87,6 @@ class InterestsListDetailScreenTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        composeTestRule.activityRule
     }
 
     @Test
@@ -109,7 +108,7 @@ class InterestsListDetailScreenTest {
     }
 
     @Test
-    fun notExpandedWidth_initialState_showsListPane() {
+    fun compactWidth_initialState_showsListPane() {
         composeTestRule.apply {
             setContent {
                 with(TestDeviceConfig.Compact) {
@@ -151,7 +150,7 @@ class InterestsListDetailScreenTest {
     }
 
     @Test
-    fun notExpandedWidth_topicSelected_showsTopicDetailPane() {
+    fun compactWidth_topicSelected_showsTopicDetailPane() {
         composeTestRule.apply {
             setContent {
                 with(TestDeviceConfig.Compact) {
@@ -205,7 +204,7 @@ class InterestsListDetailScreenTest {
     }
 
     @Test
-    fun notExpandedWidth_backPressFromTopicDetail_showsListPane() {
+    fun compactWidth_backPressFromTopicDetail_showsListPane() {
         composeTestRule.apply {
             setContent {
                 with(TestDeviceConfig.Compact) {
