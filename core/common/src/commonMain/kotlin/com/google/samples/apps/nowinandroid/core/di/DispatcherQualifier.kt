@@ -23,7 +23,8 @@ import me.tatarka.inject.annotations.Qualifier
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE
+    AnnotationTarget.TYPE,
+     AnnotationTarget.PROPERTY
 )
 annotation class IoDispatcher
 
@@ -32,7 +33,8 @@ annotation class IoDispatcher
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE
+    AnnotationTarget.TYPE,
+    AnnotationTarget.PROPERTY
 )
 annotation class MainDispatcher
 
@@ -41,6 +43,7 @@ annotation class MainDispatcher
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE
+    AnnotationTarget.TYPE,
+    AnnotationTarget.PROPERTY
 )
 annotation class DefaultDispatcher
