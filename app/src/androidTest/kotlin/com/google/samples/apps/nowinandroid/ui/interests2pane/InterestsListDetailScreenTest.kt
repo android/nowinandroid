@@ -74,12 +74,13 @@ class InterestsListDetailScreenTest {
     // Overrides for device sizes.
     private enum class TestDeviceConfig(widthDp: Float, heightDp: Float) {
         Compact(412f, 915f),
-        Expanded(1200f, 840f);
+        Expanded(1200f, 840f),
+        ;
 
         val sizeOverride = DeviceConfigurationOverride.ForcedSize(DpSize(widthDp.dp, heightDp.dp))
         val adaptiveInfo = WindowAdaptiveInfo(
             windowSizeClass = WindowSizeClass.compute(widthDp, heightDp),
-            windowPosture = Posture()
+            windowPosture = Posture(),
         )
     }
 
