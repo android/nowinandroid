@@ -23,7 +23,7 @@ import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.tracing.trace
-import com.google.samples.apps.nowinandroid.core.di.IODispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharedFlow
@@ -42,7 +42,7 @@ import java.time.ZoneId
 internal class TimeZoneBroadcastMonitor(
     private val context: Context,
     appScope: CoroutineScope,
-    private val ioDispatcher: IODispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : TimeZoneMonitor {
 
     override val currentTimeZone: SharedFlow<TimeZone> =

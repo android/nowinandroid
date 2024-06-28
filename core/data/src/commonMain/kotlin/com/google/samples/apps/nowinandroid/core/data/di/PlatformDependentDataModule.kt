@@ -21,14 +21,11 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.di.ApplicationScope
 import me.tatarka.inject.annotations.Provides
 
-@ApplicationScope
-abstract class PlatformDependentDataModule {
 
-    @ApplicationScope
+abstract class PlatformDependentDataModule {
     @Provides
     abstract fun bindsNetworkMonitor(): NetworkMonitor
 
-    @ApplicationScope
     @Provides
     abstract fun bindsTimeZoneMonitor(): TimeZoneMonitor
 }

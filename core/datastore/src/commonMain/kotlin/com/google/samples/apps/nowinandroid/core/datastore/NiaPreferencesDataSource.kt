@@ -15,8 +15,7 @@
  */
 
 package com.google.samples.apps.nowinandroid.core.datastore
-
-import com.google.samples.apps.nowinandroid.core.di.IODispatcher
+import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
@@ -25,6 +24,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.decodeValueOrNull
 import com.russhwolf.settings.serialization.encodeValue
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -38,7 +38,7 @@ private const val USER_DATA_KEY = "userData"
 @Inject
 class NiaPreferencesDataSource(
     private val settings: Settings,
-    private val dispatcher: IODispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) {
     // FlowSettings did not support JS, use a workaround instead
     // https://github.com/russhwolf/multiplatform-settings/issues/139
