@@ -17,8 +17,10 @@
 package com.google.samples.apps.nowinandroid.core.di
 
 import me.tatarka.inject.annotations.Qualifier
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Qualifier
+@Retention(RUNTIME)
 @Target(
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.FUNCTION,
@@ -26,24 +28,10 @@ import me.tatarka.inject.annotations.Qualifier
     AnnotationTarget.TYPE,
     AnnotationTarget.PROPERTY,
 )
-annotation class IoDispatcher
+annotation class Dispatcher(val dispatcher: NiaDispatchers)
 
-@Qualifier
-@Target(
-    AnnotationTarget.PROPERTY_GETTER,
-    AnnotationTarget.FUNCTION,
-    AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE,
-    AnnotationTarget.PROPERTY,
-)
-annotation class MainDispatcher
-
-@Qualifier
-@Target(
-    AnnotationTarget.PROPERTY_GETTER,
-    AnnotationTarget.FUNCTION,
-    AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE,
-    AnnotationTarget.PROPERTY,
-)
-annotation class DefaultDispatcher
+enum class NiaDispatchers {
+    IO,
+    DEFAULT,
+    MAIN,
+}

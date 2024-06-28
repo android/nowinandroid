@@ -16,13 +16,26 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.DEFAULT
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.MAIN
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.IO
 import me.tatarka.inject.annotations.Provides
 
 abstract class DispatchersComponent {
     @Provides
-    abstract fun providesIODispatcher(): @IoDispatcher CoroutineDispatcher
+    abstract fun providesIODispatcher():
+        @Dispatcher(IO)
+        CoroutineDispatcher
 
     @Provides
-    abstract fun providesDefaultDispatcher(): @DefaultDispatcher CoroutineDispatcher
+    abstract fun providesDefaultDispatcher():
+        @Dispatcher(DEFAULT)
+        CoroutineDispatcher
+
+    @Provides
+    abstract fun providesMainDispatcher():
+        @Dispatcher(MAIN)
+        CoroutineDispatcher
 }

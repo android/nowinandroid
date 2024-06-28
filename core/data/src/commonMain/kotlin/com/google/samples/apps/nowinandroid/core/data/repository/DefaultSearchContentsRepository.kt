@@ -23,7 +23,8 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
-import com.google.samples.apps.nowinandroid.core.di.IoDispatcher
+import com.google.samples.apps.nowinandroid.core.di.Dispatcher
+import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,7 +44,7 @@ class DefaultSearchContentsRepository(
     private val newsResourceFtsDao: NewsResourceFtsDao,
     private val topicDao: TopicDao,
     private val topicFtsDao: TopicFtsDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SearchContentsRepository {
 
     override suspend fun populateFtsData() {
