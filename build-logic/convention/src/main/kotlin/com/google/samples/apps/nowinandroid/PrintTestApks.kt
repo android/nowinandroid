@@ -54,7 +54,7 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
             if (artifact != null && testSources != null) {
                 tasks.register(
                     "${variant.name}PrintTestApk",
-                    PrintApkLocationTask::class.java
+                    PrintApkLocationTask::class.java,
                 ) {
                     apkFolder = artifact
                     builtArtifactsLoader = loader
