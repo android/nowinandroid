@@ -214,8 +214,8 @@ com.google.guava:failureaccess:1.0.1
 com.google.guava:guava:31.1-android
 com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.google.j2objc:j2objc-annotations:1.3
-com.google.protobuf:protobuf-javalite:4.27.1
-com.google.protobuf:protobuf-kotlin-lite:4.27.1
+com.google.protobuf:protobuf-javalite:4.27.2
+com.google.protobuf:protobuf-kotlin-lite:4.27.2
 com.russhwolf:multiplatform-settings-android:1.1.1
 com.russhwolf:multiplatform-settings-coroutines-android:1.1.1
 com.russhwolf:multiplatform-settings-coroutines:1.1.1
