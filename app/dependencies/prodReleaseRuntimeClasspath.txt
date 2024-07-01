@@ -49,6 +49,7 @@ androidx.compose.ui:ui-geometry-android:1.7.0-beta03
 androidx.compose.ui:ui-geometry:1.7.0-beta03
 androidx.compose.ui:ui-graphics-android:1.7.0-beta03
 androidx.compose.ui:ui-graphics:1.7.0-beta03
+androidx.compose.ui:ui-test-manifest:1.7.0-beta03
 androidx.compose.ui:ui-text-android:1.7.0-beta03
 androidx.compose.ui:ui-text:1.7.0-beta03
 androidx.compose.ui:ui-tooling-preview-android:1.7.0-beta03
@@ -106,6 +107,7 @@ androidx.lifecycle:lifecycle-viewmodel:2.8.2
 androidx.loader:loader:1.0.0
 androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
 androidx.metrics:metrics-performance:1.0.0-beta01
+androidx.multidex:multidex:2.0.1
 androidx.navigation:navigation-common-ktx:2.8.0-beta03
 androidx.navigation:navigation-common:2.8.0-beta03
 androidx.navigation:navigation-compose:2.8.0-beta03
@@ -124,6 +126,12 @@ androidx.savedstate:savedstate:1.2.1
 androidx.sqlite:sqlite-framework:2.4.0
 androidx.sqlite:sqlite:2.4.0
 androidx.startup:startup-runtime:1.1.1
+androidx.test.services:storage:1.4.2
+androidx.test:annotation:1.0.1
+androidx.test:core:1.4.0
+androidx.test:monitor:1.6.0
+androidx.test:rules:1.5.0
+androidx.test:runner:1.5.0
 androidx.tracing:tracing-ktx:1.3.0-alpha02
 androidx.tracing:tracing-perfetto:1.0.0
 androidx.tracing:tracing:1.3.0-alpha02
@@ -172,6 +180,7 @@ com.google.android.gms:play-services-tasks:18.2.0
 com.google.code.findbugs:jsr305:3.0.2
 com.google.dagger:dagger-lint-aar:2.51.1
 com.google.dagger:dagger:2.51.1
+com.google.dagger:hilt-android-testing:2.51.1
 com.google.dagger:hilt-android:2.51.1
 com.google.dagger:hilt-core:2.51.1
 com.google.errorprone:error_prone_annotations:2.26.0
@@ -278,9 +287,11 @@ io.ktor:ktor-websocket-serialization:2.3.12
 io.ktor:ktor-websockets-jvm:2.3.12
 io.ktor:ktor-websockets:2.3.12
 javax.inject:javax.inject:1
+junit:junit:4.13.2
 me.tatarka.inject:kotlin-inject-runtime-jvm:0.7.1
 me.tatarka.inject:kotlin-inject-runtime:0.7.1
 org.checkerframework:checker-qual:3.12.0
+org.hamcrest:hamcrest-core:1.3
 org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0
 org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07
 org.jetbrains.compose.components:components-resources-android:1.6.11
@@ -298,6 +309,7 @@ org.jetbrains.kotlin:kotlin-stdlib-common:2.0.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22
 org.jetbrains.kotlin:kotlin-stdlib:2.0.0
+org.jetbrains.kotlin:kotlin-test:2.0.0
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1
@@ -306,12 +318,14 @@ org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.1
+org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1
+org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1
 org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.0
 org.jetbrains.kotlinx:kotlinx-datetime:0.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0
+org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1
 org.jetbrains:annotations:23.0.0
 org.slf4j:slf4j-api:1.7.36
