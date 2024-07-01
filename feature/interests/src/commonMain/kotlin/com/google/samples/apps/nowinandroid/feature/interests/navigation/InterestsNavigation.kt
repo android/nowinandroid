@@ -22,7 +22,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
 const val TOPIC_ID_ARG = "topicId"
 const val INTERESTS_ROUTE_BASE = "interests_route"
@@ -50,6 +49,6 @@ fun NavGraphBuilder.interestsScreen(
             },
         ),
     ) {
-        InterestsRoute(onTopicClick = onTopicClick)
+//        InterestsRoute(onTopicClick = onTopicClick)
     }
 }
