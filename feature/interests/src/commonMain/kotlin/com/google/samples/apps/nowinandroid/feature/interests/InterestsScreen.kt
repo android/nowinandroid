@@ -22,10 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -33,13 +29,19 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
+import nowinandroid.feature.interests.generated.resources.Res
+import nowinandroid.feature.interests.generated.resources.feature_interests_empty_header
+import nowinandroid.feature.interests.generated.resources.feature_interests_loading
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 fun InterestsRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     highlightSelectedTopic: Boolean = false,
-    viewModel: InterestsViewModel = hiltViewModel(),
+    viewModel: InterestsViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -71,7 +73,7 @@ internal fun InterestsScreen(
             InterestsUiState.Loading ->
                 NiaLoadingWheel(
                     modifier = modifier,
-                    contentDesc = stringResource(id = R.string.feature_interests_loading),
+                    contentDesc = stringResource(Res.string.feature_interests_loading),
                 )
 
             is InterestsUiState.Interests ->
@@ -92,7 +94,7 @@ internal fun InterestsScreen(
 
 @Composable
 private fun InterestsEmptyScreen() {
-    Text(text = stringResource(id = R.string.feature_interests_empty_header))
+    Text(text = stringResource(Res.string.feature_interests_empty_header))
 }
 
 @DevicePreviews
