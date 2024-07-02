@@ -29,15 +29,11 @@ import androidx.test.uiautomator.HasChildrenOp.EXACTLY
 fun untilHasChildren(
     childCount: Int = 1,
     op: HasChildrenOp = AT_LEAST,
-): UiObject2Condition<Boolean> {
-    return object : UiObject2Condition<Boolean>() {
-        override fun apply(element: UiObject2): Boolean {
-            return when (op) {
-                AT_LEAST -> element.childCount >= childCount
-                EXACTLY -> element.childCount == childCount
-                AT_MOST -> element.childCount <= childCount
-            }
-        }
+): UiObject2Condition<Boolean> = object : UiObject2Condition<Boolean>() {
+    override fun apply(element: UiObject2): Boolean = when (op) {
+        AT_LEAST -> element.childCount >= childCount
+        EXACTLY -> element.childCount == childCount
+        AT_MOST -> element.childCount <= childCount
     }
 }
 

@@ -103,9 +103,7 @@ class NiaPreferencesDataSource @Inject constructor(
 
     suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
         userPreferences.updateData {
-            it.copy {
-                this.useDynamicColor = useDynamicColor
-            }
+            it.copy { this.useDynamicColor = useDynamicColor }
         }
     }
 
@@ -190,9 +188,7 @@ class NiaPreferencesDataSource @Inject constructor(
 
     suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         userPreferences.updateData {
-            it.copy {
-                this.shouldHideOnboarding = shouldHideOnboarding
-            }
+            it.copy { this.shouldHideOnboarding = shouldHideOnboarding }
         }
     }
 }

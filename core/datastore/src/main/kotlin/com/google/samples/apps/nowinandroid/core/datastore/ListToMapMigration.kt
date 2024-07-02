@@ -52,7 +52,6 @@ internal object ListToMapMigration : DataMigration<UserPreferences> {
             hasDoneListToMapMigration = true
         }
 
-    override suspend fun shouldMigrate(currentData: UserPreferences): Boolean {
-        return !currentData.hasDoneListToMapMigration
-    }
+    override suspend fun shouldMigrate(currentData: UserPreferences): Boolean =
+        !currentData.hasDoneListToMapMigration
 }

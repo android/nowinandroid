@@ -17,11 +17,12 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import android.content.Context
+import androidx.tracing.trace
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.util.DebugLogger
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
-import com.google.samples.apps.nowinandroid.core.network.fake.FakeAssetManager
+import com.google.samples.apps.nowinandroid.core.network.demo.DemoAssetManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,22 +46,24 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesFakeAssetManager(
+    fun providesDemoAssetManager(
         @ApplicationContext context: Context,
-    ): FakeAssetManager = FakeAssetManager(context.assets::open)
+    ): DemoAssetManager = DemoAssetManager(context.assets::open)
 
     @Provides
     @Singleton
-    fun okHttpCallFactory(): Call.Factory = OkHttpClient.Builder()
-        .addInterceptor(
-            HttpLoggingInterceptor()
-                .apply {
-                    if (BuildConfig.DEBUG) {
-                        setLevel(HttpLoggingInterceptor.Level.BODY)
-                    }
-                },
-        )
-        .build()
+    fun okHttpCallFactory(): Call.Factory = trace("NiaOkHttpClient") {
+        OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor()
+                    .apply {
+                        if (BuildConfig.DEBUG) {
+                            setLevel(HttpLoggingInterceptor.Level.BODY)
+                        }
+                    },
+            )
+            .build()
+    }
 
     /**
      * Since we're displaying SVGs in the app, Coil needs an ImageLoader which supports this
@@ -72,20 +75,21 @@ internal object NetworkModule {
     @Provides
     @Singleton
     fun imageLoader(
-        okHttpCallFactory: Call.Factory,
+        // We specifically request dagger.Lazy here, so that it's not instantiated from Dagger.
+        okHttpCallFactory: dagger.Lazy<Call.Factory>,
         @ApplicationContext application: Context,
-    ): ImageLoader = ImageLoader.Builder(application)
-        .callFactory(okHttpCallFactory)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        // Assume most content images are versioned urls
-        // but some problematic images are fetching each time
-        .respectCacheHeaders(false)
-        .apply {
-            if (BuildConfig.DEBUG) {
-                logger(DebugLogger())
+    ): ImageLoader = trace("NiaImageLoader") {
+        ImageLoader.Builder(application)
+            .callFactory { okHttpCallFactory.get() }
+            .components { add(SvgDecoder.Factory()) }
+            // Assume most content images are versioned urls
+            // but some problematic images are fetching each time
+            .respectCacheHeaders(false)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    logger(DebugLogger())
+                }
             }
-        }
-        .build()
+            .build()
+    }
 }

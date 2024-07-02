@@ -33,6 +33,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.assign
 import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
@@ -53,12 +54,12 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
             if (artifact != null && testSources != null) {
                 tasks.register(
                     "${variant.name}PrintTestApk",
-                    PrintApkLocationTask::class.java
+                    PrintApkLocationTask::class.java,
                 ) {
-                    apkFolder.set(artifact)
-                    builtArtifactsLoader.set(loader)
-                    variantName.set(variant.name)
-                    sources.set(testSources)
+                    apkFolder = artifact
+                    builtArtifactsLoader = loader
+                    variantName = variant.name
+                    sources = testSources
                 }
             }
         }
@@ -86,14 +87,12 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
     fun taskAction() {
         val hasFiles = sources.orNull?.any { directory ->
             directory.asFileTree.files.any {
-                it.isFile && it.parentFile.path.contains("build${File.separator}generated").not()
+                it.isFile && "build${File.separator}generated" !in it.parentFile.path
             }
         } ?: throw RuntimeException("Cannot check androidTest sources")
 
         // Don't print APK location if there are no androidTest source files
-        if (!hasFiles) {
-            return
-        }
+        if (!hasFiles) return
 
         val builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
             ?: throw RuntimeException("Cannot load APKs")

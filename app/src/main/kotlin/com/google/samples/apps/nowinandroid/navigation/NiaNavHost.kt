@@ -22,12 +22,11 @@ import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsGraph
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
+import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -49,24 +48,16 @@ fun NiaNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToTopic)
+        forYouScreen(onTopicClick = navController::navigateToInterests)
         bookmarksScreen(
-            onTopicClick = navController::navigateToTopic,
+            onTopicClick = navController::navigateToInterests,
             onShowSnackbar = onShowSnackbar,
         )
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = navController::navigateToTopic,
+            onTopicClick = navController::navigateToInterests,
         )
-        interestsGraph(
-            onTopicClick = navController::navigateToTopic,
-            nestedGraphs = {
-                topicScreen(
-                    onBackClick = navController::popBackStack,
-                    onTopicClick = navController::navigateToTopic,
-                )
-            },
-        )
+        interestsListDetailScreen()
     }
 }
