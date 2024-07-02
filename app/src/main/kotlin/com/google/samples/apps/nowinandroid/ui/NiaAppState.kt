@@ -37,6 +37,7 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigat
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE_BASE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -145,17 +146,23 @@ class NiaAppState(
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {
             val topLevelNavOptions = navOptions {
+                val startDestination = navController.graph.findStartDestination()
+                // Avoid popUpTo and navigate to same screen.
+                val shouldNotSavedAndRestored = isStartDestinationSameWithNextDestination(
+                    startDestination, topLevelDestination
+                ) ?: false
                 // Pop up to the start destination of the graph to
                 // avoid building up a large stack of destinations
                 // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                popUpTo(startDestination.id) {
+                    saveState = !shouldNotSavedAndRestored
                 }
+
                 // Avoid multiple copies of the same destination when
                 // reselecting the same item
                 launchSingleTop = true
                 // Restore state when reselecting a previously selected item
-                restoreState = true
+                restoreState = !shouldNotSavedAndRestored
             }
 
             when (topLevelDestination) {
@@ -165,6 +172,18 @@ class NiaAppState(
             }
         }
     }
+
+    /**
+     * Check if next destination is same with start destination of current graph.
+     */
+    private fun isStartDestinationSameWithNextDestination(
+        startDestination: NavDestination,
+        nextDestination: TopLevelDestination,
+    ): Boolean? = startDestination.route?.equals(when(nextDestination) {
+        FOR_YOU -> FOR_YOU_ROUTE
+        BOOKMARKS -> BOOKMARKS_ROUTE
+        INTERESTS -> INTERESTS_ROUTE_BASE
+    })
 
     fun navigateToSearch() = navController.navigateToSearch()
 }
