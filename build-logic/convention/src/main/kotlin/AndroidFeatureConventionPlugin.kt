@@ -26,8 +26,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("nowinandroid.android.library")
-                apply("nowinandroid.android.hilt")
+                apply(libs.findPlugin("nowinandroid.android.library").get().get().pluginId)
+                apply(libs.findPlugin("nowinandroid.android.hilt").get().get().pluginId)
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
