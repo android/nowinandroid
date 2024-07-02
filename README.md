@@ -122,9 +122,9 @@ tests against _all_ build variants which is both unecessary and will result in f
 A screenshot test takes a screenshot of a screen or a UI component within the app, and compares it 
 with a previously recorded screenshot which is known to be rendered correctly. 
 
-For example, Now in Android has [screenshot tests](https://github.com/android/nowinandroid/blob/main/app/src/testDemoDebug/kotlin/com/google/samples/apps/nowinandroid/ui/NiaAppScreenSizesScreenshotTests.kt)
+For example, Now in Android has [screenshot tests](https://github.com/android/nowinandroid/blob/main/app/src/testDemo/kotlin/com/google/samples/apps/nowinandroid/ui/NiaAppScreenSizesScreenshotTests.kt)
 to verify that the navigation is displayed correctly on different screen sizes 
-([known correct screenshots](https://github.com/android/nowinandroid/tree/main/app/src/testDemoDebug/screenshots)). 
+([known correct screenshots](https://github.com/android/nowinandroid/tree/main/app/src/testDemo/screenshots)). 
 
 Now In Android uses [Roborazzi](https://github.com/takahirom/roborazzi) to run screenshot tests
 of certain screens and UI components. When working with screenshot tests the following gradle tasks are useful:

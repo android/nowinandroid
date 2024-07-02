@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
@@ -44,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -70,19 +72,21 @@ import com.google.samples.apps.nowinandroid.feature.topic.R.string
 
 @Composable
 internal fun TopicRoute(
+    showBackButton: Boolean,
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
 ) {
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
-    val newsUiState: NewsUiState by viewModel.newUiState.collectAsStateWithLifecycle()
+    val newsUiState: NewsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
 
     TrackScreenViewEvent(screenName = "Topic: ${viewModel.topicId}")
     TopicScreen(
         topicUiState = topicUiState,
         newsUiState = newsUiState,
-        modifier = modifier,
+        modifier = modifier.testTag("topic:${viewModel.topicId}"),
+        showBackButton = showBackButton,
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,
         onBookmarkChanged = viewModel::bookmarkNews,
@@ -96,6 +100,7 @@ internal fun TopicRoute(
 internal fun TopicScreen(
     topicUiState: TopicUiState,
     newsUiState: NewsUiState,
+    showBackButton: Boolean,
     onBackClick: () -> Unit,
     onFollowClick: (Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
@@ -127,6 +132,7 @@ internal fun TopicScreen(
                 is TopicUiState.Success -> {
                     item {
                         TopicToolbar(
+                            showBackButton = showBackButton,
                             onBackClick = onBackClick,
                             onFollowClick = onFollowClick,
                             uiState = topicUiState.followableTopic,
@@ -270,6 +276,7 @@ private fun TopicBodyPreview() {
 private fun TopicToolbar(
     uiState: FollowableTopic,
     modifier: Modifier = Modifier,
+    showBackButton: Boolean = true,
     onBackClick: () -> Unit = {},
     onFollowClick: (Boolean) -> Unit = {},
 ) {
@@ -280,13 +287,18 @@ private fun TopicToolbar(
             .fillMaxWidth()
             .padding(bottom = 32.dp),
     ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(
-                imageVector = NiaIcons.ArrowBack,
-                contentDescription = stringResource(
-                    id = com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_back,
-                ),
-            )
+        if (showBackButton) {
+            IconButton(onClick = { onBackClick() }) {
+                Icon(
+                    imageVector = NiaIcons.ArrowBack,
+                    contentDescription = stringResource(
+                        id = com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_back,
+                    ),
+                )
+            }
+        } else {
+            // Keeps the NiaFilterChip aligned to the end of the Row.
+            Spacer(modifier = Modifier.width(1.dp))
         }
         val selected = uiState.isFollowed
         NiaFilterChip(
@@ -314,6 +326,7 @@ fun TopicScreenPopulated(
             TopicScreen(
                 topicUiState = TopicUiState.Success(userNewsResources[0].followableTopics[0]),
                 newsUiState = NewsUiState.Success(userNewsResources),
+                showBackButton = true,
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
@@ -332,6 +345,7 @@ fun TopicScreenLoading() {
             TopicScreen(
                 topicUiState = TopicUiState.Loading,
                 newsUiState = NewsUiState.Loading,
+                showBackButton = true,
                 onBackClick = {},
                 onFollowClick = {},
                 onBookmarkChanged = { _, _ -> },
