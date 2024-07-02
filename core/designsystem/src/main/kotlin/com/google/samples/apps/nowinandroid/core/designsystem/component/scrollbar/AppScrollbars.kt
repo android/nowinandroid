@@ -75,10 +75,10 @@ private const val SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS = 2_000L
  */
 @Composable
 fun ScrollableState.DraggableScrollbar(
-    modifier: Modifier = Modifier,
     state: ScrollbarState,
     orientation: Orientation,
     onThumbMoved: (Float) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Scrollbar(
@@ -105,9 +105,9 @@ fun ScrollableState.DraggableScrollbar(
  */
 @Composable
 fun ScrollableState.DecorativeScrollbar(
-    modifier: Modifier = Modifier,
     state: ScrollbarState,
     orientation: Orientation,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Scrollbar(

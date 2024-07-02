@@ -195,13 +195,13 @@ internal fun Orientation.valueOf(intOffset: IntOffset) = when (this) {
  */
 @Composable
 fun Scrollbar(
-    modifier: Modifier = Modifier,
     orientation: Orientation,
     state: ScrollbarState,
-    minThumbSize: Dp = 40.dp,
+    modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource? = null,
-    thumb: @Composable () -> Unit,
+    minThumbSize: Dp = 40.dp,
     onThumbMoved: ((Float) -> Unit)? = null,
+    thumb: @Composable () -> Unit,
 ) {
     // Using Offset.Unspecified and Float.NaN instead of null
     // to prevent unnecessary boxing of primitives

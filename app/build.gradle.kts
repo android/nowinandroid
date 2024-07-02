@@ -21,7 +21,6 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.flavors)
     alias(libs.plugins.nowinandroid.android.application.jacoco)
     alias(libs.plugins.nowinandroid.android.hilt)
-    id("jacoco")
     alias(libs.plugins.nowinandroid.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
@@ -45,7 +44,7 @@ android {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
-        val release = getByName("release") {
+        release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -53,20 +52,9 @@ android {
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.named("debug").get()
             // Ensure Baseline Profile is fresh for release builds.
             baselineProfile.automaticGenerationDuringBuild = true
-        }
-        create("benchmark") {
-            // Enable all the optimizations from release build through initWith(release).
-            initWith(release)
-            matchingFallbacks.add("release")
-            // Debug key signing is available to everyone.
-            signingConfig = signingConfigs.getByName("debug")
-            // Only use benchmark proguard rules
-            proguardFiles("benchmark-rules.pro")
-            isMinifyEnabled = true
-            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
         }
     }
 
@@ -100,15 +88,23 @@ dependencies {
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+
+    ksp(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(projects.uiTestHiltManifest)
@@ -117,18 +113,21 @@ dependencies {
 
     testImplementation(projects.core.dataTest)
     testImplementation(projects.core.testing)
-    testImplementation(libs.accompanist.testharness)
+    testImplementation(projects.sync.syncTest)
+    testImplementation(libs.androidx.compose.ui.test)
+    testImplementation(libs.androidx.work.testing)
     testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.work.testing)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
+    testDemoImplementation(projects.core.screenshotTesting)
 
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.accompanist.testharness)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
     baselineProfile(projects.benchmarks)
