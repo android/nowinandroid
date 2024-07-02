@@ -85,7 +85,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.analytics)
-    implementation(projects.sync.work)
+    implementation(projects.sync)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)
@@ -105,30 +105,32 @@ dependencies {
     implementation(libs.coil.kt)
 
     ksp(libs.hilt.compiler)
+    kspTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(projects.uiTestHiltManifest)
 
-    kspTest(libs.hilt.compiler)
-
-    testImplementation(projects.core.dataTest)
     testImplementation(projects.core.testing)
-    testImplementation(projects.sync.syncTest)
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.androidx.work.testing)
     testImplementation(libs.hilt.android.testing)
+    testImplementation(testFixtures(projects.core.data))
+    testImplementation(testFixtures(projects.sync))
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
     testDemoImplementation(projects.core.screenshotTesting)
+    testDemoImplementation(testFixtures(projects.core.data))
 
     androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.dataTest)
-    androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(testFixtures(projects.core.data))
+    androidTestImplementation(testFixtures(projects.core.datastore))
+    androidTestImplementation(testFixtures(projects.sync))
 
     baselineProfile(projects.benchmarks)
 }

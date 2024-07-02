@@ -18,14 +18,14 @@ package com.google.samples.apps.nowinandroid.feature.search
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.analytics.NoOpAnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.data.repository.TestRecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TestSearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
-import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
-import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestSearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
+import com.google.samples.apps.nowinandroid.core.model.data.newsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.model.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery

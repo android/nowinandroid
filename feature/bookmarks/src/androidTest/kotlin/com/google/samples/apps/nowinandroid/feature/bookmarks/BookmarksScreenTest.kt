@@ -34,7 +34,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.testing.TestLifecycleOwner
-import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.model.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

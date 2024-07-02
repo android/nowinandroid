@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.datastore.di.testUserPreferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

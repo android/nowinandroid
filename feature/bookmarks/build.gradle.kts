@@ -28,6 +28,9 @@ dependencies {
     implementation(projects.core.data)
 
     testImplementation(projects.core.testing)
+    testImplementation(testFixtures(projects.core.data))
+    testImplementation(testFixtures(projects.core.model))
 
     androidTestImplementation(projects.core.testing)
+    androidTestImplementation(testFixtures(projects.core.model))
 }

@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.javax.inject)
 
     testImplementation(projects.core.testing)
+    testImplementation(testFixtures(projects.core.data))
 }

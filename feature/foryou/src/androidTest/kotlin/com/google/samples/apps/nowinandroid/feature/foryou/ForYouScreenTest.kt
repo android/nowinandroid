@@ -28,9 +28,9 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
+import com.google.samples.apps.nowinandroid.core.model.data.followableTopicTestData
+import com.google.samples.apps.nowinandroid.core.model.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
-import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
-import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import org.junit.Rule
 import org.junit.Test

@@ -37,4 +37,5 @@ dependencies {
     implementation(libs.coil.kt.compose)
 
     androidTestImplementation(projects.core.testing)
+    androidTestImplementation(testFixtures(projects.core.model))
 }
