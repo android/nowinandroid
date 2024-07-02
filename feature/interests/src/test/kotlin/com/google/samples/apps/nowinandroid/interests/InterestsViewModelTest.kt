@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
+import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -24,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -53,6 +55,7 @@ class InterestsViewModelTest {
     @Before
     fun setup() {
         viewModel = InterestsViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(TOPIC_ID_ARG to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
         )
@@ -93,7 +96,10 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testOutputTopics),
+            InterestsUiState.Interests(
+                topics = testOutputTopics,
+                selectedTopicId = testInputTopics[0].topic.id,
+            ),
             viewModel.uiState.value,
         )
 
@@ -123,7 +129,10 @@ class InterestsViewModelTest {
         )
 
         assertEquals(
-            InterestsUiState.Interests(topics = testInputTopics),
+            InterestsUiState.Interests(
+                topics = testInputTopics,
+                selectedTopicId = testInputTopics[0].topic.id,
+            ),
             viewModel.uiState.value,
         )
 

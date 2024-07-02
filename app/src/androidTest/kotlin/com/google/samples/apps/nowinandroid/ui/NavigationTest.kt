@@ -20,7 +20,6 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -225,12 +224,7 @@ class NavigationTest {
             onNodeWithText(ok).performClick()
 
             // Check that the saved screen is still visible and selected.
-            onNode(
-                hasText(saved) and
-                    hasAnyAncestor(
-                        hasTestTag("NiaBottomBar") or hasTestTag("NiaNavRail"),
-                    ),
-            ).assertIsSelected()
+            onNode(hasText(saved) and hasTestTag("NiaNavItem")).assertIsSelected()
         }
     }
 
@@ -274,10 +268,10 @@ class NavigationTest {
 
             // Select the last topic
             val topic = runBlocking {
-                topicsRepository.getTopics().first().sortedBy(Topic::name).last().name
+                topicsRepository.getTopics().first().sortedBy(Topic::name).last()
             }
-            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic))
-            onNodeWithText(topic).performClick()
+            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic.name))
+            onNodeWithText(topic.name).performClick()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
@@ -285,8 +279,8 @@ class NavigationTest {
             // Come back to Interests
             onNodeWithText(interests).performClick()
 
-            // Verify we're not in the list of interests
-            onNodeWithTag("interests:topics").assertDoesNotExist()
+            // Verify the topic is still shown
+            onNodeWithTag("topic:${topic.id}").assertExists()
         }
     }
 }
