@@ -1,23 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="205pt" height="116pt" viewBox="0.00 0.00 204.88 116.00">
-  <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
-    <title>G</title>
-    <polygon fill="white" stroke="none" points="-4,4 -4,-112 200.88,-112 200.88,4 -4,4"/>
-    <g id="node1" class="node">
-      <title>:core:screenshot-testing</title>
-      <ellipse fill="none" stroke="black" cx="98.44" cy="-90" rx="98.44" ry="18"/>
-      <text text-anchor="middle" x="98.44" y="-84.95" font-family="Times,serif" font-size="14.00">:core:screenshot-testing</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="284" height="116pt" viewBox="0 0 213.49 116">
+    <g class="graph">
+        <path fill="#fff" d="M0 116V0h213.49v116z"/>
+        <g class="node" transform="translate(4 112)">
+            <ellipse cx="102.74" cy="-90" fill="none" stroke="#000" rx="102.74" ry="18"/>
+            <text x="102.74" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">:core:screenshot-testing</text>
+        </g>
+        <g class="node" transform="translate(4 112)">
+            <ellipse cx="102.74" cy="-18" fill="none" stroke="#000" rx="85.06" ry="18"/>
+            <text x="102.74" y="-13.8" font-family="Times,serif" font-size="14" text-anchor="middle">:core:designsystem</text>
+        </g>
+        <g stroke="red" stroke-width="2" class="edge">
+            <path fill="none" d="M106.74 40.3v24.16"/>
+            <path fill="red" d="m110.24 62.87-3.5 10-3.5-10z"/>
+        </g>
     </g>
-    <g id="node2" class="node">
-      <title>:core:designsystem</title>
-      <ellipse fill="none" stroke="black" cx="98.44" cy="-18" rx="82.06" ry="18"/>
-      <text text-anchor="middle" x="98.44" y="-12.95" font-family="Times,serif" font-size="14.00">:core:designsystem</text>
-    </g>
-    <g id="edge1" class="edge">
-      <title>:core:screenshot-testing-&gt;:core:designsystem</title>
-      <path fill="none" stroke="red" stroke-width="2" d="M98.44,-71.7C98.44,-64.41 98.44,-55.73 98.44,-47.54"/>
-      <polygon fill="red" stroke="red" stroke-width="2" points="101.94,-49.13 98.44,-39.13 94.94,-49.13 101.94,-49.13"/>
-    </g>
-  </g>
 </svg>
