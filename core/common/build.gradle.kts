@@ -15,7 +15,7 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.nowinandroid.android.jacoco)
     alias(libs.plugins.nowinandroid.android.hilt)
 }
 

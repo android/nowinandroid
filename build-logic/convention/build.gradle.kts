@@ -15,7 +15,6 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
@@ -57,21 +56,17 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "nowinandroid.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        register("androidCompose") {
+            id = "nowinandroid.android.compose"
+            implementationClass = "AndroidComposeConventionPlugin"
         }
         register("androidApplication") {
             id = "nowinandroid.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationJacoco") {
-            id = "nowinandroid.android.application.jacoco"
-            implementationClass = "AndroidApplicationJacocoConventionPlugin"
-        }
-        register("androidLibraryCompose") {
-            id = "nowinandroid.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("androidJacoco") {
+            id = "nowinandroid.android.jacoco"
+            implementationClass = "AndroidJacocoConventionPlugin"
         }
         register("androidLibrary") {
             id = "nowinandroid.android.library"
@@ -80,10 +75,6 @@ gradlePlugin {
         register("androidFeature") {
             id = "nowinandroid.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
-        }
-        register("androidLibraryJacoco") {
-            id = "nowinandroid.android.library.jacoco"
-            implementationClass = "AndroidLibraryJacocoConventionPlugin"
         }
         register("androidTest") {
             id = "nowinandroid.android.test"
