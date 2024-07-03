@@ -68,6 +68,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
+import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -121,8 +122,7 @@ class SnackbarInsetsScreenshotTests {
     @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
+    private lateinit var networkMonitor: NetworkMonitor
 
     @Inject
     lateinit var timeZoneMonitor: TimeZoneMonitor
@@ -139,6 +139,9 @@ class SnackbarInsetsScreenshotTests {
     @Before
     fun setup() {
         hiltRule.inject()
+
+        // Set network connection to offline
+        networkMonitor = TestNetworkMonitor().apply { setConnected(false) }
 
         // Configure user data
         runBlocking {
