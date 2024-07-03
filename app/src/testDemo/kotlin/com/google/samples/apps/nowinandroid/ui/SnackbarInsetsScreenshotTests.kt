@@ -134,8 +134,8 @@ class SnackbarInsetsScreenshotTests {
     fun setup() {
         hiltRule.inject()
 
-        // Set network connection to offline
-        networkMonitor = TestNetworkMonitor().apply { setConnected(false) }
+        // Set network connection to online
+        networkMonitor = TestNetworkMonitor().apply { setConnected(true) }
 
         // Configure user data
         runBlocking {
@@ -164,6 +164,8 @@ class SnackbarInsetsScreenshotTests {
 
     @Test
     fun snackbarShown_phone() {
+        // Set network connection to offline
+        networkMonitor = TestNetworkMonitor().apply { setConnected(false) }
         testSnackbarScreenshotWithSize(
             400.dp,
             500.dp,
@@ -173,6 +175,8 @@ class SnackbarInsetsScreenshotTests {
 
     @Test
     fun snackbarShown_foldable() {
+        // Set network connection to offline
+        networkMonitor = TestNetworkMonitor().apply { setConnected(false) }
         testSnackbarScreenshotWithSize(
             600.dp,
             600.dp,
@@ -182,6 +186,8 @@ class SnackbarInsetsScreenshotTests {
 
     @Test
     fun snackbarShown_tablet() {
+        // Set network connection to offline
+        networkMonitor = TestNetworkMonitor().apply { setConnected(false) }
         testSnackbarScreenshotWithSize(
             900.dp,
             900.dp,
