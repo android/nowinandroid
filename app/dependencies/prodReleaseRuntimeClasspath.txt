@@ -322,10 +322,10 @@ org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1
 org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1
 org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.0
 org.jetbrains.kotlinx:kotlinx-datetime:0.6.0
-org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0
-org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0
+org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.1
+org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1
 org.jetbrains:annotations:23.0.0
 org.slf4j:slf4j-api:1.7.36
