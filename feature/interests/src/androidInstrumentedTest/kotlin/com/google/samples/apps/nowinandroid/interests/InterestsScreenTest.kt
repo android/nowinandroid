@@ -27,11 +27,15 @@ import androidx.compose.ui.test.onNodeWithText
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
+import kotlinx.coroutines.runBlocking
+import nowinandroid.feature.interests.generated.resources.feature_interests_empty_header
+import nowinandroid.feature.interests.generated.resources.feature_interests_loading
+import org.jetbrains.compose.resources.getString
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
-import com.google.samples.apps.nowinandroid.feature.interests.R as InterestsR
+import nowinandroid.core.ui.generated.resources.Res as CoreUiR
+import nowinandroid.feature.interests.generated.resources.Res as InterestsR
 
 /**
  * UI test for checking the correct behaviour of the Interests screen;
@@ -50,13 +54,16 @@ class InterestsScreenTest {
 
     @Before
     fun setup() {
-        composeTestRule.activity.apply {
+        // Temp solution to call getString
+        runBlocking {
             interestsLoading = getString(InterestsR.string.feature_interests_loading)
             interestsEmptyHeader = getString(InterestsR.string.feature_interests_empty_header)
+            // TODO res object is internal, it couldn't import from the other module
             interestsTopicCardFollowButton =
                 getString(CoreUiR.string.core_ui_interests_card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =
                 getString(CoreUiR.string.core_ui_interests_card_unfollow_button_content_desc)
+
         }
     }
 

@@ -50,7 +50,13 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())
 
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.compose.ui.test").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.core").get())
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.ext").get())
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.junit").get())
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.runner").get())
+                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.espresso.core").get())
             }
         }
     }
