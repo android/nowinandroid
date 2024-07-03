@@ -35,10 +35,23 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
-import com.google.samples.apps.nowinandroid.core.ui.R.string
+import kotlinx.coroutines.runBlocking
+import nowinandroid.core.ui.generated.resources.core_ui_interests_card_follow_button_content_desc
+import nowinandroid.core.ui.generated.resources.core_ui_interests_card_unfollow_button_content_desc
+import nowinandroid.feature.search.generated.resources.Res
+import nowinandroid.feature.search.generated.resources.feature_search_clear_recent_searches_content_desc
+import nowinandroid.feature.search.generated.resources.feature_search_clear_search_text_content_desc
+import nowinandroid.feature.search.generated.resources.feature_search_interests
+import nowinandroid.feature.search.generated.resources.feature_search_not_ready
+import nowinandroid.feature.search.generated.resources.feature_search_to_browse_topics
+import nowinandroid.feature.search.generated.resources.feature_search_topics
+import nowinandroid.feature.search.generated.resources.feature_search_try_another_search
+import nowinandroid.feature.search.generated.resources.feature_search_updates
+import org.jetbrains.compose.resources.getString
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import nowinandroid.core.ui.generated.resources.Res as uiR
 
 /**
  * UI test for checking the correct behaviour of the Search screen.
@@ -68,20 +81,18 @@ class SearchScreenTest {
     )
 
     @Before
-    fun setup() {
-        composeTestRule.activity.apply {
-            clearSearchContentDesc = getString(R.string.feature_search_clear_search_text_content_desc)
-            clearRecentSearchesContentDesc = getString(R.string.feature_search_clear_recent_searches_content_desc)
-            followButtonContentDesc =
-                getString(string.core_ui_interests_card_follow_button_content_desc)
-            unfollowButtonContentDesc =
-                getString(string.core_ui_interests_card_unfollow_button_content_desc)
-            topicsString = getString(R.string.feature_search_topics)
-            updatesString = getString(R.string.feature_search_updates)
-            tryAnotherSearchString = getString(R.string.feature_search_try_another_search) +
-                " " + getString(R.string.feature_search_interests) + " " + getString(R.string.feature_search_to_browse_topics)
-            searchNotReadyString = getString(R.string.feature_search_not_ready)
-        }
+    fun setup() = runBlocking {
+        clearSearchContentDesc = getString(Res.string.feature_search_clear_search_text_content_desc)
+        clearRecentSearchesContentDesc = getString(Res.string.feature_search_clear_recent_searches_content_desc)
+        followButtonContentDesc =
+            getString(uiR.string.core_ui_interests_card_follow_button_content_desc)
+        unfollowButtonContentDesc =
+            getString(uiR.string.core_ui_interests_card_unfollow_button_content_desc)
+        topicsString = getString(Res.string.feature_search_topics)
+        updatesString = getString(Res.string.feature_search_updates)
+        tryAnotherSearchString = getString(Res.string.feature_search_try_another_search) +
+            " " + getString(Res.string.feature_search_interests) + " " + getString(Res.string.feature_search_to_browse_topics)
+        searchNotReadyString = getString(Res.string.feature_search_not_ready)
     }
 
     @Test

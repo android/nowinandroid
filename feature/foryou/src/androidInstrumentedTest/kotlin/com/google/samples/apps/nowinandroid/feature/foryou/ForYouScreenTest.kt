@@ -32,6 +32,12 @@ import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPer
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import nowinandroid.feature.foryou.generated.resources.Res
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_done
+import nowinandroid.feature.foryou.generated.resources.feature_foryou_loading
+import org.jetbrains.compose.resources.getString
 import org.junit.Rule
 import org.junit.Test
 
@@ -44,13 +50,13 @@ class ForYouScreenTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val doneButtonMatcher by lazy {
-        hasText(
-            composeTestRule.activity.resources.getString(R.string.feature_foryou_done),
-        )
+        runBlocking {
+            hasText(getString(Res.string.feature_foryou_done))
+        }
     }
 
     @Test
-    fun circularProgressIndicator_whenScreenIsLoading_exists() {
+    fun circularProgressIndicator_whenScreenIsLoading_exists() = runTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -70,13 +76,13 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
+                getString(Res.string.feature_foryou_loading),
             )
             .assertExists()
     }
 
     @Test
-    fun circularProgressIndicator_whenScreenIsSyncing_exists() {
+    fun circularProgressIndicator_whenScreenIsSyncing_exists() = runTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -96,7 +102,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
+                getString(Res.string.feature_foryou_loading),
             )
             .assertExists()
     }
@@ -194,7 +200,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun feed_whenInterestsSelectedAndLoading_showsLoadingIndicator() {
+    fun feed_whenInterestsSelectedAndLoading_showsLoadingIndicator() = runTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -215,13 +221,13 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
+                getString(Res.string.feature_foryou_loading),
             )
             .assertExists()
     }
 
     @Test
-    fun feed_whenNoInterestsSelectionAndLoading_showsLoadingIndicator() {
+    fun feed_whenNoInterestsSelectionAndLoading_showsLoadingIndicator() = runTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
@@ -241,7 +247,7 @@ class ForYouScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_foryou_loading),
+                getString(Res.string.feature_foryou_loading),
             )
             .assertExists()
     }
