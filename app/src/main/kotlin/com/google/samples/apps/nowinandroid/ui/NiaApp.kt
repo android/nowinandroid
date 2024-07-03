@@ -80,6 +80,7 @@ fun NiaApp(
     appState: NiaAppState,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+    bottomSystemUiHeight: WindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
@@ -87,9 +88,7 @@ fun NiaApp(
 
     NiaBackground(
         modifier = modifier
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
-            ),
+            .windowInsetsPadding(bottomSystemUiHeight),
     ) {
         NiaGradientBackground(
             gradientColors = if (shouldShowGradientBackground) {
