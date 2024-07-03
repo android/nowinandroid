@@ -32,14 +32,10 @@ import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsStartWidth
 import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,9 +70,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -161,83 +155,50 @@ class SnackbarInsetsScreenshotTests {
 
     @Test
     fun phone_noSnackbar() {
-        val snackbarHostState = SnackbarHostState()
         testSnackbarScreenshotWithSize(
-            snackbarHostState,
             400.dp,
             500.dp,
             "insets_snackbar_compact_medium_noSnackbar",
-            action = { },
         )
     }
 
     @Test
     fun snackbarShown_phone() {
-        val snackbarHostState = SnackbarHostState()
         testSnackbarScreenshotWithSize(
-            snackbarHostState,
             400.dp,
             500.dp,
             "insets_snackbar_compact_medium",
-        ) {
-            snackbarHostState.showSnackbar(
-                "This is a test snackbar message",
-                actionLabel = "Action Label",
-                duration = Indefinite,
-            )
-        }
+        )
     }
 
     @Test
     fun snackbarShown_foldable() {
-        val snackbarHostState = SnackbarHostState()
         testSnackbarScreenshotWithSize(
-            snackbarHostState,
             600.dp,
             600.dp,
             "insets_snackbar_medium_medium",
-        ) {
-            snackbarHostState.showSnackbar(
-                "This is a test snackbar message",
-                actionLabel = "Action Label",
-                duration = Indefinite,
-            )
-        }
+        )
     }
 
     @Test
     fun snackbarShown_tablet() {
-        val snackbarHostState = SnackbarHostState()
         testSnackbarScreenshotWithSize(
-            snackbarHostState,
             900.dp,
             900.dp,
             "insets_snackbar_expanded_expanded",
-        ) {
-            snackbarHostState.showSnackbar(
-                "This is a test snackbar message",
-                actionLabel = "Action Label",
-                duration = Indefinite,
-            )
-        }
+        )
     }
 
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     private fun testSnackbarScreenshotWithSize(
-        snackbarHostState: SnackbarHostState,
         width: Dp,
         height: Dp,
         screenshotName: String,
-        action: suspend () -> Unit,
     ) {
-        lateinit var scope: CoroutineScope
         composeTestRule.setContent {
             CompositionLocalProvider(
                 // Replaces images with placeholders
                 LocalInspectionMode provides true,
             ) {
-                scope = rememberCoroutineScope()
-
                 DeviceConfigurationOverride(
                     DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
@@ -289,10 +250,6 @@ class SnackbarInsetsScreenshotTests {
                     }
                 }
             }
-        }
-
-        scope.launch {
-            action()
         }
 
         composeTestRule.onNodeWithTag("root")
