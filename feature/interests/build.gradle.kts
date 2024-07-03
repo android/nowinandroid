@@ -16,8 +16,6 @@
 
 plugins {
     alias(libs.plugins.nowinandroid.cmp.feature)
-    alias(libs.plugins.jetbrains.compose)
-    alias(libs.plugins.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.roborazzi)
 }
