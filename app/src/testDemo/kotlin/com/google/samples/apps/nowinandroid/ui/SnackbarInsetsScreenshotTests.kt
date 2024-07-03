@@ -272,12 +272,9 @@ class SnackbarInsetsScreenshotTests {
                                     userNewsResourceRepository = userNewsResourceRepository,
                                     timeZoneMonitor = timeZoneMonitor,
                                 )
+                                // Replace NiaApp for using Background, which contains SnackBar
                                 NiaApp(
                                     appState = appState,
-                                    snackbarHostState = snackbarHostState,
-                                    showSettingsDialog = false,
-                                    onSettingsDismissed = {},
-                                    onTopAppBarActionClick = {},
                                     windowAdaptiveInfo = WindowAdaptiveInfo(
                                         windowSizeClass = WindowSizeClass.compute(
                                             maxWidth.value,
