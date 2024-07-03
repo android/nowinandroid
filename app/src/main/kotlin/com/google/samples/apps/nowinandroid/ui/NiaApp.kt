@@ -85,7 +85,12 @@ fun NiaApp(
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
-    NiaBackground(modifier = modifier) {
+    NiaBackground(
+        modifier = modifier
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
+            ),
+    ) {
         NiaGradientBackground(
             gradientColors = if (shouldShowGradientBackground) {
                 LocalGradientColors.current
