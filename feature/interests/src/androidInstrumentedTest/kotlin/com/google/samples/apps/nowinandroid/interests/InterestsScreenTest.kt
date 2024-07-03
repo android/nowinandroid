@@ -28,6 +28,8 @@ import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTes
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
 import kotlinx.coroutines.runBlocking
+import nowinandroid.core.ui.generated.resources.core_ui_interests_card_follow_button_content_desc
+import nowinandroid.core.ui.generated.resources.core_ui_interests_card_unfollow_button_content_desc
 import nowinandroid.feature.interests.generated.resources.feature_interests_empty_header
 import nowinandroid.feature.interests.generated.resources.feature_interests_loading
 import org.jetbrains.compose.resources.getString
@@ -58,7 +60,6 @@ class InterestsScreenTest {
         runBlocking {
             interestsLoading = getString(InterestsR.string.feature_interests_loading)
             interestsEmptyHeader = getString(InterestsR.string.feature_interests_empty_header)
-            // TODO res object is internal, it couldn't import from the other module
             interestsTopicCardFollowButton =
                 getString(CoreUiR.string.core_ui_interests_card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =

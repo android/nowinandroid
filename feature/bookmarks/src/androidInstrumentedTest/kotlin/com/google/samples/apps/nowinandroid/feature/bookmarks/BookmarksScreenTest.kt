@@ -37,6 +37,12 @@ import androidx.lifecycle.testing.TestLifecycleOwner
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import kotlinx.coroutines.test.runTest
+import nowinandroid.core.ui.generated.resources.core_ui_unbookmark
+import nowinandroid.feature.bookmarks.generated.resources.Res
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_empty_description
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_empty_error
+import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_loading
+import org.jetbrains.compose.resources.getString
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -51,7 +57,7 @@ class BookmarksScreenTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun loading_showsLoadingSpinner() {
+    fun loading_showsLoadingSpinner() = runTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Loading,
@@ -64,7 +70,7 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_bookmarks_loading),
+                getString(Res.string.feature_bookmarks_loading),
             )
             .assertExists()
     }
@@ -109,7 +115,7 @@ class BookmarksScreenTest {
     }
 
     @Test
-    fun feed_whenRemovingBookmark_removesBookmark() {
+    fun feed_whenRemovingBookmark_removesBookmark() = runTest {
         var removeFromBookmarksCalled = false
 
         composeTestRule.setContent {
@@ -129,8 +135,8 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onAllNodesWithContentDescription(
-                composeTestRule.activity.getString(
-                    com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_unbookmark,
+                getString(
+                    nowinandroid.core.ui.generated.resources.Res.string.core_ui_unbookmark,
                 ),
             ).filter(
                 hasAnyAncestor(
@@ -148,7 +154,7 @@ class BookmarksScreenTest {
     }
 
     @Test
-    fun feed_whenHasNoBookmarks_showsEmptyState() {
+    fun feed_whenHasNoBookmarks_showsEmptyState() = runTest {
         composeTestRule.setContent {
             BookmarksScreen(
                 feedState = NewsFeedUiState.Success(emptyList()),
@@ -161,13 +167,13 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.feature_bookmarks_empty_error),
+                getString(Res.string.feature_bookmarks_empty_error),
             )
             .assertExists()
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.feature_bookmarks_empty_description),
+                getString(Res.string.feature_bookmarks_empty_description),
             )
             .assertExists()
     }
