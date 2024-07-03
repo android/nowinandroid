@@ -18,10 +18,10 @@
 
 package com.google.samples.apps.nowinandroid.feature.search
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.topics
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 /**
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)

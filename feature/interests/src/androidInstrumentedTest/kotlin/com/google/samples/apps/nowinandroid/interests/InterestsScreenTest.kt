@@ -64,7 +64,6 @@ class InterestsScreenTest {
                 getString(CoreUiR.string.core_ui_interests_card_follow_button_content_desc)
             interestsTopicCardUnfollowButton =
                 getString(CoreUiR.string.core_ui_interests_card_unfollow_button_content_desc)
-
         }
     }
 

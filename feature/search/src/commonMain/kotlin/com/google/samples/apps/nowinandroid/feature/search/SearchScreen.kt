@@ -84,10 +84,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
-import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import nowinandroid.core.ui.generated.resources.core_ui_back
 import nowinandroid.feature.search.generated.resources.feature_search_clear_recent_searches_content_desc
 import nowinandroid.feature.search.generated.resources.feature_search_clear_search_text_content_desc
 import nowinandroid.feature.search.generated.resources.feature_search_interests
@@ -102,6 +102,7 @@ import nowinandroid.feature.search.generated.resources.feature_search_updates
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import nowinandroid.core.ui.generated.resources.Res as uiR
 import nowinandroid.feature.search.generated.resources.Res as searchR
 
 @Composable
@@ -220,7 +221,7 @@ fun EmptySearchResultBody(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
-        val message = stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
+        val message = stringResource(searchR.string.feature_search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
             text = AnnotatedString(
@@ -237,9 +238,9 @@ fun EmptySearchResultBody(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp),
         )
-        val interests = stringResource(id = searchR.string.feature_search_interests)
+        val interests = stringResource(searchR.string.feature_search_interests)
         val tryAnotherSearchString = buildAnnotatedString {
-            append(stringResource(id = searchR.string.feature_search_try_another_search))
+            append(stringResource(searchR.string.feature_search_try_another_search))
             append(" ")
             withStyle(
                 style = SpanStyle(
@@ -251,7 +252,7 @@ fun EmptySearchResultBody(
                 append(interests)
             }
             append(" ")
-            append(stringResource(id = searchR.string.feature_search_to_browse_topics))
+            append(stringResource(searchR.string.feature_search_to_browse_topics))
         }
         ClickableText(
             text = tryAnotherSearchString,
@@ -279,7 +280,7 @@ private fun SearchNotReadyBody() {
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
         Text(
-            text = stringResource(id = searchR.string.feature_search_not_ready),
+            text = stringResource(searchR.string.feature_search_not_ready),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp),
@@ -320,7 +321,7 @@ private fun SearchResultBody(
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(stringResource(id = searchR.string.feature_search_topics))
+                                append(stringResource(searchR.string.feature_search_topics))
                             }
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -356,7 +357,7 @@ private fun SearchResultBody(
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(stringResource(id = searchR.string.feature_search_updates))
+                                append(stringResource(searchR.string.feature_search_updates))
                             }
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -408,7 +409,7 @@ private fun RecentSearchesBody(
             Text(
                 text = buildAnnotatedString {
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(stringResource(id = searchR.string.feature_search_recent_searches))
+                        append(stringResource(searchR.string.feature_search_recent_searches))
                     }
                 },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -423,7 +424,7 @@ private fun RecentSearchesBody(
                     Icon(
                         imageVector = NiaIcons.Close,
                         contentDescription = stringResource(
-                            id = searchR.string.feature_search_clear_recent_searches_content_desc,
+                            searchR.string.feature_search_clear_recent_searches_content_desc,
                         ),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
@@ -461,7 +462,7 @@ private fun SearchToolbar(
             Icon(
                 imageVector = NiaIcons.ArrowBack,
                 contentDescription = stringResource(
-                    id = string.core_ui_back,
+                    uiR.string.core_ui_back,
                 ),
             )
         }
@@ -497,7 +498,7 @@ private fun SearchTextField(
             Icon(
                 imageVector = NiaIcons.Search,
                 contentDescription = stringResource(
-                    id = searchR.string.feature_search_title,
+                    searchR.string.feature_search_title,
                 ),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -512,7 +513,7 @@ private fun SearchTextField(
                     Icon(
                         imageVector = NiaIcons.Close,
                         contentDescription = stringResource(
-                            id = searchR.string.feature_search_clear_search_text_content_desc,
+                            searchR.string.feature_search_clear_search_text_content_desc,
                         ),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )

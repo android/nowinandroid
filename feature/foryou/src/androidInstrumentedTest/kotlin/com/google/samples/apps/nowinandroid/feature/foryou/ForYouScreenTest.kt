@@ -53,7 +53,6 @@ class ForYouScreenTest {
         runBlocking {
             hasText(getString(Res.string.feature_foryou_done))
         }
-
     }
 
     @Test
@@ -228,7 +227,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun feed_whenNoInterestsSelectionAndLoading_showsLoadingIndicator() = runTest{
+    fun feed_whenNoInterestsSelectionAndLoading_showsLoadingIndicator() = runTest {
         composeTestRule.setContent {
             BoxWithConstraints {
                 ForYouScreen(
