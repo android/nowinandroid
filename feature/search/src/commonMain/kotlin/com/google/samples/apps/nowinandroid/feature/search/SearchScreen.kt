@@ -64,7 +64,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -74,11 +73,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
@@ -91,8 +86,23 @@ import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
-import com.google.samples.apps.nowinandroid.feature.search.R as searchR
+import nowinandroid.feature.search.generated.resources.feature_search_clear_recent_searches_content_desc
+import nowinandroid.feature.search.generated.resources.feature_search_clear_search_text_content_desc
+import nowinandroid.feature.search.generated.resources.feature_search_interests
+import nowinandroid.feature.search.generated.resources.feature_search_not_ready
+import nowinandroid.feature.search.generated.resources.feature_search_recent_searches
+import nowinandroid.feature.search.generated.resources.feature_search_result_not_found
+import nowinandroid.feature.search.generated.resources.feature_search_title
+import nowinandroid.feature.search.generated.resources.feature_search_to_browse_topics
+import nowinandroid.feature.search.generated.resources.feature_search_topics
+import nowinandroid.feature.search.generated.resources.feature_search_try_another_search
+import nowinandroid.feature.search.generated.resources.feature_search_updates
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import nowinandroid.feature.search.generated.resources.Res as searchR
 
 @Composable
 internal fun SearchRoute(
@@ -100,7 +110,7 @@ internal fun SearchRoute(
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    searchViewModel: SearchViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel,
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
