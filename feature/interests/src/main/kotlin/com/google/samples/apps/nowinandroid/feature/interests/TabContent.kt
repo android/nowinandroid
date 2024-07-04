@@ -39,6 +39,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 
 @Composable
 fun TopicsTabContent(
@@ -47,6 +48,8 @@ fun TopicsTabContent(
     onFollowButtonClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     withBottomSpacer: Boolean = true,
+    selectedTopicId: String? = null,
+    highlightSelectedTopic: Boolean = false,
 ) {
     Box(
         modifier = modifier
@@ -63,6 +66,7 @@ fun TopicsTabContent(
             topics.forEach { followableTopic ->
                 val topicId = followableTopic.topic.id
                 item(key = topicId) {
+                    val isSelected = highlightSelectedTopic && topicId == selectedTopicId
                     InterestsItem(
                         name = followableTopic.topic.name,
                         following = followableTopic.isFollowed,
@@ -70,6 +74,7 @@ fun TopicsTabContent(
                         topicImageUrl = followableTopic.topic.imageUrl,
                         onClick = { onTopicClick(topicId) },
                         onFollowButtonClick = { onFollowButtonClick(topicId, it) },
+                        isSelected = isSelected,
                     )
                 }
             }

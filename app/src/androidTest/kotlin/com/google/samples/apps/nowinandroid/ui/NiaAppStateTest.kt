@@ -16,15 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.composable
@@ -34,14 +30,15 @@ import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNe
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.TimeZone
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -50,7 +47,6 @@ import kotlin.test.assertTrue
  * Note: This could become an unit test if Robolectric is added to the project and the Context
  * is faked.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class NiaAppStateTest {
 
     @get:Rule
@@ -58,6 +54,8 @@ class NiaAppStateTest {
 
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
+
+    private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
         CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository())
@@ -75,9 +73,9 @@ class NiaAppStateTest {
                 NiaAppState(
                     navController = navController,
                     coroutineScope = backgroundScope,
-                    windowSizeClass = getCompactWindowClass(),
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
+                    timeZoneMonitor = timeZoneMonitor,
                 )
             }
 
@@ -97,9 +95,9 @@ class NiaAppStateTest {
     fun niaAppState_destinations() = runTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
-                windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
             )
         }
 
@@ -110,62 +108,14 @@ class NiaAppStateTest {
     }
 
     @Test
-    fun niaAppState_showBottomBar_compact() = runTest {
+    fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                windowSizeClass = getCompactWindowClass(),
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
-            )
-        }
-
-        assertTrue(state.shouldShowBottomBar)
-        assertFalse(state.shouldShowNavRail)
-    }
-
-    @Test
-    fun niaAppState_showNavRail_medium() = runTest {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(800.dp, 800.dp)),
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-            )
-        }
-
-        assertTrue(state.shouldShowNavRail)
-        assertFalse(state.shouldShowBottomBar)
-    }
-
-    @Test
-    fun niaAppState_showNavRail_large() = runTest {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
-            )
-        }
-
-        assertTrue(state.shouldShowNavRail)
-        assertFalse(state.shouldShowBottomBar)
-    }
-
-    @Test
-    fun stateIsOfflineWhenNetworkMonitorIsOffline() = runTest(UnconfinedTestDispatcher()) {
-        composeTestRule.setContent {
-            state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
-                coroutineScope = backgroundScope,
-                windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(900.dp, 1200.dp)),
-                networkMonitor = networkMonitor,
-                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
             )
         }
 
@@ -177,13 +127,31 @@ class NiaAppStateTest {
         )
     }
 
-    private fun getCompactWindowClass() = WindowSizeClass.calculateFromSize(DpSize(500.dp, 300.dp))
+    @Test
+    fun niaAppState_differentTZ_withTimeZoneMonitorChange() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+        val changedTz = TimeZone.of("Europe/Prague")
+        backgroundScope.launch { state.currentTimeZone.collect() }
+        timeZoneMonitor.setTimeZone(changedTz)
+        assertEquals(
+            changedTz,
+            state.currentTimeZone.value,
+        )
+    }
 }
 
 @Composable
 private fun rememberTestNavController(): TestNavHostController {
     val context = LocalContext.current
-    return remember<TestNavHostController> {
+    return remember {
         TestNavHostController(context).apply {
             navigatorProvider.addNavigator(ComposeNavigator())
             graph = createGraph(startDestination = "a") {

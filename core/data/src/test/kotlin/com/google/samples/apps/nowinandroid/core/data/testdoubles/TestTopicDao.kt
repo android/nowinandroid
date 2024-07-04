@@ -28,20 +28,15 @@ import kotlinx.coroutines.flow.update
  */
 class TestTopicDao : TopicDao {
 
-    private var entitiesStateFlow = MutableStateFlow(
-        emptyList<TopicEntity>(),
-    )
+    private val entitiesStateFlow = MutableStateFlow(emptyList<TopicEntity>())
 
-    override fun getTopicEntity(topicId: String): Flow<TopicEntity> {
+    override fun getTopicEntity(topicId: String): Flow<TopicEntity> =
         throw NotImplementedError("Unused in tests")
-    }
 
-    override fun getTopicEntities(): Flow<List<TopicEntity>> =
-        entitiesStateFlow
+    override fun getTopicEntities(): Flow<List<TopicEntity>> = entitiesStateFlow
 
     override fun getTopicEntities(ids: Set<String>): Flow<List<TopicEntity>> =
-        getTopicEntities()
-            .map { topics -> topics.filter { it.id in ids } }
+        getTopicEntities().map { topics -> topics.filter { it.id in ids } }
 
     override suspend fun getOneOffTopicEntities(): List<TopicEntity> = emptyList()
 
@@ -55,15 +50,11 @@ class TestTopicDao : TopicDao {
 
     override suspend fun upsertTopics(entities: List<TopicEntity>) {
         // Overwrite old values with new values
-        entitiesStateFlow.update { oldValues ->
-            (entities + oldValues).distinctBy(TopicEntity::id)
-        }
+        entitiesStateFlow.update { oldValues -> (entities + oldValues).distinctBy(TopicEntity::id) }
     }
 
     override suspend fun deleteTopics(ids: List<String>) {
         val idSet = ids.toSet()
-        entitiesStateFlow.update { entities ->
-            entities.filterNot { idSet.contains(it.id) }
-        }
+        entitiesStateFlow.update { entities -> entities.filterNot { it.id in idSet } }
     }
 }

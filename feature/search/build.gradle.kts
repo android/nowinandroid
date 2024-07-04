@@ -25,9 +25,13 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.bookmarks)
-    implementation(projects.feature.foryou)
-    implementation(projects.feature.interests)
-    implementation(libs.kotlinx.datetime)
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.core.ui)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
 }
 

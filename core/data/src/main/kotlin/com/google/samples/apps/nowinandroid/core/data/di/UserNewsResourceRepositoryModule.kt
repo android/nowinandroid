@@ -25,7 +25,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface UserNewsResourceRepositoryModule {
+internal interface UserNewsResourceRepositoryModule {
     @Binds
     fun bindsUserNewsResourceRepository(
         userDataRepository: CompositeUserNewsResourceRepository,

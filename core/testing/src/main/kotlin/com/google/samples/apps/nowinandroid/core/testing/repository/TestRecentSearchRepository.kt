@@ -32,7 +32,5 @@ class TestRecentSearchRepository : RecentSearchRepository {
         cachedRecentSearches.add(RecentSearchQuery(searchQuery))
     }
 
-    override suspend fun clearRecentSearches() {
-        cachedRecentSearches.clear()
-    }
+    override suspend fun clearRecentSearches() = cachedRecentSearches.clear()
 }

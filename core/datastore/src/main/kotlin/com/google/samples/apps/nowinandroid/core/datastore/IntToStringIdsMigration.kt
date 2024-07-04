@@ -21,7 +21,7 @@ import androidx.datastore.core.DataMigration
 /**
  * Migrates saved ids from [Int] to [String] types
  */
-object IntToStringIdsMigration : DataMigration<UserPreferences> {
+internal object IntToStringIdsMigration : DataMigration<UserPreferences> {
 
     override suspend fun cleanUp() = Unit
 

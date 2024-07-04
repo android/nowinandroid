@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ktlint:standard:max-line-length")
+
 package com.google.samples.apps.nowinandroid.core.testing.data
 
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
@@ -26,7 +28,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
-/* ktlint-disable max-line-length */
 val userNewsResourcesTestData: List<UserNewsResource> = UserData(
     bookmarkedNewsResources = setOf("1", "4"),
     viewedNewsResources = setOf("1", "2", "4"),

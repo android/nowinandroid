@@ -45,7 +45,7 @@ class ScrollTopicListPowerMetricsBenchmark {
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
-    private val categories = PowerCategory.values()
+    private val categories = PowerCategory.entries
         .associateWith { PowerCategoryDisplayLevel.TOTAL }
 
     @Test

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="122pt" height="44pt" viewBox="0 0 122.31 44">
+    <g class="graph">
+        <path fill="#fff" d="M0 44V0h122.31v44z"/>
+        <g class="node" transform="translate(4 40)">
+            <ellipse cx="57.16" cy="-18" fill="none" stroke="#000" rx="57.16" ry="18"/>
+            <text x="57.16" y="-13.8" font-family="Times,serif" font-size="14" text-anchor="middle">:core:model</text>
+        </g>
+    </g>
+</svg>

@@ -24,10 +24,10 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
@@ -50,46 +50,40 @@ private const val FOR_YOU_PATH = "foryou"
  * Implementation of [Notifier] that displays notifications in the system tray.
  */
 @Singleton
-class SystemTrayNotifier @Inject constructor(
+internal class SystemTrayNotifier @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Notifier {
 
     override fun postNewsNotifications(
         newsResources: List<NewsResource>,
     ) = with(context) {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                permission.POST_NOTIFICATIONS,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
             return
         }
 
-        val truncatedNewsResources = newsResources
-            .take(MAX_NUM_NOTIFICATIONS)
+        val truncatedNewsResources = newsResources.take(MAX_NUM_NOTIFICATIONS)
 
-        val newsNotifications = truncatedNewsResources
-            .map { newsResource ->
-                createNewsNotification {
-                    setSmallIcon(
-                        com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
-                    )
-                        .setContentTitle(newsResource.title)
-                        .setContentText(newsResource.content)
-                        .setContentIntent(newsPendingIntent(newsResource))
-                        .setGroup(NEWS_NOTIFICATION_GROUP)
-                        .setAutoCancel(true)
-                }
+        val newsNotifications = truncatedNewsResources.map { newsResource ->
+            createNewsNotification {
+                setSmallIcon(
+                    com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
+                )
+                    .setContentTitle(newsResource.title)
+                    .setContentText(newsResource.content)
+                    .setContentIntent(newsPendingIntent(newsResource))
+                    .setGroup(NEWS_NOTIFICATION_GROUP)
+                    .setAutoCancel(true)
             }
+        }
         val summaryNotification = createNewsNotification {
             val title = getString(
-                R.string.news_notification_group_summary,
+                R.string.core_notifications_news_notification_group_summary,
                 truncatedNewsResources.size,
             )
             setContentTitle(title)
                 .setContentText(title)
                 .setSmallIcon(
-                    com.google.samples.apps.nowinandroid.core.common.R.drawable.ic_nia_notification,
+                    com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
                 )
                 // Build summary info into InboxStyle template.
                 .setStyle(newsNotificationStyle(truncatedNewsResources, title))
@@ -117,9 +111,7 @@ class SystemTrayNotifier @Inject constructor(
         newsResources: List<NewsResource>,
         title: String,
     ): InboxStyle = newsResources
-        .fold(InboxStyle()) { inboxStyle, newsResource ->
-            inboxStyle.addLine(newsResource.title)
-        }
+        .fold(InboxStyle()) { inboxStyle, newsResource -> inboxStyle.addLine(newsResource.title) }
         .setBigContentTitle(title)
         .setSummaryText(title)
 }
@@ -148,10 +140,10 @@ private fun Context.ensureNotificationChannelExists() {
 
     val channel = NotificationChannel(
         NEWS_NOTIFICATION_CHANNEL_ID,
-        getString(R.string.news_notification_channel_name),
+        getString(R.string.core_notifications_news_notification_channel_name),
         NotificationManager.IMPORTANCE_DEFAULT,
     ).apply {
-        description = getString(R.string.news_notification_channel_description)
+        description = getString(R.string.core_notifications_news_notification_channel_description)
     }
     // Register the channel with the system
     NotificationManagerCompat.from(this).createNotificationChannel(channel)
