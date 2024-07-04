@@ -1,3 +1,3 @@
 # :core:data module
-
-![Dependency graph](../../docs/images/graphs/dep_graph_core_data.png)
+## Dependency graph
+![Dependency graph](../../docs/images/graphs/dep_graph_core_data.svg)

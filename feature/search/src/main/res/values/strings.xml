@@ -15,15 +15,15 @@
      limitations under the License.
 -->
 <resources>
-    <string name="search">Search</string>
-    <string name="clear_search_text_content_desc">Clear search text</string>
-    <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
-    <string name="search_not_ready">Sorry, we are still processing the search index. Please come back later.</string>
-    <string name="try_another_search">Try another search or explorer </string>
-    <string name="interests">Interests</string>
-    <string name="to_browse_topics"> to browse topics</string>
-    <string name="topics">Topics</string>
-    <string name="updates">Updates</string>
-    <string name="recent_searches">Recent searches</string>
-    <string name="clear_recent_searches_content_desc">Clear searches</string>
+    <string name="feature_search_title">Search</string>
+    <string name="feature_search_clear_search_text_content_desc">Clear search text</string>
+    <string name="feature_search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
+    <string name="feature_search_not_ready">Sorry, we are still processing the search index. Please come back later</string>
+    <string name="feature_search_try_another_search">Try another search or explorer </string>
+    <string name="feature_search_interests">Interests</string>
+    <string name="feature_search_to_browse_topics"> to browse topics</string>
+    <string name="feature_search_topics">Topics</string>
+    <string name="feature_search_updates">Updates</string>
+    <string name="feature_search_recent_searches">Recent searches</string>
+    <string name="feature_search_clear_recent_searches_content_desc">Clear searches</string>
 </resources>

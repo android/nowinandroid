@@ -28,6 +28,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -35,35 +37,38 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DataModule {
+abstract class DataModule {
 
     @Binds
-    fun bindsTopicRepository(
+    internal abstract fun bindsTopicRepository(
         topicsRepository: OfflineFirstTopicsRepository,
     ): TopicsRepository
 
     @Binds
-    fun bindsNewsResourceRepository(
+    internal abstract fun bindsNewsResourceRepository(
         newsRepository: OfflineFirstNewsRepository,
     ): NewsRepository
 
     @Binds
-    fun bindsUserDataRepository(
+    internal abstract fun bindsUserDataRepository(
         userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository
 
     @Binds
-    fun bindsRecentSearchRepository(
+    internal abstract fun bindsRecentSearchRepository(
         recentSearchRepository: DefaultRecentSearchRepository,
     ): RecentSearchRepository
 
     @Binds
-    fun bindsSearchContentsRepository(
+    internal abstract fun bindsSearchContentsRepository(
         searchContentsRepository: DefaultSearchContentsRepository,
     ): SearchContentsRepository
 
     @Binds
-    fun bindsNetworkMonitor(
+    internal abstract fun bindsNetworkMonitor(
         networkMonitor: ConnectivityManagerNetworkMonitor,
     ): NetworkMonitor
+
+    @Binds
+    internal abstract fun binds(impl: TimeZoneBroadcastMonitor): TimeZoneMonitor
 }

@@ -15,8 +15,8 @@
      limitations under the License.
 -->
 <resources>
-    <string name="sync_notification_title">Now in Android</string>
-    <string name="sync_notification_channel_name">Sync</string>
-    <string name="sync_notification_channel_description">Background tasks for Now in Android</string>
+    <string name="sync_work_notification_title">Now in Android</string>
+    <string name="sync_work_notification_channel_name">Sync</string>
+    <string name="sync_work_notification_channel_description">Background tasks for Now in Android</string>
 
 </resources>

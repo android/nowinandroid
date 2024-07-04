@@ -35,10 +35,10 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
+import com.google.samples.apps.nowinandroid.core.ui.R.string
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import com.google.samples.apps.nowinandroid.feature.interests.R as interestsR
 
 /**
  * UI test for checking the correct behaviour of the Search screen.
@@ -70,17 +70,17 @@ class SearchScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            clearSearchContentDesc = getString(R.string.clear_search_text_content_desc)
-            clearRecentSearchesContentDesc = getString(R.string.clear_recent_searches_content_desc)
+            clearSearchContentDesc = getString(R.string.feature_search_clear_search_text_content_desc)
+            clearRecentSearchesContentDesc = getString(R.string.feature_search_clear_recent_searches_content_desc)
             followButtonContentDesc =
-                getString(interestsR.string.card_follow_button_content_desc)
+                getString(string.core_ui_interests_card_follow_button_content_desc)
             unfollowButtonContentDesc =
-                getString(interestsR.string.card_unfollow_button_content_desc)
-            topicsString = getString(R.string.topics)
-            updatesString = getString(R.string.updates)
-            tryAnotherSearchString = getString(R.string.try_another_search) +
-                " " + getString(R.string.interests) + " " + getString(R.string.to_browse_topics)
-            searchNotReadyString = getString(R.string.search_not_ready)
+                getString(string.core_ui_interests_card_unfollow_button_content_desc)
+            topicsString = getString(R.string.feature_search_topics)
+            updatesString = getString(R.string.feature_search_updates)
+            tryAnotherSearchString = getString(R.string.feature_search_try_another_search) +
+                " " + getString(R.string.feature_search_interests) + " " + getString(R.string.feature_search_to_browse_topics)
+            searchNotReadyString = getString(R.string.feature_search_not_ready)
         }
     }
 

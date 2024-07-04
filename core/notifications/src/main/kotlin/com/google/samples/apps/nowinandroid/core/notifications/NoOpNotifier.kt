@@ -22,6 +22,6 @@ import javax.inject.Inject
 /**
  * Implementation of [Notifier] which does nothing. Useful for tests and previews.
  */
-class NoOpNotifier @Inject constructor() : Notifier {
+internal class NoOpNotifier @Inject constructor() : Notifier {
     override fun postNewsNotifications(newsResources: List<NewsResource>) = Unit
 }

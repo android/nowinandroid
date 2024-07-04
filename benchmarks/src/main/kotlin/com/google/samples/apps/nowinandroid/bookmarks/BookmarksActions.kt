@@ -18,13 +18,13 @@ package com.google.samples.apps.nowinandroid.bookmarks
 
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Until
+import com.google.samples.apps.nowinandroid.waitForObjectOnTopAppBar
 
 fun MacrobenchmarkScope.goToBookmarksScreen() {
-    device.findObject(By.text("Saved")).click()
+    val savedSelector = By.text("Saved")
+    val savedButton = device.findObject(savedSelector)
+    savedButton.click()
     device.waitForIdle()
     // Wait until saved title are shown on screen
-    device.wait(Until.hasObject(By.res("niaTopAppBar")), 2_000)
-    val topAppBar = device.findObject(By.res("niaTopAppBar"))
-    topAppBar.wait(Until.hasObject(By.text("Saved")), 2_000)
+    waitForObjectOnTopAppBar(savedSelector)
 }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="284" height="116pt" viewBox="0 0 213.49 116">
+    <g class="graph">
+        <path fill="#fff" d="M0 116V0h213.49v116z"/>
+        <g class="node" transform="translate(4 112)">
+            <ellipse cx="102.74" cy="-90" fill="none" stroke="#000" rx="102.74" ry="18"/>
+            <text x="102.74" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">:core:screenshot-testing</text>
+        </g>
+        <g class="node" transform="translate(4 112)">
+            <ellipse cx="102.74" cy="-18" fill="none" stroke="#000" rx="85.06" ry="18"/>
+            <text x="102.74" y="-13.8" font-family="Times,serif" font-size="14" text-anchor="middle">:core:designsystem</text>
+        </g>
+        <g stroke="red" stroke-width="2" class="edge">
+            <path fill="none" d="M106.74 40.3v24.16"/>
+            <path fill="red" d="m110.24 62.87-3.5 10-3.5-10z"/>
+        </g>
+    </g>
+</svg>

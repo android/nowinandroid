@@ -30,13 +30,9 @@ import org.junit.runner.Description
  * for the duration of the test.
  */
 class MainDispatcherRule(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(testDispatcher)
-    }
+    override fun starting(description: Description) = Dispatchers.setMain(testDispatcher)
 
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
+    override fun finished(description: Description) = Dispatchers.resetMain()
 }
