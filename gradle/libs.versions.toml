@@ -122,7 +122,7 @@ google-oss-licenses = { group = "com.google.android.gms", name = "play-services-
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
@@ -187,12 +187,11 @@ nowinandroid-android-application-firebase = { id = "nowinandroid.android.applica
 nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors", version = "unspecified" }
 nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco", version = "unspecified" }
 nowinandroid-android-feature = { id = "nowinandroid.android.feature", version = "unspecified" }
-nowinandroid-android-hilt = { id = "nowinandroid.android.hilt", version = "unspecified" }
 nowinandroid-android-library = { id = "nowinandroid.android.library", version = "unspecified" }
 nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose", version = "unspecified" }
 nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco", version = "unspecified" }
 nowinandroid-android-lint = { id = "nowinandroid.android.lint", version = "unspecified" }
 nowinandroid-android-room = { id = "nowinandroid.android.room", version = "unspecified" }
 nowinandroid-android-test = { id = "nowinandroid.android.test", version = "unspecified" }
+nowinandroid-hilt = { id = "nowinandroid.hilt", version = "unspecified" }
 nowinandroid-jvm-library = { id = "nowinandroid.jvm.library", version = "unspecified" }
-nowinandroid-jvm-hilt = { id = "nowinandroid.jvm.hilt", version = "unspecified" }
