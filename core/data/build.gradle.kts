@@ -16,18 +16,13 @@
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.nowinandroid.android.library.testoptions)
     alias(libs.plugins.nowinandroid.android.hilt)
     id("kotlinx-serialization")
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            isReturnDefaultValues = true
-        }
-    }
 }
 
 dependencies {

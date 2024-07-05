@@ -57,45 +57,43 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "nowinandroid.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
         register("androidApplication") {
             id = "nowinandroid.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidApplicationCompose") {
+            id = "nowinandroid.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidApplicationJacoco") {
             id = "nowinandroid.android.application.jacoco"
             implementationClass = "AndroidApplicationJacocoConventionPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "nowinandroid.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("androidApplicationTestOptionsUnitTests") {
+            id = "nowinandroid.android.application.testoptions"
+            implementationClass = "AndroidApplicationTestOptionsUnitTestsConventionPlugin"
         }
+
         register("androidLibrary") {
             id = "nowinandroid.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidFeature") {
-            id = "nowinandroid.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
+        register("androidLibraryCompose") {
+            id = "nowinandroid.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidLibraryJacoco") {
             id = "nowinandroid.android.library.jacoco"
             implementationClass = "AndroidLibraryJacocoConventionPlugin"
         }
-        register("androidTest") {
-            id = "nowinandroid.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
+        register("androidLibraryTestOptionsUnitTests") {
+            id = "nowinandroid.android.library.testoptions"
+            implementationClass = "AndroidLibraryTestOptionsUnitTestsConventionPlugin"
         }
-        register("androidHilt") {
-            id = "nowinandroid.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
-        }
-        register("androidRoom") {
-            id = "nowinandroid.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
+
+        register("androidFeature") {
+            id = "nowinandroid.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidFirebase") {
             id = "nowinandroid.android.application.firebase"
@@ -108,6 +106,18 @@ gradlePlugin {
         register("androidLint") {
             id = "nowinandroid.android.lint"
             implementationClass = "AndroidLintConventionPlugin"
+        }
+        register("androidHilt") {
+            id = "nowinandroid.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "nowinandroid.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+        register("androidTest") {
+            id = "nowinandroid.android.test"
+            implementationClass = "AndroidTestConventionPlugin"
         }
         register("jvmLibrary") {
             id = "nowinandroid.jvm.library"
