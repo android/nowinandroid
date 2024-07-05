@@ -14,27 +14,27 @@
  *   limitations under the License.
  */
 
+import com.android.build.gradle.api.AndroidBasePlugin
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.dependencies
 
-class HiltConventionPlugin(
-    val basePluginId: String? = null,
-    val dependencyHandler: DependencyHandlerScope.(libs: VersionCatalog) -> Unit
-) : Plugin<Project> {
+class HiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                basePluginId?.let(::apply)
-                apply("com.google.devtools.ksp")
-            }
+            pluginManager.apply("com.google.devtools.ksp")
             dependencies {
-                "ksp"(libs.findLibrary("hilt.compiler").get())
-                "kspTest"(libs.findLibrary("hilt.compiler").get())
-                dependencyHandler(libs)
+                add("ksp", libs.findLibrary("hilt.compiler").get())
+                add("implementation", libs.findLibrary("hilt.core").get())
+            }
+
+            /** Add support for Android modules, based on [AndroidBasePlugin] */
+            pluginManager.withPlugin("com.android.base") {
+                pluginManager.apply("dagger.hilt.android.plugin")
+                dependencies {
+                    add("implementation", libs.findLibrary("hilt.android").get())
+                }
             }
         }
     }

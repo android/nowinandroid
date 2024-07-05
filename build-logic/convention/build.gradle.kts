@@ -89,9 +89,9 @@ gradlePlugin {
             id = "nowinandroid.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
-        register("androidHilt") {
-            id = "nowinandroid.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+        register("hilt") {
+            id = "nowinandroid.hilt"
+            implementationClass = "HiltConventionPlugin"
         }
         register("androidRoom") {
             id = "nowinandroid.android.room"
@@ -112,10 +112,6 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "nowinandroid.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
-        }
-        register("jvmHilt") {
-            id = "nowinandroid.jvm.hilt"
-            implementationClass = "JvmHiltConventionPlugin"
         }
     }
 }
