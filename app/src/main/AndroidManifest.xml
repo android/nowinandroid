@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--
-    Firebase automatically adds these AD_ID and ADSERVICES permissions, even though we don't use it.
+    Firebase automatically adds these AD_ID and ADSERVICES permissions, even though we don't use them.
     If you use this permission you must declare how you're using it to Google Play, otherwise the
     app will be rejected when publishing it. To avoid this we remove the permission entirely.
     -->
