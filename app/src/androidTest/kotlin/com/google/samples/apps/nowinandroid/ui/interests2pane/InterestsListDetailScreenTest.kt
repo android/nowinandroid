@@ -89,6 +89,11 @@ class InterestsListDetailScreenTest {
         hiltRule.inject()
     }
 
+    /** Convenience function for getting all topics during tests, */
+    private fun getTopics(): List<Topic> = runBlocking {
+        topicsRepository.getTopics().first()
+    }
+
     @Test
     fun expandedWidth_initialState_showsTwoPanesWithPlaceholder() {
         composeTestRule.apply {
@@ -138,9 +143,7 @@ class InterestsListDetailScreenTest {
                 }
             }
 
-            val firstTopic = runBlocking {
-                topicsRepository.getTopics().first().first()
-            }
+            val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
             onNodeWithTag(listPaneTag).assertIsDisplayed()
@@ -162,9 +165,7 @@ class InterestsListDetailScreenTest {
                 }
             }
 
-            val firstTopic = runBlocking {
-                topicsRepository.getTopics().first().first()
-            }
+            val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
             onNodeWithTag(listPaneTag).assertIsNotDisplayed()
@@ -192,9 +193,7 @@ class InterestsListDetailScreenTest {
                 }
             }
 
-            val firstTopic = runBlocking {
-                topicsRepository.getTopics().first().first()
-            }
+            val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
             Espresso.pressBack()
@@ -216,9 +215,7 @@ class InterestsListDetailScreenTest {
                 }
             }
 
-            val firstTopic = runBlocking {
-                topicsRepository.getTopics().first().first()
-            }
+            val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
             Espresso.pressBack()
