@@ -107,6 +107,7 @@ androidx-test-runner = { group = "androidx.test", name = "runner", version.ref =
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 androidx-window-core = { group = "androidx.window", name = "window-core", version.ref = "androidxWindowManager" }
+androidx-window-testing = { group = "androidx.window", name = "window-testing", version.ref = "androidxWindowManager" }
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

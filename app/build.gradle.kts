@@ -126,6 +126,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.androidx.window.testing)
     androidTestImplementation(libs.hilt.android.testing)
 
     baselineProfile(projects.benchmarks)
