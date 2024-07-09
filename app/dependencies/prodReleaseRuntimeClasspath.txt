@@ -194,7 +194,6 @@ com.google.firebase:firebase-common:21.0.0
 com.google.firebase:firebase-components:18.0.0
 com.google.firebase:firebase-config-interop:16.0.1
 com.google.firebase:firebase-config:22.0.0
-com.google.firebase:firebase-crashlytics-ktx:19.0.2
 com.google.firebase:firebase-crashlytics:19.0.2
 com.google.firebase:firebase-datatransport:18.2.0
 com.google.firebase:firebase-encoders-json:18.0.1
@@ -204,9 +203,7 @@ com.google.firebase:firebase-iid-interop:17.1.0
 com.google.firebase:firebase-installations-interop:17.1.1
 com.google.firebase:firebase-installations:18.0.0
 com.google.firebase:firebase-measurement-connector:20.0.1
-com.google.firebase:firebase-messaging-ktx:24.0.0
 com.google.firebase:firebase-messaging:24.0.0
-com.google.firebase:firebase-perf-ktx:21.0.1
 com.google.firebase:firebase-perf:21.0.1
 com.google.firebase:firebase-sessions:2.0.2
 com.google.firebase:protolite-well-known-types:18.0.0
