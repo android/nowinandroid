@@ -27,13 +27,12 @@ kotlin {
         commonMain.dependencies {
             api(kotlin("test"))
             api(projects.core.analytics)
+            api(projects.core.common)
             api(projects.core.data)
             api(projects.core.model)
             api(projects.core.notifications)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotlinx.datetime)
-            implementation(projects.core.common)
-            implementation(projects.core.designsystem)
         }
 
         androidMain.dependencies {

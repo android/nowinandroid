@@ -50,6 +50,7 @@ kotlin {
         }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)
+            implementation(libs.bundles.androidx.compose.ui.test)
         }
     }
 }
