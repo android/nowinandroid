@@ -95,7 +95,7 @@ class InterestsListDetailScreenTest {
      */
     @Composable
     private fun TestDeviceConfig.Override(
-        content: @Composable () -> Unit
+        content: @Composable () -> Unit,
     ) {
         DeviceConfigurationOverride(override = DeviceConfigurationOverride.ForcedSize(dpSize)) {
             with(LocalDensity.current) {
