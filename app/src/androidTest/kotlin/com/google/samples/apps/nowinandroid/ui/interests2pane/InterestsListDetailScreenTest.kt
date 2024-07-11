@@ -36,7 +36,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.ui.stringResource
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -44,7 +43,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import javax.inject.Inject
 import kotlin.test.assertTrue
 import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
@@ -54,11 +52,7 @@ class InterestsListDetailScreenTest {
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
-    @BindValue
     @get:Rule(order = 1)
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
-    @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Inject
