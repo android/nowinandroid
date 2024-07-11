@@ -43,7 +43,6 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
-            resValue("string", "app_name_display", "@string/app_name_debug")
         }
         release {
             isMinifyEnabled = true
