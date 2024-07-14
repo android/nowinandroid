@@ -33,84 +33,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlin.math.min
 
 /**
- * Calculates a [ScrollbarState] driven by the changes in a [LazyState].
- *
- * @param itemsAvailable the total amount of items available to scroll in the [LazyState].
- * @param itemSize a lookup function for the size of an item in the layout.
- * @param offset a lookup function for the offset of an item relative to the start of the view port.
- * @param nextItemOnMainAxis a lookup function for the next item on the main axis in the direction
- *  of the scroll.
- * @param itemSize next [LazyStateItem] on the main axis of [LazyState], null if none.
- * @param index a lookup function for index of an item in the layout relative to
- * @param viewportStartOffset a lookup function for the start offset of the view port
- * @param viewportEndOffset a lookup function for the end offset of the view port
- * @param reverseLayout a lookup function for the reverseLayout of [LazyState].
- */
-@Composable
-internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScrollbarState(
-    itemsAvailable: Int,
-    crossinline visibleItems: () -> List<LazyStateItem>,
-    crossinline itemSize: LazyState.(LazyStateItem) -> Int,
-    crossinline offset: LazyState.(LazyStateItem) -> Int,
-    crossinline nextItemOnMainAxis: LazyState.(LazyStateItem) -> LazyStateItem?,
-    crossinline index: (LazyStateItem) -> Int,
-    crossinline viewportStartOffset: () -> Int,
-    crossinline viewportEndOffset: () -> Int,
-    crossinline reverseLayout: () -> Boolean = { false },
-): ScrollbarState {
-    val state = remember { ScrollbarState() }
-    LaunchedEffect(this, itemsAvailable) {
-        snapshotFlow {
-            if (itemsAvailable == 0) return@snapshotFlow null
-
-            val visibleItemsInfo = visibleItems()
-            if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
-
-            val firstIndex = min(
-                a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
-                    itemSize = itemSize,
-                    offset = offset,
-                    nextItemOnMainAxis = nextItemOnMainAxis,
-                    itemIndex = index,
-                ),
-                b = itemsAvailable.toFloat(),
-            )
-            if (firstIndex.isNaN()) return@snapshotFlow null
-
-            val itemsVisible = visibleItemsInfo.floatSumOf { itemInfo ->
-                itemVisibilityPercentage(
-                    itemSize = itemSize(itemInfo),
-                    itemStartOffset = offset(itemInfo),
-                    viewportStartOffset = viewportStartOffset(),
-                    viewportEndOffset = viewportEndOffset(),
-                )
-            }
-
-            val thumbTravelPercent = min(
-                a = firstIndex / itemsAvailable,
-                b = 1f,
-            )
-            val thumbSizePercent = min(
-                a = itemsVisible / itemsAvailable,
-                b = 1f,
-            )
-            scrollbarStateValue(
-                thumbSizePercent = thumbSizePercent,
-                thumbMovedPercent = when {
-                    reverseLayout() -> 1f - thumbTravelPercent
-                    else -> thumbTravelPercent
-                },
-            )
-        }
-            .filterNotNull()
-            .distinctUntilChanged()
-            .collect { state.onScroll(it) }
-    }
-    return state
-}
-
-/**
  * Calculates a [ScrollbarState] driven by the changes in a [LazyListState].
  *
  * @param itemsAvailable the total amount of items available to scroll in the lazy list.
@@ -187,6 +109,84 @@ fun LazyStaggeredGridState.scrollbarState(
     viewportStartOffset = { layoutInfo.viewportStartOffset },
     viewportEndOffset = { layoutInfo.viewportEndOffset },
 )
+
+/**
+ * Calculates a [ScrollbarState] driven by the changes in a [LazyState].
+ *
+ * @param itemsAvailable the total amount of items available to scroll in the [LazyState].
+ * @param itemSize a lookup function for the size of an item in the layout.
+ * @param offset a lookup function for the offset of an item relative to the start of the view port.
+ * @param nextItemOnMainAxis a lookup function for the next item on the main axis in the direction
+ *  of the scroll.
+ * @param itemSize next [LazyStateItem] on the main axis of [LazyState], null if none.
+ * @param index a lookup function for index of an item in the layout relative to
+ * @param viewportStartOffset a lookup function for the start offset of the view port
+ * @param viewportEndOffset a lookup function for the end offset of the view port
+ * @param reverseLayout a lookup function for the reverseLayout of [LazyState].
+ */
+@Composable
+private fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScrollbarState(
+    itemsAvailable: Int,
+    visibleItems: () -> List<LazyStateItem>,
+    itemSize: LazyState.(LazyStateItem) -> Int,
+    offset: LazyState.(LazyStateItem) -> Int,
+    nextItemOnMainAxis: LazyState.(LazyStateItem) -> LazyStateItem?,
+    index: (LazyStateItem) -> Int,
+    viewportStartOffset: () -> Int,
+    viewportEndOffset: () -> Int,
+    reverseLayout: () -> Boolean = { false },
+): ScrollbarState {
+    val state = remember { ScrollbarState() }
+    LaunchedEffect(this, itemsAvailable) {
+        snapshotFlow {
+            if (itemsAvailable == 0) return@snapshotFlow null
+
+            val visibleItemsInfo = visibleItems()
+            if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
+
+            val firstIndex = min(
+                a = interpolateFirstItemIndex(
+                    visibleItems = visibleItemsInfo,
+                    itemSize = itemSize,
+                    offset = offset,
+                    nextItemOnMainAxis = nextItemOnMainAxis,
+                    itemIndex = index,
+                ),
+                b = itemsAvailable.toFloat(),
+            )
+            if (firstIndex.isNaN()) return@snapshotFlow null
+
+            val itemsVisible = visibleItemsInfo.floatSumOf { itemInfo ->
+                itemVisibilityPercentage(
+                    itemSize = itemSize(itemInfo),
+                    itemStartOffset = offset(itemInfo),
+                    viewportStartOffset = viewportStartOffset(),
+                    viewportEndOffset = viewportEndOffset(),
+                )
+            }
+
+            val thumbTravelPercent = min(
+                a = firstIndex / itemsAvailable,
+                b = 1f,
+            )
+            val thumbSizePercent = min(
+                a = itemsVisible / itemsAvailable,
+                b = 1f,
+            )
+            scrollbarStateValue(
+                thumbSizePercent = thumbSizePercent,
+                thumbMovedPercent = when {
+                    reverseLayout() -> 1f - thumbTravelPercent
+                    else -> thumbTravelPercent
+                },
+            )
+        }
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collect { state.onScroll(it) }
+    }
+    return state
+}
 
 private inline fun <T> List<T>.floatSumOf(selector: (T) -> Float): Float =
     fold(initial = 0f) { accumulator, listItem -> accumulator + selector(listItem) }
