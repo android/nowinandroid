@@ -45,6 +45,7 @@ fun LazyListState.scrollbarState(
 ) = genericScrollbarState(
     itemsAvailable = itemsAvailable,
     visibleItems = { layoutInfo.visibleItemsInfo },
+    visibleItemsOnMainAxis = { layoutInfo.visibleItemsInfo },
     itemSize = { it.size },
     offset = { it.offset },
     nextItemOnMainAxis = { first -> layoutInfo.visibleItemsInfo.find { it != first } },
@@ -67,6 +68,12 @@ fun LazyGridState.scrollbarState(
 ) = genericScrollbarState(
     itemsAvailable = itemsAvailable,
     visibleItems = { layoutInfo.visibleItemsInfo },
+    visibleItemsOnMainAxis = {
+        when (layoutInfo.orientation) {
+            Orientation.Vertical -> layoutInfo.visibleItemsInfo.filter { it.row == 0 }
+            Orientation.Horizontal -> layoutInfo.visibleItemsInfo.filter { it.column == 0 }
+        }
+    },
     itemSize = { layoutInfo.orientation.valueOf(it.size) },
     offset = { layoutInfo.orientation.valueOf(it.offset) },
     nextItemOnMainAxis = { first ->
@@ -100,6 +107,7 @@ fun LazyStaggeredGridState.scrollbarState(
 ) = genericScrollbarState(
     itemsAvailable = itemsAvailable,
     visibleItems = { layoutInfo.visibleItemsInfo },
+    visibleItemsOnMainAxis = { layoutInfo.visibleItemsInfo.filter { it.lane == 0 } },
     itemSize = { layoutInfo.orientation.valueOf(it.size) },
     offset = { layoutInfo.orientation.valueOf(it.offset) },
     nextItemOnMainAxis = { first ->
@@ -128,6 +136,7 @@ fun LazyStaggeredGridState.scrollbarState(
 private fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScrollbarState(
     itemsAvailable: Int,
     visibleItems: () -> List<LazyStateItem>,
+    visibleItemsOnMainAxis: () -> List<LazyStateItem>,
     itemSize: LazyState.(LazyStateItem) -> Int,
     offset: LazyState.(LazyStateItem) -> Int,
     nextItemOnMainAxis: LazyState.(LazyStateItem) -> LazyStateItem?,
@@ -142,11 +151,12 @@ private fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScroll
             if (itemsAvailable == 0) return@snapshotFlow null
 
             val visibleItemsInfo = visibleItems()
+            val visibleItemsOnMainAxis = visibleItemsOnMainAxis()
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
 
-            val firstIndex = min(
-                a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
+            val interpolatedIndex = min(
+                a = interpolateIndex(
+                    visibleItems = visibleItemsOnMainAxis,
                     itemSize = itemSize,
                     offset = offset,
                     nextItemOnMainAxis = nextItemOnMainAxis,
@@ -154,7 +164,7 @@ private fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScroll
                 ),
                 b = itemsAvailable.toFloat(),
             )
-            if (firstIndex.isNaN()) return@snapshotFlow null
+            if (interpolatedIndex.isNaN()) return@snapshotFlow null
 
             val itemsVisible = visibleItemsInfo.floatSumOf { itemInfo ->
                 itemVisibilityPercentage(
@@ -166,7 +176,7 @@ private fun <LazyState : ScrollableState, LazyStateItem> LazyState.genericScroll
             }
 
             val thumbTravelPercent = min(
-                a = firstIndex / itemsAvailable,
+                a = interpolatedIndex / itemsAvailable,
                 b = 1f,
             )
             val thumbSizePercent = min(
