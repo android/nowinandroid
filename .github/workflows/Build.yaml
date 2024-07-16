@@ -202,16 +202,20 @@ jobs:
         run: ./gradlew ${{matrix.device-config}}DemoDebugAndroidTest --no-parallel --max-workers=1
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
 
-      - name: Upload test reports
-        if: success() || failure()
-        uses: actions/upload-artifact@v3
+      - name: Rename test report
+        run: mv app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/index.html app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/${{matrix.device-config}}.html
 
-      - name: Build projects and run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-
+#      - name: Build projects and run instrumentation tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#
+#        with:
+#          name: test-reports-GMD
+#          path: '**/build/reports/androidTests'
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: test-reports-GMD
-          path: '**/build/reports/androidTests'
+          name: testResults${{matrix.device-config}}
+          path: app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/${{matrix.device-config}}.html
 
       - name: Print disk space usage
         if: failure()
