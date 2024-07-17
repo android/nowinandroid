@@ -52,6 +52,6 @@ plugins {
 }
 
 moduleGraphAssert {
-    configurations = setOf("api", "implementation", "test", "androidTest")
+    configurations = setOf("api", "implementation", "androidTestImplementation")
 }
 
