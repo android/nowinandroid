@@ -50,3 +50,8 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
 }
+
+moduleGraphAssert {
+    configurations = setOf("api", "implementation", "test", "androidTest")
+}
+
