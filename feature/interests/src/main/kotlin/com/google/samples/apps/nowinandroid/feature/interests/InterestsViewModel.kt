@@ -25,7 +25,6 @@ import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCa
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -41,9 +40,12 @@ class InterestsViewModel @Inject constructor(
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
 
+    // Key used to save and retrieve the currently selected topic id from saved state.
+    private val selectedTopicIdKey = "selectedTopicIdKey"
+
     private val interestsRoute: InterestsRoute = savedStateHandle.toRoute()
     private val selectedTopicId = savedStateHandle.getStateFlow(
-        key = TOPIC_ID_KEY,
+        key = selectedTopicIdKey,
         initialValue = interestsRoute.initialTopicId,
     )
 
@@ -64,7 +66,7 @@ class InterestsViewModel @Inject constructor(
     }
 
     fun onTopicClick(topicId: String?) {
-        savedStateHandle[TOPIC_ID_KEY] = topicId
+        savedStateHandle[selectedTopicIdKey] = topicId
     }
 }
 
