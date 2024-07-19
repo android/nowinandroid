@@ -20,8 +20,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 
-const val TOPIC_ID_KEY = "topicId"
-
 @Serializable data class InterestsRoute(
     // The ID of the topic which will be initially selected at this destination
     val initialTopicId: String?,
