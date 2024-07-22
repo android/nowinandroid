@@ -1,1 +1,5 @@
 /build
+/.idea/.gitignore
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/vcs.xml
