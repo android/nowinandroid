@@ -36,7 +36,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            api(libs.androidx.compose.ui.testManifest)
+//            api(libs.androidx.compose.ui.testManifest)
             implementation(libs.androidx.test.rules)
             implementation(libs.hilt.android.testing)
         }
