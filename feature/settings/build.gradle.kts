@@ -15,8 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
-    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.cmp.feature)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
@@ -24,12 +23,32 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.settings"
 }
 
-dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.google.oss.licenses)
-    implementation(projects.core.data)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.data)
+            implementation(projects.core.ui)
+            implementation(compose.material3)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+        }
+        commonMain.dependencies {
+            implementation(projects.core.testing)
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.roborazzi)
+            implementation(projects.core.screenshotTesting)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.testing)
+            implementation(libs.bundles.androidx.compose.ui.test)
+        }
+    }
+}
 
-    testImplementation(projects.core.testing)
-
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+compose.resources {
+    publicResClass = true
 }

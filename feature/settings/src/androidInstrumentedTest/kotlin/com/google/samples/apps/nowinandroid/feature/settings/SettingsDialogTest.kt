@@ -25,6 +25,22 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
+import kotlinx.coroutines.runBlocking
+import nowinandroid.feature.settings.generated.resources.Res
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_android
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_default
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_guidelines
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_dark
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_light
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_system_default
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_no
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_preference
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_yes
+import nowinandroid.feature.settings.generated.resources.feature_settings_feedback
+import nowinandroid.feature.settings.generated.resources.feature_settings_licenses
+import nowinandroid.feature.settings.generated.resources.feature_settings_loading
+import nowinandroid.feature.settings.generated.resources.feature_settings_privacy_policy
+import org.jetbrains.compose.resources.StringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,7 +49,10 @@ class SettingsDialogTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private fun getString(id: Int) = composeTestRule.activity.resources.getString(id)
+    private fun getString(id: StringResource) = runBlocking {
+        // TODO remove runBlocking
+        org.jetbrains.compose.resources.getString(id)
+    }
 
     @Test
     fun whenLoading_showsLoadingText() {
@@ -48,7 +67,7 @@ class SettingsDialogTest {
         }
 
         composeTestRule
-            .onNodeWithText(getString(R.string.feature_settings_loading))
+            .onNodeWithText(getString(Res.string.feature_settings_loading))
             .assertExists()
     }
 
@@ -71,17 +90,17 @@ class SettingsDialogTest {
         }
 
         // Check that all the possible settings are displayed.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_default)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_android)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_brand_default)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_brand_android)).assertExists()
         composeTestRule.onNodeWithText(
-            getString(R.string.feature_settings_dark_mode_config_system_default),
+            getString(Res.string.feature_settings_dark_mode_config_system_default),
         ).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_light)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_dark)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dark_mode_config_light)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dark_mode_config_dark)).assertExists()
 
         // Check that the correct settings are selected.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_android)).assertIsSelected()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dark_mode_config_dark)).assertIsSelected()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_brand_android)).assertIsSelected()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dark_mode_config_dark)).assertIsSelected()
     }
 
     @Test
@@ -103,12 +122,12 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_preference)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_yes)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_no)).assertExists()
 
         // Check that the correct default dynamic color setting is selected.
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertIsSelected()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_no)).assertIsSelected()
     }
 
     @Test
@@ -129,10 +148,10 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference))
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_preference))
             .assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
     }
 
     @Test
@@ -153,10 +172,10 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_preference))
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_preference))
             .assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_yes)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_dynamic_color_no)).assertDoesNotExist()
     }
 
     @Test
@@ -177,9 +196,9 @@ class SettingsDialogTest {
             )
         }
 
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_privacy_policy)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_licenses)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_brand_guidelines)).assertExists()
-        composeTestRule.onNodeWithText(getString(R.string.feature_settings_feedback)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_privacy_policy)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_licenses)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_brand_guidelines)).assertExists()
+        composeTestRule.onNodeWithText(getString(Res.string.feature_settings_feedback)).assertExists()
     }
 }

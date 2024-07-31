@@ -18,7 +18,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +30,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -45,17 +43,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
@@ -67,14 +59,34 @@ import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.feature.settings.R.string
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
+import nowinandroid.feature.settings.generated.resources.Res
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_android
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_default
+import nowinandroid.feature.settings.generated.resources.feature_settings_brand_guidelines
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_dark
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_light
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_config_system_default
+import nowinandroid.feature.settings.generated.resources.feature_settings_dark_mode_preference
+import nowinandroid.feature.settings.generated.resources.feature_settings_dismiss_dialog_button_text
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_no
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_preference
+import nowinandroid.feature.settings.generated.resources.feature_settings_dynamic_color_yes
+import nowinandroid.feature.settings.generated.resources.feature_settings_feedback
+import nowinandroid.feature.settings.generated.resources.feature_settings_licenses
+import nowinandroid.feature.settings.generated.resources.feature_settings_loading
+import nowinandroid.feature.settings.generated.resources.feature_settings_privacy_policy
+import nowinandroid.feature.settings.generated.resources.feature_settings_theme
+import nowinandroid.feature.settings.generated.resources.feature_settings_title
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingsDialog(
     onDismiss: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel,
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
@@ -95,7 +107,7 @@ fun SettingsDialog(
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
+    val configuration = LocalViewConfiguration.current
 
     /**
      * usePlatformDefaultWidth = false is use as a temporary fix to allow
@@ -106,11 +118,10 @@ fun SettingsDialog(
      */
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(
-                text = stringResource(string.feature_settings_title),
+                text = stringResource(Res.string.feature_settings_title),
                 style = MaterialTheme.typography.titleLarge,
             )
         },
@@ -120,7 +131,7 @@ fun SettingsDialog(
                 when (settingsUiState) {
                     Loading -> {
                         Text(
-                            text = stringResource(string.feature_settings_loading),
+                            text = stringResource(Res.string.feature_settings_loading),
                             modifier = Modifier.padding(vertical = 16.dp),
                         )
                     }
@@ -142,7 +153,7 @@ fun SettingsDialog(
         },
         confirmButton = {
             Text(
-                text = stringResource(string.feature_settings_dismiss_dialog_button_text),
+                text = stringResource(Res.string.feature_settings_dismiss_dialog_button_text),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -162,50 +173,50 @@ private fun ColumnScope.SettingsPanel(
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
 ) {
-    SettingsDialogSectionTitle(text = stringResource(string.feature_settings_theme))
+    SettingsDialogSectionTitle(text = stringResource(Res.string.feature_settings_theme))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_brand_default),
+            text = stringResource(Res.string.feature_settings_brand_default),
             selected = settings.brand == DEFAULT,
             onClick = { onChangeThemeBrand(DEFAULT) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_brand_android),
+            text = stringResource(Res.string.feature_settings_brand_android),
             selected = settings.brand == ANDROID,
             onClick = { onChangeThemeBrand(ANDROID) },
         )
     }
     AnimatedVisibility(visible = settings.brand == DEFAULT && supportDynamicColor) {
         Column {
-            SettingsDialogSectionTitle(text = stringResource(string.feature_settings_dynamic_color_preference))
+            SettingsDialogSectionTitle(text = stringResource(Res.string.feature_settings_dynamic_color_preference))
             Column(Modifier.selectableGroup()) {
                 SettingsDialogThemeChooserRow(
-                    text = stringResource(string.feature_settings_dynamic_color_yes),
+                    text = stringResource(Res.string.feature_settings_dynamic_color_yes),
                     selected = settings.useDynamicColor,
                     onClick = { onChangeDynamicColorPreference(true) },
                 )
                 SettingsDialogThemeChooserRow(
-                    text = stringResource(string.feature_settings_dynamic_color_no),
+                    text = stringResource(Res.string.feature_settings_dynamic_color_no),
                     selected = !settings.useDynamicColor,
                     onClick = { onChangeDynamicColorPreference(false) },
                 )
             }
         }
     }
-    SettingsDialogSectionTitle(text = stringResource(string.feature_settings_dark_mode_preference))
+    SettingsDialogSectionTitle(text = stringResource(Res.string.feature_settings_dark_mode_preference))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_dark_mode_config_system_default),
+            text = stringResource(Res.string.feature_settings_dark_mode_config_system_default),
             selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
             onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_dark_mode_config_light),
+            text = stringResource(Res.string.feature_settings_dark_mode_config_light),
             selected = settings.darkThemeConfig == LIGHT,
             onClick = { onChangeDarkThemeConfig(LIGHT) },
         )
         SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_dark_mode_config_dark),
+            text = stringResource(Res.string.feature_settings_dark_mode_config_dark),
             selected = settings.darkThemeConfig == DARK,
             onClick = { onChangeDarkThemeConfig(DARK) },
         )
@@ -261,25 +272,24 @@ private fun LinksPanel() {
         NiaTextButton(
             onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
         ) {
-            Text(text = stringResource(string.feature_settings_privacy_policy))
+            Text(text = stringResource(Res.string.feature_settings_privacy_policy))
         }
-        val context = LocalContext.current
         NiaTextButton(
             onClick = {
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                // Intentionally left blank
             },
         ) {
-            Text(text = stringResource(string.feature_settings_licenses))
+            Text(text = stringResource(Res.string.feature_settings_licenses))
         }
         NiaTextButton(
             onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) },
         ) {
-            Text(text = stringResource(string.feature_settings_brand_guidelines))
+            Text(text = stringResource(Res.string.feature_settings_brand_guidelines))
         }
         NiaTextButton(
             onClick = { uriHandler.openUri(FEEDBACK_URL) },
         ) {
-            Text(text = stringResource(string.feature_settings_feedback))
+            Text(text = stringResource(Res.string.feature_settings_feedback))
         }
     }
 }
@@ -319,5 +329,6 @@ private fun PreviewSettingsDialogLoading() {
 }
 
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
-private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
+private const val BRAND_GUIDELINES_URL =
+    "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
 private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"

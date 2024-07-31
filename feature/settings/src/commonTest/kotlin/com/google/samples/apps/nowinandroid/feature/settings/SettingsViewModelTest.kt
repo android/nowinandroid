@@ -19,28 +19,24 @@ package com.google.samples.apps.nowinandroid.feature.settings
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SettingsViewModelTest {
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
 
     private val userDataRepository = TestUserDataRepository()
 
     private lateinit var viewModel: SettingsViewModel
 
-    @Before
+    @BeforeTest
     fun setup() {
         viewModel = SettingsViewModel(userDataRepository)
     }
@@ -50,6 +46,7 @@ class SettingsViewModelTest {
         assertEquals(Loading, viewModel.settingsUiState.value)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun stateIsSuccessAfterUserDataLoaded() = runTest {
         val collectJob =
