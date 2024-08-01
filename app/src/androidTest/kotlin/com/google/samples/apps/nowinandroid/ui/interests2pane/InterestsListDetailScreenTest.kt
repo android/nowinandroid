@@ -17,20 +17,18 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.material3.adaptive.Posture
-import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.ui.test.DeviceConfigurationOverride
-import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.test.espresso.Espresso
-import androidx.window.core.layout.WindowSizeClass
+import androidx.test.espresso.device.DeviceInteraction.Companion.setDisplaySize
+import androidx.test.espresso.device.EspressoDevice
+import androidx.test.espresso.device.rules.DisplaySizeRule
+import androidx.test.espresso.device.sizeclass.HeightSizeClass
+import androidx.test.espresso.device.sizeclass.WidthSizeClass
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
@@ -61,6 +59,9 @@ class InterestsListDetailScreenTest {
     @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
+    @get:Rule(order = 3)
+    val displaySizeRule: DisplaySizeRule = DisplaySizeRule()
+
     @Inject
     lateinit var topicsRepository: TopicsRepository
 
@@ -71,17 +72,9 @@ class InterestsListDetailScreenTest {
     private val Topic.testTag
         get() = "topic:${this.id}"
 
-    // Overrides for device sizes.
-    private enum class TestDeviceConfig(widthDp: Float, heightDp: Float) {
-        Compact(412f, 915f),
-        Expanded(1200f, 840f),
-        ;
-
-        val sizeOverride = DeviceConfigurationOverride.ForcedSize(DpSize(widthDp.dp, heightDp.dp))
-        val adaptiveInfo = WindowAdaptiveInfo(
-            windowSizeClass = WindowSizeClass.compute(widthDp, heightDp),
-            windowPosture = Posture(),
-        )
+    /** Convenience function for getting all topics during tests, */
+    private fun getTopics(): List<Topic> = runBlocking {
+        topicsRepository.getTopics().first().sortedBy { it.name }
     }
 
     @Before
@@ -89,21 +82,16 @@ class InterestsListDetailScreenTest {
         hiltRule.inject()
     }
 
-    /** Convenience function for getting all topics during tests, */
-    private fun getTopics(): List<Topic> = runBlocking {
-        topicsRepository.getTopics().first()
-    }
-
     @Test
     fun expandedWidth_initialState_showsTwoPanesWithPlaceholder() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.EXPANDED,
+            heightSizeClass = HeightSizeClass.EXPANDED,
+        )
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Expanded) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
-                    }
+                NiaTheme {
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -114,14 +102,14 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun compactWidth_initialState_showsListPane() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.COMPACT,
+            heightSizeClass = HeightSizeClass.MEDIUM,
+        )
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Compact) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
-                    }
+                NiaTheme {
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -132,14 +120,14 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun expandedWidth_topicSelected_updatesDetailPane() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.EXPANDED,
+            heightSizeClass = HeightSizeClass.EXPANDED,
+        )
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Expanded) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
-                    }
+                NiaTheme {
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -154,14 +142,14 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun compactWidth_topicSelected_showsTopicDetailPane() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.COMPACT,
+            heightSizeClass = HeightSizeClass.MEDIUM,
+        )
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Compact) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
-                    }
+                NiaTheme {
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -176,20 +164,21 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun expandedWidth_backPressFromTopicDetail_leavesInterests() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.EXPANDED,
+            heightSizeClass = HeightSizeClass.EXPANDED,
+        )
+
         var unhandledBackPress = false
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Expanded) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            // Back press should not be handled by the two pane layout, and thus
-                            // "fall through" to this BackHandler.
-                            BackHandler {
-                                unhandledBackPress = true
-                            }
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
+                NiaTheme {
+                    // Back press should not be handled by the two pane layout, and thus
+                    // "fall through" to this BackHandler.
+                    BackHandler {
+                        unhandledBackPress = true
                     }
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -204,14 +193,14 @@ class InterestsListDetailScreenTest {
 
     @Test
     fun compactWidth_backPressFromTopicDetail_showsListPane() {
+        EspressoDevice.onDevice().setDisplaySize(
+            widthSizeClass = WidthSizeClass.COMPACT,
+            heightSizeClass = HeightSizeClass.MEDIUM,
+        )
         composeTestRule.apply {
             setContent {
-                with(TestDeviceConfig.Compact) {
-                    DeviceConfigurationOverride(override = sizeOverride) {
-                        NiaTheme {
-                            InterestsListDetailScreen(windowAdaptiveInfo = adaptiveInfo)
-                        }
-                    }
+                NiaTheme {
+                    InterestsListDetailScreen()
                 }
             }
 

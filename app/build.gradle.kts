@@ -67,6 +67,9 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+        emulatorControl {
+            enable = true
+        }
     }
     namespace = "com.google.samples.apps.nowinandroid"
 }
@@ -124,6 +127,7 @@ dependencies {
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.device)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
