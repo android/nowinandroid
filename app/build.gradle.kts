@@ -114,6 +114,7 @@ dependencies {
     testImplementation(projects.core.dataTest)
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.sync.syncTest)
+    testImplementation(libs.kotlin.test)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
