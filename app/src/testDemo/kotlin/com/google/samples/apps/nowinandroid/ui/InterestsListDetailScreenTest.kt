@@ -29,7 +29,6 @@ import androidx.test.espresso.Espresso
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.feature.topic.R
 import com.google.samples.apps.nowinandroid.ui.interests2pane.InterestsListDetailScreen
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.BindValue
@@ -48,6 +47,7 @@ import org.robolectric.annotation.Config
 import javax.inject.Inject
 import kotlin.properties.ReadOnlyProperty
 import kotlin.test.assertTrue
+import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
 
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
 private const val COMPACT_WIDTH = "w412dp-h915dp"
@@ -76,7 +76,7 @@ class InterestsListDetailScreenTest {
     }
 
     // The strings used for matching in these tests.
-    private val placeholderText by composeTestRule.stringResource(R.string.feature_topic_select_an_interest)
+    private val placeholderText by composeTestRule.stringResource(FeatureTopicR.string.feature_topic_select_an_interest)
     private val listPaneTag = "interests:topics"
 
     private val Topic.testTag
