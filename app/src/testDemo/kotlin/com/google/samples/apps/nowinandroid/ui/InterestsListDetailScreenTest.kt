@@ -174,6 +174,7 @@ class InterestsListDetailScreenTest {
             val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
+            waitForIdle()
             Espresso.pressBack()
 
             assertTrue(unhandledBackPress)
@@ -193,6 +194,7 @@ class InterestsListDetailScreenTest {
             val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
+            waitForIdle()
             Espresso.pressBack()
 
             onNodeWithTag(listPaneTag).assertIsDisplayed()
