@@ -26,14 +26,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply(libs.findPlugin("nowinandroid.android.library").get().get().pluginId)
-                apply(libs.findPlugin("nowinandroid.android.hilt").get().get().pluginId)
+                apply("nowinandroid.android.library")
+                apply("nowinandroid.hilt")
             }
             extensions.configure<LibraryExtension> {
-                defaultConfig {
-                    testInstrumentationRunner =
-                        "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-                }
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }
