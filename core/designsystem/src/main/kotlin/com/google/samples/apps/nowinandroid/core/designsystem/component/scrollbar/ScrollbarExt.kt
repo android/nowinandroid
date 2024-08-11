@@ -51,7 +51,7 @@ fun LazyListState.scrollbarState(
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
 
             val firstIndex = min(
-                a = interpolateFirstItemIndex(
+                a = interpolateIndex(
                     visibleItems = visibleItemsInfo,
                     itemSize = { it.size },
                     offset = { it.offset },
@@ -114,8 +114,11 @@ fun LazyGridState.scrollbarState(
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
 
             val firstIndex = min(
-                a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
+                a = interpolateIndex(
+                    visibleItems = when (layoutInfo.orientation) {
+                        Orientation.Vertical -> layoutInfo.visibleItemsInfo.filter { it.row == 0 }
+                        Orientation.Horizontal -> layoutInfo.visibleItemsInfo.filter { it.column == 0 }
+                    },
                     itemSize = { layoutInfo.orientation.valueOf(it.size) },
                     offset = { layoutInfo.orientation.valueOf(it.offset) },
                     nextItemOnMainAxis = { first ->
@@ -188,8 +191,8 @@ fun LazyStaggeredGridState.scrollbarState(
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
 
             val firstIndex = min(
-                a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
+                a = interpolateIndex(
+                    visibleItems = layoutInfo.visibleItemsInfo.filter { it.lane == 0 },
                     itemSize = { layoutInfo.orientation.valueOf(it.size) },
                     offset = { layoutInfo.orientation.valueOf(it.offset) },
                     nextItemOnMainAxis = { first ->
