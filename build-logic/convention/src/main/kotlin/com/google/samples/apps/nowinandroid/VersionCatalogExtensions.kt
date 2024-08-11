@@ -22,5 +22,5 @@ import kotlin.jvm.optionals.getOrNull
 /**
  * Get a Plugin from version catalog using an alias.
  */
-fun VersionCatalog.getPlugin(alias: String): String =
+internal fun VersionCatalog.getPlugin(alias: String): String =
     findPlugin(alias).getOrNull()?.get()?.pluginId ?: "There is no [$alias] in the catalog"
