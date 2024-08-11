@@ -16,19 +16,20 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
+import com.google.samples.apps.nowinandroid.getPlugin
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply {
-                apply("nowinandroid.android.library")
-                apply("nowinandroid.hilt")
-            }
+            apply(plugin = libs.getPlugin("nowinandroid.android.library"))
+            apply(plugin = libs.getPlugin("nowinandroid.hilt"))
+
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
@@ -43,7 +44,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
 
-                add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
+                add(
+                    "androidTestImplementation",
+                    libs.findLibrary("androidx.lifecycle.runtimeTesting").get(),
+                )
             }
         }
     }

@@ -16,6 +16,7 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureAndroidCompose
+import com.google.samples.apps.nowinandroid.getPlugin
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -25,8 +26,8 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.findPlugin("android-library").get().get().pluginId)
-            apply(plugin = libs.findPlugin("compose").get().get().pluginId)
+            apply(plugin = libs.getPlugin("android.library"))
+            apply(plugin = libs.getPlugin("compose"))
 
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)

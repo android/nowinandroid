@@ -16,20 +16,21 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+import com.google.samples.apps.nowinandroid.getPlugin
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply(libs.findPlugin("gms").get().get().pluginId)
-                apply(libs.findPlugin("firebase-perf").get().get().pluginId)
-                apply(libs.findPlugin("firebase-crashlytics").get().get().pluginId)
-            }
+            apply(plugin = libs.getPlugin("gms"))
+            apply(plugin = libs.getPlugin("firebase.perf"))
+            apply(plugin = libs.getPlugin("firebase.crashlytics"))
+
 
             dependencies {
                 val bom = libs.findLibrary("firebase-bom").get()
