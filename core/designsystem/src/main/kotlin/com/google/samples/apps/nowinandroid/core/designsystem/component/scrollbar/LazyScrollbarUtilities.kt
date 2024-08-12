@@ -33,7 +33,7 @@ import kotlin.math.abs
  * @return a [Float] in the range [firstItemPosition..nextItemPosition) where nextItemPosition
  * is the index of the consecutive item along the major axis.
  * */
-internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.interpolateIndex(
+internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.interpolateFirstItemIndex(
     visibleItems: List<LazyStateItem>,
     crossinline itemSize: LazyState.(LazyStateItem) -> Int,
     crossinline offset: LazyState.(LazyStateItem) -> Int,
