@@ -97,6 +97,12 @@ fun NewsResourceCardExpanded(
     modifier: Modifier = Modifier,
 ) {
     val clickActionLabel = stringResource(R.string.core_ui_card_tap_action)
+    val sharingLabel = stringResource(R.string.core_ui_feed_sharing)
+    val sharingContent = stringResource(
+        R.string.core_ui_feed_sharing_data,
+        userNewsResource.title,
+        userNewsResource.url,
+    )
 
     val dragAndDropFlags = if (VERSION.SDK_INT >= VERSION_CODES.N) {
         View.DRAG_FLAG_GLOBAL
@@ -128,15 +134,16 @@ fun NewsResourceCardExpanded(
                     Row {
                         NewsResourceTitle(
                             userNewsResource.title,
-                            modifier = Modifier.fillMaxWidth((.8f))
+                            modifier = Modifier
+                                .fillMaxWidth((.8f))
                                 .dragAndDropSource {
                                     detectTapGestures(
                                         onLongPress = {
                                             startTransfer(
                                                 DragAndDropTransferData(
                                                     ClipData.newPlainText(
-                                                        "Feed sharing",
-                                                        userNewsResource.title + ": " + userNewsResource.url,
+                                                        sharingLabel,
+                                                        sharingContent,
                                                     ),
                                                     flags = dragAndDropFlags,
                                                 ),
