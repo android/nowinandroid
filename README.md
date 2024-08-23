@@ -190,11 +190,11 @@ Then copy the resulting baseline profile from the emulator to [`app/src/main/bas
 Run the following command to get and analyse compose compiler metrics:
 
 ```bash
-./gradlew assembleRelease -PenableComposeCompilerMetrics=true -PenableComposeCompilerReports=true
+./gradlew assembleRelease -PenableComposeCompilerReportsAndMetrics=true --rerun-tasks
 ```
 
-The reports files will be added to [build/compose-reports](build/compose-reports). The metrics files will also be 
-added to [build/compose-metrics](build/compose-metrics).
+The reports files will be added to ***build/module-name/compose-reports***. The metrics files will also be 
+added to ***build/module-name/compose-metrics***.
 
 For more information on Compose compiler metrics, see [this blog post](https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8).
 
