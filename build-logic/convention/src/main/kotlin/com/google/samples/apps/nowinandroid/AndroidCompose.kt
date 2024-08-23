@@ -51,7 +51,7 @@ internal fun Project.configureAndroidCompose(
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
-        if (project.hasProperty("enableComposeCompilerReportsAndMetrics")) {
+        if (isPropertyValueIsTrue("enableComposeCompilerReportsAndMetrics")) {
             metricsDestination = relativeToRootProject("compose-metrics")
             reportsDestination = relativeToRootProject("compose-reports")
         }
