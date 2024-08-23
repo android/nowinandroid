@@ -32,3 +32,9 @@ val Project.libs
 internal fun Project.relativeToRootProject(dir: String): Provider<Directory> =
     rootProject.layout.buildDirectory.dir(projectDir.toRelativeString(rootDir))
         .map { it.dir(dir) }
+
+/**
+ * Check a [propertyName]'s property value is true.
+ */
+internal fun Project.isPropertyValueIsTrue(propertyName: String): Boolean =
+    properties[propertyName].toString().toBoolean()
