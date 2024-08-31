@@ -35,12 +35,12 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.ExecOperations
 import java.io.File
+import java.util.Locale
 import javax.inject.Inject
 
 @CacheableTask
@@ -105,6 +105,10 @@ abstract class CheckBadgingTask : DefaultTask() {
             .that(generatedBadging.get().asFile.readText())
             .isEqualTo(goldenBadging.get().asFile.readText())
     }
+}
+
+private fun String.capitalized() = replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
 }
 
 fun Project.configureBadgingTasks(
