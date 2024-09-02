@@ -52,8 +52,7 @@ class SettingsViewModelTest {
 
     @Test
     fun stateIsSuccessAfterUserDataLoaded() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.settingsUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.settingsUiState.collect() }
 
         userDataRepository.setThemeBrand(ANDROID)
         userDataRepository.setDarkThemeConfig(DARK)
@@ -69,6 +68,5 @@ class SettingsViewModelTest {
             viewModel.settingsUiState.value,
         )
 
-        collectJob.cancel()
     }
 }

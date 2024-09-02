@@ -98,9 +98,8 @@ class ForYouViewModelTest {
 
     @Test
     fun stateIsLoadingWhenFollowedTopicsAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
@@ -110,30 +109,25 @@ class ForYouViewModelTest {
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
 
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun stateIsLoadingWhenAppIsSyncingWithNoInterests() = runTest {
         syncManager.setSyncing(true)
 
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
 
         assertEquals(
             true,
             viewModel.isSyncing.value,
         )
 
-        collectJob.cancel()
     }
 
     @Test
     fun onboardingStateIsLoadingWhenTopicsAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
 
@@ -142,16 +136,13 @@ class ForYouViewModelTest {
             viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Success(emptyList()), viewModel.feedState.value)
-
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun onboardingIsShownWhenNewsResourcesAreLoading() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
@@ -202,16 +193,12 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun onboardingIsShownAfterLoadingEmptyFollowedTopics() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
@@ -264,15 +251,12 @@ class ForYouViewModelTest {
             viewModel.feedState.value,
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun onboardingIsNotShownAfterUserDismissesOnboarding() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
 
@@ -300,15 +284,13 @@ class ForYouViewModelTest {
             viewModel.feedState.value,
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
+
     }
 
     @Test
     fun topicSelectionUpdatesAfterSelectingTopic() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
@@ -352,16 +334,12 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun topicSelectionUpdatesAfterUnselectingTopic() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         topicsRepository.sendTopics(sampleTopics)
         userDataRepository.setFollowedTopicIds(emptySet())
@@ -416,16 +394,12 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun newsResourceSelectionUpdatesAfterLoadingFollowedTopics() = runTest {
-        val collectJob1 =
-            launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
-        val collectJob2 = launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
         val followedTopicIds = setOf("1")
         val userData = emptyUserData.copy(
@@ -461,14 +435,11 @@ class ForYouViewModelTest {
             viewModel.feedState.value,
         )
 
-        collectJob1.cancel()
-        collectJob2.cancel()
     }
 
     @Test
     fun deepLinkedNewsResourceIsFetchedAndResetAfterViewing() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.deepLinkedNewsResource.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.deepLinkedNewsResource.collect() }
 
         newsRepository.sendNewsResources(sampleNewsResources)
         userDataRepository.setUserData(emptyUserData)
@@ -504,7 +475,6 @@ class ForYouViewModelTest {
             ),
         )
 
-        collectJob.cancel()
     }
 
     @Test
