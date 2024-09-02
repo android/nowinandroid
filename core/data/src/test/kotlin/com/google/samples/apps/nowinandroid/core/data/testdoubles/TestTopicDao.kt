@@ -51,6 +51,7 @@ class TestTopicDao : TopicDao {
     override suspend fun upsertTopics(entities: List<TopicEntity>) {
         // Overwrite old values with new values
         entitiesStateFlow.update { oldValues -> (entities + oldValues).distinctBy(TopicEntity::id) }
+
     }
 
     override suspend fun deleteTopics(ids: List<String>) {
