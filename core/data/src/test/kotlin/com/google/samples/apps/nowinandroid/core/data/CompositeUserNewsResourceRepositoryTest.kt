@@ -17,13 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.data
 
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -42,23 +40,16 @@ class CompositeUserNewsResourceRepositoryTest {
 
     @Test
     fun whenNoFilters_allNewsResourcesAreReturned() = runTest {
-        // Obtain the user news resources flow.
+        // Obtain the user news resources flow without any filters applied.
         val userNewsResources = userNewsResourceRepository.observeAll()
 
-        // Send some news resources and user data into the data repositories.
+        // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
+        userDataRepository.setFollowedTopicIds(emptySet())
 
-        // Construct the test user data with bookmarks and followed topics.
-        val userData = emptyUserData.copy(
-            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
-            followedTopics = setOf(sampleTopic1.id),
-        )
-
-        userDataRepository.setUserData(userData)
-
-        // Check that the correct news resources are returned with their bookmarked state.
+        // Check that the correct list of news resources is returned.
         assertEquals(
-            sampleNewsResources.mapToUserNewsResources(userData),
+            sampleNewsResources.mapToUserNewsResources(userDataRepository.userData.first()),
             userNewsResources.first(),
         )
     }
@@ -66,46 +57,35 @@ class CompositeUserNewsResourceRepositoryTest {
     @Test
     fun whenFilteredByTopicId_matchingNewsResourcesAreReturned() = runTest {
         // Obtain a stream of user news resources for the given topic id.
-        val userNewsResources =
-            userNewsResourceRepository.observeAll(
-                NewsResourceQuery(
-                    filterTopicIds = setOf(
-                        sampleTopic1.id,
-                    ),
-                ),
-            )
+        val userNewsResources = userNewsResourceRepository.observeAllForFollowedTopics()
 
         // Send test data into the repositories.
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setUserData(emptyUserData)
+        userDataRepository.setTopicIdFollowed(sampleTopic1.id, true)
 
         // Check that only news resources with the given topic id are returned.
         assertEquals(
             sampleNewsResources
                 .filter { sampleTopic1 in it.topics }
-                .mapToUserNewsResources(emptyUserData),
+                .mapToUserNewsResources(userDataRepository.userData.first()),
             userNewsResources.first(),
         )
     }
 
     @Test
     fun whenFilteredByFollowedTopics_matchingNewsResourcesAreReturned() = runTest {
-        // Obtain a stream of user news resources for the given topic id.
-        val userNewsResources =
-            userNewsResourceRepository.observeAllForFollowedTopics()
+        // Obtain a stream of user news resources filtered by followed topics
+        val userNewsResources = userNewsResourceRepository.observeAllForFollowedTopics()
 
         // Send test data into the repositories.
-        val userData = emptyUserData.copy(
-            followedTopics = setOf(sampleTopic1.id),
-        )
         newsRepository.sendNewsResources(sampleNewsResources)
-        userDataRepository.setUserData(userData)
+        userDataRepository.setFollowedTopicIds(setOf(sampleTopic1.id))
 
-        // Check that only news resources with the given topic id are returned.
+        // Check that only news resources with the followed topics are returned.
         assertEquals(
             sampleNewsResources
                 .filter { sampleTopic1 in it.topics }
-                .mapToUserNewsResources(userData),
+                .mapToUserNewsResources(userDataRepository.userData.first()),
             userNewsResources.first(),
         )
     }
@@ -119,16 +99,14 @@ class CompositeUserNewsResourceRepositoryTest {
         newsRepository.sendNewsResources(sampleNewsResources)
 
         // Construct the test user data with bookmarks and followed topics.
-        val userData = emptyUserData.copy(
-            bookmarkedNewsResources = setOf(sampleNewsResources[0].id, sampleNewsResources[2].id),
-            followedTopics = setOf(sampleTopic1.id),
-        )
-
-        userDataRepository.setUserData(userData)
+        userDataRepository.setNewsResourceBookmarked(sampleNewsResources[0].id, true)
+        userDataRepository.setNewsResourceBookmarked(sampleNewsResources[2].id, true)
+        userDataRepository.setFollowedTopicIds(setOf(sampleTopic1.id))
 
         // Check that the correct news resources are returned with their bookmarked state.
         assertEquals(
-            listOf(sampleNewsResources[0], sampleNewsResources[2]).mapToUserNewsResources(userData),
+            listOf(sampleNewsResources[0], sampleNewsResources[2])
+                .mapToUserNewsResources(userDataRepository.userData.first()),
             userNewsResources.first(),
         )
     }

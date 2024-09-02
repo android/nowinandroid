@@ -25,7 +25,6 @@ import com.google.samples.apps.nowinandroid.core.testing.data.topicsTestData
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
-import com.google.samples.apps.nowinandroid.core.testing.repository.emptyUserData
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.search.RecentSearchQueriesUiState.Success
 import com.google.samples.apps.nowinandroid.feature.search.SearchResultUiState.EmptyQuery
@@ -41,6 +40,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -73,7 +73,6 @@ class SearchViewModelTest {
             userDataRepository = userDataRepository,
             analyticsHelper = NoOpAnalyticsHelper(),
         )
-        userDataRepository.setUserData(emptyUserData)
     }
 
     @Test
@@ -103,6 +102,7 @@ class SearchViewModelTest {
         viewModel.onSearchQueryChanged("XXX")
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
+        userDataRepository.setFollowedTopicIds(emptySet())
 
         val result = viewModel.searchResultUiState.value
         assertIs<SearchResultUiState.Success>(result)
@@ -118,6 +118,20 @@ class SearchViewModelTest {
 
         val result = viewModel.recentSearchQueriesUiState.value
         assertIs<Success>(result)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun recentSearches_verifyQueryHistoryClear() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
+
+        viewModel.onSearchTriggered("kotlin")
+        viewModel.clearRecentSearches()
+
+        val result = viewModel.recentSearchQueriesUiState.value
+        assertIs<Success>(result)
+        assertTrue(result.recentQueries.isEmpty())
 
         collectJob.cancel()
     }

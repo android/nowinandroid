@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.navigation
 
+import androidx.annotation.VisibleForTesting
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -24,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 
+@VisibleForTesting
 const val TOPIC_ID_ARG = "topicId"
 const val INTERESTS_ROUTE_BASE = "interests_route"
 const val INTERESTS_ROUTE = "$INTERESTS_ROUTE_BASE?$TOPIC_ID_ARG={$TOPIC_ID_ARG}"
