@@ -68,17 +68,15 @@ class InterestsViewModelTest {
 
     @Test
     fun uiState_whenFollowedTopicsAreLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
         userDataRepository.setFollowedTopicIds(emptySet())
         assertEquals(InterestsUiState.Loading, viewModel.uiState.value)
-
-        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenFollowingNewTopic_thenShowUpdatedTopics() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
         val toggleTopicId = testOutputTopics[1].topic.id
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
@@ -102,13 +100,11 @@ class InterestsViewModelTest {
             ),
             viewModel.uiState.value,
         )
-
-        collectJob.cancel()
     }
 
     @Test
     fun uiState_whenUnfollowingTopics_thenShowUpdatedTopics() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
         val toggleTopicId = testOutputTopics[1].topic.id
 
@@ -135,8 +131,6 @@ class InterestsViewModelTest {
             ),
             viewModel.uiState.value,
         )
-
-        collectJob.cancel()
     }
 }
 
