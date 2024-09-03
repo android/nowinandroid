@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
@@ -35,8 +36,8 @@ import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val iconTextId: Int,
-    val titleTextId: Int,
+    @StringRes val iconTextId: Int,
+    @StringRes val titleTextId: Int,
     val route: KClass<*>,
 ) {
     FOR_YOU(

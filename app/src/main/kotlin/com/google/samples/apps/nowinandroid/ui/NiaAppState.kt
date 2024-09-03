@@ -92,12 +92,9 @@ class NiaAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() {
-            with(currentDestination) {
-                if (this?.hasRoute<ForYouRoute>() == true) return FOR_YOU
-                if (this?.hasRoute<BookmarksRoute>() == true) return BOOKMARKS
-                if (this?.hasRoute<InterestsRoute>() == true) return INTERESTS
+            return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
+                currentDestination?.hasRoute(route = topLevelDestination.route) ?: false
             }
-            return null
         }
 
     val isOffline = networkMonitor.isOnline

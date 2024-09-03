@@ -73,6 +73,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -151,7 +152,7 @@ internal fun NiaApp(
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
                 val selected = currentDestination
-                    .isTopLevelDestinationInHierarchy(destination)
+                    .isRouteInHierarchy(destination.route)
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },
@@ -199,8 +200,10 @@ internal fun NiaApp(
             ) {
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
-                val shouldShowTopAppBar = destination != null
+                var shouldShowTopAppBar = false
+
                 if (destination != null) {
+                    shouldShowTopAppBar = true
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,
@@ -267,7 +270,7 @@ private fun Modifier.notificationDot(): Modifier =
         }
     }
 
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
     this?.hierarchy?.any {
-        it.hasRoute(destination.route)
+        it.hasRoute(route)
     } ?: false
