@@ -20,11 +20,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--
-    Firebase automatically adds the AD_ID permission, even though we don't use it. If you use this
-    permission you must declare how you're using it to Google Play, otherwise the app will be
-    rejected when publishing it. To avoid this we remove the permission entirely.
+    Firebase automatically adds these AD_ID and ADSERVICES permissions, even though we don't use them.
+    If you use these permissions you must declare how you're using them to Google Play, otherwise the
+    app will be rejected when publishing it. To avoid this we remove the permissions entirely.
     -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove"/>
 
     <application
         android:name=".NiaApplication"
@@ -60,6 +62,11 @@
         <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <!-- Firebase automatically adds the following property which we don't use so remove it -->
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            tools:node="remove" />
+
     </application>
 
 </manifest>
