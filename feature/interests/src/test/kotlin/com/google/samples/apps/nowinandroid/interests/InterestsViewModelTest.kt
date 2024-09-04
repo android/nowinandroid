@@ -46,7 +46,7 @@ import kotlin.test.assertEquals
  * `SavedStateHandle.toRoute` which has a dependency on `android.os.Bundle`.
  *
  * TODO: Remove Robolectric if/when AndroidX Navigation API is updated to remove Android dependency.
- *  See b/340966212.
+ *  See https://issuetracker.google.com/340966212.
  */
 @RunWith(RobolectricTestRunner::class)
 class InterestsViewModelTest {
