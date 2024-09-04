@@ -27,14 +27,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("nowinandroid.android.library")
-                apply("nowinandroid.android.hilt")
+                apply("nowinandroid.hilt")
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
             extensions.configure<LibraryExtension> {
-                defaultConfig {
-                    testInstrumentationRunner =
-                        "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-                }
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }

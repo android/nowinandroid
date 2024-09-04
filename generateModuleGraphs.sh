@@ -31,6 +31,14 @@ then
     exit 1
 fi
 
+# Check if the svgo command is available
+if ! command -v svgo &> /dev/null
+then
+    echo "The 'svgo' command is not found. This is required to cleanup and compress SVGs."
+    echo "Installation instructions available at https://github.com/svg/svgo."
+    exit 1
+fi
+
 # Check for a version of grep which supports Perl regex.
 # On MacOS the OS installed grep doesn't support Perl regex so check for the existence of the
 # GNU version instead which is prefixed with 'g' to distinguish it from the OS installed version.
@@ -113,11 +121,9 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.output.gv="/tmp/${file_name}.gv" \
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
-        # Convert to SVG using dot, remove unnecessary comments, and reformat
+        # Convert to SVG using dot, and cleanup/compress using svgo
         dot -Tsvg "/tmp/${file_name}.gv" |
-          sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' | grep -zv '^<!--' | tr -d '\0' |
-          xmllint --format - \
-          > "docs/images/graphs/${file_name}.svg"
+          svgo --multipass --pretty --output="docs/images/graphs/${file_name}.svg" -
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi
