@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_NEWS_RESOURCE_ID_KEY
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
@@ -34,7 +35,6 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -472,7 +472,7 @@ class ForYouViewModelTest {
 
         newsRepository.sendNewsResources(sampleNewsResources)
         userDataRepository.setUserData(emptyUserData)
-        savedStateHandle[LINKED_NEWS_RESOURCE_ID] = sampleNewsResources.first().id
+        savedStateHandle[DEEP_LINK_NEWS_RESOURCE_ID_KEY] = sampleNewsResources.first().id
 
         assertEquals(
             expected = UserNewsResource(
@@ -496,7 +496,7 @@ class ForYouViewModelTest {
                     type = "news_deep_link_opened",
                     extras = listOf(
                         Param(
-                            key = LINKED_NEWS_RESOURCE_ID,
+                            key = DEEP_LINK_NEWS_RESOURCE_ID_KEY,
                             value = sampleNewsResources.first().id,
                         ),
                     ),
