@@ -41,7 +41,7 @@ fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
                  * opened the news resource.
                  */
                 uriPattern = DEEP_LINK_URI_PATTERN
-            }
+            },
         ),
     ) {
         ForYouScreen(onTopicClick)
