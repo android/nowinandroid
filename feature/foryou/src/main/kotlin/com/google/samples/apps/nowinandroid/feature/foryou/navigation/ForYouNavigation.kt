@@ -21,23 +21,27 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_SCHEME_AND_HOST
-import com.google.samples.apps.nowinandroid.core.notifications.FOR_YOU_PATH
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_URI_PATTERN
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import kotlinx.serialization.Serializable
 
-const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
+@Serializable data object ForYouRoute
 
-private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH"
-
-@Serializable data class ForYouRoute(val linkedNewsResourceId: String? = null)
-
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute(), navOptions)
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute, navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouRoute>(
         deepLinks = listOf(
-            navDeepLink<ForYouRoute>(basePath = DEEP_LINK_BASE_PATH),
+            navDeepLink {
+                /**
+                 * This destination has a deep link that enables a specific news resource to be
+                 * opened from a notification (@see SystemTrayNotifier for more). The news resource
+                 * ID is sent in the URI rather than being modelled in the route type because it's
+                 * transient data (stored in SavedStateHandle) that is cleared after the user has
+                 * opened the news resource.
+                 */
+                uriPattern = DEEP_LINK_URI_PATTERN
+            }
         ),
     ) {
         ForYouScreen(onTopicClick)
