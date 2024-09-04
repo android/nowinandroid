@@ -1,7 +1,7 @@
 androidx.activity:activity-compose:1.8.2
 androidx.activity:activity-ktx:1.8.2
 androidx.activity:activity:1.8.2
-androidx.annotation:annotation-experimental:1.4.1
+androidx.annotation:annotation-experimental:1.4.0
 androidx.annotation:annotation-jvm:1.8.0
 androidx.annotation:annotation:1.8.0
 androidx.appcompat:appcompat-resources:1.7.0
