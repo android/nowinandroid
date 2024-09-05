@@ -195,7 +195,7 @@ com.squareup.okhttp3:logging-interceptor:4.12.0
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.8.0
 com.squareup.okio:okio:3.8.0
-com.squareup.retrofit2:retrofit:2.10.0
+com.squareup.retrofit2:retrofit:2.11.0
 io.coil-kt:coil-base:2.6.0
 io.coil-kt:coil-compose-base:2.6.0
 io.coil-kt:coil-compose:2.6.0
