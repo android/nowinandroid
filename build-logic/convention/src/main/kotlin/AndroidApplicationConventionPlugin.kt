@@ -21,20 +21,21 @@ import com.google.samples.apps.nowinandroid.configureBadgingTasks
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
+import com.google.samples.apps.nowinandroid.getPlugin
+import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
-                apply("nowinandroid.android.lint")
-                apply("com.dropbox.dependency-guard")
-            }
+            apply(plugin = libs.getPlugin("android.application"))
+            apply(plugin = libs.getPlugin("kotlin.android"))
+            apply(plugin = libs.getPlugin("nowinandroid.android.lint"))
+            apply(plugin = libs.getPlugin("dependencyGuard"))
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
@@ -49,5 +50,4 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }

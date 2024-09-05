@@ -15,15 +15,17 @@
  */
 
 import com.android.build.gradle.api.AndroidBasePlugin
+import com.google.samples.apps.nowinandroid.getPlugin
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
 class HiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("com.google.devtools.ksp")
+            apply(plugin = libs.getPlugin("ksp"))
             dependencies {
                 add("ksp", libs.findLibrary("hilt.compiler").get())
                 add("implementation", libs.findLibrary("hilt.core").get())
@@ -31,7 +33,7 @@ class HiltConventionPlugin : Plugin<Project> {
 
             /** Add support for Android modules, based on [AndroidBasePlugin] */
             pluginManager.withPlugin("com.android.base") {
-                pluginManager.apply("dagger.hilt.android.plugin")
+                apply(plugin = libs.getPlugin("hilt.plugin"))
                 dependencies {
                     add("implementation", libs.findLibrary("hilt.android").get())
                 }
