@@ -71,7 +71,6 @@ class BookmarksViewModelTest {
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
         assertEquals(item.feed.size, 1)
-
     }
 
     @Test
@@ -87,6 +86,5 @@ class BookmarksViewModelTest {
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
         assertEquals(item.feed.size, 0)
-
     }
 }

@@ -106,13 +106,11 @@ class SearchViewModelTest {
 
     @Test
     fun recentSearches_verifyUiStateIsSuccess() = runTest {
-
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
         viewModel.onSearchTriggered("kotlin")
 
         val result = viewModel.recentSearchQueriesUiState.value
         assertIs<Success>(result)
-
     }
 
     @Test
@@ -122,7 +120,6 @@ class SearchViewModelTest {
         viewModel.onSearchQueryChanged("")
 
         assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
-
     }
 
     @Test

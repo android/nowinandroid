@@ -67,6 +67,5 @@ class SettingsViewModelTest {
             ),
             viewModel.settingsUiState.value,
         )
-
     }
 }

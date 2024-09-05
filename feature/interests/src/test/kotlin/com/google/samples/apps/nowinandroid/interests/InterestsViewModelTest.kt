@@ -112,7 +112,6 @@ class InterestsViewModelTest {
             ),
             viewModel.uiState.value,
         )
-
     }
 
     @Test
