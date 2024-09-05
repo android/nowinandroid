@@ -320,7 +320,7 @@ private fun TopicSelection(
     onboardingUiState: OnboardingUiState.Shown,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
-) = trace("TopicSelection") {
+) {
     val lazyGridState = rememberLazyGridState()
     val topicSelectionTestTag = "forYou:topicSelection"
 
@@ -381,7 +381,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit,
-) = trace("SingleTopicButton") {
+) {
     Surface(
         modifier = Modifier
             .width(312.dp)
