@@ -30,9 +30,6 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
-      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
-      # release build
       - name: Build all build type and flavor permutations including baseline profiles
         run: ./gradlew :app:assemble
              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
