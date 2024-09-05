@@ -97,7 +97,6 @@ class TopicViewModelTest {
         ).first()
 
         assertEquals(topicFromRepository, item.followableTopic.topic)
-
     }
 
     @Test
@@ -116,7 +115,6 @@ class TopicViewModelTest {
 
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         assertEquals(TopicUiState.Loading, viewModel.topicUiState.value)
-
     }
 
     @Test
@@ -131,7 +129,6 @@ class TopicViewModelTest {
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Loading>(newsUiState)
-
         }
 
     @Test
@@ -152,7 +149,6 @@ class TopicViewModelTest {
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Success>(newsUiState)
-
         }
 
     @Test
@@ -169,7 +165,6 @@ class TopicViewModelTest {
             TopicUiState.Success(followableTopic = testOutputTopics[0]),
             viewModel.topicUiState.value,
         )
-
     }
 }
 

@@ -108,7 +108,6 @@ class ForYouViewModelTest {
             viewModel.onboardingUiState.value,
         )
         assertEquals(NewsFeedUiState.Loading, viewModel.feedState.value)
-
     }
 
     @Test
@@ -121,7 +120,6 @@ class ForYouViewModelTest {
             true,
             viewModel.isSyncing.value,
         )
-
     }
 
     @Test
@@ -140,7 +138,6 @@ class ForYouViewModelTest {
 
     @Test
     fun onboardingIsShownWhenNewsResourcesAreLoading() = runTest {
-
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.onboardingUiState.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedState.collect() }
 
@@ -250,7 +247,6 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
     }
 
     @Test
@@ -283,8 +279,6 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
-
     }
 
     @Test
@@ -434,7 +428,6 @@ class ForYouViewModelTest {
             ),
             viewModel.feedState.value,
         )
-
     }
 
     @Test
@@ -474,7 +467,6 @@ class ForYouViewModelTest {
                 ),
             ),
         )
-
     }
 
     @Test
