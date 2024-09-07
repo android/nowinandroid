@@ -85,7 +85,7 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
-       backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
@@ -111,7 +111,7 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicLoading_thenShowLoading() = runTest {
-       backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         assertEquals(TopicUiState.Loading, viewModel.topicUiState.value)
@@ -120,7 +120,7 @@ class TopicViewModelTest {
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccess_thenTopicSuccessAndNewsLoading() =
         runTest {
-           backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
@@ -134,7 +134,7 @@ class TopicViewModelTest {
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-           backgroundScope.launch(UnconfinedTestDispatcher()) {
+            backgroundScope.launch(UnconfinedTestDispatcher()) {
                 combine(
                     viewModel.topicUiState,
                     viewModel.newsUiState,
@@ -153,7 +153,7 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateTopic_whenFollowingTopic_thenShowUpdatedTopic() = runTest {
-       backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
         // Set which topic IDs are followed, not including 0.
