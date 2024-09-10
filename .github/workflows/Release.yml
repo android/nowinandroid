@@ -37,12 +37,15 @@ jobs:
           validate-wrappers: true
           gradle-home-cache-cleanup: true
 
-      - name: Accept Android licenses
-        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Install GMD image for baseline profile generation
-        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;aosp_atd;x86"
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
         
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Setup AVD for GMD use
+        run: yes | sdkmanager "system-images;android-30;aosp_atd;x86 AOSP ATD Intel x86 Atom System Image" || true
+
       - name: Build release variant including baseline profile generation
         run: ./gradlew :app:assembleDemoRelease
              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
