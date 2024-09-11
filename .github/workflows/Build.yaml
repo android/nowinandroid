@@ -114,7 +114,11 @@ jobs:
         if: always()
         run: ./gradlew testDemoDebug :lint:test
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
+        run: ./gradlew :app:assemble :benchmarks:assemble
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
