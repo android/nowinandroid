@@ -46,9 +46,9 @@ android {
     }
 
     testOptions.managedDevices.devices {
-        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel4Api30") {
-            device = "Pixel 4"
-            apiLevel = 30
+        create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel5Api33") {
+            device = "Pixel 5"
+            apiLevel = 33
             systemImageSource = "aosp_atd"
         }
     }
@@ -59,7 +59,7 @@ android {
 
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on.
-    managedDevices += "pixel4Api30"
+    managedDevices += "pixel5Api33"
 
     // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
     useConnectedDevices = false
