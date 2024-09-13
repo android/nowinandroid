@@ -53,9 +53,6 @@ jobs:
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Setup AVD for GMD use
-        run: yes | sdkmanager "system-images;android-33;aosp_atd;x86_64" || true
-
       - name: Check build-logic
         run: ./gradlew check -p build-logic
 
@@ -118,8 +115,14 @@ jobs:
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
-        if: always()
         run: ./gradlew testDemoDebug :lint:test
+
+      - name: Setup GMD
+        run: ./gradlew :benchmarks:pixel6Api33Setup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
