@@ -30,6 +30,12 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Setup GMD
+        run: ./gradlew :benchmarks:pixel6Api33Setup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
       - name: Build all build type and flavor permutations including baseline profiles
         run: ./gradlew :app:assemble
              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
