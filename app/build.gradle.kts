@@ -25,6 +25,7 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -103,6 +104,7 @@ dependencies {
     implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.kotlinx.serialization.json)
 
     ksp(libs.hilt.compiler)
 
@@ -114,6 +116,7 @@ dependencies {
     testImplementation(projects.core.dataTest)
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.sync.syncTest)
+    testImplementation(libs.kotlin.test)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)

@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.Keep
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -39,34 +40,26 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.createTopicRoute
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
-private const val DETAIL_PANE_NAVHOST_ROUTE = "detail_pane_route"
+@Serializable internal object TopicPlaceholderRoute
+
+// TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
+@Keep
+@Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable(
-        route = INTERESTS_ROUTE,
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) {
-                type = NavType.StringType
-                defaultValue = null
-                nullable = true
-            },
-        ),
-    ) {
+    composable<InterestsRoute> {
         InterestsListDetailScreen()
     }
 }
@@ -104,8 +97,9 @@ internal fun InterestsListDetailScreen(
         listDetailNavigator.navigateBack()
     }
 
-    var nestedNavHostStartDestination by remember {
-        mutableStateOf(selectedTopicId?.let(::createTopicRoute) ?: TOPIC_ROUTE)
+    var nestedNavHostStartRoute by remember {
+        val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
+        mutableStateOf(route)
     }
     var nestedNavKey by rememberSaveable(
         stateSaver = Saver({ it.toString() }, UUID::fromString),
@@ -122,11 +116,11 @@ internal fun InterestsListDetailScreen(
             // If the detail pane was visible, then use the nestedNavController navigate call
             // directly
             nestedNavController.navigateToTopic(topicId) {
-                popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+                popUpTo<DetailPaneNavHostRoute>()
             }
         } else {
             // Otherwise, recreate the NavHost entirely, and start at the new destination
-            nestedNavHostStartDestination = createTopicRoute(topicId)
+            nestedNavHostStartRoute = TopicRoute(id = topicId)
             nestedNavKey = UUID.randomUUID()
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
@@ -148,15 +142,15 @@ internal fun InterestsListDetailScreen(
                 key(nestedNavKey) {
                     NavHost(
                         navController = nestedNavController,
-                        startDestination = nestedNavHostStartDestination,
-                        route = DETAIL_PANE_NAVHOST_ROUTE,
+                        startDestination = nestedNavHostStartRoute,
+                        route = DetailPaneNavHostRoute::class,
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
                             onBackClick = listDetailNavigator::navigateBack,
                             onTopicClick = ::onTopicClickShowDetailPane,
                         )
-                        composable(route = TOPIC_ROUTE) {
+                        composable<TopicPlaceholderRoute> {
                             TopicDetailPlaceholder()
                         }
                     }
