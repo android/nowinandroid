@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -474,6 +475,7 @@ private fun SearchTextField(
     onSearchTriggered: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current // Focus manager to clear focus
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val onSearchExplicitlyTriggered = {
@@ -537,6 +539,7 @@ private fun SearchTextField(
         keyboardActions = KeyboardActions(
             onSearch = {
                 onSearchExplicitlyTriggered()
+                focusManager.clearFocus() // Clear focus when search action is triggered
             },
         ),
         maxLines = 1,
