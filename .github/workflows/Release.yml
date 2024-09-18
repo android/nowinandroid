@@ -43,9 +43,6 @@ jobs:
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Setup AVD for GMD use
-        run: yes | sdkmanager "system-images;android-33;aosp_atd;x86_64" || true
-
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
           --info
