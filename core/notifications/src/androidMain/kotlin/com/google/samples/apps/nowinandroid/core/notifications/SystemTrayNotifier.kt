@@ -41,7 +41,10 @@ private const val NEWS_NOTIFICATION_SUMMARY_ID = 1
 private const val NEWS_NOTIFICATION_CHANNEL_ID = ""
 private const val NEWS_NOTIFICATION_GROUP = "NEWS_NOTIFICATIONS"
 private const val DEEP_LINK_SCHEME_AND_HOST = "https://www.nowinandroid.apps.samples.google.com"
-private const val FOR_YOU_PATH = "foryou"
+private const val DEEP_LINK_FOR_YOU_PATH = "foryou"
+private const val DEEP_LINK_BASE_PATH = "$DEEP_LINK_SCHEME_AND_HOST/$DEEP_LINK_FOR_YOU_PATH"
+const val DEEP_LINK_NEWS_RESOURCE_ID_KEY = "linkedNewsResourceId"
+const val DEEP_LINK_URI_PATTERN = "$DEEP_LINK_BASE_PATH/{$DEEP_LINK_NEWS_RESOURCE_ID_KEY}"
 
 /**
  * Implementation of [Notifier] that displays notifications in the system tray.
@@ -162,4 +165,4 @@ private fun Context.newsPendingIntent(
     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
 )
 
-private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_SCHEME_AND_HOST/$FOR_YOU_PATH/$id".toUri()
+private fun NewsResource.newsDeepLinkUri() = "$DEEP_LINK_BASE_PATH/$id".toUri()

@@ -25,6 +25,7 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -103,6 +104,7 @@ dependencies {
     implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil)
+    implementation(libs.kotlinx.serialization.json)
 
     ksp(libs.hilt.compiler)
 
@@ -114,6 +116,7 @@ dependencies {
     testImplementation(projects.core.dataTest)
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.sync.syncTest)
+    testImplementation(libs.kotlin.test)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
@@ -134,6 +137,9 @@ baselineProfile {
     // Don't build on every iteration of a full assemble.
     // Instead enable generation directly for the release build variant.
     automaticGenerationDuringBuild = false
+
+    // Make use of Dex Layout Optimizations via Startup Profiles
+    dexLayoutOptimization = true
 }
 
 dependencyGuard {

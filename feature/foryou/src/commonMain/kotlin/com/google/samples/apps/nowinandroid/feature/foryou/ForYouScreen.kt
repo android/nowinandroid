@@ -97,7 +97,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
-internal fun ForYouRoute(
+internal fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel,

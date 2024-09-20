@@ -75,7 +75,7 @@ fun LazyStaggeredGridScope.newsFeed(
                     onTopicClick = onTopicClick,
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .animateItemPlacement(),
+                        .animateItem(),
                 )
             }
         }
