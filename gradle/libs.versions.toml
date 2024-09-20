@@ -27,7 +27,7 @@ androidxTracing = "1.3.0-alpha02"
 androidxUiAutomator = "2.3.0"
 androidxWindowManager = "1.3.0"
 androidxWork = "2.9.0"
-coil = "2.7.0"
+coil = "3.0.0-alpha10"
 dependencyGuard = "0.5.0"
 firebaseBom = "33.3.0"
 firebaseCrashlyticsPlugin = "2.9.9"
@@ -66,8 +66,8 @@ sqldelight = "2.0.2"
 kotlinInject = '0.7.1'
 multiplatform-settings = "1.1.1"
 kermit = "2.0.4"
-ktor = "2.3.12"
-ktrofit = "1.14.0"
+ktor = "3.0.0-rc-1"
+ktrofit = "2.1.0"
 buildKonfig = "0.15.1"
 lifecycle-viewmodel-compose = "2.8.0"
 navigation-compose = "2.7.0-alpha07"
@@ -126,7 +126,7 @@ coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
 coil-core = { group = "io.coil-kt.coil3", name = "coil-core", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose-core", version.ref = "coil" }
 coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil" }
-coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor", version.ref = "coil" }
+coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
@@ -166,7 +166,6 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
