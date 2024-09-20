@@ -60,17 +60,17 @@ androidx-constraintlayout = "2.1.4"
 androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-ui-tooling = "1.6.8"
-compose-plugin = "1.6.11"
+compose-ui-tooling = "1.7.2"
+compose-plugin = "1.7.0-beta02"
 sqldelight = "2.0.2"
-kotlinInject = '0.7.1'
-multiplatform-settings = "1.1.1"
+kotlinInject = '0.7.2'
+multiplatform-settings = "1.2.0"
 kermit = "2.0.4"
 ktor = "3.0.0-rc-1"
 ktrofit = "2.1.0"
-buildKonfig = "0.15.1"
-lifecycle-viewmodel-compose = "2.8.0"
-navigation-compose = "2.7.0-alpha07"
+buildKonfig = "0.15.2"
+lifecycle-viewmodel-compose = "2.8.2"
+navigation-compose = "2.8.0-alpha10"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -181,6 +181,7 @@ sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coro
 sqldelight-primitive-adapters = { group = "app.cash.sqldelight", name = "primitive-adapters", version.ref = "sqldelight" }
 kotlin-inject-compiler-ksp = { group = "me.tatarka.inject", name = "kotlin-inject-compiler-ksp", version.ref = "kotlinInject" }
 kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-runtime", version.ref = "kotlinInject" }
+kotlin-inject-runtime-kmp = { group = "me.tatarka.inject", name = "kotlin-inject-runtime-kmp", version.ref = "kotlinInject" }
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings-no-arg", version.ref = "multiplatform-settings" }
 multiplatform-settings-test = { group = "com.russhwolf", name = "multiplatform-settings-test", version.ref = "multiplatform-settings" }
 multiplatform-settings-serialization = { group = "com.russhwolf", name = "multiplatform-settings-serialization", version.ref = "multiplatform-settings" }
@@ -199,6 +200,8 @@ ktor-client-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktrofit" }
 ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktrofit" }
+ktorfit-converters-flow = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-flow", version.ref = "ktrofit" }
+ktorfit-converters-call = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-call", version.ref = "ktrofit" }
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildKonfig" }
 jetbrains-compose-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
 jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }

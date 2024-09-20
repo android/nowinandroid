@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.BuildKonfig
 import de.jensklingenberg.ktorfit.Ktorfit
-import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
-import de.jensklingenberg.ktorfit.converter.builtin.FlowConverterFactory
+import de.jensklingenberg.ktorfit.converter.CallConverterFactory
+import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -29,7 +29,7 @@ import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
 @Component
-internal abstract class NetworkModule {
+abstract class NetworkModule {
 
     @Provides
     fun providesNetworkJson(): Json = Json {

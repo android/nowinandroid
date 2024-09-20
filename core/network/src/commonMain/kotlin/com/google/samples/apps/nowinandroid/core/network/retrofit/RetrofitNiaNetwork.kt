@@ -66,7 +66,7 @@ internal class RetrofitNiaNetwork @Inject constructor(
     ktorfit: Ktorfit,
 ) : NiaNetworkDataSource {
 
-    private val networkApi = ktorfit.create<RetrofitNiaNetworkApi>()
+    private val networkApi: RetrofitNiaNetworkApi = ktorfit.createRetrofitNiaNetworkApi()
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
         networkApi.getTopics(ids = ids).data
