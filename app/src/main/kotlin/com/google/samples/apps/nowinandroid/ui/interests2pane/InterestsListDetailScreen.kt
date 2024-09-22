@@ -147,7 +147,11 @@ internal fun InterestsListDetailScreen(
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
-                            onBackClick = listDetailNavigator::navigateBack,
+                            onBackClick = {
+                                if (listDetailNavigator.canNavigateBack()) {
+                                    listDetailNavigator.navigateBack()
+                                }
+                            },
                             onTopicClick = ::onTopicClickShowDetailPane,
                         )
                         composable<TopicPlaceholderRoute> {
