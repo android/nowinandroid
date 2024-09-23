@@ -33,8 +33,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-cleanup: on-success
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
