@@ -144,7 +144,7 @@ com.google.android.datatransport:transport-api:3.2.0
 com.google.android.datatransport:transport-backend-cct:3.3.0
 com.google.android.datatransport:transport-runtime:3.3.0
 com.google.android.gms:play-services-ads-identifier:18.0.0
-com.google.android.gms:play-services-base:18.0.1
+com.google.android.gms:play-services-base:18.5.0
 com.google.android.gms:play-services-basement:18.4.0
 com.google.android.gms:play-services-cloud-messaging:17.2.0
 com.google.android.gms:play-services-measurement-api:22.1.0
@@ -153,7 +153,7 @@ com.google.android.gms:play-services-measurement-impl:22.1.0
 com.google.android.gms:play-services-measurement-sdk-api:22.1.0
 com.google.android.gms:play-services-measurement-sdk:22.1.0
 com.google.android.gms:play-services-measurement:22.1.0
-com.google.android.gms:play-services-oss-licenses:17.0.1
+com.google.android.gms:play-services-oss-licenses:17.1.0
 com.google.android.gms:play-services-stats:17.0.2
 com.google.android.gms:play-services-tasks:18.2.0
 com.google.code.findbugs:jsr305:3.0.2
