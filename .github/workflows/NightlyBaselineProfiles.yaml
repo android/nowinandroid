@@ -29,8 +29,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-cleanup: on-success
 
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
