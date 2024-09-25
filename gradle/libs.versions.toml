@@ -48,7 +48,7 @@ moduleGraph = "2.5.0"
 okhttp = "4.12.0"
 protobuf = "4.26.1"
 protobufPlugin = "0.9.4"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 robolectric = "4.12.2"
 roborazzi = "1.7.0"
@@ -139,7 +139,7 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
+retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
