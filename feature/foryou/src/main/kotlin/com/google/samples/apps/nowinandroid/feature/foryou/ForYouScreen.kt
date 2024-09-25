@@ -82,7 +82,6 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tracing.trace
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus.Denied
 import com.google.accompanist.permissions.rememberPermissionState
@@ -320,7 +319,7 @@ private fun TopicSelection(
     onboardingUiState: OnboardingUiState.Shown,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
-) = trace("TopicSelection") {
+) {
     val lazyGridState = rememberLazyGridState()
     val topicSelectionTestTag = "forYou:topicSelection"
 
@@ -381,7 +380,7 @@ private fun SingleTopicButton(
     imageUrl: String,
     isSelected: Boolean,
     onClick: (String, Boolean) -> Unit,
-) = trace("SingleTopicButton") {
+) {
     Surface(
         modifier = Modifier
             .width(312.dp)
