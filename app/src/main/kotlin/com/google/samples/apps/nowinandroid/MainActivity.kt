@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity(), ApplicationComponentProvider {
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
-    val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override val component by lazy(LazyThreadSafetyMode.NONE) {
         ApplicationComponent::class.create(applicationContext)
