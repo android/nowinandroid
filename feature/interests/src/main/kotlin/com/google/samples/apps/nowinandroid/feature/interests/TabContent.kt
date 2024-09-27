@@ -75,6 +75,7 @@ fun TopicsTabContent(
                         onClick = { onTopicClick(topicId) },
                         onFollowButtonClick = { onFollowButtonClick(topicId, it) },
                         isSelected = isSelected,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }

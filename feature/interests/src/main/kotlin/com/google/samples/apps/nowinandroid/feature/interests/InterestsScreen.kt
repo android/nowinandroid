@@ -70,7 +70,6 @@ internal fun InterestsScreen(
         when (uiState) {
             InterestsUiState.Loading ->
                 NiaLoadingWheel(
-                    modifier = modifier,
                     contentDesc = stringResource(id = R.string.feature_interests_loading),
                 )
 
@@ -81,7 +80,6 @@ internal fun InterestsScreen(
                     onFollowButtonClick = followTopic,
                     selectedTopicId = uiState.selectedTopicId,
                     highlightSelectedTopic = highlightSelectedTopic,
-                    modifier = modifier,
                 )
 
             is InterestsUiState.Empty -> InterestsEmptyScreen()
