@@ -1,0 +1,50 @@
+#file: noinspection YAMLSchemaValidation
+name: "jemalloc-linux"
+description: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Restore jemalloc"
+      id: cache-jemalloc
+      uses: actions/cache/restore@v3
+      with:
+        path: /tmp/libjemalloc.so.2
+        key: v2-${{ runner.os }}-jemalloc-5.3.0
+
+    - name: "Relocate jemalloc to expected directory"
+      if: steps.cache-jemalloc.outputs.cache-hit == 'true'
+      shell: bash
+      run: sudo mv /tmp/libjemalloc.so.2 /usr/local/lib/
+
+    - name: "Download jemalloc"
+      if: steps.cache-jemalloc.outputs.cache-hit != 'true'
+      shell: bash
+      run: curl -Ls https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2 -o jemalloc-5.3.0.tar.bz2
+
+    - name: "Unzip jemalloc"
+      if: steps.cache-jemalloc.outputs.cache-hit != 'true'
+      shell: bash
+      run: tar xvf jemalloc-5.3.0.tar.bz2
+
+    - name: "Configure jemalloc"
+      if: steps.cache-jemalloc.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        cd jemalloc-5.3.0
+        ./configure
+        make
+        sudo make install
+
+    - name: "Configure LD_PRELOAD"
+      shell: bash
+      run: |
+        echo 'export LD_PRELOAD=/usr/local/lib/libjemalloc.so.2 app' >> $GITHUB_ENV
+        cp /usr/local/lib/libjemalloc.so.2 /tmp/
+
+    - name: "Save jemalloc"
+      uses: actions/cache/save@v3
+      if: steps.cache-jemalloc.outputs.cache-hit != 'true'
+      with:
+        path: /tmp/libjemalloc.so.2
+        key: v2-${{ runner.os }}-jemalloc-5.3.0
