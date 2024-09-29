@@ -108,7 +108,7 @@ abstract class CheckBadgingTask : DefaultTask() {
 }
 
 private fun String.capitalized() = replaceFirstChar {
-    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+    if (it.isLowerCase()) it.titlecase() else it.toString()
 }
 
 fun Project.configureBadgingTasks(
