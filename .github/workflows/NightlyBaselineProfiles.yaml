@@ -1,26 +1,29 @@
-name: GitHub Release with APKs
+name: NightlyBaselineProfiles
 
 on:
-  push:
-    tags:
-    - 'v*'
+  schedule:
+    - cron:  '42 4 * * *'
 
 jobs:
-  build:
+  baseline_profiles:
+    name: "Generate Baseline Profiles"
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+
+    permissions:
+      contents: write
+
+    timeout-minutes: 60
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
           ls /dev/kvm
-
-      - name: Checkout
-
-        uses: actions/checkout@v4
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -40,36 +43,17 @@ jobs:
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
+      - name: Check build-logic
+        run: ./gradlew check -p build-logic
+
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
           --info
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
-      - name: Build release variant including baseline profile generation
-        run: ./gradlew :app:assembleDemoRelease
-             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
+      - name: Build all build type and flavor permutations including baseline profiles
+        run: ./gradlew :app:assemble
+             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
              -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
              -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-             -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-             -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
-      - name: Upload app
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/demo/release/app-demo-release.apk
-          asset_name: app-demo-release.apk
-          asset_content_type: application/vnd.android.package-archive          

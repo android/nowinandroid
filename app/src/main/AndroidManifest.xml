@@ -47,9 +47,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <data
-                    android:scheme="https"
-                    android:host="www.nowinandroid.apps.samples.google.com" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="www.nowinandroid.apps.samples.google.com" />
             </intent-filter>
         </activity>
 

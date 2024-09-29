@@ -27,8 +27,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_NEWS_RESOURCE_ID_KEY
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.LINKED_NEWS_RESOURCE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -55,7 +55,7 @@ class ForYouViewModel @Inject constructor(
         userDataRepository.userData.map { !it.shouldHideOnboarding }
 
     val deepLinkedNewsResource = savedStateHandle.getStateFlow<String?>(
-        key = LINKED_NEWS_RESOURCE_ID,
+        key = DEEP_LINK_NEWS_RESOURCE_ID_KEY,
         null,
     )
         .flatMapLatest { newsResourceId ->
@@ -129,7 +129,7 @@ class ForYouViewModel @Inject constructor(
 
     fun onDeepLinkOpened(newsResourceId: String) {
         if (newsResourceId == deepLinkedNewsResource.value?.id) {
-            savedStateHandle[LINKED_NEWS_RESOURCE_ID] = null
+            savedStateHandle[DEEP_LINK_NEWS_RESOURCE_ID_KEY] = null
         }
         analyticsHelper.logNewsDeepLinkOpen(newsResourceId = newsResourceId)
         viewModelScope.launch {
@@ -153,7 +153,7 @@ private fun AnalyticsHelper.logNewsDeepLinkOpen(newsResourceId: String) =
             type = "news_deep_link_opened",
             extras = listOf(
                 Param(
-                    key = LINKED_NEWS_RESOURCE_ID,
+                    key = DEEP_LINK_NEWS_RESOURCE_ID_KEY,
                     value = newsResourceId,
                 ),
             ),
