@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.34.0"
+accompanist = "0.36.0"
 androidDesugarJdkLibs = "2.0.4"
 # AGP and tools should be updated together
 androidGradlePlugin = "8.6.1"
