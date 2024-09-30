@@ -73,7 +73,7 @@ class OfflineFirstNewsRepositoryTest {
     @Before
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            tmpFolder.testUserPreferencesDataStore(testScope.backgroundScope),
         )
         newsResourceDao = TestNewsResourceDao()
         topicDao = TestTopicDao()
