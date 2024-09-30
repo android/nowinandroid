@@ -40,7 +40,7 @@ class NiaPreferencesDataSourceTest {
     @Before
     fun setup() {
         subject = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            tmpFolder.testUserPreferencesDataStore(testScope.backgroundScope),
         )
     }
 
