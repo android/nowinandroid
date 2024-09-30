@@ -54,7 +54,7 @@ robolectric = "4.12.2"
 roborazzi = "1.7.0"
 room = "2.6.1"
 secrets = "2.0.1"
-truth = "1.4.2"
+truth = "1.4.4"
 turbine = "1.1.0"
 
 [bundles]
