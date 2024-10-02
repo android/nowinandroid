@@ -142,17 +142,22 @@ class NiaAppState(
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {
             val topLevelNavOptions = navOptions {
+                val startDestination = navController.graph.findStartDestination()
+
+                // Avoid popUpTo and navigate to same screen.
+                val shouldNotSavedAndRestored = startDestination.hasRoute(topLevelDestination.route)
+
                 // Pop up to the start destination of the graph to
                 // avoid building up a large stack of destinations
                 // on the back stack as users select items
                 popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                    saveState = !shouldNotSavedAndRestored
                 }
                 // Avoid multiple copies of the same destination when
                 // reselecting the same item
-                launchSingleTop = true
+                launchSingleTop = !shouldNotSavedAndRestored
                 // Restore state when reselecting a previously selected item
-                restoreState = true
+                restoreState = !shouldNotSavedAndRestored
             }
 
             when (topLevelDestination) {
