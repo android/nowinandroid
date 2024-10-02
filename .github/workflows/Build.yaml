@@ -93,7 +93,9 @@ jobs:
         continue-on-error: false
         if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "::error::Screenshot tests failed, please create a PR in your fork first." && exit 1
+          echo "::error::Screenshot tests failed, please create a PR in your fork first." 
+          echo "Your fork's CI will take screenshots for your fork."
+          exit 1
 
       # Runs if previous job failed
       - name: Generate new screenshots if verification failed and it's a PR
