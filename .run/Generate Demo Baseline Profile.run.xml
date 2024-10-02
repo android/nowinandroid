@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright 2022 The Android Open Source Project
+     Copyright 2024 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,27 +16,26 @@
 -->
 <component name="ProjectRunConfigurationManager">
   <!--
-  Baseline Profiles improve code execution speed by around 30% from the first launch by avoiding
-  interpretation and just-in-time (JIT) compilation steps for included code paths.
-  More information at http://d.android.com/baseline-profiles.
+      Baseline Profiles improve code execution speed by around 30% from the first launch by avoiding
+      interpretation and just-in-time (JIT) compilation steps for included code paths.
+      More information at http://d.android.com/baseline-profiles.
 
-  In this run configuration we leverage rerun parameter that always reruns the requested task regardless of cache.
-  We also leverage enable-display parameter to be able to verify the generator works as intended.
+      In this run configuration we leverage rerun parameter that always reruns the requested task regardless of cache.
+      We also leverage enable-display parameter to be able to verify the generator works as intended.
   -->
   <configuration default="false" name="Generate Demo Baseline Profile" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="-Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value=":benchmark:pixel6Api31atdDemoBenchmarkAndroidTest" />
+          <option value=":app:generateDemoReleaseBaselineProfile" />
           <option value="--rerun" />
-          <option value="--enable-display" />
         </list>
       </option>
       <option name="vmOptions" />
@@ -44,6 +43,7 @@
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
     <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
     <method v="2" />
   </configuration>
 </component>
