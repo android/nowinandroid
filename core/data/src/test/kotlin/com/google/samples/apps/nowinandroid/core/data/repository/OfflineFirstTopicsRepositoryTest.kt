@@ -60,7 +60,7 @@ class OfflineFirstTopicsRepositoryTest {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
         niaPreferences = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            tmpFolder.testUserPreferencesDataStore(testScope.backgroundScope),
         )
         synchronizer = TestSynchronizer(niaPreferences)
 
