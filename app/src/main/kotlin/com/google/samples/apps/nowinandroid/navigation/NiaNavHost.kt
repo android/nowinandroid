@@ -38,10 +38,10 @@ import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetai
 @Composable
 fun NiaNavHost(
     appState: NiaAppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+
     NavHost(
         navController = navController,
         startDestination = ForYouRoute,
@@ -50,12 +50,13 @@ fun NiaNavHost(
         forYouScreen(onTopicClick = navController::navigateToInterests)
         bookmarksScreen(
             onTopicClick = navController::navigateToInterests,
-            onShowSnackbar = onShowSnackbar,
+            onShowSnackbar = { message, label, actionSuccess, actionFailure -> appState.addLongErrorMessage(error = message, label = label, successAction = actionSuccess, failureAction = actionFailure) },
         )
         searchScreen(
             onBackClick = navController::popBackStack,
             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
             onTopicClick = navController::navigateToInterests,
+            errorHandler = { message -> appState.addShortErrorMessage(message) },
         )
         interestsListDetailScreen()
     }

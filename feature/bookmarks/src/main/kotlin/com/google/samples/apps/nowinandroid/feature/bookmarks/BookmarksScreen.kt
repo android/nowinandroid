@@ -78,7 +78,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 @Composable
 internal fun BookmarksRoute(
     onTopicClick: (String) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onShowSnackbar: (String, String?, (() -> Unit)?, (() -> Unit)?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
@@ -103,7 +103,7 @@ internal fun BookmarksRoute(
 @Composable
 internal fun BookmarksScreen(
     feedState: NewsFeedUiState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onShowSnackbar: (String, String?, (() -> Unit)?, (() -> Unit)?) -> Unit,
     removeFromBookmarks: (String) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
@@ -117,12 +117,7 @@ internal fun BookmarksScreen(
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
-            val snackBarResult = onShowSnackbar(bookmarkRemovedMessage, undoText)
-            if (snackBarResult) {
-                undoBookmarkRemoval()
-            } else {
-                clearUndoState()
-            }
+            onShowSnackbar(bookmarkRemovedMessage, undoText, { undoBookmarkRemoval() }, { clearUndoState() })
         }
     }
 
