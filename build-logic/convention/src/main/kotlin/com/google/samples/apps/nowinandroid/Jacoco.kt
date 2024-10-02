@@ -88,13 +88,11 @@ internal fun Project.configureJacoco(
                     html.required = true
                 }
 
-                // TODO: This is missing files in src/debug/, src/prod, src/demo, src/demoDebug...
-                sourceDirectories.setFrom(
-                    files(
-                        "$projectDir/src/main/java",
-                        "$projectDir/src/main/kotlin",
-                    ),
-                )
+                // Collect all java and kotlin source directories from the variant's source sets
+                val sourceDirs = variant.sources
+                    .map { it.java.srcDirs + it.kotlin.srcDirs }
+                    .flatten()
+                sourceDirectories.setFrom(sourceDirs)
 
                 executionData.setFrom(
                     project.fileTree("$buildDir/outputs/unit_test_code_coverage/${variant.name}UnitTest")
