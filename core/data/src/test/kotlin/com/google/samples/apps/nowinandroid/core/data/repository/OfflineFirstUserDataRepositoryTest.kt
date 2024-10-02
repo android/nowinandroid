@@ -51,7 +51,7 @@ class OfflineFirstUserDataRepositoryTest {
     @Before
     fun setup() {
         niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
+            tmpFolder.testUserPreferencesDataStore(testScope.backgroundScope),
         )
 
         subject = OfflineFirstUserDataRepository(
