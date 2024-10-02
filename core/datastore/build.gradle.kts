@@ -25,11 +25,6 @@ android {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
     namespace = "com.google.samples.apps.nowinandroid.core.datastore"
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-        }
-    }
 }
 
 dependencies {
