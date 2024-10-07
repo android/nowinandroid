@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.google.samples.apps.nowinandroid.core.ui
 
-import android.content.ClipData
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
-import android.view.View
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.draganddrop.dragAndDropSource
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,7 +46,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -78,11 +69,12 @@ import nowinandroid.core.ui.generated.resources.Res
 import nowinandroid.core.ui.generated.resources.core_ui_bookmark
 import nowinandroid.core.ui.generated.resources.core_ui_card_meta_data_text
 import nowinandroid.core.ui.generated.resources.core_ui_card_tap_action
+import nowinandroid.core.ui.generated.resources.core_ui_feed_sharing
+import nowinandroid.core.ui.generated.resources.core_ui_feed_sharing_data
 import nowinandroid.core.ui.generated.resources.core_ui_topic_chip_content_description_when_followed
 import nowinandroid.core.ui.generated.resources.core_ui_topic_chip_content_description_when_not_followed
 import nowinandroid.core.ui.generated.resources.core_ui_unbookmark
 import nowinandroid.core.ui.generated.resources.core_ui_unread_resource_dot_content_description
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -110,11 +102,12 @@ fun NewsResourceCardExpanded(
         userNewsResource.url,
     )
 
-    val dragAndDropFlags = if (VERSION.SDK_INT >= VERSION_CODES.N) {
-        View.DRAG_FLAG_GLOBAL
-    } else {
-        0
-    }
+//    val dragAndDropFlags = if (VERSION.SDK_INT >= VERSION_CODES.N) {
+//        View.DRAG_FLAG_GLOBAL
+//    } else {
+//        0
+//    }
+    val dragAndDropFlags = 0
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
@@ -142,22 +135,22 @@ fun NewsResourceCardExpanded(
                         NewsResourceTitle(
                             userNewsResource.title,
                             modifier = Modifier
-                                .fillMaxWidth((.8f))
-                                .dragAndDropSource {
-                                    detectTapGestures(
-                                        onLongPress = {
-                                            startTransfer(
-                                                DragAndDropTransferData(
-                                                    ClipData.newPlainText(
-                                                        sharingLabel,
-                                                        sharingContent,
-                                                    ),
-                                                    flags = dragAndDropFlags,
-                                                ),
-                                            )
-                                        },
-                                    )
-                                },
+                                .fillMaxWidth((.8f)),
+//                                .dragAndDropSource {
+//                                    detectTapGestures(
+//                                        onLongPress = {
+//                                            startTransfer(
+//                                                DragAndDropTransferData(
+//                                                    ClipData.newPlainText(
+//                                                        sharingLabel,
+//                                                        sharingContent,
+//                                                    ),
+//                                                    flags = dragAndDropFlags,
+//                                                ),
+//                                            )
+//                                        },
+//                                    )
+//                                },
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
