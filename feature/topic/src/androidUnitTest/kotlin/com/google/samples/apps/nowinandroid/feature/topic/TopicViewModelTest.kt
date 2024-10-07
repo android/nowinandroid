@@ -71,7 +71,7 @@ class TopicViewModelTest {
     fun setup() {
         viewModel = TopicViewModel(
             savedStateHandle = SavedStateHandle(
-                route = TopicRoute(id = testInputTopics[0].topic.id),
+//                route = TopicRoute(id = testInputTopics[0].topic.id),
             ),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,

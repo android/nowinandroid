@@ -46,12 +46,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.ImageLoader
+import coil3.compose.LocalPlatformContext
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaFilterChip
@@ -65,10 +63,14 @@ import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
-import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
-import com.google.samples.apps.nowinandroid.feature.topic.R.string
+import nowinandroid.core.ui.generated.resources.core_ui_back
+import nowinandroid.feature.topic.generated.resources.Res
+import nowinandroid.feature.topic.generated.resources.feature_topic_loading
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun TopicScreen(
@@ -76,7 +78,7 @@ internal fun TopicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel(),
+    viewModel: TopicViewModel,
 ) {
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
     val newsUiState: NewsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
@@ -109,7 +111,7 @@ internal fun TopicScreen(
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
-    TrackScrollJank(scrollableState = state, stateName = "topic:screen")
+//    TrackScrollJank(scrollableState = state, stateName = "topic:screen")
     Box(
         modifier = modifier,
     ) {
@@ -124,7 +126,7 @@ internal fun TopicScreen(
                 TopicUiState.Loading -> item {
                     NiaLoadingWheel(
                         modifier = modifier,
-                        contentDesc = stringResource(id = string.feature_topic_loading),
+                        contentDesc = stringResource(Res.string.feature_topic_loading),
                     )
                 }
 
@@ -214,6 +216,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
                 .align(Alignment.CenterHorizontally)
                 .size(216.dp)
                 .padding(bottom = 12.dp),
+                 imageLoader = ImageLoader(LocalPlatformContext.current),
         )
         Text(name, style = MaterialTheme.typography.displayMedium)
         if (description.isNotEmpty()) {
@@ -292,7 +295,7 @@ private fun TopicToolbar(
                 Icon(
                     imageVector = NiaIcons.ArrowBack,
                     contentDescription = stringResource(
-                        id = com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_back,
+                        nowinandroid.core.ui.generated.resources.Res.string.core_ui_back,
                     ),
                 )
             }
