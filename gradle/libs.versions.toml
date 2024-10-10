@@ -67,6 +67,7 @@ kotlinInject = '0.7.2'
 multiplatform-settings = "1.2.0"
 kermit = "2.0.4"
 koin = "4.0.0"
+koin-annotations = "1.4.0-RC4"
 ktor = "3.0.0-rc-1"
 ktrofit = "2.1.0"
 buildKonfig = "0.15.2"
@@ -143,6 +144,9 @@ hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hi
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
 javax-inject = { module = "javax.inject:javax.inject", version = "1" }
+koin-annotations-bom = { group = "io.insert-koin", name = "koin-annotations-bom", version.ref = "koin-annotations" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations" }
+koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler" }
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android"}
 koin-core = { group = "io.insert-koin", name = "koin-core"}
@@ -272,3 +276,4 @@ nowinandroid-kmp-library = { id = "nowinandroid.kmp.library" }
 nowinandroid-kotlin-inject = { id = "nowinandroid.kmp.inject" }
 nowinandroid-sqldelight = { id = "nowinandroid.sqldelight" }
 nowinandroid-cmp-feature = { id = "nowinandroid.cmp.feature" }
+nowinandroid-di-koin = { id = "nowinandroid.di.koin" }
