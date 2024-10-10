@@ -37,8 +37,8 @@ class KoinConventionPlugin: Plugin<Project> {
             dependencies {
                 "commonMainImplementation"(platform(libs.findLibrary("koin.bom").get()))
                 "commonMainImplementation"(libs.findLibrary("koin.core").get())
-                "commonMainApi"(platform(libs.findLibrary("koin.annotation.bom").get()))
-                "commonMainApi"(libs.findLibrary("koin.annotation").get())
+                "commonMainApi"(platform(libs.findLibrary("koin.annotations.bom").get()))
+                "commonMainApi"(libs.findLibrary("koin.annotations").get())
                 "commonTestImplementation"(libs.findLibrary("koin.test").get())
                 "kspCommonMainMetadata"(libs.findLibrary("koin.ksp.compiler").get())
                 "kspAndroid"(libs.findLibrary("koin.ksp.compiler").get())
