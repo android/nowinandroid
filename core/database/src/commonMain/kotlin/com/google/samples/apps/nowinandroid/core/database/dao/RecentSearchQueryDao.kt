@@ -24,12 +24,10 @@ import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQuer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
-import me.tatarka.inject.annotations.Inject
 
 /**
  * DAO for [RecentSearchQueryEntity] access
  */
-@Inject
 class RecentSearchQueryDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : RecentSearchQueryDaoInterface {
 
     private val query = db.recentSearchQueryQueries

@@ -23,43 +23,48 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
-import com.google.samples.apps.nowinandroid.core.di.Dispatcher
-import com.google.samples.apps.nowinandroid.core.di.DispatchersComponent
-import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
-import kotlinx.coroutines.CoroutineDispatcher
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import kotlinx.coroutines.runBlocking
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.ksp.generated.module
 
-@Component
-abstract class DatabaseModule(@Component val dispatchersComponent: DispatchersComponent) {
-    @Dispatcher(IO)
-    abstract val dispatcher: CoroutineDispatcher
-
-    @Provides
-    fun providesNiaDatabase(driver: SqlDriver): NiaDatabase = NiaDatabase(driver)
-
-    @Provides
-    fun providesTopicsDao(
-        database: NiaDatabase,
-    ): TopicDao = TopicDao(database, dispatcher)
-
-    @Provides
-    fun providesNewsResourceDao(
-        database: NiaDatabase,
-    ): NewsResourceDao = NewsResourceDao(database, dispatcher)
-
-    @Provides
-    fun providesTopicFtsDao(
-        database: NiaDatabase,
-    ): TopicFtsDao = TopicFtsDao(database, dispatcher)
-
-    @Provides
-    fun providesNewsResourceFtsDao(
-        database: NiaDatabase,
-    ): NewsResourceFtsDao = NewsResourceFtsDao(database, dispatcher)
-
-    @Provides
-    fun providesRecentSearchQueryDao(
-        database: NiaDatabase,
-    ): RecentSearchQueryDao = RecentSearchQueryDao(database, dispatcher)
+internal val driverModule = module {
+    single { NiaDatabase.Schema }
+    single<SqlDriver> {
+        val driverProvider: DriverProvider = get()
+        // TODO check if we can remove runBlocking
+        runBlocking {
+            driverProvider.provideDbDriver(get())
+        }
+    }
 }
+
+internal val daoModule = module {
+    single { (driver: SqlDriver) -> NiaDatabase(driver) }
+
+    factory { (database: NiaDatabase) -> TopicDao(database, get(named("IoDispatcher"))) }
+
+    factory { (database: NiaDatabase) -> NewsResourceDao(database, get(named("IoDispatcher"))) }
+
+    factory { (database: NiaDatabase) -> TopicFtsDao(database, get(named("IoDispatcher"))) }
+
+    factory { (database: NiaDatabase) -> NewsResourceFtsDao(database, get(named("IoDispatcher"))) }
+
+    factory { (database: NiaDatabase) ->
+        RecentSearchQueryDao(
+            database,
+            get(named("IoDispatcher")),
+        )
+    }
+}
+
+val databaseModule = listOf(
+    DatabaseModule().module,
+    daoModule,
+)
+
+@Module
+@ComponentScan
+class DatabaseModule

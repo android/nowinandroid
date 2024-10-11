@@ -16,31 +16,31 @@
 
 package com.google.samples.apps.nowinandroid.core.database.di
 
+import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
-import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import co.touchlab.sqliter.DatabaseConfiguration
-import co.touchlab.sqliter.DatabaseConfiguration.Extended
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver.Callback
+import org.koin.core.annotation.Single
 
-@Component
-internal actual abstract class DriverModule {
+@Single
+internal actual class DriverProvider(val context: Context) {
 
-    @Provides
     actual suspend fun provideDbDriver(
         schema: SqlSchema<AsyncValue<Unit>>,
     ): SqlDriver {
         val synchronousSchema = schema.synchronous()
-        return NativeSqliteDriver(
+        return AndroidSqliteDriver(
             schema = synchronousSchema,
+            context = context,
             name = "nia-database.db",
-            onConfiguration = { config: DatabaseConfiguration ->
-                config.copy(
-                    extendedConfig = Extended(foreignKeyConstraints = true),
-                )
+            callback = object : Callback(synchronousSchema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    db.setForeignKeyConstraintsEnabled(true)
+                }
             },
         )
     }

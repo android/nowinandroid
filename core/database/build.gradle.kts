@@ -16,7 +16,7 @@
 
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.nowinandroid.di.koin)
     alias(libs.plugins.sqldelight.gradle.plugin)
 }
 

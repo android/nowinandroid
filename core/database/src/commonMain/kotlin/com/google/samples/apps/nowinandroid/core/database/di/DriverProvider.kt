@@ -19,10 +19,8 @@ package com.google.samples.apps.nowinandroid.core.database.di
 import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
-import me.tatarka.inject.annotations.Provides
 
-internal expect abstract class DriverModule {
-    @Provides
+internal expect class DriverProvider {
     suspend fun provideDbDriver(
         schema: SqlSchema<AsyncValue<Unit>>,
     ): SqlDriver

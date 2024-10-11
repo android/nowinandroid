@@ -26,13 +26,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
-import me.tatarka.inject.annotations.Inject
 
 /**
  * DAO for [NewsResource] and [NewsResourceEntity] access
  */
-@Inject
-class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : NewsResourceDaoInterface {
+class NewsResourceDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) :
+    NewsResourceDaoInterface {
     private val query = db.newsResourceQueries
 
     /**

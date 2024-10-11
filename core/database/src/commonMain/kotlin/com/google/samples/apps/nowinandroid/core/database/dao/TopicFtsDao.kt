@@ -24,12 +24,10 @@ import com.google.samples.apps.nowinandroid.core.database.model.TopicFtsEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import me.tatarka.inject.annotations.Inject
 
 /**
  * DAO for [TopicFtsEntity] access.
  */
-@Inject
 class TopicFtsDao(db: NiaDatabase, private val dispatcher: CoroutineDispatcher) : TopicFtsDaoInterface {
 
     private val dbQuery = db.topicFtsQueries
