@@ -17,13 +17,11 @@
 package com.google.samples.apps.nowinandroid.core.analytics
 
 import co.touchlab.kermit.Logger
-import me.tatarka.inject.annotations.Inject
 
 /**
  * An implementation of AnalyticsHelper just writes the events to logcat. Used in builds where no
  * analytics events should be sent to a backend.
  */
-@Inject
 internal class StubAnalyticsHelper : AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
         Logger.d { "Received analytics event: $event" }

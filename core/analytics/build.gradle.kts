@@ -15,7 +15,7 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.nowinandroid.di.koin)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose)
 }
