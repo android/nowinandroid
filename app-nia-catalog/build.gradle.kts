@@ -15,8 +15,9 @@
  */
 
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -45,6 +46,7 @@ kotlin {
         binaries.executable()
     }
     androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JVM_11)
         }
@@ -142,7 +144,7 @@ compose.desktop {
 }
 
 compose.experimental {
-    web.application {}
+
 }
 
 dependencyGuard {
