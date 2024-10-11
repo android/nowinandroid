@@ -22,7 +22,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_URI_PATTERN
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import kotlinx.serialization.Serializable
 
 @Serializable data object ForYouRoute

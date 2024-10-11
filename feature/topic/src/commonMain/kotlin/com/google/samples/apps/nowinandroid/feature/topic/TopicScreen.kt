@@ -216,7 +216,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
                 .align(Alignment.CenterHorizontally)
                 .size(216.dp)
                 .padding(bottom = 12.dp),
-                 imageLoader = ImageLoader(LocalPlatformContext.current),
+            imageLoader = ImageLoader(LocalPlatformContext.current),
         )
         Text(name, style = MaterialTheme.typography.displayMedium)
         if (description.isNotEmpty()) {

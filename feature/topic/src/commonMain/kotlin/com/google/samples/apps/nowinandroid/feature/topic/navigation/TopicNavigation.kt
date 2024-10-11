@@ -16,13 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
-import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable data class TopicRoute(val id: String)
