@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.hilt)
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.di.koin)
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.data.test"
 }
 
-dependencies {
-    api(projects.core.data)
-
-    implementation(libs.hilt.android.testing)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.data)
+        }
+    }
 }
