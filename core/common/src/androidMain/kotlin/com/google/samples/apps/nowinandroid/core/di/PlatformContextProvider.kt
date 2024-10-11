@@ -16,12 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import android.app.Application
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import android.content.Context
+import coil3.PlatformContext
+import org.koin.core.annotation.Single
 
-@Component
-@ApplicationScope
-abstract class AndroidApplicationComponent(
-    @get:Provides val application: Application,
-)
+@Single
+actual class PlatformContextProvider(
+    val context: Context,
+) {
+    actual fun getPlatformContext(): PlatformContext {
+        return context
+    }
+}

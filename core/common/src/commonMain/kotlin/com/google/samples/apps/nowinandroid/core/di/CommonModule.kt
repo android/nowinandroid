@@ -16,11 +16,17 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import android.app.Application
-import coil3.PlatformContext
-import me.tatarka.inject.annotations.Provides
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.ksp.generated.module
 
-interface PlatformComponent {
-    @Provides
-    fun providePlatformContext(application: Application): PlatformContext = application
-}
+fun commonModule() = listOf(
+    CommonModule().module,
+    coroutineDispatcherModule,
+    coroutineScopeModule,
+    imageLoaderModule,
+)
+
+@Module
+@ComponentScan
+class CommonModule

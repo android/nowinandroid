@@ -21,27 +21,16 @@ import coil3.PlatformContext
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import coil3.util.DebugLogger
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import org.koin.dsl.module
 
-@Component
-abstract class ImageLoaderComponent {
-    /**
-     * Since we're displaying SVGs in the app, Coil needs an ImageLoader which supports this
-     * format. During Coil's initialization it will call `applicationContext.newImageLoader()` to
-     * obtain an ImageLoader.
-     *
-     * @see <a href="https://github.com/coil-kt/coil/blob/main/coil-singleton/src/main/java/coil/Coil.kt">Coil</a>
-     */
-    @Provides
-    fun provideImageLoader(
-        context: PlatformContext,
-    ): ImageLoader {
-        return ImageLoader.Builder(context)
+val imageLoaderModule = module {
+    single<ImageLoader> {
+        val platformContext: PlatformContext = get()
+        ImageLoader.Builder(platformContext)
             .memoryCache {
                 MemoryCache.Builder()
                     // Set the max size to 25% of the app's available memory.
-                    .maxSizePercent(context, percent = 0.25)
+                    .maxSizePercent(platformContext, percent = 0.25)
                     .build()
             }
             // Show a short crossfade when loading images asynchronously.

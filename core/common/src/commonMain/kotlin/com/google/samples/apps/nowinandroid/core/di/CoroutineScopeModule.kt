@@ -16,26 +16,22 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.DEFAULT
-import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.IO
-import com.google.samples.apps.nowinandroid.core.di.NiaDispatchers.MAIN
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.IO
-import me.tatarka.inject.annotations.Provides
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import me.tatarka.inject.annotations.Scope
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-abstract class DispatchersComponent {
-    @Provides
-    abstract fun providesIODispatcher():
-        @Dispatcher(IO)
-        CoroutineDispatcher
+/**
+ * The application-level scope. There will only be one instance of anything annotated with this.
+ */
+@Scope
+annotation class ApplicationScope
 
-    @Provides
-    abstract fun providesDefaultDispatcher():
-        @Dispatcher(DEFAULT)
-        CoroutineDispatcher
-
-    @Provides
-    abstract fun providesMainDispatcher():
-        @Dispatcher(MAIN)
-        CoroutineDispatcher
+val coroutineScopeModule = module {
+    single {
+        val dispatcher: CoroutineDispatcher = get(named("DefaultDispatcher"))
+        CoroutineScope(SupervisorJob() + dispatcher)
+    }
 }

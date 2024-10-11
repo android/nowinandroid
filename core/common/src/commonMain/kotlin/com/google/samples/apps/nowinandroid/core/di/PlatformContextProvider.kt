@@ -18,6 +18,6 @@ package com.google.samples.apps.nowinandroid.core.di
 
 import coil3.PlatformContext
 
-interface PlatformContextProvider {
-    val platformContext: PlatformContext
+expect class PlatformContextProvider {
+    fun getPlatformContext(): PlatformContext
 }

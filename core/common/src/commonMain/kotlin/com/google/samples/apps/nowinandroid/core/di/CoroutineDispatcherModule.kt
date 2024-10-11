@@ -16,11 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import android.content.Context
-import coil3.PlatformContext
-import me.tatarka.inject.annotations.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Inject
-class AndroidPlatformContextProvider(private val context: Context) : PlatformContextProvider {
-    override val platformContext: PlatformContext get() = context
+val coroutineDispatcherModule = module {
+    single(named("IoDispatcher")) { Dispatchers.IO }
+    single(named("DefaultDispatcher")) { Dispatchers.Default }
+    single(named("MainDispatcher")) { Dispatchers.Main }
 }
