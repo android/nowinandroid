@@ -25,12 +25,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import me.tatarka.inject.annotations.Inject
+import org.koin.core.annotation.Factory
 
 /**
  * A use case which returns the searched contents matched with the search query.
  */
-@Inject
+@Factory
 class GetSearchContentsUseCase(
     private val searchContentsRepository: SearchContentsRepository,
     private val userDataRepository: UserDataRepository,

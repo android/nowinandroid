@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.di.koin)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.domain"
-}
+package com.google.samples.apps.nowinandroid.core.domain.di
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            api(projects.core.data)
-            api(projects.core.model)
-        }
-        commonTest.dependencies {
-            implementation(projects.core.testing)
-        }
-    }
-}
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.ksp.generated.module
+
+val domainModule = listOf(
+    DomainModule().module
+)
+@Module
+@ComponentScan
+class DomainModule
