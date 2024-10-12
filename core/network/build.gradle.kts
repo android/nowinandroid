@@ -19,11 +19,10 @@ import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.kotlin.inject)
+    alias(libs.plugins.nowinandroid.di.koin)
     alias(libs.plugins.ktrofit)
     alias(libs.plugins.buildkonfig)
     id("kotlinx-serialization")
-    id("com.google.devtools.ksp")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 

@@ -17,38 +17,51 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.BuildKonfig
+import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.CallConverterFactory
 import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
+import org.koin.ksp.generated.module
 
-@Component
-abstract class NetworkModule {
-
-    @Provides
-    fun providesNetworkJson(): Json = Json {
-        ignoreUnknownKeys = true
-    }
-
-    @Provides
-    fun provideKtorfit(json: Json): Ktorfit = ktorfit {
-        baseUrl(BuildKonfig.BACKEND_URL)
-        httpClient(
-            HttpClient {
-                install(ContentNegotiation) {
-                    json(json)
-                }
-            },
-        )
-        converterFactories(
-            FlowConverterFactory(),
-            CallConverterFactory(),
-        )
+internal val jsonModule = module {
+    single<Json> {
+        Json {
+            ignoreUnknownKeys = true
+        }
     }
 }
+
+internal val ktorfitModule = module {
+    single<Ktorfit> {
+        ktorfit {
+            baseUrl(BuildKonfig.BACKEND_URL)
+            httpClient(
+                HttpClient {
+                    install(ContentNegotiation) {
+                        get<Json>()
+                    }
+                },
+            )
+            converterFactories(
+                FlowConverterFactory(),
+                CallConverterFactory(),
+            )
+        }
+    }
+
+    singleOf(::RetrofitNiaNetwork)
+}
+
+val networkModule = listOf(NetworkModule().module, jsonModule, ktorfitModule)
+
+@Module
+@ComponentScan
+class NetworkModule

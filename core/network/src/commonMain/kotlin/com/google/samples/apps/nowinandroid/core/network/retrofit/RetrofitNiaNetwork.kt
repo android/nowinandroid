@@ -24,7 +24,6 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.serialization.Serializable
-import me.tatarka.inject.annotations.Inject
 
 /**
  * Retrofit API declaration for NIA Network API
@@ -62,7 +61,7 @@ internal data class NetworkResponse<T>(
 /**
  * [Ktrofit] backed [NiaNetworkDataSource]
  */
-internal class RetrofitNiaNetwork @Inject constructor(
+internal class RetrofitNiaNetwork(
     ktorfit: Ktorfit,
 ) : NiaNetworkDataSource {
 

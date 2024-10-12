@@ -27,12 +27,13 @@ import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import me.tatarka.inject.annotations.Inject
+import org.koin.core.annotation.Single
 
 /**
  * [NiaNetworkDataSource] implementation that provides static news resources to aid development
  */
-class DemoNiaNetworkDataSource @Inject constructor(
+@Single
+class DemoNiaNetworkDataSource(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
 ) : NiaNetworkDataSource {
