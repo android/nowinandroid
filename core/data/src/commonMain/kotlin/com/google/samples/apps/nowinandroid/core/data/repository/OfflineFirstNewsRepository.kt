@@ -35,7 +35,6 @@ import com.google.samples.apps.nowinandroid.core.notifications.Notifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import me.tatarka.inject.annotations.Inject
 
 // Heuristic value to optimize for serialization and deserialization cost on client and server
 // for each news resource batch.
@@ -45,7 +44,6 @@ private const val SYNC_BATCH_SIZE = 40
  * Disk storage backed implementation of the [NewsRepository].
  * Reads are exclusively from local storage to support offline access.
  */
-@Inject
 class OfflineFirstNewsRepository(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
     private val newsResourceDao: NewsResourceDaoInterface,

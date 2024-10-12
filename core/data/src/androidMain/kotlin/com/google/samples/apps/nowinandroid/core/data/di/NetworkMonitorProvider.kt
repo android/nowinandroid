@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
-import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import android.content.Context
+import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import kotlinx.coroutines.CoroutineDispatcher
+import org.koin.core.annotation.Singleton
 
-@Component
-abstract class UserNewsResourceRepositoryModule {
-    @Provides
-    fun bindsUserNewsResourceRepository(
-        userDataRepository: CompositeUserNewsResourceRepository,
-    ): UserNewsResourceRepository = userDataRepository
+@Singleton
+actual class NetworkMonitorProvider(
+    private val context: Context,
+    private val dispatcher: CoroutineDispatcher,
+) {
+    actual fun provideNetworkMonitor(): NetworkMonitor {
+        return ConnectivityManagerNetworkMonitor(context, dispatcher)
+    }
 }

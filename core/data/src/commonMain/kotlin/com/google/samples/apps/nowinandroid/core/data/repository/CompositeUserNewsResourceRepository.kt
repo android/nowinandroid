@@ -25,14 +25,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import me.tatarka.inject.annotations.Inject
 
 /**
  * Implements a [UserNewsResourceRepository] by combining a [NewsRepository] with a
  * [UserDataRepository].
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-@Inject
 class CompositeUserNewsResourceRepository(
     val newsRepository: NewsRepository,
     val userDataRepository: UserDataRepository,

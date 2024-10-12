@@ -35,10 +35,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
-import me.tatarka.inject.annotations.Inject
 import java.time.ZoneId
 
-@Inject
 internal class TimeZoneBroadcastMonitor(
     private val context: Context,
     appScope: CoroutineScope,

@@ -28,13 +28,11 @@ import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import me.tatarka.inject.annotations.Inject
 
 /**
  * Disk storage backed implementation of the [TopicsRepository].
  * Reads are exclusively from local storage to support offline access.
  */
-@Inject
 class OfflineFirstTopicsRepository(
     private val topicDao: TopicDaoInterface,
     private val network: NiaNetworkDataSource,

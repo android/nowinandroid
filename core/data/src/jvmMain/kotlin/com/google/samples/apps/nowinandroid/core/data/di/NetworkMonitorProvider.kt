@@ -17,13 +17,14 @@
 package com.google.samples.apps.nowinandroid.core.data.di
 
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import me.tatarka.inject.annotations.Provides
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import org.koin.core.annotation.Singleton
 
-abstract class PlatformDependentDataModule {
-    @Provides
-    abstract fun bindsNetworkMonitor(): NetworkMonitor
-
-    @Provides
-    abstract fun bindsTimeZoneMonitor(): TimeZoneMonitor
+@Singleton
+actual class NetworkMonitorProvider {
+    actual fun provideNetworkMonitor(): NetworkMonitor = object : NetworkMonitor {
+        override val isOnline: Flow<Boolean>
+            get() = flowOf(true)
+    }
 }

@@ -35,10 +35,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
-import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@Inject
 class DefaultSearchContentsRepository(
     private val newsResourceDao: NewsResourceDao,
     private val newsResourceFtsDao: NewsResourceFtsDao,

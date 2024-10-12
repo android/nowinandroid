@@ -16,44 +16,56 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultSearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
-import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.ksp.generated.module
 
-@Component
-abstract class DataModule {
-
-    @Provides
-    fun bindsTopicRepository(
-        topicsRepository: OfflineFirstTopicsRepository,
-    ): TopicsRepository = topicsRepository
-
-    @Provides
-    fun bindsNewsResourceRepository(
-        newsRepository: OfflineFirstNewsRepository,
-    ): NewsRepository = newsRepository
-
-    @Provides
-    fun bindsUserDataRepository(
-        userDataRepository: OfflineFirstUserDataRepository,
-    ): UserDataRepository = userDataRepository
-
-    @Provides
-    fun bindsRecentSearchRepository(
-        recentSearchRepository: DefaultRecentSearchRepository,
-    ): RecentSearchRepository = recentSearchRepository
-
-    @Provides
-    fun bindsSearchContentsRepository(
-        searchContentsRepository: DefaultSearchContentsRepository,
-    ): SearchContentsRepository = searchContentsRepository
+internal val repositoryModule = module {
+    single { OfflineFirstTopicsRepository(get(), get()) }
+    single { OfflineFirstNewsRepository(get(), get(), get(), get(), get()) }
+    single { OfflineFirstUserDataRepository(get(), get()) }
+    single { DefaultRecentSearchRepository(get()) }
+    single {
+        DefaultSearchContentsRepository(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(named("IoDispatcher")),
+        )
+    }
+    single { CompositeUserNewsResourceRepository(get(), get()) }
 }
+
+internal val networkMonitorModule = module {
+    single {
+        val networkMonitorProvider: NetworkMonitorProvider = get()
+        networkMonitorProvider.provideNetworkMonitor()
+    }
+}
+
+internal val timeZoneMonitorProviderModule = module {
+    single {
+        val timeZoneMonitorProvider: TimeZoneMonitorProvider = get()
+        timeZoneMonitorProvider.provideTimeZoneMonitor()
+    }
+}
+
+val dataModule = listOf(
+    DataModule().module,
+    repositoryModule,
+    networkMonitorModule,
+    timeZoneMonitorProviderModule,
+)
+
+@Module
+@ComponentScan
+class DataModule
