@@ -17,12 +17,9 @@
 package com.google.samples.apps.nowinandroid.core.notifications.di
 
 import com.google.samples.apps.nowinandroid.core.notifications.NoOpNotifier
-import com.google.samples.apps.nowinandroid.core.notifications.Notifier
-import me.tatarka.inject.annotations.Provides
+import org.koin.dsl.module
 
-internal abstract class NotificationsModule {
-
-    // TODO: Add a real implementation of Notifier foe each platform
-    @Provides
-    internal fun provideNotifier(): Notifier = NoOpNotifier()
+val notificationModule = module {
+    // TODO replace with a real implementation
+    single { NoOpNotifier() }
 }
