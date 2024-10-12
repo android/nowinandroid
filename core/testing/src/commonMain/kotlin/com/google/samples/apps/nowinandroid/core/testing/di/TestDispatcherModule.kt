@@ -19,12 +19,9 @@ package com.google.samples.apps.nowinandroid.core.testing.di
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import org.koin.dsl.module
 
-@Component
-internal abstract class TestDispatcherModule {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Provides
-    fun providesTestDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
+@OptIn(ExperimentalCoroutinesApi::class)
+val testDispatcherModule = module {
+    single { UnconfinedTestDispatcher() }
 }
