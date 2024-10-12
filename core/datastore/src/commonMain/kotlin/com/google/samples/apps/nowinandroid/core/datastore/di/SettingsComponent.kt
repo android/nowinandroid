@@ -16,12 +16,17 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore.di
 
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.russhwolf.settings.Settings
-import me.tatarka.inject.annotations.Component
-import me.tatarka.inject.annotations.Provides
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Component
-abstract class SettingsComponent {
-    @Provides
-    fun providesSettings(): Settings = Settings()
+val settingsModule = module {
+    single { Settings() }
+    single {
+        NiaPreferencesDataSource(
+            settings = get(),
+            dispatcher = get(named("IoDispatcher")),
+        )
+    }
 }

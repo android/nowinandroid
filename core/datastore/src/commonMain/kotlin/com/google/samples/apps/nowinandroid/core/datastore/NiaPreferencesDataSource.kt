@@ -31,12 +31,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
-import me.tatarka.inject.annotations.Inject
 
 private const val USER_DATA_KEY = "userData"
 
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
-@Inject
 class NiaPreferencesDataSource(
     private val settings: Settings,
     @Dispatcher(IO) private val dispatcher: CoroutineDispatcher,
