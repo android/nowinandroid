@@ -29,7 +29,7 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("nowinandroid.kmp.library")
-                apply("nowinandroid.kmp.inject")
+                apply("nowinandroid.di.koin")
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("org.jetbrains.compose")
             }
@@ -47,6 +47,9 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", project(":core:designsystem"))
                 add("commonMainImplementation", libs.findLibrary("jetbrains.compose.viewmodel").get())
                 add("commonMainImplementation", libs.findLibrary("jetbrains.compose.navigation").get())
+                add("commonMainImplementation", libs.findLibrary("koin.compose").get())
+                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
+                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())
 
                 add("androidMainImplementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
