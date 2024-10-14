@@ -103,6 +103,7 @@ import nowinandroid.feature.search.generated.resources.feature_search_updates
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import org.koin.compose.viewmodel.koinViewModel
 import nowinandroid.core.ui.generated.resources.Res as uiR
 import nowinandroid.feature.search.generated.resources.Res as searchR
 
@@ -112,7 +113,7 @@ internal fun SearchRoute(
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    searchViewModel: SearchViewModel,
+    searchViewModel: SearchViewModel = koinViewModel(),
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
@@ -256,7 +257,7 @@ fun EmptySearchResultBody(
                         fontWeight = FontWeight.Bold,
                     ),
                 ) {
-                    append(stringResource(id = searchR.string.feature_search_interests))
+                    append(stringResource(resource = searchR.string.feature_search_interests))
                 }
             }
 

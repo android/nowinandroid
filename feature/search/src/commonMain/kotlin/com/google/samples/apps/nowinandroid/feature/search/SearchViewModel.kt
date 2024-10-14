@@ -37,10 +37,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SearchViewModel @Inject constructor(
+class SearchViewModel(
     getSearchContentsUseCase: GetSearchContentsUseCase,
     recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val searchContentsRepository: SearchContentsRepository,
