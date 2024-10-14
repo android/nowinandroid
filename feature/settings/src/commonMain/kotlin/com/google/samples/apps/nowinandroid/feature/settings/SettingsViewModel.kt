@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class SettingsViewModel constructor(
+class SettingsViewModel(
     private val userDataRepository: UserDataRepository,
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =

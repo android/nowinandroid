@@ -82,11 +82,12 @@ import nowinandroid.feature.settings.generated.resources.feature_settings_theme
 import nowinandroid.feature.settings.generated.resources.feature_settings_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsDialog(
     onDismiss: () -> Unit,
-    viewModel: SettingsViewModel,
+    viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
