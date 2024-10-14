@@ -37,9 +37,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import me.tatarka.inject.annotations.Inject
+import org.koin.android.annotation.KoinViewModel
 
-class TopicViewModel @Inject constructor(
+@KoinViewModel
+class TopicViewModel(
     savedStateHandle: SavedStateHandle,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
