@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.testing.di
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.dsl.module
 

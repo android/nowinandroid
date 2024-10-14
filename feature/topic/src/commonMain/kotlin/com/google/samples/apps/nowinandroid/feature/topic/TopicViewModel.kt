@@ -37,9 +37,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.koin.android.annotation.KoinViewModel
 
-@KoinViewModel
 class TopicViewModel(
     savedStateHandle: SavedStateHandle,
     private val userDataRepository: UserDataRepository,

@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.topic.di
 
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

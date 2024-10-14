@@ -21,8 +21,9 @@ import org.koin.core.annotation.Module
 import org.koin.ksp.generated.module
 
 val domainModule = listOf(
-    DomainModule().module
+    DomainModule().module,
 )
+
 @Module
 @ComponentScan
 class DomainModule
