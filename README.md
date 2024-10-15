@@ -46,7 +46,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 | :core:analytics           | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:common              | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:data                | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :core:data-test           | Not started | ❌                | ❌                | ❌            | ❌            |
+| :core:data-test           | Done        | ✔️                | ✔️                | ✔️            | ❌            |
 | :core:database            | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:datastore           | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:datastore-proto     | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
@@ -59,12 +59,12 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 | :core:screenshot-testing  | Not started | ❌                | ❌                | ❌            | ❌            |
 | :core:testing             | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:ui                  | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
-| :feature:bookmarks        | In progress | ✔️                | ✔️                | ✔️            | ❌            |
-| :feature:foryou           | In progress | ✔️                | ✔️                | ✔️            | ❌            |
-| :feature:interests        | In progress | ✔️                | ✔️                | ✔️            | ❌            |
-| :feature:search           | In progress | ✔️                | ✔️                | ✔️            | ❌            |
-| :feature:settings         | Not started | ✔️                | ✔️                | ✔️            | ❌            |
-| :feature:topic            | Not started | ❌                | ❌                | ❌            | ❌            |
+| :feature:bookmarks        | Done        | ✔️                | ✔️                | ✔️            | ❌            |
+| :feature:foryou           | Done        | ✔️                | ✔️                | ✔️            | ❌            |
+| :feature:interests        | Done        | ✔️                | ✔️                | ✔️            | ❌            |
+| :feature:search           | Done        | ✔️                | ✔️                | ✔️            | ❌            |
+| :feature:settings         | Done        | ✔️                | ✔️                | ✔️            | ❌            |
+| :feature:topic            | Done        | ✔️                | ✔️                | ✔️            | ❌            |
 | lint                      | Not started | ❌                | ❌                | ❌            | ❌            |
 | :sync:sync-test           | Not started | ❌                | ❌                | ❌            | ❌            |
 | :sync:work                | Not started | ❌                | ❌                | ❌            | ❌            |
