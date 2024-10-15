@@ -35,13 +35,14 @@ import nowinandroid.feature.interests.generated.resources.feature_interests_empt
 import nowinandroid.feature.interests.generated.resources.feature_interests_loading
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun InterestsRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     highlightSelectedTopic: Boolean = false,
-    viewModel: InterestsViewModel,
+    viewModel: InterestsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

@@ -29,5 +29,5 @@ fun NavController.navigateToInterests(
     initialTopicId: String? = null,
     navOptions: NavOptions? = null,
 ) {
-//    navigate(route = InterestsRoute(initialTopicId), navOptions)
+    navigate(route = InterestsRoute(initialTopicId), navOptions)
 }
