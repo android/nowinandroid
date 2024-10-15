@@ -31,6 +31,7 @@ kotlin {
             implementation(projects.core.ui)
             implementation(libs.coil)
             implementation(libs.coil.compose)
+            implementation(libs.kotlinx.serialization.core)
             implementation(compose.material3)
             implementation(compose.foundation)
             implementation(compose.ui)
