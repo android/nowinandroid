@@ -95,12 +95,13 @@ import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ForYouViewModel,
+    viewModel: ForYouViewModel = koinViewModel(),
 ) {
     val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()

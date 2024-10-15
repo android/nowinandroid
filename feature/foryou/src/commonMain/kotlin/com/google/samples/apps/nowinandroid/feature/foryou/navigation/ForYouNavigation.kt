@@ -22,11 +22,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_URI_PATTERN
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import kotlinx.serialization.Serializable
 
-@Serializable data object ForYouRoute
+@Serializable
+data object ForYouRoute
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute, navOptions)
+fun NavController.navigateToForYou(navOptions: NavOptions) =
+    navigate(route = ForYouRoute, navOptions)
 
 fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
     composable<ForYouRoute>(
@@ -43,6 +46,6 @@ fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
             },
         ),
     ) {
-//        ForYouRoute(onTopicClick)
+        ForYouScreen(onTopicClick)
     }
 }

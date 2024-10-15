@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.nowinandroid.cmp.feature)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -36,6 +37,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.coil)
             implementation(libs.coil.compose)
+            implementation(libs.kotlinx.serialization.core)
         }
         androidMain.dependencies {
             implementation(libs.accompanist.permissions)
