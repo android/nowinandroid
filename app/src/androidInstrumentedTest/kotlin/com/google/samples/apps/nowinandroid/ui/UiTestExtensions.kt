@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+package com.google.samples.apps.nowinandroid.ui
 
-class SqlDelightConventionPlugin: Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("app.cash.sqldelight")
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.compose.resources.StringResource
+import kotlin.properties.ReadOnlyProperty
+
+fun AndroidComposeTestRule<*, *>.stringResource(
+    resId: StringResource,
+): ReadOnlyProperty<Any, String> =
+    ReadOnlyProperty { _, _ ->
+        runBlocking {
+            // TODO remove runBlocking
+            org.jetbrains.compose.resources.getString(resId)
         }
     }
-}
+

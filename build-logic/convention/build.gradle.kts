@@ -129,6 +129,10 @@ gradlePlugin {
             id = "nowinandroid.cmp.feature"
             implementationClass = "CmpFeatureConventionPlugin"
         }
+        register("cmpApplication") {
+            id = "nowinandroid.cmp.application"
+            implementationClass = "CmpApplicationConventionPlugin"
+        }
         register("koin") {
             id = "nowinandroid.di.koin"
             implementationClass = "KoinConventionPlugin"

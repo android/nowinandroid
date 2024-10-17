@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 import com.google.samples.apps.nowinandroid.NiaBuildType
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.application)
-    alias(libs.plugins.nowinandroid.android.application.compose)
-    alias(libs.plugins.nowinandroid.android.application.flavors)
-    alias(libs.plugins.nowinandroid.android.application.jacoco)
-    alias(libs.plugins.nowinandroid.android.application.firebase)
-    alias(libs.plugins.nowinandroid.hilt)
-    id("com.google.android.gms.oss-licenses-plugin")
-    alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.nowinandroid.cmp.application)
+    alias(libs.plugins.nowinandroid.di.koin)
+//    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -34,8 +32,7 @@ android {
         versionCode = 8
         versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
-        // Custom test runner to set up Hilt dependency graph
-        testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -55,7 +52,7 @@ android {
             // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
             signingConfig = signingConfigs.named("debug").get()
             // Ensure Baseline Profile is fresh for release builds.
-            baselineProfile.automaticGenerationDuringBuild = true
+//            baselineProfile.automaticGenerationDuringBuild = true
         }
     }
 
@@ -72,76 +69,127 @@ android {
     namespace = "com.google.samples.apps.nowinandroid"
 }
 
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.feature.interests)
+            implementation(projects.feature.foryou)
+            implementation(projects.feature.bookmarks)
+            implementation(projects.feature.topic)
+            implementation(projects.feature.search)
+            implementation(projects.feature.settings)
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
+            implementation(projects.core.designsystem)
+            implementation(projects.core.data)
+            implementation(projects.core.model)
+            implementation(projects.core.analytics)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+//            implementation(projects.sync.work)
+
+            implementation(libs.coil.core)
+            implementation(libs.coil.compose)
+            implementation(libs.kotlinx.serialization.json)
+        }
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.compose.material3.adaptive)
+            implementation(libs.androidx.compose.material3.adaptive.layout)
+            implementation(libs.androidx.compose.material3.adaptive.navigation)
+            implementation(libs.androidx.compose.material3.windowSizeClass)
+            implementation(libs.androidx.compose.runtime.tracing)
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.profileinstaller)
+            implementation(libs.androidx.tracing.ktx)
+            implementation(libs.androidx.window.core)
+            implementation(libs.kotlinx.coroutines.guava)
+            implementation(libs.koin.android)
+        }
+
+        commonTest.dependencies {
+            implementation(projects.core.dataTest)
+            implementation(projects.core.testing)
+            implementation(projects.core.screenshotTesting)
+//            implementation(projects.sync.syncTest)
+            implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+        }
+
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.dataTest)
+            implementation(projects.core.testing)
+            implementation(libs.androidx.test.espresso.core)
+            implementation(libs.androidx.navigation.testing)
+            implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.ui.test)
+        }
+
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+        }
+
+        jvmTest.dependencies {
+            implementation(compose.desktop.uiTestJUnit4)
+        }
+    }
+}
+
 dependencies {
-    implementation(projects.feature.interests)
-    implementation(projects.feature.foryou)
-    implementation(projects.feature.bookmarks)
-    implementation(projects.feature.topic)
-    implementation(projects.feature.search)
-    implementation(projects.feature.settings)
-
-    implementation(projects.core.common)
-    implementation(projects.core.ui)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.data)
-    implementation(projects.core.model)
-    implementation(projects.core.analytics)
-    implementation(projects.sync.work)
-
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3.adaptive)
-    implementation(libs.androidx.compose.material3.adaptive.layout)
-    implementation(libs.androidx.compose.material3.adaptive.navigation)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.compose.runtime.tracing)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.profileinstaller)
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.androidx.window.core)
-    implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.coil)
-    implementation(libs.kotlinx.serialization.json)
-
-    ksp(libs.hilt.compiler)
-
-    debugImplementation(libs.androidx.compose.ui.testManifest)
-    debugImplementation(projects.uiTestHiltManifest)
-
-    kspTest(libs.hilt.compiler)
-
-    testImplementation(projects.core.dataTest)
-    testImplementation(libs.hilt.android.testing)
-    testImplementation(projects.sync.syncTest)
-    testImplementation(libs.kotlin.test)
-
-    testDemoImplementation(libs.robolectric)
-    testDemoImplementation(libs.roborazzi)
-    testDemoImplementation(projects.core.screenshotTesting)
-
-    androidTestImplementation(kotlin("test"))
-    androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.dataTest)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.hilt.android.testing)
-
-    baselineProfile(projects.benchmarks)
+    debugImplementation(compose.uiTooling)
+    androidTestImplementation(libs.androidx.compose.ui.test.android)
+    androidTestImplementation(libs.androidx.compose.ui.testManifest)
 }
 
-baselineProfile {
-    // Don't build on every iteration of a full assemble.
-    // Instead enable generation directly for the release build variant.
-    automaticGenerationDuringBuild = false
+compose.desktop {
+    application {
+        mainClass = "com.google.sample.apps.nowinandroid.MainKt"
 
-    // Make use of Dex Layout Optimizations via Startup Profiles
-    dexLayoutOptimization = true
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.google.sample.apps.nowinandroid"
+            packageVersion = "1.0.0"
+        }
+    }
 }
 
-dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
-}
+//dependencies {
+//
+//    debugImplementation(libs.androidx.compose.ui.testManifest)
+//    debugImplementation(projects.uiTestHiltManifest)
+//
+//
+//
+//    testDemoImplementation(libs.robolectric)
+//    testDemoImplementation(libs.roborazzi)
+//    testDemoImplementation(projects.core.screenshotTesting)
+//
+//    baselineProfile(projects.benchmarks)
+//}
+//
+//baselineProfile {
+//    // Don't build on every iteration of a full assemble.
+//    // Instead enable generation directly for the release build variant.
+//    automaticGenerationDuringBuild = false
+//
+//    // Make use of Dex Layout Optimizations via Startup Profiles
+//    dexLayoutOptimization = true
+//}
+//
