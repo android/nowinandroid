@@ -30,4 +30,3 @@ fun AndroidComposeTestRule<*, *>.stringResource(
             org.jetbrains.compose.resources.getString(resId)
         }
     }
-

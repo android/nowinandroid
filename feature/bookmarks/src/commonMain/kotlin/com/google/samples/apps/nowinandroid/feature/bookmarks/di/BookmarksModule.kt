@@ -18,10 +18,8 @@ package com.google.samples.apps.nowinandroid.feature.bookmarks.di
 
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val bookmarksModule = module {
     viewModel { BookmarksViewModel(get(), get()) }
 }
-

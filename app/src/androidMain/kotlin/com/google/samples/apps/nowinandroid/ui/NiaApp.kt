@@ -74,9 +74,9 @@ import nowinandroid.app.generated.resources.Res
 import nowinandroid.app.generated.resources.not_connected
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_action_icon_description
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_navigation_icon_description
+import org.jetbrains.compose.resources.stringResource
 import kotlin.reflect.KClass
 import nowinandroid.feature.settings.generated.resources.Res as settingsR
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NiaApp(

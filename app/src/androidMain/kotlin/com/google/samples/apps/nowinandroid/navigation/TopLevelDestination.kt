@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
-
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute

@@ -44,7 +44,6 @@ import nowinandroid.feature.search.generated.resources.feature_search_interests
 import nowinandroid.feature.settings.generated.resources.feature_settings_brand_android
 import nowinandroid.feature.settings.generated.resources.feature_settings_dismiss_dialog_button_text
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_action_icon_description
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject

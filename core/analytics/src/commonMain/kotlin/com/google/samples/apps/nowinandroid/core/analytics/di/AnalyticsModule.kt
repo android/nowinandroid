@@ -21,7 +21,6 @@ import com.google.samples.apps.nowinandroid.core.analytics.StubAnalyticsHelper
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
-
 @Module
 class AnalyticsModule {
     @Single
