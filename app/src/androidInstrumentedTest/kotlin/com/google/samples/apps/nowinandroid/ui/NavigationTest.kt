@@ -60,8 +60,8 @@ class NavigationTest {
     /**
      * Manages the components' state and is used to perform injection on your test
      */
-    @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+//    @get:Rule(order = 0)
+//    val hiltRule = HiltAndroidRule(this)
 
     /**
      * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission.
@@ -89,8 +89,8 @@ class NavigationTest {
     private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_brand_android)
     private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_dismiss_dialog_button_text)
 
-    @Before
-    fun setup() = hiltRule.inject()
+//    @Before
+//    fun setup() = hiltRule.inject()
 
     @Test
     fun firstScreen_isForYou() {

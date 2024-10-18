@@ -60,7 +60,8 @@ internal val daoModule = module {
     }
 }
 
-val databaseModule = listOf(
+fun databaseModule() = listOf(
+    driverModule,
     DatabaseModule().module,
     daoModule,
 )

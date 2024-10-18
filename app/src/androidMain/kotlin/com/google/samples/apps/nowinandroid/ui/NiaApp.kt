@@ -37,7 +37,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -54,7 +53,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
@@ -62,7 +60,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationSuiteScaffold
@@ -73,10 +70,14 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import nowinandroid.app.generated.resources.Res
+import nowinandroid.app.generated.resources.not_connected
+import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_action_icon_description
+import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_navigation_icon_description
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import nowinandroid.feature.settings.generated.resources.Res as settingsR
+import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun NiaApp(
     appState: NiaAppState,
@@ -100,7 +101,7 @@ fun NiaApp(
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
             // If user is not connected to the internet show a snack bar to inform them.
-            val notConnectedMessage = stringResource(R.string.not_connected)
+            val notConnectedMessage = stringResource(Res.string.not_connected)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
@@ -126,7 +127,6 @@ fun NiaApp(
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3AdaptiveApi::class,
 )
 internal fun NiaApp(
     appState: NiaAppState,
@@ -205,14 +205,14 @@ internal fun NiaApp(
                 if (destination != null) {
                     shouldShowTopAppBar = true
                     NiaTopAppBar(
-                        titleRes = destination.titleTextId,
+                        title = stringResource(destination.titleTextId),
                         navigationIcon = NiaIcons.Search,
                         navigationIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_navigation_icon_description,
+                            resource = settingsR.string.feature_settings_top_app_bar_navigation_icon_description,
                         ),
                         actionIcon = NiaIcons.Settings,
                         actionIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_action_icon_description,
+                            resource = settingsR.string.feature_settings_top_app_bar_action_icon_description,
                         ),
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent,

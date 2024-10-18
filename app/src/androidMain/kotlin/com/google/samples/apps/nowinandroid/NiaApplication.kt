@@ -21,14 +21,11 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
-import com.google.samples.apps.nowinandroid.core.analytics.di.analyticsModule
-import com.google.samples.apps.nowinandroid.core.di.CommonModule
-import com.google.samples.apps.nowinandroid.core.di.commonModule
+import com.google.samples.apps.nowinandroid.di.appModules
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.ksp.generated.module
 
 /**
  * [Application] class for NiA
@@ -42,18 +39,14 @@ class NiaApplication : Application(), SingletonImageLoader.Factory {
         startKoin {
             androidLogger()
             androidContext(this@NiaApplication)
-            val allModules =
-            modules(
-                CommonModule().module,
-                AnalyticModule().module,
-            )
+            modules(appModules)
         }
         // Initialize Sync; the system responsible for keeping data in the app up to date.
 //        Sync.initialize(context = this)
         profileVerifierLogger()
     }
 
-    override fun newImageLoader(context: PlatformContext): ImageLoader{
+    override fun newImageLoader(context: PlatformContext): ImageLoader {
         return ImageLoader.Builder(context)
             .crossfade(true)
             .build()

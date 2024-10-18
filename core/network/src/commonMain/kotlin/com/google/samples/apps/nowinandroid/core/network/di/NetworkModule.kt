@@ -60,7 +60,7 @@ internal val ktorfitModule = module {
     singleOf(::RetrofitNiaNetwork)
 }
 
-val networkModule = listOf(NetworkModule().module, jsonModule, ktorfitModule)
+fun networkModule() = listOf(NetworkModule().module, jsonModule, ktorfitModule)
 
 @Module
 @ComponentScan

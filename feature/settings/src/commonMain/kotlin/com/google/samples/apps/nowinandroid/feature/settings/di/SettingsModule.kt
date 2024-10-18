@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.datastore.di
+package com.google.samples.apps.nowinandroid.feature.settings.di
 
-import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.russhwolf.settings.Settings
-import org.koin.core.qualifier.named
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val settingsModule = module {
-    single { Settings() }
-    single {
-        NiaPreferencesDataSource(
-            settings = get(),
-            dispatcher = get(named("IoDispatcher")),
-        )
+    viewModel {
+        SettingsViewModel(get())
     }
 }

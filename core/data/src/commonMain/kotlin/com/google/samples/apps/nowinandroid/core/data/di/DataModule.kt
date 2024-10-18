@@ -24,15 +24,17 @@ import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTop
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
 
 internal val repositoryModule = module {
-    single { OfflineFirstTopicsRepository(get(), get()) }
-    single { OfflineFirstNewsRepository(get(), get(), get(), get(), get()) }
-    single { OfflineFirstUserDataRepository(get(), get()) }
-    single { DefaultRecentSearchRepository(get()) }
+    singleOf(::OfflineFirstTopicsRepository)
+    singleOf(::OfflineFirstNewsRepository)
+    singleOf(::OfflineFirstUserDataRepository)
+    singleOf(::DefaultRecentSearchRepository)
+    singleOf(::CompositeUserNewsResourceRepository)
     single {
         DefaultSearchContentsRepository(
             get(),
@@ -42,7 +44,6 @@ internal val repositoryModule = module {
             get(named("IoDispatcher")),
         )
     }
-    single { CompositeUserNewsResourceRepository(get(), get()) }
 }
 
 internal val networkMonitorModule = module {
@@ -59,7 +60,7 @@ internal val timeZoneMonitorProviderModule = module {
     }
 }
 
-val dataModule = listOf(
+fun dataModule() = listOf(
     DataModule().module,
     repositoryModule,
     networkMonitorModule,

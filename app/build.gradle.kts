@@ -92,6 +92,8 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
+            implementation(compose.material3AdaptiveNavigationSuite)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -100,6 +102,7 @@ kotlin {
             implementation(libs.coil.core)
             implementation(libs.coil.compose)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.jetbrains.compose.material3.adaptive.navigation)
         }
 
         androidMain.dependencies {

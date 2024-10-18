@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.Bookmar
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import nowinandroid.app.generated.resources.Res
+import nowinandroid.app.generated.resources.app_name
 import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_title
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_title
 import nowinandroid.feature.search.generated.resources.feature_search_interests

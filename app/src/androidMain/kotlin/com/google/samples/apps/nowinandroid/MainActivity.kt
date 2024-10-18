@@ -51,6 +51,7 @@ import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.core.context.GlobalContext.get
 
 class MainActivity : ComponentActivity() {
@@ -58,25 +59,17 @@ class MainActivity : ComponentActivity() {
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
      */
-    private val lazyStats: JankStats = get()
+    private val stats: JankStats by inject()
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
+    private val networkMonitor: NetworkMonitor by inject()
 
-    @Inject
-    lateinit var timeZoneMonitor: TimeZoneMonitor
+    private val timeZoneMonitor: TimeZoneMonitor by inject()
 
-    @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    private val analyticsHelper: AnalyticsHelper by inject()
 
-    @Inject
-    lateinit var userNewsResourceRepository: UserNewsResourceRepository
+    private val userNewsResourceRepository: UserNewsResourceRepository by inject()
 
     private val viewModel: MainActivityViewModel by viewModels()
-
-    override val component by lazy(LazyThreadSafetyMode.NONE) {
-        ApplicationComponent::class.create(applicationContext)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -154,12 +147,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        lazyStats.get().isTrackingEnabled = true
+        stats.isTrackingEnabled = true
     }
 
     override fun onPause() {
         super.onPause()
-        lazyStats.get().isTrackingEnabled = false
+        stats.isTrackingEnabled = false
     }
 }
 

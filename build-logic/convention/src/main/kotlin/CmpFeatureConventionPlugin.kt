@@ -47,6 +47,7 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", project(":core:designsystem"))
                 add("commonMainImplementation", libs.findLibrary("jetbrains.compose.viewmodel").get())
                 add("commonMainImplementation", libs.findLibrary("jetbrains.compose.navigation").get())
+                "commonMainImplementation"(platform(libs.findLibrary("koin.bom").get()))
                 add("commonMainImplementation", libs.findLibrary("koin.compose").get())
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())

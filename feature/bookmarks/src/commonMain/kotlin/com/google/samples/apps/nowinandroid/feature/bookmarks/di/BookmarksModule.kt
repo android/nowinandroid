@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.domain.di
+package com.google.samples.apps.nowinandroid.feature.bookmarks.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksViewModel
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
 
-@Module
-@ComponentScan
-class DomainModule
+val bookmarksModule = module {
+    viewModel { BookmarksViewModel(get(), get()) }
+}
+

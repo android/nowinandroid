@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.core.notifications.di
 import com.google.samples.apps.nowinandroid.core.notifications.NoOpNotifier
 import org.koin.dsl.module
 
-val notificationModule = module {
+fun notificationModule() = module {
     // TODO replace with a real implementation
     single { NoOpNotifier() }
 }

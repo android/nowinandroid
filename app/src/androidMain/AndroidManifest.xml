@@ -19,15 +19,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--
-    Firebase automatically adds these AD_ID and ADSERVICES permissions, even though we don't use them.
-    If you use these permissions you must declare how you're using them to Google Play, otherwise the
-    app will be rejected when publishing it. To avoid this we remove the permissions entirely.
-    -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" tools:node="remove"/>
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove"/>
-
     <application
         android:name=".NiaApplication"
         android:allowBackup="true"
