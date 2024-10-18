@@ -35,8 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
-import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
-import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
+import com.google.samples.apps.nowinandroid.MainScreenUiState.Loading
+import com.google.samples.apps.nowinandroid.MainScreenUiState.Success
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -52,7 +52,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.core.context.GlobalContext.get
 
 class MainActivity : ComponentActivity() {
 
@@ -69,13 +68,13 @@ class MainActivity : ComponentActivity() {
 
     private val userNewsResourceRepository: UserNewsResourceRepository by inject()
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        var uiState: MainActivityUiState by mutableStateOf(Loading)
+        var uiState: MainScreenUiState by mutableStateOf(Loading)
 
         // Update the uiState
         lifecycleScope.launch {
@@ -161,7 +160,7 @@ class MainActivity : ComponentActivity() {
  */
 @Composable
 private fun shouldUseAndroidTheme(
-    uiState: MainActivityUiState,
+    uiState: MainScreenUiState,
 ): Boolean = when (uiState) {
     Loading -> false
     is Success -> when (uiState.userData.themeBrand) {
@@ -175,7 +174,7 @@ private fun shouldUseAndroidTheme(
  */
 @Composable
 private fun shouldDisableDynamicTheming(
-    uiState: MainActivityUiState,
+    uiState: MainScreenUiState,
 ): Boolean = when (uiState) {
     Loading -> false
     is Success -> !uiState.userData.useDynamicColor
@@ -187,7 +186,7 @@ private fun shouldDisableDynamicTheming(
  */
 @Composable
 private fun shouldUseDarkTheme(
-    uiState: MainActivityUiState,
+    uiState: MainScreenUiState,
 ): Boolean = when (uiState) {
     Loading -> isSystemInDarkTheme()
     is Success -> when (uiState.userData.darkThemeConfig) {

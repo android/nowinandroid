@@ -18,8 +18,8 @@ package com.google.samples.apps.nowinandroid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
-import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
+import com.google.samples.apps.nowinandroid.MainScreenUiState.Loading
+import com.google.samples.apps.nowinandroid.MainScreenUiState.Success
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,10 +29,10 @@ import kotlinx.coroutines.flow.stateIn
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class MainActivityViewModel(
+class MainScreenViewModel(
     userDataRepository: UserDataRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
+    val uiState: StateFlow<MainScreenUiState> = userDataRepository.userData.map {
         Success(it)
     }.stateIn(
         scope = viewModelScope,
@@ -41,7 +41,7 @@ class MainActivityViewModel(
     )
 }
 
-sealed interface MainActivityUiState {
-    data object Loading : MainActivityUiState
-    data class Success(val userData: UserData) : MainActivityUiState
+sealed interface MainScreenUiState {
+    data object Loading : MainScreenUiState
+    data class Success(val userData: UserData) : MainScreenUiState
 }

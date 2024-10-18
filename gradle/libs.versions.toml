@@ -153,8 +153,6 @@ koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android"}
 koin-core = { group = "io.insert-koin", name = "koin-core"}
 koin-core-coroutines = { group = "io.insert-koin", name = "koin-android-coroutines"}
-koin-core-viewmodel = { group = "io.insert-koin", name = "koin-android-viewmodel"}
-koin-core-viewmodel-navigation = { group = "io.insert-koin", name = "koin-android-viewmodel-navigation"}
 koin-compose = { group = "io.insert-koin", name = "koin-compose"}
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel"}
 koin-compose-viewmodel-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation"}
