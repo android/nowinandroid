@@ -58,5 +58,5 @@ val appModules = module {
         *networkModule().toTypedArray(),
     )
     includes(featureModules)
-    includes(JankStatsModule().module, AppModule().module)
+    includes(AppModule().module)
 }

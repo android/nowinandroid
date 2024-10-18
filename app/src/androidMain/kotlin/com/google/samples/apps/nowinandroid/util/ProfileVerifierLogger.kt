@@ -48,7 +48,6 @@ import org.koin.core.annotation.Single
  *
  * @see androidx.profileinstaller.ProfileVerifier.CompilationStatus.ResultCode
  */
-@Single
 class ProfileVerifierLogger(
     @ApplicationScope private val scope: CoroutineScope,
 ) {

@@ -16,8 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
-import androidx.activity.compose.BackHandler
-import androidx.annotation.Keep
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -50,12 +48,13 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToT
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Serializable internal object TopicPlaceholderRoute
 
 // TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
-@Keep
+//@Keep
 @Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
@@ -77,7 +76,7 @@ internal fun InterestsListDetailScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalUuidApi::class)
 @Composable
 internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
@@ -93,18 +92,21 @@ internal fun InterestsListDetailScreen(
             },
         ),
     )
-    BackHandler(listDetailNavigator.canNavigateBack()) {
-        listDetailNavigator.navigateBack()
-    }
+    // https://youtrack.jetbrains.com/issue/CMP-4419
+    // Support `BackHandler`/`PredictiveBackHandler`
+
+//    BackHandler(listDetailNavigator.canNavigateBack()) {
+//        listDetailNavigator.navigateBack()
+//    }
 
     var nestedNavHostStartRoute by remember {
         val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
         mutableStateOf(route)
     }
     var nestedNavKey by rememberSaveable(
-        stateSaver = Saver({ it.toString() }, UUID::fromString),
+        stateSaver = Saver({ it.toByteArray() }, Uuid::fromByteArray),
     ) {
-        mutableStateOf(UUID.randomUUID())
+        mutableStateOf(Uuid.random())
     }
     val nestedNavController = key(nestedNavKey) {
         rememberNavController()
@@ -121,7 +123,7 @@ internal fun InterestsListDetailScreen(
         } else {
             // Otherwise, recreate the NavHost entirely, and start at the new destination
             nestedNavHostStartRoute = TopicRoute(id = topicId)
-            nestedNavKey = UUID.randomUUID()
+            nestedNavKey = Uuid.random()
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
