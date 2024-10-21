@@ -212,7 +212,7 @@ private fun TopicHeader(name: String, description: String, imageUrl: String) {
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .size(216.dp)
+                .size(132.dp)
                 .padding(bottom = 12.dp),
         )
         Text(name, style = MaterialTheme.typography.displayMedium)
