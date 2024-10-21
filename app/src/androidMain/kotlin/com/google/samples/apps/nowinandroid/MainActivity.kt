@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
     private val userNewsResourceRepository: UserNewsResourceRepository by inject()
 
-    private val viewModel: MainScreenViewModel by viewModels()
+    private val viewModel: MainScreenViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()

@@ -21,12 +21,14 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
+import com.google.samples.apps.nowinandroid.di.JankStatsModule
 import com.google.samples.apps.nowinandroid.di.appModules
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.ksp.generated.module
 
 /**
  * [Application] class for NiA
@@ -40,7 +42,10 @@ class NiaApplication : Application(), SingletonImageLoader.Factory {
         startKoin {
             androidLogger()
             androidContext(this@NiaApplication)
-            modules(appModules)
+            modules(
+                JankStatsModule().module,
+                appModules,
+            )
         }
         // Initialize Sync; the system responsible for keeping data in the app up to date.
 //        Sync.initialize(context = this)

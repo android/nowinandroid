@@ -21,6 +21,8 @@ import android.util.Log
 import android.view.Window
 import androidx.metrics.performance.JankStats
 import androidx.metrics.performance.JankStats.OnFrameListener
+import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
+import kotlinx.coroutines.CoroutineScope
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
@@ -44,4 +46,8 @@ class JankStatsModule {
         window: Window,
         frameListener: OnFrameListener,
     ): JankStats = JankStats.createAndTrack(window, frameListener)
+
+    @Single
+    fun provideProfileVerifierLogger(scope: CoroutineScope): ProfileVerifierLogger =
+        ProfileVerifierLogger(scope)
 }
