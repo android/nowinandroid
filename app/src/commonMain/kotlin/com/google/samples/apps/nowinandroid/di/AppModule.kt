@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.di
 
+import com.google.samples.apps.nowinandroid.MainScreenViewModel
 import com.google.samples.apps.nowinandroid.core.analytics.di.AnalyticsModule
 import com.google.samples.apps.nowinandroid.core.data.di.dataModule
 import com.google.samples.apps.nowinandroid.core.database.di.databaseModule
@@ -28,8 +29,10 @@ import com.google.samples.apps.nowinandroid.feature.interests.di.interestModule
 import com.google.samples.apps.nowinandroid.feature.search.di.searchModule
 import com.google.samples.apps.nowinandroid.feature.settings.di.settingsModule
 import com.google.samples.apps.nowinandroid.feature.topic.di.topicModule
+import com.google.samples.apps.nowinandroid.ui.interests2pane.Interests2PaneViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
 
@@ -37,7 +40,12 @@ import org.koin.ksp.generated.module
 @ComponentScan
 class AppModule
 
-val featureModules = module {
+internal val appViewModelModule = module {
+    viewModelOf(::MainScreenViewModel)
+    viewModelOf(::Interests2PaneViewModel)
+}
+
+internal val featureModules = module {
     includes(
         forYouModule,
         interestModule,
@@ -48,7 +56,7 @@ val featureModules = module {
     )
 }
 
-val appModules = module {
+internal val appModules = module {
     includes(
         *commonModule().toTypedArray(),
         AnalyticsModule().module,
@@ -58,5 +66,6 @@ val appModules = module {
         *networkModule().toTypedArray(),
     )
     includes(featureModules)
+    includes(appViewModelModule)
     includes(AppModule().module)
 }

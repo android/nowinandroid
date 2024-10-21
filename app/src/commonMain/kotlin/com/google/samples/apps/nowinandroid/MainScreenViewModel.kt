@@ -26,9 +26,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.koin.android.annotation.KoinViewModel
 
-@KoinViewModel
 class MainScreenViewModel(
     userDataRepository: UserDataRepository,
 ) : ViewModel() {

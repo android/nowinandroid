@@ -21,11 +21,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import kotlinx.coroutines.flow.StateFlow
-import org.koin.android.annotation.KoinViewModel
 
 const val TOPIC_ID_KEY = "selectedTopicId"
 
-@KoinViewModel
 class Interests2PaneViewModel(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
