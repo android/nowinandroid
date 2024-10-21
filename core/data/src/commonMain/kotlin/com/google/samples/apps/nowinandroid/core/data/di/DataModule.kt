@@ -19,22 +19,29 @@ package com.google.samples.apps.nowinandroid.core.data.di
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultSearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.OfflineFirstUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
 
 internal val repositoryModule = module {
-    singleOf(::OfflineFirstTopicsRepository)
-    singleOf(::OfflineFirstNewsRepository)
-    singleOf(::OfflineFirstUserDataRepository)
-    singleOf(::DefaultRecentSearchRepository)
-    singleOf(::CompositeUserNewsResourceRepository)
+    singleOf(::OfflineFirstTopicsRepository) bind TopicsRepository::class
+    singleOf(::OfflineFirstNewsRepository) bind NewsRepository::class
+    singleOf(::OfflineFirstUserDataRepository) bind UserDataRepository::class
+    singleOf(::DefaultRecentSearchRepository) bind RecentSearchRepository::class
+    singleOf(::CompositeUserNewsResourceRepository) bind UserNewsResourceRepository::class
     single {
         DefaultSearchContentsRepository(
             get(),
@@ -43,7 +50,7 @@ internal val repositoryModule = module {
             get(),
             get(named("IoDispatcher")),
         )
-    }
+    } bind SearchContentsRepository::class
 }
 
 internal val networkMonitorModule = module {
