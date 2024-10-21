@@ -91,8 +91,10 @@ internal fun Project.configureKotlinMultiplatform() {
         // Suppress 'expect'/'actual' classes are in Beta.
         targets.configureEach {
             compilations.configureEach {
-                compilerOptions.configure {
-                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                compileTaskProvider.configure {
+                    compilerOptions {
+                        freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                    }
                 }
             }
         }

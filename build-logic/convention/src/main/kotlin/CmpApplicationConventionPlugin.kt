@@ -17,11 +17,9 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureBadgingTasks
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
-import com.google.samples.apps.nowinandroid.configureKotlinMultiplatform
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
@@ -29,7 +27,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -96,7 +93,7 @@ private fun Project.configureComposeMultiplatformApp() {
         listOf(
             iosX64(),
             iosArm64(),
-            iosSimulatorArm64()
+            iosSimulatorArm64(),
         ).forEach { iosTarget ->
             iosTarget.binaries.framework {
                 baseName = "NowInAndroid"
@@ -111,8 +108,10 @@ private fun Project.configureComposeMultiplatformApp() {
         // Suppress 'expect'/'actual' classes are in Beta.
         targets.configureEach {
             compilations.configureEach {
-                compilerOptions.configure {
-                    freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                compileTaskProvider.configure {
+                    compilerOptions {
+                        freeCompilerArgs.addAll("-Xexpect-actual-classes")
+                    }
                 }
             }
         }
@@ -123,5 +122,4 @@ private fun Project.configureComposeMultiplatformApp() {
             dependsOn("allTests")
         }
     }
-
 }
