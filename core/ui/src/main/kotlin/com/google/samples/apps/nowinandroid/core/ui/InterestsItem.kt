@@ -54,7 +54,7 @@ fun InterestsItem(
 ) {
     ListItem(
         leadingContent = {
-            InterestsIcon(topicImageUrl, iconModifier.size(64.dp))
+            InterestsIcon(topicImageUrl, iconModifier.size(48.dp))
         },
         headlineContent = {
             Text(text = name)
