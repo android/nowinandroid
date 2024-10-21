@@ -23,6 +23,7 @@ import coil3.SingletonImageLoader
 import coil3.request.crossfade
 import com.google.samples.apps.nowinandroid.di.appModules
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -32,7 +33,7 @@ import org.koin.core.context.startKoin
  */
 class NiaApplication : Application(), SingletonImageLoader.Factory {
 
-    lateinit var profileVerifierLogger: ProfileVerifierLogger
+    private val profileVerifierLogger: ProfileVerifierLogger by inject()
 
     override fun onCreate() {
         super.onCreate()
