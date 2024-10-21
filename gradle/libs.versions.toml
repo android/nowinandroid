@@ -151,6 +151,7 @@ koin-annotations = { group = "io.insert-koin", name = "koin-annotations" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koin-annotations" }
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android"}
+koin-androidx-startup = { group = "io.insert-koin", name = "koin-androidx-startup"}
 koin-core = { group = "io.insert-koin", name = "koin-core"}
 koin-core-coroutines = { group = "io.insert-koin", name = "koin-android-coroutines"}
 koin-compose = { group = "io.insert-koin", name = "koin-compose"}
