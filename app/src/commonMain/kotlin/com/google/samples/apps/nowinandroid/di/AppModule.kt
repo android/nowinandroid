@@ -61,7 +61,7 @@ internal val appModules = module {
         *commonModule().toTypedArray(),
         AnalyticsModule().module,
         *databaseModule().toTypedArray(),
-        *dataModule().toTypedArray(),
+        dataModule,
         dataStoreModule(),
         *networkModule().toTypedArray(),
     )

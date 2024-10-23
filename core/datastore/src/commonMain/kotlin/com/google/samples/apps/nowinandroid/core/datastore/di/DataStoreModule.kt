@@ -26,7 +26,7 @@ fun dataStoreModule() = module {
     single {
         NiaPreferencesDataSource(
             settings = get(),
-            dispatcher = get(named("IoDispatcher")),
+            dispatcher = get(),
         )
     }
 }

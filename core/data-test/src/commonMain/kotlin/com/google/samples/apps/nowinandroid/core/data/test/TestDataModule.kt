@@ -32,8 +32,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val testDataModule = module {
-    single<TopicsRepository> { FakeTopicsRepository(get(named("IoDispatcher")), get()) }
-    single<NewsRepository> { FakeNewsRepository(get(named("IoDispatcher")), get()) }
+    single<TopicsRepository> { FakeTopicsRepository(get(), get()) }
+    single<NewsRepository> { FakeNewsRepository(get(), get()) }
     single<UserDataRepository> { FakeUserDataRepository(get()) }
     single<RecentSearchRepository> { FakeRecentSearchRepository() }
     single<SearchContentsRepository> { FakeSearchContentsRepository() }

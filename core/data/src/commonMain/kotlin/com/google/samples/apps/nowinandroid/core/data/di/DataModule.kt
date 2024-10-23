@@ -28,13 +28,10 @@ import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsR
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.koin.ksp.generated.module
 
 internal val repositoryModule = module {
     singleOf(::OfflineFirstTopicsRepository) bind TopicsRepository::class
@@ -42,38 +39,16 @@ internal val repositoryModule = module {
     singleOf(::OfflineFirstUserDataRepository) bind UserDataRepository::class
     singleOf(::DefaultRecentSearchRepository) bind RecentSearchRepository::class
     singleOf(::CompositeUserNewsResourceRepository) bind UserNewsResourceRepository::class
-    single {
-        DefaultSearchContentsRepository(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(named("IoDispatcher")),
-        )
-    } bind SearchContentsRepository::class
+    singleOf(::DefaultSearchContentsRepository) bind SearchContentsRepository::class
 }
 
-internal val networkMonitorModule = module {
-    single {
-        val networkMonitorProvider: NetworkMonitorProvider = get()
-        networkMonitorProvider.provideNetworkMonitor()
-    }
+internal expect val networkMonitorModule: Module
+internal expect val timeZoneMonitorModule: Module
+
+val dataModule: Module get() = module {
+    includes(
+        repositoryModule,
+        networkMonitorModule,
+        timeZoneMonitorModule,
+    )
 }
-
-internal val timeZoneMonitorProviderModule = module {
-    single {
-        val timeZoneMonitorProvider: TimeZoneMonitorProvider = get()
-        timeZoneMonitorProvider.provideTimeZoneMonitor()
-    }
-}
-
-fun dataModule() = listOf(
-    DataModule().module,
-    repositoryModule,
-    networkMonitorModule,
-    timeZoneMonitorProviderModule,
-)
-
-@Module
-@ComponentScan
-class DataModule

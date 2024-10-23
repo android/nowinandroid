@@ -44,18 +44,18 @@ internal val driverModule = module {
 internal val daoModule = module {
     single { (driver: SqlDriver) -> NiaDatabase(driver) }
 
-    factory { (database: NiaDatabase) -> TopicDao(database, get(named("IoDispatcher"))) }
+    factory { (database: NiaDatabase) -> TopicDao(database, get()) }
 
-    factory { (database: NiaDatabase) -> NewsResourceDao(database, get(named("IoDispatcher"))) }
+    factory { (database: NiaDatabase) -> NewsResourceDao(database, get()) }
 
-    factory { (database: NiaDatabase) -> TopicFtsDao(database, get(named("IoDispatcher"))) }
+    factory { (database: NiaDatabase) -> TopicFtsDao(database, get()) }
 
-    factory { (database: NiaDatabase) -> NewsResourceFtsDao(database, get(named("IoDispatcher"))) }
+    factory { (database: NiaDatabase) -> NewsResourceFtsDao(database, get()) }
 
     factory { (database: NiaDatabase) ->
         RecentSearchQueryDao(
             database,
-            get(named("IoDispatcher")),
+            get(),
         )
     }
 }

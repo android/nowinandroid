@@ -16,13 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val coroutineDispatcherModule = module {
-    single(named("IoDispatcher")) { Dispatchers.IO }
-    single(named("DefaultDispatcher")) { Dispatchers.Default }
-    single(named("MainDispatcher")) { Dispatchers.Main }
+    single<CoroutineDispatcher> { Dispatchers.IO }
+    single<CoroutineDispatcher> (named("DefaultDispatcher")) { Dispatchers.Default }
+    single<CoroutineDispatcher> (named("MainDispatcher")) { Dispatchers.Main }
 }

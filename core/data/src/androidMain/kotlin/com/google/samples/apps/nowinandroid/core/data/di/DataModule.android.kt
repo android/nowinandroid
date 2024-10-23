@@ -17,14 +17,17 @@
 package com.google.samples.apps.nowinandroid.core.data.di
 
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import org.koin.core.annotation.Singleton
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMonitor
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Singleton
-actual class NetworkMonitorProvider {
-    actual fun provideNetworkMonitor(): NetworkMonitor = object : NetworkMonitor {
-        override val isOnline: Flow<Boolean>
-            get() = flowOf(true)
-    }
+internal actual val networkMonitorModule = module {
+    singleOf(::ConnectivityManagerNetworkMonitor) bind NetworkMonitor::class
+}
+
+internal actual val timeZoneMonitorModule = module {
+    singleOf(::TimeZoneBroadcastMonitor) bind TimeZoneMonitor::class
 }
