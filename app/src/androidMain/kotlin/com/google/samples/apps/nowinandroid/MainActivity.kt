@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -52,13 +51,16 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
 
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
      */
-    private val stats: JankStats by inject()
+    private val lazyStats by inject<JankStats> { parametersOf(this) }
 
     private val networkMonitor: NetworkMonitor by inject()
 
@@ -68,7 +70,7 @@ class MainActivity : ComponentActivity() {
 
     private val userNewsResourceRepository: UserNewsResourceRepository by inject()
 
-    private val viewModel: MainScreenViewModel by inject()
+    private val viewModel: MainScreenViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -138,7 +140,9 @@ class MainActivity : ComponentActivity() {
                     androidTheme = shouldUseAndroidTheme(uiState),
                     disableDynamicTheming = shouldDisableDynamicTheming(uiState),
                 ) {
-                    NiaApp(appState)
+                    KoinAndroidContext {
+                        NiaApp(appState)
+                    }
                 }
             }
         }
@@ -146,12 +150,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        stats.isTrackingEnabled = true
+        lazyStats.isTrackingEnabled = true
     }
 
     override fun onPause() {
         super.onPause()
-        stats.isTrackingEnabled = false
+        lazyStats.isTrackingEnabled = false
     }
 }
 

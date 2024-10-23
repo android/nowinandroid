@@ -18,36 +18,21 @@ package com.google.samples.apps.nowinandroid.di
 
 import android.app.Activity
 import android.util.Log
-import android.view.Window
 import androidx.metrics.performance.JankStats
 import androidx.metrics.performance.JankStats.OnFrameListener
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
-import kotlinx.coroutines.CoroutineScope
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Single
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@Module
-class JankStatsModule {
-    @Factory
-    fun providesOnFrameListener(): OnFrameListener = OnFrameListener { frameData ->
-        // Make sure to only log janky frames.
-        if (frameData.isJank) {
-            // We're currently logging this but would better report it to a backend.
-            Log.v("NiA Jank", frameData.toString())
-        }
+val jankStatsModule = module {
+    singleOf(::ProfileVerifierLogger)
+    factory { (activity : Activity) -> JankStats.createAndTrack(activity.window, providesOnFrameListener()) }
+}
+
+fun providesOnFrameListener(): OnFrameListener = OnFrameListener { frameData ->
+    // Make sure to only log janky frames.
+    if (frameData.isJank) {
+        // We're currently logging this but would better report it to a backend.
+        Log.v("NiA Jank", frameData.toString())
     }
-
-    @Single
-    fun providesWindow(activity: Activity): Window = activity.window
-
-    @Factory
-    fun providesJankStats(
-        window: Window,
-        frameListener: OnFrameListener,
-    ): JankStats = JankStats.createAndTrack(window, frameListener)
-
-    @Single
-    fun provideProfileVerifierLogger(scope: CoroutineScope): ProfileVerifierLogger =
-        ProfileVerifierLogger(scope)
 }

@@ -123,6 +123,8 @@ kotlin {
             implementation(libs.androidx.window.core)
             implementation(libs.kotlinx.coroutines.guava)
             implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.koin.androidx.startup)
         }
 
         commonTest.dependencies {
