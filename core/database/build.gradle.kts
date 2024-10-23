@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.sqldelight.primitive.adapters)
         }
         androidMain.dependencies {
+            implementation(libs.koin.android)
             implementation(libs.sqldelight.android.driver)
         }
         androidUnitTest.dependencies {

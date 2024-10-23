@@ -60,7 +60,7 @@ internal val appModules = module {
     includes(
         *commonModule().toTypedArray(),
         AnalyticsModule().module,
-        *databaseModule().toTypedArray(),
+        databaseModule,
         dataModule,
         dataStoreModule(),
         *networkModule().toTypedArray(),

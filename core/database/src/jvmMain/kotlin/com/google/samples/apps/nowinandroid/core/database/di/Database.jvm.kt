@@ -19,20 +19,23 @@ package com.google.samples.apps.nowinandroid.core.database.di
 import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
+
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import org.koin.core.annotation.Single
+import kotlinx.coroutines.runBlocking
+
+import org.koin.dsl.module
 import java.util.Properties
 
-@Single
-internal actual class DriverProvider {
-
-    actual suspend fun provideDbDriver(
-        schema: SqlSchema<AsyncValue<Unit>>,
-    ): SqlDriver {
-        return JdbcSqliteDriver(
+internal actual val driverModule = module {
+    single<SqlDriver> { (schema: SqlSchema<AsyncValue<Unit>>) ->
+        JdbcSqliteDriver(
             url = JdbcSqliteDriver.IN_MEMORY,
             properties = Properties().apply { put("foreign_keys", "true") },
         )
-            .also { schema.create(it).await() }
+            .also {
+                runBlocking {
+                    schema.create(it).await()
+                }
+            }
     }
 }

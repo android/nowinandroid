@@ -19,21 +19,20 @@ package com.google.samples.apps.nowinandroid.core.database.di
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.async.coroutines.synchronous
-import app.cash.sqldelight.db.QueryResult.AsyncValue
+import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver.Callback
-import org.koin.core.annotation.Single
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-@Single
-internal actual class DriverProvider(val context: Context) {
-
-    actual suspend fun provideDbDriver(
-        schema: SqlSchema<AsyncValue<Unit>>,
-    ): SqlDriver {
+internal actual val driverModule = module {
+    single<SqlDriver> {
+        val schema: SqlSchema<QueryResult.AsyncValue<Unit>> = get()
+        val context: Context = androidContext()
         val synchronousSchema = schema.synchronous()
-        return AndroidSqliteDriver(
+        AndroidSqliteDriver(
             schema = synchronousSchema,
             context = context,
             name = "nia-database.db",

@@ -16,12 +16,25 @@
 
 package com.google.samples.apps.nowinandroid.core.database.di
 
+import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.native.NativeSqliteDriver
+import co.touchlab.sqliter.DatabaseConfiguration
+import co.touchlab.sqliter.DatabaseConfiguration.Extended
+import org.koin.dsl.module
 
-internal expect class DriverProvider {
-    suspend fun provideDbDriver(
-        schema: SqlSchema<AsyncValue<Unit>>,
-    ): SqlDriver
+internal actual val driverModule = module {
+    single<SqlDriver> { (schema: SqlSchema<AsyncValue<Unit>>) ->
+        NativeSqliteDriver(
+            schema = schema.synchronous(),
+            name = "nia-database.db",
+            onConfiguration = { config: DatabaseConfiguration ->
+                config.copy(
+                    extendedConfig = Extended(foreignKeyConstraints = true),
+                )
+            },
+        )
+    }
 }
