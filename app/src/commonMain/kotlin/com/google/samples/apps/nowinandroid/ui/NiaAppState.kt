@@ -167,8 +167,8 @@ class NiaAppState(
 /**
  * Stores information about navigation events to be used with JankStats
  */
-//@Composable
-//private fun NavigationTrackingSideEffect(navController: NavHostController) {
+// @Composable
+// private fun NavigationTrackingSideEffect(navController: NavHostController) {
 //    TrackDisposableJank(navController) { metricsHolder ->
 //        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
 //            metricsHolder.state?.putState("Navigation", destination.route.toString())
@@ -180,4 +180,4 @@ class NiaAppState(
 //            navController.removeOnDestinationChangedListener(listener)
 //        }
 //    }
-//}
+// }

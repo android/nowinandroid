@@ -28,7 +28,6 @@ import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeTopics
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val testDataModule = module {

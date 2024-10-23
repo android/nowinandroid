@@ -26,7 +26,7 @@ import org.koin.dsl.module
 
 val jankStatsModule = module {
     singleOf(::ProfileVerifierLogger)
-    factory { (activity : Activity) -> JankStats.createAndTrack(activity.window, providesOnFrameListener()) }
+    factory { (activity: Activity) -> JankStats.createAndTrack(activity.window, providesOnFrameListener()) }
 }
 
 fun providesOnFrameListener(): OnFrameListener = OnFrameListener { frameData ->

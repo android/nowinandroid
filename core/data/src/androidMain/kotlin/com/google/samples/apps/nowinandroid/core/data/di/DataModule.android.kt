@@ -16,10 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
-import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

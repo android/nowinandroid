@@ -22,7 +22,6 @@ import com.google.samples.apps.nowinandroid.core.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Single
 
 /**
  * Logs the app's Baseline Profile Compilation Status using [ProfileVerifier].

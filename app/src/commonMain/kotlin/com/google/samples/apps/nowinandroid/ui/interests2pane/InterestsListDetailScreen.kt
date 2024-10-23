@@ -54,7 +54,7 @@ import kotlin.uuid.Uuid
 @Serializable internal object TopicPlaceholderRoute
 
 // TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
-//@Keep
+// @Keep
 @Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {

@@ -26,7 +26,6 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import kotlinx.coroutines.runBlocking
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
 

@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.core.datastore.di
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.russhwolf.settings.Settings
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 fun dataStoreModule() = module {
