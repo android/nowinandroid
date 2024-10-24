@@ -41,7 +41,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 
 | Module                    | Progress    | Desktop supported | Android supported | iOS supported | Web supported |
 |---------------------------|-------------|-------------------|-------------------|---------------|---------------|
-| app                       | Not started | ❌                | ❌                | ❌            | ❌            |
+| app                       | Not started | 🚧                | 🚧                | ❌            | ❌            |
 | app-nia-catalog           | Done        | ✅                | ✅                | ❔            | ✅            |
 | :core:analytics           | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
 | :core:common              | Done        | ✔️                 | ✔️                 | ✔️             | ❌            |
@@ -76,6 +76,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 ❔: Not yet tested, but expected to work  
 ✔️: Successfully compiled  
 ❌: Not functioning, requires further attention  
+🚧: Work in progress  
 
 # Running the Project
 
