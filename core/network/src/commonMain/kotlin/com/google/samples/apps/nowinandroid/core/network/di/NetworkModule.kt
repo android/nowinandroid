@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.BuildKonfig
+import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.CallConverterFactory
@@ -25,11 +26,10 @@ import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.json.Json
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.koin.ksp.generated.module
 
 internal val jsonModule = module {
     single<Json> {
@@ -42,7 +42,8 @@ internal val jsonModule = module {
 internal val ktorfitModule = module {
     single<Ktorfit> {
         ktorfit {
-            baseUrl(BuildKonfig.BACKEND_URL)
+            // TODO use the correct URL
+            baseUrl("https://${BuildKonfig.BACKEND_URL}/")
             httpClient(
                 HttpClient {
                     install(ContentNegotiation) {
@@ -56,12 +57,9 @@ internal val ktorfitModule = module {
             )
         }
     }
-
-    singleOf(::RetrofitNiaNetwork)
 }
 
-fun networkModule() = listOf(NetworkModule().module, jsonModule, ktorfitModule)
-
-@Module
-@ComponentScan
-class NetworkModule
+val networkModule: Module = module {
+    includes(jsonModule, ktorfitModule)
+    singleOf(::RetrofitNiaNetwork) bind NiaNetworkDataSource::class
+}

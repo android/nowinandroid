@@ -27,7 +27,8 @@ import org.koin.dsl.module
 import java.util.Properties
 
 internal actual val driverModule = module {
-    single<SqlDriver> { (schema: SqlSchema<AsyncValue<Unit>>) ->
+    single<SqlDriver> {
+        val schema: SqlSchema<AsyncValue<Unit>> = get()
         JdbcSqliteDriver(
             url = JdbcSqliteDriver.IN_MEMORY,
             properties = Properties().apply { put("foreign_keys", "true") },

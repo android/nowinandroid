@@ -63,7 +63,7 @@ internal val appModules = module {
         databaseModule,
         dataModule,
         dataStoreModule(),
-        *networkModule().toTypedArray(),
+        networkModule,
     )
     includes(featureModules)
     includes(appViewModelModule)

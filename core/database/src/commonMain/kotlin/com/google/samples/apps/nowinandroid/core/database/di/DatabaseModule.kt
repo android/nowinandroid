@@ -32,6 +32,9 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDaoInterface
 import com.google.samples.apps.nowinandroid.core.di.coroutineDispatcherModule
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 internal expect val driverModule: Module
@@ -41,34 +44,15 @@ internal val schemaModule = module {
 }
 
 internal val dbModule = module {
-    single { (driver: SqlDriver) ->
-        NiaDatabase(driver)
-    }
+    single { NiaDatabase(get()) }
 }
 
 internal val daoModule = module {
-    factory<TopicDaoInterface> { (database: NiaDatabase) ->
-        TopicDao(database, get())
-    }
-
-    factory <NewsResourceDaoInterface> { (database: NiaDatabase) ->
-        NewsResourceDao(database, get())
-    }
-
-    factory<TopicFtsDaoInterface> { (database: NiaDatabase) ->
-        TopicFtsDao(database, get())
-    }
-
-    factory<NewsResourceFtsDaoInterface> { (database: NiaDatabase) ->
-        NewsResourceFtsDao(database, get())
-    }
-
-    factory<RecentSearchQueryDaoInterface> { (database: NiaDatabase) ->
-        RecentSearchQueryDao(
-            database,
-            get(),
-        )
-    }
+    singleOf(::TopicDao) bind TopicDaoInterface::class
+    singleOf(::NewsResourceDao) bind NewsResourceDaoInterface::class
+    singleOf(::TopicFtsDao) bind TopicFtsDaoInterface::class
+    singleOf(::NewsResourceFtsDao) bind NewsResourceFtsDaoInterface::class
+    singleOf(::RecentSearchQueryDao) bind RecentSearchQueryDaoInterface::class
 }
 
 val databaseModule: Module get() = module {
