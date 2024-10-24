@@ -23,6 +23,7 @@ import com.google.samples.apps.nowinandroid.core.database.di.databaseModule
 import com.google.samples.apps.nowinandroid.core.datastore.di.dataStoreModule
 import com.google.samples.apps.nowinandroid.core.di.commonModule
 import com.google.samples.apps.nowinandroid.core.network.di.networkModule
+import com.google.samples.apps.nowinandroid.core.notifications.di.notificationModule
 import com.google.samples.apps.nowinandroid.feature.bookmarks.di.bookmarksModule
 import com.google.samples.apps.nowinandroid.feature.foryou.di.forYouModule
 import com.google.samples.apps.nowinandroid.feature.interests.di.interestModule
@@ -64,6 +65,7 @@ internal val appModules = module {
         dataModule,
         dataStoreModule(),
         networkModule,
+        notificationModule,
     )
     includes(featureModules)
     includes(appViewModelModule)

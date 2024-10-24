@@ -89,6 +89,7 @@ kotlin {
             implementation(projects.core.data)
             implementation(projects.core.model)
             implementation(projects.core.analytics)
+            implementation(projects.core.notifications)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
