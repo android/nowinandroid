@@ -33,15 +33,9 @@ import com.google.samples.apps.nowinandroid.feature.settings.di.settingsModule
 import com.google.samples.apps.nowinandroid.feature.topic.di.topicModule
 import com.google.samples.apps.nowinandroid.sync.di.syncModule
 import com.google.samples.apps.nowinandroid.ui.interests2pane.Interests2PaneViewModel
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
-
-@Module
-@ComponentScan
-class AppModule
 
 internal val appViewModelModule = module {
     viewModelOf(::MainScreenViewModel)
@@ -61,11 +55,11 @@ internal val featureModules = module {
 
 internal val appModules = module {
     includes(
-        *commonModule().toTypedArray(),
+        commonModule,
         AnalyticsModule().module,
         databaseModule,
         dataModule,
-        dataStoreModule(),
+        dataStoreModule,
         domainModule,
         networkModule,
         notificationModule,
@@ -73,5 +67,4 @@ internal val appModules = module {
     includes(featureModules)
     includes(syncModule)
     includes(appViewModelModule)
-    includes(AppModule().module)
 }

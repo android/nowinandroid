@@ -18,14 +18,10 @@ package com.google.samples.apps.nowinandroid.core.datastore.di
 
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
 import com.russhwolf.settings.Settings
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-fun dataStoreModule() = module {
-    single { Settings() }
-    single {
-        NiaPreferencesDataSource(
-            settings = get(),
-            dispatcher = get(),
-        )
-    }
+val dataStoreModule = module {
+    singleOf(::Settings)
+    singleOf(::NiaPreferencesDataSource)
 }

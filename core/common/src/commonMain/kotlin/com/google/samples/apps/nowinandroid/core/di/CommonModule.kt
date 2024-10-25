@@ -16,17 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
-import org.koin.ksp.generated.module
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-fun commonModule() = listOf(
-    CommonModule().module,
-    coroutineDispatcherModule,
-    coroutineScopeModule,
-    imageLoaderModule,
-)
-
-@Module
-@ComponentScan
-class CommonModule
+val commonModule: Module = module {
+    includes(
+        coroutineDispatcherModule,
+        coroutineScopeModule,
+        imageLoaderModule,
+    )
+}
