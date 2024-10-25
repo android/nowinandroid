@@ -30,6 +30,7 @@ import com.google.samples.apps.nowinandroid.feature.interests.di.interestModule
 import com.google.samples.apps.nowinandroid.feature.search.di.searchModule
 import com.google.samples.apps.nowinandroid.feature.settings.di.settingsModule
 import com.google.samples.apps.nowinandroid.feature.topic.di.topicModule
+import com.google.samples.apps.nowinandroid.sync.di.syncModule
 import com.google.samples.apps.nowinandroid.ui.interests2pane.Interests2PaneViewModel
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
@@ -68,6 +69,7 @@ internal val appModules = module {
         notificationModule,
     )
     includes(featureModules)
+    includes(syncModule)
     includes(appViewModelModule)
     includes(AppModule().module)
 }

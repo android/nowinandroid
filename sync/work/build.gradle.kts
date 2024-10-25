@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.hilt)
+    alias(libs.plugins.nowinandroid.di.koin)
 }
 
 android {
@@ -26,21 +26,28 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.sync"
 }
 
-dependencies {
-    ksp(libs.hilt.ext.compiler)
-
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.androidx.work.ktx)
-    implementation(libs.hilt.ext.work)
-    implementation(projects.core.analytics)
-    implementation(projects.core.data)
-    implementation(projects.core.notifications)
-
-    prodImplementation(libs.firebase.cloud.messaging)
-    prodImplementation(platform(libs.firebase.bom))
-
-    androidTestImplementation(libs.androidx.work.testing)
-    androidTestImplementation(libs.hilt.android.testing)
-    androidTestImplementation(libs.kotlinx.coroutines.guava)
-    androidTestImplementation(projects.core.testing)
+kotlin {
+    sourceSets{
+        commonMain.dependencies {
+            implementation(projects.core.analytics)
+            implementation(projects.core.data)
+            implementation(projects.core.notifications)
+        }
+        commonTest.dependencies {
+            implementation(projects.core.testing)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.tracing.ktx)
+            implementation(libs.androidx.work.ktx)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(projects.core.testing)
+            implementation(libs.androidx.work.testing)
+            implementation(libs.kotlinx.coroutines.guava)
+        }
+    }
 }
+
+//    prodImplementation(libs.firebase.cloud.messaging)
+//    prodImplementation(platform(libs.firebase.bom))

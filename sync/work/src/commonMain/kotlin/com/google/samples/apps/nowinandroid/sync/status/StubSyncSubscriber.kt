@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.foryou.di
+package com.google.samples.apps.nowinandroid.sync.status
 
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
-import org.koin.core.module.dsl.viewModel
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
+import co.touchlab.kermit.Logger
 
-val forYouModule = module {
-    viewModelOf(::ForYouViewModel)
+/**
+ * Stub implementation of [SyncSubscriber]
+ */
+class StubSyncSubscriber : SyncSubscriber {
+    override suspend fun subscribe() {
+        Logger.d { "Subscribing to sync" }
+    }
 }

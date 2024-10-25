@@ -38,6 +38,7 @@ kotlin {
             api(projects.core.model)
             api(projects.core.analytics)
             api(projects.core.notifications)
+            api(projects.sync.work)
             api(compose.components.resources)
         }
         commonTest.dependencies {
