@@ -36,8 +36,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import nowinandroid.shared.generated.resources.Res
-import nowinandroid.shared.generated.resources.app_name
 import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_title
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_navigate_up
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_title
@@ -45,6 +43,8 @@ import nowinandroid.feature.search.generated.resources.feature_search_interests
 import nowinandroid.feature.settings.generated.resources.feature_settings_brand_android
 import nowinandroid.feature.settings.generated.resources.feature_settings_dismiss_dialog_button_text
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_action_icon_description
+import nowinandroid.shared.generated.resources.Res
+import nowinandroid.shared.generated.resources.app_name
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject

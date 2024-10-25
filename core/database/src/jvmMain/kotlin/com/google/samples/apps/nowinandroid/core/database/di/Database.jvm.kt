@@ -19,10 +19,8 @@ package com.google.samples.apps.nowinandroid.core.database.di
 import app.cash.sqldelight.db.QueryResult.AsyncValue
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
-
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import kotlinx.coroutines.runBlocking
-
 import org.koin.dsl.module
 import java.util.Properties
 

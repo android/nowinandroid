@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.core.database.di
 
 import app.cash.sqldelight.db.QueryResult
-import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
@@ -32,7 +31,6 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDaoInterface
 import com.google.samples.apps.nowinandroid.core.di.coroutineDispatcherModule
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

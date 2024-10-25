@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.feature.foryou.di
 
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

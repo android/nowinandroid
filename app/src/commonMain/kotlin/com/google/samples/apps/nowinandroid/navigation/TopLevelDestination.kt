@@ -21,11 +21,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
-import nowinandroid.shared.generated.resources.Res
-import nowinandroid.shared.generated.resources.app_name
 import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_title
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_title
 import nowinandroid.feature.search.generated.resources.feature_search_interests
+import nowinandroid.shared.generated.resources.Res
+import nowinandroid.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.StringResource
 import kotlin.reflect.KClass
 import nowinandroid.feature.bookmarks.generated.resources.Res as bookmarksR

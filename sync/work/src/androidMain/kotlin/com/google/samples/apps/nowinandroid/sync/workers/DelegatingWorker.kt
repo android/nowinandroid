@@ -23,14 +23,14 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import kotlin.reflect.KClass
 
-///**
+// /**
 // * An entry point to retrieve the [HiltWorkerFactory] at runtime
 // */
-//@EntryPoint
-//@InstallIn(SingletonComponent::class)
-//interface HiltWorkerFactoryEntryPoint {
+// @EntryPoint
+// @InstallIn(SingletonComponent::class)
+// interface HiltWorkerFactoryEntryPoint {
 //    fun hiltWorkerFactory(): HiltWorkerFactory
-//}
+// }
 
 private const val WORKER_CLASS_NAME = "RouterWorkerDelegateClassName"
 
