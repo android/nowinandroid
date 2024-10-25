@@ -36,8 +36,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import nowinandroid.app.generated.resources.Res
-import nowinandroid.app.generated.resources.app_name
+import nowinandroid.shared.generated.resources.Res
+import nowinandroid.shared.generated.resources.app_name
 import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_title
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_navigate_up
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_title
