@@ -69,8 +69,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradien
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import nowinandroid.app.generated.resources.Res
-import nowinandroid.app.generated.resources.not_connected
+import nowinandroid.shared.generated.resources.Res
+import nowinandroid.shared.generated.resources.not_connected
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_action_icon_description
 import nowinandroid.feature.settings.generated.resources.feature_settings_top_app_bar_navigation_icon_description
 import org.jetbrains.compose.resources.stringResource
@@ -167,7 +167,8 @@ internal fun NiaApp(
                             contentDescription = null,
                         )
                     },
-                    label = { Text(stringResource(destination.iconTextId)) },
+                    // TODO Error: Invalid symbol '??'(0)
+//                    label = { Text(stringResource(destination.iconTextId)) },
                     modifier =
                     Modifier
                         .testTag("NiaNavItem")

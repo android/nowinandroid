@@ -77,19 +77,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.feature.interests)
-            implementation(projects.feature.foryou)
-            implementation(projects.feature.bookmarks)
-            implementation(projects.feature.topic)
-            implementation(projects.feature.search)
-            implementation(projects.feature.settings)
-            implementation(projects.core.common)
-            implementation(projects.core.ui)
-            implementation(projects.core.designsystem)
-            implementation(projects.core.data)
-            implementation(projects.core.model)
-            implementation(projects.core.analytics)
-            implementation(projects.core.notifications)
+            implementation(projects.shared)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
