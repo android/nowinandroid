@@ -16,9 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.domain.di
 
-import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Module
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.module
 
-@Module
-@ComponentScan
-class DomainModule
+val domainModule = module {
+    factoryOf(::GetFollowableTopicsUseCase)
+    factoryOf(::GetRecentSearchQueriesUseCase)
+    factoryOf(::GetSearchContentsUseCase)
+}

@@ -28,7 +28,6 @@ import org.koin.core.annotation.Factory
 /**
  * A use case which obtains a list of topics with their followed state.
  */
-@Factory
 class GetFollowableTopicsUseCase(
     private val topicsRepository: TopicsRepository,
     private val userDataRepository: UserDataRepository,

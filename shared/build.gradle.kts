@@ -35,6 +35,7 @@ kotlin {
             api(projects.core.ui)
             api(projects.core.designsystem)
             api(projects.core.data)
+            api(projects.core.domain)
             api(projects.core.model)
             api(projects.core.analytics)
             api(projects.core.notifications)

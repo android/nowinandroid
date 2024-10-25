@@ -24,7 +24,6 @@ import org.koin.core.annotation.Factory
 /**
  * A use case which returns the recent search queries.
  */
-@Factory
 class GetRecentSearchQueriesUseCase(
     private val recentSearchRepository: RecentSearchRepository,
 ) {
