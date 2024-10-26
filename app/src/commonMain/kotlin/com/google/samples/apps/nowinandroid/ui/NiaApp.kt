@@ -35,6 +35,7 @@ import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -45,7 +46,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
@@ -122,10 +122,7 @@ fun NiaApp(
 }
 
 @Composable
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class,
-)
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun NiaApp(
     appState: NiaAppState,
     snackbarHostState: SnackbarHostState,
@@ -166,10 +163,8 @@ internal fun NiaApp(
                             contentDescription = null,
                         )
                     },
-                    // TODO Error: Invalid symbol '??'(0)
-//                    label = { Text(stringResource(destination.iconTextId)) },
-                    modifier =
-                    Modifier
+                    label = { Text(stringResource(destination.iconTextId)) },
+                    modifier = Modifier
                         .testTag("NiaNavItem")
                         .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )

@@ -86,8 +86,6 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-//            implementation(projects.sync.work)
-
             implementation(libs.coil.core)
             implementation(libs.coil.compose)
             implementation(libs.kotlinx.serialization.json)
