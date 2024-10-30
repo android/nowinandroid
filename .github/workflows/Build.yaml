@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write
 
     timeout-minutes: 60
 
@@ -24,8 +25,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -37,7 +42,13 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Check build-logic
         run: ./gradlew check -p build-logic
@@ -101,17 +112,21 @@ jobs:
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
-        if: always()
         run: ./gradlew testDemoDebug :lint:test
-      # Replace task exclusions with `-Pandroidx.baselineprofile.skipgeneration` when
-      # https://android-review.googlesource.com/c/platform/frameworks/support/+/2602790 landed in a
-      # release build
+
+      - name: Setup GMD
+        run: ./gradlew :benchmarks:pixel6Api33Setup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedReleaseBaselineProfile
+        run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=5
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -119,12 +134,19 @@ jobs:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload test results (XML)
+      - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
+
+      - name: Upload screenshot results (PNG)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-test-results
+          path: '**/build/outputs/roborazzi/*_compare.png'
 
       - name: Check lint
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
@@ -178,12 +200,12 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          validate-wrappers: true
+          gradle-home-cache-cleanup: true
 
-      - name: Build projects before running emulator
-        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
-
-      - name: Run instrumentation tests
+      - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -193,9 +215,41 @@ jobs:
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
+      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
+        if: matrix.api-level == 30
+        # There is no need to verify Roborazzi tests to generate coverage.
+        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
+
+      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
+      - name: Generate coverage reports for Debug variants (only API 30)
+        if: matrix.api-level == 30
+        run: ./gradlew createDemoDebugCombinedCoverageReport
+        
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
+      - name: Display local test coverage (only API 30)
+        if: matrix.api-level == 30
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.7.0
+        with:
+          title: Combined test coverage report
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Upload local coverage reports (XML + HTML) (only API 30)
+        if: matrix.api-level == 30
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          if-no-files-found: error
+          compression-level: 1
+          overwrite: false
+          path: '**/build/reports/jacoco/'

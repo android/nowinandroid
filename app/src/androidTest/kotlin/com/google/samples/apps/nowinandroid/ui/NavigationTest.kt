@@ -16,14 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -38,7 +35,6 @@ import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -46,9 +42,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import javax.inject.Inject
-import kotlin.properties.ReadOnlyProperty
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
 import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
@@ -67,30 +61,19 @@ class NavigationTest {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Create a temporary folder used to create a Data Store file. This guarantees that
-     * the file is removed in between each test, preventing a crash.
-     */
-    @BindValue
-    @get:Rule(order = 1)
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
-    /**
      * Grant [android.Manifest.permission.POST_NOTIFICATIONS] permission.
      */
-    @get:Rule(order = 2)
+    @get:Rule(order = 1)
     val postNotificationsPermission = GrantPostNotificationsPermissionRule()
 
     /**
      * Use the primary activity to initialize the app normally.
      */
-    @get:Rule(order = 3)
+    @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Inject
     lateinit var topicsRepository: TopicsRepository
-
-    private fun AndroidComposeTestRule<*, *>.stringResource(@StringRes resId: Int) =
-        ReadOnlyProperty<Any, String> { _, _ -> activity.getString(resId) }
 
     // The strings used for matching in these tests
     private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_navigate_up)
@@ -225,12 +208,7 @@ class NavigationTest {
             onNodeWithText(ok).performClick()
 
             // Check that the saved screen is still visible and selected.
-            onNode(
-                hasText(saved) and
-                    hasAnyAncestor(
-                        hasTestTag("NiaBottomBar") or hasTestTag("NiaNavRail"),
-                    ),
-            ).assertIsSelected()
+            onNode(hasText(saved) and hasTestTag("NiaNavItem")).assertIsSelected()
         }
     }
 

@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid.core.sync.test
 
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.sync.di.SyncModule
+import com.google.samples.apps.nowinandroid.sync.status.StubSyncSubscriber
+import com.google.samples.apps.nowinandroid.sync.status.SyncSubscriber
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
@@ -33,4 +35,9 @@ internal interface TestSyncModule {
     fun bindsSyncStatusMonitor(
         syncStatusMonitor: NeverSyncingSyncManager,
     ): SyncManager
+
+    @Binds
+    fun bindsSyncSubscriber(
+        syncSubscriber: StubSyncSubscriber,
+    ): SyncSubscriber
 }

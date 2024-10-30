@@ -16,14 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,11 +33,8 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BOOKMARKS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -55,7 +51,6 @@ import kotlinx.datetime.TimeZone
 
 @Composable
 fun rememberNiaAppState(
-    windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
@@ -66,7 +61,6 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        windowSizeClass,
         networkMonitor,
         userNewsResourceRepository,
         timeZoneMonitor,
@@ -74,7 +68,6 @@ fun rememberNiaAppState(
         NiaAppState(
             navController = navController,
             coroutineScope = coroutineScope,
-            windowSizeClass = windowSizeClass,
             networkMonitor = networkMonitor,
             userNewsResourceRepository = userNewsResourceRepository,
             timeZoneMonitor = timeZoneMonitor,
@@ -86,7 +79,6 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
@@ -96,18 +88,11 @@ class NiaAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            FOR_YOU_ROUTE -> FOR_YOU
-            BOOKMARKS_ROUTE -> BOOKMARKS
-            INTERESTS_ROUTE -> INTERESTS
-            else -> null
+        @Composable get() {
+            return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
+                currentDestination?.hasRoute(route = topLevelDestination.route) ?: false
+            }
         }
-
-    val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    val shouldShowNavRail: Boolean
-        get() = !shouldShowBottomBar
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)

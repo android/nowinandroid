@@ -12,12 +12,11 @@ updates:
     registries: "*"
     labels: [ "version update" ]
     groups:
-      kotlin-ksp-compose:
+      kotlin-ksp:
         patterns:
           - "org.jetbrains.kotlin:*"
           - "org.jetbrains.kotlin.jvm"
           - "com.google.devtools.ksp"
-          - "androidx.compose.compiler:compiler"
     open-pull-requests-limit: 10
 registries:
   maven-google:

@@ -30,7 +30,7 @@ import javax.inject.Inject
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
  */
-internal class FakeUserDataRepository @Inject constructor(
+class FakeUserDataRepository @Inject constructor(
     private val niaPreferencesDataSource: NiaPreferencesDataSource,
 ) : UserDataRepository {
 
