@@ -14,3 +14,4 @@ ktlint_standard_function-expression-body = disabled
 ktlint_standard_function-literal = disabled
 ktlint_standard_function-type-modifier-spacing = disabled
 ktlint_standard_multiline-loop = disabled
+ktlint_standard_function-signature = disabled
