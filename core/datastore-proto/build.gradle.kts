@@ -16,34 +16,16 @@
 
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.protobuf)
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.datastore.proto"
 }
 
-// Setup protobuf configuration, generating lite Java and Kotlin classes
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get().toString()
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(libs.protobuf.kotlin.lite)
             implementation(libs.kotlinx.serialization.core)
         }
     }

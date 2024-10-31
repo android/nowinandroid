@@ -63,7 +63,6 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.ext").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.junit").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.runner").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.espresso.core").get())
             }
         }
     }

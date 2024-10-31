@@ -19,12 +19,12 @@ package com.google.samples.apps.nowinandroid.core.testing
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import dagger.hilt.android.testing.HiltTestApplication
 
 /**
  * A custom runner to set up the instrumented application class for tests.
  */
 class NiaTestRunner : AndroidJUnitRunner() {
+    // TODO Shall we use the custom application class for testing?
     override fun newApplication(cl: ClassLoader, name: String, context: Context): Application =
-        super.newApplication(cl, HiltTestApplication::class.java.name, context)
+        super.newApplication(cl, name, context)
 }

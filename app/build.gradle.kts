@@ -127,7 +127,6 @@ kotlin {
         androidInstrumentedTest.dependencies {
             implementation(projects.core.dataTest)
             implementation(projects.core.testing)
-            implementation(libs.androidx.test.espresso.core)
             implementation(libs.androidx.navigation.testing)
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
             implementation(libs.androidx.compose.ui.test)

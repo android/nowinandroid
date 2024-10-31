@@ -40,11 +40,8 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.firebase.crashlytics.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.room.gradlePlugin)
     implementation(libs.truth)
 }
 
@@ -88,18 +85,6 @@ gradlePlugin {
         register("androidTest") {
             id = "nowinandroid.android.test"
             implementationClass = "AndroidTestConventionPlugin"
-        }
-        register("hilt") {
-            id = "nowinandroid.hilt"
-            implementationClass = "HiltConventionPlugin"
-        }
-        register("androidRoom") {
-            id = "nowinandroid.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
-        }
-        register("androidFirebase") {
-            id = "nowinandroid.android.application.firebase"
-            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
         }
         register("androidFlavors") {
             id = "nowinandroid.android.application.flavors"

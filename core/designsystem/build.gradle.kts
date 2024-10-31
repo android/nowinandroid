@@ -67,7 +67,6 @@ kotlin {
             implementation(libs.androidx.compose.ui.testManifest)
             implementation(libs.robolectric)
             implementation(libs.roborazzi)
-            implementation(libs.hilt.android.testing)
             implementation(projects.core.screenshotTesting)
             implementation(projects.core.testing)
         }
