@@ -27,6 +27,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
 import kotlinx.serialization.Serializable
 
 @Serializable data object ForYouRoute // route to ForYou screen
+
 @Serializable data object ForYouBaseRoute // route to base navigation graph
 
 fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute, navOptions)
@@ -40,7 +41,7 @@ fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = Fo
  */
 fun NavGraphBuilder.forYouSection(
     onTopicClick: (String) -> Unit,
-    topicDestination: NavGraphBuilder.() -> Unit
+    topicDestination: NavGraphBuilder.() -> Unit,
 ) {
     navigation<ForYouBaseRoute>(startDestination = ForYouRoute) {
         composable<ForYouRoute>(
