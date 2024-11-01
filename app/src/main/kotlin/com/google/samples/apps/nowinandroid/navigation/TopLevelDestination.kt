@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
@@ -45,7 +45,7 @@ enum class TopLevelDestination(
         unselectedIcon = NiaIcons.UpcomingBorder,
         iconTextId = forYouR.string.feature_foryou_title,
         titleTextId = R.string.app_name,
-        route = ForYouRoute::class,
+        route = ForYouBaseRoute::class,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
