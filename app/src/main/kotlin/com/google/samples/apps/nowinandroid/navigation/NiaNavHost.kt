@@ -20,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouScreen
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
 import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
@@ -44,10 +46,18 @@ fun NiaNavHost(
     val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = ForYouRoute,
+        startDestination = ForYouBaseRoute,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToInterests)
+        forYouSection(
+            onTopicClick = navController::navigateToTopic
+        ) {
+            topicScreen(
+                showBackButton = true,
+                onBackClick = navController::popBackStack,
+                onTopicClick = navController::navigateToTopic
+            )
+        }
         bookmarksScreen(
             onTopicClick = navController::navigateToInterests,
             onShowSnackbar = onShowSnackbar,
