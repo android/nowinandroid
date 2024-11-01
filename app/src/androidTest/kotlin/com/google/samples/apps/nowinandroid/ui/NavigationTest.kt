@@ -281,6 +281,7 @@ class NavigationTest {
 
             // Tap the first topic chip
             onNodeWithTag("topicChip:${topic.id}", useUnmergedTree = true)
+                .assertExists()
                 .performClick()
 
             // TEST FAILING HERE
