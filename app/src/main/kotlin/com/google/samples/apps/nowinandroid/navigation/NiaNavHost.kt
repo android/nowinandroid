@@ -50,12 +50,12 @@ fun NiaNavHost(
         modifier = modifier,
     ) {
         forYouSection(
-            onTopicClick = navController::navigateToTopic
+            onTopicClick = navController::navigateToTopic,
         ) {
             topicScreen(
                 showBackButton = true,
                 onBackClick = navController::popBackStack,
-                onTopicClick = navController::navigateToTopic
+                onTopicClick = navController::navigateToTopic,
             )
         }
         bookmarksScreen(
