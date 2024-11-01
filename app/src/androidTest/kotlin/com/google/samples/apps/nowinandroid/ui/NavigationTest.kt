@@ -267,4 +267,27 @@ class NavigationTest {
             onNodeWithTag("topic:${topic.id}").assertExists()
         }
     }
+
+    @Test
+    fun navigatingToTopicFromForYou_showsTopicDetails() {
+        composeTestRule.apply {
+            // Follow a topic
+            onNodeWithText(sampleTopic).performClick()
+
+            // Get the topic ID
+            val topic = runBlocking {
+                topicsRepository.getTopics().first().filter { it.name == sampleTopic }.first()
+            }
+
+            // Tap the first topic chip
+            onNodeWithTag("topicChip:${topic.id}", useUnmergedTree = true)
+                .performClick()
+
+            // TEST FAILING HERE
+            composeTestRule.waitUntil(timeoutMillis = 3_600_000, condition = { false })
+
+            // Verify that we're on the correct topic details screen
+            onNodeWithTag("topic:${topic.id}").assertExists()
+        }
+    }
 }
