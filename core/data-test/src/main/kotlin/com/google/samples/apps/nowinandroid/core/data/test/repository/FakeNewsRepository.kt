@@ -17,16 +17,13 @@
 package com.google.samples.apps.nowinandroid.core.data.test.repository
 
 import com.google.samples.apps.nowinandroid.core.data.Synchronizer
-import com.google.samples.apps.nowinandroid.core.data.model.asEntity
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
-import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
-import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
+import com.google.samples.apps.nowinandroid.core.network.model.asExternalModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -48,9 +45,11 @@ class FakeNewsRepository @Inject constructor(
         query: NewsResourceQuery,
     ): Flow<List<NewsResource>> =
         flow {
+            val newsResources = datasource.getNewsResources()
+            val topics = datasource.getTopics()
+
             emit(
-                datasource
-                    .getNewsResources()
+                newsResources
                     .filter { networkNewsResource ->
                         // Filter out any news resources which don't match the current query.
                         // If no query parameters (filterTopicIds or filterNewsIds) are specified
@@ -64,8 +63,7 @@ class FakeNewsRepository @Inject constructor(
                         )
                             .all(true::equals)
                     }
-                    .map(NetworkNewsResource::asEntity)
-                    .map(NewsResourceEntity::asExternalModel),
+                    .map { it.asExternalModel(topics) },
             )
         }.flowOn(ioDispatcher)
 
