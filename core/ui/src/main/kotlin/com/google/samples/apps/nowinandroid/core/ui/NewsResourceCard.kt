@@ -117,9 +117,11 @@ fun NewsResourceCardExpanded(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
         // Pass null for action to only override the label and not the actual action.
-        modifier = modifier.semantics {
-            onClick(label = clickActionLabel, action = null)
-        },
+        modifier = modifier
+            .semantics {
+                onClick(label = clickActionLabel, action = null)
+            }
+            .testTag("newsResourceCard:${userNewsResource.id}"),
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
@@ -337,12 +339,13 @@ fun NewsResourceTopics(
                     }
                     Text(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
-                        modifier = Modifier.semantics {
-                            this.contentDescription = contentDescription
-                        },
+                        modifier = Modifier
+                            .semantics {
+                                this.contentDescription = contentDescription
+                            }
+                            .testTag("topicTag:${followableTopic.topic.id}"),
                     )
                 },
-                modifier = Modifier.testTag("topicChip:${followableTopic.topic.id}"),
             )
         }
     }

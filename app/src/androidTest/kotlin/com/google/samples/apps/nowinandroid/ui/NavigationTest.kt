@@ -22,7 +22,9 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -32,6 +34,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoActivityResumedException
 import com.google.samples.apps.nowinandroid.MainActivity
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
@@ -74,6 +77,9 @@ class NavigationTest {
 
     @Inject
     lateinit var topicsRepository: TopicsRepository
+
+    @Inject
+    lateinit var newsRepository: NewsRepository
 
     // The strings used for matching in these tests
     private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_navigate_up)
@@ -271,21 +277,27 @@ class NavigationTest {
     @Test
     fun navigatingToTopicFromForYou_showsTopicDetails() {
         composeTestRule.apply {
-            // Follow a topic
-            onNodeWithText(sampleTopic).performClick()
-
-            // Get the topic ID
-            val topic = runBlocking {
-                topicsRepository.getTopics().first().filter { it.name == sampleTopic }.first()
+            // Get the first news resource
+            val newsResource = runBlocking {
+                newsRepository.getNewsResources().first().first()
             }
 
-            // Tap the first topic chip
-            onNodeWithTag("topicChip:${topic.id}", useUnmergedTree = true)
-                .assertExists()
-                .performClick()
+            // Get its first topic and follow it
+            val topic = newsResource.topics.first()
+            onNodeWithText(topic.name).performClick()
 
-            // TEST FAILING HERE
-            composeTestRule.waitUntil(timeoutMillis = 3_600_000, condition = { false })
+            // Get the news feed and scroll to the news resource
+            // Note: Possible flakiness. If the content of the news resource is long then the topic
+            // tag might not be visible meaning it cannot be clicked
+            onNodeWithTag("forYou:feed")
+                .performScrollToNode(
+                    hasTestTag("newsResourceCard:${newsResource.id}"),
+                )
+
+            // Click the first topic tag
+            onAllNodesWithTag("topicTag:${topic.id}", useUnmergedTree = true)
+                .onFirst()
+                .performClick()
 
             // Verify that we're on the correct topic details screen
             onNodeWithTag("topic:${topic.id}").assertExists()
