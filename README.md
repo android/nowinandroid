@@ -41,30 +41,30 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 
 | Module                    | Progress    | Desktop supported | Android supported | iOS supported | Web supported |
 |---------------------------|-------------|-------------------|-------------------|---------------|---------------|
-| app                       | In progress | 🚧                | ✅                | ❌            | ❌            |
+| app                       | In progress | ✅                | ✅                | ❌            | ❌            |
 | app-nia-catalog           | Done        | ✅                | ✅                | ❔            | ✅            |
-| :core:analytics           | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:common              | Done        | ✔️                 | ✅                 | ✔️             | ❌            |
-| :core:data                | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:data-test           | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :core:database            | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:datastore           | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:datastore-proto     | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
+| :core:analytics           | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:common              | Done        | ✅                 | ✅                 | ✔️             | ❌            |
+| :core:data                | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:data-test           | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :core:database            | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:datastore           | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:datastore-proto     | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
 | :core:datastore-test      | Removed     | ❌                | ❌                | ❌            | ❌            |
 | :core:designsystem        | Done        | ✅                | ✅                | ❔            | ✅            |
-| :core:domain              | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:model               | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:network             | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
+| :core:domain              | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:model               | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:network             | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
 | :core:notification        | Done        | No implmentaion   | ✅️                 |No implmentaion| ❌           |
 | :core:screenshot-testing  | Not started | ❌                | ❌                | ❌            | ❌            |
-| :core:testing             | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :core:ui                  | Done        | ✔️                 | ✅️                 | ✔️             | ❌            |
-| :feature:bookmarks        | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :feature:foryou           | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :feature:interests        | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :feature:search           | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :feature:settings         | Done        | ✔️                | ✅️                | ✔️            | ❌            |
-| :feature:topic            | Done        | ✔️                | ✅️                | ✔️            | ❌            |
+| :core:testing             | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :core:ui                  | Done        | ✅                 | ✅️                 | ✔️             | ❌            |
+| :feature:bookmarks        | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :feature:foryou           | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :feature:interests        | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :feature:search           | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :feature:settings         | Done        | ✅                | ✅️                | ✔️            | ❌            |
+| :feature:topic            | Done        | ✅                | ✅️                | ✔️            | ❌            |
 | lint                      | Not started | ❌                | ❌                | ❌            | ❌            |
 | :sync:sync-test           | Not started | ❌                | ❌                | ❌            | ❌            |
 | :sync:work                | Not started | No implmentaion   | ✅️                | No implmentaion| ❌            |
