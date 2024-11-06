@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+package com.google.samples.apps.nowinandroid
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.google.samples.apps.nowinandroid.MainScreenUiState
-import com.google.samples.apps.nowinandroid.MainScreenViewModel
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -30,9 +30,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
 import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.di.appModules
-import com.google.samples.apps.nowinandroid.shouldDisableDynamicTheming
-import com.google.samples.apps.nowinandroid.shouldUseAndroidTheme
-import com.google.samples.apps.nowinandroid.shouldUseDarkTheme
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import nowinandroid.shared.generated.resources.Res
