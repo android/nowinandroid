@@ -96,7 +96,7 @@ private fun Project.configureComposeMultiplatformApp() {
             iosSimulatorArm64(),
         ).forEach { iosTarget ->
             iosTarget.binaries.framework {
-                baseName = "NowInAndroid"
+                baseName = "ComposeApp"
                 isStatic = true
             }
         }

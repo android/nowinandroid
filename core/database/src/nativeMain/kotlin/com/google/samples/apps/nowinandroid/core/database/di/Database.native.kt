@@ -26,7 +26,8 @@ import co.touchlab.sqliter.DatabaseConfiguration.Extended
 import org.koin.dsl.module
 
 internal actual val driverModule = module {
-    single<SqlDriver> { (schema: SqlSchema<AsyncValue<Unit>>) ->
+    single<SqlDriver> {
+        val schema: SqlSchema<AsyncValue<Unit>> = get()
         NativeSqliteDriver(
             schema = schema.synchronous(),
             name = "nia-database.db",
