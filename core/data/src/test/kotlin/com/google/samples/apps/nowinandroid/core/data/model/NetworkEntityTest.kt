@@ -78,7 +78,7 @@ class NetworkEntityTest {
             shortDescription = "short description",
             longDescription = "long description",
             url = "URL",
-            imageUrl = "imageUrl"
+            imageUrl = "imageUrl",
         )
 
         val expected = Topic(
