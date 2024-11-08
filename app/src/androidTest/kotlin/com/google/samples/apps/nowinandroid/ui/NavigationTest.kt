@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.compose.ui.semantics.SemanticsActions.ScrollBy
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
@@ -290,9 +291,19 @@ class NavigationTest {
             // Note: Possible flakiness. If the content of the news resource is long then the topic
             // tag might not be visible meaning it cannot be clicked
             onNodeWithTag("forYou:feed")
-                .performScrollToNode(
-                    hasTestTag("newsResourceCard:${newsResource.id}"),
-                )
+                .performScrollToNode(hasTestTag("newsResourceCard:${newsResource.id}"))
+                .fetchSemanticsNode()
+                .apply {
+                    val newsResourceCardNode = onNodeWithTag("newsResourceCard:${newsResource.id}")
+                        .fetchSemanticsNode()
+                    config[ScrollBy].action?.invoke(
+                        0f,
+                        // to ensure the bottom of the card is visible,
+                        // manually scroll the difference between the height of
+                        // the scrolling node and the height of the card
+                        (newsResourceCardNode.size.height - size.height).coerceAtLeast(0).toFloat(),
+                    )
+                }
 
             // Click the first topic tag
             onAllNodesWithTag("topicTag:${topic.id}", useUnmergedTree = true)

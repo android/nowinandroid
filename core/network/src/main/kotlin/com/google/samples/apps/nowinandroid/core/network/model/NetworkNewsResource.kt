@@ -34,32 +34,3 @@ data class NetworkNewsResource(
     val type: String,
     val topics: List<String> = listOf(),
 )
-
-fun NetworkNewsResource.asExternalModel(topics: List<NetworkTopic>) =
-    NewsResource(
-        id = id,
-        title = title,
-        content = content,
-        url = url,
-        headerImageUrl = headerImageUrl,
-        publishDate = publishDate,
-        type = type,
-        topics = topics
-            .filter { networkTopic -> this.topics.contains(networkTopic.id) }
-            .map(NetworkTopic::asExternalModel),
-    )
-
-/**
- * Network representation of [NewsResource] when fetched from /newsresources/{id}
- */
-@Serializable
-data class NetworkNewsResourceExpanded(
-    val id: String,
-    val title: String,
-    val content: String,
-    val url: String,
-    val headerImageUrl: String,
-    val publishDate: Instant,
-    val type: String,
-    val topics: List<NetworkTopic> = listOf(),
-)
