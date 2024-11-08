@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import com.google.samples.apps.nowinandroid.core.network.model.asExternalModel
 import kotlinx.datetime.Instant
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -70,6 +71,29 @@ class NetworkEntityTest {
     }
 
     @Test
+    fun networkTopicMapsToExternalModel() {
+        val networkTopic = NetworkTopic(
+            id = "0",
+            name = "Test",
+            shortDescription = "short description",
+            longDescription = "long description",
+            url = "URL",
+            imageUrl = "imageUrl"
+        )
+
+        val expected = Topic(
+            id = "0",
+            name = "Test",
+            shortDescription = "short description",
+            longDescription = "long description",
+            url = "URL",
+            imageUrl = "imageUrl",
+        )
+
+        assertEquals(expected, networkTopic.asExternalModel())
+    }
+
+    @Test
     fun networkNewsResourceMapsToExternalModel() {
         val networkNewsResource = NetworkNewsResource(
             id = "0",
@@ -109,24 +133,7 @@ class NetworkEntityTest {
             headerImageUrl = "headerImageUrl",
             publishDate = Instant.fromEpochMilliseconds(1),
             type = "Article 📚",
-            topics = listOf(
-                Topic(
-                    id = "1",
-                    name = "Test 1",
-                    shortDescription = "short description 1",
-                    longDescription = "long description 1",
-                    url = "url 1",
-                    imageUrl = "imageUrl 1",
-                ),
-                Topic(
-                    id = "2",
-                    name = "Test 2",
-                    shortDescription = "short description 2",
-                    longDescription = "long description 2",
-                    url = "url 2",
-                    imageUrl = "imageUrl 2",
-                ),
-            ),
+            topics = networkTopics.map(NetworkTopic::asExternalModel),
         )
         assertEquals(expected, networkNewsResource.asExternalModel(networkTopics))
     }
