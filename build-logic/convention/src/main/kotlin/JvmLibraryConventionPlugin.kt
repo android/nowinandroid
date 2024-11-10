@@ -17,6 +17,8 @@
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.kotlin
 
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -26,6 +28,9 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
                 apply("nowinandroid.android.lint")
             }
             configureKotlinJvm()
+            dependencies {
+                add("testImplementation", kotlin("test"))
+            }
         }
     }
 }
