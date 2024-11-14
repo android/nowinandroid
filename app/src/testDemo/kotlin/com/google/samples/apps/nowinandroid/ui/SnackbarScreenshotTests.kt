@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.CompositionLocalProvider
@@ -182,7 +181,6 @@ class SnackbarScreenshotTests {
         }
     }
 
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     private fun testSnackbarScreenshotWithSize(
         snackbarHostState: SnackbarHostState,
         width: Dp,
