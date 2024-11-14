@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import nowinandroid.feature.bookmarks.generated.resources.feature_bookmarks_title
@@ -33,9 +34,18 @@ import nowinandroid.feature.foryou.generated.resources.Res as forYouR
 import nowinandroid.feature.search.generated.resources.Res as searchR
 
 /**
- * Type for the top level destinations in the application. Each of these destinations
- * can contain one or more screens (based on the window size). Navigation from one screen to the
- * next within a single destination will be handled directly in composables.
+ * Type for the top level destinations in the application. Contains metadata about the destination
+ * that is used in the top app bar and common navigation UI.
+ *
+ * @param selectedIcon The icon to be displayed in the navigation UI when this destination is
+ * selected.
+ * @param unselectedIcon The icon to be displayed in the navigation UI when this destination is
+ * not selected.
+ * @param iconTextId Text that to be displayed in the navigation UI.
+ * @param titleTextId Text that is displayed on the top app bar.
+ * @param route The route to use when navigating to this destination.
+ * @param baseRoute The highest ancestor of this destination. Defaults to [route], meaning that
+ * there is a single destination in that section of the app (no nested destinations).
  */
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
@@ -43,6 +53,7 @@ enum class TopLevelDestination(
     val iconTextId: StringResource,
     val titleTextId: StringResource,
     val route: KClass<*>,
+    val baseRoute: KClass<*> = route,
 ) {
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
@@ -50,6 +61,7 @@ enum class TopLevelDestination(
         iconTextId = forYouR.string.feature_foryou_title,
         titleTextId = Res.string.app_name,
         route = ForYouRoute::class,
+        baseRoute = ForYouBaseRoute::class,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,

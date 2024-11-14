@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -114,9 +115,11 @@ fun NewsResourceCardExpanded(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
         // Pass null for action to only override the label and not the actual action.
-        modifier = modifier.semantics {
-            onClick(label = clickActionLabel, action = null)
-        },
+        modifier = modifier
+            .semantics {
+                onClick(label = clickActionLabel, action = null)
+            }
+            .testTag("newsResourceCard:${userNewsResource.id}"),
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
@@ -334,9 +337,11 @@ fun NewsResourceTopics(
                     }
                     Text(
                         text = followableTopic.topic.name.uppercase(),
-                        modifier = Modifier.semantics {
-                            this.contentDescription = contentDescription
-                        },
+                        modifier = Modifier
+                            .semantics {
+                                this.contentDescription = contentDescription
+                            }
+                            .testTag("topicTag:${followableTopic.topic.id}"),
                     )
                 },
             )

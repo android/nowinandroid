@@ -147,7 +147,7 @@ internal fun NiaApp(
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
                 val selected = currentDestination
-                    .isRouteInHierarchy(destination.route)
+                    .isRouteInHierarchy(destination.baseRoute)
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },

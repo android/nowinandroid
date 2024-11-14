@@ -74,7 +74,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-internal fun TopicScreen(
+fun TopicScreen(
     showBackButton: Boolean,
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,

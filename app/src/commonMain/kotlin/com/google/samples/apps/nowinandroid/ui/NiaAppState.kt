@@ -88,7 +88,7 @@ class NiaAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() {
             return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
-                currentDestination?.hasRoute(route = topLevelDestination.route) ?: false
+                currentDestination?.hasRoute(route = topLevelDestination.route) == true
             }
         }
 
