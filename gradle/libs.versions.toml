@@ -223,10 +223,7 @@ nowinandroid-android-library = { id = "nowinandroid.android.library" }
 nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose" }
 nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco" }
 nowinandroid-android-lint = { id = "nowinandroid.android.lint" }
-nowinandroid-android-room = { id = "nowinandroid.android.room" }
 nowinandroid-android-test = { id = "nowinandroid.android.test" }
-nowinandroid-hilt = { id = "nowinandroid.hilt" }
-nowinandroid-jvm-library = { id = "nowinandroid.jvm.library" }
 nowinandroid-kmp-library = { id = "nowinandroid.kmp.library" }
 nowinandroid-kotlin-inject = { id = "nowinandroid.kmp.inject" }
 nowinandroid-sqldelight = { id = "nowinandroid.sqldelight" }
