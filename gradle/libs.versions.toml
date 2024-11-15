@@ -34,6 +34,7 @@ kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.3"
 ksp = "2.0.21-1.0.26"
+logback = "1.5.12"
 material3adaptive = "1.0.0"
 moduleGraph = "2.7.1"
 robolectric = "4.13"
@@ -139,6 +140,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "androidTools" }
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "androidTools" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "androidTools" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
