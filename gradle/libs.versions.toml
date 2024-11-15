@@ -213,10 +213,7 @@ ktrofit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktrofit" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
 
 # Plugins defined by this project
-nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors" }
 nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco" }
-nowinandroid-android-library = { id = "nowinandroid.android.library" }
-nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose" }
 nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco" }
 nowinandroid-android-lint = { id = "nowinandroid.android.lint" }
 nowinandroid-android-test = { id = "nowinandroid.android.test" }

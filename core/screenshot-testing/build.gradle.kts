@@ -15,11 +15,6 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
-    alias(libs.plugins.nowinandroid.android.library.compose)
-}
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.screenshottesting"
 }
 
 kotlin {

@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-}
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.sync.test"
+    alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.nowinandroid.di.koin)
 }
 
 dependencies {
