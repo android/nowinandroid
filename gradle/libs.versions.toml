@@ -215,10 +215,8 @@ buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig"
 # Plugins defined by this project
 nowinandroid-android-application = { id = "nowinandroid.android.application" }
 nowinandroid-android-application-compose = { id = "nowinandroid.android.application.compose" }
-nowinandroid-android-application-firebase = { id = "nowinandroid.android.application.firebase" }
 nowinandroid-android-application-flavors = { id = "nowinandroid.android.application.flavors" }
 nowinandroid-android-application-jacoco = { id = "nowinandroid.android.application.jacoco" }
-nowinandroid-android-feature = { id = "nowinandroid.android.feature" }
 nowinandroid-android-library = { id = "nowinandroid.android.library" }
 nowinandroid-android-library-compose = { id = "nowinandroid.android.library.compose" }
 nowinandroid-android-library-jacoco = { id = "nowinandroid.android.library.jacoco" }
