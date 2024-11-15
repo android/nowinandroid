@@ -18,6 +18,10 @@ plugins {
     alias(libs.plugins.nowinandroid.di.koin)
 }
 
+android {
+    namespace = "com.google.samples.apps.nowinandroid.core.sync.test"
+}
+
 dependencies {
     implementation(projects.core.data)
     implementation(projects.sync.work)
