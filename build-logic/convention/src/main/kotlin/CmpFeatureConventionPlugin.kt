@@ -52,13 +52,10 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())
 
-                add("androidMainImplementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())
 
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.compose.ui.test").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.core").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.ext").get())
                 add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.junit").get())

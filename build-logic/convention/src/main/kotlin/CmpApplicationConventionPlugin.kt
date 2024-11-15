@@ -65,7 +65,6 @@ class CmpApplicationConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())
 
                 add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
         }
