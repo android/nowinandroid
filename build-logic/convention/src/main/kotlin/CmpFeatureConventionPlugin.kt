@@ -43,24 +43,25 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("commonMainImplementation", project(":core:ui"))
-                add("commonMainImplementation", project(":core:designsystem"))
-                add("commonMainImplementation", libs.findLibrary("jetbrains.compose.viewmodel").get())
-                add("commonMainImplementation", libs.findLibrary("jetbrains.compose.navigation").get())
+                "commonMainImplementation"(project(":core:ui"))
+                "commonMainImplementation"(project(":core:designsystem"))
+                "commonMainImplementation"(libs.findLibrary("jetbrains.compose.viewmodel").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains.compose.navigation").get())
                 "commonMainImplementation"(platform(libs.findLibrary("koin.bom").get()))
-                add("commonMainImplementation", libs.findLibrary("koin.compose").get())
-                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
-                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose.viewmodel").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose.viewmodel.navigation").get())
 
-                add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())
+                "androidMainImplementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
+                "androidMainImplementation"(libs.findLibrary("androidx.tracing.ktx").get())
 
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.compose.ui.test").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.core").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.ext").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.junit").get())
-                add("androidInstrumentedTestImplementation", libs.findLibrary("androidx.test.runner").get())
+                "androidInstrumentedTestImplementation"(libs.findLibrary("androidx.compose.ui.test").get())
+                "androidInstrumentedTestImplementation"(libs.findLibrary("androidx.test.core").get())
+                "androidInstrumentedTestImplementation"(libs.findLibrary("androidx.test.ext").get())
+                "androidInstrumentedTestImplementation"(libs.findLibrary("androidx.test.junit").get())
+                "androidInstrumentedTestImplementation"(libs.findLibrary("androidx.test.runner").get())
             }
+
         }
     }
 }

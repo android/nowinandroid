@@ -56,17 +56,18 @@ class CmpApplicationConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("commonMainImplementation", project(":core:ui"))
-                add("commonMainImplementation", project(":core:designsystem"))
-                add("commonMainImplementation", libs.findLibrary("jetbrains.compose.viewmodel").get())
-                add("commonMainImplementation", libs.findLibrary("jetbrains.compose.navigation").get())
-                add("commonMainImplementation", libs.findLibrary("koin.compose").get())
-                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
-                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel.navigation").get())
+                "commonMainImplementation"(project(":core:ui"))
+                "commonMainImplementation"(project(":core:designsystem"))
+                "commonMainImplementation"(libs.findLibrary("jetbrains.compose.viewmodel").get())
+                "commonMainImplementation"(libs.findLibrary("jetbrains.compose.navigation").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose.viewmodel").get())
+                "commonMainImplementation"(libs.findLibrary("koin.compose.viewmodel.navigation").get())
 
-                add("androidMainImplementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("androidMainImplementation", libs.findLibrary("androidx.tracing.ktx").get())
+                "androidMainImplementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
+                "androidMainImplementation"(libs.findLibrary("androidx.tracing.ktx").get())
             }
+
         }
     }
 }

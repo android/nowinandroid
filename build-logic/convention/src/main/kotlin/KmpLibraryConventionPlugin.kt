@@ -39,9 +39,9 @@ class KmpLibraryConventionPlugin: Plugin<Project> {
                 resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
             }
             dependencies {
-                add("commonTestImplementation", libs.findLibrary("kotlin.test").get())
-                add("commonTestImplementation", libs.findLibrary("turbine").get())
-                add("commonTestImplementation", libs.findLibrary("kotlinx.coroutines.test").get())
+                "commonTestImplementation"(libs.findLibrary("kotlin.test").get())
+                "commonTestImplementation"(libs.findLibrary("turbine").get())
+                "commonTestImplementation"(libs.findLibrary("kotlinx.coroutines.test").get())
             }
         }
     }
