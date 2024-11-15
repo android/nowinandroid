@@ -54,14 +54,6 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "nowinandroid.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
-        register("androidApplication") {
-            id = "nowinandroid.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
-        }
         register("androidApplicationJacoco") {
             id = "nowinandroid.android.application.jacoco"
             implementationClass = "AndroidApplicationJacocoConventionPlugin"
