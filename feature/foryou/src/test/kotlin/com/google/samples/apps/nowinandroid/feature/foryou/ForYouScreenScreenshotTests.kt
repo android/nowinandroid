@@ -46,7 +46,7 @@ import java.util.TimeZone
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class)
+@Config(application = HiltTestApplication::class, sdk = [21])
 @LooperMode(LooperMode.Mode.PAUSED)
 class ForYouScreenScreenshotTests {
 
