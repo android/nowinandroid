@@ -46,7 +46,7 @@ import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class, qualifiers = "480dpi", sdk = [21])
+@Config(application = HiltTestApplication::class, qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 class FilterChipScreenshotTests {
 
