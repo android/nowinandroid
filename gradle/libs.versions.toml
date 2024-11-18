@@ -56,7 +56,7 @@ koin-annotations = "1.4.0-RC4"
 ktor = "3.0.0"
 ktrofit = "2.1.0"
 buildKonfig = "0.15.2"
-lifecycle-viewmodel-compose = "2.8.2"
+lifecycle-viewmodel-compose = "2.8.4"
 navigation-compose = "2.8.0-alpha10"
 
 [bundles]
