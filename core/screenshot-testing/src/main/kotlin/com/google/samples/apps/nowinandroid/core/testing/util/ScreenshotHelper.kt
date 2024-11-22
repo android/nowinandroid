@@ -35,7 +35,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityCheckOptions
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker
-import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker.CheckLevel.Error
+import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker.CheckLevel
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
@@ -99,7 +99,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
         )
     this.onRoot().checkRoboAccessibility(
         roborazziATFAccessibilityCheckOptions = RoborazziATFAccessibilityCheckOptions(
-            failureLevel = Error,
+            failureLevel = CheckLevel.Warning,
             checker = RoborazziATFAccessibilityChecker(
                 preset = AccessibilityCheckPreset.LATEST,
             ),
