@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalRoborazziApi::class)
+
 package com.google.samples.apps.nowinandroid.core.testing.util
 
 import androidx.activity.ComponentActivity
@@ -30,10 +32,16 @@ import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.RoborazziATFAccessibilityCheckOptions
+import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker
+import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker.CheckLevel.Error
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.github.takahirom.roborazzi.checkRoboAccessibility
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckPreset
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.robolectric.RuntimeEnvironment
 
@@ -50,6 +58,7 @@ enum class DefaultTestDevices(val description: String, val spec: String) {
     FOLDABLE("foldable", "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480"),
     TABLET("tablet", "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"),
 }
+
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
     body: @Composable () -> Unit,
@@ -88,6 +97,14 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             "src/test/screenshots/${screenshotName}_$deviceName.png",
             roborazziOptions = roborazziOptions,
         )
+    this.onRoot().checkRoboAccessibility(
+        roborazziATFAccessibilityCheckOptions = RoborazziATFAccessibilityCheckOptions(
+            failureLevel = Error,
+            checker = RoborazziATFAccessibilityChecker(
+                preset = AccessibilityCheckPreset.LATEST,
+            ),
+        ),
+    )
 }
 
 /**
