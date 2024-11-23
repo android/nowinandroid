@@ -122,8 +122,8 @@ class ForYouScreenScreenshotTests {
                     matchesElements(withText("Done")),
 
                     // TODO investigate, seems a false positive
-//                    matchesElements(withText("What are you interested in?")),
-//                    matchesElements(withText("UI")),
+                    matchesElements(withText("What are you interested in?")),
+                    matchesElements(withText("UI")),
                 ),
             ),
         ) {
