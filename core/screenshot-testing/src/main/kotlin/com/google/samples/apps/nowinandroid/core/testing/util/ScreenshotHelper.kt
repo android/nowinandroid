@@ -31,7 +31,6 @@ import androidx.compose.ui.test.DarkMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityCheckOptions
@@ -44,6 +43,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.checkRoboAccessibility
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckPreset
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityViewCheckResult
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityViewCheckException
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -62,14 +62,19 @@ enum class DefaultTestDevices(val description: String, val spec: String) {
     FOLDABLE("foldable", "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480"),
     TABLET("tablet", "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"),
 }
-
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
     accessibilitySuppressions: Matcher<in AccessibilityViewCheckResult> = Matchers.not(Matchers.anything()),
     body: @Composable () -> Unit,
 ) {
-    listOf(DefaultTestDevices.FOLDABLE).forEach {
-        this.captureForDevice(it.description, it.spec, screenshotName, body = body, accessibilitySuppressions = accessibilitySuppressions)
+    DefaultTestDevices.entries.forEach {
+        this.captureForDevice(
+            deviceName = it.description,
+            deviceSpec = it.spec,
+            screenshotName = screenshotName,
+            body = body,
+            accessibilitySuppressions = accessibilitySuppressions,
+        )
     }
 }
 
@@ -98,20 +103,33 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             }
         }
     }
+
+    // Run Accessibility checks first so logging is included
+    val accessibilityException = try {
+        this.onRoot().checkRoboAccessibility(
+            roborazziATFAccessibilityCheckOptions = RoborazziATFAccessibilityCheckOptions(
+                failureLevel = CheckLevel.Warning,
+                checker = RoborazziATFAccessibilityChecker(
+                    preset = AccessibilityCheckPreset.LATEST,
+                    suppressions = accessibilitySuppressions
+                ),
+            ),
+        )
+        null
+    } catch (e: AccessibilityViewCheckException) {
+        e
+    }
+
     this.onRoot()
         .captureRoboImage(
             "src/test/screenshots/${screenshotName}_$deviceName.png",
             roborazziOptions = roborazziOptions,
         )
-    this.onRoot().checkRoboAccessibility(
-        roborazziATFAccessibilityCheckOptions = RoborazziATFAccessibilityCheckOptions(
-            failureLevel = CheckLevel.Warning,
-            checker = RoborazziATFAccessibilityChecker(
-                preset = AccessibilityCheckPreset.LATEST,
-                suppressions = accessibilitySuppressions
-            ),
-        ),
-    )
+
+    // Rethrow the Accessibility exception once screenshots have passed
+    if (accessibilityException != null) {
+        throw accessibilityException
+    }
 }
 
 /**

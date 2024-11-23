@@ -58,7 +58,8 @@ class ForYouScreenScreenshotTests {
     /**
      * Use a test activity to set the content on.
      */
-    @get:Rule val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val userNewsResources = UserNewsResourcePreviewParameterProvider().values.first()
 
