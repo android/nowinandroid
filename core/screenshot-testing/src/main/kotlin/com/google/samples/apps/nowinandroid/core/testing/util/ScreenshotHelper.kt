@@ -50,6 +50,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.robolectric.RuntimeEnvironment
+import java.io.File
 import java.io.FileOutputStream
 
 val DefaultRoborazziOptions =
@@ -134,9 +135,10 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
         accessibilityException.results.forEachIndexed { index, check ->
             val viewImage = check.viewImage
             if (viewImage is BitmapImage) {
+                val file = File("build/outputs/roborazzi/${screenshotName}_${deviceName}_$index.png")
+                println("Writing check.viewImage to $file")
                 FileOutputStream(
-                    "build/outputs/roborazzi/" +
-                        "${screenshotName}_${deviceName}_$index.png",
+                    file,
                 ).use {
                     viewImage.bitmap.compress(PNG, 100, it)
                 }
