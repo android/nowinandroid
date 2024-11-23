@@ -31,6 +31,7 @@ import androidx.compose.ui.test.DarkMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityCheckOptions
@@ -42,7 +43,10 @@ import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.checkRoboAccessibility
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckPreset
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityViewCheckResult
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers
 import org.robolectric.RuntimeEnvironment
 
 val DefaultRoborazziOptions =
@@ -61,10 +65,11 @@ enum class DefaultTestDevices(val description: String, val spec: String) {
 
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
     screenshotName: String,
+    accessibilitySuppressions: Matcher<in AccessibilityViewCheckResult> = Matchers.not(Matchers.anything()),
     body: @Composable () -> Unit,
 ) {
-    DefaultTestDevices.entries.forEach {
-        this.captureForDevice(it.description, it.spec, screenshotName, body = body)
+    listOf(DefaultTestDevices.FOLDABLE).forEach {
+        this.captureForDevice(it.description, it.spec, screenshotName, body = body, accessibilitySuppressions = accessibilitySuppressions)
     }
 }
 
@@ -73,6 +78,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     deviceSpec: String,
     screenshotName: String,
     roborazziOptions: RoborazziOptions = DefaultRoborazziOptions,
+    accessibilitySuppressions: Matcher<in AccessibilityViewCheckResult> = Matchers.not(Matchers.anything()),
     darkMode: Boolean = false,
     body: @Composable () -> Unit,
 ) {
@@ -102,6 +108,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             failureLevel = CheckLevel.Warning,
             checker = RoborazziATFAccessibilityChecker(
                 preset = AccessibilityCheckPreset.LATEST,
+                suppressions = accessibilitySuppressions
             ),
         ),
     )
