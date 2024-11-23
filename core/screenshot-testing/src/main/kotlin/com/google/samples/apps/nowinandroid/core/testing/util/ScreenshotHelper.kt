@@ -18,6 +18,7 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.util
 
+import android.graphics.Bitmap.CompressFormat.PNG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -44,10 +45,12 @@ import com.github.takahirom.roborazzi.checkRoboAccessibility
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckPreset
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityViewCheckResult
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityViewCheckException
+import com.google.android.apps.common.testing.accessibility.framework.utils.contrast.BitmapImage
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.robolectric.RuntimeEnvironment
+import java.io.FileOutputStream
 
 val DefaultRoborazziOptions =
     RoborazziOptions(
@@ -111,7 +114,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
                 failureLevel = CheckLevel.Warning,
                 checker = RoborazziATFAccessibilityChecker(
                     preset = AccessibilityCheckPreset.LATEST,
-                    suppressions = accessibilitySuppressions
+                    suppressions = accessibilitySuppressions,
                 ),
             ),
         )
@@ -128,6 +131,18 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 
     // Rethrow the Accessibility exception once screenshots have passed
     if (accessibilityException != null) {
+        accessibilityException.results.forEachIndexed { index, check ->
+            val viewImage = check.viewImage
+            if (viewImage is BitmapImage) {
+                FileOutputStream(
+                    "build/outputs/roborazzi/" +
+                        "${screenshotName}_${deviceName}_$index.png",
+                ).use {
+                    viewImage.bitmap.compress(PNG, 100, it)
+                }
+            }
+        }
+
         throw accessibilityException
     }
 }
