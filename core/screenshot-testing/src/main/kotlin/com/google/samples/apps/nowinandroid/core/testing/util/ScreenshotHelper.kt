@@ -112,7 +112,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     val accessibilityException = try {
         this.onRoot().checkRoboAccessibility(
             roborazziATFAccessibilityCheckOptions = RoborazziATFAccessibilityCheckOptions(
-                failureLevel = CheckLevel.Warning,
+                failureLevel = CheckLevel.Error,
                 checker = RoborazziATFAccessibilityChecker(
                     preset = AccessibilityCheckPreset.LATEST,
                     suppressions = accessibilitySuppressions,
