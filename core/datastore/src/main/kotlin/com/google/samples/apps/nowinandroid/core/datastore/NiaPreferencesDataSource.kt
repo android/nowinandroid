@@ -164,6 +164,14 @@ class NiaPreferencesDataSource @Inject constructor(
     }
 
     suspend fun getChangeListVersions() = userPreferences.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("NiaPreferences", "Error reading user preferences.", exception)
+                emit(UserPreferences.getDefaultInstance())
+            } else {
+                throw exception
+            }
+        }
         .map {
             ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
