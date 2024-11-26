@@ -28,7 +28,7 @@ import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 internal class ConnectivityManagerNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(Default) private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         trace("NetworkMonitor.callbackFlow") {
