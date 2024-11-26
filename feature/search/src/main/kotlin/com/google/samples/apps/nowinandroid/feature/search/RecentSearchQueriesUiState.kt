@@ -24,4 +24,8 @@ sealed interface RecentSearchQueriesUiState {
     data class Success(
         val recentQueries: List<RecentSearchQuery> = emptyList(),
     ) : RecentSearchQueriesUiState
+
+    data class Error(
+        val message: Strng
+    ) : RecentSearchQueriesUiState
 }
