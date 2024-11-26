@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -145,6 +146,10 @@ internal fun NiaApp(
         SettingsDialog(
             onDismiss = { onSettingsDismissed() },
         )
+    }
+
+    LaunchedEffect(Unit) {
+        Log.e("#####","info message - App UI")
     }
 
     NiaNavigationSuiteScaffold(
