@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
@@ -33,6 +34,9 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     userDataRepository: UserDataRepository,
 ) : ViewModel() {
+
+    private lateinit var _context: Context
+
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
         Success(it)
     }.stateIn(
@@ -40,6 +44,10 @@ class MainActivityViewModel @Inject constructor(
         initialValue = Loading,
         started = SharingStarted.WhileSubscribed(5_000),
     )
+
+    fun saveActivity(context: Context) {
+        _context = context
+    }
 }
 
 sealed interface MainActivityUiState {
