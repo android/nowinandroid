@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsR
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
+import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
@@ -45,11 +46,14 @@ class GetSearchContentsUseCase @Inject constructor(
 private fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Flow<UserSearchResult> =
     combine(userDataStream) { searchResult, userData ->
         UserSearchResult(
-            topics = searchResult.topics.map { topic ->
-                FollowableTopic(
-                    topic = topic,
-                    isFollowed = topic.id in userData.followedTopics,
-                )
+            topics = when (searchResult.topics.size) {
+                0 -> emptyList()
+                else -> searchResult.topics.map { topic ->
+                    FollowableTopic(
+                        topic = topic,
+                        isFollowed = topic.id in userData.followedTopics,
+                    )
+                }
             },
             newsResources = searchResult.newsResources.map { news ->
                 UserNewsResource(
