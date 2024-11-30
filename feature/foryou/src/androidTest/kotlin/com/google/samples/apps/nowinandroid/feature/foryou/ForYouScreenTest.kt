@@ -128,7 +128,7 @@ class ForYouScreenTest {
 
         testData.forEach { testTopic ->
             composeTestRule
-                .onNodeWithText(testTopic.topic.name)
+                .onNodeWithContentDescription(testTopic.topic.name)
                 .assertExists()
                 .assertHasClickAction()
         }
@@ -175,7 +175,7 @@ class ForYouScreenTest {
 
         followableTopicTestData.forEach { testTopic ->
             composeTestRule
-                .onNodeWithText(testTopic.topic.name)
+                .onNodeWithContentDescription(testTopic.topic.name)
                 .assertExists()
                 .assertHasClickAction()
         }

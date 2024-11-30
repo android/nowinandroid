@@ -21,5 +21,7 @@
     <string name="feature_foryou_navigate_up">Navigate up</string>
     <string name="feature_foryou_onboarding_guidance_title">What are you interested in?</string>
     <string name="feature_foryou_onboarding_guidance_subtitle">Updates from topics you follow will appear here. Follow some things to get started.</string>
+    <string name="feature_foryou_topic_icon_checked">%s checked</string>
+    <string name="feature_foryou_topic_icon_add">%s add</string>
 
 </resources>
