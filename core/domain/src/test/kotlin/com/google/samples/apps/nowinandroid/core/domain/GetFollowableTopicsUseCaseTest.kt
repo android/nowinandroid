@@ -28,6 +28,9 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
+/**
+ * Unit test for [GetFollowableTopicsUseCase]
+ */
 class GetFollowableTopicsUseCaseTest {
 
     @get:Rule
@@ -42,7 +45,7 @@ class GetFollowableTopicsUseCaseTest {
     )
 
     @Test
-    fun whenNoParams_followableTopicsAreReturnedWithNoSorting() = runTest {
+    fun whenSortOrderIsByNone_followableTopicsAreReturnedWithNoSorting() = runTest {
         // Obtain a stream of followable topics.
         val followableTopics = useCase()
 
