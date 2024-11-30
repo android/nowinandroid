@@ -19,6 +19,8 @@ package com.google.samples.apps.niacatalog.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
@@ -34,8 +36,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
@@ -64,6 +68,9 @@ fun NiaCatalog() {
                 .systemBars
                 .add(WindowInsets(left = 16.dp, top = 16.dp, right = 16.dp, bottom = 16.dp))
                 .asPaddingValues()
+
+            var buttonsEnabledState by remember { mutableStateOf(true) }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = contentPadding,
@@ -75,92 +82,76 @@ fun NiaCatalog() {
                         style = MaterialTheme.typography.headlineSmall,
                     )
                 }
-                item { Text("Buttons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        NiaButton(onClick = {}) {
-                            Text(text = "Enabled")
-                        }
-                        NiaOutlinedButton(onClick = {}) {
-                            Text(text = "Enabled")
-                        }
-                        NiaTextButton(onClick = {}) {
-                            Text(text = "Enabled")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("Buttons")
+                        Spacer(modifier = Modifier.weight(1f))
+                        NiaTextButton(
+                            onClick = { buttonsEnabledState = !buttonsEnabledState },
+                        ) {
+                            Text(text = "Toggle enabled")
                         }
                     }
                 }
-                item { Text("Disabled buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
                         ) {
-                            Text(text = "Disabled")
+                            Text(text = "Filled")
                         }
                         NiaOutlinedButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
                         ) {
-                            Text(text = "Disabled")
+                            Text(text = "Outlined")
                         }
                         NiaTextButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
                         ) {
-                            Text(text = "Disabled")
+                            Text(text = "Text")
                         }
                     }
                 }
-                item { Text("Buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        NiaButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            },
-                        )
-                        NiaOutlinedButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            },
-                        )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("Buttons with leading icons")
+                        Spacer(modifier = Modifier.weight(1f))
                         NiaTextButton(
-                            onClick = {},
-                            text = { Text(text = "Enabled") },
-                            leadingIcon = {
-                                Icon(imageVector = NiaIcons.Add, contentDescription = null)
-                            },
-                        )
+                            onClick = { buttonsEnabledState = !buttonsEnabledState },
+                        ) {
+                            Text(text = "Toggle enabled")
+                        }
                     }
                 }
-                item { Text("Disabled buttons with leading icons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         NiaButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
+                            text = { Text(text = "Filled") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
                             },
                         )
                         NiaOutlinedButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
+                            text = { Text(text = "Outlined") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
                             },
                         )
                         NiaTextButton(
+                            enabled = buttonsEnabledState,
                             onClick = {},
-                            enabled = false,
-                            text = { Text(text = "Disabled") },
+                            text = { Text(text = "Text") },
                             leadingIcon = {
                                 Icon(imageVector = NiaIcons.Add, contentDescription = null)
                             },
