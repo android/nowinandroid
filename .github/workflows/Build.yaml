@@ -161,12 +161,12 @@ jobs:
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
 
-  androidTest:
+  androidTest-GMD:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 90
     strategy:
       matrix:
-        api-level: [26, 30]
+        device-config: [ "pixel4api30aospatd","pixel6api31aosp","pixelCapi30aospatd" ]
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -205,15 +205,34 @@ jobs:
           validate-wrappers: true
           gradle-home-cache-cleanup: true
 
-      - name: Build projects and run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Accept Android licenses
+        run: yes | "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Build AndroidTest apps
+        run: ./gradlew packageDemoDebug packageDemoDebugAndroidTest
+
+      - name: Run instrumented tests with GMD
+        run: ./gradlew ${{matrix.device-config}}DemoDebugAndroidTest --no-parallel --max-workers=1
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+
+      - name: Rename test report
+        run: mv app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/index.html app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/${{matrix.device-config}}.html
+
+#      - name: Build projects and run instrumentation tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#
+#        with:
+#          name: test-reports-GMD
+#          path: '**/build/reports/androidTests'
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          name: testResults${{matrix.device-config}}
+          path: app/build/reports/androidTests/managedDevice/debug/flavors/demo/allDevices/${{matrix.device-config}}.html
+
+      - name: Print disk space usage
+        if: failure()
+        run: df -h
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30
