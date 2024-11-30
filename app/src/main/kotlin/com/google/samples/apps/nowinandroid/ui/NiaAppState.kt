@@ -30,7 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.ErrorMessage
+import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
@@ -45,13 +46,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 
 @Composable
 fun rememberNiaAppState(
-    networkMonitor: NetworkMonitor,
+    errorMonitor: ErrorMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -61,14 +61,14 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        networkMonitor,
+        errorMonitor,
         userNewsResourceRepository,
         timeZoneMonitor,
     ) {
         NiaAppState(
             navController = navController,
             coroutineScope = coroutineScope,
-            networkMonitor = networkMonitor,
+            errorMonitor = errorMonitor,
             userNewsResourceRepository = userNewsResourceRepository,
             timeZoneMonitor = timeZoneMonitor,
         )
@@ -79,10 +79,10 @@ fun rememberNiaAppState(
 class NiaAppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
-    networkMonitor: NetworkMonitor,
+    errorMonitor: ErrorMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
-) {
+) : ErrorMonitor by errorMonitor {
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -94,13 +94,17 @@ class NiaAppState(
             }
         }
 
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false,
-        )
+    val isOfflineState: StateFlow<Boolean> = isOffline.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = false,
+    )
+
+    val snackbarMessage: StateFlow<ErrorMessage?> = errorMessage.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null,
+    )
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
