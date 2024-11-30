@@ -27,7 +27,8 @@ then
     echo "The 'dot' command is not found. This is required to generate SVGs from the Graphviz files."
     echo "Installation instructions:"
     echo "  - On macOS: You can install Graphviz using Homebrew with the command: 'brew install graphviz'"
-    echo "  - On Ubuntu: You can install Graphviz using APT with the command: 'sudo apt-get install graphviz'"
+    echo "  - On Ubuntu: You can install Graphviz using APT with the command: 'sudo apt install graphviz'"
+    echo "  - Others: Visit https://graphviz.org/download/"
     exit 1
 fi
 
