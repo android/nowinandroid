@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.foryou
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -52,7 +52,7 @@ class ForYouScreenTest {
     @Test
     fun circularProgressIndicator_whenScreenIsLoading_exists() {
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.Loading,
@@ -78,7 +78,7 @@ class ForYouScreenTest {
     @Test
     fun circularProgressIndicator_whenScreenIsSyncing_exists() {
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = true,
                     onboardingUiState = OnboardingUiState.NotShown,
@@ -106,7 +106,7 @@ class ForYouScreenTest {
         val testData = followableTopicTestData.map { it.copy(isFollowed = false) }
 
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.Shown(
@@ -149,7 +149,7 @@ class ForYouScreenTest {
     @Test
     fun topicSelector_whenSomeTopicsSelected_showsTopicChipsAndEnabledDoneButton() {
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
@@ -196,7 +196,7 @@ class ForYouScreenTest {
     @Test
     fun feed_whenInterestsSelectedAndLoading_showsLoadingIndicator() {
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
@@ -223,7 +223,7 @@ class ForYouScreenTest {
     @Test
     fun feed_whenNoInterestsSelectionAndLoading_showsLoadingIndicator() {
         composeTestRule.setContent {
-            BoxWithConstraints {
+            Box {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.NotShown,
