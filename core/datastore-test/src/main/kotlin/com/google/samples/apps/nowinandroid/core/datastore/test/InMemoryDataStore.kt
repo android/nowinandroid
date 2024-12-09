@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-dependencyResolutionManagement {
-    repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
-    }
-    versionCatalogs {
-        create("libs") {
-            from(files("../gradle/libs.versions.toml"))
-        }
-    }
-}
+package com.google.samples.apps.nowinandroid.core.datastore.test
 
-rootProject.name = "build-logic"
-include(":convention")
+import androidx.datastore.core.DataStore
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.updateAndGet
+
+class InMemoryDataStore<T>(initialValue: T) : DataStore<T> {
+    override val data = MutableStateFlow(initialValue)
+    override suspend fun updateData(
+        transform: suspend (it: T) -> T,
+    ) = data.updateAndGet { transform(it) }
+}
