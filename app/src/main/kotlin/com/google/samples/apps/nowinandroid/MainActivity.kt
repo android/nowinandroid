@@ -16,12 +16,16 @@
 
 package com.google.samples.apps.nowinandroid
 
+import android.app.UiModeManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -108,23 +112,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val darkTheme = shouldUseDarkTheme(uiState)
+            val themeInfo = themeInfo(uiState)
 
             // Update the edge to edge configuration to match the theme
             // This is the same parameters as the default enableEdgeToEdge call, but we manually
             // resolve whether or not to show dark theme using uiState, since it can be different
             // than the configuration's dark theme value based on the user preference.
-            DisposableEffect(darkTheme) {
+            DisposableEffect(themeInfo.isThemeDark, themeInfo.shouldFollowSystem) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT,
-                    ) { darkTheme },
+                    ) { themeInfo.isThemeDark },
                     navigationBarStyle = SystemBarStyle.auto(
                         lightScrim,
                         darkScrim,
-                    ) { darkTheme },
+                    ) { themeInfo.isThemeDark },
                 )
+                setAppTheme(getSystemService(Context.UI_MODE_SERVICE) as UiModeManager, themeInfo)
                 onDispose {}
             }
 
@@ -141,9 +146,9 @@ class MainActivity : ComponentActivity() {
                 LocalTimeZone provides currentTimeZone,
             ) {
                 NiaTheme(
-                    darkTheme = darkTheme,
-                    androidTheme = shouldUseAndroidTheme(uiState),
-                    disableDynamicTheming = shouldDisableDynamicTheming(uiState),
+                    darkTheme = themeInfo.isThemeDark,
+                    androidTheme = themeInfo.shouldUseAndroidTheme,
+                    disableDynamicTheming = themeInfo.shouldDisableDynamicTheming,
                 ) {
                     NiaApp(appState)
                 }
@@ -162,44 +167,77 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/**
- * Returns `true` if the Android theme should be used, as a function of the [uiState].
- */
+private data class ThemeInfo(
+    /**
+     * Returns `true` if dark theme should be used.
+     */
+    val isThemeDark: Boolean,
+
+    /**
+     * Returns `true` if theme should follow the system settings.
+     */
+    val shouldFollowSystem: Boolean,
+
+    /**
+     * Returns `true` if the dynamic color is disabled.
+     */
+    val shouldDisableDynamicTheming: Boolean,
+
+    /**
+     * Returns `true` if the Android theme should be used.
+     */
+    val shouldUseAndroidTheme: Boolean,
+)
 @Composable
-private fun shouldUseAndroidTheme(
-    uiState: MainActivityUiState,
-): Boolean = when (uiState) {
-    Loading -> false
-    is Success -> when (uiState.userData.themeBrand) {
-        ThemeBrand.DEFAULT -> false
-        ThemeBrand.ANDROID -> true
+private fun themeInfo(uiState: MainActivityUiState): ThemeInfo {
+    return when (uiState) {
+        Loading -> ThemeInfo(
+            isThemeDark = isSystemInDarkTheme(),
+            shouldFollowSystem = false,
+            shouldDisableDynamicTheming = false,
+            shouldUseAndroidTheme = false
+        )
+
+        is Success -> {
+            val isThemeDark = uiState.userData.darkThemeConfig == DarkThemeConfig.DARK
+            val shouldFollowSystem = uiState.userData.darkThemeConfig == DarkThemeConfig.FOLLOW_SYSTEM
+            ThemeInfo(
+                isThemeDark = isThemeDark || (shouldFollowSystem && isSystemInDarkTheme()),
+                shouldFollowSystem = shouldFollowSystem,
+                shouldDisableDynamicTheming = !uiState.userData.useDynamicColor,
+                shouldUseAndroidTheme = uiState.userData.themeBrand == ThemeBrand.ANDROID
+            )
+        }
     }
 }
 
 /**
- * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
+ * Sets app theme to reflect user choice.
  */
-@Composable
-private fun shouldDisableDynamicTheming(
-    uiState: MainActivityUiState,
-): Boolean = when (uiState) {
-    Loading -> false
-    is Success -> !uiState.userData.useDynamicColor
-}
-
-/**
- * Returns `true` if dark theme should be used, as a function of the [uiState] and the
- * current system context.
- */
-@Composable
-private fun shouldUseDarkTheme(
-    uiState: MainActivityUiState,
-): Boolean = when (uiState) {
-    Loading -> isSystemInDarkTheme()
-    is Success -> when (uiState.userData.darkThemeConfig) {
-        DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-        DarkThemeConfig.LIGHT -> false
-        DarkThemeConfig.DARK -> true
+private fun setAppTheme(
+    uiModeManager: UiModeManager,
+    themeInfo: ThemeInfo
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        uiModeManager.setApplicationNightMode(
+            if (themeInfo.shouldFollowSystem) {
+                UiModeManager.MODE_NIGHT_AUTO
+            } else if (themeInfo.isThemeDark) {
+                UiModeManager.MODE_NIGHT_YES
+            } else {
+                UiModeManager.MODE_NIGHT_NO
+            }
+        )
+    } else {
+        AppCompatDelegate.setDefaultNightMode(
+            if (themeInfo.shouldFollowSystem) {
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            } else if (themeInfo.isThemeDark) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
     }
 }
 
