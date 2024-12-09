@@ -15,9 +15,9 @@
  */
 
 plugins {
-    id("nowinandroid.android.feature")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
+    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
 android {
@@ -25,5 +25,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
+    implementation(projects.core.data)
+
+    testImplementation(projects.core.testing)
+    testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
 }

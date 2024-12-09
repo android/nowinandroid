@@ -14,10 +14,10 @@
  *   limitations under the License.
  */
 
-val ktlintVersion = "0.48.1"
+val ktlintVersion = "1.4.0"
 
 initscript {
-    val spotlessVersion = "6.13.0"
+    val spotlessVersion = "6.25.0"
 
     repositories {
         mavenCentral()
@@ -35,7 +35,11 @@ rootProject {
             kotlin {
                 target("**/*.kt")
                 targetExclude("**/build/**/*.kt")
-                ktlint(ktlintVersion).userData(mapOf("android" to "true"))
+                ktlint(ktlintVersion).editorConfigOverride(
+                    mapOf(
+                        "android" to "true",
+                    ),
+                )
                 licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
             }
             format("kts") {

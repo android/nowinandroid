@@ -15,9 +15,9 @@
  */
 
 plugins {
-    id("nowinandroid.android.feature")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.library.jacoco")
+    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.library.compose)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
 
 android {
@@ -25,9 +25,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:bookmarks"))
-    implementation(project(":feature:foryou"))
-    implementation(project(":feature:interests"))
-    implementation(libs.kotlinx.datetime)
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
 }
 

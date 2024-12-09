@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.android.hilt")
-}
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.common"
+    alias(libs.plugins.nowinandroid.jvm.library)
+    alias(libs.plugins.nowinandroid.hilt)
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines.android)
-    testImplementation(project(":core:testing"))
+    implementation(libs.kotlinx.coroutines.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

@@ -15,10 +15,9 @@
  */
 
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.android.hilt")
-    alias(libs.plugins.protobuf)
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -33,39 +32,13 @@ android {
     }
 }
 
-// Setup protobuf configuration, generating lite Java and Kotlin classes
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get().toString()
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("java") {
-                    option("lite")
-                }
-                register("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
-androidComponents.beforeVariants {
-    android.sourceSets.register(it.name) {
-        java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
-        kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))
-    }
-}
-
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
-    implementation(libs.androidx.dataStore.core)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.protobuf.kotlin.lite)
+    api(libs.androidx.dataStore)
+    api(projects.core.datastoreProto)
+    api(projects.core.model)
 
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.common)
+
+    testImplementation(projects.core.datastoreTest)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
