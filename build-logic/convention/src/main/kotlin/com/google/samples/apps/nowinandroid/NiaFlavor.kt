@@ -29,6 +29,7 @@ fun configureFlavors(
             NiaFlavor.values().forEach {
                 create(it.name) {
                     dimension = it.dimension.name
+                    resValue("string", "app_name_display", "@string/app_name_$it")
                     flavorConfigurationBlock(this, it)
                     if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
                         if (it.applicationIdSuffix != null) {
