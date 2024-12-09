@@ -31,6 +31,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -58,7 +59,11 @@ class NiaAppStateTest {
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
-        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository())
+        CompositeUserNewsResourceRepository(
+            newsRepository = TestNewsRepository(),
+            userDataRepository = TestUserDataRepository(),
+            defaultDispatcher = Dispatchers.Default,
+        )
 
     // Subject under test.
     private lateinit var state: NiaAppState

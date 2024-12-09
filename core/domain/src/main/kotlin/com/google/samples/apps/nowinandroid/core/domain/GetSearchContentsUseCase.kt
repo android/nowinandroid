@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
+import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
@@ -23,8 +24,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 /**
@@ -33,29 +38,35 @@ import javax.inject.Inject
 class GetSearchContentsUseCase @Inject constructor(
     private val searchContentsRepository: SearchContentsRepository,
     private val userDataRepository: UserDataRepository,
+    @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) {
 
     operator fun invoke(
         searchQuery: String,
     ): Flow<UserSearchResult> =
         searchContentsRepository.searchContents(searchQuery)
-            .mapToUserSearchResult(userDataRepository.userData)
+            .mapToUserSearchResult(userDataRepository.userData, defaultDispatcher)
 }
 
-private fun Flow<SearchResult>.mapToUserSearchResult(userDataStream: Flow<UserData>): Flow<UserSearchResult> =
+private fun Flow<SearchResult>.mapToUserSearchResult(
+    userDataStream: Flow<UserData>,
+    defaultDispatcher: CoroutineDispatcher,
+): Flow<UserSearchResult> =
     combine(userDataStream) { searchResult, userData ->
-        UserSearchResult(
-            topics = searchResult.topics.map { topic ->
-                FollowableTopic(
-                    topic = topic,
-                    isFollowed = topic.id in userData.followedTopics,
-                )
-            },
-            newsResources = searchResult.newsResources.map { news ->
-                UserNewsResource(
-                    newsResource = news,
-                    userData = userData,
-                )
-            },
-        )
-    }
+        trace("Flow<SearchResult>.mapToUserSearchResult") {
+            UserSearchResult(
+                topics = searchResult.topics.map { topic ->
+                    FollowableTopic(
+                        topic = topic,
+                        isFollowed = topic.id in userData.followedTopics,
+                    )
+                },
+                newsResources = searchResult.newsResources.map { news ->
+                    UserNewsResource(
+                        newsResource = news,
+                        userData = userData,
+                    )
+                },
+            )
+        }
+    }.flowOn(defaultDispatcher)
