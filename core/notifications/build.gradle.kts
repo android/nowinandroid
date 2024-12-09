@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.compose")
-    id("nowinandroid.android.hilt")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -24,14 +23,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
+    api(projects.core.model)
 
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.browser)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.core.ktx)
+    implementation(projects.core.common)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.cloud.messaging)
+    compileOnly(platform(libs.androidx.compose.bom))
 }

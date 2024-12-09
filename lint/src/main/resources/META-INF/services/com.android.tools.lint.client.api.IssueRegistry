@@ -14,4 +14,4 @@
 #  limitations under the License.
 #
 
-com.google.samples.apps.nowinandroid.lint.designsystem.DesignSystemIssueRegistry
+com.google.samples.apps.nowinandroid.lint.NiaIssueRegistry

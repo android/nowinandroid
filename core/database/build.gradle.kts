@@ -15,25 +15,22 @@
  */
 
 plugins {
-    id("nowinandroid.android.library")
-    id("nowinandroid.android.library.jacoco")
-    id("nowinandroid.android.hilt")
-    id("nowinandroid.android.room")
+    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.nowinandroid.android.room)
+    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
-    defaultConfig {
-        testInstrumentationRunner =
-            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-    }
     namespace = "com.google.samples.apps.nowinandroid.core.database"
 }
 
 dependencies {
-    implementation(project(":core:model"))
+    api(projects.core.model)
 
-    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
 
-    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

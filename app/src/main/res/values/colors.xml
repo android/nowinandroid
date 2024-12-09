@@ -15,9 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <!-- Status bar -->
-    <color name="black30">#4D000000</color>
-
     <color name="ic_launcher_background_tint">#000000</color>
     <color name="ic_launcher_foreground_tint">#FCFCFC</color>
 </resources>
