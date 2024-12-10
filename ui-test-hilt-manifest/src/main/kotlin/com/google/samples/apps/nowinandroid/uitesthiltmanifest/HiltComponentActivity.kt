@@ -28,7 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class HiltComponentActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setActionBar(null)
+        // Use a no-action-bar theme to prevent overlapping with the action bar during tests.
+        // Theme_Material_Light_NoActionBar is the base theme used by the production app.
+        setTheme(android.R.style.Theme_Material_Light_NoActionBar)
         super.onCreate(savedInstanceState)
     }
 }
