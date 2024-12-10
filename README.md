@@ -147,6 +147,45 @@ legitimate changes.
 For more information about screenshot testing 
 [check out this talk](https://www.droidcon.com/2023/11/15/easy-screenshot-testing-with-compose/).
 
+# Continuous Integration (CI)
+
+Now in Android CI [build status](https://github.com/android/nowinandroid/actions).
+
+From the [Android Developers official documentation](https://developer.android.com/training/testing/continuous-integration)
+Continuous Integration is a software development practice where developers frequently merge
+their code changes into a central repository, after which automated builds and tests run.
+
+## Benefits of CI
+The advantages of CI include:
+
+- Improved quality of software
+- Reduced risk of broken builds
+- Increased confidence in releases
+- Improved communication and collaboration
+- Increased productivity
+
+## Now in Android project uses GitHub Actions for CI
+[GitHub Actions](https://github.com/features/actions) is our CI automation tool of choice. GitHub Actions lives right inside GitHub, making it super convenient to manage automation alongside your code.
+Workflows are the heart of GitHub Actions. These are YAML files that define the sequence of steps to be automated.
+
+New code check-ins trigger automated Gradle tasks to validate changes. This prevents broken builds from merging into master. Our CI workflow automates quality checks on each PR. It executes Gradle tasks, defined within the
+file [Build.yaml](https://github.com/android/nowinandroid/blob/main/.github/workflows/Build.yaml), to ensure code integrity. The file path is: .github/workflows/Build.yaml
+
+The following Gradle tasks safeguard code quality on every PR:
+| Gradle task | Description | 
+| ------------- | :-----:| 
+| ./gradlew check -p build-logic | Check build-logic |  
+| ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache | Check spotless | 
+| ./gradlew dependencyGuard | Check Dependency Guard |  
+| ./gradlew verifyRoborazziDemoDebug | Run all local screenshot tests (Roborazzi) |  
+| ./gradlew testDemoDebug :lint:test | Run local tests and create report |  
+| ./gradlew :app:assemble :benchmarks:assemble -x pixel6Api33ProdNonMinifiedReleaseAndroidTest -x pixel6Api33DemoNonMinifiedReleaseAndroidTest -x collectDemoNonMinifiedReleaseBaselineProfile -x collectProdNonMinifiedReleaseBaselineProfile | Build all build type and flavor permutations |
+| ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint | Check lint |
+| ./gradlew :app:checkProdReleaseBadging | Check badging | 
+| ./gradlew packageDemoDebug packageDemoDebugAndroidTest | Build DemoDebug projects | 
+| ./gradlew connectedDemoDebugAndroidTest --daemon | Run instrumentation tests on reactivecircus emulator| 
+| ./gradlew pixel4api30aospatdDebugAndroidTest| Run instrumentation tests on Gradle managed devices | 
+
 # UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/). Learn more about the design process and 
 obtain the design files in the [Now in Android Material 3 Case Study](https://goo.gle/nia-figma) (design assets [also available as a PDF](docs/Now-In-Android-Design-File.pdf)).
