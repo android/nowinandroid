@@ -29,6 +29,7 @@ import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.util.TestErrorMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import kotlinx.coroutines.flow.collect
@@ -55,6 +56,8 @@ class NiaAppStateTest {
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
 
+    private val errorMonitor = TestErrorMonitor(networkMonitor)
+
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
@@ -73,7 +76,7 @@ class NiaAppStateTest {
                 NiaAppState(
                     navController = navController,
                     coroutineScope = backgroundScope,
-                    networkMonitor = networkMonitor,
+                    errorMonitor = errorMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
                 )
@@ -95,7 +98,7 @@ class NiaAppStateTest {
     fun niaAppState_destinations() = runTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
-                networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -113,17 +116,37 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
         }
 
-        backgroundScope.launch { state.isOffline.collect() }
+        backgroundScope.launch { state.isOfflineState.collect() }
         networkMonitor.setConnected(false)
         assertEquals(
             true,
-            state.isOffline.value,
+            state.isOfflineState.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_whenNetworkMonitorIsOnline_StateIsOnline() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                errorMonitor = errorMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        backgroundScope.launch { state.isOfflineState.collect() }
+        networkMonitor.setConnected(true)
+        assertEquals(
+            false,
+            state.isOfflineState.value,
         )
     }
 
@@ -133,7 +156,7 @@ class NiaAppStateTest {
             state = NiaAppState(
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
-                networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -144,6 +167,28 @@ class NiaAppStateTest {
         assertEquals(
             changedTz,
             state.currentTimeZone.value,
+        )
+    }
+
+    @Test
+    fun niaAppState_FirstErrorMessageIsPresent() = runTest(UnconfinedTestDispatcher()) {
+        composeTestRule.setContent {
+            state = NiaAppState(
+                navController = NavHostController(LocalContext.current),
+                coroutineScope = backgroundScope,
+                errorMonitor = errorMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+        }
+
+        val id = state.addShortErrorMessage("Test Error Message 1")
+
+        backgroundScope.launch { state.snackbarMessage.collect() }
+
+        assertEquals(
+            id,
+            state.snackbarMessage.value?.id,
         )
     }
 }

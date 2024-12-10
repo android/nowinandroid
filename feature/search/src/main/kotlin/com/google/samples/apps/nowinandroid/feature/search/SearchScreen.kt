@@ -102,10 +102,14 @@ internal fun SearchRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
+    errorHandler: (String) -> Unit,
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
+
+    val launchFailedString = stringResource(id = searchR.string.feature_search_custom_tab_activity_not_found)
+
     SearchScreen(
         modifier = modifier,
         searchQuery = searchQuery,
@@ -120,6 +124,7 @@ internal fun SearchRoute(
         onBackClick = onBackClick,
         onInterestsClick = onInterestsClick,
         onTopicClick = onTopicClick,
+        onLaunchFailed = { errorHandler(launchFailedString) },
     )
 }
 
@@ -138,6 +143,7 @@ internal fun SearchScreen(
     onBackClick: () -> Unit = {},
     onInterestsClick: () -> Unit = {},
     onTopicClick: (String) -> Unit = {},
+    onLaunchFailed: () -> Unit = {},
 ) {
     TrackScreenViewEvent(screenName = "Search")
     Column(modifier = modifier) {
@@ -194,6 +200,7 @@ internal fun SearchScreen(
                         onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
                         onNewsResourceViewed = onNewsResourceViewed,
                         onFollowButtonClick = onFollowButtonClick,
+                        onLaunchFailed = onLaunchFailed,
                     )
                 }
             }
@@ -291,6 +298,7 @@ private fun SearchResultBody(
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onFollowButtonClick: (String, Boolean) -> Unit,
+    onLaunchFailed: () -> Unit,
 ) {
     val state = rememberLazyStaggeredGridState()
     Box(
@@ -364,6 +372,9 @@ private fun SearchResultBody(
                     onTopicClick = onTopicClick,
                     onExpandedCardClick = {
                         onSearchTriggered(searchQuery)
+                    },
+                    onLaunchFailed = {
+                        onLaunchFailed()
                     },
                 )
             }
