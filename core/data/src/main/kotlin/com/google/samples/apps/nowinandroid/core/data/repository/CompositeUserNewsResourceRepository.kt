@@ -18,11 +18,15 @@ package com.google.samples.apps.nowinandroid.core.data.repository
 
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.mapToUserNewsResources
+import com.google.samples.apps.nowinandroid.core.network.Dispatcher
+import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.Default
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -33,6 +37,7 @@ import javax.inject.Inject
 class CompositeUserNewsResourceRepository @Inject constructor(
     val newsRepository: NewsRepository,
     val userDataRepository: UserDataRepository,
+    @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : UserNewsResourceRepository {
 
     /**
@@ -44,7 +49,7 @@ class CompositeUserNewsResourceRepository @Inject constructor(
         newsRepository.getNewsResources(query)
             .combine(userDataRepository.userData) { newsResources, userData ->
                 newsResources.mapToUserNewsResources(userData)
-            }
+            }.flowOn(defaultDispatcher)
 
     /**
      * Returns available news resources (joined with user data) for the followed topics.
