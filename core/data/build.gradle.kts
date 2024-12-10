@@ -22,6 +22,12 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.data"
+
+    defaultConfig {
+        testInstrumentationRunner =
+            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -43,4 +49,6 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(projects.core.datastoreTest)
     testImplementation(projects.core.testing)
+
+    androidTestImplementation(projects.core.testing)
 }
