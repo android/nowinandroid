@@ -28,11 +28,11 @@ androidxWork = "2.10.1"
 coil = "3.0.3"
 dependencyGuard = "0.5.0"
 jacoco = "0.8.7"
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.3"
-ksp = "2.0.21-1.0.28"
+ksp = "2.1.0-1.0.29"
 logback = "1.5.12"
 material3adaptive = "1.0.1"
 moduleGraph = "2.7.1"
@@ -54,7 +54,7 @@ kermit = "2.0.4"
 koin = "4.0.0"
 koin-annotations = "1.4.0-RC4"
 ktor = "3.0.1"
-ktrofit = "2.1.0"
+ktrofit = "2.2.0"
 buildKonfig = "0.15.2"
 lifecycle-viewmodel-compose = "2.8.4"
 navigation-compose = "2.8.0-alpha10"
@@ -163,10 +163,10 @@ ktor-client-java = { group = "io.ktor", name = "ktor-client-java", version.ref =
 ktor-client-js = { group = "io.ktor", name = "ktor-client-js", version.ref = "ktor" }
 ktor-client-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
-ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktrofit" }
 ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktrofit" }
 ktorfit-converters-flow = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-flow", version.ref = "ktrofit" }
 ktorfit-converters-call = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-call", version.ref = "ktrofit" }
+ktorfit-converters-response = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-response", version.ref = "ktrofit" }
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildKonfig" }
 jetbrains-compose-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
 jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }

@@ -20,9 +20,10 @@ plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.nowinandroid.di.koin)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.ktrofit)
     alias(libs.plugins.buildkonfig)
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
@@ -62,6 +63,7 @@ kotlin {
             implementation(libs.ktorfit.lib)
             implementation(libs.ktorfit.converters.call)
             implementation(libs.ktorfit.converters.flow)
+            implementation(libs.ktorfit.converters.response)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
@@ -79,16 +81,4 @@ kotlin {
             implementation(libs.ktor.client.winhttp)
         }
     }
-}
-
-dependencies {
-    add("kspCommonMainMetadata", libs.ktorfit.ksp)
-    add("kspAndroid", libs.ktorfit.ksp)
-//    add("kspWasmJs", libs.ktorfit.ksp)
-    add("kspJvm", libs.ktorfit.ksp)
-    add("kspIosX64", libs.ktorfit.ksp)
-    add("kspIosArm64", libs.ktorfit.ksp)
-    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
-    add("kspMacosX64", libs.ktorfit.ksp)
-    add("kspMacosArm64", libs.ktorfit.ksp)
 }
