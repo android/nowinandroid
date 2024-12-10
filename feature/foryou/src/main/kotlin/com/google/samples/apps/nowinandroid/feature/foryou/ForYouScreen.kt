@@ -67,7 +67,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -467,7 +466,6 @@ private fun DeepLinkEffect(
     onDeepLinkOpened: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
     LaunchedEffect(userNewsResource) {
         if (userNewsResource == null) return@LaunchedEffect
@@ -476,7 +474,6 @@ private fun DeepLinkEffect(
         launchCustomChromeTab(
             context = context,
             uri = Uri.parse(userNewsResource.url),
-            toolbarColor = backgroundColor,
         )
     }
 }

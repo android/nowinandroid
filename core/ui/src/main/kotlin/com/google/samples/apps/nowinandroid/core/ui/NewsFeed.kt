@@ -18,8 +18,6 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 import android.content.Context
 import android.net.Uri
-import androidx.annotation.ColorInt
-import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
@@ -28,10 +26,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,7 +59,6 @@ fun LazyStaggeredGridScope.newsFeed(
             ) { userNewsResource ->
                 val context = LocalContext.current
                 val analyticsHelper = LocalAnalyticsHelper.current
-                val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
 
                 NewsResourceCardExpanded(
                     userNewsResource = userNewsResource,
@@ -73,7 +68,7 @@ fun LazyStaggeredGridScope.newsFeed(
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
                         )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url))
 
                         onNewsResourceViewed(userNewsResource.id)
                     },
@@ -94,14 +89,11 @@ fun LazyStaggeredGridScope.newsFeed(
     }
 }
 
-fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int) {
-    val customTabBarColor = CustomTabColorSchemeParams.Builder()
-        .setToolbarColor(toolbarColor).build()
-    val customTabsIntent = CustomTabsIntent.Builder()
-        .setDefaultColorSchemeParams(customTabBarColor)
+fun launchCustomChromeTab(context: Context, uri: Uri) {
+    CustomTabsIntent.Builder()
+        .setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM)
         .build()
-
-    customTabsIntent.launchUrl(context, uri)
+        .run { launchUrl(context, uri) }
 }
 
 /**
