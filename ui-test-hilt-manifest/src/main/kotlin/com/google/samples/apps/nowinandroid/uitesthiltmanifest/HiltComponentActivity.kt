@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HiltComponentActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+        setActionBar(null)
         super.onCreate(savedInstanceState)
     }
 }
