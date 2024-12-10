@@ -2,7 +2,7 @@
 accompanist = "0.36.0"
 androidDesugarJdkLibs = "2.1.3"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.7.2"
+androidGradlePlugin = "8.7.3"
 androidTools = "31.7.3"
 androidxActivity = "1.9.3"
 androidxBrowser = "1.8.0"
@@ -40,7 +40,7 @@ robolectric = "4.14"
 roborazzi = "1.36.0"
 secrets = "2.0.1"
 truth = "1.4.4"
-turbine = "1.1.0"
+turbine = "1.2.0"
 androidx-constraintlayout = "2.2.0"
 androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
@@ -52,12 +52,12 @@ kotlinInject = '0.7.2'
 multiplatform-settings = "1.2.0"
 kermit = "2.0.4"
 koin = "4.0.0"
-koin-annotations = "1.4.0-RC4"
-ktor = "3.0.1"
+koin-annotations = "2.0.0-Beta2"
+ktor = "3.0.2"
 ktrofit = "2.2.0"
 buildKonfig = "0.15.2"
 lifecycle-viewmodel-compose = "2.8.4"
-navigation-compose = "2.8.0-alpha10"
+navigation-compose = "2.8.0-alpha11"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
