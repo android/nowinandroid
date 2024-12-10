@@ -58,7 +58,7 @@ class SearchViewModel(
                     flowOf(SearchResultUiState.SearchNotReady)
                 } else {
                     searchQuery.flatMapLatest { query ->
-                        if (query.length < SEARCH_QUERY_MIN_LENGTH) {
+                        if (query.trim().length < SEARCH_QUERY_MIN_LENGTH) {
                             flowOf(SearchResultUiState.EmptyQuery)
                         } else {
                             getSearchContentsUseCase(query)
@@ -101,6 +101,7 @@ class SearchViewModel(
      * search query in the search text field, defining this method.
      */
     fun onSearchTriggered(query: String) {
+        if (query.isBlank()) return
         viewModelScope.launch {
             recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
         }
