@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.uitesthiltmanifest
 
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,4 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint
  * for https://github.com/google/dagger/issues/3394
  */
 @AndroidEntryPoint
-class HiltComponentActivity : ComponentActivity()
+class HiltComponentActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+        super.onCreate(savedInstanceState)
+    }
+}
