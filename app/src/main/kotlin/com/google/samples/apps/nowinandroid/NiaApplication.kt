@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy.Builder
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
@@ -40,12 +41,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
 
-        // Kill NiA if there are main thread policy violations and log the offending call.
-        if (isDebuggable()) {
-            StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().penaltyDeath().build(),
-            )
-        }
+        setStrictModePolicy()
 
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
@@ -59,5 +55,19 @@ class NiaApplication : Application(), ImageLoaderFactory {
      */
     private fun isDebuggable(): Boolean {
         return 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
+    }
+
+    /**
+     * Set a thread policy that detects all potential problems on the main thread, such as network
+     * and disk access.
+     *
+     * If a problem is found, the offending call will be logged and the application will be killed.
+     */
+    private fun setStrictModePolicy() {
+        if (isDebuggable()) {
+            StrictMode.setThreadPolicy(
+                Builder().detectAll().penaltyLog().penaltyDeath().build(),
+            )
+        }
     }
 }
