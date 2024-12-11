@@ -137,14 +137,14 @@ jobs:
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload JVM local results (XML)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Upload screenshot results (PNG)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-test-results
@@ -154,7 +154,7 @@ jobs:
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
 
       - name: Upload lint reports (HTML)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: lint-reports
@@ -228,7 +228,7 @@ jobs:
         run: ./gradlew createDemoDebugCombinedCoverageReport
         
       - name: Upload test reports
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
