@@ -17,7 +17,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity android:name=".HiltComponentActivity" />
+        <!--
+        Use a no-action-bar theme to prevent overlapping with the action bar during tests.
+        Theme_Material_Light_NoActionBar is the base theme used by the production app.
+        -->
+        <activity
+            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:name=".HiltComponentActivity"
+            />
     </application>
 
 </manifest>
