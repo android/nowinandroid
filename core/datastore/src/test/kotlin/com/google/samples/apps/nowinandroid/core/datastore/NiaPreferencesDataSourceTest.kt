@@ -16,15 +16,21 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.IOException
 import com.google.samples.apps.nowinandroid.core.datastore.test.InMemoryDataStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class NiaPreferencesDataSourceTest {
 
@@ -32,10 +38,29 @@ class NiaPreferencesDataSourceTest {
 
     private lateinit var subject: NiaPreferencesDataSource
 
+    // A DataStore implementation that throws an IOException when accessed
+    private val ioExceptionThrowingDataStore = object : DataStore<UserPreferences> {
+        override val data: Flow<UserPreferences>
+            get() = flow { throw IOException("Failed to read proto") }
+
+        override suspend fun updateData(transform: suspend (t: UserPreferences) -> UserPreferences): UserPreferences {
+            fail("Not needed for this test")
+        }
+    }
+
     @Before
     fun setup() {
         subject = NiaPreferencesDataSource(InMemoryDataStore(UserPreferences.getDefaultInstance()))
     }
+
+    @Test
+    fun userData_emitDefault_whenDataStoreThrowsIOException() =
+        testScope.runTest {
+            val dataSource = NiaPreferencesDataSource(ioExceptionThrowingDataStore)
+            val actualUserData = dataSource.userData.first()
+
+            assertEquals(subject.userData.first(), actualUserData)
+        }
 
     @Test
     fun shouldHideOnboardingIsFalseByDefault() = testScope.runTest {
@@ -74,6 +99,15 @@ class NiaPreferencesDataSourceTest {
 
             // Then: onboarding should be shown again
             assertFalse(subject.userData.first().shouldHideOnboarding)
+        }
+
+    @Test
+    fun getChangeListVersions_returnsDefault_whenDataStoreThrowsIOException() =
+        testScope.runTest {
+            val dataSource = NiaPreferencesDataSource(ioExceptionThrowingDataStore)
+            val actualResult = dataSource.getChangeListVersions()
+
+            assertEquals(subject.getChangeListVersions(), actualResult)
         }
 
     @Test
