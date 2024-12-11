@@ -93,7 +93,7 @@ class BookmarksViewModelTest {
 
     @Test
     fun feedUiState_resourceIsViewed_setResourcesViewed() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
         // Given
         newsRepository.sendNewsResources(newsResourcesTestData)
@@ -109,13 +109,11 @@ class BookmarksViewModelTest {
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
         assertTrue(item.feed.first().hasBeenViewed)
-
-        collectJob.cancel()
     }
 
     @Test
     fun feedUiState_undoneBookmarkRemoval_bookmarkIsRestored() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+        launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
         // Given
         newsRepository.sendNewsResources(newsResourcesTestData)
@@ -134,7 +132,5 @@ class BookmarksViewModelTest {
         val item = viewModel.feedUiState.value
         assertIs<Success>(item)
         assertEquals(1, item.feed.size)
-
-        collectJob.cancel()
     }
 }
