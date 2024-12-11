@@ -55,7 +55,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader = imageLoader.get()
 
     /**
-     * Check if the application is debuggable.
+     * Return true if the application is debuggable.
      */
     private fun isDebuggable(): Boolean {
         return 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
