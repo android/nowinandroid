@@ -75,13 +75,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState.Off
-import androidx.compose.ui.state.ToggleableState.On
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -275,30 +268,23 @@ private fun LazyStaggeredGridScope.onboarding(
 
         is OnboardingUiState.Shown -> {
             item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
-                Column(
-                    modifier = interestsItemModifier,
-                ) {
-                    Column(
+                Column(modifier = interestsItemModifier) {
+                    Text(
+                        text = stringResource(R.string.feature_foryou_onboarding_guidance_title),
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .semantics(mergeDescendants = true) { },
-                    ) {
-                        Text(
-                            text = stringResource(R.string.feature_foryou_onboarding_guidance_title),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 24.dp),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Text(
-                            text = stringResource(R.string.feature_foryou_onboarding_guidance_subtitle),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, start = 24.dp, end = 24.dp),
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Text(
+                        text = stringResource(R.string.feature_foryou_onboarding_guidance_subtitle),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 24.dp, end = 24.dp),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
                     TopicSelection(
                         onboardingUiState,
                         onTopicCheckedChanged,
@@ -398,21 +384,7 @@ private fun SingleTopicButton(
     Surface(
         modifier = Modifier
             .width(312.dp)
-            .heightIn(min = 56.dp)
-            .semantics(mergeDescendants = true) {
-                toggleableState = if (isSelected) {
-                    On
-                } else {
-                    Off
-                }
-                stateDescription = if (isSelected) {
-                    "Following"
-                } else {
-                    "Not Following"
-                }
-
-                contentDescription = name
-            },
+            .heightIn(min = 56.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         color = MaterialTheme.colorScheme.surface,
         selected = isSelected,
@@ -422,9 +394,7 @@ private fun SingleTopicButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(start = 12.dp, end = 8.dp)
-                .clearAndSetSemantics { },
+            modifier = Modifier.padding(start = 12.dp, end = 8.dp),
         ) {
             TopicIcon(
                 imageUrl = imageUrl,
@@ -443,19 +413,13 @@ private fun SingleTopicButton(
                 icon = {
                     Icon(
                         imageVector = NiaIcons.Add,
-                        contentDescription = stringResource(
-                            id = R.string.feature_foryou_topic_icon_add,
-                            name,
-                        ),
+                        contentDescription = name,
                     )
                 },
                 checkedIcon = {
                     Icon(
                         imageVector = NiaIcons.Check,
-                        contentDescription = stringResource(
-                            id = R.string.feature_foryou_topic_icon_checked,
-                            name,
-                        ),
+                        contentDescription = name,
                     )
                 },
             )
