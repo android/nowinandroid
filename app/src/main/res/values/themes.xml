@@ -21,7 +21,9 @@
     <style name="NightAdjusted.Theme.Nia" parent="android:Theme.Material.Light.NoActionBar" />
 
     <!-- The final theme we use -->
-    <style name="Theme.Nia" parent="NightAdjusted.Theme.Nia" />
+    <style name="Theme.Nia" parent="NightAdjusted.Theme.Nia">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
