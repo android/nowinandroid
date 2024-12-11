@@ -30,6 +30,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class NiaPreferencesDataSourceTest {
 
@@ -43,7 +44,7 @@ class NiaPreferencesDataSourceTest {
             get() = flow { throw IOException("Failed to read proto") }
 
         override suspend fun updateData(transform: suspend (t: UserPreferences) -> UserPreferences): UserPreferences {
-            throw Exception("Not needed for this test")
+            fail("Not needed for this test")
         }
     }
 
@@ -55,13 +56,9 @@ class NiaPreferencesDataSourceTest {
     @Test
     fun userData_emitDefault_whenDataStoreThrowsIOException() =
         testScope.runTest {
-            // Given: NiaPreferencesDataSource with ioException throwing datastore
             val dataSource = NiaPreferencesDataSource(ioExceptionThrowingDataStore)
-
-            // When: Retrieving user data from the data source
             val actualUserData = dataSource.userData.first()
 
-            // Then: The default user data is returned
             assertEquals(subject.userData.first(), actualUserData)
         }
 
@@ -107,13 +104,9 @@ class NiaPreferencesDataSourceTest {
     @Test
     fun getChangeListVersions_returnsDefault_whenDataStoreThrowsIOException() =
         testScope.runTest {
-            // Given: NiaPreferencesDataSource with ioException throwing datastore
             val dataSource = NiaPreferencesDataSource(ioExceptionThrowingDataStore)
-
-            // When: Retrieving change list versions from the data source
             val actualResult = dataSource.getChangeListVersions()
 
-            // Then: The default value is returned
             assertEquals(subject.getChangeListVersions(), actualResult)
         }
 
