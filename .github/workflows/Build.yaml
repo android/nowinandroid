@@ -160,6 +160,12 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
+      - name: Upload lint reports (SARIF)
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './'
+
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
 
