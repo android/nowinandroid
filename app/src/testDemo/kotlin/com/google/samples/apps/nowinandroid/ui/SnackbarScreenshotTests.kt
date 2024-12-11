@@ -19,8 +19,9 @@ package com.google.samples.apps.nowinandroid.ui
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.Posture
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -40,7 +42,6 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -51,7 +52,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -63,7 +63,6 @@ import javax.inject.Inject
 /**
  * Tests that the Snackbar is correctly displayed on different screen sizes.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
@@ -80,17 +79,9 @@ class SnackbarScreenshotTests {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Create a temporary folder used to create a Data Store file. This guarantees that
-     * the file is removed in between each test, preventing a crash.
-     */
-    @BindValue
-    @get:Rule(order = 1)
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
-    /**
      * Use a test activity to set the content on.
      */
-    @get:Rule(order = 2)
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Inject
@@ -191,6 +182,7 @@ class SnackbarScreenshotTests {
         }
     }
 
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     private fun testSnackbarScreenshotWithSize(
         snackbarHostState: SnackbarHostState,
         width: Dp,
@@ -210,16 +202,26 @@ class SnackbarScreenshotTests {
                     DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
                 ) {
                     BoxWithConstraints {
-                        val appState = rememberNiaAppState(
-                            windowSizeClass = WindowSizeClass.calculateFromSize(
-                                DpSize(maxWidth, maxHeight),
-                            ),
-                            networkMonitor = networkMonitor,
-                            userNewsResourceRepository = userNewsResourceRepository,
-                            timeZoneMonitor = timeZoneMonitor,
-                        )
                         NiaTheme {
-                            NiaApp(appState, snackbarHostState, false, {}, {})
+                            val appState = rememberNiaAppState(
+                                networkMonitor = networkMonitor,
+                                userNewsResourceRepository = userNewsResourceRepository,
+                                timeZoneMonitor = timeZoneMonitor,
+                            )
+                            NiaApp(
+                                appState = appState,
+                                snackbarHostState = snackbarHostState,
+                                showSettingsDialog = false,
+                                onSettingsDismissed = {},
+                                onTopAppBarActionClick = {},
+                                windowAdaptiveInfo = WindowAdaptiveInfo(
+                                    windowSizeClass = WindowSizeClass.compute(
+                                        maxWidth.value,
+                                        maxHeight.value,
+                                    ),
+                                    windowPosture = Posture(),
+                                ),
+                            )
                         }
                     }
                 }
