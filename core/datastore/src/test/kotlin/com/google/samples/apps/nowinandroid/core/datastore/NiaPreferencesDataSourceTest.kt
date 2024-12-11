@@ -16,15 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.core.datastore
 
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.datastore.test.InMemoryDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -34,14 +32,9 @@ class NiaPreferencesDataSourceTest {
 
     private lateinit var subject: NiaPreferencesDataSource
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @Before
     fun setup() {
-        subject = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
-        )
+        subject = NiaPreferencesDataSource(InMemoryDataStore(UserPreferences.getDefaultInstance()))
     }
 
     @Test
