@@ -14,4 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- This theme is the same base theme as the theme we use for production app -->
+    <application android:theme="@android:style/Theme.Material.NoActionBar" />
+</manifest>
