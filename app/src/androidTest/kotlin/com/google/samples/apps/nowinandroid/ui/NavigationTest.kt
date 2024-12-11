@@ -18,7 +18,8 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.ui.semantics.SemanticsActions.ScrollBy
 import androidx.compose.ui.test.assertCountEquals
-import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -87,6 +88,8 @@ class NavigationTest {
     private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_title)
     private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_interests)
     private val sampleTopic = "Headlines"
+    private val sampleTopicCheckIconDescription = "Headlines checked"
+    private val sampleTopicAddIconDescription = "Headlines add"
     private val appName by composeTestRule.stringResource(R.string.app_name)
     private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_title)
     private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_top_app_bar_action_icon_description)
@@ -115,13 +118,20 @@ class NavigationTest {
     fun navigationBar_navigateToPreviouslySelectedTab_restoresContent() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText(sampleTopic).performClick()
+            onNodeWithContentDescription(sampleTopic).performClick()
             // WHEN the user navigates to the Interests destination
             onNodeWithText(interests).performClick()
             // AND the user navigates to the For You destination
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
-            onNodeWithContentDescription(sampleTopic).assertIsOn()
+            onNodeWithContentDescription(
+                sampleTopicCheckIconDescription,
+                useUnmergedTree = true,
+            ).assertIsDisplayed()
+            onNodeWithContentDescription(
+                sampleTopicAddIconDescription,
+                useUnmergedTree = true,
+            ).assertIsNotDisplayed()
         }
     }
 
@@ -132,11 +142,18 @@ class NavigationTest {
     fun navigationBar_reselectTab_keepsState() {
         composeTestRule.apply {
             // GIVEN the user follows a topic
-            onNodeWithText(sampleTopic).performClick()
+            onNodeWithContentDescription(sampleTopic).performClick()
             // WHEN the user taps the For You navigation bar item
             onNodeWithText(forYou).performClick()
             // THEN the state of the For You destination is restored
-            onNodeWithContentDescription(sampleTopic).assertIsOn()
+            onNodeWithContentDescription(
+                sampleTopicCheckIconDescription,
+                useUnmergedTree = true,
+            ).assertIsDisplayed()
+            onNodeWithContentDescription(
+                sampleTopicAddIconDescription,
+                useUnmergedTree = true,
+            ).assertIsNotDisplayed()
         }
     }
 
