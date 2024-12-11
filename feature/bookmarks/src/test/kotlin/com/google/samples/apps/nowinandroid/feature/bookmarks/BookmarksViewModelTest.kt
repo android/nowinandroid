@@ -113,7 +113,7 @@ class BookmarksViewModelTest {
 
     @Test
     fun feedUiState_undoneBookmarkRemoval_bookmarkIsRestored() = runTest {
-        launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
         // Given
         newsRepository.sendNewsResources(newsResourcesTestData)
