@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.hilt)
-    id("com.google.devtools.ksp")
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.domain.di"
-}
+package com.google.samples.apps.nowinandroid.core.domain
 
-dependencies {
-    api(projects.core.data)
-    api(projects.core.model)
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-    api(projects.core.domain.api)
-    api(projects.core.domain)
-}
+@InstallIn(SingletonComponent::class)
+@Module
+interface DomainModule
