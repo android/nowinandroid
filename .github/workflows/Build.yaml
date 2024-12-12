@@ -18,6 +18,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      security-events: write
 
     timeout-minutes: 60
 
