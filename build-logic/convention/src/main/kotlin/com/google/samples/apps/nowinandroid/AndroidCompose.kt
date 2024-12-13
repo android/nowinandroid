@@ -53,8 +53,10 @@ internal fun Project.configureAndroidCompose(
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
         fun Provider<String>.onlyIfTrue() = flatMap { provider { it.takeIf(String::toBoolean) } }
-        fun Provider<*>.relativeToRootProject(dir: String) = flatMap {
-            rootProject.layout.buildDirectory.dir(projectDir.toRelativeString(rootDir))
+        fun Provider<*>.relativeToRootProject(dir: String) = map {
+            isolated.rootProject.projectDirectory
+                .dir("build")
+                .dir(projectDir.toRelativeString(rootDir))
         }.map { it.dir(dir) }
 
         project.providers.gradleProperty("enableComposeCompilerMetrics").onlyIfTrue()
@@ -66,6 +68,6 @@ internal fun Project.configureAndroidCompose(
             .let(reportsDestination::set)
 
         stabilityConfigurationFile =
-            rootProject.layout.projectDirectory.file("compose_compiler_config.conf")
+            isolated.rootProject.projectDirectory.file("compose_compiler_config.conf")
     }
 }
