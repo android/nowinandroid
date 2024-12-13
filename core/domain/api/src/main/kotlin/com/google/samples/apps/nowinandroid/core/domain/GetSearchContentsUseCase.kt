@@ -16,16 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.domain
 
-import dagger.Module
-import dagger.Binds
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
+import kotlinx.coroutines.flow.Flow
 
-@InstallIn(SingletonComponent::class)
-@Module
-interface DomainModule {
-    @Binds
-    fun bindGetSearchContentsUseCase(
-        impl: DefaultGetSearchContentsUseCase
-    ): GetSearchContentsUseCase
-    
+/**
+ * A use case which returns the searched contents matched with the search query.
+ */
+interface GetSearchContentsUseCase {
+    operator fun invoke(
+        searchQuery: String,
+    ): Flow<UserSearchResult>
+}
