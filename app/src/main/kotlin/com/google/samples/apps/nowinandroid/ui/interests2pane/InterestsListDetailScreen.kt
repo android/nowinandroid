@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.Keep
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
@@ -50,6 +51,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,6 +59,9 @@ import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
+import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
+import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
+import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel_Factory
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
@@ -126,28 +131,10 @@ internal fun InterestsListDetailScreen(
         val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
         mutableStateOf(route)
     }
-    var nestedNavKey by rememberSaveable(
-        stateSaver = Saver({ it.toString() }, UUID::fromString),
-    ) {
-        mutableStateOf(UUID.randomUUID())
-    }
-    val nestedNavController = key(nestedNavKey) {
-        rememberNavController()
-    }
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        if (listDetailNavigator.isDetailPaneVisible()) {
-            // If the detail pane was visible, then use the nestedNavController navigate call
-            // directly
-            nestedNavController.navigateToTopic(topicId) {
-                popUpTo<DetailPaneNavHostRoute>()
-            }
-        } else {
-            // Otherwise, recreate the NavHost entirely, and start at the new destination
-            nestedNavHostStartRoute = TopicRoute(id = topicId)
-            nestedNavKey = UUID.randomUUID()
-        }
+        nestedNavHostStartRoute = TopicRoute(id = topicId)
         coroutineScope.launch {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         }
@@ -207,22 +194,25 @@ internal fun InterestsListDetailScreen(
                             }
                         },
                 ) {
-                    key(nestedNavKey) {
-                        NavHost(
-                            navController = nestedNavController,
-                            startDestination = nestedNavHostStartRoute,
-                            route = DetailPaneNavHostRoute::class,
-                        ) {
-                            topicScreen(
-                                showBackButton = !listDetailNavigator.isListPaneVisible(),
-                                onBackClick = {
-                                    coroutineScope.launch {
-                                        listDetailNavigator.navigateBack()
+                    AnimatedContent(nestedNavHostStartRoute) { route ->
+                        when (route) {
+                            is TopicRoute -> {
+                                TopicScreen(
+                                    showBackButton = !listDetailNavigator.isListPaneVisible(),
+                                    onBackClick = {
+                                        coroutineScope.launch {
+                                            listDetailNavigator.navigateBack()
+                                        }
+                                    },
+                                    onTopicClick = ::onTopicClickShowDetailPane,
+                                    viewModel = hiltViewModel<TopicViewModel, TopicViewModel.Factory>(
+                                        key = route.id,
+                                    ) { factory ->
+                                        factory.create(route.id)
                                     }
-                                },
-                                onTopicClick = ::onTopicClickShowDetailPane,
-                            )
-                            composable<TopicPlaceholderRoute> {
+                                )
+                            }
+                            is TopicPlaceholderRoute -> {
                                 TopicDetailPlaceholder()
                             }
                         }
