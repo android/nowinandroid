@@ -15,8 +15,11 @@
  */
 
 import com.android.build.gradle.LibraryExtension
+import com.google.samples.apps.nowinandroid.androidTestImplementation
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
+import com.google.samples.apps.nowinandroid.implementation
 import com.google.samples.apps.nowinandroid.libs
+import com.google.samples.apps.nowinandroid.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -36,18 +39,18 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":core:ui"))
-                add("implementation", project(":core:designsystem"))
+                implementation(project(":core:ui"))
+                implementation(project(":core:designsystem"))
 
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
-                add("implementation", libs.findLibrary("androidx.navigation.compose").get())
-                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
-                add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
+                implementation(libs.findLibrary("androidx.hilt.navigation.compose").get())
+                implementation(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
+                implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
+                implementation(libs.findLibrary("androidx.navigation.compose").get())
+                implementation(libs.findLibrary("androidx.tracing.ktx").get())
+                implementation(libs.findLibrary("kotlinx.serialization.json").get())
 
-                add("testImplementation", libs.findLibrary("androidx.navigation.testing").get())
-                add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
+                testImplementation(libs.findLibrary("androidx.navigation.testing").get())
+                androidTestImplementation(libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
             }
         }
     }
