@@ -32,20 +32,22 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
                 apply("com.google.firebase.crashlytics")
             }
 
+            configurations.forEach {
+                /*
+                Exclusion of protobuf / protolite dependencies is necessary as the
+                datastore-proto brings in protobuf dependencies. These are the source of truth
+                for Now in Android.
+                That's why the duplicate classes from below dependencies are excluded.
+                */
+                it.exclude(group = "com.google.protobuf", module = "protobuf-javalite")
+                it.exclude(group = "com.google.firebase", module = "protolite-well-known-types")
+            }
+
             dependencies {
                 val bom = libs.findLibrary("firebase-bom").get()
                 add("implementation", platform(bom))
                 add("implementation", "firebase.analytics")
                 add("implementation", "firebase.performance")
-                    /*
-                    Exclusion of protobuf / protolite dependencies is necessary as the
-                    datastore-proto brings in protobuf dependencies. These are the source of truth
-                    for Now in Android.
-                    That's why the duplicate classes from below dependencies are excluded.
-                    */
-                    exclude(group = "com.google.protobuf", module = "protobuf-javalite")
-                    exclude(group = "com.google.firebase", module = "protolite-well-known-types")
-
                 add("implementation", "firebase.crashlytics")
             }
 
