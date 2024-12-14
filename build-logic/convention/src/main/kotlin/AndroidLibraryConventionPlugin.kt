@@ -40,6 +40,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
+                defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 testOptions.animationsDisabled = true
                 configureFlavors(this)
                 configureGradleManagedDevices(this)
@@ -52,7 +53,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 disableUnnecessaryAndroidTests(target)
             }
             dependencies {
-                add("testImplementation", kotlin("test"))
+                add("androidTestImplementation", libs.findLibrary("kotlin.test").get())
+                add("testImplementation", libs.findLibrary("kotlin.test").get())
 
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
