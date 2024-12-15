@@ -19,29 +19,47 @@ package com.google.samples.apps.nowinandroid.feature.foryou.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
-import com.google.samples.apps.nowinandroid.feature.foryou.ForYouRoute
+import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_URI_PATTERN
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
+import kotlinx.serialization.Serializable
 
-const val LINKED_NEWS_RESOURCE_ID = "linkedNewsResourceId"
-const val FOR_YOU_ROUTE = "for_you_route/{$LINKED_NEWS_RESOURCE_ID}"
-private const val DEEP_LINK_URI_PATTERN =
-    "https://www.nowinandroid.apps.samples.google.com/foryou/{$LINKED_NEWS_RESOURCE_ID}"
+@Serializable data object ForYouRoute // route to ForYou screen
 
-fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(FOR_YOU_ROUTE, navOptions)
+@Serializable data object ForYouBaseRoute // route to base navigation graph
 
-fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
-    composable(
-        route = FOR_YOU_ROUTE,
-        deepLinks = listOf(
-            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
-        ),
-        arguments = listOf(
-            navArgument(LINKED_NEWS_RESOURCE_ID) { type = NavType.StringType },
-        ),
-    ) {
-        ForYouRoute(onTopicClick)
+fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute, navOptions)
+
+/**
+ *  The ForYou section of the app. It can also display information about topics.
+ *  This should be supplied from a separate module.
+ *
+ *  @param onTopicClick - Called when a topic is clicked, contains the ID of the topic
+ *  @param topicDestination - Destination for topic content
+ */
+fun NavGraphBuilder.forYouSection(
+    onTopicClick: (String) -> Unit,
+    topicDestination: NavGraphBuilder.() -> Unit,
+) {
+    navigation<ForYouBaseRoute>(startDestination = ForYouRoute) {
+        composable<ForYouRoute>(
+            deepLinks = listOf(
+                navDeepLink {
+                    /**
+                     * This destination has a deep link that enables a specific news resource to be
+                     * opened from a notification (@see SystemTrayNotifier for more). The news resource
+                     * ID is sent in the URI rather than being modelled in the route type because it's
+                     * transient data (stored in SavedStateHandle) that is cleared after the user has
+                     * opened the news resource.
+                     */
+                    uriPattern = DEEP_LINK_URI_PATTERN
+                },
+            ),
+        ) {
+            ForYouScreen(onTopicClick)
+        }
+        topicDestination()
     }
 }
