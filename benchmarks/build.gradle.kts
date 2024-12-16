@@ -59,6 +59,7 @@ android {
 
 baselineProfile {
     // This specifies the managed devices to use that you run the tests on.
+    managedDevices.clear()
     managedDevices += "pixel6Api33"
 
     // Don't use a connected device but rely on a GMD for consistency between local and CI builds.

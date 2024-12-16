@@ -17,44 +17,49 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.Keep
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
+import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import kotlinx.serialization.Serializable
+import java.util.UUID
 
-private const val DETAIL_PANE_NAVHOST_ROUTE = "detail_pane_route"
+@Serializable internal object TopicPlaceholderRoute
+
+// TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
+@Keep
+@Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable(
-        route = INTERESTS_ROUTE,
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) {
-                type = NavType.StringType
-                defaultValue = null
-                nullable = true
-            },
-        ),
-    ) {
+    composable<InterestsRoute> {
         InterestsListDetailScreen()
     }
 }
@@ -62,11 +67,13 @@ fun NavGraphBuilder.interestsListDetailScreen() {
 @Composable
 internal fun InterestsListDetailScreen(
     viewModel: Interests2PaneViewModel = hiltViewModel(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
     InterestsListDetailScreen(
         selectedTopicId = selectedTopicId,
         onTopicClick = viewModel::onTopicClick,
+        windowAdaptiveInfo = windowAdaptiveInfo,
     )
 }
 
@@ -75,18 +82,46 @@ internal fun InterestsListDetailScreen(
 internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
     onTopicClick: (String) -> Unit,
+    windowAdaptiveInfo: WindowAdaptiveInfo,
 ) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator(
+        scaffoldDirective = calculatePaneScaffoldDirective(windowAdaptiveInfo),
+        initialDestinationHistory = listOfNotNull(
+            ThreePaneScaffoldDestinationItem(ListDetailPaneScaffoldRole.List),
+            ThreePaneScaffoldDestinationItem<Nothing>(ListDetailPaneScaffoldRole.Detail).takeIf {
+                selectedTopicId != null
+            },
+        ),
+    )
     BackHandler(listDetailNavigator.canNavigateBack()) {
         listDetailNavigator.navigateBack()
     }
 
-    val nestedNavController = rememberNavController()
+    var nestedNavHostStartRoute by remember {
+        val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
+        mutableStateOf(route)
+    }
+    var nestedNavKey by rememberSaveable(
+        stateSaver = Saver({ it.toString() }, UUID::fromString),
+    ) {
+        mutableStateOf(UUID.randomUUID())
+    }
+    val nestedNavController = key(nestedNavKey) {
+        rememberNavController()
+    }
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavController.navigateToTopic(topicId) {
-            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+        if (listDetailNavigator.isDetailPaneVisible()) {
+            // If the detail pane was visible, then use the nestedNavController navigate call
+            // directly
+            nestedNavController.navigateToTopic(topicId) {
+                popUpTo<DetailPaneNavHostRoute>()
+            }
+        } else {
+            // Otherwise, recreate the NavHost entirely, and start at the new destination
+            nestedNavHostStartRoute = TopicRoute(id = topicId)
+            nestedNavKey = UUID.randomUUID()
         }
         listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
     }
@@ -95,34 +130,34 @@ internal fun InterestsListDetailScreen(
         value = listDetailNavigator.scaffoldValue,
         directive = listDetailNavigator.scaffoldDirective,
         listPane = {
-            InterestsRoute(
-                onTopicClick = ::onTopicClickShowDetailPane,
-                highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
-            )
+            AnimatedPane {
+                InterestsRoute(
+                    onTopicClick = ::onTopicClickShowDetailPane,
+                    highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+                )
+            }
         },
         detailPane = {
-            NavHost(
-                navController = nestedNavController,
-                startDestination = TOPIC_ROUTE,
-                route = DETAIL_PANE_NAVHOST_ROUTE,
-            ) {
-                topicScreen(
-                    showBackButton = !listDetailNavigator.isListPaneVisible(),
-                    onBackClick = listDetailNavigator::navigateBack,
-                    onTopicClick = ::onTopicClickShowDetailPane,
-                )
-                composable(route = TOPIC_ROUTE) {
-                    TopicDetailPlaceholder()
+            AnimatedPane {
+                key(nestedNavKey) {
+                    NavHost(
+                        navController = nestedNavController,
+                        startDestination = nestedNavHostStartRoute,
+                        route = DetailPaneNavHostRoute::class,
+                    ) {
+                        topicScreen(
+                            showBackButton = !listDetailNavigator.isListPaneVisible(),
+                            onBackClick = listDetailNavigator::navigateBack,
+                            onTopicClick = ::onTopicClickShowDetailPane,
+                        )
+                        composable<TopicPlaceholderRoute> {
+                            TopicDetailPlaceholder()
+                        }
+                    }
                 }
             }
         },
     )
-    LaunchedEffect(Unit) {
-        if (selectedTopicId != null) {
-            // Initial topic ID was provided when navigating to Interests, so show its details.
-            onTopicClickShowDetailPane(selectedTopicId)
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
