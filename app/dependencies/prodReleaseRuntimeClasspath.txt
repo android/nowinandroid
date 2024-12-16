@@ -163,10 +163,10 @@ com.google.android.gms:play-services-oss-licenses:17.1.0
 com.google.android.gms:play-services-stats:17.0.2
 com.google.android.gms:play-services-tasks:18.2.0
 com.google.code.findbugs:jsr305:3.0.2
-com.google.dagger:dagger-lint-aar:2.52
-com.google.dagger:dagger:2.52
-com.google.dagger:hilt-android:2.52
-com.google.dagger:hilt-core:2.52
+com.google.dagger:dagger-lint-aar:2.53.1
+com.google.dagger:dagger:2.53.1
+com.google.dagger:hilt-android:2.53.1
+com.google.dagger:hilt-core:2.53.1
 com.google.errorprone:error_prone_annotations:2.26.0
 com.google.firebase:firebase-abt:21.1.1
 com.google.firebase:firebase-analytics:22.1.2
@@ -211,10 +211,10 @@ javax.inject:javax.inject:1
 org.checkerframework:checker-qual:3.12.0
 org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.9.22
 org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.22
-org.jetbrains.kotlin:kotlin-stdlib-common:2.0.20
+org.jetbrains.kotlin:kotlin-stdlib-common:2.0.21
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0
-org.jetbrains.kotlin:kotlin-stdlib:2.0.20
+org.jetbrains.kotlin:kotlin-stdlib:2.0.21
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0
 org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0
@@ -229,3 +229,4 @@ org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3
 org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3
 org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3
 org.jetbrains:annotations:23.0.0
+org.jspecify:jspecify:1.0.0
