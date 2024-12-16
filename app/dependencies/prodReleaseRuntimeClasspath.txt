@@ -145,7 +145,7 @@ androidx.work:work-runtime-ktx:2.9.1
 androidx.work:work-runtime:2.9.1
 com.caverock:androidsvg-aar:1.4
 com.google.accompanist:accompanist-drawablepainter:0.32.0
-com.google.accompanist:accompanist-permissions:0.36.0
+com.google.accompanist:accompanist-permissions:0.37.0
 com.google.android.datatransport:transport-api:3.2.0
 com.google.android.datatransport:transport-backend-cct:3.3.0
 com.google.android.datatransport:transport-runtime:3.3.0
