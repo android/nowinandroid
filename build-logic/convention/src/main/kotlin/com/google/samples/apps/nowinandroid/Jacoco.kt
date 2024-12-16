@@ -89,9 +89,23 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
+                val kotlin = variant
+                    .sources
+                    .kotlin
+                    ?.all
+                    ?.map { it.orEmpty() }
+                    ?.map { it.map { it.asFile.path } }
+                val java = variant
+                    .sources
+                    .java
+                    ?.all
+                    ?.map { it.orEmpty() }
+                    ?.map { it.map { it.asFile.path } }
                 sourceDirectories.setFrom(
-                    variant.sources.kotlin?.all?.get().orEmpty(),
-                    variant.sources.java?.all?.get().orEmpty()
+                    files(
+                        kotlin,
+                        java
+                    )
                 )
 
                 executionData.setFrom(
