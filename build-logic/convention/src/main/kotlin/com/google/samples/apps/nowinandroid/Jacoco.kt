@@ -89,10 +89,9 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
-//                val sourceDirs =
                 sourceDirectories.setFrom(
-                    variant.sources.kotlin?.all?.get(),
-                    variant.sources.java?.all?.get()
+                    variant.sources.kotlin?.all?.get().orEmpty(),
+                    variant.sources.java?.all?.get().orEmpty()
                 )
 
                 executionData.setFrom(
