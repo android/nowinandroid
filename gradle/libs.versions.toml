@@ -55,7 +55,7 @@ roborazzi = "1.36.0"
 room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.4"
-turbine = "1.1.0"
+turbine = "1.2.0"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
