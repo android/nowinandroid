@@ -20,11 +20,12 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.compose)
     alias(libs.plugins.nowinandroid.android.application.flavors)
     alias(libs.plugins.nowinandroid.android.application.jacoco)
-    alias(libs.plugins.nowinandroid.android.hilt)
     alias(libs.plugins.nowinandroid.android.application.firebase)
+    alias(libs.plugins.nowinandroid.hilt)
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -47,7 +48,7 @@ android {
         release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -100,8 +101,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.kotlinx.serialization.json)
 
     ksp(libs.hilt.compiler)
 
@@ -111,10 +114,10 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.dataTest)
-    testImplementation(projects.core.testing)
-    testImplementation(libs.accompanist.testharness)
+    testImplementation(projects.core.datastoreTest)
     testImplementation(libs.hilt.android.testing)
-    testImplementation(libs.work.testing)
+    testImplementation(projects.sync.syncTest)
+    testImplementation(libs.kotlin.test)
 
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
@@ -125,8 +128,9 @@ dependencies {
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.accompanist.testharness)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.kotlin.test)
 
     baselineProfile(projects.benchmarks)
 }
@@ -135,6 +139,9 @@ baselineProfile {
     // Don't build on every iteration of a full assemble.
     // Instead enable generation directly for the release build variant.
     automaticGenerationDuringBuild = false
+
+    // Make use of Dex Layout Optimizations via Startup Profiles
+    dexLayoutOptimization = true
 }
 
 dependencyGuard {

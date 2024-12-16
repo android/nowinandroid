@@ -16,23 +16,19 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import android.util.Log
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.adaptive.Posture
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.work.Configuration
-import androidx.work.testing.SynchronousExecutor
-import androidx.work.testing.WorkManagerTestInitHelper
+import androidx.window.core.layout.WindowSizeClass
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.google.accompanist.testharness.TestHarness
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -41,7 +37,6 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -50,7 +45,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -62,7 +56,6 @@ import javax.inject.Inject
 /**
  * Tests that the navigation UI is rendered correctly on different screen sizes.
  */
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
@@ -79,17 +72,9 @@ class NiaAppScreenSizesScreenshotTests {
     val hiltRule = HiltAndroidRule(this)
 
     /**
-     * Create a temporary folder used to create a Data Store file. This guarantees that
-     * the file is removed in between each test, preventing a crash.
-     */
-    @BindValue
-    @get:Rule(order = 1)
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
-    /**
      * Use a test activity to set the content on.
      */
-    @get:Rule(order = 2)
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Inject
@@ -109,17 +94,6 @@ class NiaAppScreenSizesScreenshotTests {
 
     @Before
     fun setup() {
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .setExecutor(SynchronousExecutor())
-            .build()
-
-        // Initialize WorkManager for instrumentation tests.
-        WorkManagerTestInitHelper.initializeTestWorkManager(
-            InstrumentationRegistry.getInstrumentation().context,
-            config,
-        )
-
         hiltRule.inject()
 
         // Configure user data
@@ -143,19 +117,25 @@ class NiaAppScreenSizesScreenshotTests {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
             ) {
-                TestHarness(size = DpSize(width, height)) {
-                    BoxWithConstraints {
-                        NiaTheme {
-                            val fakeAppState = rememberNiaAppState(
-                                windowSizeClass = WindowSizeClass.calculateFromSize(
-                                    DpSize(maxWidth, maxHeight),
+                DeviceConfigurationOverride(
+                    override = DeviceConfigurationOverride.ForcedSize(DpSize(width, height)),
+                ) {
+                    NiaTheme {
+                        val fakeAppState = rememberNiaAppState(
+                            networkMonitor = networkMonitor,
+                            userNewsResourceRepository = userNewsResourceRepository,
+                            timeZoneMonitor = timeZoneMonitor,
+                        )
+                        NiaApp(
+                            fakeAppState,
+                            windowAdaptiveInfo = WindowAdaptiveInfo(
+                                windowSizeClass = WindowSizeClass.compute(
+                                    width.value,
+                                    height.value,
                                 ),
-                                networkMonitor = networkMonitor,
-                                userNewsResourceRepository = userNewsResourceRepository,
-                                timeZoneMonitor = timeZoneMonitor,
-                            )
-                            NiaApp(fakeAppState)
-                        }
+                                windowPosture = Posture(),
+                            ),
+                        )
                     }
                 }
             }
@@ -178,20 +158,20 @@ class NiaAppScreenSizesScreenshotTests {
     }
 
     @Test
-    fun mediumWidth_compactHeight_showsNavigationRail() {
+    fun mediumWidth_compactHeight_showsNavigationBar() {
         testNiaAppScreenshotWithSize(
             610.dp,
             400.dp,
-            "mediumWidth_compactHeight_showsNavigationRail",
+            "mediumWidth_compactHeight_showsNavigationBar",
         )
     }
 
     @Test
-    fun expandedWidth_compactHeight_showsNavigationRail() {
+    fun expandedWidth_compactHeight_showsNavigationBar() {
         testNiaAppScreenshotWithSize(
             900.dp,
             400.dp,
-            "expandedWidth_compactHeight_showsNavigationRail",
+            "expandedWidth_compactHeight_showsNavigationBar",
         )
     }
 
