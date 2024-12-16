@@ -19,11 +19,14 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
+import com.android.build.api.variant.SourceDirectories
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
+import org.gradle.internal.impldep.io.opencensus.common.ExperimentalApi
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
@@ -89,23 +92,11 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
-                val kotlin = variant
-                    .sources
-                    .kotlin
-                    ?.all
-                    ?.map { it.orEmpty() }
-                    ?.map { it.map { it.asFile.path } }
-                val java = variant
-                    .sources
-                    .java
-                    ?.all
-                    ?.map { it.orEmpty() }
-                    ?.map { it.map { it.asFile.path } }
+                fun SourceDirectories.Flat.srcs(): Provider<List<String>> = this
+                    .all
+                    .map { directories -> directories.map { it.asFile.path } }
                 sourceDirectories.setFrom(
-                    files(
-                        kotlin,
-                        java
-                    )
+                    files(variant.sources.java?.srcs(), variant.sources.kotlin?.srcs())
                 )
 
                 executionData.setFrom(
