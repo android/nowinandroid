@@ -89,10 +89,11 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
-                val sourceDirs = variant.sources
-                    .map { it.java.srcDirs + it.kotlin.srcDirs }
-                    .flatten()
-                sourceDirectories.setFrom(sourceDirs)
+//                val sourceDirs =
+                sourceDirectories.setFrom(
+                    variant.sources.kotlin?.all?.get(),
+                    variant.sources.java?.all?.get()
+                )
 
                 executionData.setFrom(
                     project.fileTree("$buildDir/outputs/unit_test_code_coverage/${variant.name}UnitTest")
