@@ -26,7 +26,6 @@ import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
-import org.gradle.internal.impldep.io.opencensus.common.ExperimentalApi
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
@@ -92,11 +91,11 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
-                fun SourceDirectories.Flat.srcs(): Provider<List<String>> = this
+                fun SourceDirectories.Flat.paths(): Provider<List<String>> = this
                     .all
                     .map { directories -> directories.map { it.asFile.path } }
                 sourceDirectories.setFrom(
-                    files(variant.sources.java?.srcs(), variant.sources.kotlin?.srcs())
+                    files(variant.sources.java?.paths(), variant.sources.kotlin?.paths())
                 )
 
                 executionData.setFrom(
