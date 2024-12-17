@@ -89,13 +89,18 @@ jobs:
         continue-on-error: true
         run: ./gradlew verifyRoborazziDemoDebug
 
+      # If this is a fork, we don't have the authority to push screenshots to that fork. It would
+      # also be a security risk for our CI to run commands on an untrusted codebase.
+      # It is up to the fork owner to generate new screenshots.
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots
         continue-on-error: false
         if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "::error::Screenshot tests failed, please create a PR in your fork first." 
-          echo "Your fork's CI will take screenshots for your fork."
+          echo "::error::Screenshot tests failed and we cannot generate new screenshots" 
+          echo " automatically because this is a fork."
+          echo "Generate new screenshots by enabling Github Actions on the fork and running the"
+          echo " Build.yaml workflow on it."
           exit 1
 
       # Runs if previous job failed
