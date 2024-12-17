@@ -1,4 +1,4 @@
-package: name='com.google.samples.apps.nowinandroid' versionCode='8' versionName='0.1.2' platformBuildVersionName='14' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='14'
+package: name='com.google.samples.apps.nowinandroid' versionCode='8' versionName='0.1.2' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 sdkVersion:'21'
 targetSdkVersion:'35'
 uses-permission: name='android.permission.INTERNET'
