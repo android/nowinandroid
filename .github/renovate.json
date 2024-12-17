@@ -3,7 +3,6 @@
   "extends": [
     "local>android/.github:renovate-config"
   ],
-  "automerge": false,
   "baseBranches": [
     "main"
   ]
