@@ -91,11 +91,14 @@ internal fun Project.configureJacoco(
                 }
 
                 // Collect all java and kotlin source directories from the variant's source sets
-                fun SourceDirectories.Flat.paths(): Provider<List<String>> = this
+                fun SourceDirectories.Flat.toFilePaths(): Provider<List<String>> = this
                     .all
                     .map { directories -> directories.map { it.asFile.path } }
                 sourceDirectories.setFrom(
-                    files(variant.sources.java?.paths(), variant.sources.kotlin?.paths())
+                    files(
+                        variant.sources.java?.toFilePaths(),
+                        variant.sources.kotlin?.toFilePaths()
+                    )
                 )
 
                 executionData.setFrom(
