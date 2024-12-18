@@ -94,11 +94,10 @@ internal fun Project.configureJacoco(
                     ?.all
                     ?.map { directories -> directories.map { it.asFile.path } }
                     ?: provider { emptyList() }
-                operator fun Provider<List<String>>.plus(other: Provider<List<String>>) =
-                    zip(other) { first, second -> first + second }
                 sourceDirectories.setFrom(
                     files(
-                        variant.sources.java.toFilePaths() + variant.sources.kotlin.toFilePaths()
+                        variant.sources.java.toFilePaths(),
+                        variant.sources.kotlin.toFilePaths()
                     ),
                 )
 
