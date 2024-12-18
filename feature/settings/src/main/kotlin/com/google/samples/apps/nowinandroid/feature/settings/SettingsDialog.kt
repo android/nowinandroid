@@ -141,7 +141,10 @@ fun SettingsDialog(
             TrackScreenViewEvent(screenName = "Settings")
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            NiaTextButton(
+                onClick = onDismiss,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ) {
                 Text(
                     text = stringResource(string.feature_settings_dismiss_dialog_button_text),
                     style = MaterialTheme.typography.labelLarge,
