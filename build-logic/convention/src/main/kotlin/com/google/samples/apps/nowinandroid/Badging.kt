@@ -140,7 +140,7 @@ fun Project.configureBadgingTasks(
 
         val updateBadgingTaskName = "update${capitalizedVariantName}Badging"
         tasks.register<Copy>(updateBadgingTaskName) {
-            from(generateBadging.get().badging)
+            from(generateBadging.map(GenerateBadgingTask::badging))
             into(project.layout.projectDirectory)
         }
 
@@ -148,7 +148,7 @@ fun Project.configureBadgingTasks(
         tasks.register<CheckBadgingTask>(checkBadgingTaskName) {
             goldenBadging = project.layout.projectDirectory.file("${variant.name}-badging.txt")
 
-            generatedBadging = generateBadging.get().badging
+            generatedBadging.set(generateBadging.flatMap(GenerateBadgingTask::badging))
 
             this.updateBadgingTaskName = updateBadgingTaskName
 
