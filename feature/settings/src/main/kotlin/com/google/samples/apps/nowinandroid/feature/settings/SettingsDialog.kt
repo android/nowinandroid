@@ -20,7 +20,6 @@ package com.google.samples.apps.nowinandroid.feature.settings
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -41,6 +40,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -141,14 +141,13 @@ fun SettingsDialog(
             TrackScreenViewEvent(screenName = "Settings")
         },
         confirmButton = {
-            Text(
-                text = stringResource(string.feature_settings_dismiss_dialog_button_text),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable { onDismiss() },
-            )
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = stringResource(string.feature_settings_dismiss_dialog_button_text),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         },
     )
 }
