@@ -64,7 +64,7 @@ class SyncWorkerTest {
         val preRunWorkInfo = workManager.getWorkInfoById(request.id).get()
 
         // Assert
-        assertEquals(WorkInfo.State.ENQUEUED, preRunWorkInfo.state)
+        assertEquals(WorkInfo.State.ENQUEUED, preRunWorkInfo?.state)
 
         // Tells the testing framework that the constraints have been met
         testDriver.setAllConstraintsMet(request.id)
