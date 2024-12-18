@@ -70,6 +70,6 @@ class SyncWorkerTest {
         testDriver.setAllConstraintsMet(request.id)
 
         val postRequirementWorkInfo = workManager.getWorkInfoById(request.id).get()
-        assertEquals(WorkInfo.State.RUNNING, postRequirementWorkInfo.state)
+        assertEquals(WorkInfo.State.RUNNING, postRequirementWorkInfo?.state)
     }
 }
