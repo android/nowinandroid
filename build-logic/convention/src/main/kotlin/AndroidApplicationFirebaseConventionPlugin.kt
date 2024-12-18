@@ -16,7 +16,6 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
-import com.google.samples.apps.nowinandroid.implementation
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -35,9 +34,9 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
 
             dependencies {
                 val bom = libs.findLibrary("firebase-bom").get()
-                implementation(platform(bom))
-                implementation(libs.findLibrary("firebase.analytics").get())
-                implementation(libs.findLibrary("firebase.performance").get()) {
+                "implementation"(platform(bom))
+                "implementation"(libs.findLibrary("firebase.analytics").get())
+                "implementation"(libs.findLibrary("firebase.performance").get()) {
                     /*
                     Exclusion of protobuf / protolite dependencies is necessary as the
                     datastore-proto brings in protobuf dependencies. These are the source of truth
@@ -47,7 +46,7 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
                     exclude(group = "com.google.protobuf", module = "protobuf-javalite")
                     exclude(group = "com.google.firebase", module = "protolite-well-known-types")
                 }
-                implementation(libs.findLibrary("firebase.crashlytics").get())
+                "implementation"(libs.findLibrary("firebase.crashlytics").get())
             }
 
             extensions.configure<ApplicationExtension> {
