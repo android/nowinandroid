@@ -40,6 +40,9 @@ data class TopicFtsEntity(
     val longDescription: String,
 )
 
+/**
+ * Transform [TopicEntity] into [TopicFtsEntity].
+ */
 fun TopicEntity.asFtsEntity() = TopicFtsEntity(
     topicId = id,
     name = name,
