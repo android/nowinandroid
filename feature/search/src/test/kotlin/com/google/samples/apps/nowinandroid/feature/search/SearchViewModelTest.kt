@@ -57,6 +57,7 @@ class SearchViewModelTest {
     private val getSearchContentsUseCase = GetSearchContentsUseCase(
         searchContentsRepository = searchContentsRepository,
         userDataRepository = userDataRepository,
+        defaultDispatcher = dispatcherRule.testDispatcher,
     )
     private val recentSearchRepository = TestRecentSearchRepository()
     private val getRecentQueryUseCase = GetRecentSearchQueriesUseCase(recentSearchRepository)
