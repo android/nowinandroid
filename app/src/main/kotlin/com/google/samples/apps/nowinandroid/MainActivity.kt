@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                         darkTheme = uiState.shouldUseDarkTheme(systemDark),
                         androidTheme = uiState.shouldUseAndroidTheme,
                         disableDynamicTheming = uiState.shouldDisableDynamicTheming,
-                        shouldFollowSystemTheme = uiState.shouldFollowSystemTheme
+                        shouldFollowSystemTheme = uiState.shouldFollowSystemTheme,
                     )
                 }
                     .onEach { themeSettings = it }
@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
                             )
                             setAppTheme(
                                 uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager,
-                                themeSettings = themeSettings
+                                themeSettings = themeSettings,
                             )
                         }
                     }
@@ -182,28 +182,26 @@ class MainActivity : ComponentActivity() {
  */
 private fun setAppTheme(
     uiModeManager: UiModeManager,
-    themeSettings: ThemeSettings
+    themeSettings: ThemeSettings,
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        uiModeManager.setApplicationNightMode(
-            if (themeSettings.shouldFollowSystemTheme) {
-                UiModeManager.MODE_NIGHT_AUTO
-            } else if (themeSettings.darkTheme) {
-                UiModeManager.MODE_NIGHT_YES
-            } else {
-                UiModeManager.MODE_NIGHT_NO
-            }
-        )
+        val mode = if (themeSettings.shouldFollowSystemTheme) {
+            UiModeManager.MODE_NIGHT_AUTO
+        } else if (themeSettings.darkTheme) {
+            UiModeManager.MODE_NIGHT_YES
+        } else {
+            UiModeManager.MODE_NIGHT_NO
+        }
+        uiModeManager.setApplicationNightMode(mode)
     } else {
-        AppCompatDelegate.setDefaultNightMode(
-            if (themeSettings.shouldFollowSystemTheme) {
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            } else if (themeSettings.darkTheme) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
+        val mode = if (themeSettings.shouldFollowSystemTheme) {
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        } else if (themeSettings.darkTheme) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 }
 
