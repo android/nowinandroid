@@ -22,7 +22,7 @@
 
     <!-- The final theme we use -->
     <style name="Theme.Nia" parent="NightAdjusted.Theme.Nia">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
     </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
