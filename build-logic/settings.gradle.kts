@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+    }
+}
+
 dependencyResolutionManagement {
     repositories {
         google {
