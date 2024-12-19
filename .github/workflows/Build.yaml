@@ -151,7 +151,7 @@ jobs:
           path: '**/build/reports/lint-results-*.html'
 
       - name: Upload lint reports (SARIF)
-        if: always()
+        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: './'
