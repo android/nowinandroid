@@ -86,5 +86,8 @@ sealed interface MainActivityUiState {
      */
     fun shouldUseDarkTheme(isSystemDarkTheme: Boolean) = isSystemDarkTheme
 
+    /**
+     * Returns `true` if app theme should follow system theme.
+     */
     val shouldFollowSystemTheme: Boolean get() = true
 }
