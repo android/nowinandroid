@@ -194,8 +194,8 @@ com.google.guava:failureaccess:1.0.1
 com.google.guava:guava:31.1-android
 com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.google.j2objc:j2objc-annotations:1.3
-com.google.protobuf:protobuf-javalite:4.29.1
-com.google.protobuf:protobuf-kotlin-lite:4.29.1
+com.google.protobuf:protobuf-javalite:4.29.2
+com.google.protobuf:protobuf-kotlin-lite:4.29.2
 com.squareup.okhttp3:logging-interceptor:4.12.0
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.9.0
