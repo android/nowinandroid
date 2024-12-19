@@ -31,6 +31,8 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -38,15 +40,18 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
- *
- * Note: This could become an unit test if Robolectric is added to the project and the Context
- * is faked.
  */
+@RunWith(RobolectricTestRunner::class)
+@Config(application = HiltTestApplication::class)
+@HiltAndroidTest
 class NiaAppStateTest {
 
     @get:Rule
