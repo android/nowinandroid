@@ -21,6 +21,7 @@ import androidx.datastore.core.DataStore
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
@@ -30,6 +31,14 @@ class NiaPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>,
 ) {
     val userData = userPreferences.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("NiaPreferences", "Error reading user preferences.", exception)
+                emit(UserPreferences.getDefaultInstance())
+            } else {
+                throw exception
+            }
+        }
         .map {
             UserData(
                 bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
@@ -155,6 +164,14 @@ class NiaPreferencesDataSource @Inject constructor(
     }
 
     suspend fun getChangeListVersions() = userPreferences.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("NiaPreferences", "Error reading user preferences.", exception)
+                emit(UserPreferences.getDefaultInstance())
+            } else {
+                throw exception
+            }
+        }
         .map {
             ChangeListVersions(
                 topicVersion = it.topicChangeListVersion,
