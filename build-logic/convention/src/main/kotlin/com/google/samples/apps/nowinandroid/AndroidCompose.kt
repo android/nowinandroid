@@ -36,10 +36,10 @@ internal fun Project.configureAndroidCompose(
 
         dependencies {
             val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
-            add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
+            "implementation"(platform(bom))
+            "androidTestImplementation"(platform(bom))
+            "implementation"(libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+            "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
         testOptions {
@@ -58,7 +58,5 @@ internal fun Project.configureAndroidCompose(
 
         stabilityConfigurationFile =
             rootProject.layout.projectDirectory.file("compose_compiler_config.conf")
-
-        enableStrongSkippingMode = true
     }
 }

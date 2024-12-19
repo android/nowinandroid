@@ -15,7 +15,6 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-library`
@@ -39,7 +38,7 @@ kotlin {
 dependencies {
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.lint.api)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.lint.checks)
     testImplementation(libs.lint.tests)
-    testImplementation(kotlin("test"))
 }

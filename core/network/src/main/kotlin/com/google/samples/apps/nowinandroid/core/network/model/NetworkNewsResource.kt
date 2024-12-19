@@ -34,18 +34,3 @@ data class NetworkNewsResource(
     val type: String,
     val topics: List<String> = listOf(),
 )
-
-/**
- * Network representation of [NewsResource] when fetched from /newsresources/{id}
- */
-@Serializable
-data class NetworkNewsResourceExpanded(
-    val id: String,
-    val title: String,
-    val content: String,
-    val url: String,
-    val headerImageUrl: String,
-    val publishDate: Instant,
-    val type: String,
-    val topics: List<NetworkTopic> = listOf(),
-)
