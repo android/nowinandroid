@@ -61,6 +61,9 @@ sealed interface MainActivityUiState {
                 DarkThemeConfig.LIGHT -> false
                 DarkThemeConfig.DARK -> true
             }
+
+        override val shouldFollowSystemTheme =
+            userData.darkThemeConfig == DarkThemeConfig.FOLLOW_SYSTEM
     }
 
     /**
@@ -82,4 +85,6 @@ sealed interface MainActivityUiState {
      * Returns `true` if dark theme should be used.
      */
     fun shouldUseDarkTheme(isSystemDarkTheme: Boolean) = isSystemDarkTheme
+
+    val shouldFollowSystemTheme: Boolean get() = true
 }
