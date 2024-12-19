@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.analytics
 
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.analytics.analytics
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -35,8 +35,6 @@ internal abstract class AnalyticsModule {
     companion object {
         @Provides
         @Singleton
-        fun provideFirebaseAnalytics(): FirebaseAnalytics {
-            return Firebase.analytics
-        }
+        fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
     }
 }

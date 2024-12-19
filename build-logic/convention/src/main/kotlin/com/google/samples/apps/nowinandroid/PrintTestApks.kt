@@ -33,6 +33,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.assign
 import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
@@ -53,12 +54,12 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
             if (artifact != null && testSources != null) {
                 tasks.register(
                     "${variant.name}PrintTestApk",
-                    PrintApkLocationTask::class.java
+                    PrintApkLocationTask::class.java,
                 ) {
-                    apkFolder.set(artifact)
-                    builtArtifactsLoader.set(loader)
-                    variantName.set(variant.name)
-                    sources.set(testSources)
+                    apkFolder = artifact
+                    builtArtifactsLoader = loader
+                    variantName = variant.name
+                    sources = testSources
                 }
             }
         }

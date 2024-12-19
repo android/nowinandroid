@@ -27,7 +27,16 @@ then
     echo "The 'dot' command is not found. This is required to generate SVGs from the Graphviz files."
     echo "Installation instructions:"
     echo "  - On macOS: You can install Graphviz using Homebrew with the command: 'brew install graphviz'"
-    echo "  - On Ubuntu: You can install Graphviz using APT with the command: 'sudo apt-get install graphviz'"
+    echo "  - On Ubuntu: You can install Graphviz using APT with the command: 'sudo apt install graphviz'"
+    echo "  - Others: Visit https://graphviz.org/download/"
+    exit 1
+fi
+
+# Check if the svgo command is available
+if ! command -v svgo &> /dev/null
+then
+    echo "The 'svgo' command is not found. This is required to cleanup and compress SVGs."
+    echo "Installation instructions available at https://github.com/svg/svgo."
     exit 1
 fi
 
@@ -113,11 +122,9 @@ echo "$module_paths" | while read -r module_path; do
           -Pmodules.graph.output.gv="/tmp/${file_name}.gv" \
           -Pmodules.graph.of.module="${module_path}" </dev/null
 
-        # Convert to SVG using dot, remove unnecessary comments, and reformat
+        # Convert to SVG using dot, and cleanup/compress using svgo
         dot -Tsvg "/tmp/${file_name}.gv" |
-          sed 's/<!--/\x0<!--/g;s/-->/-->\x0/g' | grep -zv '^<!--' | tr -d '\0' |
-          xmllint --format - \
-          > "docs/images/graphs/${file_name}.svg"
+          svgo --multipass --pretty --output="docs/images/graphs/${file_name}.svg" -
         # Remove the temporary .gv file
         rm "/tmp/${file_name}.gv"
     fi
