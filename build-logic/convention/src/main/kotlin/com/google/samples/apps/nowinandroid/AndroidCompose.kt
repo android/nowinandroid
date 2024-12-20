@@ -58,8 +58,8 @@ internal fun Project.configureAndroidCompose(
             reportsDestination = createPerModulePath("compose-reports")
         }
 
-        stabilityConfigurationFile =
-            rootProject.layout.projectDirectory.file("compose_compiler_config.conf")
+        stabilityConfigurationFiles
+            .add(isolated.rootProject.projectDirectory.file("compose_compiler_config.conf"))
     }
 }
 
