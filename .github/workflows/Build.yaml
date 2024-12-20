@@ -18,6 +18,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      security-events: write
 
     timeout-minutes: 60
 
@@ -116,19 +117,8 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
-      - name: Setup GMD
-        run: ./gradlew :benchmarks:pixel6Api33Setup
-          --info
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=5
+        run: ./gradlew :app:assemble
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -161,7 +151,7 @@ jobs:
           path: '**/build/reports/lint-results-*.html'
 
       - name: Upload lint reports (SARIF)
-        if: always()
+        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: './'
@@ -209,9 +199,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          validate-wrappers: true
-          gradle-home-cache-cleanup: true
 
       - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
