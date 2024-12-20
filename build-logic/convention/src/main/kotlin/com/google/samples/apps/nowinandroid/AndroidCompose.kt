@@ -54,8 +54,8 @@ internal fun Project.configureAndroidCompose(
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
         if (isPropertyValueIsTrue("enableComposeCompilerReportsAndMetrics")) {
-            metricsDestination = relativeToRootProject("compose-metrics")
-            reportsDestination = relativeToRootProject("compose-reports")
+            metricsDestination = createPerModulePath("compose-metrics")
+            reportsDestination = createPerModulePath("compose-reports")
         }
 
         stabilityConfigurationFile =
