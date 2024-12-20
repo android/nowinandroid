@@ -18,6 +18,8 @@ package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -59,4 +61,17 @@ internal fun Project.configureAndroidCompose(
         stabilityConfigurationFile =
             rootProject.layout.projectDirectory.file("compose_compiler_config.conf")
     }
+}
+
+/**
+ * Checking a value of [propertyName] is true.
+ */
+private fun Project.isPropertyValueIsTrue(propertyName: String): Boolean =
+    providers.gradleProperty(propertyName).orNull.toBoolean()
+
+/**
+ * Creating a path where the [dir] will be created in.
+ */
+private fun Project.createPerModulePath(dir: String): Provider<Directory> = provider {
+    isolated.rootProject.projectDirectory.dir("build/${projectDir.toRelativeString(rootDir)}/$dir")
 }
