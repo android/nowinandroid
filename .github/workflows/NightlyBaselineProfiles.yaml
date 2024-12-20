@@ -44,7 +44,7 @@ jobs:
         run: yes | sdkmanager --licenses || true
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./gradlew :build-logic:convention:check
 
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
