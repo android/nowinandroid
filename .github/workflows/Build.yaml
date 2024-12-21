@@ -37,9 +37,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./gradlew :build-logic:convention:check
 
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
@@ -186,6 +188,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
