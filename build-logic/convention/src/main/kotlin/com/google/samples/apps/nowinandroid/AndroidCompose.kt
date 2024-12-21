@@ -61,7 +61,7 @@ internal fun Project.configureAndroidCompose(
              * being written up to the build/***modules-name***/[dir] location.
              */
             fun setComposeMetricsAndReportLocation(dir: String) =
-                isolated.rootProject.projectDirectory.dir("build").dir(projectDir.toRelativeString(rootDir)).dir(dir)
+                isolated.rootProject.projectDirectory.dir("build/${projectDir.toRelativeString(rootDir)}/$dir")
 
             metricsDestination = setComposeMetricsAndReportLocation("compose-metrics")
             reportsDestination = setComposeMetricsAndReportLocation("compose-reports")
