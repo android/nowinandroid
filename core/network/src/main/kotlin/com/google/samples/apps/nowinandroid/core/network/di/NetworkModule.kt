@@ -32,7 +32,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import java.io.InputStream
 import javax.inject.Singleton
 
 @Module
@@ -49,10 +48,7 @@ internal object NetworkModule {
     @Singleton
     fun providesDemoAssetManager(
         @ApplicationContext context: Context,
-    ): DemoAssetManager = object : DemoAssetManager {
-        override fun open(fileName: String): InputStream = context.assets.open(fileName)
-        override fun readText(fileName: String): String = context.assets.open(fileName).bufferedReader().use { it.readText() }
-    }
+    ): DemoAssetManager = DemoAssetManager(context.assets::open)
 
     @Provides
     @Singleton
