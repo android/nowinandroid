@@ -53,25 +53,21 @@ internal fun Project.configureAndroidCompose(
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
-        if (isPropertyValueIsTrue("enableComposeCompilerReportsAndMetrics")) {
-            metricsDestination = createPerModulePath("compose-metrics")
-            reportsDestination = createPerModulePath("compose-reports")
+
+        val isComposeCompilerReportsAndMetricsEnabled = providers.gradleProperty("enableComposeCompilerReportsAndMetrics").orNull.toBoolean()
+        if (isComposeCompilerReportsAndMetricsEnabled) {
+            /**
+             * Set path where the `compose-metrics` and `compose-reports`
+             * being written up to the build/***modules-name***/[dir] location.
+             */
+            fun setComposeMetricsAndReportLocation(dir: String) =
+                isolated.rootProject.projectDirectory.dir("build").dir(projectDir.toRelativeString(rootDir)).dir(dir)
+
+            metricsDestination = setComposeMetricsAndReportLocation("compose-metrics")
+            reportsDestination = setComposeMetricsAndReportLocation("compose-reports")
         }
 
         stabilityConfigurationFiles
             .add(isolated.rootProject.projectDirectory.file("compose_compiler_config.conf"))
     }
-}
-
-/**
- * Checking a value of [propertyName] is true.
- */
-private fun Project.isPropertyValueIsTrue(propertyName: String): Boolean =
-    providers.gradleProperty(propertyName).orNull.toBoolean()
-
-/**
- * Creating a path where the [dir] will be created in.
- */
-private fun Project.createPerModulePath(dir: String): Provider<Directory> = provider {
-    isolated.rootProject.projectDirectory.dir("build/${projectDir.toRelativeString(rootDir)}/$dir")
 }
