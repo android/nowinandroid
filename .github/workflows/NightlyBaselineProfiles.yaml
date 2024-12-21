@@ -36,6 +36,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -44,7 +46,7 @@ jobs:
         run: yes | sdkmanager --licenses || true
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./gradlew :build-logic:convention:check
 
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
