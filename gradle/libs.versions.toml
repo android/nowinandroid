@@ -57,6 +57,7 @@ room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.4"
 turbine = "1.2.0"
+android-security-lint = "1.0.3"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -149,6 +150,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+android-security-lint = { group = "com.android.security.lint", name = "lint", version.ref = "android-security-lint" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
