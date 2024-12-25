@@ -1,7 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>android/.github:renovate-config"
+    "local>android/.github:renovate-config",
+    "group:allNonMajor"
   ],
   "baseBranches": [
     "main"
@@ -10,11 +11,5 @@
     "renovate[bot]@users.noreply.github.com",
     "github-actions[bot]@users.noreply.github.com",
     "41898282+github-actions[bot]@users.noreply.github.com"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["minor"],
-      "automerge": true
-    }
   ]
 }
