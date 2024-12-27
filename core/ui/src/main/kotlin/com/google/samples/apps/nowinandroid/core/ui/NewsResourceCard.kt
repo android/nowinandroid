@@ -42,10 +42,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,8 +60,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -71,7 +67,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.R.drawable
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopicTag
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -347,50 +342,6 @@ fun NewsResourceTopics(
                     )
                 },
             )
-        }
-    }
-}
-
-@Preview("Bookmark Button")
-@Composable
-private fun BookmarkButtonPreview() {
-    NiaTheme {
-        Surface {
-            BookmarkButton(isBookmarked = false, onClick = { })
-        }
-    }
-}
-
-@Preview("Bookmark Button Bookmarked")
-@Composable
-private fun BookmarkButtonBookmarkedPreview() {
-    NiaTheme {
-        Surface {
-            BookmarkButton(isBookmarked = true, onClick = { })
-        }
-    }
-}
-
-@Preview("NewsResourceCardExpanded")
-@Composable
-private fun ExpandedNewsResourcePreview(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    CompositionLocalProvider(
-        LocalInspectionMode provides true,
-    ) {
-        NiaTheme {
-            Surface {
-                NewsResourceCardExpanded(
-                    userNewsResource = userNewsResources[0],
-                    isBookmarked = true,
-                    hasBeenViewed = false,
-                    onToggleBookmark = {},
-                    onClick = {},
-                    onTopicClick = {},
-                )
-            }
         }
     }
 }

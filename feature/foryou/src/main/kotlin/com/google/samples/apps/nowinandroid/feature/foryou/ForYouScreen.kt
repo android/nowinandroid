@@ -76,7 +76,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -94,13 +93,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
@@ -315,7 +311,7 @@ private fun LazyStaggeredGridScope.onboarding(
 }
 
 @Composable
-private fun TopicSelection(
+internal fun TopicSelection(
     onboardingUiState: OnboardingUiState.Shown,
     onTopicCheckedChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -374,7 +370,7 @@ private fun TopicSelection(
 }
 
 @Composable
-private fun SingleTopicButton(
+internal fun SingleTopicButton(
     name: String,
     topicId: String,
     imageUrl: String,
@@ -445,7 +441,7 @@ fun TopicIcon(
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-private fun NotificationPermissionEffect() {
+internal fun NotificationPermissionEffect() {
     // Permission requests should only be made from an Activity Context, which is not present
     // in previews
     if (LocalInspectionMode.current) return
@@ -462,7 +458,7 @@ private fun NotificationPermissionEffect() {
 }
 
 @Composable
-private fun DeepLinkEffect(
+internal fun DeepLinkEffect(
     userNewsResource: UserNewsResource?,
     onDeepLinkOpened: (String) -> Unit,
 ) {
@@ -498,122 +494,4 @@ private fun feedItemsSize(
         is OnboardingUiState.Shown -> 1
     }
     return feedSize + onboardingSize
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedFeed(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.NotShown,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenOfflinePopulatedFeed(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.NotShown,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenTopicSelection(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.Shown(
-                topics = userNewsResources.flatMap { news -> news.followableTopics }
-                    .distinctBy { it.topic.id },
-            ),
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenLoading() {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.Loading,
-            feedState = NewsFeedUiState.Loading,
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
-
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedAndLoading(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = true,
-            onboardingUiState = OnboardingUiState.Loading,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
 }
