@@ -31,7 +31,8 @@ class TopicDaoTest : TestDatabaseSetup() {
         val savedTopics = topicDao.getTopicEntities().first()
 
         assertEquals(
-            listOf("1", "2", "3"), savedTopics.map { it.id },
+            listOf("1", "2", "3"),
+            savedTopics.map { it.id },
         )
     }
 
@@ -51,7 +52,8 @@ class TopicDaoTest : TestDatabaseSetup() {
         val savedTopics = topicDao.getOneOffTopicEntities()
 
         assertEquals(
-            listOf("1", "2", "3"), savedTopics.map { it.id },
+            listOf("1", "2", "3"),
+            savedTopics.map { it.id },
         )
     }
 
