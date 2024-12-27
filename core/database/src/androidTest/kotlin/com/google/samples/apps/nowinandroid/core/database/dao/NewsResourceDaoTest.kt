@@ -16,10 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
+import com.google.samples.apps.nowinandroid.core.database.TestDatabaseSetup
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
@@ -27,31 +24,10 @@ import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class NewsResourceDaoTest {
-
-    private lateinit var newsResourceDao: NewsResourceDao
-    private lateinit var topicDao: TopicDao
-    private lateinit var db: NiaDatabase
-
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context,
-            NiaDatabase::class.java,
-        ).build()
-        newsResourceDao = db.newsResourceDao()
-        topicDao = db.topicDao()
-    }
-
-    @After
-    fun closeDb() = db.close()
-
+class NewsResourceDaoTest : TestDatabaseSetup() {
     @Test
     fun newsResourceDao_fetches_items_by_descending_publish_date() = runTest {
         val newsResourceEntities = listOf(

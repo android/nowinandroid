@@ -16,35 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
+import com.google.samples.apps.nowinandroid.core.database.TestDatabaseSetup
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class TopicDaoTest {
-    private lateinit var topicDao: TopicDao
-    private lateinit var db: NiaDatabase
-
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context,
-            NiaDatabase::class.java,
-        ).build()
-        topicDao = db.topicDao()
-    }
-
-    @After
-    fun closeDb() = db.close()
-
+class TopicDaoTest : TestDatabaseSetup() {
     @Test
     fun topicDao_fetchTopics() = runTest {
         insertTopics()
