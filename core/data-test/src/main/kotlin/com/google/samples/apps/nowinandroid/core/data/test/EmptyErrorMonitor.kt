@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class EmptyErrorMonitor @Inject constructor(): ErrorMonitor {
+class EmptyErrorMonitor @Inject constructor() : ErrorMonitor {
 
     override fun addMessageByString(message: String): MessageData {
         TODO("Not yet implemented")
@@ -42,5 +42,4 @@ class EmptyErrorMonitor @Inject constructor(): ErrorMonitor {
 
     override val messages: Flow<List<MessageData?>>
         get() = flowOf(emptyList())
-
 }

@@ -18,13 +18,11 @@ package com.google.samples.apps.nowinandroid.core.testing.util
 
 import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import com.google.samples.apps.nowinandroid.core.model.data.MessageData
-import com.google.samples.apps.nowinandroid.core.model.data.MessageType
 import com.google.samples.apps.nowinandroid.core.model.data.MessageType.MESSAGE
 import com.google.samples.apps.nowinandroid.core.model.data.MessageType.OFFLINE
 import com.google.samples.apps.nowinandroid.core.model.data.MessageType.UNKNOWN
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 
 class TestErrorMonitor : ErrorMonitor {
 
@@ -53,19 +51,19 @@ class TestErrorMonitor : ErrorMonitor {
      * Test-only API to add message types
      */
 
-    fun setOfflineMessage(){
+    fun setOfflineMessage() {
         _messages.value = listOf(OFFLINE_MESSAGE)
     }
 
-    fun addMessage(){
+    fun addMessage() {
         _messages.value.plus(MESSAGE_MESSAGE)
     }
 
-    fun addUnknownMessage(){
+    fun addUnknownMessage() {
         _messages.value.plus(UNKNOWN_MESSAGE)
     }
 
-    companion object{
+    companion object {
         val OFFLINE_MESSAGE = MessageData(OFFLINE)
         val MESSAGE_MESSAGE = MessageData(MESSAGE("Message"), "Title", {}, {})
         val UNKNOWN_MESSAGE = MessageData(UNKNOWN)

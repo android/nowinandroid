@@ -27,7 +27,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestErrorMonitor
@@ -45,7 +44,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
