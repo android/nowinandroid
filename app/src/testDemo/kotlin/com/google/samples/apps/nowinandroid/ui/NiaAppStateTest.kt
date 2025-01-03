@@ -27,8 +27,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.util.ErrorMonitor
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.util.TestErrorMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -43,6 +45,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import javax.inject.Inject
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -59,6 +62,8 @@ class NiaAppStateTest {
 
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
+
+    private var errorMonitor = TestErrorMonitor()
 
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
@@ -79,6 +84,7 @@ class NiaAppStateTest {
                     navController = navController,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
+                    errorMonitor = errorMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
                 )
@@ -101,6 +107,7 @@ class NiaAppStateTest {
         composeTestRule.setContent {
             state = rememberNiaAppState(
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -119,6 +126,7 @@ class NiaAppStateTest {
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )
@@ -139,6 +147,7 @@ class NiaAppStateTest {
                 navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
+                errorMonitor = errorMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
             )

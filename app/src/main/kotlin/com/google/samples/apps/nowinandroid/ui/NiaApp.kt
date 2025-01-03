@@ -109,7 +109,7 @@ fun NiaApp(
             LaunchedEffect(stateMessage) {
                 stateMessage?.let { message ->
 
-                    //Text and Duration values dictated by the UI
+                    // Text and Duration values dictated by the UI
                     val (text, duration) = getSnackbarValues(context, message)
 
                     // Determine whether user clicked action button
