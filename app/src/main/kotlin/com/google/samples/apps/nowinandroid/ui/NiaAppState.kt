@@ -133,9 +133,9 @@ class NiaAppState(
             // Priority is given to Offline Error Message over other types
             MessageData(type = MessageType.OFFLINE)
         }
-        // Otherwise, Display first from error monitor list
+        // Otherwise, Display first from error monitor list if exists
         else {
-            errors.first()
+            errors.firstOrNull()
         }
     }.stateIn(
         scope = coroutineScope,
