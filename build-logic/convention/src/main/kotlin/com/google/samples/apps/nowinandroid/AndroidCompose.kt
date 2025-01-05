@@ -55,14 +55,14 @@ internal fun Project.configureAndroidCompose(
         val isComposeCompilerReportsAndMetricsEnabled = providers.gradleProperty("enableComposeCompilerReportsAndMetrics").orNull.toBoolean()
         if (isComposeCompilerReportsAndMetricsEnabled) {
             /**
-             * Set path where the `compose-metrics` and `compose-reports`
-             * being written up to the build/***modules-name***/[dir] location.
+             * Transform a [String] into a Directory where the `compose-metrics` and `compose-reports`
+             * being written, such as `build/modules-name/String`.
              */
-            fun setComposeMetricsAndReportLocation(dir: String) =
-                isolated.rootProject.projectDirectory.dir("build/${projectDir.toRelativeString(rootDir)}/$dir")
+            fun String.toRelativeDirectoryForMetricsAndReport() =
+                isolated.rootProject.projectDirectory.dir("build/${projectDir.toRelativeString(rootDir)}/$this")
 
-            metricsDestination = setComposeMetricsAndReportLocation("compose-metrics")
-            reportsDestination = setComposeMetricsAndReportLocation("compose-reports")
+            metricsDestination = "compose-metrics".toRelativeDirectoryForMetricsAndReport()
+            reportsDestination = "compose-reports".toRelativeDirectoryForMetricsAndReport()
         }
 
         stabilityConfigurationFiles
