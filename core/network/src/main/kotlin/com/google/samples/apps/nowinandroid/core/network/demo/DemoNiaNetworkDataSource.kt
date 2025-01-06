@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid.core.network.demo
 
 import JvmUnitTestDemoAssetManager
 import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.N
+import android.os.Build.VERSION_CODES.M
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
 import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
@@ -43,10 +43,10 @@ class DemoNiaNetworkDataSource @Inject constructor(
 ) : NiaNetworkDataSource {
 
     override suspend fun getTopics(ids: List<String>?): List<NetworkTopic> =
-        getDemoDataFromJson(TOPICS_ASSET)
+        getDataFromJsonFile(TOPICS_ASSET)
 
     override suspend fun getNewsResources(ids: List<String>?): List<NetworkNewsResource> =
-        getDemoDataFromJson(NEWS_ASSET)
+        getDataFromJsonFile(NEWS_ASSET)
 
     override suspend fun getTopicChangeList(after: Int?): List<NetworkChangeList> =
         getTopics().mapToChangeList(NetworkTopic::id)
@@ -55,18 +55,22 @@ class DemoNiaNetworkDataSource @Inject constructor(
         getNewsResources().mapToChangeList(NetworkNewsResource::id)
 
     /**
-     * Get Demo data form a [fileName] Json file.
+     * Get data from the given JSON [fileName].
      */
     @OptIn(ExperimentalSerializationApi::class)
-    private suspend inline fun <reified T> getDemoDataFromJson(fileName: String): List<T> =
+    private suspend inline fun <reified T> getDataFromJsonFile(fileName: String): List<T> =
         withContext(ioDispatcher) {
             assets.open(fileName).use { inputStream ->
-                if (SDK_INT >= N) {
-                    networkJson.decodeFromStream(inputStream)
-                } // https://github.com/Kotlin/kotlinx.serialization/issues/2457#issuecomment-1786923342
-                else {
+                if (SDK_INT <= M) {
+                    /**
+                     * On API 23 (M) and below we must use a workaround to avoid an exception being
+                     * thrown during deserialization. See:
+                     * https://github.com/Kotlin/kotlinx.serialization/issues/2457#issuecomment-1786923342
+                     */
                     inputStream.bufferedReader().use(BufferedReader::readText)
                         .let(networkJson::decodeFromString)
+                } else {
+                    networkJson.decodeFromStream(inputStream)
                 }
             }
         }
