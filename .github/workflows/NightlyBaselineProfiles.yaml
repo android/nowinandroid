@@ -7,6 +7,7 @@ on:
 jobs:
   baseline_profiles:
     name: "Generate Baseline Profiles"
+    if: github.repository == 'android/nowinandroid'
     runs-on: ubuntu-latest
 
     permissions:
