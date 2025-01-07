@@ -67,6 +67,10 @@ class OfflineFirstTopicsRepositoryTest {
     @Test
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
         testScope.runTest {
+            // After sync, topicDao.getTopicEntities().first() and subject.getTopics().first()
+            // will return non-empty lists. 
+            subject.syncWith(synchronizer)
+            
             assertEquals(
                 topicDao.getTopicEntities()
                     .first()
