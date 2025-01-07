@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,39 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.database
+package com.google.samples.apps.nowinandroid.core.database.dao
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
-import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
+import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import org.junit.After
 import org.junit.Before
 
-abstract class TestDatabaseSetup {
-    protected lateinit var newsResourceDao: NewsResourceDao
-    protected lateinit var topicDao: TopicDao
-    private lateinit var db: NiaDatabase
+
+internal abstract class DatabaseTest {
+
+    private lateinit var db : NiaDatabase
+    protected lateinit var newsResourceDao : NewsResourceDao
+    protected lateinit var topicDao : TopicDao
 
     @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context,
-            NiaDatabase::class.java,
-        ).build()
+    fun setup() {
+        db = run {
+            val context = ApplicationProvider.getApplicationContext<Context>()
+            Room.inMemoryDatabaseBuilder(
+                context,
+                NiaDatabase::class.java,
+            ).build()
+        }
         newsResourceDao = db.newsResourceDao()
         topicDao = db.topicDao()
     }
 
     @After
-    fun closeDb() = db.close()
+    fun closeDb(){
+        db.close()
+    }
 }
+
+

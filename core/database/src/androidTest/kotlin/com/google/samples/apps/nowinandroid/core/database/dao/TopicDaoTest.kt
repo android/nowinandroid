@@ -16,16 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.core.database.dao
 
-import com.google.samples.apps.nowinandroid.core.database.TestDatabaseSetup
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class TopicDaoTest : TestDatabaseSetup() {
+internal class TopicDaoTest : DatabaseTest() {
+
     @Test
-    fun topicDao_fetchTopics() = runTest {
+    fun getTopics() = runTest {
         insertTopics()
 
         val savedTopics = topicDao.getTopicEntities().first()
@@ -37,7 +37,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_getSingleTopicEntity() = runTest {
+    fun getTopic() = runTest {
         insertTopics()
 
         val savedTopicEntity = topicDao.getTopicEntity("2").first()
@@ -46,7 +46,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_getOneOffTopicEntity() = runTest {
+    fun getTopics_oneOff() = runTest {
         insertTopics()
 
         val savedTopics = topicDao.getOneOffTopicEntities()
@@ -58,7 +58,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_getTopicEntities_ByIds() = runTest {
+    fun getTopics_byId() = runTest {
         insertTopics()
 
         val savedTopics = topicDao.getTopicEntities(setOf("1", "2"))
@@ -68,7 +68,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_IgnoreNewEntry_If_EntityExists() = runTest {
+    fun insertTopic_newEntryIsIgnoredIfAlreadyExists() = runTest {
         insertTopics()
         topicDao.insertOrIgnoreTopics(
             listOf(testTopicEntity("1", "compose")),
@@ -80,7 +80,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_Upsert_Entities() = runTest {
+    fun upsertTopic_existingEntryIsUpdated() = runTest {
         insertTopics()
         topicDao.upsertTopics(
             listOf(testTopicEntity("1", "newName")),
@@ -93,7 +93,7 @@ class TopicDaoTest : TestDatabaseSetup() {
     }
 
     @Test
-    fun topicDao_Delete_Entities() = runTest {
+    fun deleteTopics_byId_existingEntriesAreDeleted() = runTest {
         insertTopics()
         topicDao.deleteTopics(listOf("1", "2"))
 
