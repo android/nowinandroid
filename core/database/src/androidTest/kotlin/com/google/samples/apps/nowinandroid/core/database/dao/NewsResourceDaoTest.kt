@@ -32,6 +32,9 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
+/**
+ * Instrumentation tests for [NewsResourceDao].
+ */
 class NewsResourceDaoTest {
 
     private lateinit var newsResourceDao: NewsResourceDao
