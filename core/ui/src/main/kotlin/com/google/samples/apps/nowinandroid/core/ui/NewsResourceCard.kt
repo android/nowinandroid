@@ -138,16 +138,14 @@ fun NewsResourceCardExpanded(
                             userNewsResource.title,
                             modifier = Modifier
                                 .fillMaxWidth((.8f))
-                                .dragAndDropSource {
-                                    startTransfer(
+                                .dragAndDropSource { _ ->
                                         DragAndDropTransferData(
                                             ClipData.newPlainText(
                                                 sharingLabel,
                                                 sharingContent,
                                             ),
                                             flags = dragAndDropFlags,
-                                        ),
-                                    )
+                                        )
                                 },
                         )
                         Spacer(modifier = Modifier.weight(1f))
