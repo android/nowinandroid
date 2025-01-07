@@ -7,6 +7,7 @@ on:
 jobs:
   baseline_profiles:
     name: "Generate Baseline Profiles"
+    if: github.repository == 'android/nowinandroid'
     runs-on: ubuntu-latest
 
     permissions:
@@ -36,6 +37,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -44,7 +47,7 @@ jobs:
         run: yes | sdkmanager --licenses || true
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./gradlew :build-logic:convention:check
 
       - name: Setup GMD
         run: ./gradlew :benchmarks:pixel6Api33Setup
@@ -52,8 +55,9 @@ jobs:
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
-      - name: Build all build type and flavor permutations including baseline profiles
-        run: ./gradlew :app:assemble
-             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
-             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+      # This generates both baseline and startup profile and adds them into the generated folder
+      - name: Generate Baseline Profile
+        run: ./gradlew :app:generateReleaseBaselineProfile
+          -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          --stacktrace
