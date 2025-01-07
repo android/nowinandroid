@@ -23,18 +23,17 @@ import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
-                apply("nowinandroid.android.lint")
-                apply("com.dropbox.dependency-guard")
-            }
+            apply(plugin = "com.android.application")
+            apply(plugin = "org.jetbrains.kotlin.android")
+            apply(plugin = "nowinandroid.android.lint")
+            apply(plugin = "com.dropbox.dependency-guard")
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
@@ -49,5 +48,4 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }
