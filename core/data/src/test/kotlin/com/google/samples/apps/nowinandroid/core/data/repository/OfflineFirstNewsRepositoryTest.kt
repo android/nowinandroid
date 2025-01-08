@@ -89,8 +89,6 @@ class OfflineFirstNewsRepositoryTest {
     @Test
     fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
         testScope.runTest {
-            // After sync, newsResourceDao.getNewsResources().first() and 
-            // subject.getNewsResources().first() will return non-empty lists. 
             subject.syncWith(synchronizer)
             
             assertEquals(
