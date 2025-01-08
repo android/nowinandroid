@@ -21,6 +21,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.MainScreenUiState.Loading
 import com.google.samples.apps.nowinandroid.MainScreenUiState.Success
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -41,5 +43,40 @@ class MainScreenViewModel(
 
 sealed interface MainScreenUiState {
     data object Loading : MainScreenUiState
-    data class Success(val userData: UserData) : MainScreenUiState
+
+    data class Success(val userData: UserData) : MainScreenUiState {
+        override val shouldDisableDynamicTheming = !userData.useDynamicColor
+
+        override val shouldUseAndroidTheme: Boolean = when (userData.themeBrand) {
+            ThemeBrand.DEFAULT -> false
+            ThemeBrand.ANDROID -> true
+        }
+
+        override fun shouldUseDarkTheme(isSystemDarkTheme: Boolean) =
+            when (userData.darkThemeConfig) {
+                DarkThemeConfig.FOLLOW_SYSTEM -> isSystemDarkTheme
+                DarkThemeConfig.LIGHT -> false
+                DarkThemeConfig.DARK -> true
+            }
+    }
+
+    /**
+     * Returns `true` if the state wasn't loaded yet and it should keep showing the splash screen.
+     */
+    fun shouldKeepSplashScreen() = this is Loading
+
+    /**
+     * Returns `true` if the dynamic color is disabled.
+     */
+    val shouldDisableDynamicTheming: Boolean get() = true
+
+    /**
+     * Returns `true` if the Android theme should be used.
+     */
+    val shouldUseAndroidTheme: Boolean get() = false
+
+    /**
+     * Returns `true` if dark theme should be used.
+     */
+    fun shouldUseDarkTheme(isSystemDarkTheme: Boolean) = isSystemDarkTheme
 }

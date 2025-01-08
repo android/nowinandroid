@@ -30,6 +30,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.data)
             implementation(projects.core.domain)
+            implementation(projects.core.notifications)
             implementation(compose.material3)
             implementation(compose.foundation)
             implementation(compose.ui)

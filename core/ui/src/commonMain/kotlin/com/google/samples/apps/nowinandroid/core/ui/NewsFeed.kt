@@ -36,7 +36,6 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
  * An extension on [LazyListScope] defining a feed with news resources.
  * Depending on the [feedState], this might emit no items.
  */
-@OptIn(ExperimentalFoundationApi::class)
 fun LazyStaggeredGridScope.newsFeed(
     feedState: NewsFeedUiState,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,

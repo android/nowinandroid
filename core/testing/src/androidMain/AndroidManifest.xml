@@ -14,4 +14,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--
+    This theme is used by ComposeTestRules
+    Use a no-action-bar theme to prevent overlapping with the action bar during tests.
+    Theme_Material_Light_NoActionBar is the base theme used by the production app.
+    -->
+    <application android:theme="@android:style/Theme.Material.NoActionBar" />
+</manifest>

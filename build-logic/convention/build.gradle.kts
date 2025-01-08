@@ -15,10 +15,10 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.android.lint)
 }
 
 group = "com.google.samples.apps.nowinandroid.buildlogic"
@@ -43,6 +43,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     implementation(libs.truth)
+    lintChecks(libs.androidx.lint.gradle)
 }
 
 tasks {

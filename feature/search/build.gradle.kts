@@ -17,6 +17,7 @@
 plugins {
     alias(libs.plugins.nowinandroid.cmp.feature)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.roborazzi)
 }
 

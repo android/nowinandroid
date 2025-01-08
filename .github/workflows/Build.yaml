@@ -18,19 +18,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      security-events: write
 
     timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -43,15 +37,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept licenses
-        run: yes | sdkmanager --licenses || true
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Check build-logic
-        run: ./gradlew check -p build-logic
+        run: ./gradlew :build-logic:convention:check
 
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
@@ -116,19 +106,8 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
-      - name: Setup GMD
-        run: ./gradlew :benchmarks:pixel6Api33Setup
-          --info
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmarks:assemble -Pandroidx.baselineprofile.skipgeneration
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-          -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-          -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=5
+        run: ./gradlew :app:assemble
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -137,14 +116,14 @@ jobs:
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload JVM local results (XML)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Upload screenshot results (PNG)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-test-results
@@ -154,11 +133,17 @@ jobs:
         run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
 
       - name: Upload lint reports (HTML)
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
+
+      - name: Upload lint reports (SARIF)
+        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './'
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
@@ -168,7 +153,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26]
+        api-level: [26, 34]
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -204,8 +189,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          validate-wrappers: true
-          gradle-home-cache-cleanup: true
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -228,7 +212,7 @@ jobs:
         run: ./gradlew createDemoDebugCombinedCoverageReport
         
       - name: Upload test reports
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}

@@ -19,7 +19,6 @@
 package com.google.samples.apps.nowinandroid.feature.settings
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -153,14 +152,16 @@ fun SettingsDialog(
             TrackScreenViewEvent(screenName = "Settings")
         },
         confirmButton = {
-            Text(
-                text = stringResource(Res.string.feature_settings_dismiss_dialog_button_text),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable { onDismiss() },
-            )
+            NiaTextButton(
+                onClick = onDismiss,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            ) {
+                Text(
+                    text = stringResource(Res.string.feature_settings_dismiss_dialog_button_text),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         },
     )
 }

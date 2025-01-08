@@ -204,7 +204,8 @@ To run the tests execute the following gradle tasks:
 (see below for explanation). To avoid this, run `recordRoborazziDemoDebug` prior to running unit tests.
 - `connectedDemoDebugAndroidTest` run all instrumented tests against the `demoDebug` variant. 
 
-**Note:** You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
+> [!NOTE]
+> You should not run `./gradlew test` or `./gradlew connectedAndroidTest` as this will execute 
 tests against _all_ build variants which is both unnecessary and will result in failures as only the
 `demoDebug` variant is supported. No other variants have any tests (although this might change in future). 
 
@@ -227,7 +228,9 @@ stored in `modulename/src/test/screenshots`.
 - `compareRoborazziDemoDebug` create comparison images between failed tests and the known correct
 images. These can also be found in `modulename/src/test/screenshots`. 
 
-**Note on failing screenshot tests:** The known correct screenshots stored in this repository are recorded on CI using Linux. Other
+> [!NOTE]
+> **Note on failing screenshot tests**   
+> The known correct screenshots stored in this repository are recorded on CI using Linux. Other
 platforms may (and probably will) generate slightly different images, making the screenshot tests fail. 
 When working on a non-Linux platform, a workaround to this is to run `recordRoborazziDemoDebug` on the
 `main` branch before starting work. After making changes, `verifyRoborazziDemoDebug` will identify only
