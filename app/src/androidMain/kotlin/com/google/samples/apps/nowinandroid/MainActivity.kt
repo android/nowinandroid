@@ -118,7 +118,6 @@ class MainActivity : ComponentActivity() {
                             ) { darkTheme },
                         )
                     }
-
             }
         }
 
