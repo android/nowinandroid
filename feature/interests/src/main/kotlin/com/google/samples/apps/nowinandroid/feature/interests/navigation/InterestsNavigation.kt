@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.interests.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 
@@ -29,5 +30,14 @@ fun NavController.navigateToInterests(
     initialTopicId: String? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = InterestsRoute(initialTopicId), navOptions)
+    navigate(
+        route = InterestsRoute(initialTopicId),
+        navOptions = navOptions ?: androidx.navigation.navOptions {
+            // When navigating directly to TopicScreen route inside Interests nested graph, we need
+            // to save start destination state
+            popUpTo(this@navigateToInterests.graph.findStartDestination().id) {
+                saveState = true
+            }
+        },
+    )
 }
