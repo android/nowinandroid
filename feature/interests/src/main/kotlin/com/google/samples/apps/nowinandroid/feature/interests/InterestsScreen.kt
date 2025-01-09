@@ -23,15 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
-import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
 @Composable
@@ -91,54 +85,6 @@ internal fun InterestsScreen(
 }
 
 @Composable
-private fun InterestsEmptyScreen() {
+internal fun InterestsEmptyScreen() {
     Text(text = stringResource(id = R.string.feature_interests_empty_header))
-}
-
-@DevicePreviews
-@Composable
-fun InterestsScreenPopulated(
-    @PreviewParameter(FollowableTopicPreviewParameterProvider::class)
-    followableTopics: List<FollowableTopic>,
-) {
-    NiaTheme {
-        NiaBackground {
-            InterestsScreen(
-                uiState = InterestsUiState.Interests(
-                    selectedTopicId = null,
-                    topics = followableTopics,
-                ),
-                followTopic = { _, _ -> },
-                onTopicClick = {},
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun InterestsScreenLoading() {
-    NiaTheme {
-        NiaBackground {
-            InterestsScreen(
-                uiState = InterestsUiState.Loading,
-                followTopic = { _, _ -> },
-                onTopicClick = {},
-            )
-        }
-    }
-}
-
-@DevicePreviews
-@Composable
-fun InterestsScreenEmpty() {
-    NiaTheme {
-        NiaBackground {
-            InterestsScreen(
-                uiState = InterestsUiState.Empty,
-                followTopic = { _, _ -> },
-                onTopicClick = {},
-            )
-        }
-    }
 }

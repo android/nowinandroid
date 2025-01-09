@@ -32,9 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,19 +69,4 @@ fun NiaTopAppBar(
         colors = colors,
         modifier = modifier.testTag("niaTopAppBar"),
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview("Top App Bar")
-@Composable
-private fun NiaTopAppBarPreview() {
-    NiaTheme {
-        NiaTopAppBar(
-            titleRes = android.R.string.untitled,
-            navigationIcon = NiaIcons.Search,
-            navigationIconContentDescription = "Navigation icon",
-            actionIcon = NiaIcons.MoreVert,
-            actionIconContentDescription = "Action icon",
-        )
-    }
 }
