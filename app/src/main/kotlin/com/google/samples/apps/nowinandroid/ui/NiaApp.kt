@@ -68,7 +68,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavig
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAppBar
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -88,7 +88,7 @@ fun NiaApp(
     NiaBackground(modifier = modifier) {
         NiaGradientBackground(
             gradientColors = if (shouldShowGradientBackground) {
-                LocalGradientColors.current
+                NiaTheme.gradientColors
             } else {
                 GradientColors()
             },
