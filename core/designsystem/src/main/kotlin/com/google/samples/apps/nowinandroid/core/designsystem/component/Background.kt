@@ -51,8 +51,8 @@ fun NiaBackground(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val color = NiaTheme.backgroundTheme.color
-    val tonalElevation = NiaTheme.backgroundTheme.tonalElevation
+    val color = NiaTheme.niaBackground.color
+    val tonalElevation = NiaTheme.niaBackground.tonalElevation
     Surface(
         color = if (color == Color.Unspecified) Color.Transparent else color,
         tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,

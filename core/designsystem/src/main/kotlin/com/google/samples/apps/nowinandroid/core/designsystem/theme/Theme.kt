@@ -260,7 +260,7 @@ object NiaTheme {
         @ReadOnlyComposable
         get() = LocalGradientColors.current
 
-    val backgroundTheme: BackgroundTheme
+    val niaBackground: BackgroundTheme
         @Composable
         @ReadOnlyComposable
         get() = LocalBackgroundTheme.current
