@@ -56,8 +56,8 @@ fun NiaIconToggleButton(
     FilledIconToggleButton(
         checked = checked,
         onCheckedChange = { isChecked ->
-            onCheckedChange(isChecked)
             if (isChecked) haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+            onCheckedChange(isChecked)
         },
         modifier = modifier,
         enabled = enabled,
