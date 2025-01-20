@@ -292,10 +292,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-#      # android-emulator-runner uses /latest
-#      - name: Replace cmdlinetools and set path
-#        run: |
-#          rm -rf ${{ env.ANDROID_HOME}}/cmdline-tools/latest
+      # android-emulator-runner uses /latest
+      - name: Remove old cmdlinetools
+        run: |
+          rm -rf ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 #          mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
 #          echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest/bin >> $GITHUB_PATH
 
