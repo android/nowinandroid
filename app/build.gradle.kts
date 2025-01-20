@@ -61,15 +61,6 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-        // Espresso Device
-        emulatorControl {
-            enable = true
-        }
-    }
     namespace = "com.google.samples.apps.nowinandroid"
 }
 

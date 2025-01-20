@@ -91,36 +91,34 @@ class EdgeToEdgeTest {
 
     @Before
     fun enableDemoMode() {
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-            executeShellCommand(
-                "settings put global development_settings_enabled 1",
-            )
-            executeShellCommand("settings put global sysui_demo_allowed 1")
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "enter",
-            )
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "notifications -e visible false",
-            )
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "clock -e hhmm 1234",
-            )
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "network -e wifi hide",
-            )
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "network -e mobile hide",
-            )
-            executeShellCommand(
-                "am broadcast -a com.android.systemui.demo -e command " +
-                    "network -e satellite hide",
-            )
-        }
+        executeShellCommand(
+            "settings put global development_settings_enabled 1",
+        )
+        executeShellCommand("settings put global sysui_demo_allowed 1")
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "enter",
+        )
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "notifications -e visible false",
+        )
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "clock -e hhmm 1234",
+        )
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "network -e wifi hide",
+        )
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "network -e mobile hide",
+        )
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command " +
+                "network -e satellite hide",
+        )
     }
 
     @After
@@ -332,7 +330,7 @@ class EdgeToEdgeTest {
 
     private fun executeShellCommand(command: String) {
         runOnUiThread {
-            InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).executeShellCommand(command)
         }
         // ADB commands are not synchronized. This sleep was found empirically.
         Thread.sleep(20)

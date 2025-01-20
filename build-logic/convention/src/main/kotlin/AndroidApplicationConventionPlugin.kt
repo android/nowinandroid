@@ -42,6 +42,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
+                testOptions.emulatorControl.enable = true
+//                testOptions.unitTests.isIncludeAndroidResources
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
