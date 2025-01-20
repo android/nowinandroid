@@ -318,7 +318,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           disk-size: 6000M
-          emulator-build: 11834374 # 34.2.14
+          emulator-build: 12895296 # 35.4.5 - https://developer.android.com/studio/emulator_archive
           heap-size: 600M
           profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
