@@ -19,11 +19,14 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
+import com.android.build.api.variant.SourceDirectories
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -66,9 +69,13 @@ internal fun Project.configureJacoco(
         val myObjFactory = project.objects
         val buildDir = layout.buildDirectory.get().asFile
         val allJars: ListProperty<RegularFile> = myObjFactory.listProperty(RegularFile::class.java)
-        val allDirectories: ListProperty<Directory> = myObjFactory.listProperty(Directory::class.java)
+        val allDirectories: ListProperty<Directory> =
+            myObjFactory.listProperty(Directory::class.java)
         val reportTask =
-            tasks.register("create${variant.name.capitalize()}CombinedCoverageReport", JacocoReport::class) {
+            tasks.register(
+                "create${variant.name.capitalize()}CombinedCoverageReport",
+                JacocoReport::class,
+            ) {
 
                 classDirectories.setFrom(
                     allJars,
@@ -76,23 +83,31 @@ internal fun Project.configureJacoco(
                         dirs.map { dir ->
                             myObjFactory.fileTree().setDir(dir).exclude(coverageExclusions)
                         }
-                    }
+                    },
                 )
                 reports {
-                    xml.required.set(true)
-                    html.required.set(true)
+                    xml.required = true
+                    html.required = true
                 }
 
-                // TODO: This is missing files in src/debug/, src/prod, src/demo, src/demoDebug...
-                sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+                fun SourceDirectories.Flat?.toFilePaths(): Provider<List<String>> = this
+                    ?.all
+                    ?.map { directories -> directories.map { it.asFile.path } }
+                    ?: provider { emptyList() }
+                sourceDirectories.setFrom(
+                    files(
+                        variant.sources.java.toFilePaths(),
+                        variant.sources.kotlin.toFilePaths()
+                    ),
+                )
 
                 executionData.setFrom(
                     project.fileTree("$buildDir/outputs/unit_test_code_coverage/${variant.name}UnitTest")
                         .matching { include("**/*.exec") },
 
                     project.fileTree("$buildDir/outputs/code_coverage/${variant.name}AndroidTest")
-                        .matching { include("**/*.ec") }
-                    )
+                        .matching { include("**/*.ec") },
+                )
             }
 
 

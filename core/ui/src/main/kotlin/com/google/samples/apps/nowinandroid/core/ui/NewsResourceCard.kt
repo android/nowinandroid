@@ -16,8 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.content.ClipData
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
+import android.view.View
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,9 +51,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -77,6 +85,7 @@ import java.util.Locale
  * [NewsResource] card used on the following screens: For You, Saved
  */
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsResourceCardExpanded(
     userNewsResource: UserNewsResource,
@@ -88,15 +97,30 @@ fun NewsResourceCardExpanded(
     modifier: Modifier = Modifier,
 ) {
     val clickActionLabel = stringResource(R.string.core_ui_card_tap_action)
+    val sharingLabel = stringResource(R.string.core_ui_feed_sharing)
+    val sharingContent = stringResource(
+        R.string.core_ui_feed_sharing_data,
+        userNewsResource.title,
+        userNewsResource.url,
+    )
+
+    val dragAndDropFlags = if (VERSION.SDK_INT >= VERSION_CODES.N) {
+        View.DRAG_FLAG_GLOBAL
+    } else {
+        0
+    }
+
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
         // Pass null for action to only override the label and not the actual action.
-        modifier = modifier.semantics {
-            onClick(label = clickActionLabel, action = null)
-        },
+        modifier = modifier
+            .semantics {
+                onClick(label = clickActionLabel, action = null)
+            }
+            .testTag("newsResourceCard:${userNewsResource.id}"),
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
@@ -112,7 +136,17 @@ fun NewsResourceCardExpanded(
                     Row {
                         NewsResourceTitle(
                             userNewsResource.title,
-                            modifier = Modifier.fillMaxWidth((.8f)),
+                            modifier = Modifier
+                                .fillMaxWidth((.8f))
+                                .dragAndDropSource { _ ->
+                                    DragAndDropTransferData(
+                                        ClipData.newPlainText(
+                                            sharingLabel,
+                                            sharingContent,
+                                        ),
+                                        flags = dragAndDropFlags,
+                                    )
+                                },
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
@@ -298,9 +332,11 @@ fun NewsResourceTopics(
                     }
                     Text(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
-                        modifier = Modifier.semantics {
-                            this.contentDescription = contentDescription
-                        },
+                        modifier = Modifier
+                            .semantics {
+                                this.contentDescription = contentDescription
+                            }
+                            .testTag("topicTag:${followableTopic.topic.id}"),
                     )
                 },
             )
