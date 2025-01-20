@@ -32,6 +32,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
+                testOptions.emulatorControl.enable = true
                 configureGradleManagedDevices(this)
             }
 
