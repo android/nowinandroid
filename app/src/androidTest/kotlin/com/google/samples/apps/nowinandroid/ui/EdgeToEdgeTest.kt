@@ -92,9 +92,8 @@ class EdgeToEdgeTest {
     @Before
     fun enableDemoMode() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-
             executeShellCommand(
-                "settings put global development_settings_enabled 1"
+                "settings put global development_settings_enabled 1",
             )
             executeShellCommand("settings put global sysui_demo_allowed 1")
             executeShellCommand(
@@ -128,16 +127,16 @@ class EdgeToEdgeTest {
     fun disableDemoMode() {
         exitDemoMode()
         executeShellCommand(
-            "settings put global sysui_demo_allowed 0"
+            "settings put global sysui_demo_allowed 0",
         )
         executeShellCommand(
-            "settings put global development_settings_enabled 0"
+            "settings put global development_settings_enabled 0",
         )
     }
 
     private fun exitDemoMode() {
         executeShellCommand(
-            "am broadcast -a com.android.systemui.demo -e command exit"
+            "am broadcast -a com.android.systemui.demo -e command exit",
         )
     }
 
