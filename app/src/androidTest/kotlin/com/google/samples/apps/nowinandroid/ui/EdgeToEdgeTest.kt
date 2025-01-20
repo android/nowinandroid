@@ -34,6 +34,7 @@ import androidx.test.espresso.device.sizeclass.HeightSizeClass.Companion.HeightS
 import androidx.test.espresso.device.sizeclass.WidthSizeClass.Companion.WidthSizeClassEnum
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.SdkSuppress
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.dropbox.dropshots.Dropshots
@@ -42,6 +43,7 @@ import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPer
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.Rule
@@ -90,6 +92,10 @@ class EdgeToEdgeTest {
     @Before
     fun enableDemoMode() {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+
+            executeShellCommand(
+                "settings put global development_settings_enabled 1"
+            )
             executeShellCommand("settings put global sysui_demo_allowed 1")
             executeShellCommand(
                 "am broadcast -a com.android.systemui.demo -e command " +
@@ -111,7 +117,28 @@ class EdgeToEdgeTest {
                 "am broadcast -a com.android.systemui.demo -e command " +
                     "network -e mobile hide",
             )
+            executeShellCommand(
+                "am broadcast -a com.android.systemui.demo -e command " +
+                    "network -e satellite hide",
+            )
         }
+    }
+
+    @After
+    fun disableDemoMode() {
+        exitDemoMode()
+        executeShellCommand(
+            "settings put global sysui_demo_allowed 0"
+        )
+        executeShellCommand(
+            "settings put global development_settings_enabled 0"
+        )
+    }
+
+    private fun exitDemoMode() {
+        executeShellCommand(
+            "am broadcast -a com.android.systemui.demo -e command exit"
+        )
     }
 
     companion object {
@@ -151,12 +178,15 @@ class EdgeToEdgeTest {
     @SdkSuppress(minSdkVersion = 35, codeName = "VanillaIceCream")
     @Test
     fun edgeToEdge_Foldable_api35_tallCutout() {
-        forceTallCutout()
         onDevice().setClosedMode()
+        forceTallCutout()
+        exitDemoMode()
         enableDemoMode() // Mode change resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_closed_system_tallCutout_api35")
 
         onDevice().setFlatMode()
+        exitDemoMode()
+        forceTallCutout()
         enableDemoMode() // Mode change resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_flat_system_tallCutout_api35")
 
@@ -174,6 +204,8 @@ class EdgeToEdgeTest {
         onDevice().setClosedMode()
         onDevice().setScreenOrientation(LANDSCAPE)
         forceThreeButtonNavigation()
+        exitDemoMode()
+        enableDemoMode() // This fixes the satellite icon showing up uninvited.
         screenshotSideNavigationBar("edgeToEdge_Foldable_landscape_sideNav3button_35")
         onDevice().setScreenOrientation(PORTRAIT)
     }
@@ -188,6 +220,7 @@ class EdgeToEdgeTest {
         screenshotNavigationBar("edgeToEdge_Foldable_closed_navGesture_$apiName")
 
         onDevice().setFlatMode()
+        exitDemoMode()
         enableDemoMode() // Flat mode resets demo mode!
         screenshotSystemBar("edgeToEdge_Foldable_flat_system_$apiName")
         forceThreeButtonNavigation()
@@ -296,5 +329,13 @@ class EdgeToEdgeTest {
             }
             break
         }
+    }
+
+    private fun executeShellCommand(command: String) {
+        runOnUiThread {
+            InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
+        }
+        // ADB commands are not synchronized. This sleep was found empirically.
+        Thread.sleep(20)
     }
 }
