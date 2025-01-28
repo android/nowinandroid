@@ -200,6 +200,7 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
+      # Take a snapshot if it doesn't have a cache.
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
