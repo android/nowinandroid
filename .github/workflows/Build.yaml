@@ -226,7 +226,8 @@ jobs:
           disk-size: 6000M
           heap-size: 600M
           script: |
-            /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm uninstall com.google.samples.apps.nowinandroid.demo.debug; ./gradlew connectedDemoDebugAndroidTest --daemon;
+            /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm list packages | grep com.google.samples.apps.nowinandroid.* | cut -d':' -f2 | tr '\r' ' ' | xargs -r -n1 -t adb uninstall; ./gradlew connectedDemoDebugAndroidTest --daemon;
+            # /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm uninstall com.google.samples.apps.nowinandroid.demo.debug; 
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30
