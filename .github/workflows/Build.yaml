@@ -225,9 +225,10 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
+          # && killall -INT crashpad_handler || true
+          # came from https://github.com/ReactiveCircus/android-emulator-runner/issues/385#issuecomment-2492035091
           script: |
-            /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm list packages -u | grep com.google.samples.apps.nowinandroid* | cut -d':' -f2 | tr '\r' ' ' | xargs -r -n1 -t adb uninstall; ./gradlew connectedDemoDebugAndroidTest --daemon;
-            # /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm uninstall com.google.samples.apps.nowinandroid.demo.debug; 
+            /usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell pm list packages -u | grep com.google.samples.apps.nowinandroid* | cut -d':' -f2 | tr '\r' ' ' | xargs -r -n1 -t adb uninstall; ./gradlew connectedDemoDebugAndroidTest --daemon && killall -INT crashpad_handler || true
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30
