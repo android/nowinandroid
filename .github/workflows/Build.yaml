@@ -153,7 +153,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 34]
+        api-level: [ 26, 34 ]
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -213,7 +213,7 @@ jobs:
       - name: Generate coverage reports for Debug variants (only API 34)
         if: matrix.api-level == 34
         run: ./gradlew createDemoDebugCombinedCoverageReport
-        
+
       - name: Upload test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -232,7 +232,7 @@ jobs:
           paths: |
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-        
+
       - name: Upload local coverage reports (XML + HTML) (only API 34)
         if: matrix.api-level == 34
         uses: actions/upload-artifact@v4
