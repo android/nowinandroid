@@ -22,7 +22,6 @@ import kotlinx.datetime.Instant
  * A [NewsResource] with additional user information such as whether the user is following the
  * news resource's topics and whether they have saved (bookmarked) this news resource.
  */
-@ConsistentCopyVisibility
 data class UserNewsResource internal constructor(
     val id: String,
     val title: String,
