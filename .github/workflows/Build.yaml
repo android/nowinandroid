@@ -199,7 +199,10 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          # && killall -INT crashpad_handler || true
+          # came from https://github.com/ReactiveCircus/android-emulator-runner/issues/385#issuecomment-2492035091
+          script: |
+            ./gradlew connectedDemoDebugAndroidTest --daemon && killall -INT crashpad_handler || true
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 34)
         if: matrix.api-level == 34
