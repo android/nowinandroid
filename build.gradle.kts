@@ -16,10 +16,16 @@
 
 buildscript {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
 
-        // Android Build Server
+        // This is used only for internal Google builds.
         maven { url = uri("../nowinandroid-prebuilts/m2repository") }
     }
     dependencies {
