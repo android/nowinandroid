@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'android/nowinandroid'
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
@@ -33,6 +34,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
