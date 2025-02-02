@@ -63,11 +63,6 @@
         <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-        <!-- Firebase automatically adds the following property which we don't use so remove it -->
-        <property
-            android:name="android.adservices.AD_SERVICES_CONFIG"
-            tools:node="remove" />
-
     </application>
 
 </manifest>
