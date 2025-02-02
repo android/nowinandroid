@@ -13,7 +13,7 @@ concurrency:
 jobs:
   test_and_apk:
     name: "Local tests and APKs"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     permissions:
       contents: write
