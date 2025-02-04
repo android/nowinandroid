@@ -72,20 +72,24 @@ import com.google.samples.apps.nowinandroid.feature.topic.R.string
 
 @Composable
 fun TopicScreen(
+    topicId: String,
     showBackButton: Boolean,
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel(),
+    viewModel: TopicViewModel = hiltViewModel()
 ) {
+    viewModel.updateTopic(topicId)
+
     val topicUiState: TopicUiState by viewModel.topicUiState.collectAsStateWithLifecycle()
     val newsUiState: NewsUiState by viewModel.newsUiState.collectAsStateWithLifecycle()
+    val selectedTopicId by viewModel.topicId.collectAsStateWithLifecycle()
 
-    TrackScreenViewEvent(screenName = "Topic: ${viewModel.topicId}")
+    TrackScreenViewEvent(screenName = "Topic: $selectedTopicId")
     TopicScreen(
         topicUiState = topicUiState,
         newsUiState = newsUiState,
-        modifier = modifier.testTag("topic:${viewModel.topicId}"),
+        modifier = modifier.testTag("topic:${selectedTopicId}"),
         showBackButton = showBackButton,
         onBackClick = onBackClick,
         onFollowClick = viewModel::followTopicToggle,

@@ -16,10 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -29,52 +27,74 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TopicViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
-    userNewsResourceRepository: UserNewsResourceRepository,
+    userNewsResourceRepository: UserNewsResourceRepository
 ) : ViewModel() {
 
-    val topicId = savedStateHandle.toRoute<TopicRoute>().id
+    private val _topicId = MutableStateFlow<String?>(null)
+    val topicId = _topicId.asStateFlow()
 
-    val topicUiState: StateFlow<TopicUiState> = topicUiState(
-        topicId = topicId,
-        userDataRepository = userDataRepository,
-        topicsRepository = topicsRepository,
-    )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading,
-        )
+    private val _topicUIState = MutableStateFlow<TopicUiState>(TopicUiState.Loading)
 
-    val newsUiState: StateFlow<NewsUiState> = newsUiState(
-        topicId = topicId,
-        userDataRepository = userDataRepository,
-        userNewsResourceRepository = userNewsResourceRepository,
+    private val _newsUIState = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
+
+
+    init {
+        viewModelScope.launch {
+            _topicId.filterNotNull().collect { topicId ->
+                combine(
+                    topicUiState(
+                        topicId = topicId,
+                        userDataRepository = userDataRepository,
+                        topicsRepository = topicsRepository,
+                    ),
+                    newsUiState(
+                        topicId = topicId,
+                        userDataRepository = userDataRepository,
+                        userNewsResourceRepository = userNewsResourceRepository,
+                    ),
+                ) { topicIUState, newsUIState ->
+                    _topicUIState.update { topicIUState }
+                    _newsUIState.update { newsUIState }
+                }.stateIn(viewModelScope)
+            }
+        }
+    }
+
+    val topicUiState: StateFlow<TopicUiState> = _topicUIState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = TopicUiState.Loading,
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading,
-        )
+
+    val newsUiState: StateFlow<NewsUiState> = _newsUIState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = NewsUiState.Loading,
+    )
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setTopicIdFollowed(topicId, followed)
+            _topicId.value?.let {
+                userDataRepository.setTopicIdFollowed(it, followed)
+            }
         }
     }
 
@@ -88,6 +108,10 @@ class TopicViewModel @Inject constructor(
         viewModelScope.launch {
             userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
+    }
+
+    fun updateTopic(id: String) {
+        this._topicId.value = id
     }
 }
 

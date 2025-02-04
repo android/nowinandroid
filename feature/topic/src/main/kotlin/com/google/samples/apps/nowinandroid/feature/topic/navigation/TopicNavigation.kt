@@ -36,8 +36,10 @@ fun NavGraphBuilder.topicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
-    composable<TopicRoute> {
+    composable<TopicRoute> { entry ->
+        val id = entry.arguments?.getString("id")!!
         TopicScreen(
+            topicId = id,
             showBackButton = showBackButton,
             onBackClick = onBackClick,
             onTopicClick = onTopicClick,
