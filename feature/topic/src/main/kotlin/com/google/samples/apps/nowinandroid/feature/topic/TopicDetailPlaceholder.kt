@@ -30,9 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 @Composable
 fun TopicDetailPlaceholder(modifier: Modifier = Modifier) {
@@ -59,13 +57,5 @@ fun TopicDetailPlaceholder(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.titleLarge,
             )
         }
-    }
-}
-
-@Preview(widthDp = 200, heightDp = 300)
-@Composable
-fun TopicDetailPlaceholderPreview() {
-    NiaTheme {
-        TopicDetailPlaceholder()
     }
 }

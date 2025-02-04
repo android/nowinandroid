@@ -49,14 +49,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
@@ -156,7 +154,7 @@ fun SettingsDialog(
 
 // [ColumnScope] is used for using the [ColumnScope.AnimatedVisibility] extension overload composable.
 @Composable
-private fun ColumnScope.SettingsPanel(
+internal fun ColumnScope.SettingsPanel(
     settings: UserEditableSettings,
     supportDynamicColor: Boolean,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
@@ -214,7 +212,7 @@ private fun ColumnScope.SettingsPanel(
 }
 
 @Composable
-private fun SettingsDialogSectionTitle(text: String) {
+internal fun SettingsDialogSectionTitle(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
@@ -250,7 +248,7 @@ fun SettingsDialogThemeChooserRow(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun LinksPanel() {
+internal fun LinksPanel() {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
@@ -282,40 +280,6 @@ private fun LinksPanel() {
         ) {
             Text(text = stringResource(string.feature_settings_feedback))
         }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewSettingsDialog() {
-    NiaTheme {
-        SettingsDialog(
-            onDismiss = {},
-            settingsUiState = Success(
-                UserEditableSettings(
-                    brand = DEFAULT,
-                    darkThemeConfig = FOLLOW_SYSTEM,
-                    useDynamicColor = false,
-                ),
-            ),
-            onChangeThemeBrand = {},
-            onChangeDynamicColorPreference = {},
-            onChangeDarkThemeConfig = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewSettingsDialogLoading() {
-    NiaTheme {
-        SettingsDialog(
-            onDismiss = {},
-            settingsUiState = Loading,
-            onChangeThemeBrand = {},
-            onChangeDynamicColorPreference = {},
-            onChangeDarkThemeConfig = {},
-        )
     }
 }
 
