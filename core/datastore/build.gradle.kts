@@ -25,6 +25,9 @@ android {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
     namespace = "com.google.samples.apps.nowinandroid.core.datastore"
+
+    @Suppress("UnstableApiUsage")
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -34,6 +37,7 @@ dependencies {
 
     implementation(projects.core.common)
 
-    testImplementation(projects.core.datastoreTest)
     testImplementation(libs.kotlinx.coroutines.test)
+
+    testFixturesImplementation(libs.hilt.android.testing)
 }
