@@ -40,6 +40,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 
 @Composable
 fun TopicsTabContent(
@@ -56,10 +57,14 @@ fun TopicsTabContent(
             .fillMaxWidth(),
     ) {
         val scrollableState = rememberLazyListState()
+        val testTag = "interests:topics"
+
+        TrackScrollJank(scrollableState = scrollableState, stateName = testTag)
+
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .testTag("interests:topics"),
+                .testTag(testTag),
             contentPadding = PaddingValues(vertical = 16.dp),
             state = scrollableState,
         ) {

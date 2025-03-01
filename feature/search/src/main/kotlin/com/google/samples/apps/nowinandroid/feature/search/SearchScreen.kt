@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -92,6 +93,7 @@ import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
+import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
@@ -154,8 +156,7 @@ internal fun SearchScreen(
             -> Unit
 
             SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
-            SearchResultUiState.EmptyQuery,
-            -> {
+            SearchResultUiState.EmptyQuery -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
                     RecentSearchesBody(
                         onClearRecentSearches = onClearRecentSearches,
@@ -211,7 +212,8 @@ fun EmptySearchResultBody(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
-        val message = stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
+        val message =
+            stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
             text = AnnotatedString(
@@ -293,6 +295,10 @@ private fun SearchResultBody(
     onFollowButtonClick: (String, Boolean) -> Unit,
 ) {
     val state = rememberLazyStaggeredGridState()
+    val testTag = "search:searchResult"
+
+    TrackScrollJank(scrollableState = state, stateName = testTag)
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -304,7 +310,7 @@ private fun SearchResultBody(
             verticalItemSpacing = 24.dp,
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("search:newsResources"),
+                .testTag(testTag),
             state = state,
         ) {
             if (topics.isNotEmpty()) {
@@ -394,6 +400,10 @@ private fun RecentSearchesBody(
     onRecentSearchClicked: (String) -> Unit,
 ) {
     Column {
+        val scrollableState = rememberLazyListState()
+
+        TrackScrollJank(scrollableState = scrollableState, stateName = "search:recentSearches")
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -424,7 +434,10 @@ private fun RecentSearchesBody(
                 }
             }
         }
-        LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            state = scrollableState,
+        ) {
             items(recentSearchQueries) { recentSearch ->
                 Text(
                     text = recentSearch,
