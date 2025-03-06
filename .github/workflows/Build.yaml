@@ -199,6 +199,7 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
+          emulator-options: -show-kernel -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
