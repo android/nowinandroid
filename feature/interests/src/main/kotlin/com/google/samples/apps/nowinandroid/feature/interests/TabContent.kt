@@ -49,7 +49,7 @@ fun TopicsTabContent(
     modifier: Modifier = Modifier,
     withBottomSpacer: Boolean = true,
     selectedTopicId: String? = null,
-    highlightSelectedTopic: Boolean = false,
+    shouldHighlightSelectedTopic: Boolean = false,
 ) {
     Box(
         modifier = modifier
@@ -66,7 +66,7 @@ fun TopicsTabContent(
             topics.forEach { followableTopic ->
                 val topicId = followableTopic.topic.id
                 item(key = topicId) {
-                    val isSelected = highlightSelectedTopic && topicId == selectedTopicId
+                    val isSelected = shouldHighlightSelectedTopic && topicId == selectedTopicId
                     InterestsItem(
                         name = followableTopic.topic.name,
                         following = followableTopic.isFollowed,
