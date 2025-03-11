@@ -17,7 +17,6 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
-import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -27,23 +26,23 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.AnimatedPane
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.PaneExpansionAnchor
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import androidx.compose.material3.adaptive.layout.defaultDragHandleSemantics
 import androidx.compose.material3.adaptive.layout.rememberPaneExpansionState
+import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldPredictiveBackHandler
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -51,30 +50,19 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
-import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel_Factory
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import java.util.UUID
 import kotlin.math.max
 
 @Serializable internal object TopicPlaceholderRoute
-
-// TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
-@Keep
-@Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
     composable<InterestsRoute> {
@@ -121,9 +109,17 @@ internal fun InterestsListDetailScreen(
         ),
     )
 
-    BackHandler(listDetailNavigator.canNavigateBack()) {
+    ThreePaneScaffoldPredictiveBackHandler(
+        listDetailNavigator,
+        BackNavigationBehavior.PopUntilScaffoldValueChange,
+    )
+    BackHandler(
+        paneExpansionState.currentAnchor == PaneExpansionAnchor.Proportion(0f) &&
+            listDetailNavigator.isListPaneVisible() &&
+            listDetailNavigator.isDetailPaneVisible(),
+    ) {
         coroutineScope.launch {
-            listDetailNavigator.navigateBack()
+            paneExpansionState.animateTo(PaneExpansionAnchor.Proportion(1f))
         }
     }
 
@@ -138,14 +134,18 @@ internal fun InterestsListDetailScreen(
         coroutineScope.launch {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         }
+        if (paneExpansionState.currentAnchor == PaneExpansionAnchor.Proportion(1f)) {
+            coroutineScope.launch {
+                paneExpansionState.animateTo(PaneExpansionAnchor.Proportion(0f))
+            }
+        }
     }
 
     val mutableInteractionSource = remember { MutableInteractionSource() }
     val minPaneWidth = 300.dp
 
-    ListDetailPaneScaffold(
-        value = listDetailNavigator.scaffoldValue,
-        directive = listDetailNavigator.scaffoldDirective,
+    NavigableListDetailPaneScaffold(
+        navigator = listDetailNavigator,
         listPane = {
             AnimatedPane {
                 Box(
@@ -209,7 +209,7 @@ internal fun InterestsListDetailScreen(
                                         key = route.id,
                                     ) { factory ->
                                         factory.create(route.id)
-                                    }
+                                    },
                                 )
                             }
                             is TopicPlaceholderRoute -> {
@@ -227,6 +227,7 @@ internal fun InterestsListDetailScreen(
                     state = paneExpansionState,
                     minTouchTargetSize = LocalMinimumInteractiveComponentSize.current,
                     interactionSource = mutableInteractionSource,
+                    semanticsProperties = paneExpansionState.defaultDragHandleSemantics(),
                 ),
                 interactionSource = mutableInteractionSource,
             )
