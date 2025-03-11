@@ -123,14 +123,14 @@ internal fun InterestsListDetailScreen(
         }
     }
 
-    var nestedNavHostStartRoute by remember {
+    var topicRoute by remember {
         val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
         mutableStateOf(route)
     }
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavHostStartRoute = TopicRoute(id = topicId)
+        topicRoute = TopicRoute(id = topicId)
         coroutineScope.launch {
             listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         }
@@ -194,7 +194,7 @@ internal fun InterestsListDetailScreen(
                             }
                         },
                 ) {
-                    AnimatedContent(nestedNavHostStartRoute) { route ->
+                    AnimatedContent(topicRoute) { route ->
                         when (route) {
                             is TopicRoute -> {
                                 TopicScreen(
