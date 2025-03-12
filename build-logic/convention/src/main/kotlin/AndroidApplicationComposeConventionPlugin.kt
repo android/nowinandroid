@@ -16,6 +16,7 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.google.samples.apps.nowinandroid.configureAndroidCompose
+import com.google.samples.apps.nowinandroid.configureAndroidComposeScreenshotTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -26,9 +27,11 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.application")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "com.android.compose.screenshot")
 
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)
+            configureAndroidComposeScreenshotTest(extension)
         }
     }
 
