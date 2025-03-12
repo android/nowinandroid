@@ -30,6 +30,7 @@ dependencies {
 
     implementation(libs.kotlinx.datetime)
 
+    androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.kotlinx.coroutines.test)
