@@ -37,7 +37,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -76,7 +75,6 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun NiaApp(
     appState: NiaAppState,
@@ -126,7 +124,6 @@ fun NiaApp(
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3AdaptiveApi::class,
 )
 internal fun NiaApp(
     appState: NiaAppState,
@@ -152,7 +149,7 @@ internal fun NiaApp(
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
                 val selected = currentDestination
-                    .isRouteInHierarchy(destination.route)
+                    .isRouteInHierarchy(destination.baseRoute)
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },
@@ -185,7 +182,12 @@ internal fun NiaApp(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = {
+                SnackbarHost(
+                    snackbarHostState,
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
+                )
+            },
         ) { padding ->
             Column(
                 Modifier

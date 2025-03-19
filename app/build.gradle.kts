@@ -36,9 +36,6 @@ android {
 
         // Custom test runner to set up Hilt dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -48,7 +45,7 @@ android {
         release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -89,6 +86,7 @@ dependencies {
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.androidx.compose.material3.adaptive.navigation)
@@ -114,22 +112,24 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.dataTest)
+    testImplementation(projects.core.datastoreTest)
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.sync.syncTest)
     testImplementation(libs.kotlin.test)
 
+    testDemoImplementation(libs.androidx.navigation.testing)
     testDemoImplementation(libs.robolectric)
     testDemoImplementation(libs.roborazzi)
     testDemoImplementation(projects.core.screenshotTesting)
+    testDemoImplementation(projects.core.testing)
 
-    androidTestImplementation(kotlin("test"))
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.kotlin.test)
 
     baselineProfile(projects.benchmarks)
 }

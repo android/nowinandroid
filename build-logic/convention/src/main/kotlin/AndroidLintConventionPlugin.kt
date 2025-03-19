@@ -19,6 +19,7 @@ import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.dsl.Lint
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
 class AndroidLintConventionPlugin : Plugin<Project> {
@@ -32,7 +33,7 @@ class AndroidLintConventionPlugin : Plugin<Project> {
                     configure<LibraryExtension> { lint(Lint::configure) }
 
                 else -> {
-                    pluginManager.apply("com.android.lint")
+                    apply(plugin = "com.android.lint")
                     configure<Lint>(Lint::configure)
                 }
             }
@@ -42,5 +43,7 @@ class AndroidLintConventionPlugin : Plugin<Project> {
 
 private fun Lint.configure() {
     xmlReport = true
+    sarifReport = true
     checkDependencies = true
+    disable += "GradleDependency"
 }

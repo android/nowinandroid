@@ -41,6 +41,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 /**
  * To learn more about how this test handles Flows created with stateIn, see
@@ -85,20 +86,16 @@ class SearchViewModelTest {
     fun stateIsEmptyQuery_withEmptySearchQuery() = runTest {
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("")
 
         assertEquals(EmptyQuery, viewModel.searchResultUiState.value)
-
-        collectJob.cancel()
     }
 
     @Test
     fun emptyResultIsReturned_withNotMatchingQuery() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("XXX")
         searchContentsRepository.addNewsResources(newsResourcesTestData)
@@ -106,30 +103,59 @@ class SearchViewModelTest {
 
         val result = viewModel.searchResultUiState.value
         assertIs<SearchResultUiState.Success>(result)
-
-        collectJob.cancel()
     }
 
     @Test
     fun recentSearches_verifyUiStateIsSuccess() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.recentSearchQueriesUiState.collect() }
         viewModel.onSearchTriggered("kotlin")
 
         val result = viewModel.recentSearchQueriesUiState.value
         assertIs<Success>(result)
+    }
+
+    @Test
+    fun searchNotReady_withNoFtsTableEntity() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("")
+
+        assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
+    }
+
+    @Test
+    fun emptySearchText_isNotAddedToRecentSearches() = runTest {
+        viewModel.onSearchTriggered("")
+
+        val recentSearchQueriesStream = getRecentQueryUseCase()
+        val recentSearchQueries = recentSearchQueriesStream.first()
+        val recentSearchQuery = recentSearchQueries.firstOrNull()
+
+        assertNull(recentSearchQuery)
+    }
+
+    @Test
+    fun searchTextWithThreeSpaces_isEmptyQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+
+        viewModel.onSearchQueryChanged("   ")
+
+        assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
 
         collectJob.cancel()
     }
 
     @Test
-    fun searchNotReady_withNoFtsTableEntity() = runTest {
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+    fun searchTextWithThreeSpacesAndOneLetter_isEmptyQuery() = runTest {
+        searchContentsRepository.addNewsResources(newsResourcesTestData)
+        searchContentsRepository.addTopics(topicsTestData)
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
-        viewModel.onSearchQueryChanged("")
+        viewModel.onSearchQueryChanged("   a")
 
-        assertEquals(SearchNotReady, viewModel.searchResultUiState.value)
+        assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
 
         collectJob.cancel()
     }

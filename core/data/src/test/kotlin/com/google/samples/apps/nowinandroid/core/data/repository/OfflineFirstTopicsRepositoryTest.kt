@@ -25,7 +25,8 @@ import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.test.InMemoryDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
 import kotlinx.coroutines.flow.first
@@ -33,9 +34,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import kotlin.test.assertEquals
 
 class OfflineFirstTopicsRepositoryTest {
@@ -52,16 +51,11 @@ class OfflineFirstTopicsRepositoryTest {
 
     private lateinit var synchronizer: Synchronizer
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @Before
     fun setup() {
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
-        niaPreferences = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
-        )
+        niaPreferences = NiaPreferencesDataSource(InMemoryDataStore(UserPreferences.getDefaultInstance()))
         synchronizer = TestSynchronizer(niaPreferences)
 
         subject = OfflineFirstTopicsRepository(
@@ -73,6 +67,8 @@ class OfflineFirstTopicsRepositoryTest {
     @Test
     fun offlineFirstTopicsRepository_topics_stream_is_backed_by_topics_dao() =
         testScope.runTest {
+            subject.syncWith(synchronizer)
+
             assertEquals(
                 topicDao.getTopicEntities()
                     .first()

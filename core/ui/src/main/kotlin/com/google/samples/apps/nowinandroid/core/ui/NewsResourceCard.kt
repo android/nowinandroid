@@ -24,7 +24,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.draganddrop.dragAndDropSource
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,6 +55,7 @@ import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -116,9 +116,11 @@ fun NewsResourceCardExpanded(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
         // Pass null for action to only override the label and not the actual action.
-        modifier = modifier.semantics {
-            onClick(label = clickActionLabel, action = null)
-        },
+        modifier = modifier
+            .semantics {
+                onClick(label = clickActionLabel, action = null)
+            }
+            .testTag("newsResourceCard:${userNewsResource.id}"),
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {
@@ -136,19 +138,13 @@ fun NewsResourceCardExpanded(
                             userNewsResource.title,
                             modifier = Modifier
                                 .fillMaxWidth((.8f))
-                                .dragAndDropSource {
-                                    detectTapGestures(
-                                        onLongPress = {
-                                            startTransfer(
-                                                DragAndDropTransferData(
-                                                    ClipData.newPlainText(
-                                                        sharingLabel,
-                                                        sharingContent,
-                                                    ),
-                                                    flags = dragAndDropFlags,
-                                                ),
-                                            )
-                                        },
+                                .dragAndDropSource { _ ->
+                                    DragAndDropTransferData(
+                                        ClipData.newPlainText(
+                                            sharingLabel,
+                                            sharingContent,
+                                        ),
+                                        flags = dragAndDropFlags,
                                     )
                                 },
                         )
@@ -336,9 +332,11 @@ fun NewsResourceTopics(
                     }
                     Text(
                         text = followableTopic.topic.name.uppercase(Locale.getDefault()),
-                        modifier = Modifier.semantics {
-                            this.contentDescription = contentDescription
-                        },
+                        modifier = Modifier
+                            .semantics {
+                                this.contentDescription = contentDescription
+                            }
+                            .testTag("topicTag:${followableTopic.topic.id}"),
                     )
                 },
             )

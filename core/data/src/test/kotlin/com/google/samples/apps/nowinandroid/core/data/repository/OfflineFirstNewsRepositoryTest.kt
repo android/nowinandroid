@@ -32,7 +32,8 @@ import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsRes
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
-import com.google.samples.apps.nowinandroid.core.datastore.test.testUserPreferencesDataStore
+import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
+import com.google.samples.apps.nowinandroid.core.datastore.test.InMemoryDataStore
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkChangeList
@@ -43,9 +44,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -67,14 +66,9 @@ class OfflineFirstNewsRepositoryTest {
 
     private lateinit var synchronizer: Synchronizer
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
-
     @Before
     fun setup() {
-        niaPreferencesDataSource = NiaPreferencesDataSource(
-            tmpFolder.testUserPreferencesDataStore(testScope),
-        )
+        niaPreferencesDataSource = NiaPreferencesDataSource(InMemoryDataStore(UserPreferences.getDefaultInstance()))
         newsResourceDao = TestNewsResourceDao()
         topicDao = TestTopicDao()
         network = TestNiaNetworkDataSource()
@@ -95,6 +89,7 @@ class OfflineFirstNewsRepositoryTest {
     @Test
     fun offlineFirstNewsRepository_news_resources_stream_is_backed_by_news_resource_dao() =
         testScope.runTest {
+            subject.syncWith(synchronizer)
             assertEquals(
                 newsResourceDao.getNewsResources()
                     .first()
