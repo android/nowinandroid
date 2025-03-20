@@ -37,4 +37,4 @@ data class GradientColors(
 /**
  * A composition local for [GradientColors].
  */
-val LocalGradientColors = staticCompositionLocalOf { GradientColors() }
+internal val LocalGradientColors = staticCompositionLocalOf { GradientColors() }
