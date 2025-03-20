@@ -98,10 +98,10 @@ androidx.window:window-core:1.3.0
 androidx.window:window:1.3.0
 com.google.accompanist:accompanist-drawablepainter:0.32.0
 com.google.code.findbugs:jsr305:3.0.2
-com.google.dagger:dagger-lint-aar:2.54
-com.google.dagger:dagger:2.54
-com.google.dagger:hilt-android:2.54
-com.google.dagger:hilt-core:2.54
+com.google.dagger:dagger-lint-aar:2.56
+com.google.dagger:dagger:2.56
+com.google.dagger:hilt-android:2.56
+com.google.dagger:hilt-core:2.56
 com.google.guava:listenablefuture:1.0
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.9.0
