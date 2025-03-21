@@ -71,7 +71,7 @@ fun LazyStaggeredGridState.rememberDraggableScroller(
  * @param scroll a function to be invoked when an index has been identified to scroll to.
  */
 @Composable
-private inline fun rememberDraggableScroller(
+internal inline fun rememberDraggableScroller(
     itemsAvailable: Int,
     crossinline scroll: suspend (index: Int) -> Unit,
 ): (Float) -> Unit {
