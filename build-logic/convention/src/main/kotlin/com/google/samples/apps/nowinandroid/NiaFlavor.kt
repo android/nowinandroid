@@ -34,8 +34,8 @@ enum class NiaFlavor(val dimension: FlavorDimension, val applicationIdSuffix: St
     prod(FlavorDimension.contentType),
 }
 
-fun <E : CommonExtension<*, *, *, F, *, *>, F : ProductFlavor> configureFlavors(
-    commonExtension: E,
+fun configureFlavors(
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
     flavorConfigurationBlock: ProductFlavor.(flavor: NiaFlavor) -> Unit = {},
 ) {
     when (commonExtension) {
@@ -49,7 +49,7 @@ fun <E : CommonExtension<*, *, *, F, *, *>, F : ProductFlavor> configureFlavors(
 }
 
 @JvmName("configureFlavorsImpl")
-private inline fun <E : CommonExtension<*, *, *, F, *, *>, F : ProductFlavor> E.configureFlavors(
+private inline fun <E : CommonExtension<*, *, *, out F, *, *>, F : ProductFlavor> E.configureFlavors(
     crossinline flavorConfigurationBlock: F.(flavor: NiaFlavor) -> Unit = {},
 ) {
     apply {
