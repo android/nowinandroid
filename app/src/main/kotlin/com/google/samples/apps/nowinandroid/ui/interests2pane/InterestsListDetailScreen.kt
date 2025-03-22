@@ -54,8 +54,6 @@ import java.util.UUID
 
 @Serializable internal object TopicPlaceholderRoute
 
-// TODO: Remove @Keep when https://issuetracker.google.com/353898971 is fixed
-@Keep
 @Serializable internal object DetailPaneNavHostRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
