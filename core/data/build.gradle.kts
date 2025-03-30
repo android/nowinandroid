@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.notifications)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(platform(libs.kotlinx.serialization.bom))
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(projects.core.datastoreTest)
     testImplementation(projects.core.testing)
