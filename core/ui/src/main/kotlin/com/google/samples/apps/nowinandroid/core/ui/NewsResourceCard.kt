@@ -118,6 +118,7 @@ fun NewsResourceCardExpanded(
         // Pass null for action to only override the label and not the actual action.
         modifier = modifier
             .semantics {
+                contentDescription = clickActionLabel
                 onClick(label = clickActionLabel, action = null)
             }
             .testTag("newsResourceCard:${userNewsResource.id}"),
