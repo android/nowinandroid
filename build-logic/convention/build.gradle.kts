@@ -58,33 +58,25 @@ tasks {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = libs.plugins.nowinandroid.android.application.compose.get().pluginId
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
         register("androidApplication") {
             id = libs.plugins.nowinandroid.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationJacoco") {
-            id = libs.plugins.nowinandroid.android.application.jacoco.get().pluginId
-            implementationClass = "AndroidApplicationJacocoConventionPlugin"
-        }
-        register("androidLibraryCompose") {
-            id = libs.plugins.nowinandroid.android.library.compose.get().pluginId
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("androidCompose") {
+            id = libs.plugins.nowinandroid.android.compose.get().pluginId
+            implementationClass = "AndroidComposeConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.nowinandroid.android.library.asProvider().get().pluginId
+            id = libs.plugins.nowinandroid.android.library.get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidFeature") {
             id = libs.plugins.nowinandroid.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
-        register("androidLibraryJacoco") {
-            id = libs.plugins.nowinandroid.android.library.jacoco.get().pluginId
-            implementationClass = "AndroidLibraryJacocoConventionPlugin"
+        register("androidJacoco") {
+            id = libs.plugins.nowinandroid.android.jacoco.get().pluginId
+            implementationClass = "AndroidJacocoConventionPlugin"
         }
         register("androidTest") {
             id = libs.plugins.nowinandroid.android.test.get().pluginId
