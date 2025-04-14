@@ -1,9 +1,9 @@
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.google.samples.apps.nowinandroid.configureJacoco
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -36,7 +36,7 @@ class AndroidJacocoConventionPlugin : Plugin<Project> {
 
             when {
                 pluginManager.hasPlugin("com.android.application") -> {
-                    androidExtension = the<BaseAppModuleExtension>()
+                    androidExtension = the<ApplicationExtension>()
                     jacocoExtension = the<ApplicationAndroidComponentsExtension>()
                 }
 
