@@ -175,9 +175,9 @@ internal fun NiaApp(
                     },
                     label = { Text(stringResource(destination.iconTextId)) },
                     modifier =
-                        Modifier
-                            .testTag("NiaNavItem")
-                            .then(if (hasUnread) Modifier.notificationDot() else Modifier),
+                    Modifier
+                        .testTag("NiaNavItem")
+                        .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )
             }
         },
@@ -295,7 +295,6 @@ fun Modifier.refinedImePadding() = composed {
     onGloballyPositioned { coordinates ->
         consumePadding = coordinates.findRootCoordinates().size.height -
             (coordinates.positionInWindow().y + coordinates.size.height).toInt()
-
     }
         .consumeWindowInsets(
             PaddingValues(
