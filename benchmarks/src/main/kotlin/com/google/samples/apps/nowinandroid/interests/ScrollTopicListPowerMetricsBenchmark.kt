@@ -27,13 +27,14 @@ import androidx.benchmark.macro.PowerMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.uiautomator.By
+import androidx.test.uiautomator.uiAutomator
+import com.google.samples.apps.nowinandroid.ITERATIONS
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.allowNotifications
 import com.google.samples.apps.nowinandroid.foryou.forYouScrollFeedDownUp
 import com.google.samples.apps.nowinandroid.foryou.forYouSelectTopics
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
 import com.google.samples.apps.nowinandroid.foryou.setAppTheme
+import com.google.samples.apps.nowinandroid.startAppAndAllowPermission
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,23 +62,23 @@ class ScrollTopicListPowerMetricsBenchmark {
             packageName = PACKAGE_NAME,
             metrics = listOf(FrameTimingMetric(), PowerMetric(PowerMetric.Energy(categories))),
             compilationMode = compilationMode,
-            iterations = 2,
+            iterations = ITERATIONS,
             startupMode = StartupMode.WARM,
             setupBlock = {
-                // Start the app
-                pressHome()
-                startActivityAndWait()
-                allowNotifications()
-                // Navigate to Settings
-                device.findObject(By.desc("Settings")).click()
-                device.waitForIdle()
-                setAppTheme(isDark)
+                uiAutomator {
+                    pressHome()
+                    startAppAndAllowPermission()
+                    onView { contentDescription == "Settings" }.click()
+                    setAppTheme(isDark)
+                }
             },
         ) {
-            forYouWaitForContent()
-            forYouSelectTopics()
-            repeat(3) {
-                forYouScrollFeedDownUp()
+            uiAutomator {
+                forYouWaitForContent()
+                forYouSelectTopics()
+                repeat(3) {
+                    forYouScrollFeedDownUp()
+                }
             }
         }
 }

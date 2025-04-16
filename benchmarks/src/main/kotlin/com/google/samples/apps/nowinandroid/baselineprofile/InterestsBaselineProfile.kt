@@ -17,10 +17,11 @@
 package com.google.samples.apps.nowinandroid.baselineprofile
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
+import androidx.test.uiautomator.uiAutomator
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
 import com.google.samples.apps.nowinandroid.interests.goToInterestsScreen
 import com.google.samples.apps.nowinandroid.interests.interestsScrollTopicsDownUp
-import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
+import com.google.samples.apps.nowinandroid.startAppAndAllowPermission
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,10 +34,11 @@ class InterestsBaselineProfile {
     @Test
     fun generate() =
         baselineProfileRule.collect(PACKAGE_NAME) {
-            startActivityAndAllowNotifications()
-
-            // Navigate to interests screen
-            goToInterestsScreen()
-            interestsScrollTopicsDownUp()
+            uiAutomator {
+                startAppAndAllowPermission()
+                // Navigate to interests screen
+                goToInterestsScreen()
+                interestsScrollTopicsDownUp()
+            }
         }
 }
