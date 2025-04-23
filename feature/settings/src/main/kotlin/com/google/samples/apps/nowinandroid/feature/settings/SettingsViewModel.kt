@@ -71,7 +71,7 @@ class SettingsViewModel @Inject constructor(
     fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         viewModelScope.launch {
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
-            if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT >=  VERSION_CODES.S) {
                 val uiModeManager =
                     context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
                 val splashMode = when (darkThemeConfig) {
