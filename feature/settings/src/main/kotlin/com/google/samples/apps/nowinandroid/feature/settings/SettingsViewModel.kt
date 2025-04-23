@@ -16,14 +16,22 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings
 
+import android.app.UiModeManager
+import android.content.Context
+import android.os.Build
+import android.os.Build.VERSION_CODES
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.LIGHT
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -35,6 +43,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepository.userData
@@ -62,6 +71,17 @@ class SettingsViewModel @Inject constructor(
     fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         viewModelScope.launch {
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
+            if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
+                val uiModeManager =
+                    context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+                val splashMode = when (darkThemeConfig) {
+                    FOLLOW_SYSTEM -> UiModeManager.MODE_NIGHT_AUTO
+                    LIGHT -> UiModeManager.MODE_NIGHT_NO
+                    DARK -> UiModeManager.MODE_NIGHT_YES
+                }
+                uiModeManager.setApplicationNightMode(splashMode)
+            }
+
         }
     }
 
