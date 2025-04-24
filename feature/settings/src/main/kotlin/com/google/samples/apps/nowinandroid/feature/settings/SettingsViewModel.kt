@@ -20,6 +20,7 @@ import android.app.UiModeManager
 import android.content.Context
 import android.os.Build
 import android.os.Build.VERSION_CODES
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -43,7 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepository.userData
@@ -71,17 +72,21 @@ class SettingsViewModel @Inject constructor(
     fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         viewModelScope.launch {
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
+            val splashMode = when (darkThemeConfig) {
+                FOLLOW_SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                DARK -> AppCompatDelegate.MODE_NIGHT_YES
+            }
+            AppCompatDelegate.setDefaultNightMode(splashMode)
             if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
-                val uiModeManager =
-                    context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
-                val splashMode = when (darkThemeConfig) {
+                val uiModeMode = when (darkThemeConfig) {
                     FOLLOW_SYSTEM -> UiModeManager.MODE_NIGHT_AUTO
                     LIGHT -> UiModeManager.MODE_NIGHT_NO
                     DARK -> UiModeManager.MODE_NIGHT_YES
                 }
-                uiModeManager.setApplicationNightMode(splashMode)
+                (context.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager)
+                    ?.setApplicationNightMode(uiModeMode)
             }
-
         }
     }
 
