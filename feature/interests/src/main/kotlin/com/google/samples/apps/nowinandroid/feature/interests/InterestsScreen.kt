@@ -38,7 +38,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 fun InterestsRoute(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    highlightSelectedTopic: Boolean = false,
+    shouldHighlightSelectedTopic: Boolean = false,
     viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,7 +50,7 @@ fun InterestsRoute(
             viewModel.onTopicClick(it)
             onTopicClick(it)
         },
-        highlightSelectedTopic = highlightSelectedTopic,
+        shouldHighlightSelectedTopic = shouldHighlightSelectedTopic,
         modifier = modifier,
     )
 }
@@ -61,7 +61,7 @@ internal fun InterestsScreen(
     followTopic: (String, Boolean) -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    highlightSelectedTopic: Boolean = false,
+    shouldHighlightSelectedTopic: Boolean = false,
 ) {
     Column(
         modifier = modifier,
@@ -70,7 +70,6 @@ internal fun InterestsScreen(
         when (uiState) {
             InterestsUiState.Loading ->
                 NiaLoadingWheel(
-                    modifier = modifier,
                     contentDesc = stringResource(id = R.string.feature_interests_loading),
                 )
 
@@ -80,8 +79,7 @@ internal fun InterestsScreen(
                     onTopicClick = onTopicClick,
                     onFollowButtonClick = followTopic,
                     selectedTopicId = uiState.selectedTopicId,
-                    highlightSelectedTopic = highlightSelectedTopic,
-                    modifier = modifier,
+                    shouldHighlightSelectedTopic = shouldHighlightSelectedTopic,
                 )
 
             is InterestsUiState.Empty -> InterestsEmptyScreen()

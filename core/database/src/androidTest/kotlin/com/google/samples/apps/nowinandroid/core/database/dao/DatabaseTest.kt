@@ -23,12 +23,11 @@ import com.google.samples.apps.nowinandroid.core.database.NiaDatabase
 import org.junit.After
 import org.junit.Before
 
-
 internal abstract class DatabaseTest {
 
-    private lateinit var db : NiaDatabase
-    protected lateinit var newsResourceDao : NewsResourceDao
-    protected lateinit var topicDao : TopicDao
+    private lateinit var db: NiaDatabase
+    protected lateinit var newsResourceDao: NewsResourceDao
+    protected lateinit var topicDao: TopicDao
 
     @Before
     fun setup() {
@@ -46,5 +45,3 @@ internal abstract class DatabaseTest {
     @After
     fun teardown() = db.close()
 }
-
-
