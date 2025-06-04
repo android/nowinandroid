@@ -128,7 +128,7 @@ fun ScrollableState.DecorativeScrollbar(
  * A scrollbar thumb that is intended to also be a touch target for fast scrolling.
  */
 @Composable
-private fun ScrollableState.DraggableScrollbarThumb(
+internal fun ScrollableState.DraggableScrollbarThumb(
     interactionSource: InteractionSource,
     orientation: Orientation,
 ) {
@@ -148,7 +148,7 @@ private fun ScrollableState.DraggableScrollbarThumb(
  * A decorative scrollbar thumb used solely for communicating a user's position in a list.
  */
 @Composable
-private fun ScrollableState.DecorativeScrollbarThumb(
+internal fun ScrollableState.DecorativeScrollbarThumb(
     interactionSource: InteractionSource,
     orientation: Orientation,
 ) {
@@ -168,7 +168,7 @@ private fun ScrollableState.DecorativeScrollbarThumb(
 // remove when project is upgraded
 @SuppressLint("ComposableModifierFactory")
 @Composable
-private fun Modifier.scrollThumb(
+internal fun Modifier.scrollThumb(
     scrollableState: ScrollableState,
     interactionSource: InteractionSource,
 ): Modifier {
@@ -214,7 +214,7 @@ private class ScrollThumbNode(var colorProducer: ColorProducer) : DrawModifierNo
  * @param interactionSource source of interactions in the scrolling container
  */
 @Composable
-private fun scrollbarThumbColor(
+internal fun scrollbarThumbColor(
     scrollableState: ScrollableState,
     interactionSource: InteractionSource,
 ): State<Color> {

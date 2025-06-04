@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,12 +31,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 
 @Composable
@@ -100,7 +97,7 @@ fun InterestsItem(
 }
 
 @Composable
-private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
+internal fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier = modifier
@@ -116,92 +113,5 @@ private fun InterestsIcon(topicImageUrl: String, modifier: Modifier = Modifier) 
             contentDescription = null,
             modifier = modifier,
         )
-    }
-}
-
-@Preview
-@Composable
-private fun InterestsCardPreview() {
-    NiaTheme {
-        Surface {
-            InterestsItem(
-                name = "Compose",
-                description = "Description",
-                following = false,
-                topicImageUrl = "",
-                onClick = { },
-                onFollowButtonClick = { },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun InterestsCardLongNamePreview() {
-    NiaTheme {
-        Surface {
-            InterestsItem(
-                name = "This is a very very very very long name",
-                description = "Description",
-                following = true,
-                topicImageUrl = "",
-                onClick = { },
-                onFollowButtonClick = { },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun InterestsCardLongDescriptionPreview() {
-    NiaTheme {
-        Surface {
-            InterestsItem(
-                name = "Compose",
-                description = "This is a very very very very very very very " +
-                    "very very very long description",
-                following = false,
-                topicImageUrl = "",
-                onClick = { },
-                onFollowButtonClick = { },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun InterestsCardWithEmptyDescriptionPreview() {
-    NiaTheme {
-        Surface {
-            InterestsItem(
-                name = "Compose",
-                description = "",
-                following = true,
-                topicImageUrl = "",
-                onClick = { },
-                onFollowButtonClick = { },
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun InterestsCardSelectedPreview() {
-    NiaTheme {
-        Surface {
-            InterestsItem(
-                name = "Compose",
-                description = "",
-                following = true,
-                topicImageUrl = "",
-                onClick = { },
-                onFollowButtonClick = { },
-                isSelected = true,
-            )
-        }
     }
 }
