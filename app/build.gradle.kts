@@ -101,7 +101,8 @@ dependencies {
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.window.core)
     implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.coil.kt)
+    implementation(platform(libs.coil.bom))
+    implementation(libs.coil)
     implementation(libs.kotlinx.serialization.json)
 
     ksp(libs.hilt.compiler)
