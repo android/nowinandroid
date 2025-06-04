@@ -18,10 +18,13 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -42,6 +45,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,6 +56,10 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.findRootCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -185,7 +193,8 @@ internal fun NiaApp(
             snackbarHost = {
                 SnackbarHost(
                     snackbarHostState,
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
+                    modifier = Modifier
+                        .refinedImePadding(),
                 )
             },
         ) { padding ->
@@ -276,3 +285,23 @@ private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
     this?.hierarchy?.any {
         it.hasRoute(route)
     } ?: false
+
+fun Modifier.refinedImePadding() = composed {
+    var consumePadding by remember { mutableIntStateOf(0) }
+
+    val density = LocalDensity.current
+    val navigationBars = WindowInsets.navigationBars
+
+    onGloballyPositioned { coordinates ->
+        consumePadding = coordinates.findRootCoordinates().size.height -
+            (coordinates.positionInWindow().y + coordinates.size.height).toInt()
+    }
+        .consumeWindowInsets(
+            PaddingValues(
+                bottom = with(LocalDensity.current) {
+                    maxOf(0.dp, (consumePadding - navigationBars.getBottom(density)).toDp())
+                },
+            ),
+        )
+        .imePadding()
+}
