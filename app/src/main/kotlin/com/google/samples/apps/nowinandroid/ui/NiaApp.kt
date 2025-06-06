@@ -168,10 +168,9 @@ internal fun NiaApp(
                         )
                     },
                     label = { Text(stringResource(destination.iconTextId)) },
-                    modifier =
-                        Modifier
-                            .testTag("NiaNavItem")
-                            .then(if (hasUnread) Modifier.notificationDot() else Modifier),
+                    modifier = Modifier
+                        .testTag("NiaNavItem")
+                        .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )
             }
         },
