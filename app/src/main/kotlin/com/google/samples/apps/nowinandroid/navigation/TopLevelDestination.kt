@@ -20,14 +20,14 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouBaseRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
-import com.google.samples.apps.nowinandroid.feature.search.R as searchR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
+import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
 
 /**
  * Type for the top level destinations in the application. Contains metadata about the destination
@@ -54,7 +54,7 @@ enum class TopLevelDestination(
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
         unselectedIcon = NiaIcons.UpcomingBorder,
-        iconTextId = forYouR.string.feature_foryou_title,
+        iconTextId = forYouR.string.feature_foryou_api_title,
         titleTextId = R.string.app_name,
         route = ForYouRoute::class,
         baseRoute = ForYouBaseRoute::class,
@@ -62,15 +62,15 @@ enum class TopLevelDestination(
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
         unselectedIcon = NiaIcons.BookmarksBorder,
-        iconTextId = bookmarksR.string.feature_bookmarks_title,
-        titleTextId = bookmarksR.string.feature_bookmarks_title,
+        iconTextId = bookmarksR.string.feature_bookmarks_api_title,
+        titleTextId = bookmarksR.string.feature_bookmarks_api_title,
         route = BookmarksRoute::class,
     ),
     INTERESTS(
         selectedIcon = NiaIcons.Grid3x3,
         unselectedIcon = NiaIcons.Grid3x3,
-        iconTextId = searchR.string.feature_search_interests,
-        titleTextId = searchR.string.feature_search_interests,
+        iconTextId = searchR.string.feature_search_api_interests,
+        titleTextId = searchR.string.feature_search_api_interests,
         route = InterestsRoute::class,
     ),
 }
