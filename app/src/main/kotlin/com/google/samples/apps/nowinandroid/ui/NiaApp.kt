@@ -75,17 +75,21 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+<<<<<<< HEAD
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
+=======
+import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
+>>>>>>> 068d8cc9 (Split feature modules into api and impl modules)
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.TimeZone
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 
 @Composable
 fun NiaApp(
