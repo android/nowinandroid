@@ -45,7 +45,7 @@ import org.robolectric.annotation.Config
 import javax.inject.Inject
 import kotlin.properties.ReadOnlyProperty
 import kotlin.test.assertTrue
-import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
+import com.google.samples.apps.nowinandroid.feature.topic.api.R as FeatureTopicR
 
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
 private const val COMPACT_WIDTH = "w412dp-h915dp"
