@@ -34,10 +34,10 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
-import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.navigateToBookmarks
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.navigateToForYou
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.navigateToInterests
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU

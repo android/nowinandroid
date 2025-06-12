@@ -68,12 +68,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.interests)
-    implementation(projects.feature.foryou)
-    implementation(projects.feature.bookmarks)
-    implementation(projects.feature.topic)
-    implementation(projects.feature.search)
-    implementation(projects.feature.settings)
+    implementation(projects.feature.interests.api)
+    implementation(projects.feature.foryou.api)
+    implementation(projects.feature.bookmarks.api)
+    implementation(projects.feature.topic.api)
+    implementation(projects.feature.search.api)
+    implementation(projects.feature.settings.api)
 
     implementation(projects.core.common)
     implementation(projects.core.ui)
