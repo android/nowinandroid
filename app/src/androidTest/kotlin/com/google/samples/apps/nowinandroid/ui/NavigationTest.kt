@@ -47,7 +47,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
 import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
 import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR

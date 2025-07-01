@@ -67,6 +67,7 @@ include(":core:ui")
 
 include(":feature:foryou")
 include(":feature:interests")
+include(":feature:bookmarks:api")
 include(":feature:bookmarks:impl")
 include(":feature:topic")
 include(":feature:search")
