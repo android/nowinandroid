@@ -2,7 +2,7 @@
 accompanist = "0.37.0"
 androidDesugarJdkLibs = "2.1.4"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.9.0"
+androidGradlePlugin = "8.9.3"
 androidTools = "31.9.0"
 androidxActivity = "1.9.3"
 androidxAppCompat = "1.7.0"
@@ -21,6 +21,7 @@ androidxLintGradle = "1.0.0-alpha03"
 androidxMacroBenchmark = "1.3.4"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
+androidxNavigation3 = "1.0.0-alpha04"
 androidxProfileinstaller = "1.4.1"
 androidxTestCore = "1.6.1"
 androidxTestExt = "1.2.1"
@@ -59,6 +60,9 @@ room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.4"
 turbine = "1.2.0"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+material = "1.12.0"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -99,6 +103,8 @@ androidx-lint-gradle = { group = "androidx.lint", name = "lint-gradle", version.
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "androidxNavigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidxNavigation3" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
@@ -161,6 +167,9 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -198,3 +207,4 @@ nowinandroid-android-room = { id = "nowinandroid.android.room" }
 nowinandroid-android-test = { id = "nowinandroid.android.test" }
 nowinandroid-hilt = { id = "nowinandroid.hilt" }
 nowinandroid-jvm-library = { id = "nowinandroid.jvm.library" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
