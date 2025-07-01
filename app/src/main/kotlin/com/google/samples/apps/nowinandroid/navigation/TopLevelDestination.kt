@@ -20,12 +20,12 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 

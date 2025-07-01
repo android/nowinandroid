@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
