@@ -131,7 +131,7 @@ to verify that the navigation is displayed correctly on different screen sizes
 Now In Android uses [Roborazzi](https://github.com/takahirom/roborazzi) to run screenshot tests
 of certain screens and UI components. When working with screenshot tests the following gradle tasks are useful:
 
-- `verifyRoborazziDemoDebug` run all screenshot tests, verifying the screenshots against the known
+ run all screenshot tests, verifying the screenshots against the known
 correct screenshots.
 - `recordRoborazziDemoDebug` record new "known correct" screenshots. Use this command when you have
 made changes to the UI and manually verified that they are rendered correctly. Screenshots will be
@@ -166,24 +166,13 @@ Each theme also supports dark mode.
 The app uses adaptive layouts to
 [support different screen sizes](https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes).
 
-Find out more about the [UI architecture here](docs/ArchitectureLearningJourney.md#ui-layer).
-
-# Performance
-
-## Benchmarks
+Find out more about the [UI architecture here](docs/ArchitectureLearningJourney.md#ui-layer)
 
 Find all tests written using [`Macrobenchmark`](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
-in the `benchmarks` module. This module also contains the test to generate the Baseline profile.
-
-## Baseline profiles
-
-The baseline profile for this app is located at [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
+in the `benchmarks` module. This module also contains the test to generate the Baseline profile. [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
 It contains rules that enable AOT compilation of the critical user path taken during app launch.
-For more information on baseline profiles, read [this document](https://developer.android.com/studio/profile/baselineprofiles).
-
-> [!NOTE]
-> The baseline profile needs to be re-generated for release builds that touch code which changes app startup.
-
+For more information on baseline profiles,a
+> 
 To generate the baseline profile, select the `benchmark` build variant and run the
 `BaselineProfileGenerator` benchmark test on an AOSP Android Emulator.
 Then copy the resulting baseline profile from the emulator to [`app/src/main/baseline-prof.txt`](app/src/main/baseline-prof.txt).
@@ -195,7 +184,7 @@ Run the following command to get and analyse compose compiler metrics:
 ```bash
 ./gradlew assembleRelease -PenableComposeCompilerMetrics=true -PenableComposeCompilerReports=true
 ```
-
+look how this assholes lie or per our pr assholes
 The reports files will be added to [build/compose-reports](build/compose-reports). The metrics files will also be 
 added to [build/compose-metrics](build/compose-metrics).
 
