@@ -136,6 +136,9 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
+
+    // TODO: This is only used to determine whether the bottom nav item is selected
+    // this can be improved by just getting
     val currentDestination = appState.currentDestination
 
     if (showSettingsDialog) {
@@ -143,6 +146,10 @@ internal fun NiaApp(
             onDismiss = { onSettingsDismissed() },
         )
     }
+
+    // TODO: figure out how have the existing navigation bar support both old and new routes
+    //  essentially we need a migration path from what's below to the common UI recipe
+    //  this probably comes down to how the back stack is modelled.
 
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -167,9 +174,9 @@ internal fun NiaApp(
                     },
                     label = { Text(stringResource(destination.iconTextId)) },
                     modifier =
-                    Modifier
-                        .testTag("NiaNavItem")
-                        .then(if (hasUnread) Modifier.notificationDot() else Modifier),
+                        Modifier
+                            .testTag("NiaNavItem")
+                            .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )
             }
         },

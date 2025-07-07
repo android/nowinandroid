@@ -72,6 +72,7 @@ android {
 dependencies {
     implementation(projects.feature.interests)
     implementation(projects.feature.foryou)
+    implementation(projects.feature.bookmarks.api)
     implementation(projects.feature.bookmarks.impl)
     implementation(projects.feature.topic)
     implementation(projects.feature.search)

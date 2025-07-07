@@ -19,11 +19,11 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
@@ -34,7 +34,6 @@ import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
 import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
-import kotlinx.serialization.Serializable
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -50,38 +49,41 @@ fun NiaNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
-    val backStack = rememberNavBackStack(LegacyRoute)
-
-    NavDisplay(backStack = backStack, entryProvider = entryProvider {
-        entry<LegacyRoute> {
-            NavHost(
-                navController = navController,
-                startDestination = ForYouBaseRoute,
-                modifier = modifier,
-            ) {
-                forYouSection(
-                    onTopicClick = navController::navigateToTopic,
-                ) {
-                    topicScreen(
-                        showBackButton = true,
-                        onBackClick = navController::popBackStack,
-                        onTopicClick = navController::navigateToTopic,
-                    )
+    NavDisplay(
+        backStack = listOf(Unit),
+        onBack = { },
+        entryProvider = entryProvider(
+            fallback = { key ->
+                NavEntry(key = key) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = ForYouBaseRoute,
+                        modifier = modifier,
+                    ) {
+                        forYouSection(
+                            onTopicClick = navController::navigateToTopic,
+                        ) {
+                            topicScreen(
+                                showBackButton = true,
+                                onBackClick = navController::popBackStack,
+                                onTopicClick = navController::navigateToTopic,
+                            )
+                        }
+                        bookmarksScreen(
+                            onTopicClick = navController::navigateToInterests,
+                            onShowSnackbar = onShowSnackbar,
+                        )
+                        searchScreen(
+                            onBackClick = navController::popBackStack,
+                            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
+                            onTopicClick = navController::navigateToInterests,
+                        )
+                        interestsListDetailScreen()
+                    }
                 }
-                bookmarksScreen(
-                    onTopicClick = navController::navigateToInterests,
-                    onShowSnackbar = onShowSnackbar,
-                )
-                searchScreen(
-                    onBackClick = navController::popBackStack,
-                    onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-                    onTopicClick = navController::navigateToInterests,
-                )
-                interestsListDetailScreen()
-            }
-        }
-    })
-}
+            },
+        ) {
 
-@Serializable
-data object LegacyRoute : NavKey
+        },
+    )
+}

@@ -101,7 +101,7 @@ internal fun BookmarksRoute(
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-internal fun BookmarksScreen(
+fun BookmarksScreen(
     feedState: NewsFeedUiState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     removeFromBookmarks: (String) -> Unit,

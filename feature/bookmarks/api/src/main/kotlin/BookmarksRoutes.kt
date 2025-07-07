@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.kotlin.serialization)
-}
+package com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks.api"
-}
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
-dependencies {
-    implementation(projects.core.navigation)
-    implementation(libs.kotlinx.serialization.json)
-}

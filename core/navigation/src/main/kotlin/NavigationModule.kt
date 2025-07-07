@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.kotlin.serialization)
-}
+package com.google.samples.apps.nowinandroid.core.navigation
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks.api"
-}
-
-dependencies {
-    implementation(projects.core.navigation)
-    implementation(libs.kotlinx.serialization.json)
-}
+// Marker interface for top level routes
+// interface TopLevelRoute

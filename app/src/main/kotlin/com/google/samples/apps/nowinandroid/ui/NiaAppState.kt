@@ -16,9 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,11 +45,13 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 
 @Composable
@@ -59,6 +63,11 @@ fun rememberNiaAppState(
     navController: NavHostController = rememberNavController(),
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
+
+    val nav3Navigator = remember(navController) {
+        Nav3NavigatorSimple(navController)
+    }
+
     return remember(
         navController,
         coroutineScope,
@@ -196,3 +205,136 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
         }
     }
 }
+
+class Nav3NavigatorSimple(val navController: NavHostController){
+
+    val backStack = mutableStateListOf<Any>()
+
+    val coroutineScope = CoroutineScope(Job())
+
+    init {
+        coroutineScope.launch {
+            navController.currentBackStack.collect { nav2BackStack ->
+                println("Nav2 back stack changed")
+                backStack.clear()
+
+                for (nav2Entry in nav2BackStack){
+                    println("Adding destination: ${nav2Entry.destination}")
+                    backStack.add(nav2Entry.destination)
+                }
+            }
+        }
+    }
+}
+
+/*
+class Nav3Navigator<T: Any>(val navController: NavHostController, startRoute: T) {
+
+
+    init {
+        coroutineScope.launch {
+            navController.currentBackStack.collect { nav2BackStack ->
+                println("Nav2 back stack changed")
+                // TODO: Convert this into a nav3 back stack
+                for (nav2Entry in nav2BackStack){
+                    println("Destination: ${nav2Entry.destination}")
+                }
+            }
+        }
+
+        navController.addOnDestinationChangedListener(
+            listener = object : NavController.OnDestinationChangedListener {
+                override fun onDestinationChanged(
+                    controller: NavController,
+                    destination: NavDestination,
+                    arguments: Bundle?,
+                ) {
+                    println("NavController destination changed to $destination")
+                    // TODO: something! Or maybe we just listen to the back stack and mirror it here
+                }
+            }
+        )
+    }
+
+    // Keep track of the baseRoute - this is the route that is always at the bottom of the stack
+    private val baseRoute = startRoute
+
+    // Maintain a stack for each top level route
+    private var topLevelStacks : LinkedHashMap<T, SnapshotStateList<T>> = linkedMapOf(
+        baseRoute to mutableStateListOf(baseRoute)
+    )
+
+    // Expose the current top level route for consumers
+    var topLevelRoute by mutableStateOf(baseRoute)
+        private set
+
+    // Expose the back stack so it can be rendered by the NavDisplay
+    val backStack : SnapshotStateList<T> = mutableStateListOf(baseRoute)
+
+    private fun updateBackStack() {
+        backStack.apply {
+            // TODO: Could this be optimised?
+            clear()
+            addAll(topLevelStacks.flatMap { it.value })
+        }
+        println("Top level stacks: $topLevelStacks")
+        println("Backstack state: $backStack")
+    }
+
+    fun goTo(route: T, navOptions: NavOptions? = null){
+
+        backStack.add(route)
+        navController.navigate(route, navOptions)
+
+        *//*if (route is NavKey){
+            if (route is TopLevelRoute){
+                // Pop everything up to the base route stack
+                for (existingKey in topLevelStacks.keys.reversed()){
+                    if (existingKey != baseRoute) topLevelStacks.remove(existingKey)
+                }
+
+                if (route != baseRoute) {
+                    topLevelStacks.put(route, mutableStateListOf(route))
+                }
+                topLevelRoute = route
+
+            } else {
+                topLevelStacks[topLevelRoute]?.add(route)
+            }
+
+            topLevelStacks[topLevelRoute]?.add(route)
+
+            updateBackStack()
+        } else {
+            navController.navigate(route, navOptions)
+        }*//*
+    }
+
+*//*
+    fun removeLast(){
+        val removedKey = topLevelStacks[topLevelRoute]?.removeLastOrNull()
+        // If the removed key was a top level key, remove the associated top level stack
+        topLevelStacks.remove(removedKey)
+        topLevelRoute = topLevelStacks.keys.last()
+        updateBackStack()
+    }
+*//*
+
+    fun goBack(){
+        val removedKey = topLevelStacks[topLevelRoute]?.removeLastOrNull()
+        // If the removed key was a top level key, remove the associated top level stack
+        if (removedKey is TopLevelRoute){
+            topLevelStacks.remove(removedKey)
+            topLevelRoute = topLevelStacks.keys.last()
+        }
+
+        updateBackStack()
+
+        if (removedKey is LegacyRoute){
+            navController.popBackStack()
+        }
+    }
+
+
+
+}*/

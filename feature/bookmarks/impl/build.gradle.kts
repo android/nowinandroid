@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-
+    implementation(projects.core.navigation)
     testImplementation(projects.core.testing)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
