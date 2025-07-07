@@ -68,7 +68,7 @@ class ScrollTopicListPowerMetricsBenchmark {
                 uiAutomator {
                     pressHome()
                     startAppAndAllowPermission()
-                    onView { contentDescription == "Settings" }.click()
+                    onElement { contentDescription == "Settings" }.click()
                     setAppTheme(isDark)
                 }
             },

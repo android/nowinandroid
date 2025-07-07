@@ -23,11 +23,11 @@ import com.google.samples.apps.nowinandroid.textVisibleOnTopAppBar
 import org.junit.Assert.fail
 
 fun UiAutomatorTestScope.forYouWaitForContent() {
-    onViewOrNull(timeoutMs = 500) { viewIdResourceName == "loadingWheel" && !isVisibleToUser }
+    onElementOrNull(timeoutMs = 500) { viewIdResourceName == "loadingWheel" && !isVisibleToUser }
     // Sometimes, the loading wheel is gone, but the content is not loaded yet
     // So we'll wait here for topics to be sure
     // Timeout here is quite big, because sometimes data loading takes a long time!
-    onView(timeoutMs = 30_000) {
+    onElement(timeoutMs = 30_000) {
         viewIdResourceName == "forYou:topicSelection" && childCount > 0 && isVisibleToUser
     }
 }
@@ -37,7 +37,7 @@ fun UiAutomatorTestScope.forYouWaitForContent() {
  * [recheckTopicsIfChecked] Topics may be already checked from the previous iteration.
  */
 fun UiAutomatorTestScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = false) {
-    onView { viewIdResourceName == "forYou:topicSelection" }.run {
+    onElement { viewIdResourceName == "forYou:topicSelection" }.run {
         if (children.isEmpty()) {
             fail("No topics found, can't generate profile for ForYou page.")
         }
@@ -59,14 +59,14 @@ fun UiAutomatorTestScope.forYouSelectTopics(recheckTopicsIfChecked: Boolean = fa
 }
 
 fun UiAutomatorTestScope.forYouScrollFeedDownUp() {
-    onView { viewIdResourceName == "forYou:feed" }.run {
+    onElement { viewIdResourceName == "forYou:feed" }.run {
         fling(Direction.DOWN)
         fling(Direction.UP)
     }
 }
 
 fun UiAutomatorTestScope.setAppTheme(isDark: Boolean) {
-    onView { textAsString == if (isDark) "Dark" else "Light" }.click()
-    onView { textAsString == "OK" }.click()
+    onElement { textAsString() == if (isDark) "Dark" else "Light" }.click()
+    onElement { textAsString() == "OK" }.click()
     textVisibleOnTopAppBar("Now in Android")
 }

@@ -18,7 +18,7 @@ package com.google.samples.apps.nowinandroid
 
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.test.uiautomator.UiAutomatorTestScope
-import androidx.test.uiautomator.onView
+import androidx.test.uiautomator.onElement
 import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.watcher.PermissionDialog
 
@@ -34,12 +34,12 @@ fun UiAutomatorTestScope.startAppAndAllowPermission() {
 }
 
 fun UiAutomatorTestScope.textVisibleOnTopAppBar(text: String) =
-    onTopAppBar { textAsString == text && isVisibleToUser }
+    onTopAppBar { textAsString() == text && isVisibleToUser }
 
 fun UiAutomatorTestScope.onTopAppBar(
     timeoutMs: Long = 10000,
     pollIntervalMs: Long = 100,
     block: AccessibilityNodeInfo.() -> (Boolean),
 ) {
-    onView { viewIdResourceName == "niaTopAppBar" }.onView(timeoutMs, pollIntervalMs, block)
+    onElement { viewIdResourceName == "niaTopAppBar" }.onElement(timeoutMs, pollIntervalMs, block)
 }

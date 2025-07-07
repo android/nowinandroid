@@ -21,7 +21,7 @@ import androidx.benchmark.macro.FrameTimingMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.uiautomator.onView
+import androidx.test.uiautomator.onElement
 import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.uiAutomator
 import com.google.samples.apps.nowinandroid.ITERATIONS
@@ -53,7 +53,7 @@ class TopicsScreenRecompositionBenchmark {
                     pressHome()
                     startAppAndAllowPermission()
                     // Navigate to interests screen
-                    onView { textAsString == "Interests" }.click()
+                    onElement { textAsString() == "Interests" }.click()
                 }
             },
         ) {
@@ -61,7 +61,7 @@ class TopicsScreenRecompositionBenchmark {
                 interestsWaitForTopics()
                 repeat(3) {
                     // Toggle bookmarked
-                    onView { viewIdResourceName == "interests:topics" }.onView { isCheckable }
+                    onElement { viewIdResourceName == "interests:topics" }.onElement { isCheckable }
                         .click()
                 }
             }

@@ -16,10 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
+import androidx.benchmark.ExperimentalBenchmarkConfigApi
+import androidx.benchmark.ExperimentalConfig
+import androidx.benchmark.StartupInsightsConfig
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.FrameTimingMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
+import androidx.benchmark.perfetto.ExperimentalPerfettoCaptureApi
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.textAsString
 import androidx.test.uiautomator.uiAutomator
@@ -30,6 +34,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(ExperimentalBenchmarkConfigApi::class, ExperimentalPerfettoCaptureApi::class)
 @RunWith(AndroidJUnit4::class)
 class ScrollTopicListBenchmark {
     @get:Rule
@@ -46,13 +51,14 @@ class ScrollTopicListBenchmark {
             compilationMode = compilationMode,
             iterations = ITERATIONS,
             startupMode = StartupMode.WARM,
+            experimentalConfig = ExperimentalConfig(startupInsightsConfig = StartupInsightsConfig(true)),
             setupBlock = {
                 uiAutomator {
                     // Start the app
                     pressHome()
                     startAppAndAllowPermission()
                     // Navigate to interests screen
-                    onView { textAsString == "Interests" }.click()
+                    onElement { textAsString() == "Interests" }.click()
                 }
             },
         ) {

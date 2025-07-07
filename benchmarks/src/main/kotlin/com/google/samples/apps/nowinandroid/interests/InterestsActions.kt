@@ -22,21 +22,21 @@ import androidx.test.uiautomator.textAsString
 import com.google.samples.apps.nowinandroid.textVisibleOnTopAppBar
 
 fun UiAutomatorTestScope.goToInterestsScreen() {
-    onView { textAsString == "Interests" }.click()
+    onElement { textAsString() == "Interests" }.click()
     textVisibleOnTopAppBar("Interests")
     // Wait until content is loaded by checking if interests are loaded
-    assert(onViewOrNull { viewIdResourceName == "loadingWheel" && !isVisibleToUser } == null)
+    assert(onElementOrNull { viewIdResourceName == "loadingWheel" && !isVisibleToUser } == null)
 }
 
 fun UiAutomatorTestScope.interestsScrollTopicsDownUp() {
-    onView { viewIdResourceName == "interests:topics" }.run {
+    onElement { viewIdResourceName == "interests:topics" }.run {
         // Set some margin from the sides to prevent triggering system navigation
-        setGestureMargin(uiDevice.displayWidth / 5)
+        setGestureMargin(device.displayWidth / 5)
         fling(Direction.DOWN)
         fling(Direction.UP)
     }
 }
 
 fun UiAutomatorTestScope.interestsWaitForTopics() {
-    onView(30_000) { textAsString == "Accessibility" }
+    onElement(30_000) { textAsString() == "Accessibility" }
 }

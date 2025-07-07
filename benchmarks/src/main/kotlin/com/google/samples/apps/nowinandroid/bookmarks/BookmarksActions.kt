@@ -21,6 +21,6 @@ import androidx.test.uiautomator.textAsString
 import com.google.samples.apps.nowinandroid.textVisibleOnTopAppBar
 
 fun UiAutomatorTestScope.goToBookmarksScreen() {
-    onView { textAsString == "Saved" }.click()
+    onElement { textAsString == "Saved" }.click()
     textVisibleOnTopAppBar("Saved")
 }
