@@ -20,7 +20,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreenStateful
 import kotlinx.serialization.Serializable
 
 @Serializable object BookmarksRoute
@@ -33,6 +33,6 @@ fun NavGraphBuilder.bookmarksScreen(
     onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
     composable<BookmarksRoute> {
-        BookmarksRoute(onTopicClick, onShowSnackbar)
+        BookmarksScreenStateful(onTopicClick, onShowSnackbar)
     }
 }

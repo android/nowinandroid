@@ -18,25 +18,32 @@ package com.google.samples.apps.nowinandroid.ui
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.navigateToBookmarks
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
@@ -45,6 +52,7 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKM
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -77,6 +85,7 @@ fun rememberNiaAppState(
     ) {
         NiaAppState(
             navController = navController,
+            nav3Navigator = nav3Navigator,
             coroutineScope = coroutineScope,
             networkMonitor = networkMonitor,
             userNewsResourceRepository = userNewsResourceRepository,
@@ -88,6 +97,7 @@ fun rememberNiaAppState(
 @Stable
 class NiaAppState(
     val navController: NavHostController,
+    val nav3Navigator: Nav3NavigatorSimple,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
@@ -208,22 +218,53 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
 
 class Nav3NavigatorSimple(val navController: NavHostController){
 
-    val backStack = mutableStateListOf<Any>()
+    // TODO: We are using Dispatchers.Main so that we can access SavedStateHandle in toRoute,
+    //  however, this may be unnecessary if we can just deserialize the route from memory
+    val coroutineScope = CoroutineScope(Job() + Dispatchers.Main)
 
-    val coroutineScope = CoroutineScope(Job())
+    // We need a single element to avoid "backStack cannot be empty" error b/430023647
+    val backStack = mutableStateListOf<Any>(Unit)
 
     init {
         coroutineScope.launch {
             navController.currentBackStack.collect { nav2BackStack ->
-                println("Nav2 back stack changed")
-                backStack.clear()
+                with(backStack) {
 
-                for (nav2Entry in nav2BackStack){
-                    println("Adding destination: ${nav2Entry.destination}")
-                    backStack.add(nav2Entry.destination)
+                    nav2BackStack.forEach { nav2Entry ->
+                        nav2Entry.savedStateHandle.toRoute()
+                    }
+                    println("Nav2 backstack changed, size: ${backStack.size}")
+                    if (backStack.isNotEmpty()){
+                        clear()
+
+                        for (nav2Entry in nav2BackStack){
+                            val routeClass = nav2Entry.toNav3Route()
+                            if (routeClass != null){
+                                add(routeClass)
+                            } else {
+                                add(nav2Entry)
+                            }
+                        }
+                        println("Nav3 backstack updated")
+                    }
                 }
             }
         }
+    }
+
+    fun goTo(route: Any, navOptions: NavOptions? = null){
+        navController.navigate(route, navOptions)
+    }
+
+    fun goBack(){
+        navController.popBackStack()
+    }
+}
+
+private fun NavBackStackEntry.toNav3Route() : Any? {
+    return when(this.destination.route){
+        BookmarksRoute::class.qualifiedName -> { this.savedStateHandle.toRoute<BookmarksRoute>() }
+        else -> null
     }
 }
 

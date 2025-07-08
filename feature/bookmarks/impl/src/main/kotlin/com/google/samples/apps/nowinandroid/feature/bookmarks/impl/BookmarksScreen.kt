@@ -76,7 +76,7 @@ import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParam
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
 @Composable
-internal fun BookmarksRoute(
+fun BookmarksScreenStateful(
     onTopicClick: (String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
