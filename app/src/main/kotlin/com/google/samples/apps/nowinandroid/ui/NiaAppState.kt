@@ -40,6 +40,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
+import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -215,7 +216,8 @@ class Nav3NavigatorSimple(val navController: NavHostController){
 
     private val migratedRoutes = listOf(
         BookmarksRoute::class,
-        TopicRoute::class
+        TopicRoute::class,
+        SearchRoute::class
     ).associateBy { it.qualifiedName }
 
     // TODO: We are using Dispatchers.Main so that we can access SavedStateHandle in toRoute,
@@ -243,6 +245,7 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                                 when (className) {
                                     BookmarksRoute::class.qualifiedName -> entry.toRoute<BookmarksRoute>()
                                     TopicRoute::class.qualifiedName -> entry.toRoute<TopicRoute>()
+                                    SearchRoute::class.qualifiedName -> entry.toRoute<SearchRoute>()
                                     else -> entry
                                 }
                             }

@@ -29,6 +29,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBase
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
+import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
@@ -71,11 +72,7 @@ fun NiaNavHost(
                             composable<TopicRoute>{}
                         }
                         composable<BookmarksRoute> {}
-                        searchScreen(
-                            onBackClick = navController::popBackStack,
-                            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-                            onTopicClick = navController::navigateToInterests,
-                        )
+                        composable<SearchRoute> {}
                         interestsListDetailScreen()
                     }
                 }
@@ -93,6 +90,11 @@ fun NiaNavHost(
                 onTopicClick = {
                     nav3Navigator.goTo(route = TopicRoute(it))
                 },
+            )
+            searchScreen(
+                onBackClick = navController::popBackStack,
+                onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
+                onTopicClick = navController::navigateToInterests,
             )
         },
     )
