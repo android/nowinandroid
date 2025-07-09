@@ -39,6 +39,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
@@ -47,6 +48,7 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
+import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -217,7 +219,8 @@ class Nav3NavigatorSimple(val navController: NavHostController){
     private val migratedRoutes = listOf(
         BookmarksRoute::class,
         TopicRoute::class,
-        SearchRoute::class
+        SearchRoute::class,
+        InterestsRoute::class,
     ).associateBy { it.qualifiedName }
 
     // TODO: We are using Dispatchers.Main so that we can access SavedStateHandle in toRoute,
@@ -235,18 +238,16 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                     if (backStack.isNotEmpty()){
                         clear()
                         val entriesToAdd = nav2BackStack.mapNotNull { entry ->
-
-                            val className = entry.destination.route?.substringBefore('/')
-                            println("Evaluating: $className")
                             // Ignore nav graph root entries
                             if (entry.destination::class.qualifiedName == "androidx.navigation.compose.ComposeNavGraphNavigator.ComposeNavGraph"){
                                 null
                             } else {
-                                when (className) {
-                                    BookmarksRoute::class.qualifiedName -> entry.toRoute<BookmarksRoute>()
-                                    TopicRoute::class.qualifiedName -> entry.toRoute<TopicRoute>()
-                                    SearchRoute::class.qualifiedName -> entry.toRoute<SearchRoute>()
-                                    else -> entry
+                                with(entry.destination) {
+                                    if (hasRoute<BookmarksRoute>()) { entry.toRoute<BookmarksRoute>() }
+                                    else if (hasRoute<TopicRoute>()) { entry.toRoute<TopicRoute>() }
+                                    else if (hasRoute<SearchRoute>()) { entry.toRoute<SearchRoute>() }
+                                    else if (hasRoute<InterestsRoute>()) { entry.toRoute<InterestsRoute>() }
+                                    else { entry }
                                 }
                             }
                         }

@@ -73,7 +73,7 @@ fun NiaNavHost(
                         }
                         composable<BookmarksRoute> {}
                         composable<SearchRoute> {}
-                        interestsListDetailScreen()
+                        composable<InterestsRoute>{}
                     }
                 }
             },
@@ -96,6 +96,7 @@ fun NiaNavHost(
                 onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
                 onTopicClick = navController::navigateToInterests,
             )
+            interestsListDetailScreen()
         },
     )
 }

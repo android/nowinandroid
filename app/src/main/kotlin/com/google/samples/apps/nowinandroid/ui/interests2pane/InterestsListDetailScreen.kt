@@ -50,8 +50,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
@@ -64,8 +64,8 @@ import kotlin.math.max
 
 @Serializable internal object TopicPlaceholderRoute
 
-fun NavGraphBuilder.interestsListDetailScreen() {
-    composable<InterestsRoute> {
+fun EntryProviderBuilder<Any>.interestsListDetailScreen() {
+    entry<InterestsRoute> {
         InterestsListDetailScreen()
     }
 }
