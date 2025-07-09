@@ -16,23 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreenStateful
-import kotlinx.serialization.Serializable
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 
-@Serializable object BookmarksRoute
-
-fun NavController.navigateToBookmarks(navOptions: NavOptions) =
-    navigate(route = BookmarksRoute, navOptions)
-
-fun NavGraphBuilder.bookmarksScreen(
+fun EntryProviderBuilder<Any>.bookmarksScreen(
     onTopicClick: (String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
-    composable<BookmarksRoute> {
+    entry<BookmarksRoute> {
         BookmarksScreenStateful(onTopicClick, onShowSnackbar)
     }
 }

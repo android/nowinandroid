@@ -16,19 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreenStateful
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
@@ -51,9 +50,10 @@ fun NiaNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+    val nav3Navigator = appState.nav3Navigator
     NavDisplay(
-        backStack = appState.nav3Navigator.backStack,
-        onBack = { appState.nav3Navigator.goBack() },
+        backStack = nav3Navigator.backStack,
+        onBack = { nav3Navigator.goBack() },
         entryProvider = entryProvider(
             fallback = { key ->
                 println("$key not found, using fallback entry")
@@ -72,9 +72,7 @@ fun NiaNavHost(
                                 onTopicClick = navController::navigateToTopic,
                             )
                         }
-                        composable<BookmarksRoute> {
-                            Text("Legacy BookmarksRoute")
-                        }
+                        composable<BookmarksRoute> {}
                         searchScreen(
                             onBackClick = navController::popBackStack,
                             onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
@@ -85,12 +83,12 @@ fun NiaNavHost(
                 }
             },
         ) {
-            entry<BookmarksRoute>{
-                BookmarksScreenStateful(
-                    { it: String -> navController.navigateToInterests(it) },
-                    onShowSnackbar
-                )
-            }
+            bookmarksScreen(
+                onTopicClick = { it: String ->
+                    nav3Navigator.goTo(route = InterestsRoute(it))
+                },
+                onShowSnackbar = onShowSnackbar
+            )
         },
     )
 }
