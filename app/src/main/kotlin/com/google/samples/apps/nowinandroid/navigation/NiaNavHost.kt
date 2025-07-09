@@ -30,7 +30,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSect
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
@@ -64,13 +64,11 @@ fun NiaNavHost(
                         modifier = modifier,
                     ) {
                         forYouSection(
-                            onTopicClick = navController::navigateToTopic,
+                            onTopicClick = {
+                                nav3Navigator.goTo(route = TopicRoute(it))
+                            },
                         ) {
-                            topicScreen(
-                                showBackButton = true,
-                                onBackClick = navController::popBackStack,
-                                onTopicClick = navController::navigateToTopic,
-                            )
+                            composable<TopicRoute>{}
                         }
                         composable<BookmarksRoute> {}
                         searchScreen(
@@ -88,6 +86,13 @@ fun NiaNavHost(
                     nav3Navigator.goTo(route = InterestsRoute(it))
                 },
                 onShowSnackbar = onShowSnackbar
+            )
+            topicScreen(
+                showBackButton = true,
+                onBackClick = { nav3Navigator.goBack() },
+                onTopicClick = {
+                    nav3Navigator.goTo(route = TopicRoute(it))
+                },
             )
         },
     )

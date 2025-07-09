@@ -17,30 +17,21 @@
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
+import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable data class TopicRoute(val id: String)
 
-fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(route = TopicRoute(topicId)) {
-        navOptions()
-    }
-}
-
-fun NavGraphBuilder.topicScreen(
+fun EntryProviderBuilder<Any>.topicScreen(
     showBackButton: Boolean,
     onBackClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
-    composable<TopicRoute> { entry ->
-        val id = entry.toRoute<TopicRoute>().id
+    entry<TopicRoute> { entry ->
+        val id = entry.id
         TopicScreen(
             showBackButton = showBackButton,
             onBackClick = onBackClick,

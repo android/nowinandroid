@@ -30,8 +30,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.internalToRoute
 import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
@@ -41,6 +41,7 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.Boo
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
@@ -213,7 +214,8 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
 class Nav3NavigatorSimple(val navController: NavHostController){
 
     private val migratedRoutes = listOf(
-        BookmarksRoute::class
+        BookmarksRoute::class,
+        TopicRoute::class
     ).associateBy { it.qualifiedName }
 
     // TODO: We are using Dispatchers.Main so that we can access SavedStateHandle in toRoute,
@@ -231,16 +233,17 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                     if (backStack.isNotEmpty()){
                         clear()
                         val entriesToAdd = nav2BackStack.mapNotNull { entry ->
-                            println("Evaluating: ${entry.destination::class.qualifiedName}")
+
+                            val className = entry.destination.route?.substringBefore('/')
+                            println("Evaluating: $className")
                             // Ignore nav graph root entries
                             if (entry.destination::class.qualifiedName == "androidx.navigation.compose.ComposeNavGraphNavigator.ComposeNavGraph"){
                                 null
                             } else {
-                                val migratedRouteClass = migratedRoutes[entry.destination.route]
-                                if (migratedRouteClass != null){
-                                    entry.savedStateHandle.internalToRoute(route = migratedRouteClass, typeMap = emptyMap())
-                                } else {
-                                    entry
+                                when (className) {
+                                    BookmarksRoute::class.qualifiedName -> entry.toRoute<BookmarksRoute>()
+                                    TopicRoute::class.qualifiedName -> entry.toRoute<TopicRoute>()
+                                    else -> entry
                                 }
                             }
                         }
