@@ -16,17 +16,13 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -34,8 +30,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.internalToRoute
 import androidx.navigation.navOptions
-import androidx.navigation.toRoute
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
@@ -43,7 +39,6 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
@@ -218,6 +213,10 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
 
 class Nav3NavigatorSimple(val navController: NavHostController){
 
+    private val migratedRoutes = listOf(
+        BookmarksRoute::class
+    ).associateBy { it.qualifiedName }
+
     // TODO: We are using Dispatchers.Main so that we can access SavedStateHandle in toRoute,
     //  however, this may be unnecessary if we can just deserialize the route from memory
     val coroutineScope = CoroutineScope(Job() + Dispatchers.Main)
@@ -229,44 +228,43 @@ class Nav3NavigatorSimple(val navController: NavHostController){
         coroutineScope.launch {
             navController.currentBackStack.collect { nav2BackStack ->
                 with(backStack) {
-
-                    nav2BackStack.forEach { nav2Entry ->
-                        nav2Entry.savedStateHandle.toRoute()
-                    }
                     println("Nav2 backstack changed, size: ${backStack.size}")
                     if (backStack.isNotEmpty()){
                         clear()
-
-                        for (nav2Entry in nav2BackStack){
-                            val routeClass = nav2Entry.toNav3Route()
-                            if (routeClass != null){
-                                add(routeClass)
+                        val entriesToAdd = nav2BackStack.mapNotNull { entry ->
+                            println("Evaluating: ${entry.destination::class.qualifiedName}")
+                            // Ignore nav graph root entries
+                            if (entry.destination::class.qualifiedName == "androidx.navigation.compose.ComposeNavGraphNavigator.ComposeNavGraph"){
+                                null
                             } else {
-                                add(nav2Entry)
+                                val migratedRouteClass = migratedRoutes[entry.destination.route]
+                                if (migratedRouteClass != null){
+                                    entry.savedStateHandle.internalToRoute(route = migratedRouteClass, typeMap = emptyMap())
+                                } else {
+                                    entry
+                                }
                             }
                         }
-                        println("Nav3 backstack updated")
+                        addAll(entriesToAdd)
+                        println("Nav3 backstack updated: $backStack")
                     }
                 }
             }
         }
     }
 
-    fun goTo(route: Any, navOptions: NavOptions? = null){
-        navController.navigate(route, navOptions)
-    }
-
     fun goBack(){
+        backStack.removeLastOrNull()
         navController.popBackStack()
     }
-}
 
-private fun NavBackStackEntry.toNav3Route() : Any? {
-    return when(this.destination.route){
-        BookmarksRoute::class.qualifiedName -> { this.savedStateHandle.toRoute<BookmarksRoute>() }
-        else -> null
+    fun goTo(route: Any, navOptions: NavOptions? = null){
+        backStack.add(route)
+        navController.navigate(route = route, navOptions = navOptions)
     }
 }
+
+
 
 /*
 class Nav3Navigator<T: Any>(val navController: NavHostController, startRoute: T) {
@@ -379,3 +377,5 @@ class Nav3Navigator<T: Any>(val navController: NavHostController, startRoute: T)
 
 
 }*/
+
+

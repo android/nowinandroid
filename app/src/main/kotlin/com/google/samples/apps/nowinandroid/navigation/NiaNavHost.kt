@@ -53,7 +53,7 @@ fun NiaNavHost(
     val navController = appState.navController
     NavDisplay(
         backStack = appState.nav3Navigator.backStack,
-        onBack = { },
+        onBack = { appState.nav3Navigator.goBack() },
         entryProvider = entryProvider(
             fallback = { key ->
                 println("$key not found, using fallback entry")
@@ -73,7 +73,7 @@ fun NiaNavHost(
                             )
                         }
                         composable<BookmarksRoute> {
-                            Text("Legacy route")
+                            Text("Legacy BookmarksRoute")
                         }
                         searchScreen(
                             onBackClick = navController::popBackStack,
