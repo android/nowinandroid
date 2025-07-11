@@ -21,3 +21,7 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks.api"
 }
+
+dependencies {
+    api(projects.core.navigation)
+}

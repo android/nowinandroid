@@ -93,14 +93,10 @@ import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
-import com.google.samples.apps.nowinandroid.feature.search.impl.RecentSearchQueriesUiState.Loading
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.EmptyQuery
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.LoadFailed
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.SearchNotReady
 import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
 
 @Composable
-internal fun SearchRoute(
+internal fun SearchScreen(
     onBackClick: () -> Unit,
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,
@@ -131,7 +127,7 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
     searchQuery: String = "",
-    recentSearchesUiState: RecentSearchQueriesUiState = Loading,
+    recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading,
     searchResultUiState: SearchResultUiState = SearchResultUiState.Loading,
     onSearchQueryChanged: (String) -> Unit = {},
     onSearchTriggered: (String) -> Unit = {},
@@ -154,11 +150,11 @@ internal fun SearchScreen(
         )
         when (searchResultUiState) {
             SearchResultUiState.Loading,
-            LoadFailed,
+            SearchResultUiState.LoadFailed,
             -> Unit
 
-            SearchNotReady -> SearchNotReadyBody()
-            EmptyQuery,
+            SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
+            SearchResultUiState.EmptyQuery,
             -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
                     RecentSearchesBody(

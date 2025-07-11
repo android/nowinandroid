@@ -79,7 +79,9 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavDisplay
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
@@ -93,7 +95,7 @@ import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 @Composable
 fun NiaApp(
     appState: NiaAppState,
-    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<Any>.() -> Unit>,
+    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
@@ -144,7 +146,7 @@ fun NiaApp(
 )
 internal fun NiaApp(
     appState: NiaAppState,
-    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<Any>.() -> Unit>,
+    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>,
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
@@ -153,7 +155,7 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
-    val currentTopLevelKey = appState.currentTopLevelDestination
+    val currentTopLevelKey = appState.currentTopLevelDestination!!.key
 
 
     if (showSettingsDialog) {
@@ -168,10 +170,7 @@ internal fun NiaApp(
         navigationSuiteItems = {
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
-//                val selected = currentDestination
-//                    .isRouteInHierarchy(destination.baseRoute)
                 val selected = destination.key == currentTopLevelKey
-                println("cfok destination:$destination, currentDest:$currentTopLevelKey")
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },
@@ -245,7 +244,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { appState.navigateToSearchNav3() },
+                        onNavigationClick = { appState.niaBackStack.navigateToSearch() },
                     )
                 }
 

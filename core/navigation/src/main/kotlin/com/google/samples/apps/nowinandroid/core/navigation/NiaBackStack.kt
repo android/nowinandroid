@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,12 +25,12 @@ import javax.inject.Inject
 import kotlin.collections.remove
 
 class NiaBackStack @Inject constructor(
-    startKey: Any,
+    startKey: NiaBackStackKey,
 ) {
     val backStack = mutableStateListOf(startKey)
 
     // Maintain a stack for each top level route
-    private var topLevelStacks : LinkedHashMap<Any, SnapshotStateList<Any>> = linkedMapOf(
+    private var topLevelStacks : LinkedHashMap<NiaBackStackKey, SnapshotStateList<NiaBackStackKey>> = linkedMapOf(
         startKey to mutableStateListOf(startKey)
     )
 
@@ -39,8 +38,8 @@ class NiaBackStack @Inject constructor(
     var currentTopLevelKey by mutableStateOf(startKey)
         private set
 
-    internal val currentKey: Any
-        @Composable get() = topLevelStacks[currentTopLevelKey]!!.last()
+    internal val currentKey: NiaBackStackKey
+        get() = topLevelStacks[currentTopLevelKey]!!.last()
 
     private fun updateBackStack() =
         backStack.apply {
@@ -48,7 +47,7 @@ class NiaBackStack @Inject constructor(
             addAll(topLevelStacks.flatMap { it.value })
         }
 
-    fun navigateToTopLevelDestination(key: Any){
+    fun navigateToTopLevelDestination(key: NiaBackStackKey){
         // If the top level doesn't exist, add it
         if (topLevelStacks[key] == null){
             topLevelStacks.put(key, mutableStateListOf(key))
@@ -60,14 +59,16 @@ class NiaBackStack @Inject constructor(
                 }
             }
         }
+
         currentTopLevelKey = key
         updateBackStack()
     }
 
-    fun navigate(key: Any){
-        println("cfok navigate $key")
-        topLevelStacks[currentTopLevelKey]?.add(key)
-        updateBackStack()
+    fun navigate(key: NiaBackStackKey){
+        if (backStack.lastOrNull() != key) {
+            topLevelStacks[currentTopLevelKey]?.add(key)
+            updateBackStack()
+        }
     }
 
     fun removeLast(){
@@ -77,5 +78,6 @@ class NiaBackStack @Inject constructor(
         currentTopLevelKey = topLevelStacks.keys.last()
         updateBackStack()
     }
-
 }
+
+interface NiaBackStackKey

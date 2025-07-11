@@ -23,8 +23,9 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
@@ -40,10 +41,10 @@ object BookmarksModule {
     @IntoSet
     fun provideBookmarksEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<Any>.() -> @JvmSuppressWildcards Unit = {
+    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
         entry<BookmarksRoute> {
             val snackbarHostState = LocalSnackbarHostState.current
-            BookmarksRoute(
+            BookmarksScreen(
                 onTopicClick = backStack::navigateToTopic,
                 onShowSnackbar = { message, action ->
                     snackbarHostState.showSnackbar(
@@ -58,5 +59,5 @@ object BookmarksModule {
 }
 
 val LocalSnackbarHostState = compositionLocalOf<SnackbarHostState> {
-    error("host state should be initialzied at runtime")
+    error("SnackbarHostState state should be initialized at runtime")
 }

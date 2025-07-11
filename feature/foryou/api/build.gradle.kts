@@ -36,4 +36,5 @@ dependencies {
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
+    api(projects.core.navigation)
 }
