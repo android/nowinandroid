@@ -78,6 +78,7 @@ class SettingsViewModel @Inject constructor(
                 DARK -> AppCompatDelegate.MODE_NIGHT_YES
             }
             AppCompatDelegate.setDefaultNightMode(splashMode)
+            
             if (Build.VERSION.SDK_INT >= VERSION_CODES.S) {
                 val uiModeMode = when (darkThemeConfig) {
                     FOLLOW_SYSTEM -> UiModeManager.MODE_NIGHT_AUTO
