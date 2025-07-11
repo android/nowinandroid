@@ -28,7 +28,7 @@ import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigat
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
-import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
+import com.google.samples.apps.nowinandroid.feature.interests.impl.interestsListDetailScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at

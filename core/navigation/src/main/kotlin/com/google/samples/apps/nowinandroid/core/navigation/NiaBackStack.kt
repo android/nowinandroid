@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,8 +36,11 @@ class NiaBackStack @Inject constructor(
     )
 
     // Expose the current top level route for consumers
-    var topLevelKey by mutableStateOf(startKey)
+    var currentTopLevelKey by mutableStateOf(startKey)
         private set
+
+    internal val currentKey: Any
+        @Composable get() = topLevelStacks[currentTopLevelKey]!!.last()
 
     private fun updateBackStack() =
         backStack.apply {
@@ -56,21 +60,21 @@ class NiaBackStack @Inject constructor(
                 }
             }
         }
-        topLevelKey = key
+        currentTopLevelKey = key
         updateBackStack()
     }
 
     fun navigate(key: Any){
         println("cfok navigate $key")
-        topLevelStacks[topLevelKey]?.add(key)
+        topLevelStacks[currentTopLevelKey]?.add(key)
         updateBackStack()
     }
 
     fun removeLast(){
-        val removedKey = topLevelStacks[topLevelKey]?.removeLastOrNull()
+        val removedKey = topLevelStacks[currentTopLevelKey]?.removeLastOrNull()
         // If the removed key was a top level key, remove the associated top level stack
         topLevelStacks.remove(removedKey)
-        topLevelKey = topLevelStacks.keys.last()
+        currentTopLevelKey = topLevelStacks.keys.last()
         updateBackStack()
     }
 
