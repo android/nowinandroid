@@ -16,13 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.feature.search.impl.navigation
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.navigateToInterests
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRouteNav3
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchRoute
+import com.google.samples.apps.nowinandroid.feature.search.impl.SearchScreen
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,12 +38,12 @@ object SearchModule {
     @IntoSet
     fun provideSearchEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<Any>.() -> @JvmSuppressWildcards Unit = {
+    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
         entry<SearchRouteNav3> { key ->
-            SearchRoute(
+            SearchScreen(
                 onBackClick = backStack::removeLast,
-                onInterestsClick = key.onInterestsClick,
-                onTopicClick = backStack::navigateToInterests,
+                onInterestsClick = { backStack.navigateToTopLevelDestination(InterestsRoute()) },
+                onTopicClick = backStack::navigateToTopic,
             )
         }
     }

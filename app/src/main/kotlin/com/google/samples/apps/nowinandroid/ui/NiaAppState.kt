@@ -35,6 +35,7 @@ import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
+import com.google.samples.apps.nowinandroid.navigation.TopLevelDestinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -98,12 +99,7 @@ class NiaAppState(
 //        }
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() {
-            return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
-                topLevelDestination.key == niaBackStack.currentTopLevelKey
-//                currentDestination?.hasRoute(route = topLevelDestination.route) == true
-            }
-        }
+        @Composable get() = TopLevelDestinations[niaBackStack.currentTopLevelKey]
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -178,9 +174,6 @@ class NiaAppState(
     }
 
     fun navigateToSearch() = navController.navigateToSearch()
-    fun navigateToSearchNav3() = niaBackStack.navigateToSearch(
-        onInterestsClick = { navigateToTopLevelDestination(INTERESTS) }
-    )
 }
 
 /**
