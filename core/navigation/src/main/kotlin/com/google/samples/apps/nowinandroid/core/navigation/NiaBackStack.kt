@@ -31,7 +31,6 @@ class NiaBackStack @Inject constructor(
 
     // Maintain a stack for each top level route
     private var topLevelStacks : LinkedHashMap<NiaBackStackKey, SnapshotStateList<NiaBackStackKey>> = linkedMapOf(
-
         startKey to mutableStateListOf(startKey)
     )
 
