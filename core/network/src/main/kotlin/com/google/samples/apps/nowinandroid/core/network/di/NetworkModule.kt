@@ -18,9 +18,12 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import android.content.Context
 import androidx.tracing.trace
-import coil.ImageLoader
-import coil.decode.SvgDecoder
-import coil.util.DebugLogger
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.network.CacheStrategy
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.svg.SvgDecoder
+import coil3.util.DebugLogger
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.demo.DemoAssetManager
 import dagger.Module
@@ -80,11 +83,18 @@ internal object NetworkModule {
         @ApplicationContext application: Context,
     ): ImageLoader = trace("NiaImageLoader") {
         ImageLoader.Builder(application)
-            .callFactory { okHttpCallFactory.get() }
-            .components { add(SvgDecoder.Factory()) }
-            // Assume most content images are versioned urls
-            // but some problematic images are fetching each time
-            .respectCacheHeaders(false)
+            .components {
+                add(
+                    @OptIn(ExperimentalCoilApi::class)
+                    OkHttpNetworkFetcherFactory(
+                        callFactory = okHttpCallFactory::get,
+                        // Assume most content images are versioned urls
+                        // but some problematic images are fetching each time
+                        cacheStrategy = CacheStrategy::DEFAULT,
+                    ),
+                )
+                add(SvgDecoder.Factory())
+            }
             .apply {
                 if (BuildConfig.DEBUG) {
                     logger(DebugLogger())
