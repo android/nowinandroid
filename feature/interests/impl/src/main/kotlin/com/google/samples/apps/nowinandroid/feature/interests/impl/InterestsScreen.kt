@@ -36,7 +36,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.feature.interests.api.R
 
 @Composable
-fun InterestsRoute(
+fun InterestsScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     shouldHighlightSelectedTopic: Boolean = false,

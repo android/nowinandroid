@@ -28,11 +28,6 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.EmptyQuery
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.LoadFailed
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.Loading
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.SearchNotReady
-import com.google.samples.apps.nowinandroid.feature.search.impl.SearchResultUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -61,29 +56,29 @@ class SearchViewModel @Inject constructor(
         searchContentsRepository.getSearchContentsCount()
             .flatMapLatest { totalCount ->
                 if (totalCount < SEARCH_MIN_FTS_ENTITY_COUNT) {
-                    flowOf(SearchNotReady)
+                    flowOf(SearchResultUiState.SearchNotReady)
                 } else {
                     searchQuery.flatMapLatest { query ->
                         if (query.trim().length < SEARCH_QUERY_MIN_LENGTH) {
-                            flowOf(EmptyQuery)
+                            flowOf(SearchResultUiState.EmptyQuery)
                         } else {
                             getSearchContentsUseCase(query)
                                 // Not using .asResult() here, because it emits Loading state every
                                 // time the user types a letter in the search box, which flickers the screen.
                                 .map<UserSearchResult, SearchResultUiState> { data ->
-                                    Success(
+                                    SearchResultUiState.Success(
                                         topics = data.topics,
                                         newsResources = data.newsResources,
                                     )
                                 }
-                                .catch { emit(LoadFailed) }
+                                .catch { emit(SearchResultUiState.LoadFailed) }
                         }
                     }
                 }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = Loading,
+                initialValue = SearchResultUiState.Loading,
             )
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =

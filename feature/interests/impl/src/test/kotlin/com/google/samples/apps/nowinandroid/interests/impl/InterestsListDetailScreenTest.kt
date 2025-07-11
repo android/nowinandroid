@@ -29,6 +29,7 @@ import androidx.test.espresso.Espresso
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -86,7 +87,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -101,7 +102,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -116,7 +117,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -135,7 +136,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -160,7 +161,7 @@ class InterestsListDetailScreenTest {
                     BackHandler {
                         unhandledBackPress = true
                     }
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 
@@ -180,7 +181,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen()
+                    InterestsListDetailScreen()
                 }
             }
 

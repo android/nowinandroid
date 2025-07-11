@@ -19,7 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouBaseRoute
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
@@ -36,8 +37,8 @@ object ForYouModule {
     @IntoSet
     fun provideForYouEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<Any>.() -> @JvmSuppressWildcards Unit = {
-        entry<ForYouBaseRoute> {
+    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
+        entry<ForYouRoute> {
             ForYouScreen(
                 onTopicClick = backStack::navigateToTopic
             )

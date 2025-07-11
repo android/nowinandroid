@@ -20,16 +20,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
 @Serializable data object SearchRoute
 
-@Serializable data class SearchRouteNav3(val onInterestsClick: () -> Unit)
+@Serializable object SearchRouteNav3: NiaBackStackKey
 
-fun NiaBackStack.navigateToSearch(
-    onInterestsClick: () -> Unit,
-) {
-    navigate(SearchRouteNav3(onInterestsClick))
+fun NiaBackStack.navigateToSearch() {
+    navigate(SearchRouteNav3)
 }
 
 fun NavController.navigateToSearch(navOptions: NavOptions? = null) =
