@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +31,7 @@ class NiaBackStack @Inject constructor(
 
     // Maintain a stack for each top level route
     private var topLevelStacks : LinkedHashMap<NiaBackStackKey, SnapshotStateList<NiaBackStackKey>> = linkedMapOf(
+
         startKey to mutableStateListOf(startKey)
     )
 
@@ -39,8 +39,8 @@ class NiaBackStack @Inject constructor(
     var currentTopLevelKey by mutableStateOf(startKey)
         private set
 
-    internal val currentKey: Any
-        @Composable get() = topLevelStacks[currentTopLevelKey]!!.last()
+    internal val currentKey: NiaBackStackKey
+        get() = topLevelStacks[currentTopLevelKey]!!.last()
 
     private fun updateBackStack() =
         backStack.apply {
@@ -60,6 +60,7 @@ class NiaBackStack @Inject constructor(
                 }
             }
         }
+
         currentTopLevelKey = key
         updateBackStack()
     }
