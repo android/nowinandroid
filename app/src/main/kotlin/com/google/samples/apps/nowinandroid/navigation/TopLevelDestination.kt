@@ -20,8 +20,8 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import kotlin.reflect.KClass
@@ -49,8 +49,7 @@ enum class TopLevelDestination(
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int,
     val route: KClass<*>,
-    val baseRoute: KClass<*> = route,
-    val key: Any
+    val key: NiaBackStackKey
 ) {
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
@@ -58,8 +57,7 @@ enum class TopLevelDestination(
         iconTextId = forYouR.string.feature_foryou_api_title,
         titleTextId = R.string.app_name,
         route = ForYouRoute::class,
-        baseRoute = ForYouBaseRoute::class,
-        key = ForYouBaseRoute
+        key = ForYouRoute
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
@@ -78,3 +76,5 @@ enum class TopLevelDestination(
         key = InterestsRoute(null)
     ),
 }
+
+internal val TopLevelDestinations = TopLevelDestination.entries.associateBy { dest -> dest.key }

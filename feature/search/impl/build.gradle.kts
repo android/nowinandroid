@@ -27,9 +27,9 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
-    implementation(projects.core.navigation)
     implementation(projects.feature.interests.api)
     implementation(projects.feature.search.api)
+    implementation(projects.feature.topic.api)
 
     testImplementation(projects.core.testing)
 

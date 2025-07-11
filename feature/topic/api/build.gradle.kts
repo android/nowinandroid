@@ -24,10 +24,10 @@ android {
 }
 
 dependencies {
+    api(projects.core.navigation)
     implementation(projects.core.data)
 
     testImplementation(projects.core.testing)
-    implementation(projects.core.navigation)
     testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)

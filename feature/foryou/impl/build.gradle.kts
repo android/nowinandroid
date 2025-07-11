@@ -29,7 +29,6 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.core.notifications)
-    implementation(projects.core.navigation)
     implementation(projects.feature.foryou.api)
     implementation(projects.feature.topic.api)
 

@@ -16,11 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.impl
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.navigation.compose.composable
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.topic.api.TopicDetailPlaceholder
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,11 +35,22 @@ import dagger.multibindings.IntoSet
 @InstallIn(ActivityComponent::class)
 object InterestsModule {
 
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     @Provides
     @IntoSet
-    fun provideInterestsEntryProviderBuilder(): EntryProviderBuilder<Any>.() -> @JvmSuppressWildcards Unit = {
-        entry<InterestsRoute> { key ->
-            InterestsListDetailScreen()
+    fun provideInterestsEntryProviderBuilder(
+        backStack: NiaBackStack
+    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
+        entry<InterestsRoute>(
+            metadata = ListDetailSceneStrategy.listPane {
+                TopicDetailPlaceholder()
+            }
+        ) { key ->
+//            InterestsListDetailScreen()
+            InterestsScreen(
+                onTopicClick = backStack::navigateToTopic,
+                shouldHighlightSelectedTopic = false,
+            )
         }
     }
 }

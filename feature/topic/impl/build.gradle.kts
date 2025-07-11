@@ -26,8 +26,9 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(projects.core.navigation)
     implementation(projects.feature.topic.api)
+
+    implementation(libs.androidx.compose.material3.adaptive.navigation3)
 
     testImplementation(projects.core.testing)
     testImplementation(libs.robolectric)

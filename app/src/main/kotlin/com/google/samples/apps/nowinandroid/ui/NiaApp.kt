@@ -71,6 +71,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavDisplay
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -137,7 +138,7 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
-    val currentTopLevelKey = appState.currentTopLevelDestination
+    val currentTopLevelKey = appState.currentTopLevelDestination!!.key
 
 
     if (showSettingsDialog) {
@@ -152,10 +153,7 @@ internal fun NiaApp(
         navigationSuiteItems = {
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
-//                val selected = currentDestination
-//                    .isRouteInHierarchy(destination.baseRoute)
                 val selected = destination.key == currentTopLevelKey
-                println("cfok destination:$destination, currentDest:$currentTopLevelKey")
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },
@@ -229,7 +227,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { appState.navigateToSearchNav3() },
+                        onNavigationClick = { appState.niaBackStack.navigateToSearch() },
                     )
                 }
 

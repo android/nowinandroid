@@ -19,11 +19,10 @@ package com.google.samples.apps.nowinandroid.feature.foryou.api.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object ForYouRoute // route to ForYou screen
-
-@Serializable data object ForYouBaseRoute // route to base navigation graph
+@Serializable data object ForYouRoute: NiaBackStackKey // route to ForYou screen
 
 fun NavController.navigateToForYou(navOptions: NavOptions) = navigate(route = ForYouRoute, navOptions)
 
