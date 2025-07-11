@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
+import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
@@ -41,6 +42,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import com.google.samples.apps.nowinandroid.util.isSystemInDarkTheme
@@ -72,8 +74,13 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
-
     private val viewModel: MainActivityViewModel by viewModels()
+
+    @Inject
+    lateinit var niaBackStack: NiaBackStack
+
+    @Inject
+    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<Any>.() -> Unit>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -137,6 +144,7 @@ class MainActivity : ComponentActivity() {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                niaBackStack = niaBackStack,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
@@ -150,7 +158,10 @@ class MainActivity : ComponentActivity() {
                     androidTheme = themeSettings.androidTheme,
                     disableDynamicTheming = themeSettings.disableDynamicTheming,
                 ) {
-                    NiaApp(appState)
+                    NiaApp(
+                        appState,
+                        entryProviderBuilders
+                    )
                 }
             }
         }

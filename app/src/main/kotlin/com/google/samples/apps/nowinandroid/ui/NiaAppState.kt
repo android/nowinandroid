@@ -18,26 +18,19 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.navigateToBookmarks
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.navigateToForYou
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
@@ -55,11 +48,13 @@ fun rememberNiaAppState(
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
+    niaBackStack: NiaBackStack,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): NiaAppState {
     NavigationTrackingSideEffect(navController)
     return remember(
+        niaBackStack,
         navController,
         coroutineScope,
         networkMonitor,
@@ -67,6 +62,7 @@ fun rememberNiaAppState(
         timeZoneMonitor,
     ) {
         NiaAppState(
+            niaBackStack = niaBackStack,
             navController = navController,
             coroutineScope = coroutineScope,
             networkMonitor = networkMonitor,
@@ -78,6 +74,7 @@ fun rememberNiaAppState(
 
 @Stable
 class NiaAppState(
+    val niaBackStack: NiaBackStack,
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
@@ -86,24 +83,25 @@ class NiaAppState(
 ) {
     private val previousDestination = mutableStateOf<NavDestination?>(null)
 
-    val currentDestination: NavDestination?
-        @Composable get() {
-            // Collect the currentBackStackEntryFlow as a state
-            val currentEntry = navController.currentBackStackEntryFlow
-                .collectAsState(initial = null)
-
-            // Fallback to previousDestination if currentEntry is null
-            return currentEntry.value?.destination.also { destination ->
-                if (destination != null) {
-                    previousDestination.value = destination
-                }
-            } ?: previousDestination.value
-        }
+//    val currentDestination: NavDestination?
+//        @Composable get() {
+//            // Collect the currentBackStackEntryFlow as a state
+//            val currentEntry = navController.currentBackStackEntryFlow
+//                .collectAsState(initial = null)
+//
+//            // Fallback to previousDestination if currentEntry is null
+//            return currentEntry.value?.destination.also { destination ->
+//                if (destination != null) {
+//                    previousDestination.value = destination
+//                }
+//            } ?: previousDestination.value
+//        }
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() {
             return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
-                currentDestination?.hasRoute(route = topLevelDestination.route) == true
+                topLevelDestination.key == niaBackStack.currentTopLevelKey
+//                currentDestination?.hasRoute(route = topLevelDestination.route) == true
             }
         }
 
@@ -152,31 +150,37 @@ class NiaAppState(
      *
      * @param topLevelDestination: The destination the app needs to navigate to.
      */
-    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        trace("Navigation: ${topLevelDestination.name}") {
-            val topLevelNavOptions = navOptions {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
-            }
-
-            when (topLevelDestination) {
-                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
-                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
-                INTERESTS -> navController.navigateToInterests(null, topLevelNavOptions)
-            }
-        }
+    fun navigateToTopLevelDestination(
+        topLevelDestination: TopLevelDestination,
+    ) {
+        niaBackStack.navigateToTopLevelDestination(topLevelDestination.key)
+//        trace("Navigation: ${topLevelDestination.name}") {
+//            val topLevelNavOptions = navOptions {
+//                // Pop up to the start destination of the graph to
+//                // avoid building up a large stack of destinations
+//                // on the back stack as users select items
+//                popUpTo(navController.graph.findStartDestination().id) {
+//                    saveState = true
+//                }
+//                // Avoid multiple copies of the same destination when
+//                // reselecting the same item
+//                launchSingleTop = true
+//                // Restore state when reselecting a previously selected item
+//                restoreState = true
+//            }
+//
+//            when (topLevelDestination) {
+//                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
+//                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
+//                INTERESTS -> navController.navigateToInterests(null, topLevelNavOptions)
+//            }
+//        }
     }
 
     fun navigateToSearch() = navController.navigateToSearch()
+    fun navigateToSearchNav3() = niaBackStack.navigateToSearch(
+        onInterestsClick = { navigateToTopLevelDestination(INTERESTS) }
+    )
 }
 
 /**
