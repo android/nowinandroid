@@ -30,5 +30,5 @@ object NiaAppNavigation {
     @Provides
     @Singleton
     fun provideNiaBackStack(): NiaBackStack =
-        NiaBackStack(startKey = TopLevelDestination.FOR_YOU)
+        NiaBackStack(startKey = TopLevelDestination.FOR_YOU.key)
 }
