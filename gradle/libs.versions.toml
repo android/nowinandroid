@@ -22,6 +22,7 @@ androidxLifecycleViewModelNavigation3 = "2.10.0-alpha05"
 androidxMacroBenchmark = "1.4.1"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
+androidxNavigation3 = "1.0.0-alpha03"
 androidxProfileinstaller = "1.4.1"
 androidxTestCore = "1.7.0-rc01"
 androidxTestExt = "1.3.0-rc01"
@@ -98,6 +99,8 @@ androidx-lint-gradle = { group = "androidx.lint", name = "lint-gradle", version.
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
+androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "androidxNavigation3" }
+androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "androidxNavigation3" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
