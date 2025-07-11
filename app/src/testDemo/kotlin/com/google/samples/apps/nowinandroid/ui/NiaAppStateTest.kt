@@ -85,7 +85,7 @@ class NiaAppStateTest {
             }
 
             // Update currentDestination whenever it changes
-            currentDestination = state.currentDestination?.route
+            currentDestination = state.niaBackStack.currentKey
 
             // Navigate to destination b once
             LaunchedEffect(Unit) {

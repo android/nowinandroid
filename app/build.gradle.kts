@@ -69,10 +69,15 @@ android {
 
 dependencies {
     implementation(projects.feature.interests.api)
+    implementation(projects.feature.interests.impl)
     implementation(projects.feature.foryou.api)
+    implementation(projects.feature.foryou.impl)
     implementation(projects.feature.bookmarks.api)
+    implementation(projects.feature.bookmarks.impl)
     implementation(projects.feature.topic.api)
+    implementation(projects.feature.topic.impl)
     implementation(projects.feature.search.api)
+    implementation(projects.feature.search.impl)
     implementation(projects.feature.settings.api)
 
     implementation(projects.core.common)
@@ -82,10 +87,13 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.navigation)
     implementation(projects.core.analytics)
+    implementation(projects.core.navigation)
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.androidx.compose.material3.adaptive.navigation)
