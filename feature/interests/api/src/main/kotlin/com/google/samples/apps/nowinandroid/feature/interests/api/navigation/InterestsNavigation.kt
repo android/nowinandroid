@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.feature.interests.api.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import kotlinx.serialization.Serializable
 
 @Serializable data class InterestsRoute(
@@ -30,4 +31,10 @@ fun NavController.navigateToInterests(
     navOptions: NavOptions? = null,
 ) {
     navigate(route = InterestsRoute(initialTopicId), navOptions)
+}
+
+fun NiaBackStack.navigateToInterests(
+    initialTopicId: String? = null,
+) {
+    navigate(InterestsRoute(initialTopicId))
 }

@@ -23,4 +23,14 @@ android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks.impl"
 }
 
-dependencies { }
+dependencies {
+    implementation(projects.core.data)
+    implementation(projects.feature.bookmarks.api)
+    implementation(projects.core.navigation)
+    implementation(projects.feature.topic.api)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
+}

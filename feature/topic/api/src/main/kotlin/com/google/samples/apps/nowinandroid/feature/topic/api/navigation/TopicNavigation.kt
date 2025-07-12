@@ -22,12 +22,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.google.samples.apps.nowinandroid.feature.topic.api.TopicScreen
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.feature.topic.api.TopicViewModel
+import com.google.samples.apps.nowinandroid.feature.topic.api.TopicScreen
 import kotlinx.serialization.Serializable
 
 @Serializable data class TopicRoute(val id: String)
 
+fun NiaBackStack.navigateToTopic(
+    topicId: String,
+) {
+    navigate(TopicRoute(topicId))
+}
 fun NavController.navigateToTopic(topicId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
     navigate(route = TopicRoute(topicId)) {
         navOptions()
