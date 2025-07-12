@@ -22,3 +22,24 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests.impl"
 }
+
+dependencies {
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.feature.topic.api)
+    implementation(projects.feature.interests.api)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+
+    testImplementation(projects.core.testing)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.compose.ui.test)
+    testImplementation(libs.androidx.test.espresso.core)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(projects.uiTestHiltManifest)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
+}

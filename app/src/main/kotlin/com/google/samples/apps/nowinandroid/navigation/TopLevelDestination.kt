@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYou
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
 import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
 
@@ -62,8 +62,8 @@ enum class TopLevelDestination(
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
         unselectedIcon = NiaIcons.BookmarksBorder,
-        iconTextId = bookmarksR.string.feature_bookmarks_api_title,
-        titleTextId = bookmarksR.string.feature_bookmarks_api_title,
+        iconTextId = bookmarksR.string.feature_bookmarks_impl_title,
+        titleTextId = bookmarksR.string.feature_bookmarks_impl_title,
         route = BookmarksRoute::class,
     ),
     INTERESTS(
