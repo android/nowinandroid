@@ -23,3 +23,16 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.search.impl"
 }
+
+dependencies {
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.core.navigation)
+    implementation(projects.feature.interests.api)
+    implementation(projects.feature.search.api)
+
+    testImplementation(projects.core.testing)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
+}

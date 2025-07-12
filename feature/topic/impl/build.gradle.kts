@@ -23,3 +23,15 @@ plugins {
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.topic.impl"
 }
+
+dependencies {
+    implementation(projects.core.data)
+    implementation(projects.core.navigation)
+    implementation(projects.feature.topic.api)
+
+    testImplementation(projects.core.testing)
+    testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
+    androidTestImplementation(projects.core.testing)
+}
