@@ -42,6 +42,7 @@ class BookmarksViewModel @Inject constructor(
 ) : ViewModel() {
 
     var shouldDisplayUndoBookmark by mutableStateOf(false)
+        private set
     private var lastRemovedBookmarkId: String? = null
 
     val feedUiState: StateFlow<NewsFeedUiState> =
