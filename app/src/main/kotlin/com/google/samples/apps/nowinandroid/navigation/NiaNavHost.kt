@@ -28,7 +28,6 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bo
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
 import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
@@ -94,7 +93,9 @@ fun NiaNavHost(
             searchScreen(
                 onBackClick = navController::popBackStack,
                 onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-                onTopicClick = navController::navigateToInterests,
+                onTopicClick = {
+                    nav3Navigator.goTo(route = InterestsRoute(it))
+                },
             )
             interestsListDetailScreen()
         },
