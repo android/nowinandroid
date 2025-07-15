@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalUuidApi::class)
+
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,8 +24,10 @@ import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-@Serializable data class TopicRoute(val id: String)
+@Serializable data class TopicRoute(val id: String, val uuid: String = Uuid.random().toString())
 
 fun EntryProviderBuilder<Any>.topicScreen(
     showBackButton: Boolean,

@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
@@ -63,13 +65,11 @@ fun NiaNavHost(
                         startDestination = ForYouBaseRoute,
                         modifier = modifier,
                     ) {
-                        forYouSection(
-                            onTopicClick = {
-                                nav3Navigator.goTo(route = TopicRoute(it))
-                            },
-                        ) {
-                            composable<TopicRoute>{}
+                        navigation<ForYouBaseRoute>(startDestination = ForYouRoute) {
+                            composable<ForYouRoute> {}
+                            composable<TopicRoute> {}
                         }
+                        composable<ForYouRoute> {}
                         composable<BookmarksRoute> {}
                         composable<SearchRoute> {}
                         composable<InterestsRoute>{}
@@ -77,6 +77,11 @@ fun NiaNavHost(
                 }
             },
         ) {
+            forYouSection(
+                onTopicClick = {
+                    nav3Navigator.goTo(route = TopicRoute(it))
+                },
+            )
             bookmarksScreen(
                 onTopicClick = { it: String ->
                     nav3Navigator.goTo(route = InterestsRoute(it))

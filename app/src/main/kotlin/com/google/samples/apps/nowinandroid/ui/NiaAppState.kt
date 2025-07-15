@@ -39,7 +39,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.navigateToForYou
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.navigation.navigateToSearch
@@ -185,7 +185,7 @@ class NiaAppState(
             }
 
             when (topLevelDestination) {
-                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
+                FOR_YOU -> nav3Navigator.goTo(route = ForYouRoute, topLevelNavOptions)
                 BOOKMARKS -> nav3Navigator.goTo(route = BookmarksRoute, topLevelNavOptions)
                 INTERESTS -> {
                     nav3Navigator.goTo(route = InterestsRoute(null), topLevelNavOptions)
@@ -264,6 +264,8 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                                 entry.toRoute<SearchRoute>()
                             } else if (destination.hasRoute<InterestsRoute>()) {
                                 entry.toRoute<InterestsRoute>()
+                            } else if (destination.hasRoute<ForYouRoute>()) {
+                                entry.toRoute<ForYouRoute>()
                             } else {
                                 // Non migrated top level route
                                 println("Non migrated destination: $destination")
