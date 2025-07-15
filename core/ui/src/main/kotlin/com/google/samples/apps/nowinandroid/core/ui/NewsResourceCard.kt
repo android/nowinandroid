@@ -24,6 +24,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.draganddrop.dragAndDropSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
@@ -110,6 +112,17 @@ fun NewsResourceCardExpanded(
         0
     }
 
+    var isDragging by remember { mutableStateOf(false) }
+    val draggingModifier = Modifier.dragAndDropSource { _ ->
+        DragAndDropTransferData(
+            ClipData.newPlainText(
+                sharingLabel,
+                sharingContent,
+            ),
+            flags = dragAndDropFlags,
+        )
+    }
+
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
@@ -138,15 +151,10 @@ fun NewsResourceCardExpanded(
                             userNewsResource.title,
                             modifier = Modifier
                                 .fillMaxWidth((.8f))
-                                .dragAndDropSource { _ ->
-                                    DragAndDropTransferData(
-                                        ClipData.newPlainText(
-                                            sharingLabel,
-                                            sharingContent,
-                                        ),
-                                        flags = dragAndDropFlags,
-                                    )
-                                },
+                                .pointerInput(Unit) {
+                                    detectTapGestures(onLongPress = { _ -> isDragging = true })
+                                }
+                                .then(if (isDragging) draggingModifier else Modifier),
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
