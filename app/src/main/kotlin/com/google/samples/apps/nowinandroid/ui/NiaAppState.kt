@@ -251,10 +251,10 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                     // We only care about navigable destinations
                     if (destination.navigatorName == "composable"){
 
-                        println("Entry is a composable")
                         val parentDestination = destination.parent
-                        val stackName = destination.route
+                        var stackName = destination.route!!
 
+                        // Convert the entry into a route instance
                         val routeInstance =
                             if (destination.hasRoute<BookmarksRoute>()) {
                                 entry.toRoute<BookmarksRoute>()
@@ -266,43 +266,24 @@ class Nav3NavigatorSimple(val navController: NavHostController){
                                 entry.toRoute<InterestsRoute>()
                             } else {
                                 // Non migrated top level route
-                                println("Non migrated route")
+                                println("Non migrated destination: $destination")
                                 entry
                             }
 
-                        if (parentDestination == rootNode){
-                            println("This is a top level route")
-                            // Create a new top level stack, if it doesn't exist already
-                            if (stackName != null && topLevelStacks[stackName] == null){
-                                add(stackName, routeInstance)
-                            }
-                        } else {
-                            println("This is a nested route")
-                            // This is a nested route, add it to the appropriate stack
-                            val startDestinationRoute = parentDestination?.startDestinationRoute
-                            println("Its parent has a start destination route of $startDestinationRoute")
-                            if (startDestinationRoute != null){
-                                if (startDestinationRoute == stackName){
-                                    println("This is the start destination, creating new nested stack")
-                                    // This is the start destination, create a new stack
-                                    add(stackName, routeInstance)
-                                } else {
-                                    println("This is not the start destination, adding to nested stack")
-                                    // This is not the start destination, just add it to the
-                                    // previously created route
-                                    add(startDestinationRoute, routeInstance)
-                                }
-                            }
+                        // For nested stacks, use the parent destination's start destination route
+                        // as the stack name.
+                        if (parentDestination != rootNode){
+                            stackName = parentDestination?.startDestinationRoute!!
                         }
+                        add(stackName, routeInstance)
                     }
                 }
-
                 updateBackStack()
             }
         }
     }
 
-    fun add(stackName: String, route: Any){
+    private fun add(stackName: String, route: Any){
         if (topLevelStacks[stackName] == null){
             topLevelStacks.put(stackName, mutableListOf(route))
         } else {
