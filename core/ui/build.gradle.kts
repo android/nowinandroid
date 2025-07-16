@@ -30,8 +30,8 @@ dependencies {
     api(projects.core.model)
 
     implementation(libs.androidx.browser)
-    implementation(libs.coil.kt)
-    implementation(libs.coil.kt.compose)
+    implementation(platform(libs.coil.bom))
+    implementation(libs.coil.compose)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
