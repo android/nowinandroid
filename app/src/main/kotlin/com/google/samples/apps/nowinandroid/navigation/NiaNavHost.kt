@@ -19,16 +19,16 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouBaseRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouSection
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.navigateToInterests
-import com.google.samples.apps.nowinandroid.feature.search.navigation.searchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.bookmarksScreen
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.forYouSection
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.navigateToInterests
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.searchScreen
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.topicScreen
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.ui.NiaAppState
-import com.google.samples.apps.nowinandroid.ui.interests2pane.interestsListDetailScreen
+import com.google.samples.apps.nowinandroid.feature.interests.impl.interestsListDetailScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -46,7 +46,7 @@ fun NiaNavHost(
     val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = ForYouBaseRoute,
+        startDestination = ForYouRoute,
         modifier = modifier,
     ) {
         forYouSection(
