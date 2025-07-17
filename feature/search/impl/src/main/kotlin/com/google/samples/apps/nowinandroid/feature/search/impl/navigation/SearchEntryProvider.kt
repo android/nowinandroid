@@ -21,7 +21,7 @@ import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRouteNav3
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.impl.SearchScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
@@ -39,7 +39,7 @@ object SearchModule {
     fun provideSearchEntryProviderBuilder(
         backStack: NiaBackStack,
     ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
-        entry<SearchRouteNav3> { key ->
+        entry<SearchRoute> { key ->
             SearchScreen(
                 onBackClick = backStack::removeLast,
                 onInterestsClick = { backStack.navigateToTopLevelDestination(InterestsRoute()) },

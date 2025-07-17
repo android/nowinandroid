@@ -46,7 +46,6 @@ object InterestsModule {
                 TopicDetailPlaceholder()
             }
         ) { key ->
-//            InterestsListDetailScreen()
             InterestsScreen(
                 onTopicClick = backStack::navigateToTopic,
                 shouldHighlightSelectedTopic = false,

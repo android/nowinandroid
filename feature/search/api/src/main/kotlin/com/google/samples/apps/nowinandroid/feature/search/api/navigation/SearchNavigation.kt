@@ -16,36 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.search.api.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object SearchRoute
-
-@Serializable object SearchRouteNav3: NiaBackStackKey
+@Serializable object SearchRoute: NiaBackStackKey
 
 fun NiaBackStack.navigateToSearch() {
-    navigate(SearchRouteNav3)
-}
-
-fun NavController.navigateToSearch(navOptions: NavOptions? = null) =
-    navigate(SearchRoute, navOptions)
-
-fun NavGraphBuilder.searchScreen(
-    onBackClick: () -> Unit,
-    onInterestsClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
-) {
-//    // TODO: Handle back stack for each top-level destination. At the moment each top-level
-//    // destination may have own search screen's back stack.
-//    composable<SearchRoute> {
-//        com.google.samples.apps.nowinandroid.feature.search.impl.SearchRoute(
-//            onBackClick = onBackClick,
-//            onInterestsClick = onInterestsClick,
-//            onTopicClick = onTopicClick,
-//        )
-//    }
+    navigate(SearchRoute)
 }

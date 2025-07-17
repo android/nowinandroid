@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.feature.interests.impl
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
@@ -43,14 +42,14 @@ class InterestsViewModel @Inject constructor(
     // Key used to save and retrieve the currently selected topic id from saved state.
     private val selectedTopicIdKey = "selectedTopicIdKey"
 
-    private val interestsRoute: InterestsRoute = savedStateHandle.toRoute()
+    private val interestsRoute: InterestsRoute = InterestsRoute()
     private val selectedTopicId = savedStateHandle.getStateFlow(
         key = selectedTopicIdKey,
         initialValue = interestsRoute.initialTopicId,
     )
 
     val uiState: StateFlow<InterestsUiState> = combine(
-        selectedTopicId,
+        selectedTopicId.also { println("cfoook selectedTopicId:$selectedTopicId") },
         getFollowableTopics(sortBy = TopicSortField.NAME),
         InterestsUiState::Interests,
     ).stateIn(

@@ -32,7 +32,10 @@ import dagger.multibindings.IntoSet
 @Module
 @InstallIn(ActivityComponent::class)
 object ForYouModule {
-
+    /**
+     *  The ForYou composable for the app. It can also display information about topics.
+     *  This should be supplied from a separate module.
+     */
     @Provides
     @IntoSet
     fun provideForYouEntryProviderBuilder(
