@@ -59,7 +59,7 @@ fun TopicsTabContent(
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .testTag("interests:topics"),
+                .testTag(LIST_PANE_TEST_TAG),
             contentPadding = PaddingValues(vertical = 16.dp),
             state = scrollableState,
         ) {
@@ -103,3 +103,5 @@ fun TopicsTabContent(
         )
     }
 }
+
+val LIST_PANE_TEST_TAG = "interests:topics"

@@ -19,34 +19,35 @@ package com.google.samples.apps.nowinandroid.feature.interests.impl
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class InterestsViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = InterestsViewModel.Factory::class)
+class InterestsViewModel @AssistedInject constructor(
     private val savedStateHandle: SavedStateHandle,
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
+    @Assisted val key: InterestsRoute,
 ) : ViewModel() {
 
     // Key used to save and retrieve the currently selected topic id from saved state.
     private val selectedTopicIdKey = "selectedTopicIdKey"
 
-    private val interestsRoute: InterestsRoute = savedStateHandle.toRoute()
     private val selectedTopicId = savedStateHandle.getStateFlow(
         key = selectedTopicIdKey,
-        initialValue = interestsRoute.initialTopicId,
+        initialValue = key.initialTopicId,
     )
 
     val uiState: StateFlow<InterestsUiState> = combine(
@@ -67,6 +68,11 @@ class InterestsViewModel @Inject constructor(
 
     fun onTopicClick(topicId: String?) {
         savedStateHandle[selectedTopicIdKey] = topicId
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(key: InterestsRoute): InterestsViewModel
     }
 }
 

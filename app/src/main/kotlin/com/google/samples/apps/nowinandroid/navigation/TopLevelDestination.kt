@@ -20,12 +20,12 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
 import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
 
@@ -49,7 +49,7 @@ enum class TopLevelDestination(
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int,
     val route: KClass<*>,
-    val key: NiaBackStackKey
+    val key: NiaNavKey,
 ) {
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
@@ -57,15 +57,15 @@ enum class TopLevelDestination(
         iconTextId = forYouR.string.feature_foryou_api_title,
         titleTextId = R.string.app_name,
         route = ForYouRoute::class,
-        key = ForYouRoute
+        key = ForYouRoute,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
         unselectedIcon = NiaIcons.BookmarksBorder,
-        iconTextId = bookmarksR.string.feature_bookmarks_impl_title,
-        titleTextId = bookmarksR.string.feature_bookmarks_impl_title,
+        iconTextId = bookmarksR.string.feature_bookmarks_api_title,
+        titleTextId = bookmarksR.string.feature_bookmarks_api_title,
         route = BookmarksRoute::class,
-        key = BookmarksRoute
+        key = BookmarksRoute,
     ),
     INTERESTS(
         selectedIcon = NiaIcons.Grid3x3,
@@ -73,7 +73,7 @@ enum class TopLevelDestination(
         iconTextId = searchR.string.feature_search_api_interests,
         titleTextId = searchR.string.feature_search_api_interests,
         route = InterestsRoute::class,
-        key = InterestsRoute(null)
+        key = InterestsRoute(null),
     ),
 }
 

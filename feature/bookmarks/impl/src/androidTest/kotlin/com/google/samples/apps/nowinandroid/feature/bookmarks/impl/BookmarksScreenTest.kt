@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.testing.TestLifecycleOwner
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -64,7 +65,7 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(
-                composeTestRule.activity.resources.getString(R.string.feature_bookmarks_impl_loading),
+                composeTestRule.activity.resources.getString(R.string.feature_bookmarks_api_loading),
             )
             .assertExists()
     }
@@ -161,13 +162,13 @@ class BookmarksScreenTest {
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.feature_bookmarks_impl_empty_error),
+                composeTestRule.activity.getString(R.string.feature_bookmarks_api_empty_error),
             )
             .assertExists()
 
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity.getString(R.string.feature_bookmarks_impl_empty_description),
+                composeTestRule.activity.getString(R.string.feature_bookmarks_api_empty_description),
             )
             .assertExists()
     }

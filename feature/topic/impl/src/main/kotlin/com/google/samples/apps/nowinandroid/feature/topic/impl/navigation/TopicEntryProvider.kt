@@ -17,19 +17,17 @@
 package com.google.samples.apps.nowinandroid.feature.topic.impl.navigation
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.AnimatedPaneScope
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.api.TopicScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.TopicViewModel
-import com.google.samples.apps.nowinandroid.feature.topic.api.TopicViewModel.Factory
+import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicScreen
+import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicViewModel
+import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicViewModel.Factory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,21 +36,21 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object TopicModule {
+object TopicEntryProvider {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     @Provides
     @IntoSet
     fun provideTopicEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
+    ): EntryProviderBuilder<NiaNavKey>.() -> Unit = {
         entry<TopicRoute>(
-            metadata = ListDetailSceneStrategy.detailPane()
+            metadata = ListDetailSceneStrategy.detailPane(),
         ) { key ->
             val id = key.id
             TopicScreen(
                 showBackButton = true,
-                onBackClick = backStack::removeLast,
+                onBackClick = backStack::popLast,
                 onTopicClick = backStack::navigateToTopic,
                 viewModel = hiltViewModel<TopicViewModel, Factory>(
                     key = id,

@@ -86,7 +86,6 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.analytics)
-    implementation(projects.core.navigation)
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
@@ -100,10 +99,8 @@ dependencies {
     implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.lifecycle.viewModel.navigation3)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.window.core)

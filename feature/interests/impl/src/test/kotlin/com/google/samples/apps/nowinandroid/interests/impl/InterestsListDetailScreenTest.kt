@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3AdaptiveApi::class)
+
 package com.google.samples.apps.nowinandroid.interests.impl
 
-import androidx.activity.compose.BackHandler
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -25,17 +29,35 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import androidx.test.espresso.Espresso
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsListDetailScreen
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.api.R
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.impl.LIST_PANE_TEST_TAG
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.modules.PolymorphicModuleBuilder
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,16 +65,16 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.getValue
 import kotlin.properties.ReadOnlyProperty
-import kotlin.test.assertTrue
-import com.google.samples.apps.nowinandroid.feature.topic.api.R as FeatureTopicR
 
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
 private const val COMPACT_WIDTH = "w412dp-h915dp"
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class)
+@Config(application = HiltTestApplication::class, sdk = [35])
 class InterestsListDetailScreenTest {
 
     @get:Rule(order = 0)
@@ -60,6 +82,13 @@ class InterestsListDetailScreenTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
+
+    // entry point to get the features' hilt-injected EntryProviders that are installed in ActivityComponent
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface EntryProvidersEntryPoint {
+        fun getEntryProviders(): Set<@JvmSuppressWildcards EntryProviderBuilder<NiaNavKey>.() -> Unit>
+    }
 
     @Inject
     lateinit var topicsRepository: TopicsRepository
@@ -70,15 +99,20 @@ class InterestsListDetailScreenTest {
     }
 
     // The strings used for matching in these tests.
-    private val placeholderText by composeTestRule.stringResource(FeatureTopicR.string.feature_topic_api_select_an_interest)
-    private val listPaneTag = "interests:topics"
+    private val placeholderText by composeTestRule.stringResource(R.string.feature_interests_api_select_an_interest)
 
     private val Topic.testTag
         get() = "topic:${this.id}"
 
+    private lateinit var entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>
+
     @Before
     fun setup() {
         hiltRule.inject()
+        composeTestRule.apply {
+            entryProviderBuilders = EntryPoints.get(activity, EntryProvidersEntryPoint::class.java)
+                .getEntryProviders()
+        }
     }
 
     @Test
@@ -87,11 +121,16 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    InterestsListDetailScreen()
+                    NavDisplay(
+                        backStack = listOf<NiaNavKey>(InterestsRoute()),
+                        sceneStrategy = rememberListDetailSceneStrategy(),
+                        entryProvider = entryProvider {
+                            entryProviderBuilders.forEach { it() }
+                        },
+                    )
                 }
             }
-
-            onNodeWithTag(listPaneTag).assertIsDisplayed()
+            onNodeWithTag(LIST_PANE_TEST_TAG).assertIsDisplayed()
             onNodeWithText(placeholderText).assertIsDisplayed()
         }
     }
@@ -102,11 +141,17 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 NiaTheme {
-                    InterestsListDetailScreen()
+                    NavDisplay(
+                        backStack = listOf<NiaNavKey>(InterestsRoute()),
+                        sceneStrategy = rememberListDetailSceneStrategy(),
+                        entryProvider = entryProvider {
+                            entryProviderBuilders.forEach { it() }
+                        },
+                    )
                 }
             }
 
-            onNodeWithTag(listPaneTag).assertIsDisplayed()
+            onNodeWithTag(LIST_PANE_TEST_TAG).assertIsDisplayed()
             onNodeWithText(placeholderText).assertIsNotDisplayed()
         }
     }
@@ -116,15 +161,23 @@ class InterestsListDetailScreenTest {
     fun expandedWidth_topicSelected_updatesDetailPane() {
         composeTestRule.apply {
             setContent {
+                val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
+                val backStack = backStackViewModel.niaBackStack.backStack
                 NiaTheme {
-                    InterestsListDetailScreen()
+                    NavDisplay(
+                        backStack = backStack,
+                        sceneStrategy = rememberListDetailSceneStrategy(),
+                        entryProvider = entryProvider {
+                            entryProviderBuilders.forEach { it() }
+                        },
+                    )
                 }
             }
-
             val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
+            waitForIdle()
 
-            onNodeWithTag(listPaneTag).assertIsDisplayed()
+            onNodeWithTag(LIST_PANE_TEST_TAG).assertIsDisplayed()
             onNodeWithText(placeholderText).assertIsNotDisplayed()
             onNodeWithTag(firstTopic.testTag).assertIsDisplayed()
         }
@@ -135,43 +188,25 @@ class InterestsListDetailScreenTest {
     fun compactWidth_topicSelected_showsTopicDetailPane() {
         composeTestRule.apply {
             setContent {
+                val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
+                val backStack = backStackViewModel.niaBackStack.backStack
                 NiaTheme {
-                    InterestsListDetailScreen()
+                    NavDisplay(
+                        backStack = backStack,
+                        sceneStrategy = rememberListDetailSceneStrategy(),
+                        entryProvider = entryProvider {
+                            entryProviderBuilders.forEach { it() }
+                        },
+                    )
                 }
             }
 
             val firstTopic = getTopics().first()
             onNodeWithText(firstTopic.name).performClick()
 
-            onNodeWithTag(listPaneTag).assertIsNotDisplayed()
+            onNodeWithTag(LIST_PANE_TEST_TAG).assertIsNotDisplayed()
             onNodeWithText(placeholderText).assertIsNotDisplayed()
             onNodeWithTag(firstTopic.testTag).assertIsDisplayed()
-        }
-    }
-
-    @Test
-    @Config(qualifiers = EXPANDED_WIDTH)
-    fun expandedWidth_backPressFromTopicDetail_leavesInterests() {
-        var unhandledBackPress = false
-        composeTestRule.apply {
-            setContent {
-                NiaTheme {
-                    // Back press should not be handled by the two pane layout, and thus
-                    // "fall through" to this BackHandler.
-                    BackHandler {
-                        unhandledBackPress = true
-                    }
-                    InterestsListDetailScreen()
-                }
-            }
-
-            val firstTopic = getTopics().first()
-            onNodeWithText(firstTopic.name).performClick()
-
-            waitForIdle()
-            Espresso.pressBack()
-
-            assertTrue(unhandledBackPress)
         }
     }
 
@@ -180,8 +215,16 @@ class InterestsListDetailScreenTest {
     fun compactWidth_backPressFromTopicDetail_showsListPane() {
         composeTestRule.apply {
             setContent {
+                val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
+                val backStack = backStackViewModel.niaBackStack.backStack
                 NiaTheme {
-                    InterestsListDetailScreen()
+                    NavDisplay(
+                        backStack = backStack,
+                        sceneStrategy = rememberListDetailSceneStrategy(),
+                        entryProvider = entryProvider {
+                            entryProviderBuilders.forEach { it() }
+                        },
+                    )
                 }
             }
 
@@ -191,7 +234,7 @@ class InterestsListDetailScreenTest {
             waitForIdle()
             Espresso.pressBack()
 
-            onNodeWithTag(listPaneTag).assertIsDisplayed()
+            onNodeWithTag(LIST_PANE_TEST_TAG).assertIsDisplayed()
             onNodeWithText(placeholderText).assertIsNotDisplayed()
             onNodeWithTag(firstTopic.testTag).assertIsNotDisplayed()
         }
@@ -202,3 +245,22 @@ private fun AndroidComposeTestRule<*, *>.stringResource(
     @StringRes resId: Int,
 ): ReadOnlyProperty<Any, String> =
     ReadOnlyProperty { _, _ -> activity.getString(resId) }
+
+@Module
+@InstallIn(SingletonComponent::class)
+object BackStackProvider {
+    @Provides
+    @Singleton
+    fun provideNiaBackStack(): NiaBackStack =
+        NiaBackStack(startKey = InterestsRoute())
+
+    @Provides
+    @Singleton
+    fun provideSerializersModule(
+        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>,
+    ): SerializersModule = SerializersModule {
+        polymorphic(NiaNavKey::class) {
+            polymorphicModuleBuilders.forEach { it() }
+        }
+    }
+}

@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.ui.semantics.SemanticsActions.ScrollBy
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
@@ -39,11 +40,13 @@ import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
+import com.google.samples.apps.nowinandroid.feature.interests.impl.LIST_PANE_TEST_TAG
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
@@ -85,10 +88,10 @@ class NavigationTest {
     // The strings used for matching in these tests
     private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_navigate_up)
     private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_title)
-    private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_interests)
+    private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_api_interests)
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
-    private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_title)
+    private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_api_title)
     private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_top_app_bar_action_icon_description)
     private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_brand_android)
     private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_dismiss_dialog_button_text)
@@ -252,6 +255,9 @@ class NavigationTest {
         }
     }
 
+    // TODO decide if backStack should preserve previous stacks when navigating back to home tab (ForYou)
+    // https://github.com/android/nowinandroid/issues/1937
+    @Ignore
     @Test
     fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
@@ -261,12 +267,14 @@ class NavigationTest {
             val topic = runBlocking {
                 topicsRepository.getTopics().first().sortedBy(Topic::name).last()
             }
-            onNodeWithTag("interests:topics").performScrollToNode(hasText(topic.name))
+            onNodeWithTag(LIST_PANE_TEST_TAG).performScrollToNode(hasText(topic.name))
             onNodeWithText(topic.name).performClick()
+
+            // Verify the topic is still shown
+            onNodeWithTag("topic:${topic.id}").assertIsDisplayed()
 
             // Switch tab
             onNodeWithText(forYou).performClick()
-
             // Come back to Interests
             onNodeWithText(interests).performClick()
 

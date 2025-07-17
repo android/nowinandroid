@@ -23,7 +23,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
@@ -35,13 +35,13 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object BookmarksModule {
+object BookmarksEntryProvider {
 
     @Provides
     @IntoSet
     fun provideBookmarksEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
+    ): EntryProviderBuilder<NiaNavKey>.() -> Unit = {
         entry<BookmarksRoute> {
             val snackbarHostState = LocalSnackbarHostState.current
             BookmarksScreen(
@@ -52,7 +52,7 @@ object BookmarksModule {
                         actionLabel = action,
                         duration = Short,
                     ) == ActionPerformed
-                }
+                },
             )
         }
     }
