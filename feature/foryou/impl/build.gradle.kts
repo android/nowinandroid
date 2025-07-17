@@ -15,7 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.feature.impl)
     alias(libs.plugins.nowinandroid.android.library.compose)
     alias(libs.plugins.roborazzi)
 }
@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.core.notifications)
     implementation(projects.feature.foryou.api)
     implementation(projects.feature.topic.api)
+    implementation(libs.androidx.activity.compose)
 
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.robolectric)

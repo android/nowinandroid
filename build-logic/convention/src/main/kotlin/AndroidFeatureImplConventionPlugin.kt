@@ -23,12 +23,11 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-class AndroidFeatureConventionPlugin : Plugin<Project> {
+class AndroidFeatureImplConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "nowinandroid.android.library")
             apply(plugin = "nowinandroid.hilt")
-            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
@@ -39,15 +38,12 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:designsystem"))
 
-                "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
-                "implementation"(libs.findLibrary("androidx.navigation.compose").get())
+                "implementation"(libs.findLibrary("androidx.hilt.lifecycle.viewModelCompose").get())
                 "implementation"(libs.findLibrary("androidx.navigation3.runtime").get())
                 "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
-                "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
 
-                "testImplementation"(libs.findLibrary("androidx.navigation.testing").get())
                 "androidTestImplementation"(
                     libs.findLibrary("androidx.lifecycle.runtimeTesting").get(),
                 )

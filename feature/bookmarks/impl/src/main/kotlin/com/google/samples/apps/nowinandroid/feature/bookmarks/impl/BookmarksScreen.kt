@@ -56,7 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,6 +74,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R
 
 @Composable
 internal fun BookmarksScreen(
@@ -112,8 +113,8 @@ internal fun BookmarksScreen(
     undoBookmarkRemoval: () -> Unit = {},
     clearUndoState: () -> Unit = {},
 ) {
-    val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_impl_removed)
-    val undoText = stringResource(id = R.string.feature_bookmarks_impl_undo)
+    val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_api_removed)
+    val undoText = stringResource(id = R.string.feature_bookmarks_api_undo)
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
@@ -155,7 +156,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentSize()
             .testTag("forYou:loading"),
-        contentDesc = stringResource(id = R.string.feature_bookmarks_impl_loading),
+        contentDesc = stringResource(id = R.string.feature_bookmarks_api_loading),
     )
 }
 
@@ -228,7 +229,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         val iconTint = LocalTintTheme.current.iconTint
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.feature_bookmarks_impl_mg_empty_bookmarks),
+            painter = painterResource(id = R.drawable.feature_bookmarks_api_mg_empty_bookmarks),
             colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
             contentDescription = null,
         )
@@ -236,7 +237,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(48.dp))
 
         Text(
-            text = stringResource(id = R.string.feature_bookmarks_impl_empty_error),
+            text = stringResource(id = R.string.feature_bookmarks_api_empty_error),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
@@ -246,7 +247,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = stringResource(id = R.string.feature_bookmarks_impl_empty_description),
+            text = stringResource(id = R.string.feature_bookmarks_api_empty_description),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,

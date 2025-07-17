@@ -15,7 +15,8 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.feature.api)
+    alias(libs.plugins.nowinandroid.android.feature.impl)
     alias(libs.plugins.nowinandroid.android.library.compose)
 }
 
@@ -24,9 +25,6 @@ android {
 }
 
 dependencies {
-    api(projects.core.navigation)
-    implementation(projects.core.data)
-
     testImplementation(projects.core.testing)
     testImplementation(libs.robolectric)
 

@@ -16,25 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import kotlinx.serialization.Serializable
 
-@Serializable object BookmarksRoute: NiaBackStackKey
-
-fun NavController.navigateToBookmarks(navOptions: NavOptions) =
-    navigate(route = BookmarksRoute, navOptions)
-
-fun NavGraphBuilder.bookmarksScreen(
-    onTopicClick: (String) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
-) {
-//    composable<BookmarksRoute> {
-//        BookmarksRoute(
-//            onTopicClick,
-//            onShowSnackbar
-//        )
-//    }
+@Serializable
+object BookmarksRoute: NiaNavKey{
+    override val isTopLevel: Boolean
+        get() = true
 }

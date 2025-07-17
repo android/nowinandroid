@@ -15,13 +15,9 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.feature.api)
 }
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.bookmarks.api"
-}
-
-dependencies {
-    api(projects.core.navigation)
 }

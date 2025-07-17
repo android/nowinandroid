@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
@@ -39,8 +38,8 @@ import com.google.samples.apps.nowinandroid.feature.interests.api.R
 fun InterestsScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: InterestsViewModel,
     shouldHighlightSelectedTopic: Boolean = false,
-    viewModel: InterestsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
