@@ -16,21 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.compose.composable
-import androidx.navigation.createGraph
-import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect
@@ -70,30 +64,29 @@ class NiaAppStateTest {
 
     @Test
     fun niaAppState_currentDestination() = runTest {
-        var currentDestination: String? = null
-
+        val niaBackStack = mockNiaBackStack()
         composeTestRule.setContent {
-            val navController = rememberTestNavController()
-            state = remember(navController) {
+            state = remember(niaBackStack) {
                 NiaAppState(
-                    navController = navController,
+                    niaBackStack = niaBackStack,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
                 )
             }
-
-            // Update currentDestination whenever it changes
-            currentDestination = state.niaBackStack.currentKey
-
-            // Navigate to destination b once
-            LaunchedEffect(Unit) {
-                navController.setCurrentDestination("b")
-            }
         }
 
-        assertEquals("b", currentDestination)
+        assertEquals(ForYouRoute, state.niaBackStack.currentTopLevelKey)
+        assertEquals(ForYouRoute, state.niaBackStack.currentKey)
+
+        // Navigate to another destination once
+        niaBackStack.navigate(BookmarksRoute)
+
+        composeTestRule.waitForIdle()
+
+        assertEquals(BookmarksRoute, state.niaBackStack.currentTopLevelKey)
+        assertEquals(BookmarksRoute, state.niaBackStack.currentKey)
     }
 
     @Test
@@ -103,6 +96,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                niaBackStack = mockNiaBackStack(),
             )
         }
 
@@ -116,11 +110,11 @@ class NiaAppStateTest {
     fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                niaBackStack = mockNiaBackStack(),
             )
         }
 
@@ -136,11 +130,11 @@ class NiaAppStateTest {
     fun niaAppState_differentTZ_withTimeZoneMonitorChange() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                niaBackStack = mockNiaBackStack(),
             )
         }
         val changedTz = TimeZone.of("Europe/Prague")
@@ -150,20 +144,5 @@ class NiaAppStateTest {
             changedTz,
             state.currentTimeZone.value,
         )
-    }
-}
-
-@Composable
-private fun rememberTestNavController(): TestNavHostController {
-    val context = LocalContext.current
-    return remember {
-        TestNavHostController(context).apply {
-            navigatorProvider.addNavigator(ComposeNavigator())
-            graph = createGraph(startDestination = "a") {
-                composable("a") { }
-                composable("b") { }
-                composable("c") { }
-            }
-        }
     }
 }

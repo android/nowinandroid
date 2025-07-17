@@ -41,9 +41,9 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import com.google.samples.apps.nowinandroid.util.isSystemInDarkTheme
@@ -77,11 +77,10 @@ class MainActivity : ComponentActivity() {
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
     private val viewModel: MainActivityViewModel by viewModels()
 
-    @Inject
-    lateinit var niaBackStack: NiaBackStack
+    private val backStackViewModel: NiaBackStackViewModel by viewModels()
 
     @Inject
-    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>
+    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaNavKey>.() -> Unit>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -145,7 +144,7 @@ class MainActivity : ComponentActivity() {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaBackStack = niaBackStack,
+                niaBackStack = backStackViewModel.niaBackStack,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
@@ -161,7 +160,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NiaApp(
                         appState,
-                        entryProviderBuilders
+                        entryProviderBuilders,
                     )
                 }
             }

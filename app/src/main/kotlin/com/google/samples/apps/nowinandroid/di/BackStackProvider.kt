@@ -17,12 +17,16 @@
 package com.google.samples.apps.nowinandroid.di
 
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import javax.inject.Singleton
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.modules.PolymorphicModuleBuilder
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,4 +35,19 @@ object BackStackProvider {
     @Singleton
     fun provideNiaBackStack(): NiaBackStack =
         NiaBackStack(startKey = TopLevelDestination.FOR_YOU.key)
+
+    /**
+     * Registers feature modules' polymorphic serializers to support
+     * feature keys' save and restore by savedstate
+     * in [com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel].
+     */
+    @Provides
+    @Singleton
+    fun provideSerializersModule(
+        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>,
+    ): SerializersModule = SerializersModule {
+        polymorphic(NiaNavKey::class) {
+            polymorphicModuleBuilders.forEach { it() }
+        }
+    }
 }

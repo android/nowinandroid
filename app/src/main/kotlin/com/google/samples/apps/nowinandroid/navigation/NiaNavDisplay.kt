@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entryProvider
@@ -27,20 +26,20 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun NiaNavDisplay(
     niaBackStack: NiaBackStack,
-    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>,
+    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
 ) {
-    val listDetailStrategy = rememberListDetailSceneStrategy<NiaBackStackKey>()
+    val listDetailStrategy = rememberListDetailSceneStrategy<NiaNavKey>()
 
     NavDisplay(
         backStack = niaBackStack.backStack,
         sceneStrategy = listDetailStrategy,
-        onBack = { niaBackStack.removeLast() },
+        onBack = { count -> niaBackStack.popLast(count) },
         entryDecorators = listOf(
             rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),

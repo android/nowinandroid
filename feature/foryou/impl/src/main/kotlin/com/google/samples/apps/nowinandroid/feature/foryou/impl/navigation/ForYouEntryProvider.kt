@@ -19,7 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
@@ -31,16 +31,19 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object ForYouModule {
-
+object ForYouEntryProvider {
+    /**
+     *  The ForYou composable for the app. It can also display information about topics.
+     *  This should be supplied from a separate module.
+     */
     @Provides
     @IntoSet
     fun provideForYouEntryProviderBuilder(
         backStack: NiaBackStack,
-    ): EntryProviderBuilder<NiaBackStackKey>.() -> Unit = {
+    ): EntryProviderBuilder<NiaNavKey>.() -> Unit = {
         entry<ForYouRoute> {
             ForYouScreen(
-                onTopicClick = backStack::navigateToTopic
+                onTopicClick = backStack::navigateToTopic,
             )
         }
     }

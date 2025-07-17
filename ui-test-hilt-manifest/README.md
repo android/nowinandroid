@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # `:ui-test-hilt-manifest`
 
 ## Module dependency graph
@@ -43,3 +44,8 @@ classDef unknown fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000;
 
 </details>
 <!--endregion-->
+=======
+# :ui-test-hilt-manifest module
+## Dependency graph
+![Dependency graph](../docs/images/graphs/dep_graph_ui_test_hilt_manifest.svg)
+>>>>>>> a059e426 (Update readme and build dependency graph)

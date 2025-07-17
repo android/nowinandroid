@@ -16,5 +16,4 @@
 -->
 <resources>
     <string name="feature_topic_api_loading">Loading topic</string>
-    <string name="feature_topic_api_select_an_interest">Select an Interest</string>
 </resources>

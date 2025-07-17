@@ -59,9 +59,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation3.runtime.EntryProviderBuilder
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
@@ -80,6 +77,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
@@ -95,7 +93,7 @@ import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 @Composable
 fun NiaApp(
     appState: NiaAppState,
-    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>,
+    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
@@ -146,7 +144,7 @@ fun NiaApp(
 )
 internal fun NiaApp(
     appState: NiaAppState,
-    entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>,
+    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
@@ -156,7 +154,6 @@ internal fun NiaApp(
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
     val currentTopLevelKey = appState.currentTopLevelDestination!!.key
-
 
     if (showSettingsDialog) {
         SettingsDialog(
@@ -173,7 +170,7 @@ internal fun NiaApp(
                 val selected = destination.key == currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    onClick = { appState.niaBackStack.navigate(destination.key) },
                     icon = {
                         Icon(
                             imageVector = destination.unselectedIcon,
@@ -258,10 +255,6 @@ internal fun NiaApp(
                         },
                     ),
                 ) {
-//                    NiaNavHost(
-//                        appState = appState,
-//                        onShowSnackbar = onShowSnackbar,
-//                    )
                     NiaNavDisplay(
                         niaBackStack = appState.niaBackStack,
                         entryProviderBuilders,

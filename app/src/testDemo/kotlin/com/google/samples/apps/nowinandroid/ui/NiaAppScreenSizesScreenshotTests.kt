@@ -125,9 +125,11 @@ class NiaAppScreenSizesScreenshotTests {
                             networkMonitor = networkMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
                             timeZoneMonitor = timeZoneMonitor,
+                            niaBackStack = mockNiaBackStack(),
                         )
                         NiaApp(
                             fakeAppState,
+                            entryProviderBuilders = MockEntryProvider,
                             windowAdaptiveInfo = WindowAdaptiveInfo(
                                 windowSizeClass = WindowSizeClass.compute(
                                     width.value,

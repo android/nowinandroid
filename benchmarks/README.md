@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # `:benchmarks`
 
 ## Module dependency graph
@@ -132,3 +133,8 @@ classDef unknown fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000;
 
 </details>
 <!--endregion-->
+=======
+# :benchmarks module
+## Dependency graph
+![Dependency graph](../docs/images/graphs/dep_graph_benchmarks.svg)
+>>>>>>> a059e426 (Update readme and build dependency graph)

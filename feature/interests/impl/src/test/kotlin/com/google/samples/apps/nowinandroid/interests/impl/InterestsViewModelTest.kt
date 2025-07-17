@@ -24,9 +24,9 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsUiState
-import com.google.samples.apps.nowinandroid.feature.interests.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsUiState
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -36,6 +36,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 
 /**
@@ -49,6 +50,7 @@ import kotlin.test.assertEquals
  *  See https://issuetracker.google.com/340966212.
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35])
 class InterestsViewModelTest {
 
     @get:Rule
@@ -70,6 +72,7 @@ class InterestsViewModelTest {
             ),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
+            InterestsRoute(initialTopicId = testInputTopics[0].topic.id),
         )
     }
 

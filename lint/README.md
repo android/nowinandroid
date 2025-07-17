@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # `:lint`
 
 ## Module dependency graph
@@ -43,3 +44,8 @@ classDef unknown fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000;
 
 </details>
 <!--endregion-->
+=======
+# :lint module
+## Dependency graph
+![Dependency graph](../docs/images/graphs/dep_graph_lint.svg)
+>>>>>>> a059e426 (Update readme and build dependency graph)

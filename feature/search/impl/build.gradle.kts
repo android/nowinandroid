@@ -15,7 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.feature)
+    alias(libs.plugins.nowinandroid.android.feature.impl)
     alias(libs.plugins.nowinandroid.android.library.compose)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
 }
@@ -25,7 +25,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.feature.interests.api)
     implementation(projects.feature.search.api)
