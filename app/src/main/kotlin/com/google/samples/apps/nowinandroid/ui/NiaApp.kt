@@ -140,7 +140,6 @@ internal fun NiaApp(
         .collectAsStateWithLifecycle()
     val currentTopLevelKey = appState.currentTopLevelDestination!!.key
 
-
     if (showSettingsDialog) {
         SettingsDialog(
             onDismiss = { onSettingsDismissed() },
@@ -156,7 +155,7 @@ internal fun NiaApp(
                 val selected = destination.key == currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    onClick = { appState.niaBackStack.navigate(destination.key) },
                     icon = {
                         Icon(
                             imageVector = destination.unselectedIcon,

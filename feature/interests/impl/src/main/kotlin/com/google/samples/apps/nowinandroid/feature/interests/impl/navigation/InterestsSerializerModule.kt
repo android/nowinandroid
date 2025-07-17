@@ -14,35 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.di
+package com.google.samples.apps.nowinandroid.feature.interests.impl.navigation
 
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import javax.inject.Singleton
 
+/**
+ * Provides the DSL to register the route's [kotlinx.serialization.KSerializer] as a polymorphic serializer
+ *
+ */
 @Module
 @InstallIn(SingletonComponent::class)
-object BackStackProvider {
+object InterestsSerializerModule {
     @Provides
-    @Singleton
-    fun provideNiaBackStack(): NiaBackStack =
-        NiaBackStack(startKey = TopLevelDestination.FOR_YOU.key)
-
-    @Provides
-    @Singleton
-    fun provideSerializersModule(
-        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaBackStackKey>.() -> Unit>
-    ) : SerializersModule = SerializersModule {
-        polymorphic(NiaBackStackKey::class) {
-            polymorphicModuleBuilders.forEach { it() }
-        }
+    @IntoSet
+    fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaBackStackKey>.() -> Unit = {
+        subclass(InterestsRoute::class, InterestsRoute.serializer())
     }
 }

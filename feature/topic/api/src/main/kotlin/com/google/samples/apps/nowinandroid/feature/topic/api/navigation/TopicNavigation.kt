@@ -20,7 +20,11 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable data class TopicRoute(val id: String): NiaBackStackKey
+@Serializable
+data class TopicRoute(val id: String): NiaBackStackKey{
+    override val isTopLevel: Boolean
+        get() = false
+}
 
 fun NiaBackStack.navigateToTopic(
     topicId: String,

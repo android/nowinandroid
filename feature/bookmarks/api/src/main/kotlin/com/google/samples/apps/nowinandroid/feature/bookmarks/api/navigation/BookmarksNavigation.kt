@@ -19,4 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable object BookmarksRoute: NiaBackStackKey
+@Serializable
+object BookmarksRoute: NiaBackStackKey{
+    override val isTopLevel: Boolean
+        get() = true
+}

@@ -19,4 +19,8 @@ package com.google.samples.apps.nowinandroid.feature.foryou.api.navigation
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object ForYouRoute: NiaBackStackKey // route to ForYou screen
+@Serializable
+object ForYouRoute: NiaBackStackKey{ // route to ForYou screen
+    override val isTopLevel: Boolean
+        get() = true
+}

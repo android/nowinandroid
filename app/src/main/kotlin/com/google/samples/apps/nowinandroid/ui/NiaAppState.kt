@@ -28,13 +28,11 @@ import androidx.navigation.compose.rememberNavController
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.FOR_YOU
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination.INTERESTS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -84,20 +82,6 @@ class NiaAppState(
 ) {
     private val previousDestination = mutableStateOf<NavDestination?>(null)
 
-//    val currentDestination: NavDestination?
-//        @Composable get() {
-//            // Collect the currentBackStackEntryFlow as a state
-//            val currentEntry = navController.currentBackStackEntryFlow
-//                .collectAsState(initial = null)
-//
-//            // Fallback to previousDestination if currentEntry is null
-//            return currentEntry.value?.destination.also { destination ->
-//                if (destination != null) {
-//                    previousDestination.value = destination
-//                }
-//            } ?: previousDestination.value
-//        }
-
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = TopLevelDestinations[niaBackStack.currentTopLevelKey]
 
@@ -138,19 +122,6 @@ class NiaAppState(
             SharingStarted.WhileSubscribed(5_000),
             TimeZone.currentSystemDefault(),
         )
-
-    /**
-     * UI logic for navigating to a top level destination in the app. Top level destinations have
-     * only one copy of the destination of the back stack, and save and restore state whenever you
-     * navigate to and from it.
-     *
-     * @param topLevelDestination: The destination the app needs to navigate to.
-     */
-    fun navigateToTopLevelDestination(
-        topLevelDestination: TopLevelDestination,
-    ) {
-        niaBackStack.navigateToTopLevelDestination(topLevelDestination.key)
-    }
 }
 
 /**

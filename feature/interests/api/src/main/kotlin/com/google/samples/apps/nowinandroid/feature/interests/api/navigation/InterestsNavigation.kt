@@ -16,11 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.api.navigation
 
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable data class InterestsRoute(
+@Serializable
+data class InterestsRoute(
     // The ID of the topic which will be initially selected at this destination
     val initialTopicId: String? = null,
-): NiaBackStackKey
+): NiaBackStackKey {
+    override val isTopLevel: Boolean
+        get() = true
+}

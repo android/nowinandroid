@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.interests.impl
+package com.google.samples.apps.nowinandroid.feature.interests.impl.navigation
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsScreen
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModelNav3
 import com.google.samples.apps.nowinandroid.feature.topic.api.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
@@ -46,9 +49,13 @@ object InterestsModule {
                 TopicDetailPlaceholder()
             }
         ) { key ->
+            val viewModel = hiltViewModel<InterestsViewModelNav3, InterestsViewModelNav3.Factory> {
+                it.create(key)
+            }
             InterestsScreen(
                 onTopicClick = backStack::navigateToTopic,
                 shouldHighlightSelectedTopic = false,
+                viewModel = viewModel
             )
         }
     }

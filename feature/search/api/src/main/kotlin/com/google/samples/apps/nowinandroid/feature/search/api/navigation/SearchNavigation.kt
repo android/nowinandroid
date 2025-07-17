@@ -20,7 +20,11 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import kotlinx.serialization.Serializable
 
-@Serializable object SearchRoute: NiaBackStackKey
+@Serializable
+object SearchRoute: NiaBackStackKey {
+    override val isTopLevel: Boolean
+        get() = false
+}
 
 fun NiaBackStack.navigateToSearch() {
     navigate(SearchRoute)

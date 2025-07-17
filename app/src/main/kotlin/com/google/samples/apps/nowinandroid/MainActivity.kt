@@ -43,7 +43,7 @@ import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
 import com.google.samples.apps.nowinandroid.navigation.LocalEntryProviderBuilder
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
@@ -78,8 +78,7 @@ class MainActivity : ComponentActivity() {
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
     private val viewModel: MainActivityViewModel by viewModels()
 
-    @Inject
-    lateinit var niaBackStack: NiaBackStack
+    private val backStackViewModel: NiaBackStackViewModel by viewModels()
 
     @Inject
     lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderBuilder<NiaBackStackKey>.() -> Unit>
@@ -146,7 +145,7 @@ class MainActivity : ComponentActivity() {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaBackStack = niaBackStack,
+                niaBackStack = backStackViewModel.niaBackStack,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
