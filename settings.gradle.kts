@@ -16,6 +16,7 @@
 
 pluginManagement {
     includeBuild("build-logic")
+    includeBuild("build-logic-settings")
     repositories {
         google {
             content {
@@ -75,6 +76,10 @@ include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
 include(":ui-test-hilt-manifest")
+
+plugins {
+    id("nowinandroid.foo")
+}
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """
