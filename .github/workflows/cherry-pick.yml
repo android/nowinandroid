@@ -1,1 +1,19 @@
+name: Cherry-Pick
 
+on: workflow_dispatch
+
+jobs:
+  cherry-pick:
+    name: Cherry-Pick multiple PR into one
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - run: npm ci
+
+    - uses: ./.github/actions/cherry-pick
+      with:
+        myToken: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,5 @@
+name: 'Create Cherry pick pull request'
+description: 'Create Cherry pick pull request'
+runs:
+  using: node20
+  main: index.js
