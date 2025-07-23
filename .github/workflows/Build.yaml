@@ -140,11 +140,26 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
-      - name: Upload lint reports (SARIF)
-        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+      - name: Upload lint reports (SARIF) for app module
+        if: ${{ !cancelled() && hashFiles('app/**/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: './'
+          sarif_file: './app/'
+          category: app
+
+      - name: Upload lint reports (SARIF) for app-nia-catalog module
+        if: ${{ !cancelled() && hashFiles('app-nia-catalog/**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './app-nia-catalog/'
+          category: app-nia-catalog
+
+      - name: Upload lint reports (SARIF) for lint module
+        if: ${{ !cancelled() && hashFiles('lint/**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './lint/'
+          category: lint
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
