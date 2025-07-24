@@ -46,7 +46,7 @@ internal class DefaultSearchContentsRepository @Inject constructor(
 
     override suspend fun populateFtsData() {
         withContext(ioDispatcher) {
-            newsResourceFtsDao.insertAll(
+            newsResourceFtsDao.deleteAllAndInsertAll(
                 newsResourceDao.getNewsResources(
                     useFilterTopicIds = false,
                     useFilterNewsIds = false,
@@ -54,7 +54,7 @@ internal class DefaultSearchContentsRepository @Inject constructor(
                     .first()
                     .map(PopulatedNewsResource::asFtsEntity),
             )
-            topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
+            topicFtsDao.deleteAllAndInsertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
         }
     }
 
