@@ -20,8 +20,9 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
-import coil.ImageLoader
-import coil.ImageLoaderFactory
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import dagger.hilt.android.HiltAndroidApp
@@ -31,7 +32,7 @@ import javax.inject.Inject
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApplication : Application(), ImageLoaderFactory {
+class NiaApplication : Application(), SingletonImageLoader.Factory {
     @Inject
     lateinit var imageLoader: dagger.Lazy<ImageLoader>
 
@@ -48,7 +49,7 @@ class NiaApplication : Application(), ImageLoaderFactory {
         profileVerifierLogger()
     }
 
-    override fun newImageLoader(): ImageLoader = imageLoader.get()
+    override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader.get()
 
     /**
      * Return true if the application is debuggable.
