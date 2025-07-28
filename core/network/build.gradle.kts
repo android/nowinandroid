@@ -60,6 +60,7 @@ val backendUrl = providers.fileContents(
     if (properties.containsKey("BACKEND_URL"))
         (properties["BACKEND_URL"] as String)
     else "http://example.com"
+    // Move to returning `properties["BACKEND_URL"] as String?` after upgrading to Gradle 9.0.0
 }.orElse("http://example.com")
 
 androidComponents {
