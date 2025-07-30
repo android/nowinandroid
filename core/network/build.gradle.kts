@@ -65,7 +65,7 @@ val backendUrl = providers.fileContents(
 
 androidComponents {
     onVariants {
-        it.buildConfigFields.put("BACKEND_URL", backendUrl.map { value ->
+        it.buildConfigFields?.put("BACKEND_URL", backendUrl.map { value ->
             BuildConfigField(type = "String", value = """"$value"""", comment = null)
         })
     }
