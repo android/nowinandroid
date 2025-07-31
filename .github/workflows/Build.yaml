@@ -221,6 +221,7 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
+          emulator-options: -show-kernel -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
@@ -261,3 +262,143 @@ jobs:
           compression-level: 1
           overwrite: false
           path: '**/build/reports/jacoco/'
+
+
+  androidTestScreenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    strategy:
+      matrix:
+        include:
+          - api-level: 27
+            profile: pixel_5
+            target: default
+#          - api-level: 33
+#            profile: pixel_fold
+#            target: google_apis
+          - api-level: 35
+            profile: pixel_fold
+            target: google_apis
+
+    steps:
+      - name: Delete unnecessary tools 🔧
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          android: false # Don't remove Android tools
+          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
+          dotnet: true # rm -rf /usr/share/dotnet
+          haskell: true # rm -rf /opt/ghc...
+          swap-storage: true # rm -f /mnt/swapfile (4GiB)
+          docker-images: false # Takes 16s, enable if needed in the future
+          large-packages: false # includes google-cloud-sdk and it's slow
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+        # TODO this workflow needs cmdline-tools 13.0 (for pixel_fold). Remove when not necessary.
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # android-emulator-runner uses /latest
+      - name: Remove old cmdlinetools
+        run: |
+          rm -rf ${{ env.ANDROID_HOME}}/cmdline-tools/latest
+#          mv ${{ env.ANDROID_HOME}}/cmdline-tools/11479570 ${{ env.ANDROID_HOME}}/cmdline-tools/latest
+#          echo ${{ env.ANDROID_HOME}}/cmdline-tools/latest/bin >> $GITHUB_PATH
+
+      # https://github.com/ReactiveCircus/android-emulator-runner/issues/197
+      - name: Create directory for AVD
+        run: mkdir -p /home/runner/.android/avd
+
+      - name: Collect Workflow Telemetry
+        uses: catchpoint/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+
+      - name: Build projects and run instrumented screenshot tests
+        id: dropshotsverify
+        continue-on-error: true
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          emulator-build: 12895296 # 35.4.5 - https://developer.android.com/studio/emulator_archive
+          heap-size: 600M
+          profile: ${{ matrix.profile }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script:
+            adb logcat > logcat.log & ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests --daemon
+
+      - name: Upload logcat
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logcat-${{ matrix.profile }}-${{ matrix.api-level }}
+          path: logcat.log
+
+      - name: Prevent pushing new screenshots if this is a fork
+        id: checkfork_screenshots_instrumented
+        continue-on-error: false
+        if: steps.dropshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Instrumented screenshot tests failed, please create a PR in your fork first." && exit 1
+
+      - name: Record new screenshots if verification failed
+        id: dropshotsrecord
+        continue-on-error: false
+        if: steps.dropshotsverify.outcome == 'failure'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          emulator-build: 12895296 # 35.4.5 - https://developer.android.com/studio/emulator_archive
+          heap-size: 600M
+          profile: ${{ matrix.profile }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script:
+            ./gradlew :app:connectedDemoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.google.samples.apps.nowinandroid.ui.InstrumentedScreenshotTests -Pdropshots.record --daemon --stacktrace
+
+
+      - name: Checkout new changes (in case another job already uploaded screenshots)
+        uses: actions/checkout@v4
+#        if: steps.dropshotsverify.outputs.newgoldens == 'true'
+        with:
+          clean: false
+
+      - name: Push new device screenshots if available
+        uses: stefanzweifel/git-auto-commit-action@4b8a201e31cadd9829df349894b28c54e6c19fe6
+#        if: steps.dropshotsverify.outputs.newgoldens == 'true'
+        with:
+          file_pattern: 'app/src/androidTest/screenshots/*.png'
+          disable_globbing: true
+          commit_message: "🤖 Updates instrumented screenshots. API ${{ matrix.api-level }}"
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ matrix.profile }}-${{ matrix.api-level }}
+          path: '**/build/reports/androidTests'
+

@@ -34,6 +34,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.android")
             apply(plugin = "nowinandroid.android.lint")
             apply(plugin = "com.dropbox.dependency-guard")
+            apply(plugin = "com.dropbox.dropshots")
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
@@ -41,6 +42,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
+                testOptions.emulatorControl.enable = true
+//                testOptions.unitTests.isIncludeAndroidResources
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
