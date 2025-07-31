@@ -3,7 +3,6 @@
 # Obsfuscation must be disabled for the build variant that generates Baseline Profile, otherwise
 # wrong symbols would be generated. The generated Baseline Profile will be properly applied when generated
 # without obfuscation and your app is being obfuscated.
--dontobfuscate
 
 # Please add these rules to your existing keep rules in order to suppress warnings.
 # This is generated automatically by the Android Gradle plugin.

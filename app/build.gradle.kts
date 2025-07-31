@@ -70,6 +70,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.app.nativelib)
     implementation(projects.feature.interests)
     implementation(projects.feature.foryou)
     implementation(projects.feature.bookmarks)

@@ -18,7 +18,7 @@ androidxEspresso = "3.6.1"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.8.7"
 androidxLintGradle = "1.0.0-alpha03"
-androidxMacroBenchmark = "1.3.4"
+androidxMacroBenchmark = "1.4.0-beta02"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
 androidxProfileinstaller = "1.4.1"
@@ -59,6 +59,9 @@ room = "2.6.1"
 secrets = "2.0.1"
 truth = "1.4.4"
 turbine = "1.2.0"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+material = "1.12.0"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -161,6 +164,9 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -198,3 +204,4 @@ nowinandroid-android-room = { id = "nowinandroid.android.room" }
 nowinandroid-android-test = { id = "nowinandroid.android.test" }
 nowinandroid-hilt = { id = "nowinandroid.hilt" }
 nowinandroid-jvm-library = { id = "nowinandroid.jvm.library" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
