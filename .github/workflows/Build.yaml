@@ -18,7 +18,6 @@ jobs:
 
     permissions:
       contents: write
-      pull-requests: write
       security-events: write
 
     timeout-minutes: 60
@@ -170,6 +169,10 @@ jobs:
   androidTest:
     runs-on: ubuntu-latest
     timeout-minutes: 55
+
+    permissions:
+      pull-requests: write
+
     strategy:
       matrix:
         api-level: [ 26, 34 ]
