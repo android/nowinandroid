@@ -9,7 +9,7 @@ available, and bookmark items.
 This project is a modern Android application that follows the official architecture guidance from Google. It is a reactive, single-activity app that uses the following:
 
 -   **UI:** Built entirely with Jetpack Compose, including Material 3 components and adaptive layouts for different screen sizes.
--   **State Management:** Unidirectional Data Flow (UDF) is implemented using Kotlin Coroutines and Flows. ViewModels act as state holders, exposing UI state as streams of data.
+-   **State Management:** Unidirectional Data Flow (UDF) is implemented using Kotlin Coroutines and `Flow`s. `ViewModel`s act as state holders, exposing UI state as streams of data.
 -   **Dependency Injection:** Hilt is used for dependency injection throughout the app, simplifying the management of dependencies and improving testability.
 -   **Navigation:** Navigation is handled by Jetpack Navigation 2 for Compose, allowing for a declarative and type-safe way to navigate between screens.
 -   **Data:** The data layer is implemented using the repository pattern.
@@ -18,11 +18,12 @@ This project is a modern Android application that follows the official architect
 -   **Background Processing:** WorkManager is used for deferrable background tasks.
 
 ## Modules
-The main Android app lives in the `app/` folder. Feature modules live in "feature/" and core and shared modules in "core/".
+
+The main Android app lives in the `app/` folder. Feature modules live in `feature/` and core and shared modules in `core/`.
 
 ## Commands to Build & Test
 
-The app and Android libraries have two product flavors: `demo` and `prod`.
+The app and Android libraries have two product flavors: `demo` and `prod`, and two build types: `debug` and `release`.
 
 - Build: `./gradlew assemble{Variant}`. Typically `assembleDemoDebug`.
 - Fix linting/formatting: `./gradlew --init-script gradle/init.gradle.kts spotlessApply`
@@ -38,14 +39,14 @@ The app and Android libraries have two product flavors: `demo` and `prod`.
 
 #### Instrumented tests
 
-- Tests for UI features should only use ComposeTestRule with a ComponentActivity.
-- Bigger tests live in :app and they can start activities like MainActivity.
+- Tests for UI features should only use `ComposeTestRule` with a `ComponentActivity`.
+- Bigger tests live in the `:app` module and they can start activities like `MainActivity`.
 
 #### Local tests
 
-- Kotlinx Coroutines for most assertions
-- Turbine for complex coroutine tests
-- Truth for assertions
+- [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) for most assertions
+- [cashapp/turbine](https://github.com/cashapp/turbine) for complex coroutine tests
+- [google/truth](https://github.com/google/truth) for assertions
 
 ## Continuous integration
 
@@ -54,4 +55,4 @@ The app and Android libraries have two product flavors: `demo` and `prod`.
 
 ## Version control and code location
 
-- The project uses git and is hosted in github.com/android/nowinandroid.
+- The project uses git and is hosted in https://github.com/android/nowinandroid.
