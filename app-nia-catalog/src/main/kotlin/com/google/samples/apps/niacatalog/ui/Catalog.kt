@@ -17,7 +17,6 @@
 package com.google.samples.apps.niacatalog.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
@@ -55,7 +54,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 /**
  * Now in Android component catalog.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NiaCatalog() {
     NiaTheme {
