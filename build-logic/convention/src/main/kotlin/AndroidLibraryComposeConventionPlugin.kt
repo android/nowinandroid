@@ -16,6 +16,7 @@
 
 import com.android.build.gradle.LibraryExtension
 import com.google.samples.apps.nowinandroid.configureAndroidCompose
+import com.google.samples.apps.nowinandroid.configureAndroidComposeScreenshotTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -26,9 +27,11 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.library")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "com.android.compose.screenshot")
 
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)
+            configureAndroidComposeScreenshotTest(extension)
         }
     }
 
