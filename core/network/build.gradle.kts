@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+import com.android.build.api.variant.BuildConfigField
+import java.io.StringReader
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
     alias(libs.plugins.nowinandroid.hilt)
     id("kotlinx-serialization")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -32,10 +35,6 @@ android {
             isIncludeAndroidResources = true
         }
     }
-}
-
-secrets {
-    defaultPropertiesFileName = "secrets.defaults.properties"
 }
 
 dependencies {
@@ -51,4 +50,23 @@ dependencies {
     implementation(libs.retrofit.kotlin.serialization)
 
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+val backendUrl = providers.fileContents(
+    isolated.rootProject.projectDirectory.file("local.properties")
+).asText.map { text ->
+    val properties = Properties()
+    properties.load(StringReader(text))
+    if (properties.containsKey("BACKEND_URL"))
+        (properties["BACKEND_URL"] as String)
+    else "http://example.com"
+    // Move to returning `properties["BACKEND_URL"] as String?` after upgrading to Gradle 9.0.0
+}.orElse("http://example.com")
+
+androidComponents {
+    onVariants {
+        it.buildConfigFields.put("BACKEND_URL", backendUrl.map { value ->
+            BuildConfigField(type = "String", value = """"$value"""", comment = null)
+        })
+    }
 }
