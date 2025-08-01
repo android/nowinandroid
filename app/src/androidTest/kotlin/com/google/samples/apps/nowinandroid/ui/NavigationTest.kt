@@ -47,10 +47,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
-import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
-import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.api.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.search.api.R as FeatureSearchR
+import com.google.samples.apps.nowinandroid.feature.settings.api.R as SettingsR
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.
@@ -83,8 +83,8 @@ class NavigationTest {
     lateinit var newsRepository: NewsRepository
 
     // The strings used for matching in these tests
-    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_navigate_up)
-    private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_title)
+    private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_navigate_up)
+    private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_title)
     private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_interests)
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
