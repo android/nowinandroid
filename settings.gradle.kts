@@ -84,3 +84,5 @@ check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """.trimIndent()
 }
 include(":app:nativelib")
+include(":app:mylibrary")
+include(":app:videolibrary")

@@ -3,7 +3,7 @@
    <fields>;
 }
 
--keepclassmembers,includedescriptorclasses class com.google.samples.apps.nowinandroid.LibraryClass {
+-keepclassmembers class com.google.samples.apps.nowinandroid.LibraryClass {
     private * secretMessage;
 }
 

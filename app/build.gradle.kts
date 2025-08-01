@@ -45,7 +45,7 @@ android {
         release {
             isMinifyEnabled = true
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -71,6 +71,7 @@ android {
 
 dependencies {
     implementation(projects.app.nativelib)
+    implementation(projects.app.mylibrary)
     implementation(projects.feature.interests)
     implementation(projects.feature.foryou)
     implementation(projects.feature.bookmarks)

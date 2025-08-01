@@ -36,6 +36,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
+import com.example.mylibrary.EventBus
+import com.example.mylibrary.MyWorker
+import com.example.mylibrary.OnEvent
+import com.example.mylibrary.ReflectiveExecutor
+import com.example.mylibrary.TaskRunner
+import com.example.mylibrary.WorkerLoader
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
@@ -53,7 +59,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import com.example.nativelib.NativeLib
 
 import javax.inject.Inject
 import kotlin.reflect.KVisibility
@@ -85,7 +90,21 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        accessSecretMessage(LibraryClass())
+
+        val workerClassName = "com.google.samples.apps.nowinandroid.CrashTestWorker"
+        WorkerLoader.loadAndRun(workerClassName)
+        val eventBus = EventBus()
+
+        val listener = CustomListener()
+        eventBus.dispatch(listener)
+
+        val runner = TaskRunner()
+        val task1 = ImportantBackgroundTask()
+
+
+        runner.process(task1) // This will be executed.
+
+
 
         // We keep this as a mutable state, so that we can track changes inside the composition.
         // This allows us to react to dark/light mode changes.
@@ -196,3 +215,25 @@ data class ThemeSettings(
     val androidTheme: Boolean,
     val disableDynamicTheming: Boolean,
 )
+
+class CrashTestWorker : MyWorker {
+    override fun doWork() {
+        // This log will never appear in a release build because the class won't be found
+        Log.d("CrashTestWorker", "Important work is being done!")
+    }
+}
+
+class CustomListener {
+    @OnEvent
+    fun onSomethingHappened() {
+        // This method will be removed by R8 without a keep rule
+        Log.e(TAG, "🎉 Event received!")
+    }
+}
+
+@ReflectiveExecutor
+class ImportantBackgroundTask {
+    fun execute() {
+        Log.e("ImportantBackgroundTask", "Executing the important background task... ✅")
+    }
+}
