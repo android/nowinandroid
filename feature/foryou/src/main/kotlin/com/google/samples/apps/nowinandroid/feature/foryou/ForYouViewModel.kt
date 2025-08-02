@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ForYouViewModel @Inject constructor(
+internal class ForYouViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     syncManager: SyncManager,
     private val analyticsHelper: AnalyticsHelper,
