@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = TopicViewModel.Factory::class)
-class TopicViewModel @AssistedInject constructor(
+internal class TopicViewModel @AssistedInject constructor(
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
