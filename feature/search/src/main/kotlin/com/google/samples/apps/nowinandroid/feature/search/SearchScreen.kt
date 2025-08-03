@@ -549,7 +549,7 @@ private fun SearchTextField(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SearchToolbarPreview() {
     NiaTheme {
@@ -562,7 +562,7 @@ private fun SearchToolbarPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun EmptySearchResultColumnPreview() {
     NiaTheme {
@@ -573,7 +573,7 @@ private fun EmptySearchResultColumnPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun RecentSearchesBodyPreview() {
     NiaTheme {
@@ -585,7 +585,7 @@ private fun RecentSearchesBodyPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SearchNotReadyBodyPreview() {
     NiaTheme {
