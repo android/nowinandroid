@@ -35,7 +35,8 @@
 
     # Keep the public execute() method that has no parameters.
     # This is critical because TaskRunner calls getMethod("execute").
-    # If this method is renamed (obfuscated) or removed (shrunk), your app will crash.
+    # If this method is renamed (obfuscated) or removed
+    # (shrunk), your app wont work the intended way.
     public void execute();
 }
 

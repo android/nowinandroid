@@ -59,9 +59,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-
 import javax.inject.Inject
-import kotlin.reflect.KVisibility
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -90,19 +88,19 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-
+        // Loading class by reflection example
         val workerClassName = "com.google.samples.apps.nowinandroid.CrashTestWorker"
         WorkerLoader.loadAndRun(workerClassName)
+
+        // Reflection using method annotation example
         val eventBus = EventBus()
+        val listener = CustomListener()
+        eventBus.dispatch(listener)
 
-//        val listener = CustomListener()
-//        eventBus.dispatch(listener)
-//
-//        val runner = TaskRunner()
-//        val task1 = ImportantBackgroundTask()
-
-
-//        runner.process(task1) // This will be executed.
+        // Reflection using class annotation example
+        val runner = TaskRunner()
+        val task1 = ImportantBackgroundTask()
+        runner.process(task1) // This will be executed.
 
 
 
