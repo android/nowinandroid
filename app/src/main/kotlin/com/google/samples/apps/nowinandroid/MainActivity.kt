@@ -95,14 +95,14 @@ class MainActivity : ComponentActivity() {
         WorkerLoader.loadAndRun(workerClassName)
         val eventBus = EventBus()
 
-        val listener = CustomListener()
-        eventBus.dispatch(listener)
+//        val listener = CustomListener()
+//        eventBus.dispatch(listener)
+//
+//        val runner = TaskRunner()
+//        val task1 = ImportantBackgroundTask()
 
-        val runner = TaskRunner()
-        val task1 = ImportantBackgroundTask()
 
-
-        runner.process(task1) // This will be executed.
+//        runner.process(task1) // This will be executed.
 
 
 
@@ -219,7 +219,7 @@ data class ThemeSettings(
 class CrashTestWorker : MyWorker {
     override fun doWork() {
         // This log will never appear in a release build because the class won't be found
-        Log.d("CrashTestWorker", "Important work is being done!")
+        Log.e("CrashTestWorker", "✅ Important work is being done!")
     }
 }
 
@@ -234,6 +234,6 @@ class CustomListener {
 @ReflectiveExecutor
 class ImportantBackgroundTask {
     fun execute() {
-        Log.e("ImportantBackgroundTask", "Executing the important background task... ✅")
+        Log.e("ImportantBackgroundTask", "✅ Executing the important background task... ✅")
     }
 }
