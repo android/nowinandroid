@@ -62,11 +62,7 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
+    testOptions.unitTests.isIncludeAndroidResources = true
     namespace = "com.google.samples.apps.nowinandroid"
 }
 
