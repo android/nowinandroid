@@ -16,10 +16,8 @@
 
 package com.google.samples.apps.nowinandroid
 
-import com.android.SdkConstants
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.gradle.BaseExtension
 import com.google.common.truth.Truth.assertWithMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
