@@ -122,14 +122,8 @@ fun Project.configureBadgingTasks(
             tasks.register<GenerateBadgingTask>(generateBadgingTaskName) {
                 apk = variant.artifacts.get(SingleArtifact.APK_FROM_BUNDLE)
                 aapt2Executable.set(
-                    // TODO: Replace with `sdkComponents.aapt2` when it's available in AGP
-                    //       https://issuetracker.google.com/issues/376815836
-                    componentsExtension.sdkComponents.sdkDirectory.map { directory ->
-                        directory.file(
-                            "${SdkConstants.FD_BUILD_TOOLS}/" +
-                                "${baseExtension.buildToolsVersion}/" +
-                                SdkConstants.FN_AAPT2,
-                        )
+                    componentsExtension.sdkComponents.aapt2.flatMap { aapt2 ->
+                        aapt2.executable
                     }
                 )
                 badging = project.layout.buildDirectory.file(
