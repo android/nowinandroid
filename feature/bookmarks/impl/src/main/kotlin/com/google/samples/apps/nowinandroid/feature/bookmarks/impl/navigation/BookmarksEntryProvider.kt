@@ -35,7 +35,7 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object BookmarksModule {
+object BookmarksEntryProvider {
 
     @Provides
     @IntoSet
@@ -52,7 +52,7 @@ object BookmarksModule {
                         actionLabel = action,
                         duration = Short,
                     ) == ActionPerformed
-                }
+                },
             )
         }
     }

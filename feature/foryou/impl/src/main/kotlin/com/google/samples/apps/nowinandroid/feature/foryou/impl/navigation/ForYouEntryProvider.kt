@@ -31,7 +31,7 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object ForYouModule {
+object ForYouEntryProvider {
     /**
      *  The ForYou composable for the app. It can also display information about topics.
      *  This should be supplied from a separate module.
@@ -43,7 +43,7 @@ object ForYouModule {
     ): EntryProviderBuilder<NiaNavKey>.() -> Unit = {
         entry<ForYouRoute> {
             ForYouScreen(
-                onTopicClick = backStack::navigateToTopic
+                onTopicClick = backStack::navigateToTopic,
             )
         }
     }

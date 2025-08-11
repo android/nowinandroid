@@ -42,7 +42,6 @@ class NiaBackStackViewModelTest {
             subclass(TestTopLevelKeySecond::class, TestTopLevelKeySecond.serializer())
             subclass(TestKeyFirst::class, TestKeyFirst.serializer())
             subclass(TestKeySecond::class, TestKeySecond.serializer())
-
         }
     }
 
@@ -57,7 +56,8 @@ class NiaBackStackViewModelTest {
         rule.setContent {
             val viewModel = createViewModel()
             assertThat(viewModel.backStackMap).containsEntry(
-                TestStartKey, mutableListOf(TestStartKey),
+                TestStartKey,
+                mutableListOf(TestStartKey),
             )
         }
     }
@@ -72,7 +72,8 @@ class NiaBackStackViewModelTest {
         }
 
         assertThat(viewModel.backStackMap).containsEntry(
-            TestStartKey, mutableListOf(TestStartKey, TestKeyFirst),
+            TestStartKey,
+            mutableListOf(TestStartKey, TestKeyFirst),
         )
     }
 
@@ -87,8 +88,10 @@ class NiaBackStackViewModelTest {
         }
 
         assertThat(viewModel.backStackMap).containsExactly(
-            TestStartKey, mutableListOf(TestStartKey, TestKeyFirst),
-            TestTopLevelKeyFirst, mutableListOf(TestTopLevelKeyFirst),
+            TestStartKey,
+            mutableListOf(TestStartKey, TestKeyFirst),
+            TestTopLevelKeyFirst,
+            mutableListOf(TestTopLevelKeyFirst),
         ).inOrder()
     }
 
@@ -102,8 +105,10 @@ class NiaBackStackViewModelTest {
         }
 
         assertThat(viewModel.backStackMap).containsExactly(
-            TestStartKey, mutableListOf(TestStartKey, TestKeyFirst),
-            TestTopLevelKeyFirst, mutableListOf(TestTopLevelKeyFirst, TestKeySecond),
+            TestStartKey,
+            mutableListOf(TestStartKey, TestKeyFirst),
+            TestTopLevelKeyFirst,
+            mutableListOf(TestTopLevelKeyFirst, TestKeySecond),
         ).inOrder()
     }
 
@@ -115,12 +120,14 @@ class NiaBackStackViewModelTest {
 
             backStack.navigate(TestKeyFirst)
             assertThat(viewModel.backStackMap).containsExactly(
-                TestStartKey, mutableListOf(TestStartKey, TestKeyFirst),
+                TestStartKey,
+                mutableListOf(TestStartKey, TestKeyFirst),
             )
 
             backStack.popLast()
             assertThat(viewModel.backStackMap).containsExactly(
-                TestStartKey, mutableListOf(TestStartKey),
+                TestStartKey,
+                mutableListOf(TestStartKey),
             )
         }
     }
@@ -141,7 +148,8 @@ class NiaBackStackViewModelTest {
         rule.runOnIdle {
             scenario.viewModel.niaBackStack.navigate(TestKeyFirst)
             assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
-                TestStartKey, TestKeyFirst,
+                TestStartKey,
+                TestKeyFirst,
             ).inOrder()
         }
 
@@ -149,7 +157,8 @@ class NiaBackStackViewModelTest {
 
         rule.runOnIdle {
             assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
-                TestStartKey, TestKeyFirst,
+                TestStartKey,
+                TestKeyFirst,
             ).inOrder()
         }
     }
@@ -173,7 +182,10 @@ class NiaBackStackViewModelTest {
             scenario.viewModel.niaBackStack.navigate(TestKeySecond)
 
             assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
-                TestStartKey, TestKeyFirst, TestTopLevelKeyFirst, TestKeySecond,
+                TestStartKey,
+                TestKeyFirst,
+                TestTopLevelKeyFirst,
+                TestKeySecond,
             ).inOrder()
         }
 
@@ -181,38 +193,41 @@ class NiaBackStackViewModelTest {
 
         rule.runOnIdle {
             assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
-                TestStartKey, TestKeyFirst, TestTopLevelKeyFirst, TestKeySecond,
+                TestStartKey,
+                TestKeyFirst,
+                TestTopLevelKeyFirst,
+                TestKeySecond,
             ).inOrder()
         }
     }
 }
 
 @Serializable
-private object TestStartKey: NiaNavKey {
+private object TestStartKey : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
 }
 
 @Serializable
-private object TestTopLevelKeyFirst: NiaNavKey {
+private object TestTopLevelKeyFirst : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
 }
 
 @Serializable
-private object TestTopLevelKeySecond: NiaNavKey {
+private object TestTopLevelKeySecond : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
 }
 
 @Serializable
-private object TestKeyFirst: NiaNavKey {
+private object TestKeyFirst : NiaNavKey {
     override val isTopLevel: Boolean
         get() = false
 }
 
 @Serializable
-private object TestKeySecond: NiaNavKey {
+private object TestKeySecond : NiaNavKey {
     override val isTopLevel: Boolean
         get() = false
 }

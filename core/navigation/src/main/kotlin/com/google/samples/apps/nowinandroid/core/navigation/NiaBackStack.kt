@@ -24,7 +24,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.jetbrains.annotations.VisibleForTesting
 import kotlin.collections.mutableListOf
 
-
 // TODO refine back behavior - perhaps take a lambda so that each screen / use site can customize back behavior?
 // https://github.com/android/nowinandroid/issues/1934
 class NiaBackStack(
@@ -32,9 +31,8 @@ class NiaBackStack(
 ) {
     internal var backStackMap: LinkedHashMap<NiaNavKey, MutableList<NiaNavKey>> =
         linkedMapOf(
-            startKey to mutableListOf(startKey)
+            startKey to mutableListOf(startKey),
         )
-
 
     @VisibleForTesting
     val backStack: SnapshotStateList<NiaNavKey> = mutableStateListOf(startKey)
@@ -58,11 +56,10 @@ class NiaBackStack(
                     val tempStack = mapOf(startKey to backStackMap[startKey]!!)
                     backStackMap.clear()
                     backStackMap.putAll(tempStack)
-                // else either restore an existing substack or initiate new one
+                    // else either restore an existing substack or initiate new one
                 } else {
                     backStackMap[key] = backStackMap.remove(key) ?: mutableListOf(key)
                 }
-
             }
             // not top level - add to current substack
             else -> {
@@ -73,7 +70,6 @@ class NiaBackStack(
                 }
                 currentStack.add(key)
             }
-
         }
         updateBackStack()
     }
@@ -105,7 +101,7 @@ class NiaBackStack(
         backStack.apply {
             clear()
             backStack.addAll(
-                backStackMap.flatMap { it.value }
+                backStackMap.flatMap { it.value },
             )
         }
 

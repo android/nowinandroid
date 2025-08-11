@@ -37,8 +37,9 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.api.R
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.impl.LIST_PANE_TEST_TAG
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
@@ -47,6 +48,7 @@ import dagger.Provides
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -64,10 +66,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.ReadOnlyProperty
-import com.google.samples.apps.nowinandroid.feature.topic.api.R as FeatureTopicR
-import dagger.hilt.android.components.ActivityComponent
 import kotlin.getValue
+import kotlin.properties.ReadOnlyProperty
 
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
 private const val COMPACT_WIDTH = "w412dp-h915dp"
@@ -87,7 +87,7 @@ class InterestsListDetailScreenTest {
     @EntryPoint
     @InstallIn(ActivityComponent::class)
     interface EntryProvidersEntryPoint {
-        fun getEntryProviders() : Set<@JvmSuppressWildcards EntryProviderBuilder<NiaNavKey>.() -> Unit>
+        fun getEntryProviders(): Set<@JvmSuppressWildcards EntryProviderBuilder<NiaNavKey>.() -> Unit>
     }
 
     @Inject
@@ -99,7 +99,7 @@ class InterestsListDetailScreenTest {
     }
 
     // The strings used for matching in these tests.
-    private val placeholderText by composeTestRule.stringResource(FeatureTopicR.string.feature_topic_api_select_an_interest)
+    private val placeholderText by composeTestRule.stringResource(R.string.feature_interests_api_select_an_interest)
 
     private val Topic.testTag
         get() = "topic:${this.id}"
@@ -257,8 +257,8 @@ object BackStackProvider {
     @Provides
     @Singleton
     fun provideSerializersModule(
-        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>
-    ) : SerializersModule = SerializersModule {
+        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>,
+    ): SerializersModule = SerializersModule {
         polymorphic(NiaNavKey::class) {
             polymorphicModuleBuilders.forEach { it() }
         }

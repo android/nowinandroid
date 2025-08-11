@@ -24,9 +24,9 @@ import androidx.navigation3.runtime.entry
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.topic.api.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
@@ -36,18 +36,18 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object InterestsModule {
+object InterestsEntryProvider {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     @Provides
     @IntoSet
     fun provideInterestsEntryProviderBuilder(
-        backStack: NiaBackStack
+        backStack: NiaBackStack,
     ): EntryProviderBuilder<NiaNavKey>.() -> Unit = {
         entry<InterestsRoute>(
             metadata = ListDetailSceneStrategy.listPane {
-                TopicDetailPlaceholder()
-            }
+                InterestsDetailPlaceholder()
+            },
         ) { key ->
             val viewModel = hiltViewModel<InterestsViewModel, InterestsViewModel.Factory> {
                 it.create(key)
@@ -55,7 +55,7 @@ object InterestsModule {
             InterestsScreen(
                 onTopicClick = backStack::navigateToTopic,
                 shouldHighlightSelectedTopic = false,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
     }

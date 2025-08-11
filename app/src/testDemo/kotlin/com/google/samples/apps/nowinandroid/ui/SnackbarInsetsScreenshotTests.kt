@@ -213,7 +213,7 @@ class SnackbarInsetsScreenshotTests {
             CompositionLocalProvider(
                 // Replaces images with placeholders
                 LocalInspectionMode provides true,
-                LocalSnackbarHostState provides snackbarHostState
+                LocalSnackbarHostState provides snackbarHostState,
             ) {
                 scope = rememberCoroutineScope()
 
@@ -250,7 +250,7 @@ class SnackbarInsetsScreenshotTests {
                                     networkMonitor = networkMonitor,
                                     userNewsResourceRepository = userNewsResourceRepository,
                                     timeZoneMonitor = timeZoneMonitor,
-                                    niaBackStack = mockNiaBackStack()
+                                    niaBackStack = mockNiaBackStack(),
                                 )
                                 NiaApp(
                                     appState = appState,

@@ -154,12 +154,12 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                        OnboardingUiState.Shown(
-                            // Follow one topic
-                            topics = followableTopicTestData.mapIndexed { index, testTopic ->
-                                testTopic.copy(isFollowed = index == 1)
-                            },
-                        ),
+                    OnboardingUiState.Shown(
+                        // Follow one topic
+                        topics = followableTopicTestData.mapIndexed { index, testTopic ->
+                            testTopic.copy(isFollowed = index == 1)
+                        },
+                    ),
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
@@ -201,9 +201,9 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                        OnboardingUiState.Shown(
-                            topics = followableTopicTestData
-                        ),
+                    OnboardingUiState.Shown(
+                        topics = followableTopicTestData,
+                    ),
                     feedState = NewsFeedUiState.Loading,
                     deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },

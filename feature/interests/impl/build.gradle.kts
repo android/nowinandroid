@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.feature.topic.api)
     implementation(projects.feature.interests.api)

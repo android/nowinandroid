@@ -23,20 +23,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.serialization.saved
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.serialization.SavedStateConfiguration
-import javax.inject.Inject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
+import javax.inject.Inject
 
 @HiltViewModel
 class NiaBackStackViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val niaBackStack: NiaBackStack,
     serializersModules: SerializersModule,
-): ViewModel() {
+) : ViewModel() {
 
     private val config = SavedStateConfiguration { serializersModule = serializersModules }
 
@@ -53,10 +53,9 @@ class NiaBackStackViewModel @Inject constructor(
             // Restore backstack from saved state handle if not emtpy
             @Suppress("UNCHECKED_CAST")
             niaBackStack.restore(
-                backStackMap as LinkedHashMap<NiaNavKey, MutableList<NiaNavKey>>
+                backStackMap as LinkedHashMap<NiaNavKey, MutableList<NiaNavKey>>,
             )
         }
-
 
         // Start observing changes to the backStack and save backStack whenever it updates
         viewModelScope.launch {

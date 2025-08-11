@@ -49,7 +49,7 @@ enum class TopLevelDestination(
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int,
     val route: KClass<*>,
-    val key: NiaNavKey
+    val key: NiaNavKey,
 ) {
     FOR_YOU(
         selectedIcon = NiaIcons.Upcoming,
@@ -57,7 +57,7 @@ enum class TopLevelDestination(
         iconTextId = forYouR.string.feature_foryou_api_title,
         titleTextId = R.string.app_name,
         route = ForYouRoute::class,
-        key = ForYouRoute
+        key = ForYouRoute,
     ),
     BOOKMARKS(
         selectedIcon = NiaIcons.Bookmarks,
@@ -65,7 +65,7 @@ enum class TopLevelDestination(
         iconTextId = bookmarksR.string.feature_bookmarks_api_title,
         titleTextId = bookmarksR.string.feature_bookmarks_api_title,
         route = BookmarksRoute::class,
-        key = BookmarksRoute
+        key = BookmarksRoute,
     ),
     INTERESTS(
         selectedIcon = NiaIcons.Grid3x3,
@@ -73,7 +73,7 @@ enum class TopLevelDestination(
         iconTextId = searchR.string.feature_search_api_interests,
         titleTextId = searchR.string.feature_search_api_interests,
         route = InterestsRoute::class,
-        key = InterestsRoute(null)
+        key = InterestsRoute(null),
     ),
 }
 

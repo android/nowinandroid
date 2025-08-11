@@ -18,4 +18,5 @@
     <string name="feature_interests_api_title">Interests</string>
     <string name="feature_interests_api_loading">Loading data</string>
     <string name="feature_interests_api_empty_header">"No available data"</string>
+    <string name="feature_interests_api_select_an_interest">Select an Interest</string>
 </resources>
