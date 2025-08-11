@@ -110,7 +110,6 @@ private fun String.capitalized() = replaceFirstChar {
 }
 
 fun Project.configureBadgingTasks(
-    baseExtension: BaseExtension,
     componentsExtension: ApplicationAndroidComponentsExtension,
 ) {
     // Registers a callback to be called, when a new variant is configured
