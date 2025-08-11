@@ -33,7 +33,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 object TopicSerializerModule {
     @Provides
     @IntoSet
-    fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
+    fun provideTopicPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(TopicRoute::class, TopicRoute.serializer())
     }
 }

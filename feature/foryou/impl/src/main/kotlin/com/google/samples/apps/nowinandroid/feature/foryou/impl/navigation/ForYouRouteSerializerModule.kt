@@ -34,7 +34,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 object ForYouRouteSerializerModule {
     @Provides
     @IntoSet
-    fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
+    fun provideForYouPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(ForYouRoute::class, ForYouRoute.serializer())
     }
 }

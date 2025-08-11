@@ -32,7 +32,7 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(ActivityComponent::class)
-object SearchModule {
+object SearchEntryProvider {
 
     @Provides
     @IntoSet

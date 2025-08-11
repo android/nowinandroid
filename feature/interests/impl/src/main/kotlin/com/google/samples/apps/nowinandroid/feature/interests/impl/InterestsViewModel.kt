@@ -71,7 +71,7 @@ class InterestsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory{
+    interface Factory {
         fun create(key: InterestsRoute): InterestsViewModel
     }
 }

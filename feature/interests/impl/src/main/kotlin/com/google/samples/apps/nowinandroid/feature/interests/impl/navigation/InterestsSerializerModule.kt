@@ -34,7 +34,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 object InterestsSerializerModule {
     @Provides
     @IntoSet
-    fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
+    fun provideInterestsPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(InterestsRoute::class, InterestsRoute.serializer())
     }
 }

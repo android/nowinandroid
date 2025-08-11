@@ -44,8 +44,8 @@ object BackStackProvider {
     @Provides
     @Singleton
     fun provideSerializersModule(
-        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>
-    ) : SerializersModule = SerializersModule {
+        polymorphicModuleBuilders: Set<@JvmSuppressWildcards PolymorphicModuleBuilder<NiaNavKey>.() -> Unit>,
+    ): SerializersModule = SerializersModule {
         polymorphic(NiaNavKey::class) {
             polymorphicModuleBuilders.forEach { it() }
         }

@@ -57,13 +57,15 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestKeyFirst)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst
+            TestStartKey,
+            TestKeyFirst,
         ).inOrder()
 
         niaBackStack.navigate(TestKeyFirst)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst
+            TestStartKey,
+            TestKeyFirst,
         ).inOrder()
     }
 
@@ -73,13 +75,16 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestKeyFirst)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestTopLevelKey, TestKeyFirst
+            TestStartKey,
+            TestTopLevelKey,
+            TestKeyFirst,
         ).inOrder()
 
         niaBackStack.navigate(TestTopLevelKey)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestTopLevelKey
+            TestStartKey,
+            TestTopLevelKey,
         ).inOrder()
     }
 
@@ -130,12 +135,15 @@ class NiaBackStackTest {
         niaBackStack.restore(
             linkedMapOf(
                 TestStartKey to mutableListOf(TestStartKey, TestKeyFirst),
-                TestTopLevelKey to mutableListOf(TestTopLevelKey, TestKeySecond)
-            )
+                TestTopLevelKey to mutableListOf(TestTopLevelKey, TestKeySecond),
+            ),
         )
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst, TestTopLevelKey, TestKeySecond
+            TestStartKey,
+            TestKeyFirst,
+            TestTopLevelKey,
+            TestKeySecond,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestKeySecond)
@@ -148,13 +156,16 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestKeySecond)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst, TestKeySecond
+            TestStartKey,
+            TestKeyFirst,
+            TestKeySecond,
         ).inOrder()
 
         niaBackStack.popLast()
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst
+            TestStartKey,
+            TestKeyFirst,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestKeyFirst)
@@ -167,7 +178,9 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestTopLevelKey)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst, TestTopLevelKey
+            TestStartKey,
+            TestKeyFirst,
+            TestTopLevelKey,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestTopLevelKey)
@@ -177,7 +190,8 @@ class NiaBackStackTest {
         niaBackStack.popLast()
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst
+            TestStartKey,
+            TestKeyFirst,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestKeyFirst)
@@ -190,13 +204,15 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestKeySecond)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestKeyFirst, TestKeySecond
+            TestStartKey,
+            TestKeyFirst,
+            TestKeySecond,
         ).inOrder()
 
         niaBackStack.popLast(2)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey
+            TestStartKey,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestStartKey)
@@ -205,7 +221,7 @@ class NiaBackStackTest {
 
     @Test
     fun popMultipleTopLevel() {
-        val TestTopLevelKeyTwo = object: NiaNavKey {
+        val testTopLevelKeyTwo = object : NiaNavKey {
             override val isTopLevel: Boolean
                 get() = true
         }
@@ -214,17 +230,21 @@ class NiaBackStackTest {
         niaBackStack.navigate(TestTopLevelKey)
         niaBackStack.navigate(TestKeyFirst)
         // third sub-stack
-        niaBackStack.navigate(TestTopLevelKeyTwo)
+        niaBackStack.navigate(testTopLevelKeyTwo)
         niaBackStack.navigate(TestKeySecond)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey, TestTopLevelKey, TestKeyFirst, TestTopLevelKeyTwo, TestKeySecond,
+            TestStartKey,
+            TestTopLevelKey,
+            TestKeyFirst,
+            testTopLevelKeyTwo,
+            TestKeySecond,
         ).inOrder()
 
         niaBackStack.popLast(4)
 
         assertThat(niaBackStack.backStack).containsExactly(
-            TestStartKey
+            TestStartKey,
         ).inOrder()
 
         assertThat(niaBackStack.currentKey).isEqualTo(TestStartKey)
@@ -239,23 +259,22 @@ class NiaBackStackTest {
     }
 }
 
-private object TestStartKey: NiaNavKey {
+private object TestStartKey : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
 }
 
-private object TestTopLevelKey: NiaNavKey {
+private object TestTopLevelKey : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
 }
 
-private object TestKeyFirst: NiaNavKey {
+private object TestKeyFirst : NiaNavKey {
     override val isTopLevel: Boolean
         get() = false
 }
 
-private object TestKeySecond: NiaNavKey {
+private object TestKeySecond : NiaNavKey {
     override val isTopLevel: Boolean
         get() = false
 }
-

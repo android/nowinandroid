@@ -34,7 +34,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 object BookmarksSerializerModule {
     @Provides
     @IntoSet
-    fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
+    fun provideBookmarksPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(BookmarksRoute::class, BookmarksRoute.serializer())
     }
 }

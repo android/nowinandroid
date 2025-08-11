@@ -125,7 +125,7 @@ class NiaAppScreenSizesScreenshotTests {
                             networkMonitor = networkMonitor,
                             userNewsResourceRepository = userNewsResourceRepository,
                             timeZoneMonitor = timeZoneMonitor,
-                            niaBackStack = mockNiaBackStack()
+                            niaBackStack = mockNiaBackStack(),
                         )
                         NiaApp(
                             fakeAppState,

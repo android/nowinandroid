@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
@@ -125,6 +124,6 @@ private fun NavigationTrackingSideEffect(niaBackStack: NiaBackStack) {
             val stack = niaBackStack.backStack.toList()
             metricsHolder.state?.putState("Navigation", stack.lastOrNull().toString())
         }
-        onDispose {  }
+        onDispose { }
     }
 }

@@ -26,11 +26,11 @@ import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
 val MockEntryProvider: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit> =
     setOf(
         {
-            entry<ForYouRoute>{
+            entry<ForYouRoute> {
                 ForYouScreen({})
             }
         },
-)
+    )
 
 private val startKey = ForYouRoute
 
