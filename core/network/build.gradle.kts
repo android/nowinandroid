@@ -30,11 +30,7 @@ android {
         buildConfig = true
     }
     namespace = "com.google.samples.apps.nowinandroid.core.network"
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
