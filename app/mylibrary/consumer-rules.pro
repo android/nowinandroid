@@ -8,7 +8,7 @@
 }
 
 
--keepattributes *Annotation*
+-keepattributes RuntimeVisibleAnnotations
 
 -keep @interface com.example.mylibrary.OnEvent
 
@@ -23,6 +23,7 @@
 
 -whyareyoukeeping class com.example.mylibrary.EventBus {
  <methods>;
+<fields>;
 }
 
 

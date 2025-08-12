@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.example.mylibrary
+package com.google.samples.apps.nowinandroid
 
+import android.util.Log
 
-
-// This is an example of loading a class by name and running its doWork method.
-
-interface MyWorker {
-    fun doWork()
+// A top-level function not inside a class
+fun isEmailValid(email: String): Boolean {
+    Log.e("crash", "nothing to crash")
+    return email.contains("@")
 }
 
-object WorkerLoader {
-    fun loadAndRun(className: String) {
-        val workerClass = Class.forName(className)
-        val worker = workerClass.getDeclaredConstructor().newInstance() as MyWorker
-        worker.doWork()
-    }
+fun isSomethingElse(email: String): Boolean {
+    Log.e("crash", "nothing to crash")
+    return email.contains("@")
 }
+
+
+

@@ -103,6 +103,8 @@ class MainActivity : ComponentActivity() {
         runner.process(task1) // This will be executed.
 
 
+        isEmailValid("ajeshr@google.com")
+
 
         // We keep this as a mutable state, so that we can track changes inside the composition.
         // This allows us to react to dark/light mode changes.
