@@ -21,6 +21,7 @@ plugins {
 }
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.interests.impl"
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
