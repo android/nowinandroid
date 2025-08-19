@@ -200,7 +200,7 @@ class SnackbarScreenshotTests {
                                 networkMonitor = networkMonitor,
                                 userNewsResourceRepository = userNewsResourceRepository,
                                 timeZoneMonitor = timeZoneMonitor,
-                                niaBackStack = mockNiaBackStack(),
+                                niaNavigator = mockNiaBackStack(),
                             )
                             NiaApp(
                                 appState = appState,

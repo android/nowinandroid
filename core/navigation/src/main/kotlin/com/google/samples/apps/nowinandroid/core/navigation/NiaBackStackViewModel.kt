@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.navigation
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.serialization.saved
@@ -26,6 +27,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
@@ -34,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NiaBackStackViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val niaBackStack: NiaBackStack,
+    val niaNavigatorState: NiaNavigatorState,
     serializersModules: SerializersModule,
 ) : ViewModel() {
 
@@ -42,29 +44,39 @@ class NiaBackStackViewModel @Inject constructor(
 
     @VisibleForTesting
     internal var backStackMap by savedStateHandle.saved(
-        serializer = getMapSerializer<NiaNavKey>(),
+        serializer = MapSerializer(
+            serializer<NiaNavKey>(),
+            serializer<List<NiaNavKey>>()
+        ),
         configuration = config,
     ) {
         linkedMapOf()
     }
 
+    @VisibleForTesting
+    internal var activeTopLeveLKeys by savedStateHandle.saved(
+        serializer = ListSerializer(serializer<NiaNavKey>()),
+        configuration = config,
+    ) {
+        listOf()
+    }
+
     init {
         if (backStackMap.isNotEmpty()) {
-            // Restore backstack from saved state handle if not emtpy
+         //    Restore backstack from saved state handle if not emtpy
             @Suppress("UNCHECKED_CAST")
-            niaBackStack.restore(
-                backStackMap as LinkedHashMap<NiaNavKey, MutableList<NiaNavKey>>,
+            niaNavigatorState.restore(
+                activeTopLeveLKeys,
+                backStackMap as LinkedHashMap<NiaNavKey, SnapshotStateList<NiaNavKey>>,
             )
         }
 
         // Start observing changes to the backStack and save backStack whenever it updates
         viewModelScope.launch {
             snapshotFlow {
-                niaBackStack.backStack.toList()
-                backStackMap = niaBackStack.backStackMap
+                activeTopLeveLKeys = niaNavigatorState.activeTopLeveLKeys.toList()
+                backStackMap = niaNavigatorState.backStacks
             }.collect()
         }
     }
 }
-
-private inline fun <reified T : NiaNavKey> getMapSerializer() = MapSerializer(serializer<T>(), serializer<List<T>>())

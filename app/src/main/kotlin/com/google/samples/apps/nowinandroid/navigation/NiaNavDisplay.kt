@@ -19,36 +19,37 @@ package com.google.samples.apps.nowinandroid.navigation
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.core.navigation.getEntries
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import kotlin.collections.forEach
+import kotlin.collections.plus
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun NiaNavDisplay(
-    niaBackStack: NiaBackStack,
-    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
+    niaNavigator: NiaNavigator,
+    entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>,
 ) {
     val listDetailStrategy = rememberListDetailSceneStrategy<NiaNavKey>()
-
+    val entries = niaNavigator.navigatorState.getEntries(entryProviderBuilders)
     NavDisplay(
-        backStack = niaBackStack.backStack,
+        entries = entries,
         sceneStrategy = listDetailStrategy,
-        onBack = { count -> niaBackStack.popLast(count) },
-        entryDecorators = listOf(
-            rememberSceneSetupNavEntryDecorator(),
-            rememberSavedStateNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-        ),
-        entryProvider = entryProvider {
-            entryProviderBuilders.forEach { builder ->
-                builder()
-            }
-        },
+        onBack = { niaNavigator.pop() },
     )
 }

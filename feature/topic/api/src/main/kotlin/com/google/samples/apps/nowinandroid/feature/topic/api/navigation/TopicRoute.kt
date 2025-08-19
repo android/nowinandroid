@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.api.navigation
 
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import kotlinx.serialization.Serializable
 
@@ -26,7 +26,7 @@ data class TopicRoute(val id: String) : NiaNavKey {
         get() = false
 }
 
-fun NiaBackStack.navigateToTopic(
+fun NiaNavigator.navigateToTopic(
     topicId: String,
 ) {
     navigate(TopicRoute(topicId))
