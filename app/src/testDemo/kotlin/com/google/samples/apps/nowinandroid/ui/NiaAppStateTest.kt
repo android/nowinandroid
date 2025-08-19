@@ -68,7 +68,7 @@ class NiaAppStateTest {
         composeTestRule.setContent {
             state = remember(niaBackStack) {
                 NiaAppState(
-                    niaBackStack = niaBackStack,
+                    niaNavigator = niaBackStack,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
@@ -77,16 +77,16 @@ class NiaAppStateTest {
             }
         }
 
-        assertEquals(ForYouRoute, state.niaBackStack.currentTopLevelKey)
-        assertEquals(ForYouRoute, state.niaBackStack.currentKey)
+        assertEquals(ForYouRoute, state.niaNavigator.currentActiveTopLevelKey)
+        assertEquals(ForYouRoute, state.niaNavigator.currentKey)
 
         // Navigate to another destination once
         niaBackStack.navigate(BookmarksRoute)
 
         composeTestRule.waitForIdle()
 
-        assertEquals(BookmarksRoute, state.niaBackStack.currentTopLevelKey)
-        assertEquals(BookmarksRoute, state.niaBackStack.currentKey)
+        assertEquals(BookmarksRoute, state.niaNavigator.currentActiveTopLevelKey)
+        assertEquals(BookmarksRoute, state.niaNavigator.currentKey)
     }
 
     @Test
@@ -96,7 +96,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaBackStack = mockNiaBackStack(),
+                niaNavigator = mockNiaBackStack(),
             )
         }
 
@@ -114,7 +114,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaBackStack = mockNiaBackStack(),
+                niaNavigator = mockNiaBackStack(),
             )
         }
 
@@ -134,7 +134,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaBackStack = mockNiaBackStack(),
+                niaNavigator = mockNiaBackStack(),
             )
         }
         val changedTz = TimeZone.of("Europe/Prague")

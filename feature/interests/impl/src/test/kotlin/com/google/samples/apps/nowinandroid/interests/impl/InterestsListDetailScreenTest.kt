@@ -30,13 +30,14 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import androidx.test.espresso.Espresso
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStack
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.R
@@ -48,6 +49,7 @@ import dagger.Provides
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -87,7 +89,7 @@ class InterestsListDetailScreenTest {
     @EntryPoint
     @InstallIn(ActivityComponent::class)
     interface EntryProvidersEntryPoint {
-        fun getEntryProviders(): Set<@JvmSuppressWildcards EntryProviderBuilder<NiaNavKey>.() -> Unit>
+        fun getEntryProviders(): Set<@JvmSuppressWildcards EntryProviderScope<NiaNavKey>.() -> Unit>
     }
 
     @Inject
@@ -104,7 +106,7 @@ class InterestsListDetailScreenTest {
     private val Topic.testTag
         get() = "topic:${this.id}"
 
-    private lateinit var entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>
+    private lateinit var entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>
 
     @Before
     fun setup() {
@@ -162,7 +164,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
-                val backStack = backStackViewModel.niaBackStack.backStack
+                val backStack = backStackViewModel.niaNavigator.backStack
                 NiaTheme {
                     NavDisplay(
                         backStack = backStack,
@@ -189,7 +191,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
-                val backStack = backStackViewModel.niaBackStack.backStack
+                val backStack = backStackViewModel.niaNavigator.backStack
                 NiaTheme {
                     NavDisplay(
                         backStack = backStack,
@@ -216,7 +218,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
-                val backStack = backStackViewModel.niaBackStack.backStack
+                val backStack = backStackViewModel.niaNavigator.backStack
                 NiaTheme {
                     NavDisplay(
                         backStack = backStack,
@@ -251,8 +253,8 @@ private fun AndroidComposeTestRule<*, *>.stringResource(
 object BackStackProvider {
     @Provides
     @Singleton
-    fun provideNiaBackStack(): NiaBackStack =
-        NiaBackStack(startKey = InterestsRoute())
+    fun provideNiaBackStack(): NiaNavigator =
+        NiaNavigator(startKey = InterestsRoute())
 
     @Provides
     @Singleton

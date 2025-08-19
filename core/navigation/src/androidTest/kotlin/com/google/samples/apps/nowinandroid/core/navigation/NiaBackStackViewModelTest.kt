@@ -16,6 +16,9 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.createSavedStateHandle
@@ -47,7 +50,7 @@ class NiaBackStackViewModelTest {
 
     private fun createViewModel() = NiaBackStackViewModel(
         savedStateHandle = SavedStateHandle(),
-        niaBackStack = NiaBackStack(TestStartKey),
+        niaNavigatorState = NiaNavigatorState(TestStartKey),
         serializersModules = serializersModules,
     )
 
@@ -55,10 +58,10 @@ class NiaBackStackViewModelTest {
     fun testStartKeySaved() {
         rule.setContent {
             val viewModel = createViewModel()
-            assertThat(viewModel.backStackMap).containsEntry(
-                TestStartKey,
-                mutableListOf(TestStartKey),
-            )
+            assertThat(viewModel.backStackMap.size).isEqualTo(1)
+            val entry = viewModel.backStackMap[TestStartKey]
+            assertThat(entry).isNotNull()
+            assertThat(entry).containsExactly(TestStartKey)
         }
     }
 
@@ -66,88 +69,99 @@ class NiaBackStackViewModelTest {
     fun testNonTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val backStack = viewModel.niaBackStack
-
-            backStack.navigate(TestKeyFirst)
+            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            navigator.navigate(TestKeyFirst)
         }
-
-        assertThat(viewModel.backStackMap).containsEntry(
-            TestStartKey,
-            mutableListOf(TestStartKey, TestKeyFirst),
-        )
+        assertThat(viewModel.backStackMap.size).isEqualTo(1)
+        val entry = viewModel.backStackMap[TestStartKey]
+        assertThat(entry).isNotNull()
+        assertThat(entry).containsExactly(TestStartKey, TestKeyFirst).inOrder()
     }
 
     @Test
     fun testTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val backStack = viewModel.niaBackStack
+            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
 
-            backStack.navigate(TestKeyFirst)
-            backStack.navigate(TestTopLevelKeyFirst)
+            navigator.navigate(TestKeyFirst)
+            navigator.navigate(TestTopLevelKeyFirst)
         }
 
-        assertThat(viewModel.backStackMap).containsExactly(
-            TestStartKey,
-            mutableListOf(TestStartKey, TestKeyFirst),
-            TestTopLevelKeyFirst,
-            mutableListOf(TestTopLevelKeyFirst),
-        ).inOrder()
+        assertThat(viewModel.backStackMap.size).isEqualTo(2)
+
+        val entry = viewModel.backStackMap[TestStartKey]
+        assertThat(entry).isNotNull()
+        assertThat(entry).containsExactly(TestStartKey, TestKeyFirst).inOrder()
+
+        val entry2 = viewModel.backStackMap[TestTopLevelKeyFirst]
+        assertThat(entry2).isNotNull()
+        assertThat(entry2).containsExactly(TestTopLevelKeyFirst)
     }
 
     @Test
     fun testMultiStacksSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            viewModel.niaBackStack.navigate(TestKeyFirst)
-            viewModel.niaBackStack.navigate(TestTopLevelKeyFirst)
-            viewModel.niaBackStack.navigate(TestKeySecond)
+            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            navigator.navigate(TestKeyFirst)
+            navigator.navigate(TestTopLevelKeyFirst)
+            navigator.navigate(TestKeySecond)
         }
 
-        assertThat(viewModel.backStackMap).containsExactly(
-            TestStartKey,
-            mutableListOf(TestStartKey, TestKeyFirst),
-            TestTopLevelKeyFirst,
-            mutableListOf(TestTopLevelKeyFirst, TestKeySecond),
-        ).inOrder()
+        assertThat(viewModel.backStackMap.size).isEqualTo(2)
+
+        val entry = viewModel.backStackMap[TestStartKey]
+        assertThat(entry).isNotNull()
+        assertThat(entry).containsExactly(TestStartKey, TestKeyFirst).inOrder()
+
+        val entry2 = viewModel.backStackMap[TestTopLevelKeyFirst]
+        assertThat(entry2).isNotNull()
+        assertThat(entry2).containsExactly(TestTopLevelKeyFirst, TestKeySecond).inOrder()
     }
 
     @Test
     fun testPopSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val backStack = viewModel.niaBackStack
+            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
 
-            backStack.navigate(TestKeyFirst)
-            assertThat(viewModel.backStackMap).containsExactly(
-                TestStartKey,
-                mutableListOf(TestStartKey, TestKeyFirst),
-            )
+            navigator.navigate(TestKeyFirst)
 
-            backStack.popLast()
-            assertThat(viewModel.backStackMap).containsExactly(
-                TestStartKey,
-                mutableListOf(TestStartKey),
-            )
+            assertThat(viewModel.backStackMap.size).isEqualTo(1)
+            val entry = viewModel.backStackMap[TestStartKey]
+            assertThat(entry).isNotNull()
+            assertThat(entry).containsExactly(TestStartKey, TestKeyFirst).inOrder()
+
+            navigator.pop()
+
+            assertThat(viewModel.backStackMap.size).isEqualTo(1)
+            val entry2 = viewModel.backStackMap[TestStartKey]
+            assertThat(entry2).isNotNull()
+            assertThat(entry2).containsExactly(TestStartKey).inOrder()
         }
     }
 
     @Test
     fun testRestore() {
         lateinit var scenario: ViewModelScenario<NiaBackStackViewModel>
+        lateinit var navigator: NiaNavigator
+        lateinit var navigatorState: NiaNavigatorState
         rule.setContent {
+            navigatorState = remember { NiaNavigatorState(TestStartKey) }
+            navigator = remember { NiaNavigator(navigatorState) }
             scenario = viewModelScenario {
                 NiaBackStackViewModel(
                     savedStateHandle = createSavedStateHandle(),
-                    niaBackStack = NiaBackStack(TestStartKey),
+                    niaNavigatorState = navigatorState,
                     serializersModules = serializersModules,
                 )
             }
         }
 
         rule.runOnIdle {
-            scenario.viewModel.niaBackStack.navigate(TestKeyFirst)
-            assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
+            navigator.navigate(TestKeyFirst)
+            assertThat(navigatorState.currentBackStack).containsExactly(
                 TestStartKey,
                 TestKeyFirst,
             ).inOrder()
@@ -156,32 +170,38 @@ class NiaBackStackViewModelTest {
         scenario.recreate()
 
         rule.runOnIdle {
-            assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
+            assertThat(navigatorState.currentBackStack).containsExactly(
                 TestStartKey,
                 TestKeyFirst,
             ).inOrder()
         }
+
+        scenario.close()
     }
 
     @Test
     fun testRestoreMultiStacks() {
         lateinit var scenario: ViewModelScenario<NiaBackStackViewModel>
+        lateinit var navigator: NiaNavigator
+        lateinit var navigatorState: NiaNavigatorState
         rule.setContent {
+            navigatorState = remember { NiaNavigatorState(TestStartKey) }
+            navigator = remember { NiaNavigator(navigatorState) }
             scenario = viewModelScenario {
                 NiaBackStackViewModel(
                     savedStateHandle = createSavedStateHandle(),
-                    niaBackStack = NiaBackStack(TestStartKey),
+                    niaNavigatorState = navigatorState,
                     serializersModules = serializersModules,
                 )
             }
         }
 
         rule.runOnIdle {
-            scenario.viewModel.niaBackStack.navigate(TestKeyFirst)
-            scenario.viewModel.niaBackStack.navigate(TestTopLevelKeyFirst)
-            scenario.viewModel.niaBackStack.navigate(TestKeySecond)
+            navigator.navigate(TestKeyFirst)
+            navigator.navigate(TestTopLevelKeyFirst)
+            navigator.navigate(TestKeySecond)
 
-            assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
+            assertThat(navigatorState.currentBackStack).containsExactly(
                 TestStartKey,
                 TestKeyFirst,
                 TestTopLevelKeyFirst,
@@ -192,13 +212,15 @@ class NiaBackStackViewModelTest {
         scenario.recreate()
 
         rule.runOnIdle {
-            assertThat(scenario.viewModel.niaBackStack.backStack).containsExactly(
+            assertThat(navigatorState.currentBackStack).containsExactly(
                 TestStartKey,
                 TestKeyFirst,
                 TestTopLevelKeyFirst,
                 TestKeySecond,
             ).inOrder()
         }
+
+        scenario.close()
     }
 }
 
