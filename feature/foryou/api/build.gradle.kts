@@ -20,7 +20,6 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.foryou.api"
-    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
