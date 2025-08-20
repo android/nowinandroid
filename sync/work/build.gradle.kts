@@ -16,7 +16,6 @@
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -27,11 +26,10 @@ android {
 }
 
 dependencies {
-    ksp(libs.hilt.ext.compiler)
-
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.androidx.work.ktx)
-    implementation(libs.hilt.ext.work)
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
     implementation(projects.core.analytics)
     implementation(projects.core.data)
     implementation(projects.core.notifications)
@@ -40,7 +38,11 @@ dependencies {
     prodImplementation(platform(libs.firebase.bom))
 
     androidTestImplementation(libs.androidx.work.testing)
-    androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.kotlinx.coroutines.guava)
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.kotlin.test)
     androidTestImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.dataTest)
 }

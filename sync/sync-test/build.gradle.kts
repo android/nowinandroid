@@ -15,7 +15,6 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -23,7 +22,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.hilt.android.testing)
+    implementation(libs.koin.test)
     implementation(projects.core.data)
     implementation(projects.sync.work)
 }

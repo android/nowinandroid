@@ -35,7 +35,7 @@ val emptyUserData = UserData(
     shouldHideOnboarding = false,
 )
 
-class TestUserDataRepository : UserDataRepository {
+class TestUserDataRepository  : UserDataRepository {
     /**
      * The backing hot flow for the list of followed topic ids for testing.
      */

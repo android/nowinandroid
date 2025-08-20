@@ -23,9 +23,8 @@ import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQuer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
-import javax.inject.Inject
 
-internal class DefaultRecentSearchRepository @Inject constructor(
+internal class DefaultRecentSearchRepository constructor(
     private val recentSearchQueryDao: RecentSearchQueryDao,
 ) : RecentSearchRepository {
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {

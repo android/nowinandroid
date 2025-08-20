@@ -31,10 +31,17 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.notifications)
 
-    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.koin.test)
     testImplementation(libs.robolectric)
     testImplementation(projects.core.testing)
+    testImplementation(project(":core:data-test"))
+    testImplementation(project(":core:datastore-test"))
+
     testDemoImplementation(projects.core.screenshotTesting)
+    testDemoImplementation(libs.koin.test)
+    testDemoImplementation(libs.robolectric)
+    testDemoImplementation(projects.core.testing)
+    testDemoImplementation(project(":core:data-test"))
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)

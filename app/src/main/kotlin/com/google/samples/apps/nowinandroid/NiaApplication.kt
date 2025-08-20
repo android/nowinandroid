@@ -22,33 +22,71 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import com.google.samples.apps.nowinandroid.core.analytics.analyticsModule
+import com.google.samples.apps.nowinandroid.core.data.di.dataModule
+import com.google.samples.apps.nowinandroid.core.database.di.databaseModule
+import com.google.samples.apps.nowinandroid.core.database.di.daosModule
+import com.google.samples.apps.nowinandroid.core.datastore.di.dataStoreModule
+import com.google.samples.apps.nowinandroid.core.domain.di.domainModule
+import com.google.samples.apps.nowinandroid.core.network.di.networkModule
+import com.google.samples.apps.nowinandroid.core.network.di.flavoredNetworkModule
+import com.google.samples.apps.nowinandroid.core.network.di.dispatchersModule
+import com.google.samples.apps.nowinandroid.core.network.di.coroutineScopesModule
+import com.google.samples.apps.nowinandroid.core.notifications.notificationsModule
+import com.google.samples.apps.nowinandroid.di.appModule
+import com.google.samples.apps.nowinandroid.di.featureModules
+import com.google.samples.apps.nowinandroid.sync.di.syncModule
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
-import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 /**
  * [Application] class for NiA
  */
-@HiltAndroidApp
 class NiaApplication : Application(), ImageLoaderFactory {
-    @Inject
-    lateinit var imageLoader: dagger.Lazy<ImageLoader>
-
-    @Inject
-    lateinit var profileVerifierLogger: ProfileVerifierLogger
 
     override fun onCreate() {
         super.onCreate()
+        
+        // Initialize Koin
+        startKoin {
+            androidLogger()
+            androidContext(this@NiaApplication)
+            modules(
+                appModule, 
+                featureModules,
+                analyticsModule,
+                dataModule, 
+                databaseModule, 
+                daosModule, 
+                dataStoreModule, 
+                domainModule, 
+                networkModule, 
+                flavoredNetworkModule, 
+                dispatchersModule,
+                coroutineScopesModule,
+                notificationsModule, 
+                syncModule
+            )
+        }
 
         setStrictModePolicy()
 
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
+        
+        // Initialize ProfileVerifierLogger after Koin is set up
+        val profileVerifierLogger: ProfileVerifierLogger by inject()
         profileVerifierLogger()
     }
 
-    override fun newImageLoader(): ImageLoader = imageLoader.get()
+    override fun newImageLoader(): ImageLoader {
+        val imageLoader: ImageLoader by inject()
+        return imageLoader
+    }
 
     /**
      * Return true if the application is debuggable.

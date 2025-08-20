@@ -30,9 +30,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import javax.inject.Inject
-import javax.inject.Singleton
-
 /**
  * Retrofit API declaration for NIA Network API
  */
@@ -71,18 +68,16 @@ private data class NetworkResponse<T>(
 /**
  * [Retrofit] backed [NiaNetworkDataSource]
  */
-@Singleton
-internal class RetrofitNiaNetwork @Inject constructor(
+internal class RetrofitNiaNetwork constructor(
     networkJson: Json,
-    okhttpCallFactory: dagger.Lazy<Call.Factory>,
+    okhttpCallFactory: Call.Factory,
 ) : NiaNetworkDataSource {
 
     private val networkApi = trace("RetrofitNiaNetwork") {
         Retrofit.Builder()
             .baseUrl(NIA_BASE_URL)
-            // We use callFactory lambda here with dagger.Lazy<Call.Factory>
-            // to prevent initializing OkHttp on the main thread.
-            .callFactory { okhttpCallFactory.get().newCall(it) }
+            // We use callFactory lambda here to prevent initializing OkHttp on the main thread.
+            .callFactory { okhttpCallFactory.newCall(it) }
             .addConverterFactory(
                 networkJson.asConverterFactory("application/json".toMediaType()),
             )

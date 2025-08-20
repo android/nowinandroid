@@ -18,15 +18,10 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.retrofit.RetrofitNiaNetwork
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal interface FlavoredNetworkModule {
-
-    @Binds
-    fun binds(impl: RetrofitNiaNetwork): NiaNetworkDataSource
+val flavoredNetworkModule = module {
+    singleOf(::RetrofitNiaNetwork) { bind<NiaNetworkDataSource>() }
 }

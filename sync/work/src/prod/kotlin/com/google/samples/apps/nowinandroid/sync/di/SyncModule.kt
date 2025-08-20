@@ -23,29 +23,12 @@ import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.sync.status.FirebaseSyncSubscriber
 import com.google.samples.apps.nowinandroid.sync.status.SyncSubscriber
 import com.google.samples.apps.nowinandroid.sync.status.WorkManagerSyncManager
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class SyncModule {
-    @Binds
-    internal abstract fun bindsSyncStatusMonitor(
-        syncStatusMonitor: WorkManagerSyncManager,
-    ): SyncManager
-
-    @Binds
-    internal abstract fun bindsSyncSubscriber(
-        syncSubscriber: FirebaseSyncSubscriber,
-    ): SyncSubscriber
-
-    companion object {
-        @Provides
-        @Singleton
-        internal fun provideFirebaseMessaging(): FirebaseMessaging = Firebase.messaging
-    }
+val syncModule = module {
+    singleOf(::WorkManagerSyncManager) { bind<SyncManager>() }
+    singleOf(::FirebaseSyncSubscriber) { bind<SyncSubscriber>() }
+    single<FirebaseMessaging> { Firebase.messaging }
 }

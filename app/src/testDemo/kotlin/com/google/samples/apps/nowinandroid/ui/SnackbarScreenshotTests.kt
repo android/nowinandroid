@@ -26,7 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -34,16 +34,24 @@ import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
-import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.test.testDataModule
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.domain.di.domainModule
+import com.google.samples.apps.nowinandroid.core.testing.di.testDispatchersModule
 import com.google.samples.apps.nowinandroid.core.testing.util.DefaultRoborazziOptions
-import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
+import org.koin.test.KoinTest
+import com.google.samples.apps.nowinandroid.core.analytics.analyticsModule
+import com.google.samples.apps.nowinandroid.core.data.test.testScopeModule
+import com.google.samples.apps.nowinandroid.core.datastore.test.testDataStoreModule
+import com.google.samples.apps.nowinandroid.core.testing.rule.SafeKoinTestRule
+import com.google.samples.apps.nowinandroid.di.appModule
+import com.google.samples.apps.nowinandroid.di.featureModules
+import com.google.samples.apps.nowinandroid.core.sync.test.testSyncModule
+import com.google.samples.apps.nowinandroid.core.testing.KoinTestApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -57,7 +65,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import org.robolectric.annotation.LooperMode
 import java.util.TimeZone
-import javax.inject.Inject
+import org.koin.core.component.get
 
 /**
  * Tests that the Snackbar is correctly displayed on different screen sizes.
@@ -66,47 +74,49 @@ import javax.inject.Inject
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
 // This allows enough room to render the content under test without clipping or scaling.
-@Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
+@Config(application = KoinTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
-@HiltAndroidTest
-class SnackbarScreenshotTests {
+class SnackbarScreenshotTests : KoinTest {
 
     /**
      * Manages the components' state and is used to perform injection on your test
      */
     @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+    val koinTestRule = SafeKoinTestRule.create(
+        modules = listOf(
+            testDataModule,
+            testDataStoreModule,
+            testNetworkModule,
+            domainModule,
+            testDispatchersModule,
+            testScopeModule,
+            analyticsModule,
+            testSyncModule,
+            appModule,
+            featureModules,
+        )
+    )
 
     /**
      * Use a test activity to set the content on.
      */
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
+    val composeTestRule = createComposeRule()
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
-
-    @Inject
-    lateinit var timeZoneMonitor: TimeZoneMonitor
-
-    @Inject
-    lateinit var userDataRepository: FakeUserDataRepository
-
-    @Inject
-    lateinit var topicsRepository: TopicsRepository
-
-    @Inject
-    lateinit var userNewsResourceRepository: UserNewsResourceRepository
+    private val networkMonitor: NetworkMonitor by lazy { get() }
+    private val timeZoneMonitor: TimeZoneMonitor by lazy { get() }
+    private val userDataRepository: UserDataRepository by lazy { get() }
+    private val topicsRepository: TopicsRepository by lazy { get() }
+    private val userNewsResourceRepository: UserNewsResourceRepository by lazy { get() }
 
     @Before
-    fun setup() {
-        hiltRule.inject()
-
+    fun setup() {        
         // Configure user data
         runBlocking {
-            userDataRepository.setShouldHideOnboarding(true)
+            val fakeUserDataRepository = userDataRepository as com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
+            fakeUserDataRepository.setShouldHideOnboarding(true)
 
-            userDataRepository.setFollowedTopicIds(
+            fakeUserDataRepository.setFollowedTopicIds(
                 setOf(topicsRepository.getTopics().first().first().id),
             )
         }
@@ -236,4 +246,5 @@ class SnackbarScreenshotTests {
                 roborazziOptions = DefaultRoborazziOptions,
             )
     }
+
 }

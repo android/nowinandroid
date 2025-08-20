@@ -20,8 +20,8 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -30,10 +30,17 @@ import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepositor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.ui.interests2pane.InterestsListDetailScreen
-import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
+import com.google.samples.apps.nowinandroid.core.analytics.analyticsModule
+import com.google.samples.apps.nowinandroid.core.data.test.testDataModule
+import com.google.samples.apps.nowinandroid.core.datastore.test.testDataStoreModule
+import com.google.samples.apps.nowinandroid.core.domain.di.domainModule
+import com.google.samples.apps.nowinandroid.core.testing.KoinTestApplication
+import com.google.samples.apps.nowinandroid.core.testing.di.testDispatchersModule
+import com.google.samples.apps.nowinandroid.di.appModule
+import com.google.samples.apps.nowinandroid.di.featureModules
+import com.google.samples.apps.nowinandroid.core.sync.test.testSyncModule
+import com.google.samples.apps.nowinandroid.core.testing.rule.SafeKoinTestRule
+import org.koin.test.KoinTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -42,7 +49,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import javax.inject.Inject
+import org.koin.core.component.inject
 import kotlin.properties.ReadOnlyProperty
 import kotlin.test.assertTrue
 import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
@@ -50,19 +57,30 @@ import com.google.samples.apps.nowinandroid.feature.topic.R as FeatureTopicR
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
 private const val COMPACT_WIDTH = "w412dp-h915dp"
 
-@HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class)
-class InterestsListDetailScreenTest {
+@Config(application = KoinTestApplication::class)
+class InterestsListDetailScreenTest : KoinTest {
 
     @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+    val koinTestRule = SafeKoinTestRule.create(
+        modules = listOf(
+            testDataModule,
+            testDataStoreModule,
+            testNetworkModule,
+            domainModule,
+            testDispatchersModule,
+            testScopeModule,
+            analyticsModule,
+            testSyncModule,
+            appModule,
+            featureModules,
+        )
+    )
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
+    val composeTestRule = createComposeRule()
 
-    @Inject
-    lateinit var topicsRepository: TopicsRepository
+    private val topicsRepository: TopicsRepository by inject()
 
     /** Convenience function for getting all topics during tests, */
     private fun getTopics(): List<Topic> = runBlocking {
@@ -78,7 +96,7 @@ class InterestsListDetailScreenTest {
 
     @Before
     fun setup() {
-        hiltRule.inject()
+        // No need to inject with Koin
     }
 
     @Test
@@ -198,7 +216,12 @@ class InterestsListDetailScreenTest {
     }
 }
 
-private fun AndroidComposeTestRule<*, *>.stringResource(
+private fun ComposeContentTestRule.stringResource(
     @StringRes resId: Int,
 ): ReadOnlyProperty<Any, String> =
-    ReadOnlyProperty { _, _ -> activity.getString(resId) }
+    ReadOnlyProperty { _, _ -> 
+        when (resId) {
+            FeatureTopicR.string.feature_topic_select_an_interest -> "Select an Interest"
+            else -> "Unknown string resource"
+        }
+    }

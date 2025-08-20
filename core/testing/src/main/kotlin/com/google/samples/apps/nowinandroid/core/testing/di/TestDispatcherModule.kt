@@ -16,18 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.testing.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object TestDispatcherModule {
-    @Provides
-    @Singleton
-    fun providesTestDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
+val testDispatcherModule = module {
+    single<TestDispatcher> { UnconfinedTestDispatcher() }
 }

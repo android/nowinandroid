@@ -27,7 +27,7 @@ dependencies {
     api(projects.core.data)
     api(projects.core.model)
 
-    implementation(libs.javax.inject)
+    implementation(libs.koin.android)
 
     testImplementation(projects.core.testing)
 }

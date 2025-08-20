@@ -24,9 +24,8 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
-import javax.inject.Inject
 
-class NiaPreferencesDataSource @Inject constructor(
+class NiaPreferencesDataSource constructor(
     private val userPreferences: DataStore<UserPreferences>,
 ) {
     val userData = userPreferences.data

@@ -48,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -60,6 +59,8 @@ import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 
 @Serializable internal object TopicPlaceholderRoute
@@ -72,7 +73,7 @@ fun NavGraphBuilder.interestsListDetailScreen() {
 
 @Composable
 internal fun InterestsListDetailScreen(
-    viewModel: Interests2PaneViewModel = hiltViewModel(),
+    viewModel: Interests2PaneViewModel = koinViewModel(),
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
@@ -205,11 +206,9 @@ internal fun InterestsListDetailScreen(
                                         }
                                     },
                                     onTopicClick = ::onTopicClickShowDetailPane,
-                                    viewModel = hiltViewModel<TopicViewModel, TopicViewModel.Factory>(
+                                    viewModel = koinViewModel<TopicViewModel>(
                                         key = route.id,
-                                    ) { factory ->
-                                        factory.create(route.id)
-                                    },
+                                    ) { parametersOf(route.id) },
                                 )
                             }
                             is TopicPlaceholderRoute -> {

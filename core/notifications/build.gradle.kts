@@ -15,7 +15,6 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -26,6 +25,7 @@ dependencies {
     api(projects.core.model)
 
     implementation(projects.core.common)
+    implementation(libs.koin.android)
 
     compileOnly(platform(libs.androidx.compose.bom))
 }

@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.data.di
 
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.DefaultSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
@@ -26,49 +27,37 @@ import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRep
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.ConnectivityManagerNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneBroadcastMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class DataModule {
+val dataModule = module {
+    // Repositories
+    singleOf(::OfflineFirstTopicsRepository) bind TopicsRepository::class
+    singleOf(::OfflineFirstNewsRepository) bind NewsRepository::class
+    singleOf(::OfflineFirstUserDataRepository) bind UserDataRepository::class
+    singleOf(::DefaultRecentSearchRepository) bind RecentSearchRepository::class
+    single { DefaultSearchContentsRepository(
+        get(), get(), get(), get(), ioDispatcher = get(named("IO"))
+    ) } bind SearchContentsRepository::class
+    singleOf(::CompositeUserNewsResourceRepository) bind UserNewsResourceRepository::class
+    
+    // Utils
+    single {
+        ConnectivityManagerNetworkMonitor(get(), ioDispatcher = get(named("IO")))
+    } bind NetworkMonitor::class
 
-    @Binds
-    internal abstract fun bindsTopicRepository(
-        topicsRepository: OfflineFirstTopicsRepository,
-    ): TopicsRepository
-
-    @Binds
-    internal abstract fun bindsNewsResourceRepository(
-        newsRepository: OfflineFirstNewsRepository,
-    ): NewsRepository
-
-    @Binds
-    internal abstract fun bindsUserDataRepository(
-        userDataRepository: OfflineFirstUserDataRepository,
-    ): UserDataRepository
-
-    @Binds
-    internal abstract fun bindsRecentSearchRepository(
-        recentSearchRepository: DefaultRecentSearchRepository,
-    ): RecentSearchRepository
-
-    @Binds
-    internal abstract fun bindsSearchContentsRepository(
-        searchContentsRepository: DefaultSearchContentsRepository,
-    ): SearchContentsRepository
-
-    @Binds
-    internal abstract fun bindsNetworkMonitor(
-        networkMonitor: ConnectivityManagerNetworkMonitor,
-    ): NetworkMonitor
-
-    @Binds
-    internal abstract fun binds(impl: TimeZoneBroadcastMonitor): TimeZoneMonitor
+    single {
+        TimeZoneBroadcastMonitor(
+            context = get(),
+            appScope = get(named("ApplicationScope")),
+            ioDispatcher = get(named("IO"))
+        )
+    } bind TimeZoneMonitor::class
 }

@@ -22,36 +22,16 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object DaosModule {
-    @Provides
-    fun providesTopicsDao(
-        database: NiaDatabase,
-    ): TopicDao = database.topicDao()
-
-    @Provides
-    fun providesNewsResourceDao(
-        database: NiaDatabase,
-    ): NewsResourceDao = database.newsResourceDao()
-
-    @Provides
-    fun providesTopicFtsDao(
-        database: NiaDatabase,
-    ): TopicFtsDao = database.topicFtsDao()
-
-    @Provides
-    fun providesNewsResourceFtsDao(
-        database: NiaDatabase,
-    ): NewsResourceFtsDao = database.newsResourceFtsDao()
-
-    @Provides
-    fun providesRecentSearchQueryDao(
-        database: NiaDatabase,
-    ): RecentSearchQueryDao = database.recentSearchQueryDao()
+val daosModule = module {
+    factory<TopicDao> { get<NiaDatabase>().topicDao() }
+    
+    factory<NewsResourceDao> { get<NiaDatabase>().newsResourceDao() }
+    
+    factory<TopicFtsDao> { get<NiaDatabase>().topicFtsDao() }
+    
+    factory<NewsResourceFtsDao> { get<NiaDatabase>().newsResourceFtsDao() }
+    
+    factory<RecentSearchQueryDao> { get<NiaDatabase>().recentSearchQueryDao() }
 }

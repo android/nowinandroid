@@ -23,46 +23,39 @@ import coil.decode.SvgDecoder
 import coil.util.DebugLogger
 import com.google.samples.apps.nowinandroid.core.network.BuildConfig
 import com.google.samples.apps.nowinandroid.core.network.demo.DemoAssetManager
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object NetworkModule {
+val networkModule = module {
 
-    @Provides
-    @Singleton
-    fun providesNetworkJson(): Json = Json {
-        ignoreUnknownKeys = true
+    single {
+        Json {
+            ignoreUnknownKeys = true
+        }
     }
 
-    @Provides
-    @Singleton
-    fun providesDemoAssetManager(
-        @ApplicationContext context: Context,
-    ): DemoAssetManager = DemoAssetManager(context.assets::open)
+    single {
+        DemoAssetManager(androidContext().assets::open)
+    }
 
-    @Provides
-    @Singleton
-    fun okHttpCallFactory(): Call.Factory = trace("NiaOkHttpClient") {
-        OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor()
-                    .apply {
-                        if (BuildConfig.DEBUG) {
-                            setLevel(HttpLoggingInterceptor.Level.BODY)
-                        }
-                    },
-            )
-            .build()
+    single<Call.Factory> {
+        trace("NiaOkHttpClient") {
+            OkHttpClient.Builder()
+                .addInterceptor(
+                    HttpLoggingInterceptor()
+                        .apply {
+                            if (BuildConfig.DEBUG) {
+                                setLevel(HttpLoggingInterceptor.Level.BODY)
+                            }
+                        },
+                )
+                .build()
+        }
     }
 
     /**
@@ -72,24 +65,20 @@ internal object NetworkModule {
      *
      * @see <a href="https://github.com/coil-kt/coil/blob/main/coil-singleton/src/main/java/coil/Coil.kt">Coil</a>
      */
-    @Provides
-    @Singleton
-    fun imageLoader(
-        // We specifically request dagger.Lazy here, so that it's not instantiated from Dagger.
-        okHttpCallFactory: dagger.Lazy<Call.Factory>,
-        @ApplicationContext application: Context,
-    ): ImageLoader = trace("NiaImageLoader") {
-        ImageLoader.Builder(application)
-            .callFactory { okHttpCallFactory.get() }
-            .components { add(SvgDecoder.Factory()) }
-            // Assume most content images are versioned urls
-            // but some problematic images are fetching each time
-            .respectCacheHeaders(false)
-            .apply {
-                if (BuildConfig.DEBUG) {
-                    logger(DebugLogger())
+    single {
+        trace("NiaImageLoader") {
+            ImageLoader.Builder(androidContext())
+                .callFactory { get<Call.Factory>() }
+                .components { add(SvgDecoder.Factory()) }
+                // Assume most content images are versioned urls
+                // but some problematic images are fetching each time
+                .respectCacheHeaders(false)
+                .apply {
+                    if (BuildConfig.DEBUG) {
+                        logger(DebugLogger())
+                    }
                 }
-            }
-            .build()
+                .build()
+        }
     }
 }

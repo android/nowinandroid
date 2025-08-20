@@ -18,15 +18,17 @@ package com.google.samples.apps.nowinandroid.core.network.di
 
 import com.google.samples.apps.nowinandroid.core.network.NiaNetworkDataSource
 import com.google.samples.apps.nowinandroid.core.network.demo.DemoNiaNetworkDataSource
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal interface FlavoredNetworkModule {
-
-    @Binds
-    fun binds(impl: DemoNiaNetworkDataSource): NiaNetworkDataSource
+val flavoredNetworkModule = module {
+    single<NiaNetworkDataSource> { 
+        DemoNiaNetworkDataSource(
+            ioDispatcher = get<CoroutineDispatcher>(named("IO")),
+            networkJson = get(),
+            assets = get()
+        ) 
+    }
 }

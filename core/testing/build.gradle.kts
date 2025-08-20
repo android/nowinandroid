@@ -15,7 +15,6 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
@@ -30,8 +29,8 @@ dependencies {
     api(projects.core.model)
     api(projects.core.notifications)
 
-
     implementation(libs.androidx.test.rules)
-    implementation(libs.hilt.android.testing)
+    implementation(libs.koin.android)
+    implementation(libs.koin.test)
     implementation(libs.kotlinx.datetime)
 }

@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
@@ -25,6 +24,8 @@ import androidx.navigation.toRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Serializable data class TopicRoute(val id: String)
 
@@ -45,11 +46,7 @@ fun NavGraphBuilder.topicScreen(
             showBackButton = showBackButton,
             onBackClick = onBackClick,
             onTopicClick = onTopicClick,
-            viewModel = hiltViewModel<TopicViewModel, TopicViewModel.Factory>(
-                key = id,
-            ) { factory ->
-                factory.create(id)
-            },
+            viewModel = koinViewModel<TopicViewModel> { parametersOf(id) },
         )
     }
 }

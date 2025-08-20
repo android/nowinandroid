@@ -34,12 +34,27 @@ import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParam
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.NotShown
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Shown
-import dagger.hilt.android.testing.HiltTestApplication
+import com.google.samples.apps.nowinandroid.core.data.test.testDataModule
+import com.google.samples.apps.nowinandroid.core.domain.di.domainModule
+import com.google.samples.apps.nowinandroid.core.testing.di.testDispatchersModule
+import com.google.samples.apps.nowinandroid.feature.foryou.ForYouViewModel
 import org.hamcrest.Matchers
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import com.google.samples.apps.nowinandroid.core.analytics.analyticsModule
+import com.google.samples.apps.nowinandroid.core.data.test.testDataModule
+import com.google.samples.apps.nowinandroid.core.data.test.testScopeModule
+import com.google.samples.apps.nowinandroid.core.datastore.test.testDataStoreModule
+import com.google.samples.apps.nowinandroid.core.domain.di.domainModule
+import com.google.samples.apps.nowinandroid.core.testing.di.testDispatchersModule
+import com.google.samples.apps.nowinandroid.core.testing.rule.SafeKoinTestRule
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.test.KoinTest
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
@@ -51,20 +66,38 @@ import java.util.TimeZone
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class)
+@Config
 @LooperMode(LooperMode.Mode.PAUSED)
-class ForYouScreenScreenshotTests {
+class ForYouScreenScreenshotTests : KoinTest {
+
+    // ViewModels needed for this test
+    private val testViewModelsModule = module {
+        viewModelOf(::ForYouViewModel)
+    }
+
+    @get:Rule(order = 0)
+    val koinTestRule = SafeKoinTestRule.create(
+        modules = listOf(
+            testDataModule,
+            testDataStoreModule,
+            domainModule,
+            testDispatchersModule,
+            testScopeModule,
+            analyticsModule,
+            testViewModelsModule,
+        )
+    )
 
     /**
      * Use a test activity to set the content on.
      */
-    @get:Rule
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val userNewsResources = UserNewsResourcePreviewParameterProvider().values.first()
 
     @Before
-    fun setTimeZone() {
+    fun setUp() {        
         // Make time zone deterministic in tests
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }

@@ -21,7 +21,7 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.flavors)
     alias(libs.plugins.nowinandroid.android.application.jacoco)
     alias(libs.plugins.nowinandroid.android.application.firebase)
-    alias(libs.plugins.nowinandroid.hilt)
+    alias(libs.plugins.nowinandroid.koin)
     id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
@@ -34,7 +34,7 @@ android {
         versionCode = 8
         versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
-        // Custom test runner to set up Hilt dependency graph
+        // Custom test runner to set up Koin dependency graph
         testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
 
@@ -95,7 +95,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.koin.androidx.compose.navigation)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
@@ -105,16 +105,17 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.kotlinx.serialization.json)
 
-    ksp(libs.hilt.compiler)
+    // Koin for Android
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(project(":core:domain"))
+    implementation(project(":core:notifications"))
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
-    debugImplementation(projects.uiTestHiltManifest)
-
-    kspTest(libs.hilt.compiler)
 
     testImplementation(projects.core.dataTest)
     testImplementation(projects.core.datastoreTest)
-    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.koin.test)
     testImplementation(projects.sync.syncTest)
     testImplementation(libs.kotlin.test)
 
@@ -129,7 +130,7 @@ dependencies {
     androidTestImplementation(projects.core.datastoreTest)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.koin.test)
     androidTestImplementation(libs.kotlin.test)
 
     baselineProfile(projects.benchmarks)

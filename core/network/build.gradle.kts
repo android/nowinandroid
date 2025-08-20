@@ -21,7 +21,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
     alias(libs.plugins.nowinandroid.android.library.jacoco)
-    alias(libs.plugins.nowinandroid.hilt)
     id("kotlinx-serialization")
 }
 
@@ -48,20 +47,12 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.koin.android)
 
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
-val backendUrl = providers.fileContents(
-    isolated.rootProject.projectDirectory.file("local.properties")
-).asText.map { text ->
-    val properties = Properties()
-    properties.load(StringReader(text))
-    if (properties.containsKey("BACKEND_URL"))
-        (properties["BACKEND_URL"] as String)
-    else "http://example.com"
-    // Move to returning `properties["BACKEND_URL"] as String?` after upgrading to Gradle 9.0.0
-}.orElse("http://example.com")
+val backendUrl = providers.gradleProperty("BACKEND_URL").orElse("http://example.com")
 
 androidComponents {
     onVariants {

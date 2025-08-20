@@ -13,11 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.nowinandroid.android.library)
-    alias(libs.plugins.nowinandroid.hilt)
-}
 
-android {
-    namespace = "com.google.samples.apps.nowinandroid.uitesthiltmanifest"
+package com.google.samples.apps.nowinandroid.core.domain.di
+
+import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
+import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.module
+
+val domainModule = module {
+    factoryOf(::GetFollowableTopicsUseCase)
+    factoryOf(::GetRecentSearchQueriesUseCase)
+    factoryOf(::GetSearchContentsUseCase)
 }

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "Bash(__NEW_LINE__ echo)",
+      "Bash(for feature in bookmarks interests search topic)",
+      "Bash(do)",
+      "Bash(echo:*)",
+      "Bash(done)"
+    ],
+    "deny": []
+  }
+}

@@ -16,60 +16,36 @@
 
 package com.google.samples.apps.nowinandroid.core.data.test
 
-import com.google.samples.apps.nowinandroid.core.data.di.DataModule
+import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeNewsRepository
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeSearchContentsRepository
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeTopicsRepository
 import com.google.samples.apps.nowinandroid.core.data.test.repository.FakeUserDataRepository
+import com.google.samples.apps.nowinandroid.core.data.test.AlwaysOnlineNetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.test.DefaultZoneIdTimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.components.SingletonComponent
-import dagger.hilt.testing.TestInstallIn
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Module
-@TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [DataModule::class],
-)
-internal interface TestDataModule {
-    @Binds
-    fun bindsTopicRepository(
-        fakeTopicsRepository: FakeTopicsRepository,
-    ): TopicsRepository
+val testDataModule = module {
+    single<TopicsRepository> { FakeTopicsRepository(get(named("IO")), get()) }
+    single<NewsRepository> { FakeNewsRepository(get(named("IO")), get()) }
+    single<UserDataRepository> { FakeUserDataRepository(get()) }
+    single<RecentSearchRepository> { FakeRecentSearchRepository() }
+    single<SearchContentsRepository> { FakeSearchContentsRepository() }
+    single<NetworkMonitor> { AlwaysOnlineNetworkMonitor() }
+    single<TimeZoneMonitor> { DefaultZoneIdTimeZoneMonitor() }
+    single<UserNewsResourceRepository> { CompositeUserNewsResourceRepository(get(), get()) }
+}
 
-    @Binds
-    fun bindsNewsResourceRepository(
-        fakeNewsRepository: FakeNewsRepository,
-    ): NewsRepository
-
-    @Binds
-    fun bindsUserDataRepository(
-        userDataRepository: FakeUserDataRepository,
-    ): UserDataRepository
-
-    @Binds
-    fun bindsRecentSearchRepository(
-        recentSearchRepository: FakeRecentSearchRepository,
-    ): RecentSearchRepository
-
-    @Binds
-    fun bindsSearchContentsRepository(
-        searchContentsRepository: FakeSearchContentsRepository,
-    ): SearchContentsRepository
-
-    @Binds
-    fun bindsNetworkMonitor(
-        networkMonitor: AlwaysOnlineNetworkMonitor,
-    ): NetworkMonitor
-
-    @Binds
-    fun binds(impl: DefaultZoneIdTimeZoneMonitor): TimeZoneMonitor
+val testScopeModule = module {
+    single<kotlinx.coroutines.CoroutineScope>(named("ApplicationScope")) { kotlinx.coroutines.test.TestScope() }
 }

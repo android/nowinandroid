@@ -33,9 +33,6 @@ import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val MAX_NUM_NOTIFICATIONS = 5
 private const val TARGET_ACTIVITY_NAME = "com.google.samples.apps.nowinandroid.MainActivity"
@@ -52,9 +49,8 @@ const val DEEP_LINK_URI_PATTERN = "$DEEP_LINK_BASE_PATH/{$DEEP_LINK_NEWS_RESOURC
 /**
  * Implementation of [Notifier] that displays notifications in the system tray.
  */
-@Singleton
-internal class SystemTrayNotifier @Inject constructor(
-    @ApplicationContext private val context: Context,
+internal class SystemTrayNotifier constructor(
+    private val context: Context,
 ) : Notifier {
 
     override fun postNewsNotifications(

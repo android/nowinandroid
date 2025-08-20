@@ -74,7 +74,6 @@ include(":feature:settings")
 include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
-include(":ui-test-hilt-manifest")
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """
