@@ -14,22 +14,27 @@
  *   limitations under the License.
  */
 
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureJacoco
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("org.gradle.jacoco")
-                apply("com.android.library")
+            apply(plugin = "jacoco")
+
+            val androidExtension = extensions.getByType<LibraryExtension>()
+
+            androidExtension.buildTypes.configureEach {
+                enableAndroidTestCoverage = true
+                enableUnitTestCoverage = true
             }
-            val extension = extensions.getByType<LibraryAndroidComponentsExtension>()
-            configureJacoco(extension)
+
+            configureJacoco(extensions.getByType<LibraryAndroidComponentsExtension>())
         }
     }
-
 }

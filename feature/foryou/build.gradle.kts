@@ -23,18 +23,20 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.foryou"
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(projects.core.data)
     implementation(projects.core.domain)
+    implementation(projects.core.notifications)
 
     testImplementation(libs.hilt.android.testing)
     testImplementation(libs.robolectric)
     testImplementation(projects.core.testing)
-    testImplementation(projects.core.screenshotTesting)
-    testDemoImplementation(libs.roborazzi)
+    testDemoImplementation(projects.core.screenshotTesting)
 
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
 }

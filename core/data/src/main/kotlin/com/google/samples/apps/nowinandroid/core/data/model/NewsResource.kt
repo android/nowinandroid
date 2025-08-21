@@ -19,20 +19,12 @@ package com.google.samples.apps.nowinandroid.core.data.model
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceEntity
 import com.google.samples.apps.nowinandroid.core.database.model.NewsResourceTopicCrossRef
 import com.google.samples.apps.nowinandroid.core.database.model.TopicEntity
+import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResource
-import com.google.samples.apps.nowinandroid.core.network.model.NetworkNewsResourceExpanded
+import com.google.samples.apps.nowinandroid.core.network.model.NetworkTopic
+import com.google.samples.apps.nowinandroid.core.network.model.asExternalModel
 
 fun NetworkNewsResource.asEntity() = NewsResourceEntity(
-    id = id,
-    title = title,
-    content = content,
-    url = url,
-    headerImageUrl = headerImageUrl,
-    publishDate = publishDate,
-    type = type,
-)
-
-fun NetworkNewsResourceExpanded.asEntity() = NewsResourceEntity(
     id = id,
     title = title,
     content = content,
@@ -65,3 +57,17 @@ fun NetworkNewsResource.topicCrossReferences(): List<NewsResourceTopicCrossRef> 
             topicId = topicId,
         )
     }
+
+fun NetworkNewsResource.asExternalModel(topics: List<NetworkTopic>) =
+    NewsResource(
+        id = id,
+        title = title,
+        content = content,
+        url = url,
+        headerImageUrl = headerImageUrl,
+        publishDate = publishDate,
+        type = type,
+        topics = topics
+            .filter { networkTopic -> this.topics.contains(networkTopic.id) }
+            .map(NetworkTopic::asExternalModel),
+    )

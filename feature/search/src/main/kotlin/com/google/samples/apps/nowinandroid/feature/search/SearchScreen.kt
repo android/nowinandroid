@@ -41,7 +41,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -55,7 +54,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -67,6 +65,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -74,6 +73,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -228,23 +228,31 @@ fun EmptySearchResultBody(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(vertical = 24.dp),
         )
-        val interests = stringResource(id = searchR.string.feature_search_interests)
         val tryAnotherSearchString = buildAnnotatedString {
             append(stringResource(id = searchR.string.feature_search_try_another_search))
             append(" ")
-            withStyle(
-                style = SpanStyle(
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold,
+            withLink(
+                LinkAnnotation.Clickable(
+                    tag = "",
+                    linkInteractionListener = {
+                        onInterestsClick()
+                    },
                 ),
             ) {
-                pushStringAnnotation(tag = interests, annotation = interests)
-                append(interests)
+                withStyle(
+                    style = SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold,
+                    ),
+                ) {
+                    append(stringResource(id = searchR.string.feature_search_interests))
+                }
             }
+
             append(" ")
             append(stringResource(id = searchR.string.feature_search_to_browse_topics))
         }
-        ClickableText(
+        Text(
             text = tryAnotherSearchString,
             style = MaterialTheme.typography.bodyLarge.merge(
                 TextStyle(
@@ -253,13 +261,8 @@ fun EmptySearchResultBody(
                 ),
             ),
             modifier = Modifier
-                .padding(start = 36.dp, end = 36.dp, bottom = 24.dp)
-                .clickable {},
-        ) { offset ->
-            tryAnotherSearchString.getStringAnnotations(start = offset, end = offset)
-                .firstOrNull()
-                ?.let { onInterestsClick() }
-        }
+                .padding(start = 36.dp, end = 36.dp, bottom = 24.dp),
+        )
     }
 }
 
@@ -464,7 +467,6 @@ private fun SearchToolbar(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SearchTextField(
     searchQuery: String,
@@ -520,6 +522,7 @@ private fun SearchTextField(
             .focusRequester(focusRequester)
             .onKeyEvent {
                 if (it.key == Key.Enter) {
+                    if (searchQuery.isBlank()) return@onKeyEvent false
                     onSearchExplicitlyTriggered()
                     true
                 } else {
@@ -534,6 +537,7 @@ private fun SearchTextField(
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
+                if (searchQuery.isBlank()) return@KeyboardActions
                 onSearchExplicitlyTriggered()
             },
         ),

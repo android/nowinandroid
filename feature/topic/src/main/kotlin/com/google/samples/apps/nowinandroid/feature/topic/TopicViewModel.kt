@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
@@ -28,7 +27,9 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.result.Result
 import com.google.samples.apps.nowinandroid.core.result.asResult
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicArgs
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,22 +38,16 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class TopicViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = TopicViewModel.Factory::class)
+class TopicViewModel @AssistedInject constructor(
     private val userDataRepository: UserDataRepository,
     topicsRepository: TopicsRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
+    @Assisted val topicId: String,
 ) : ViewModel() {
-
-    private val topicArgs: TopicArgs = TopicArgs(savedStateHandle)
-
-    val topicId = topicArgs.topicId
-
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
-        topicId = topicArgs.topicId,
+        topicId = topicId,
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository,
     )
@@ -63,7 +58,7 @@ class TopicViewModel @Inject constructor(
         )
 
     val newsUiState: StateFlow<NewsUiState> = newsUiState(
-        topicId = topicArgs.topicId,
+        topicId = topicId,
         userDataRepository = userDataRepository,
         userNewsResourceRepository = userNewsResourceRepository,
     )
@@ -75,7 +70,7 @@ class TopicViewModel @Inject constructor(
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setTopicIdFollowed(topicArgs.topicId, followed)
+            userDataRepository.setTopicIdFollowed(topicId, followed)
         }
     }
 
@@ -89,6 +84,13 @@ class TopicViewModel @Inject constructor(
         viewModelScope.launch {
             userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            topicId: String,
+        ): TopicViewModel
     }
 }
 

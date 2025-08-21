@@ -13,6 +13,7 @@ bin/
 gen/
 out/
 build/
+generated/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -43,3 +44,6 @@ _sandbox
 
 # Android Studio captures folder
 captures/
+
+# Kotlin
+.kotlin

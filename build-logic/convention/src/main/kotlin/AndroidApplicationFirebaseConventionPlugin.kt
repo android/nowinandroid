@@ -19,23 +19,32 @@ import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 
 class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.google.gms.google-services")
-                apply("com.google.firebase.firebase-perf")
-                apply("com.google.firebase.crashlytics")
-            }
+            apply(plugin = "com.google.gms.google-services")
+            apply(plugin = "com.google.firebase.firebase-perf")
+            apply(plugin = "com.google.firebase.crashlytics")
 
             dependencies {
                 val bom = libs.findLibrary("firebase-bom").get()
-                add("implementation", platform(bom))
+                "implementation"(platform(bom))
                 "implementation"(libs.findLibrary("firebase.analytics").get())
-                "implementation"(libs.findLibrary("firebase.performance").get())
+                "implementation"(libs.findLibrary("firebase.performance").get()) {
+                    /*
+                    Exclusion of protobuf / protolite dependencies is necessary as the
+                    datastore-proto brings in protobuf dependencies. These are the source of truth
+                    for Now in Android.
+                    That's why the duplicate classes from below dependencies are excluded.
+                    */
+                    exclude(group = "com.google.protobuf", module = "protobuf-javalite")
+                    exclude(group = "com.google.firebase", module = "protolite-well-known-types")
+                }
                 "implementation"(libs.findLibrary("firebase.crashlytics").get())
             }
 

@@ -17,44 +17,55 @@
 package com.google.samples.apps.nowinandroid.ui.interests2pane
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.material3.VerticalDragHandle
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
+import androidx.compose.material3.adaptive.layout.PaneExpansionAnchor
+import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
+import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import androidx.compose.material3.adaptive.layout.defaultDragHandleSemantics
+import androidx.compose.material3.adaptive.layout.rememberPaneExpansionState
+import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldPredictiveBackHandler
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.INTERESTS_ROUTE
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.TOPIC_ID_ARG
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ROUTE
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
+import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlin.math.max
 
-private const val DETAIL_PANE_NAVHOST_ROUTE = "detail_pane_route"
+@Serializable internal object TopicPlaceholderRoute
 
 fun NavGraphBuilder.interestsListDetailScreen() {
-    composable(
-        route = INTERESTS_ROUTE,
-        arguments = listOf(
-            navArgument(TOPIC_ID_ARG) {
-                type = NavType.StringType
-                defaultValue = null
-                nullable = true
-            },
-        ),
-    ) {
+    composable<InterestsRoute> {
         InterestsListDetailScreen()
     }
 }
@@ -62,11 +73,13 @@ fun NavGraphBuilder.interestsListDetailScreen() {
 @Composable
 internal fun InterestsListDetailScreen(
     viewModel: Interests2PaneViewModel = hiltViewModel(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val selectedTopicId by viewModel.selectedTopicId.collectAsStateWithLifecycle()
     InterestsListDetailScreen(
         selectedTopicId = selectedTopicId,
         onTopicClick = viewModel::onTopicClick,
+        windowAdaptiveInfo = windowAdaptiveInfo,
     )
 }
 
@@ -75,54 +88,151 @@ internal fun InterestsListDetailScreen(
 internal fun InterestsListDetailScreen(
     selectedTopicId: String?,
     onTopicClick: (String) -> Unit,
+    windowAdaptiveInfo: WindowAdaptiveInfo,
 ) {
-    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
-    BackHandler(listDetailNavigator.canNavigateBack()) {
-        listDetailNavigator.navigateBack()
+    val listDetailNavigator = rememberListDetailPaneScaffoldNavigator(
+        scaffoldDirective = calculatePaneScaffoldDirective(windowAdaptiveInfo),
+        initialDestinationHistory = listOfNotNull(
+            ThreePaneScaffoldDestinationItem(ListDetailPaneScaffoldRole.List),
+            ThreePaneScaffoldDestinationItem<Nothing>(ListDetailPaneScaffoldRole.Detail).takeIf {
+                selectedTopicId != null
+            },
+        ),
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    val paneExpansionState = rememberPaneExpansionState(
+        anchors = listOf(
+            PaneExpansionAnchor.Proportion(0f),
+            PaneExpansionAnchor.Proportion(0.5f),
+            PaneExpansionAnchor.Proportion(1f),
+        ),
+    )
+
+    ThreePaneScaffoldPredictiveBackHandler(
+        listDetailNavigator,
+        BackNavigationBehavior.PopUntilScaffoldValueChange,
+    )
+    BackHandler(
+        paneExpansionState.currentAnchor == PaneExpansionAnchor.Proportion(0f) &&
+            listDetailNavigator.isListPaneVisible() &&
+            listDetailNavigator.isDetailPaneVisible(),
+    ) {
+        coroutineScope.launch {
+            paneExpansionState.animateTo(PaneExpansionAnchor.Proportion(1f))
+        }
     }
 
-    val nestedNavController = rememberNavController()
+    var topicRoute by remember {
+        val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
+        mutableStateOf(route)
+    }
 
     fun onTopicClickShowDetailPane(topicId: String) {
         onTopicClick(topicId)
-        nestedNavController.navigateToTopic(topicId) {
-            popUpTo(DETAIL_PANE_NAVHOST_ROUTE)
+        topicRoute = TopicRoute(id = topicId)
+        coroutineScope.launch {
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
         }
-        listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+        if (paneExpansionState.currentAnchor == PaneExpansionAnchor.Proportion(1f)) {
+            coroutineScope.launch {
+                paneExpansionState.animateTo(PaneExpansionAnchor.Proportion(0f))
+            }
+        }
     }
 
-    ListDetailPaneScaffold(
-        value = listDetailNavigator.scaffoldValue,
-        directive = listDetailNavigator.scaffoldDirective,
+    val mutableInteractionSource = remember { MutableInteractionSource() }
+    val minPaneWidth = 300.dp
+
+    NavigableListDetailPaneScaffold(
+        navigator = listDetailNavigator,
         listPane = {
-            InterestsRoute(
-                onTopicClick = ::onTopicClickShowDetailPane,
-                highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
-            )
-        },
-        detailPane = {
-            NavHost(
-                navController = nestedNavController,
-                startDestination = TOPIC_ROUTE,
-                route = DETAIL_PANE_NAVHOST_ROUTE,
-            ) {
-                topicScreen(
-                    showBackButton = !listDetailNavigator.isListPaneVisible(),
-                    onBackClick = listDetailNavigator::navigateBack,
-                    onTopicClick = ::onTopicClickShowDetailPane,
-                )
-                composable(route = TOPIC_ROUTE) {
-                    TopicDetailPlaceholder()
+            AnimatedPane {
+                Box(
+                    modifier = Modifier.clipToBounds()
+                        .layout { measurable, constraints ->
+                            val width = max(minPaneWidth.roundToPx(), constraints.maxWidth)
+                            val placeable = measurable.measure(
+                                constraints.copy(
+                                    minWidth = minPaneWidth.roundToPx(),
+                                    maxWidth = width,
+                                ),
+                            )
+                            layout(constraints.maxWidth, placeable.height) {
+                                placeable.placeRelative(
+                                    x = 0,
+                                    y = 0,
+                                )
+                            }
+                        },
+                ) {
+                    InterestsRoute(
+                        onTopicClick = ::onTopicClickShowDetailPane,
+                        shouldHighlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+                    )
                 }
             }
         },
+        detailPane = {
+            AnimatedPane {
+                Box(
+                    modifier = Modifier.clipToBounds()
+                        .layout { measurable, constraints ->
+                            val width = max(minPaneWidth.roundToPx(), constraints.maxWidth)
+                            val placeable = measurable.measure(
+                                constraints.copy(
+                                    minWidth = minPaneWidth.roundToPx(),
+                                    maxWidth = width,
+                                ),
+                            )
+                            layout(constraints.maxWidth, placeable.height) {
+                                placeable.placeRelative(
+                                    x = constraints.maxWidth -
+                                        max(constraints.maxWidth, placeable.width),
+                                    y = 0,
+                                )
+                            }
+                        },
+                ) {
+                    AnimatedContent(topicRoute) { route ->
+                        when (route) {
+                            is TopicRoute -> {
+                                TopicScreen(
+                                    showBackButton = !listDetailNavigator.isListPaneVisible(),
+                                    onBackClick = {
+                                        coroutineScope.launch {
+                                            listDetailNavigator.navigateBack()
+                                        }
+                                    },
+                                    onTopicClick = ::onTopicClickShowDetailPane,
+                                    viewModel = hiltViewModel<TopicViewModel, TopicViewModel.Factory>(
+                                        key = route.id,
+                                    ) { factory ->
+                                        factory.create(route.id)
+                                    },
+                                )
+                            }
+                            is TopicPlaceholderRoute -> {
+                                TopicDetailPlaceholder()
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        paneExpansionState = paneExpansionState,
+        paneExpansionDragHandle = {
+            VerticalDragHandle(
+                modifier = Modifier.paneExpansionDraggable(
+                    state = paneExpansionState,
+                    minTouchTargetSize = LocalMinimumInteractiveComponentSize.current,
+                    interactionSource = mutableInteractionSource,
+                    semanticsProperties = paneExpansionState.defaultDragHandleSemantics(),
+                ),
+                interactionSource = mutableInteractionSource,
+            )
+        },
     )
-    LaunchedEffect(Unit) {
-        if (selectedTopicId != null) {
-            // Initial topic ID was provided when navigating to Interests, so show its details.
-            onTopicClickShowDetailPane(selectedTopicId)
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
