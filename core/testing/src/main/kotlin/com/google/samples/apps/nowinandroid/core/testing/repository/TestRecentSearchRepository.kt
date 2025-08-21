@@ -28,7 +28,7 @@ class TestRecentSearchRepository : RecentSearchRepository {
 
     private val cachedRecentSearches = MutableSharedFlow<MutableList<RecentSearchQuery>>(
         replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
     ).apply { tryEmit(mutableListOf()) }
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =

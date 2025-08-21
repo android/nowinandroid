@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.core.domain
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestRecentSearchRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
