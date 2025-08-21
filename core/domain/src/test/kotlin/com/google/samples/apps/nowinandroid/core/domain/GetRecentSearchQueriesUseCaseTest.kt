@@ -25,9 +25,6 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-/**
- * Unit test for [GetRecentSearchQueriesUseCase]
- */
 class GetRecentSearchQueriesUseCaseTest {
 
     @get:Rule
@@ -69,8 +66,8 @@ class GetRecentSearchQueriesUseCaseTest {
 
         // Check that search queries is ordered in recently up to 10
         assertEquals(
-            testRecentSearchQueries.reversed().take(10),
-            recentSearchQueries.first().map { it.query },
+            expected = testRecentSearchQueries.reversed().take(10),
+            actual = recentSearchQueries.first().map { it.query },
         )
     }
 }
