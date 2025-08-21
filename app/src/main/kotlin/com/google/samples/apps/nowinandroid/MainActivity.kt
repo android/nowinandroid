@@ -36,6 +36,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
+import com.example.nativelib.MyKotlinObject
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
@@ -86,6 +87,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         accessSecretMessage(LibraryClass())
+
+        val nativeLib = NativeLib()
+        Log.e("C++ String", nativeLib.stringFromJNI())
+
+        val myKotlinObjectInstance = MyKotlinObject("Hello from Kotlin");
+        nativeLib.stringFromKotlin(myKotlinObjectInstance);
 
         // We keep this as a mutable state, so that we can track changes inside the composition.
         // This allows us to react to dark/light mode changes.

@@ -1,0 +1,3 @@
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/6v6ty185/x86/CMakeFiles/nativelib.dir
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/6v6ty185/x86/CMakeFiles/edit_cache.dir
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/6v6ty185/x86/CMakeFiles/rebuild_cache.dir

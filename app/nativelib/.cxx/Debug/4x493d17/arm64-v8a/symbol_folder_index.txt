@@ -1,0 +1,1 @@
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a

@@ -1,0 +1,1 @@
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/src/main/cpp/CMakeLists.txt

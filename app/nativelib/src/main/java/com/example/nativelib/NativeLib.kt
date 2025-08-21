@@ -1,5 +1,7 @@
 package com.example.nativelib
 
+data class MyKotlinObject(val myString: String?)
+
 class NativeLib {
 
     /**
@@ -7,6 +9,8 @@ class NativeLib {
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
+
+    external fun stringFromKotlin(myObject: MyKotlinObject)
 
     companion object {
         // Used to load the 'nativelib' library on application startup.

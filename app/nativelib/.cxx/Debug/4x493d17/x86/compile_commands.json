@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/4x493d17/x86",
+  "command": "/Users/wickedcube/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=i686-none-linux-android21 --sysroot=/Users/wickedcube/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -Dnativelib_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/nativelib.dir/nativelib.cpp.o -c /Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/src/main/cpp/nativelib.cpp",
+  "file": "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/src/main/cpp/nativelib.cpp"
+}
+]

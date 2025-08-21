@@ -1,0 +1,1 @@
+/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/6v6ty185/obj/x86

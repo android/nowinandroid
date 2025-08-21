@@ -1,0 +1,18 @@
+                        -H/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/src/main/cpp
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_SYSTEM_VERSION=21
+-DANDROID_PLATFORM=android-21
+-DANDROID_ABI=arm64-v8a
+-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a
+-DANDROID_NDK=/Users/wickedcube/Library/Android/sdk/ndk/27.0.12077973
+-DCMAKE_ANDROID_NDK=/Users/wickedcube/Library/Android/sdk/ndk/27.0.12077973
+-DCMAKE_TOOLCHAIN_FILE=/Users/wickedcube/Library/Android/sdk/ndk/27.0.12077973/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/Users/wickedcube/Library/Android/sdk/cmake/3.22.1/bin/ninja
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a
+-DCMAKE_BUILD_TYPE=Debug
+-B/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/4x493d17/arm64-v8a
+-GNinja
+                        Build command args: []
+                        Version: 2

@@ -1,0 +1,11 @@
+# ninja log v5
+0	511	1753942844937195648	CMakeFiles/nativelib.dir/nativelib.cpp.o	e2ac7f003de5d8a8
+513	579	1753942845003821630	/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a/libnativelib.so	52ecf9f341c61d2a
+3	916	1753965161527687505	CMakeFiles/nativelib.dir/nativelib.cpp.o	e2ac7f003de5d8a8
+916	1517	1753965162129797924	/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a/libnativelib.so	52ecf9f341c61d2a
+2	451	1753965264327301487	CMakeFiles/nativelib.dir/nativelib.cpp.o	e2ac7f003de5d8a8
+451	564	1753965264441675724	/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a/libnativelib.so	52ecf9f341c61d2a
+2	478	1753966498006548002	CMakeFiles/nativelib.dir/nativelib.cpp.o	e2ac7f003de5d8a8
+478	619	1753966498149064282	/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a/libnativelib.so	52ecf9f341c61d2a
+1	334	1753966569008547350	CMakeFiles/nativelib.dir/nativelib.cpp.o	e2ac7f003de5d8a8
+334	446	1753966569121458305	/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/4x493d17/obj/arm64-v8a/libnativelib.so	52ecf9f341c61d2a

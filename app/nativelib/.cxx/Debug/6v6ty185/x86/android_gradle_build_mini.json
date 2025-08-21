@@ -1,0 +1,27 @@
+{
+  "buildFiles": [
+    "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/wickedcube/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/6v6ty185/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/wickedcube/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/.cxx/Debug/6v6ty185/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "nativelib::@6890427a1f51a3e7e1df": {
+      "artifactName": "nativelib",
+      "abi": "x86",
+      "output": "/Users/wickedcube/Documents/GitHub/nowinandroid/app/nativelib/build/intermediates/cxx/Debug/6v6ty185/obj/x86/libnativelib.so",
+      "runtimeFiles": []
+    }
+  }
+}
