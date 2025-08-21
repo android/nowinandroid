@@ -48,8 +48,8 @@ class GetRecentSearchQueriesUseCaseTest {
 
         // Check that the number of recent search queries are up to 10.
         assertEquals(
-            10,
-            recentSearchQueries.first().size,
+            expected = 10,
+            actual = recentSearchQueries.first().size,
         )
     }
 
@@ -61,7 +61,6 @@ class GetRecentSearchQueriesUseCaseTest {
         // insert search queries over 10.
         testRecentSearchQueries.forEach { query ->
             recentSearchRepository.insertOrReplaceRecentSearch(query)
-            advanceUntilIdle()
         }
 
         // Check that search queries is ordered in recently up to 10
