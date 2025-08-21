@@ -28,9 +28,6 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-/**
- * Unit test for [GetFollowableTopicsUseCase]
- */
 class GetFollowableTopicsUseCaseTest {
 
     @get:Rule
