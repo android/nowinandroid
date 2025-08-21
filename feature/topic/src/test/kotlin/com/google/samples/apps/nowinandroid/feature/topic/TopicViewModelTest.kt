@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic
 
-import androidx.lifecycle.SavedStateHandle
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
@@ -25,7 +24,6 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.TOPIC_ID_ARG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -60,10 +58,10 @@ class TopicViewModelTest {
     @Before
     fun setup() {
         viewModel = TopicViewModel(
-            savedStateHandle = SavedStateHandle(mapOf(TOPIC_ID_ARG to testInputTopics[0].topic.id)),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,
             userNewsResourceRepository = userNewsResourceRepository,
+            topicId = testInputTopics[0].topic.id,
         )
     }
 
@@ -73,7 +71,7 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateTopic_whenSuccess_matchesTopicFromRepository() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map(FollowableTopic::topic))
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
@@ -85,8 +83,6 @@ class TopicViewModelTest {
         ).first()
 
         assertEquals(topicFromRepository, item.followableTopic.topic)
-
-        collectJob.cancel()
     }
 
     @Test
@@ -101,18 +97,16 @@ class TopicViewModelTest {
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicLoading_thenShowLoading() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
         assertEquals(TopicUiState.Loading, viewModel.topicUiState.value)
-
-        collectJob.cancel()
     }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccess_thenTopicSuccessAndNewsLoading() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
             topicsRepository.sendTopics(testInputTopics.map { it.topic })
             userDataRepository.setFollowedTopicIds(setOf(testInputTopics[1].topic.id))
@@ -121,14 +115,12 @@ class TopicViewModelTest {
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Loading>(newsUiState)
-
-            collectJob.cancel()
         }
 
     @Test
     fun uiStateTopic_whenFollowedIdsSuccessAndTopicSuccessAndNewsIsSuccess_thenAllSuccess() =
         runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) {
+            backgroundScope.launch(UnconfinedTestDispatcher()) {
                 combine(
                     viewModel.topicUiState,
                     viewModel.newsUiState,
@@ -143,13 +135,11 @@ class TopicViewModelTest {
 
             assertIs<TopicUiState.Success>(topicUiState)
             assertIs<NewsUiState.Success>(newsUiState)
-
-            collectJob.cancel()
         }
 
     @Test
     fun uiStateTopic_whenFollowingTopic_thenShowUpdatedTopic() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.topicUiState.collect() }
 
         topicsRepository.sendTopics(testInputTopics.map { it.topic })
         // Set which topic IDs are followed, not including 0.
@@ -161,8 +151,6 @@ class TopicViewModelTest {
             TopicUiState.Success(followableTopic = testOutputTopics[0]),
             viewModel.topicUiState.value,
         )
-
-        collectJob.cancel()
     }
 }
 
