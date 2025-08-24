@@ -16,10 +16,14 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,6 +62,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -145,33 +150,39 @@ internal fun NiaApp(
             onDismiss = { onSettingsDismissed() },
         )
     }
-
+    val currentRoute = appState.currentDestination?.route
+    Log.d("RouteCheck", "Current route: $currentRoute")
+    val searchRoute = "com.google.samples.apps.nowinandroid.feature.search.navigation.SearchRoute"
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
-            appState.topLevelDestinations.forEach { destination ->
-                val hasUnread = unreadDestinations.contains(destination)
-                val selected = currentDestination
-                    .isRouteInHierarchy(destination.baseRoute)
-                item(
-                    selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(destination) },
-                    icon = {
-                        Icon(
-                            imageVector = destination.unselectedIcon,
-                            contentDescription = null,
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = destination.selectedIcon,
-                            contentDescription = null,
-                        )
-                    },
-                    label = { Text(stringResource(destination.iconTextId)) },
-                    modifier = Modifier
-                        .testTag("NiaNavItem")
-                        .then(if (hasUnread) Modifier.notificationDot() else Modifier),
-                )
+            if (currentRoute == searchRoute) {
+
+            } else {
+                appState.topLevelDestinations.forEach { destination ->
+                    val hasUnread = unreadDestinations.contains(destination)
+                    val selected = currentDestination
+                        .isRouteInHierarchy(destination.baseRoute)
+                    item(
+                        selected = selected,
+                        onClick = { appState.navigateToTopLevelDestination(destination) },
+                        icon = {
+                            Icon(
+                                imageVector = destination.unselectedIcon,
+                                contentDescription = null,
+                            )
+                        },
+                        selectedIcon = {
+                            Icon(
+                                imageVector = destination.selectedIcon,
+                                contentDescription = null,
+                            )
+                        },
+                        label = { Text(stringResource(destination.iconTextId)) },
+                        modifier = Modifier
+                            .testTag("NiaNavItem")
+                            .then(if (hasUnread) Modifier.notificationDot() else Modifier),
+                    )
+                }
             }
         },
         windowAdaptiveInfo = windowAdaptiveInfo,
@@ -194,6 +205,7 @@ internal fun NiaApp(
                 )
             },
         ) { padding ->
+
             Column(
                 Modifier
                     .fillMaxSize()
