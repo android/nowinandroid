@@ -33,15 +33,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,9 +59,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation3.runtime.EntryProviderBuilder
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -71,15 +68,18 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
-import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
+import com.google.samples.apps.nowinandroid.navigation.NiaNavDisplay
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 
 @Composable
 fun NiaApp(
     appState: NiaAppState,
+    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
@@ -109,15 +109,16 @@ fun NiaApp(
                     )
                 }
             }
-
-            NiaApp(
-                appState = appState,
-                snackbarHostState = snackbarHostState,
-                showSettingsDialog = showSettingsDialog,
-                onSettingsDismissed = { showSettingsDialog = false },
-                onTopAppBarActionClick = { showSettingsDialog = true },
-                windowAdaptiveInfo = windowAdaptiveInfo,
-            )
+            CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+                NiaApp(
+                    appState = appState,
+                    entryProviderBuilders = entryProviderBuilders,
+                    showSettingsDialog = showSettingsDialog,
+                    onSettingsDismissed = { showSettingsDialog = false },
+                    onTopAppBarActionClick = { showSettingsDialog = true },
+                    windowAdaptiveInfo = windowAdaptiveInfo,
+                )
+            }
         }
     }
 }
@@ -129,7 +130,7 @@ fun NiaApp(
 )
 internal fun NiaApp(
     appState: NiaAppState,
-    snackbarHostState: SnackbarHostState,
+    entryProviderBuilders: Set<EntryProviderBuilder<NiaNavKey>.() -> Unit>,
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
@@ -138,7 +139,7 @@ internal fun NiaApp(
 ) {
     val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
         .collectAsStateWithLifecycle()
-    val currentDestination = appState.currentDestination
+    val currentTopLevelKey = appState.currentTopLevelDestination!!.key
 
     if (showSettingsDialog) {
         SettingsDialog(
@@ -146,15 +147,16 @@ internal fun NiaApp(
         )
     }
 
+    val snackbarHostState = LocalSnackbarHostState.current
+
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
             appState.topLevelDestinations.forEach { destination ->
                 val hasUnread = unreadDestinations.contains(destination)
-                val selected = currentDestination
-                    .isRouteInHierarchy(destination.baseRoute)
+                val selected = destination.key == currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    onClick = { appState.niaBackStack.navigate(destination.key) },
                     icon = {
                         Icon(
                             imageVector = destination.unselectedIcon,
@@ -225,7 +227,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { appState.navigateToSearch() },
+                        onNavigationClick = { appState.niaBackStack.navigateToSearch() },
                     )
                 }
 
@@ -239,15 +241,9 @@ internal fun NiaApp(
                         },
                     ),
                 ) {
-                    NiaNavHost(
-                        appState = appState,
-                        onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        },
+                    NiaNavDisplay(
+                        niaBackStack = appState.niaBackStack,
+                        entryProviderBuilders,
                     )
                 }
 
@@ -276,8 +272,3 @@ private fun Modifier.notificationDot(): Modifier =
             )
         }
     }
-
-private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
-    this?.hierarchy?.any {
-        it.hasRoute(route)
-    } ?: false
