@@ -55,7 +55,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
-import org.robolectric.annotation.LooperMode
 import java.util.TimeZone
 import javax.inject.Inject
 
@@ -67,7 +66,6 @@ import javax.inject.Inject
 // Configure Robolectric to use a very large screen size that can fit all of the test sizes.
 // This allows enough room to render the content under test without clipping or scaling.
 @Config(application = HiltTestApplication::class, qualifiers = "w1000dp-h1000dp-480dpi")
-@LooperMode(LooperMode.Mode.PAUSED)
 @HiltAndroidTest
 class SnackbarScreenshotTests {
 
