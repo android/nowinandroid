@@ -32,14 +32,12 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
     commonExtension.apply {
         compileSdk = 35
 
-        defaultConfig {
-            minSdk = 23
-        }
+        defaultConfig.minSdk = 23
 
         compileOptions {
             // Up to Java 11 APIs are available through desugaring
