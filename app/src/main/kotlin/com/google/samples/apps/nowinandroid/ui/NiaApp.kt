@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -166,8 +168,7 @@ internal fun NiaApp(
                         )
                     },
                     label = { Text(stringResource(destination.iconTextId)) },
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .testTag("NiaNavItem")
                         .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )
@@ -185,7 +186,11 @@ internal fun NiaApp(
             snackbarHost = {
                 SnackbarHost(
                     snackbarHostState,
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.exclude(
+                            WindowInsets.ime,
+                        ),
+                    ),
                 )
             },
         ) { padding ->
@@ -216,7 +221,7 @@ internal fun NiaApp(
                         actionIconContentDescription = stringResource(
                             id = settingsR.string.feature_settings_top_app_bar_action_icon_description,
                         ),
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
