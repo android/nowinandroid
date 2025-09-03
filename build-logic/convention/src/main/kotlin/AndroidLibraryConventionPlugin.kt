@@ -18,7 +18,6 @@ import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
-import com.google.samples.apps.nowinandroid.configureGraphTasks
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
@@ -60,7 +59,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
                 "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
             }
-            configureGraphTasks()
         }
     }
 }

@@ -120,7 +120,7 @@ internal enum class PluginType(val id: String, val ref: String, val style: Strin
     ),
 }
 
-fun Project.configureGraphTasks() {
+internal fun Project.configureGraphTasks() {
     val dumpTask = tasks.register<GraphDumpTask>("graphDump") {
         val graph = Graph(this@configureGraphTasks).invoke()
         projectPath = this@configureGraphTasks.path

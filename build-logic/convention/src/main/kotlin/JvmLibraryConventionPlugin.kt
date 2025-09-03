@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
-import com.google.samples.apps.nowinandroid.configureGraphTasks
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
@@ -32,7 +31,6 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
             dependencies {
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
             }
-            configureGraphTasks()
         }
     }
 }

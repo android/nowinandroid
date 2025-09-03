@@ -18,7 +18,6 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.google.samples.apps.nowinandroid.configureBadgingTasks
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
-import com.google.samples.apps.nowinandroid.configureGraphTasks
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import org.gradle.api.Plugin
@@ -46,7 +45,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 configureBadgingTasks(extensions.getByType<ApplicationExtension>(), this)
             }
-            configureGraphTasks()
         }
     }
 }
