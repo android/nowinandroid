@@ -37,7 +37,7 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.android.gradleApiPlugin)
+    compileOnly(libs.android.gradle)
     compileOnly(libs.android.tools.common)
     compileOnly(plugin(libs.plugins.android.application))
     compileOnly(plugin(libs.plugins.android.library))
