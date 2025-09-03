@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-import com.android.build.gradle.TestExtension
+import com.android.build.api.dsl.TestExtension
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureGraphTasks
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
