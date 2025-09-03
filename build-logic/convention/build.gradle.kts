@@ -114,5 +114,9 @@ gradlePlugin {
             id = libs.plugins.nowinandroid.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("root") {
+            id = libs.plugins.nowinandroid.root.get().pluginId
+            implementationClass = "RootPlugin"
+        }
     }
 }
