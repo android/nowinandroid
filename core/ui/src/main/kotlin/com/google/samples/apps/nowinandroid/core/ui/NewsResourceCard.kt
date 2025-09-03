@@ -21,7 +21,6 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.view.View
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.horizontalScroll
@@ -85,7 +84,6 @@ import java.util.Locale
  * [NewsResource] card used on the following screens: For You, Saved
  */
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsResourceCardExpanded(
     userNewsResource: UserNewsResource,
