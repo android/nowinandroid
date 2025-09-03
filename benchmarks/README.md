@@ -1,4 +1,4 @@
-# `:app`
+# `:benchmarks`
 
 <!--region graph-->
 ```mermaid

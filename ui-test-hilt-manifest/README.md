@@ -1,4 +1,4 @@
-# `:core:model`
+# `:ui-test-hilt-manifest`
 
 <!--region graph-->
 ```mermaid
@@ -9,10 +9,7 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :core
-    direction TB
-    :core:model[model]:::jvm
-  end
+  :ui-test-hilt-manifest[ui-test-hilt-manifest]:::android-library
 
 classDef android-application fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff;
 classDef android-library fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff;
