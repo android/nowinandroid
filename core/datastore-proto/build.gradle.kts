@@ -26,7 +26,8 @@ android {
 // Setup protobuf configuration, generating lite Java and Kotlin classes
 protobuf {
     protoc {
-        artifact = libs.protobuf.protoc.get().toString()
+        // protobuf gradle plugin does not follow BoM configuration
+        artifact = "${libs.protobuf.protoc.get()}:${libs.protobuf.bom.get().version}"
     }
     generateProtoTasks {
         all().forEach { task ->
@@ -51,5 +52,6 @@ androidComponents.beforeVariants {
 }
 
 dependencies {
+    api(platform(libs.protobuf.bom))
     api(libs.protobuf.kotlin.lite)
 }
