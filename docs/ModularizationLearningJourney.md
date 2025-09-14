@@ -283,6 +283,9 @@ Using the above modularization strategy, the Now in Android app has the followin
   </tr>
 </table>
 
+Each module has its own `README.md` file containing a module graph (e.g. [`:app` module graph](../app/README.md#module-dependency-graph)).  
+When modules dependencies change, module graphs are automatically updated by the [Build.yaml](../.github/workflows/Build.yaml) workflow.  
+You can also manually update the graphs by running the `graphUpdate` task.
 
 ## Modularization in Now in Android
 
