@@ -1,5 +1,7 @@
 # `:benchmarks`
 
+## Module dependency graph
+
 <!--region graph-->
 ```mermaid
 ---
@@ -12,26 +14,26 @@ graph TB
   subgraph :core
     direction TB
     :core:analytics[analytics]:::android-library
-    :core:common[common]:::jvm
+    :core:common[common]:::jvm-library
     :core:data[data]:::android-library
     :core:database[database]:::android-library
     :core:datastore[datastore]:::android-library
     :core:datastore-proto[datastore-proto]:::android-library
     :core:designsystem[designsystem]:::android-library
     :core:domain[domain]:::android-library
-    :core:model[model]:::jvm
+    :core:model[model]:::jvm-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
   end
   subgraph :feature
     direction TB
-    :feature:bookmarks[bookmarks]:::android-library
-    :feature:foryou[foryou]:::android-library
-    :feature:interests[interests]:::android-library
-    :feature:search[search]:::android-library
-    :feature:settings[settings]:::android-library
-    :feature:topic[topic]:::android-library
+    :feature:bookmarks[bookmarks]:::android-feature
+    :feature:foryou[foryou]:::android-feature
+    :feature:interests[interests]:::android-feature
+    :feature:search[search]:::android-feature
+    :feature:settings[settings]:::android-feature
+    :feature:topic[topic]:::android-feature
   end
   subgraph :sync
     direction TB
@@ -100,10 +102,11 @@ graph TB
   :sync:work -.-> :core:data
   :sync:work -.-> :core:notifications
 
-classDef android-application fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff;
-classDef android-library fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff;
-classDef android-test fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff;
-classDef jvm fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff;
-classDef unknown fill:#FF0000,stroke:#fff,stroke-width:2px,color:#fff;
+classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
+classDef android-library fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-test fill:#A0C4FF,stroke:#000,stroke-width:2px,color:#000;
+classDef jvm-library fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000;
+classDef unknown fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000;
 ```
 <!--endregion-->

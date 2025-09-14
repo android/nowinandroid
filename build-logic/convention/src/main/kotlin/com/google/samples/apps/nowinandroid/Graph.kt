@@ -94,33 +94,39 @@ private class Graph(
  */
 internal enum class PluginType(val id: String, val ref: String, val style: String) {
     AndroidApplication(
-        id = "com.android.application",
+        id = "nowinandroid.android.application",
         ref = "android-application",
-        style = "fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff",
+        style = "fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000",
+    ),
+    AndroidFeature(
+        id = "nowinandroid.android.feature",
+        ref = "android-feature",
+        style = "fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000",
     ),
     AndroidLibrary(
-        id = "com.android.library",
+        id = "nowinandroid.android.library",
         ref = "android-library",
-        style = "fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff",
+        style = "fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000",
     ),
     AndroidTest(
-        id = "com.android.test",
+        id = "nowinandroid.android.test",
         ref = "android-test",
-        style = "fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff",
+        style = "fill:#A0C4FF,stroke:#000,stroke-width:2px,color:#000",
     ),
     Jvm(
-        id = "org.jetbrains.kotlin.jvm",
-        ref = "jvm",
-        style = "fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff",
+        id = "nowinandroid.jvm.library",
+        ref = "jvm-library",
+        style = "fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000",
     ),
     Unknown(
         id = "?",
         ref = "unknown",
-        style = "fill:#FF0000,stroke:#fff,stroke-width:2px,color:#fff",
+        style = "fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000",
     ),
 }
 
 internal fun Project.configureGraphTasks() {
+    if (!buildFile.exists()) return // Ignore root modules without build file
     val dumpTask = tasks.register<GraphDumpTask>("graphDump") {
         val graph = Graph(this@configureGraphTasks).invoke()
         projectPath = this@configureGraphTasks.path
@@ -252,9 +258,11 @@ private abstract class GraphUpdateTask : DefaultTask() {
             writeText(
                 """
                 # `${projectPath.get()}`
-    
+
+                ## Module dependency graph
+
                 <!--region graph--> <!--endregion-->
-    
+
                 """.trimIndent(),
             )
         }
