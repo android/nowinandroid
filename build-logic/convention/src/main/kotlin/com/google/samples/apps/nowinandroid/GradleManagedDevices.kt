@@ -36,7 +36,7 @@ internal fun configureGradleManagedDevices(
 
     commonExtension.testOptions {
         managedDevices {
-            devices {
+            allDevices {
                 allDevices.forEach { deviceConfig ->
                     maybeCreate(deviceConfig.taskName, ManagedVirtualDevice::class.java).apply {
                         device = deviceConfig.device
@@ -48,7 +48,7 @@ internal fun configureGradleManagedDevices(
             groups {
                 maybeCreate("ci").apply {
                     ciDevices.forEach { deviceConfig ->
-                        targetDevices.add(devices[deviceConfig.taskName])
+                        targetDevices.add(localDevices[deviceConfig.taskName])
                     }
                 }
             }
