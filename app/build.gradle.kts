@@ -43,7 +43,8 @@ android {
             applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                           "proguard-rules.pro")
