@@ -1,0 +1,9 @@
+name: ☕️ Setup Java
+description: Java setup
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v5
+      with:
+        distribution: zulu
+        java-version: "21"
