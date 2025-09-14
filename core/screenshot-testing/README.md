@@ -1,5 +1,7 @@
 # `:core:screenshot-testing`
 
+## Module dependency graph
+
 <!--region graph-->
 ```mermaid
 ---
@@ -17,10 +19,11 @@ graph TB
 
   :core:screenshot-testing -.-> :core:designsystem
 
-classDef android-application fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff;
-classDef android-library fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff;
-classDef android-test fill:#3BD482,stroke:#fff,stroke-width:2px,color:#fff;
-classDef jvm fill:#7F52FF,stroke:#fff,stroke-width:2px,color:#fff;
-classDef unknown fill:#FF0000,stroke:#fff,stroke-width:2px,color:#fff;
+classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
+classDef android-library fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-test fill:#A0C4FF,stroke:#000,stroke-width:2px,color:#000;
+classDef jvm-library fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000;
+classDef unknown fill:#FFADAD,stroke:#000,stroke-width:2px,color:#000;
 ```
 <!--endregion-->
