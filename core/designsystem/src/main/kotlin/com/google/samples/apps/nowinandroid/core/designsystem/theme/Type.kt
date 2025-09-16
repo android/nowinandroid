@@ -36,7 +36,7 @@ internal val NiaTypography = Typography(
         lineHeight = 64.sp,
         letterSpacing = (-0.25).sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     displayMedium = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -44,7 +44,7 @@ internal val NiaTypography = Typography(
         lineHeight = 52.sp,
         letterSpacing = 0.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     displaySmall = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -52,7 +52,7 @@ internal val NiaTypography = Typography(
         lineHeight = 44.sp,
         letterSpacing = 0.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     headlineLarge = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -60,7 +60,7 @@ internal val NiaTypography = Typography(
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     headlineMedium = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -68,7 +68,7 @@ internal val NiaTypography = Typography(
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     headlineSmall = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -80,7 +80,7 @@ internal val NiaTypography = Typography(
             trim = Trim.None,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.Bold,
@@ -92,7 +92,7 @@ internal val NiaTypography = Typography(
             trim = Trim.LastLineBottom,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     titleMedium = TextStyle(
         fontWeight = FontWeight.Bold,
@@ -100,7 +100,7 @@ internal val NiaTypography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.1.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     titleSmall = TextStyle(
         fontWeight = FontWeight.Medium,
@@ -108,7 +108,7 @@ internal val NiaTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     // Default text style
     bodyLarge = TextStyle(
@@ -121,7 +121,7 @@ internal val NiaTypography = Typography(
             trim = Trim.None,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     bodyMedium = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -129,7 +129,7 @@ internal val NiaTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     bodySmall = TextStyle(
         fontWeight = FontWeight.Normal,
@@ -137,7 +137,7 @@ internal val NiaTypography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     // Used for Button
     labelLarge = TextStyle(
@@ -150,7 +150,7 @@ internal val NiaTypography = Typography(
             trim = Trim.LastLineBottom,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     // Used for Navigation items
     labelMedium = TextStyle(
@@ -163,7 +163,7 @@ internal val NiaTypography = Typography(
             trim = Trim.LastLineBottom,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
     // Used for Tag
     labelSmall = TextStyle(
@@ -176,6 +176,6 @@ internal val NiaTypography = Typography(
             trim = Trim.LastLineBottom,
         ),
         textDirection = TextDirection.Ltr,
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     ),
 )
