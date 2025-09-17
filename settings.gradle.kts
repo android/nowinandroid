@@ -26,6 +26,9 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { // androidx snapshots
+            url = uri("https://androidx.dev/snapshots/builds/13364063/artifacts/repository")
+        }
     }
 }
 
@@ -40,6 +43,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven { // androidx snapshots
+            url = uri("https://androidx.dev/snapshots/builds/13364063/artifacts/repository")
+        }
     }
 }
 rootProject.name = "nowinandroid"
