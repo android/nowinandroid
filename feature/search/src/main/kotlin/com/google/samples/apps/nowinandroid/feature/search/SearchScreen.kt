@@ -75,8 +75,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -84,10 +82,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
@@ -267,7 +263,7 @@ fun EmptySearchResultBody(
 }
 
 @Composable
-private fun SearchNotReadyBody() {
+internal fun SearchNotReadyBody() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
@@ -282,7 +278,7 @@ private fun SearchNotReadyBody() {
 }
 
 @Composable
-private fun SearchResultBody(
+internal fun SearchResultBody(
     searchQuery: String,
     topics: List<FollowableTopic>,
     newsResources: List<UserNewsResource>,
@@ -388,7 +384,7 @@ private fun SearchResultBody(
 }
 
 @Composable
-private fun RecentSearchesBody(
+internal fun RecentSearchesBody(
     recentSearchQueries: List<String>,
     onClearRecentSearches: () -> Unit,
     onRecentSearchClicked: (String) -> Unit,
@@ -440,7 +436,7 @@ private fun RecentSearchesBody(
 }
 
 @Composable
-private fun SearchToolbar(
+internal fun SearchToolbar(
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
@@ -468,7 +464,7 @@ private fun SearchToolbar(
 }
 
 @Composable
-private fun SearchTextField(
+internal fun SearchTextField(
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
@@ -546,60 +542,5 @@ private fun SearchTextField(
     )
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    }
-}
-
-@Preview
-@Composable
-private fun SearchToolbarPreview() {
-    NiaTheme {
-        SearchToolbar(
-            searchQuery = "",
-            onBackClick = {},
-            onSearchQueryChanged = {},
-            onSearchTriggered = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun EmptySearchResultColumnPreview() {
-    NiaTheme {
-        EmptySearchResultBody(
-            onInterestsClick = {},
-            searchQuery = "C++",
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun RecentSearchesBodyPreview() {
-    NiaTheme {
-        RecentSearchesBody(
-            onClearRecentSearches = {},
-            onRecentSearchClicked = {},
-            recentSearchQueries = listOf("kotlin", "jetpack compose", "testing"),
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun SearchNotReadyBodyPreview() {
-    NiaTheme {
-        SearchNotReadyBody()
-    }
-}
-
-@DevicePreviews
-@Composable
-private fun SearchScreenPreview(
-    @PreviewParameter(SearchUiStatePreviewParameterProvider::class)
-    searchResultUiState: SearchResultUiState,
-) {
-    NiaTheme {
-        SearchScreen(searchResultUiState = searchResultUiState)
     }
 }
