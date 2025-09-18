@@ -38,10 +38,14 @@ dependencies {
     api(projects.core.common)
     api(projects.core.model)
 
+    implementation(platform(libs.coil.kt.bom))
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
+    implementation(platform(libs.kotlinx.serialization.bom))
     implementation(libs.kotlinx.serialization.json)
+    implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.logging)
+    implementation(platform(libs.retrofit.bom))
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
 
