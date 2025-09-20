@@ -1,7 +1,0 @@
-name: 🐘 Setup gradle.properties
-description: Copy .github/ci-gradle.properties into ~/.gradle/gradle.properties
-runs:
-  using: composite
-  steps:
-    - shell: bash
-      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties

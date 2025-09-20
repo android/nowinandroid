@@ -14,13 +14,40 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-kvm
-      - uses: ./.github/actions/setup-java
-      - uses: ./.github/actions/setup-gradle
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-      - uses: ./.github/actions/setup-gradle-properties
-      - uses: ./.github/actions/setup-gradle-managed-devices
+          build-scan-publish: true
+          build-scan-terms-of-use-url: https://gradle.com/terms-of-service
+          build-scan-terms-of-use-agree: yes
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Setup GMD
+        run: ./gradlew :benchmarks:pixel6Api33Setup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Build release variant including baseline profile generation
         run: ./gradlew :app:assembleDemoRelease
@@ -29,6 +56,7 @@ jobs:
              -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
              -Pandroid.experimental.androidTest.numManagedDeviceShards=1
              -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
