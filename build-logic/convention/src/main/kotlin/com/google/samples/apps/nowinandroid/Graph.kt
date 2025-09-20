@@ -132,11 +132,13 @@ internal fun Project.configureGraphTasks() {
         projectPath = this@configureGraphTasks.path
         dependencies = graph.dependencies()
         plugins = graph.plugins()
-        output = this@configureGraphTasks.layout.buildDirectory.file("mermaid.txt")
+        output = this@configureGraphTasks.layout.buildDirectory.file("mermaid/graph.txt")
+        legend = this@configureGraphTasks.layout.buildDirectory.file("mermaid/legend.txt")
     }
     tasks.register<GraphUpdateTask>("graphUpdate") {
         projectPath = this@configureGraphTasks.path
         input = dumpTask.flatMap { it.output }
+        legend = dumpTask.flatMap { it.legend }
         output = this@configureGraphTasks.layout.projectDirectory.file("README.md")
     }
 }
@@ -156,11 +158,15 @@ private abstract class GraphDumpTask : DefaultTask() {
     @get:OutputFile
     abstract val output: RegularFileProperty
 
+    @get:OutputFile
+    abstract val legend: RegularFileProperty
+
     override fun getDescription() = "Dumps project dependencies to a mermaid file."
 
     @TaskAction
     operator fun invoke() {
         output.get().asFile.writeText(mermaid())
+        legend.get().asFile.writeText(legend())
         logger.lifecycle(output.get().asFile.toPath().toUri().toString())
     }
 
@@ -208,6 +214,27 @@ private abstract class GraphDumpTask : DefaultTask() {
         PluginType.entries.forEach { appendLine(it.classDef()) }
     }
 
+    private fun legend() = buildString {
+        appendLine("graph TB")
+        listOf(
+            "application" to PluginType.AndroidApplication,
+            "feature" to PluginType.AndroidFeature,
+            "library" to PluginType.AndroidLibrary,
+            "jvm" to PluginType.Jvm,
+        ).forEach { (name, type) ->
+            appendLine(name.alias(indent = 2, type))
+        }
+        appendLine()
+        listOf(
+            Dependency("application", "implementation", "feature"),
+            Dependency("library", "api", "jvm"),
+        ).forEach {
+            appendLine(it.link(indent = 2))
+        }
+        appendLine()
+        PluginType.entries.forEach { appendLine(it.classDef()) }
+    }
+
     private class Dependency(val project: String, val configuration: String, val dependency: String)
 
     private fun Pair<String, String>.toDependency(project: String) =
@@ -225,7 +252,7 @@ private abstract class GraphDumpTask : DefaultTask() {
         append(project).append(" ")
         append(
             when (configuration) {
-                "api" -> "--->"
+                "api" -> "-->"
                 "implementation" -> "-.->"
                 else -> "-.->|$configuration|"
             },
@@ -245,6 +272,10 @@ private abstract class GraphUpdateTask : DefaultTask() {
     @get:InputFile
     @get:PathSensitive(NONE)
     abstract val input: RegularFileProperty
+
+    @get:InputFile
+    @get:PathSensitive(NONE)
+    abstract val legend: RegularFileProperty
 
     @get:OutputFile
     abstract val output: RegularFileProperty
@@ -266,15 +297,24 @@ private abstract class GraphUpdateTask : DefaultTask() {
                 """.trimIndent(),
             )
         }
+        val mermaid = input.get().asFile.readText().trimTrailingNewLines()
+        val legend = legend.get().asFile.readText().trimTrailingNewLines()
         val regex = """(<!--region graph-->)(.*?)(<!--endregion-->)""".toRegex(DOT_MATCHES_ALL)
         val text = readText().replace(regex) { match ->
             val (start, _, end) = match.destructured
-            val mermaid = input.get().asFile.readText().trimTrailingNewLines()
             """
             |$start
             |```mermaid
             |$mermaid
             |```
+            |
+            |<details><summary>📋 Graph legend</summary>
+            |
+            |```mermaid
+            |$legend
+            |```
+            |
+            |</details>
             |$end
             """.trimMargin()
         }
