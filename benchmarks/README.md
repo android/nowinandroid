@@ -1,4 +1,4 @@
-# `:app`
+# `:benchmarks`
 
 ## Module dependency graph
 

@@ -1,4 +1,4 @@
-# `:core:analytics`
+# `:ui-test-hilt-manifest`
 
 ## Module dependency graph
 
@@ -11,10 +11,7 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :core
-    direction TB
-    :core:analytics[analytics]:::android-library
-  end
+  :ui-test-hilt-manifest[ui-test-hilt-manifest]:::android-library
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
