@@ -252,7 +252,7 @@ private abstract class GraphDumpTask : DefaultTask() {
         append(project).append(" ")
         append(
             when (configuration) {
-                "api" -> "--->"
+                "api" -> "-->"
                 "implementation" -> "-.->"
                 else -> "-.->|$configuration|"
             },
