@@ -36,6 +36,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(platform(libs.kotlin.bom))
     compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.lint.api)
     testImplementation(libs.kotlin.test)

@@ -37,16 +37,26 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.android.gradleApiPlugin)
+    compileOnly(libs.android.gradle)
     compileOnly(libs.android.tools.common)
-    compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.firebase.crashlytics.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.room.gradlePlugin)
+    compileOnly(plugin(libs.plugins.android.application))
+    compileOnly(plugin(libs.plugins.android.library))
+    compileOnly(plugin(libs.plugins.compose))
+    compileOnly(plugin(libs.plugins.firebase.crashlytics))
+    compileOnly(plugin(libs.plugins.firebase.perf))
+    compileOnly(plugin(libs.plugins.ksp))
+    compileOnly(plugin(libs.plugins.room))
     implementation(libs.truth)
     lintChecks(libs.androidx.lint.gradle)
+}
+
+/**
+ * Converts Gradle Plugin alias from a Version Catalog into a valid dependency notation for this included build script.
+ * See https://github.com/gradle/gradle/issues/17963.
+ */
+@Suppress("UnusedReceiverParameter")
+private fun DependencyHandlerScope.plugin(plugin: Provider<PluginDependency>) = plugin.map {
+    "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version.requiredVersion}"
 }
 
 tasks {

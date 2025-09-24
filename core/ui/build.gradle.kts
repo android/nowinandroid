@@ -30,6 +30,7 @@ dependencies {
     api(projects.core.model)
 
     implementation(libs.androidx.browser)
+    implementation(platform(libs.coil.kt.bom))
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
 
