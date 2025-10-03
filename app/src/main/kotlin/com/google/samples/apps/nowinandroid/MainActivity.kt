@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
      */
-    @Inject
+    @Inject //123
     lateinit var lazyStats: dagger.Lazy<JankStats>
 
     @Inject
