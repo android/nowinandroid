@@ -43,7 +43,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
-import org.robolectric.annotation.LooperMode
 import java.util.TimeZone
 
 /**
@@ -52,7 +51,6 @@ import java.util.TimeZone
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = HiltTestApplication::class)
-@LooperMode(LooperMode.Mode.PAUSED)
 class ForYouScreenScreenshotTests {
 
     /**
