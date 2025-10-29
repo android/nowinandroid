@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.core.designsystem.component
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -37,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import kotlin.math.tan
 
 /**
@@ -146,51 +144,3 @@ fun NiaGradientBackground(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
 annotation class ThemePreviews
-
-@ThemePreviews
-@Composable
-fun BackgroundDefault() {
-    NiaTheme(disableDynamicTheming = true) {
-        NiaBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@ThemePreviews
-@Composable
-fun BackgroundDynamic() {
-    NiaTheme(disableDynamicTheming = false) {
-        NiaBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@ThemePreviews
-@Composable
-fun BackgroundAndroid() {
-    NiaTheme(androidTheme = true) {
-        NiaBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@ThemePreviews
-@Composable
-fun GradientBackgroundDefault() {
-    NiaTheme(disableDynamicTheming = true) {
-        NiaGradientBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@ThemePreviews
-@Composable
-fun GradientBackgroundDynamic() {
-    NiaTheme(disableDynamicTheming = false) {
-        NiaGradientBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@ThemePreviews
-@Composable
-fun GradientBackgroundAndroid() {
-    NiaTheme(androidTheme = true) {
-        NiaGradientBackground(Modifier.size(100.dp), content = {})
-    }
-}
