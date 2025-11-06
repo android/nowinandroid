@@ -31,7 +31,6 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
-        maven("https://central.sonatype.com/repository/maven-snapshots/") { mavenContent { snapshotsOnly() }}
     }
     versionCatalogs {
         create("libs") {
