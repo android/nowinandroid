@@ -17,9 +17,12 @@
 package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.artifact.ScopedArtifact
+import com.android.build.api.dsl.BuildType
+import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.api.variant.SourceDirectories
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
@@ -59,8 +62,14 @@ private fun String.capitalize() = replaceFirstChar {
  * tests on CI using a different Github Action or an external device farm.
  */
 internal fun Project.configureJacoco(
+    commonExtension: CommonExtension,
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
+    commonExtension.buildTypes.named("debug") {
+        enableAndroidTestCoverage = true
+        enableUnitTestCoverage = true
+    }
+
     configure<JacocoPluginExtension> {
         toolVersion = libs.findVersion("jacoco").get().toString()
     }
