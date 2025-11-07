@@ -22,11 +22,12 @@ import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode.COLD
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.uiautomator.uiAutomator
 import com.google.samples.apps.nowinandroid.BaselineProfileMetrics
+import com.google.samples.apps.nowinandroid.ITERATIONS
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.allowNotifications
 import com.google.samples.apps.nowinandroid.foryou.forYouWaitForContent
-import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
+import com.google.samples.apps.nowinandroid.startAppAndAllowPermission
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,15 +62,13 @@ class StartupBenchmark {
         metrics = BaselineProfileMetrics.allMetrics,
         compilationMode = compilationMode,
         // More iterations result in higher statistical significance.
-        iterations = 20,
+        iterations = ITERATIONS,
         startupMode = COLD,
-        setupBlock = {
-            pressHome()
-            allowNotifications()
-        },
     ) {
-        startActivityAndAllowNotifications()
-        // Waits until the content is ready to capture Time To Full Display
-        forYouWaitForContent()
+        uiAutomator {
+            startAppAndAllowPermission()
+            // Waits until the content is ready to capture Time To Full Display
+            forYouWaitForContent()
+        }
     }
 }

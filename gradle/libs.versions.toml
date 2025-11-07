@@ -18,7 +18,7 @@ androidxEspresso = "3.6.1"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.8.7"
 androidxLintGradle = "1.0.0-alpha03"
-androidxMacroBenchmark = "1.3.4"
+androidxMacroBenchmark = "1.4.0-rc01"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
 androidxProfileinstaller = "1.4.1"
@@ -27,7 +27,7 @@ androidxTestExt = "1.3.0-rc01"
 androidxTestRules = "1.7.0-rc01"
 androidxTestRunner = "1.7.0-rc01"
 androidxTracing = "1.3.0-alpha02"
-androidxUiAutomator = "2.3.0"
+androidxUiAutomator = "2.4.0-alpha05"
 androidxWindowManager = "1.3.0"
 androidxWork = "2.10.0"
 coil = "2.7.0"
@@ -67,6 +67,7 @@ android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
+androidx-benchmark-traceprocessor = { group = "androidx.benchmark", name = "benchmark-traceprocessor", version.ref = "androidxMacroBenchmark" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom-alpha", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeFoundation" }

@@ -16,18 +16,25 @@
 
 package com.google.samples.apps.nowinandroid.interests
 
+import androidx.benchmark.ExperimentalBenchmarkConfigApi
+import androidx.benchmark.ExperimentalConfig
+import androidx.benchmark.StartupInsightsConfig
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.FrameTimingMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
+import androidx.benchmark.perfetto.ExperimentalPerfettoCaptureApi
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.uiautomator.By
+import androidx.test.uiautomator.textAsString
+import androidx.test.uiautomator.uiAutomator
+import com.google.samples.apps.nowinandroid.ITERATIONS
 import com.google.samples.apps.nowinandroid.PACKAGE_NAME
-import com.google.samples.apps.nowinandroid.startActivityAndAllowNotifications
+import com.google.samples.apps.nowinandroid.startAppAndAllowPermission
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@OptIn(ExperimentalBenchmarkConfigApi::class, ExperimentalPerfettoCaptureApi::class)
 @RunWith(AndroidJUnit4::class)
 class ScrollTopicListBenchmark {
     @get:Rule
@@ -42,20 +49,24 @@ class ScrollTopicListBenchmark {
             packageName = PACKAGE_NAME,
             metrics = listOf(FrameTimingMetric()),
             compilationMode = compilationMode,
-            iterations = 10,
+            iterations = ITERATIONS,
             startupMode = StartupMode.WARM,
+            experimentalConfig = ExperimentalConfig(startupInsightsConfig = StartupInsightsConfig(true)),
             setupBlock = {
-                // Start the app
-                pressHome()
-                startActivityAndAllowNotifications()
-                // Navigate to interests screen
-                device.findObject(By.text("Interests")).click()
-                device.waitForIdle()
+                uiAutomator {
+                    // Start the app
+                    pressHome()
+                    startAppAndAllowPermission()
+                    // Navigate to interests screen
+                    onElement { textAsString() == "Interests" }.click()
+                }
             },
         ) {
-            interestsWaitForTopics()
-            repeat(3) {
-                interestsScrollTopicsDownUp()
+            uiAutomator {
+                interestsWaitForTopics()
+                repeat(3) {
+                    interestsScrollTopicsDownUp()
+                }
             }
         }
 }
