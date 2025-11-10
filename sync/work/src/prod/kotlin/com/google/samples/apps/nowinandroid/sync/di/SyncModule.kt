@@ -28,10 +28,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Singleton
 
-@VisibleForTesting
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SyncModule {

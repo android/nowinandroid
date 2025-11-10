@@ -33,10 +33,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Singleton
 
-@VisibleForTesting
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {

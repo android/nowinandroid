@@ -24,9 +24,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.jetbrains.annotations.VisibleForTesting
 
-@VisibleForTesting
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SyncModule {
