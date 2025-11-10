@@ -65,6 +65,7 @@ internal fun Project.configureJacoco(
     commonExtension: CommonExtension,
     androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
 ) {
+    // Configure only the debug build, otherwise it will force the debuggable flag on release buildTypes as well
     commonExtension.buildTypes.named("debug") {
         enableAndroidTestCoverage = true
         enableUnitTestCoverage = true
