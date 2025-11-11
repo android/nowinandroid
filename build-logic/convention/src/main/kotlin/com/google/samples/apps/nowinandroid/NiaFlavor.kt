@@ -28,13 +28,15 @@ fun configureFlavors(
             flavorDimensions += flavorDimension.name
         }
 
-        NiaFlavor.values().forEach { niaFlavor ->
-            productFlavors.register(niaFlavor.name) {
-                dimension = niaFlavor.dimension.name
-                flavorConfigurationBlock(this, niaFlavor)
-                if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
-                    if (niaFlavor.applicationIdSuffix != null) {
-                        applicationIdSuffix = niaFlavor.applicationIdSuffix
+        productFlavors.apply {
+            NiaFlavor.values().forEach { niaFlavor ->
+                register(niaFlavor.name) {
+                    dimension = niaFlavor.dimension.name
+                    flavorConfigurationBlock(this, niaFlavor)
+                    if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
+                        if (niaFlavor.applicationIdSuffix != null) {
+                            applicationIdSuffix = niaFlavor.applicationIdSuffix
+                        }
                     }
                 }
             }

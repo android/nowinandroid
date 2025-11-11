@@ -37,13 +37,17 @@ internal fun Project.configureKotlinAndroid(
     commonExtension.apply {
         compileSdk = 35
 
-        defaultConfig.minSdk = 23
+        defaultConfig.apply {
+            minSdk = 23
+        }
 
-        // Up to Java 11 APIs are available through desugaring
-        // https://developer.android.com/studio/write/java11-minimal-support-table
-        compileOptions.sourceCompatibility = JavaVersion.VERSION_11
-        compileOptions.targetCompatibility = JavaVersion.VERSION_11
-        compileOptions.isCoreLibraryDesugaringEnabled = true
+        compileOptions.apply {
+            // Up to Java 11 APIs are available through desugaring
+            // https://developer.android.com/studio/write/java11-minimal-support-table
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+            isCoreLibraryDesugaringEnabled = true
+        }
     }
 
     configureKotlin<KotlinAndroidProjectExtension>()

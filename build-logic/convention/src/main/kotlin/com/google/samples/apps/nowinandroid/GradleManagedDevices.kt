@@ -35,20 +35,22 @@ internal fun configureGradleManagedDevices(
     val ciDevices = listOf(pixel4, pixelC)
 
 
-    commonExtension.testOptions.managedDevices {
-        allDevices {
-            allDevices.forEach { deviceConfig ->
-                maybeCreate(deviceConfig.taskName, ManagedVirtualDevice::class.java).apply {
-                    device = deviceConfig.device
-                    apiLevel = deviceConfig.apiLevel
-                    systemImageSource = deviceConfig.systemImageSource
+    commonExtension.testOptions.apply {
+        managedDevices {
+            allDevices {
+                allDevices.forEach { deviceConfig ->
+                    maybeCreate(deviceConfig.taskName, ManagedVirtualDevice::class.java).apply {
+                        device = deviceConfig.device
+                        apiLevel = deviceConfig.apiLevel
+                        systemImageSource = deviceConfig.systemImageSource
+                    }
                 }
             }
-        }
-        groups {
-            maybeCreate("ci").apply {
-                ciDevices.forEach { deviceConfig ->
-                    targetDevices.add(localDevices[deviceConfig.taskName])
+            groups {
+                maybeCreate("ci").apply {
+                    ciDevices.forEach { deviceConfig ->
+                        targetDevices.add(localDevices[deviceConfig.taskName])
+                    }
                 }
             }
         }
