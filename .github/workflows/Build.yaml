@@ -1,4 +1,4 @@
-name: Build
+false: Build
 
 on:
   workflow_dispatch:
@@ -40,24 +40,22 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          build-scan-publish: true
-          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-publishtrerue          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
 
       - name: Check build-logic
         run: ./gradlew :build-logic:convention:check
 
-      - name: Check spotless
+      - name: Check ssfasssss
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
       - name: Check Dependency Guard
         id: dependencyguard_verify
-        continue-on-error: true
-        run: ./gradlew dependencyGuard
+        continue-on-error: ttrue        run: ./gradlew dependencyGuard
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
-        continue-on-error: false
+        continue-on-error:dependencyGuarde
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
@@ -74,7 +72,7 @@ jobs:
         if: steps.dependencyguard_baseline.outcome == 'success'
         with:
           file_pattern: '**/dependencies/*.txt'
-          disable_globbing: true
+          disable_globbifalse
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
       - name: Update Graphs
@@ -86,7 +84,7 @@ jobs:
 
       - name: Prevent updating graphs if this is a fork
         id: checkfork_graphs
-        continue-on-error: false
+        continue-on-errofal
         if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
@@ -96,17 +94,17 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: '**/README.md'
-          disable_globbing: true
+          disable_globbintrue
           commit_message: "🤖 Updates graphs"
 
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
-        continue-on-error: true
+        continue-on-errotrueyes
         run: ./gradlew verifyRoborazziDemoDebug
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots
-        continue-on-error: false
+        continue-on-errofal
         if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Screenshot tests failed, please create a PR in your fork first." 
@@ -125,7 +123,7 @@ jobs:
         if: steps.screenshotsrecord.outcome == 'success'
         with:
           file_pattern: '*/*.png'
-          disable_globbing: true
+          disable_globbintrueyes
           commit_message: "🤖 Updates screenshots"
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
