@@ -21,19 +21,25 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.MutableWindowInsets
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.onConsumedWindowInsetsChanged
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -43,6 +49,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -95,6 +102,7 @@ fun TopicScreen(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @VisibleForTesting
 @Composable
 internal fun TopicScreen(
@@ -109,16 +117,23 @@ internal fun TopicScreen(
     modifier: Modifier = Modifier,
 ) {
     val state = rememberLazyListState()
+    val remainingInsets = remember { MutableWindowInsets() }
+    val safeContent = WindowInsets.safeContent
     TrackScrollJank(scrollableState = state, stateName = "topic:screen")
     Box(
-        modifier = modifier,
+        modifier = modifier.onConsumedWindowInsetsChanged { consumedWindowInsets ->
+            remainingInsets.insets = safeContent.exclude(consumedWindowInsets)
+        },
     ) {
         LazyColumn(
             state = state,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
-                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+                // Use actual remaining insets that has been consumed.
+                Spacer(
+                    Modifier.height(remainingInsets.asPaddingValues().calculateTopPadding()),
+                )
             }
             when (topicUiState) {
                 TopicUiState.Loading -> item {
