@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
@@ -54,6 +56,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -71,6 +74,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.model.data.MessageData
+import com.google.samples.apps.nowinandroid.core.model.data.MessageType.MESSAGE
+import com.google.samples.apps.nowinandroid.core.model.data.MessageType.OFFLINE
+import com.google.samples.apps.nowinandroid.core.model.data.MessageType.UNKNOWN
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
@@ -83,6 +90,8 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
+    val context = LocalContext.current
+
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
@@ -97,16 +106,30 @@ fun NiaApp(
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
 
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+            val stateMessage by appState.stateMessage.collectAsStateWithLifecycle()
 
-            // If user is not connected to the internet show a snack bar to inform them.
-            val notConnectedMessage = stringResource(R.string.not_connected)
-            LaunchedEffect(isOffline) {
-                if (isOffline) {
-                    snackbarHostState.showSnackbar(
-                        message = notConnectedMessage,
-                        duration = Indefinite,
-                    )
+            LaunchedEffect(stateMessage) {
+                stateMessage?.let { message ->
+
+                    // Text and Duration values dictated by the UI
+                    val (text, duration) = getSnackbarValues(context, message)
+
+                    // Determine whether user clicked action button
+                    val snackBarResult = snackbarHostState.showSnackbar(
+                        message = text,
+                        actionLabel = message.label,
+                        duration = duration,
+                    ) == ActionPerformed
+
+                    // Handle result action
+                    if (snackBarResult) {
+                        message.onConfirm?.invoke()
+                    } else {
+                        message.onDelay?.invoke()
+                    }
+
+                    // Remove Message from List
+                    appState.errorMonitor.clearMessage(message)
                 }
             }
 
@@ -281,3 +304,11 @@ private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
     this?.hierarchy?.any {
         it.hasRoute(route)
     } ?: false
+
+private fun getSnackbarValues(context: Context, message: MessageData): Pair<String, SnackbarDuration> {
+    return when (message.type) {
+        OFFLINE -> context.getString(R.string.not_connected) to SnackbarDuration.Indefinite
+        is MESSAGE -> (message.type as MESSAGE).value to SnackbarDuration.Long
+        UNKNOWN -> context.getString(R.string.unknown_error) to SnackbarDuration.Short
+    }
+}
