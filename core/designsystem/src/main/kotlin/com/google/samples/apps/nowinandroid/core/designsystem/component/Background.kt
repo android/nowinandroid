@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import kotlin.math.tan
 
@@ -52,8 +51,8 @@ fun NiaBackground(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val color = LocalBackgroundTheme.current.color
-    val tonalElevation = LocalBackgroundTheme.current.tonalElevation
+    val color = NiaTheme.niaBackground.color
+    val tonalElevation = NiaTheme.niaBackground.tonalElevation
     Surface(
         color = if (color == Color.Unspecified) Color.Transparent else color,
         tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
@@ -76,7 +75,7 @@ fun NiaBackground(
 @Composable
 fun NiaGradientBackground(
     modifier: Modifier = Modifier,
-    gradientColors: GradientColors = LocalGradientColors.current,
+    gradientColors: GradientColors = NiaTheme.gradientColors,
     content: @Composable () -> Unit,
 ) {
     val currentTopColor by rememberUpdatedState(gradientColors.top)
