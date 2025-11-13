@@ -53,8 +53,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -65,14 +63,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
-import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 
 @Composable
@@ -149,7 +144,7 @@ internal fun BookmarksScreen(
 }
 
 @Composable
-private fun LoadingState(modifier: Modifier = Modifier) {
+internal fun LoadingState(modifier: Modifier = Modifier) {
     NiaLoadingWheel(
         modifier = modifier
             .fillMaxWidth()
@@ -160,7 +155,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun BookmarksGrid(
+internal fun BookmarksGrid(
     feedState: NewsFeedUiState,
     removeFromBookmarks: (String) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
@@ -216,7 +211,7 @@ private fun BookmarksGrid(
 }
 
 @Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
+internal fun EmptyState(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -251,37 +246,5 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
         )
-    }
-}
-
-@Preview
-@Composable
-private fun LoadingStatePreview() {
-    NiaTheme {
-        LoadingState()
-    }
-}
-
-@Preview
-@Composable
-private fun BookmarksGridPreview(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        BookmarksGrid(
-            feedState = Success(userNewsResources),
-            removeFromBookmarks = {},
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun EmptyStatePreview() {
-    NiaTheme {
-        EmptyState()
     }
 }

@@ -228,7 +228,7 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 }
 
 @Composable
-private fun generateDescription(
+internal fun generateDescription(
     shouldCompareDarkMode: Boolean,
     darkMode: Boolean,
     shouldCompareAndroidTheme: Boolean,
