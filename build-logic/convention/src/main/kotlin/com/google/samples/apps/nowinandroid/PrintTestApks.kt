@@ -1,17 +1,17 @@
 /*
  * Copyright 2022 The Android Open Source Project
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.google.samples.apps.nowinandroid
@@ -49,7 +49,9 @@ internal fun Project.configurePrintApksTask(extension: AndroidComponentsExtensio
                 javaSources.zip(kotlinSources) { javaDirs, kotlinDirs ->
                     javaDirs + kotlinDirs
                 }
-            } else javaSources ?: kotlinSources
+            } else {
+                javaSources ?: kotlinSources
+            }
 
             if (artifact != null && testSources != null) {
                 tasks.register(
@@ -96,8 +98,9 @@ internal abstract class PrintApkLocationTask : DefaultTask() {
 
         val builtArtifacts = builtArtifactsLoader.get().load(apkFolder.get())
             ?: throw RuntimeException("Cannot load APKs")
-        if (builtArtifacts.elements.size != 1)
+        if (builtArtifacts.elements.size != 1) {
             throw RuntimeException("Expected one APK !")
+        }
         val apk = File(builtArtifacts.elements.single().outputFile).toPath()
         println(apk)
     }
