@@ -51,7 +51,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -105,10 +107,10 @@ internal fun SearchRoute(
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
-    val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
+    val searchQueryState = searchViewModel.searchQuery.collectAsStateWithLifecycle()
     SearchScreen(
         modifier = modifier,
-        searchQuery = searchQuery,
+        searchQueryState = searchQueryState,
         recentSearchesUiState = recentSearchQueriesUiState,
         searchResultUiState = searchResultUiState,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
@@ -126,7 +128,7 @@ internal fun SearchRoute(
 @Composable
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
-    searchQuery: String = "",
+    searchQueryState: State<String> = remember { mutableStateOf("") },
     recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading,
     searchResultUiState: SearchResultUiState = SearchResultUiState.Loading,
     onSearchQueryChanged: (String) -> Unit = {},
@@ -146,16 +148,16 @@ internal fun SearchScreen(
             onBackClick = onBackClick,
             onSearchQueryChanged = onSearchQueryChanged,
             onSearchTriggered = onSearchTriggered,
-            searchQuery = searchQuery,
+            searchQueryState = searchQueryState,
         )
         when (searchResultUiState) {
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
-            -> Unit
+                -> Unit
 
             SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
             SearchResultUiState.EmptyQuery,
-            -> {
+                -> {
                 if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
                     RecentSearchesBody(
                         onClearRecentSearches = onClearRecentSearches,
@@ -171,7 +173,7 @@ internal fun SearchScreen(
             is SearchResultUiState.Success -> {
                 if (searchResultUiState.isEmpty()) {
                     EmptySearchResultBody(
-                        searchQuery = searchQuery,
+                        searchQueryState = searchQueryState,
                         onInterestsClick = onInterestsClick,
                     )
                     if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
@@ -186,7 +188,7 @@ internal fun SearchScreen(
                     }
                 } else {
                     SearchResultBody(
-                        searchQuery = searchQuery,
+                        searchQueryState = searchQueryState,
                         topics = searchResultUiState.topics,
                         newsResources = searchResultUiState.newsResources,
                         onSearchTriggered = onSearchTriggered,
@@ -204,13 +206,14 @@ internal fun SearchScreen(
 
 @Composable
 fun EmptySearchResultBody(
-    searchQuery: String,
+    searchQueryState: State<String>,
     onInterestsClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 48.dp),
     ) {
+        val searchQuery = searchQueryState.value
         val message = stringResource(id = searchR.string.feature_search_result_not_found, searchQuery)
         val start = message.indexOf(searchQuery)
         Text(
@@ -283,7 +286,7 @@ private fun SearchNotReadyBody() {
 
 @Composable
 private fun SearchResultBody(
-    searchQuery: String,
+    searchQueryState: State<String>,
     topics: List<FollowableTopic>,
     newsResources: List<UserNewsResource>,
     onSearchTriggered: (String) -> Unit,
@@ -334,7 +337,7 @@ private fun SearchResultBody(
                             topicImageUrl = followableTopic.topic.imageUrl,
                             onClick = {
                                 // Pass the current search query to ViewModel to save it as recent searches
-                                onSearchTriggered(searchQuery)
+                                onSearchTriggered(searchQueryState.value)
                                 onTopicClick(topicId)
                             },
                             onFollowButtonClick = { onFollowButtonClick(topicId, it) },
@@ -363,7 +366,7 @@ private fun SearchResultBody(
                     onNewsResourceViewed = onNewsResourceViewed,
                     onTopicClick = onTopicClick,
                     onExpandedCardClick = {
-                        onSearchTriggered(searchQuery)
+                        onSearchTriggered(searchQueryState.value)
                     },
                 )
             }
@@ -441,7 +444,7 @@ private fun RecentSearchesBody(
 
 @Composable
 private fun SearchToolbar(
-    searchQuery: String,
+    searchQueryState: State<String>,
     onSearchQueryChanged: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
     onBackClick: () -> Unit,
@@ -462,23 +465,24 @@ private fun SearchToolbar(
         SearchTextField(
             onSearchQueryChanged = onSearchQueryChanged,
             onSearchTriggered = onSearchTriggered,
-            searchQuery = searchQuery,
+            searchQueryState = searchQueryState,
         )
     }
 }
 
 @Composable
 private fun SearchTextField(
-    searchQuery: String,
+    searchQueryState: State<String>,
     onSearchQueryChanged: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
 ) {
+    val searchQuery = searchQueryState.value
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val onSearchExplicitlyTriggered = {
         keyboardController?.hide()
-        onSearchTriggered(searchQuery)
+        onSearchTriggered(searchQueryState.value)
     }
 
     TextField(
@@ -554,7 +558,7 @@ private fun SearchTextField(
 private fun SearchToolbarPreview() {
     NiaTheme {
         SearchToolbar(
-            searchQuery = "",
+            searchQueryState = remember { mutableStateOf("") },
             onBackClick = {},
             onSearchQueryChanged = {},
             onSearchTriggered = {},
@@ -568,7 +572,7 @@ private fun EmptySearchResultColumnPreview() {
     NiaTheme {
         EmptySearchResultBody(
             onInterestsClick = {},
-            searchQuery = "C++",
+            searchQueryState = remember { mutableStateOf("C++") },
         )
     }
 }
