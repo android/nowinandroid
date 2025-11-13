@@ -138,26 +138,22 @@ class SearchViewModelTest {
     fun searchTextWithThreeSpaces_isEmptyQuery() = runTest {
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("   ")
 
         assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
-
-        collectJob.cancel()
     }
 
     @Test
     fun searchTextWithThreeSpacesAndOneLetter_isEmptyQuery() = runTest {
         searchContentsRepository.addNewsResources(newsResourcesTestData)
         searchContentsRepository.addTopics(topicsTestData)
-        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.searchResultUiState.collect() }
 
         viewModel.onSearchQueryChanged("   a")
 
         assertIs<EmptyQuery>(viewModel.searchResultUiState.value)
-
-        collectJob.cancel()
     }
 
     @Test
