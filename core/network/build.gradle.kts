@@ -48,18 +48,19 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
-val backendUrl = providers.fileContents(
-    isolated.rootProject.projectDirectory.file("local.properties")
-).asText.map { text ->
+val backendUrl = provider {
     val properties = Properties()
+    val text = providers.fileContents(
+        isolated.rootProject.projectDirectory.file("local.properties"),
+    ).asText.getOrElse("")
     properties.load(StringReader(text))
-    properties["BACKEND_URL"]
-}.orElse("http://example.com")
+
+    val url = properties.getProperty("BACKEND_URL", "http://example.com")
+    BuildConfigField(type = "String", value = """"$url"""", comment = null)
+}
 
 androidComponents {
     onVariants {
-        it.buildConfigFields!!.put("BACKEND_URL", backendUrl.map { value ->
-            BuildConfigField(type = "String", value = """"$value"""", comment = null)
-        })
+        it.buildConfigFields!!.put("BACKEND_URL", backendUrl)
     }
 }
