@@ -55,8 +55,8 @@ val backendUrl = provider {
     ).asText.getOrElse("")
     properties.load(StringReader(text))
 
-    val url = properties.getProperty("BACKEND_URL", "\"http://example.com\"")
-    BuildConfigField(type = "String", value = url, comment = null)
+    val url = properties.getProperty("BACKEND_URL", "http://example.com")
+    BuildConfigField(type = "String", value = """"$url"""", comment = null)
 }
 
 androidComponents {
