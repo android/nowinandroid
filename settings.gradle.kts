@@ -40,6 +40,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven {
+            url = uri("https://androidx.dev/snapshots/builds/13898898/artifacts/repository")
+        }
     }
 }
 rootProject.name = "nowinandroid"
@@ -59,18 +62,24 @@ include(":core:datastore-test")
 include(":core:designsystem")
 include(":core:domain")
 include(":core:model")
+include(":core:navigation")
 include(":core:network")
 include(":core:notifications")
 include(":core:screenshot-testing")
 include(":core:testing")
 include(":core:ui")
 
-include(":feature:foryou")
-include(":feature:interests")
-include(":feature:bookmarks")
-include(":feature:topic")
-include(":feature:search")
-include(":feature:settings")
+include(":feature:foryou:api")
+include(":feature:foryou:impl")
+include(":feature:interests:api")
+include(":feature:interests:impl")
+include(":feature:bookmarks:api")
+include(":feature:bookmarks:impl")
+include(":feature:topic:api")
+include(":feature:topic:impl")
+include(":feature:search:api")
+include(":feature:search:impl")
+include(":feature:settings:api")
 include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
