@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
@@ -71,7 +72,7 @@ fun NiaIconToggleButton(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun IconButtonPreview() {
     NiaTheme {
@@ -94,7 +95,7 @@ fun IconButtonPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun IconButtonPreviewUnchecked() {
     NiaTheme {

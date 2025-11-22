@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import kotlinx.coroutines.launch
@@ -149,7 +150,7 @@ fun NiaOverlayLoadingWheel(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaLoadingWheelPreview() {
     NiaTheme {
@@ -159,7 +160,7 @@ fun NiaLoadingWheelPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaOverlayLoadingWheelPreview() {
     NiaTheme {

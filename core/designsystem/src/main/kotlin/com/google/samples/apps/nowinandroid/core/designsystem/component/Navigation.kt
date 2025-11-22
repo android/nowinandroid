@@ -38,6 +38,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -263,7 +264,7 @@ class NiaNavigationSuiteScope internal constructor(
     )
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaNavigationBarPreview() {
     val items = listOf("For you", "Saved", "Interests")
@@ -303,7 +304,7 @@ fun NiaNavigationBarPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaNavigationRailPreview() {
     val items = listOf("For you", "Saved", "Interests")

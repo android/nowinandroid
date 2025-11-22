@@ -25,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 @Composable
@@ -61,7 +62,7 @@ fun NiaTopicTag(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun TagPreview() {
     NiaTheme {
