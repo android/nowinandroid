@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.designsystem.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -31,7 +30,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
@@ -139,15 +138,7 @@ fun NiaGradientBackground(
     }
 }
 
-/**
- * Multipreview annotation that represents light and dark themes. Add this annotation to a
- * composable to render the both themes.
- */
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
-annotation class ThemePreviews
-
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun BackgroundDefault() {
     NiaTheme(disableDynamicTheming = true) {
@@ -155,7 +146,7 @@ fun BackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun BackgroundDynamic() {
     NiaTheme(disableDynamicTheming = false) {
@@ -163,7 +154,7 @@ fun BackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun BackgroundAndroid() {
     NiaTheme(androidTheme = true) {
@@ -171,7 +162,7 @@ fun BackgroundAndroid() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun GradientBackgroundDefault() {
     NiaTheme(disableDynamicTheming = true) {
@@ -179,7 +170,7 @@ fun GradientBackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun GradientBackgroundDynamic() {
     NiaTheme(disableDynamicTheming = false) {
@@ -187,7 +178,7 @@ fun GradientBackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun GradientBackgroundAndroid() {
     NiaTheme(androidTheme = true) {

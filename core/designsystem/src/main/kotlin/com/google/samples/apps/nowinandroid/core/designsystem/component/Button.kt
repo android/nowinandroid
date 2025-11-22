@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -265,7 +266,7 @@ private fun NiaButtonContent(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaButtonPreview() {
     NiaTheme {
@@ -275,7 +276,7 @@ fun NiaButtonPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaOutlinedButtonPreview() {
     NiaTheme {
@@ -285,7 +286,7 @@ fun NiaOutlinedButtonPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 fun NiaButtonLeadingIconPreview() {
     NiaTheme {

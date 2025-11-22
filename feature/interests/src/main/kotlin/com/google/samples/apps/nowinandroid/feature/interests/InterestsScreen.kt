@@ -24,13 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.FollowableTopicPreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 
@@ -93,7 +93,7 @@ private fun InterestsEmptyScreen() {
     Text(text = stringResource(id = R.string.feature_interests_empty_header))
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun InterestsScreenPopulated(
     @PreviewParameter(FollowableTopicPreviewParameterProvider::class)
@@ -113,7 +113,7 @@ fun InterestsScreenPopulated(
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun InterestsScreenLoading() {
     NiaTheme {
@@ -127,7 +127,7 @@ fun InterestsScreenLoading() {
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun InterestsScreenEmpty() {
     NiaTheme {
