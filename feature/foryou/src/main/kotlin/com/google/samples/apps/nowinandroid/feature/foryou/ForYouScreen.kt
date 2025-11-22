@@ -77,6 +77,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -96,7 +97,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
@@ -500,7 +500,7 @@ private fun feedItemsSize(
     return feedSize + onboardingSize
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenPopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
@@ -524,7 +524,7 @@ fun ForYouScreenPopulatedFeed(
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenOfflinePopulatedFeed(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
@@ -548,7 +548,7 @@ fun ForYouScreenOfflinePopulatedFeed(
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenTopicSelection(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
@@ -575,7 +575,7 @@ fun ForYouScreenTopicSelection(
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenLoading() {
     NiaTheme {
@@ -594,7 +594,7 @@ fun ForYouScreenLoading() {
     }
 }
 
-@DevicePreviews
+@PreviewScreenSizes
 @Composable
 fun ForYouScreenPopulatedAndLoading(
     @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
