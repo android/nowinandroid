@@ -241,6 +241,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
+          cores: 4
           disk-size: 6000M
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
