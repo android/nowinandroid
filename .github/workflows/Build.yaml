@@ -1,6 +1,7 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -29,16 +30,19 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
 
       - name: Check build-logic
         run: ./gradlew :build-logic:convention:check
@@ -72,6 +76,28 @@ jobs:
           file_pattern: '**/dependencies/*.txt'
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
+
+      - name: Update Graphs
+        run: ./gradlew graphUpdate
+
+      - name: Check Graphs
+        id: graphs_verify
+        run: git add -- '**/README.md' && git diff --cached --quiet --exit-code -- '**/README.md'
+
+      - name: Prevent updating graphs if this is a fork
+        id: checkfork_graphs
+        continue-on-error: false
+        if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
+
+      - name: Push new graphs if available
+        if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: '**/README.md'
+          disable_globbing: true
+          commit_message: "🤖 Updates graphs"
 
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
@@ -107,7 +133,7 @@ jobs:
         run: ./gradlew testDemoDebug :lint:test
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble
+        run: ./gradlew :app:assemble -PminifyWithR8=false
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -139,11 +165,26 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
-      - name: Upload lint reports (SARIF)
-        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+      - name: Upload lint reports (SARIF) for app module
+        if: ${{ !cancelled() && hashFiles('app/**/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: './'
+          sarif_file: './app/'
+          category: app
+
+      - name: Upload lint reports (SARIF) for app-nia-catalog module
+        if: ${{ !cancelled() && hashFiles('app-nia-catalog/**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './app-nia-catalog/'
+          category: app-nia-catalog
+
+      - name: Upload lint reports (SARIF) for lint module
+        if: ${{ !cancelled() && hashFiles('lint/**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './lint/'
+          category: lint
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
@@ -180,16 +221,19 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: 17
+          java-version: 21
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
 
       - name: AVD cache
         uses: actions/cache@v4
