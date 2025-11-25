@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 /**
  * Configure base Kotlin with Android options
@@ -85,6 +86,8 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
         is KotlinJvmProjectExtension -> compilerOptions
         else -> TODO("Unsupported project extension $this ${T::class}")
     }.apply {
+        languageVersion.set(KotlinVersion.KOTLIN_2_2)
+        coreLibrariesVersion = "2.2.21"
         jvmTarget = JvmTarget.JVM_11
         allWarningsAsErrors = warningsAsErrors
         freeCompilerArgs.add(

@@ -17,10 +17,16 @@
 import com.google.samples.apps.nowinandroid.configureGraphTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.configuration.BuildFeatures
+import javax.inject.Inject
 
-class RootPlugin : Plugin<Project> {
+abstract class RootPlugin : Plugin<Project> {
+    @get:Inject abstract val buildFeatures: BuildFeatures
+
     override fun apply(target: Project) {
         require(target.path == ":")
-        target.subprojects { configureGraphTasks() }
+        if (!buildFeatures.isolatedProjects.active.orElse(false).get()) {
+            target.subprojects { configureGraphTasks() }
+        }
     }
 }
