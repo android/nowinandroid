@@ -78,7 +78,7 @@ class NiaNavigatorState(
 
 // https://github.com/android/nowinandroid/issues/1934
 class NiaNavigator @Inject constructor(
-    val navigatorState: NiaNavigatorState
+    val navigatorState: NiaNavigatorState,
 ) {
     fun navigate(key: NiaNavKey) {
         val currentActiveSubStacks = linkedSetOf<NiaNavKey>()
@@ -117,8 +117,6 @@ class NiaNavigator @Inject constructor(
             }
             updateActiveTopLevelKeys(currentActiveSubStacks.toList())
         }
-        
-
     }
 
     fun pop() {
@@ -148,7 +146,7 @@ public fun NiaNavigatorState.getEntries(
         val decorated = key(topLevelKey) {
             val decorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator<NiaNavKey>()
+                rememberViewModelStoreNavEntryDecorator<NiaNavKey>(),
             )
             rememberDecoratedNavEntries(
                 backStack = backStacks[topLevelKey]!!,
@@ -161,4 +159,4 @@ public fun NiaNavigatorState.getEntries(
             )
         }
         entries + decorated
-}
+    }

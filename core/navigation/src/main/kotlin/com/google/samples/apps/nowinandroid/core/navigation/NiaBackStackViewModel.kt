@@ -46,7 +46,7 @@ class NiaBackStackViewModel @Inject constructor(
     internal var backStackMap by savedStateHandle.saved(
         serializer = MapSerializer(
             serializer<NiaNavKey>(),
-            serializer<List<NiaNavKey>>()
+            serializer<List<NiaNavKey>>(),
         ),
         configuration = config,
     ) {
@@ -63,7 +63,7 @@ class NiaBackStackViewModel @Inject constructor(
 
     init {
         if (backStackMap.isNotEmpty()) {
-         //    Restore backstack from saved state handle if not emtpy
+            //    Restore backstack from saved state handle if not emtpy
             @Suppress("UNCHECKED_CAST")
             niaNavigatorState.restore(
                 activeTopLeveLKeys,

@@ -55,7 +55,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Provider
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -166,7 +165,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NiaApp(
                         appState,
-                        entryProviderBuilders = entryProviderBuilders
+                        entryProviderBuilders = entryProviderBuilders,
                     )
                 }
             }
