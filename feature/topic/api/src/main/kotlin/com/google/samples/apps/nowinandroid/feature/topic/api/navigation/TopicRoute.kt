@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.api.navigation
 
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import kotlinx.serialization.Serializable
 
 @Serializable

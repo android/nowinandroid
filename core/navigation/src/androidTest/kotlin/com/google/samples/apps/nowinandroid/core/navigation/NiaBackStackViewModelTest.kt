@@ -16,9 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.createSavedStateHandle
@@ -69,7 +67,7 @@ class NiaBackStackViewModelTest {
     fun testNonTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigatorState) }
             navigator.navigate(TestKeyFirst)
         }
         assertThat(viewModel.backStackMap.size).isEqualTo(1)
@@ -82,7 +80,7 @@ class NiaBackStackViewModelTest {
     fun testTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigatorState) }
 
             navigator.navigate(TestKeyFirst)
             navigator.navigate(TestTopLevelKeyFirst)
@@ -103,7 +101,7 @@ class NiaBackStackViewModelTest {
     fun testMultiStacksSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigatorState) }
             navigator.navigate(TestKeyFirst)
             navigator.navigate(TestTopLevelKeyFirst)
             navigator.navigate(TestKeySecond)
@@ -124,7 +122,7 @@ class NiaBackStackViewModelTest {
     fun testPopSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator( viewModel.niaNavigatorState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigatorState) }
 
             navigator.navigate(TestKeyFirst)
 

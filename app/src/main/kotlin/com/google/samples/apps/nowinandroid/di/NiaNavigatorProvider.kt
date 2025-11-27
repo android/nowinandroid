@@ -16,21 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.di
 
-import androidx.navigation3.runtime.EntryProviderScope
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigatorState
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -49,8 +44,6 @@ object NiaNavigatorProvider {
 //        state: NiaNavigatorState
 //    ): NiaNavigator =
 //        NiaNavigator(state)
-
-
 
     /**
      * Registers feature modules' polymorphic serializers to support

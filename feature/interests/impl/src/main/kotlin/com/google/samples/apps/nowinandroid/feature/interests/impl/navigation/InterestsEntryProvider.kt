@@ -20,8 +20,8 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderScope
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsScreen

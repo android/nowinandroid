@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.ui
 
 import androidx.navigation3.runtime.EntryProviderScope
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
 
