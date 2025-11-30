@@ -29,6 +29,7 @@ import androidx.navigation.testing.TestNavHostController
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -54,8 +55,11 @@ import kotlin.test.assertTrue
 @HiltAndroidTest
 class NiaAppStateTest {
 
-    @get:Rule
+    @get:Rule(0)
     val composeTestRule = createComposeRule()
+
+    @get:Rule(1)
+    val mainDispatcherRule = MainDispatcherRule()
 
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
@@ -63,7 +67,7 @@ class NiaAppStateTest {
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
-        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository())
+        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository(), mainDispatcherRule.testDispatcher)
 
     // Subject under test.
     private lateinit var state: NiaAppState

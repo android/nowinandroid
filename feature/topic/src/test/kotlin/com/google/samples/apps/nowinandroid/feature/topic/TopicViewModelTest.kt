@@ -52,6 +52,7 @@ class TopicViewModelTest {
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
+        defaultDispatcher = dispatcherRule.testDispatcher,
     )
     private lateinit var viewModel: TopicViewModel
 
