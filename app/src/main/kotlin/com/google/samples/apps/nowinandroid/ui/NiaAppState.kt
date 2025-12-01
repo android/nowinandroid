@@ -71,7 +71,7 @@ class NiaAppState(
     timeZoneMonitor: TimeZoneMonitor,
 ) {
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = TopLevelDestinations[niaNavigator.navigatorState.currentTopLevelKey]
+        @Composable get() = TopLevelDestinations[niaNavigator.navigationState.currentTopLevelKey]
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)

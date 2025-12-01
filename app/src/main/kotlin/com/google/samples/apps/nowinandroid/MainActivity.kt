@@ -85,6 +85,8 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
+
+    // TODO: This isn't used
     private val backStackViewModel: NiaBackStackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
