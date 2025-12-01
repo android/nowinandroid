@@ -48,6 +48,7 @@ class BookmarksViewModelTest {
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
+        dispatcherRule.testDispatcher,
     )
     private lateinit var viewModel: BookmarksViewModel
 

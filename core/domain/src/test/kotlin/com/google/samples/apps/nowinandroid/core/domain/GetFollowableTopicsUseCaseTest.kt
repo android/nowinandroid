@@ -39,6 +39,7 @@ class GetFollowableTopicsUseCaseTest {
     val useCase = GetFollowableTopicsUseCase(
         topicsRepository,
         userDataRepository,
+        mainDispatcherRule.testDispatcher,
     )
 
     @Test
