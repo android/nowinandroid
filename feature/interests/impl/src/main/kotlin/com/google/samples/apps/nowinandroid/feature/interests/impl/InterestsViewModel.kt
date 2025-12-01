@@ -39,9 +39,12 @@ class InterestsViewModel @AssistedInject constructor(
     private val savedStateHandle: SavedStateHandle,
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
+    // TODO: see comment below
     @Assisted val key: InterestsRoute,
 ) : ViewModel() {
 
+    // TODO: this should no longer be necessary, the currently selected topic should be
+    //  available through the navigation state
     // Key used to save and retrieve the currently selected topic id from saved state.
     private val selectedTopicIdKey = "selectedTopicIdKey"
 
@@ -67,6 +70,8 @@ class InterestsViewModel @AssistedInject constructor(
     }
 
     fun onTopicClick(topicId: String?) {
+        // TODO: This should modify the navigation state directly rather than just updating the
+        //  savedStateHandle
         savedStateHandle[selectedTopicIdKey] = topicId
     }
 

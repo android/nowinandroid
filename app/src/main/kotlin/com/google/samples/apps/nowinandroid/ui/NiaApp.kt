@@ -255,6 +255,11 @@ internal fun NiaApp(
                         },
                     ),
                 ) {
+
+                    // Instantiate the NavigationState here
+
+
+
                     NiaNavDisplay(
                         niaNavigator = appState.niaNavigator,
                         entryProviderBuilders = entryProviderBuilders,

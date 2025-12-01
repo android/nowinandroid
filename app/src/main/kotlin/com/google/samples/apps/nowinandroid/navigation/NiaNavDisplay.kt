@@ -23,8 +23,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.ui.NavDisplay
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
-import com.google.samples.apps.nowinandroid.core.navigation.getEntries
-import kotlin.collections.plus
+import com.google.samples.apps.nowinandroid.core.navigation.toEntries
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -33,7 +32,7 @@ fun NiaNavDisplay(
     entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>,
 ) {
     val listDetailStrategy = rememberListDetailSceneStrategy<NiaNavKey>()
-    val entries = niaNavigator.navigatorState.getEntries(entryProviderBuilders)
+    val entries = niaNavigator.navigationState.toEntries(entryProviderBuilders)
     NavDisplay(
         entries = entries,
         sceneStrategy = listDetailStrategy,

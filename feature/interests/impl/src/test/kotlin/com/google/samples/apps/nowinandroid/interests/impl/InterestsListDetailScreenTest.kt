@@ -162,6 +162,7 @@ class InterestsListDetailScreenTest {
         composeTestRule.apply {
             setContent {
                 val backStackViewModel by composeTestRule.activity.viewModels<NiaBackStackViewModel>()
+                // TODO: This is broken
                 val backStack = backStackViewModel.niaNavigator.backStack
                 NiaTheme {
                     NavDisplay(

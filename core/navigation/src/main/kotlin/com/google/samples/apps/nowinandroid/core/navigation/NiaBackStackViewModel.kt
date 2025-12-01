@@ -33,10 +33,16 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 import javax.inject.Inject
 
+/**
+ * TODO: I'm not sure why this needs to be a ViewModel - why can't it be a plain state holder that
+ *  is scoped to `NiaAppState`?
+ *  https://github.com/android/nav3-recipes/blob/main/app/src/main/java/com/example/nav3recipes/multiplestacks/NavigationState.kt#L71
+ *
+ */
 @HiltViewModel
 class NiaBackStackViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val niaNavigatorState: NiaNavigatorState,
+    val navigationState: NavigationState,
     serializersModules: SerializersModule,
 ) : ViewModel() {
 
@@ -63,9 +69,9 @@ class NiaBackStackViewModel @Inject constructor(
 
     init {
         if (backStackMap.isNotEmpty()) {
-            //    Restore backstack from saved state handle if not emtpy
+            // Restore backstack from saved state handle if not empty
             @Suppress("UNCHECKED_CAST")
-            niaNavigatorState.restore(
+            navigationState.restore(
                 activeTopLeveLKeys,
                 backStackMap as LinkedHashMap<NiaNavKey, SnapshotStateList<NiaNavKey>>,
             )
@@ -74,8 +80,8 @@ class NiaBackStackViewModel @Inject constructor(
         // Start observing changes to the backStack and save backStack whenever it updates
         viewModelScope.launch {
             snapshotFlow {
-                activeTopLeveLKeys = niaNavigatorState.activeTopLeveLKeys.toList()
-                backStackMap = niaNavigatorState.backStacks
+                activeTopLeveLKeys = navigationState.activeTopLeveLKeys.toList()
+                backStackMap = navigationState.backStacks
             }.collect()
         }
     }

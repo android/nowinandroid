@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.di
 
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigatorState
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import dagger.Module
 import dagger.Provides
@@ -28,15 +28,19 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import javax.inject.Singleton
 
+// TODO: Rename to `NiaNavigationStateProvider`
+//  Does this even need to be injected? Can't we just instantiate it directly using `rememberNavigationState`?
 @Module
 @InstallIn(SingletonComponent::class)
-object NiaNavigatorProvider {
+object NavigationStateProvider {
     @Provides
     @Singleton
-    fun providerNiaNavigatorState(): NiaNavigatorState =
-        NiaNavigatorState(
+    fun provideNavigationState(): NavigationState =
+        NavigationState(
             startKey = TopLevelDestination.FOR_YOU.key,
         )
+
+// TODO: Remove commented out code
 //
 //    @Provides
 //    @Singleton

@@ -34,7 +34,8 @@ import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 import kotlin.collections.plus
 
-class NiaNavigatorState(
+// TODO: Consider changing this to `NiaNavigationState`
+class NavigationState(
     internal val startKey: NiaNavKey,
 ) {
     internal var backStacks: MutableMap<NiaNavKey, SnapshotStateList<NiaNavKey>> =
@@ -51,7 +52,7 @@ class NiaNavigatorState(
     val currentBackStack: List<NiaNavKey>
         get() = activeTopLeveLKeys.fold(mutableListOf()) { list, topLevelKey ->
             list.apply {
-                addAll(backStacks[topLevelKey]!!)
+                addAll(backStacks[topLevelKey] ?: error("No back stack found for $topLevelKey"))
             }
         }
 
@@ -76,13 +77,18 @@ class NiaNavigatorState(
     }
 }
 
-// https://github.com/android/nowinandroid/issues/1934
+/**
+ * TODO: Document this
+ */
 class NiaNavigator @Inject constructor(
-    val navigatorState: NiaNavigatorState,
+    val navigationState: NavigationState,
 ) {
+    // TODO: I wonder if it'd be simpler to have separate methods
+    //  for navigating to a graph and navigating to a key. If the key is on a separate graph then
+    //  navigate to that graph first.
     fun navigate(key: NiaNavKey) {
         val currentActiveSubStacks = linkedSetOf<NiaNavKey>()
-        navigatorState.apply {
+        navigationState.apply {
             currentActiveSubStacks.addAll(activeTopLeveLKeys)
             when {
                 // top level singleTop -> clear substack
@@ -120,7 +126,7 @@ class NiaNavigator @Inject constructor(
     }
 
     fun pop() {
-        navigatorState.apply {
+        navigationState.apply {
             val currentSubstack = backStacks[currentTopLevelKey]!!
             if (currentSubstack.size == 1) {
                 // if current sub-stack only has one key, remove the sub-stack from the map
@@ -134,12 +140,17 @@ class NiaNavigator @Inject constructor(
     }
 }
 
+// TODO: I wonder if removing this would remove the need for the serializers modules
 interface NiaNavKey {
     val isTopLevel: Boolean
 }
 
+/**
+ * Convert the navigation state to `NavEntry`s that can be displayed by a `NavDisplay`
+ */
 @Composable
-public fun NiaNavigatorState.getEntries(
+fun NavigationState.toEntries(
+    // TODO: Might be better to pass this in fully constructed
     entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>,
 ): List<NavEntry<NiaNavKey>> =
     activeTopLeveLKeys.fold(emptyList()) { entries, topLevelKey ->

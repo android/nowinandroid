@@ -39,11 +39,16 @@ object ForYouEntryProvider {
     @IntoSet
     fun provideForYouEntryProviderBuilder(
         navigator: NiaNavigator,
-    ): EntryProviderScope<NiaNavKey>.() -> Unit = {
-        entry<ForYouRoute> {
-            ForYouScreen(
-                onTopicClick = navigator::navigateToTopic,
-            )
-        }
+    ): EntryProviderScope<NiaNavKey>.() -> Unit = forYouEntry(navigator)
+}
+
+fun forYouEntry(navigator: NiaNavigator): EntryProviderScope<NiaNavKey>.() -> Unit = {
+    entry<ForYouRoute> {
+        ForYouScreen(
+            onTopicClick = navigator::navigateToTopic,
+        )
     }
 }
+
+
+
