@@ -81,35 +81,32 @@ enum class TopLevelDestination(
 internal val TopLevelDestinations = TopLevelDestination.entries.associateBy { dest -> dest.key }
 */
 
-val FOR_YOU = TopLevelDestination(
+val FOR_YOU = NavBarItem(
     selectedIcon = NiaIcons.Upcoming,
     unselectedIcon = NiaIcons.UpcomingBorder,
     iconTextId = forYouR.string.feature_foryou_api_title,
     titleTextId = R.string.app_name,
-    route = ForYouRoute::class,
     key = ForYouRoute,
 )
 
-val BOOKMARKS = TopLevelDestination(
+val BOOKMARKS = NavBarItem(
     selectedIcon = NiaIcons.Bookmarks,
     unselectedIcon = NiaIcons.BookmarksBorder,
     iconTextId = bookmarksR.string.feature_bookmarks_api_title,
     titleTextId = bookmarksR.string.feature_bookmarks_api_title,
-    route = BookmarksRoute::class,
     key = BookmarksRoute,
 )
 
-val INTERESTS = TopLevelDestination(
+val INTERESTS = NavBarItem(
     selectedIcon = NiaIcons.Grid3x3,
     unselectedIcon = NiaIcons.Grid3x3,
     iconTextId = searchR.string.feature_search_api_interests,
     titleTextId = searchR.string.feature_search_api_interests,
-    route = InterestsRoute::class,
     key = InterestsRoute(null)
 )
 
 
-val TOP_LEVEL_ROUTES = mapOf<NavKey, TopLevelDestination>(
+val TOP_LEVEL_ROUTES = mapOf<NavKey, NavBarItem>(
     ForYouRoute to FOR_YOU,
     BookmarksRoute to BOOKMARKS,
     InterestsRoute(null) to INTERESTS,
@@ -117,8 +114,8 @@ val TOP_LEVEL_ROUTES = mapOf<NavKey, TopLevelDestination>(
 
 
 /**
- * Type for the top level destinations in the application. Contains metadata about the destination
- * that is used in the top app bar and common navigation UI.
+ * Type for the top level navigation items in the application. Contains UI information about the
+ * current route that is used in the top app bar and common navigation UI.
  *
  * @param selectedIcon The icon to be displayed in the navigation UI when this destination is
  * selected.
@@ -126,15 +123,13 @@ val TOP_LEVEL_ROUTES = mapOf<NavKey, TopLevelDestination>(
  * not selected.
  * @param iconTextId Text that to be displayed in the navigation UI.
  * @param titleTextId Text that is displayed on the top app bar.
- * @param route The route to use when navigating to this destination.
- * @param baseRoute The highest ancestor of this destination. Defaults to [route], meaning that
+ * @param key The navigation key to use when navigating to this destination.
  * there is a single destination in that section of the app (no nested destinations).
  */
-data class TopLevelDestination(
+data class NavBarItem(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int,
-    val route: KClass<*>,
     val key: NavKey,
 )

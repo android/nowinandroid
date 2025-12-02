@@ -16,18 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.di
 
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationState
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.modules.PolymorphicModuleBuilder
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import javax.inject.Singleton
-
 // TODO: Rename to `NiaNavigationStateProvider`
 //  Does this even need to be injected? Can't we just instantiate it directly using `rememberNavigationState`?
 /*

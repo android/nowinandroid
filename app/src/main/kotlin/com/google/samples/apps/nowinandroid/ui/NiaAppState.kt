@@ -23,15 +23,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.navigation.simple.NavigationState
 import com.google.samples.apps.nowinandroid.core.navigation.simple.rememberNavigationState
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.navigation.BOOKMARKS
 import com.google.samples.apps.nowinandroid.navigation.FOR_YOU
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_ROUTES
-//import com.google.samples.apps.nowinandroid.navigation.TopLevelDestinations
+import com.google.samples.apps.nowinandroid.navigation.NavBarItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -45,15 +43,14 @@ fun rememberNiaAppState(
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
-    //niaNavigator: NiaNavigator,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): NiaAppState {
-    //NavigationTrackingSideEffect(niaNavigator)
 
     val navigationState = rememberNavigationState(ForYouRoute, TOP_LEVEL_ROUTES.keys)
 
+    NavigationTrackingSideEffect(navigationState)
+
     return remember(
-        //niaNavigator,
         navigationState,
         coroutineScope,
         networkMonitor,
@@ -61,7 +58,6 @@ fun rememberNiaAppState(
         timeZoneMonitor,
     ) {
         NiaAppState(
-            //niaNavigator = niaNavigator,
             navigationState = navigationState,
             coroutineScope = coroutineScope,
             networkMonitor = networkMonitor,
@@ -73,19 +69,13 @@ fun rememberNiaAppState(
 
 @Stable
 class NiaAppState(
-    //val niaNavigator: NiaNavigator,
     val navigationState: NavigationState,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
 ) {
-/*
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = TOP_LEVEL_ROUTES[niaNavigator.navigationState.currentTopLevelKey]
-*/
-    // TODO: It seems unnecessary to expose this as a TopLevelDestination rather than just a key
-    val currentTopLevelDestination: TopLevelDestination?
+    val currentNavBarItem: NavBarItem?
         @Composable get() = TOP_LEVEL_ROUTES[navigationState.topLevelRoute]
 
     val isOffline = networkMonitor.isOnline
@@ -99,7 +89,7 @@ class NiaAppState(
     /**
      * The top level destinations that have unread news resources.
      */
-    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> =
+    val topLevelDestinationsWithUnreadResources: StateFlow<Set<NavBarItem>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
                 setOfNotNull(
@@ -125,9 +115,9 @@ class NiaAppState(
  * Stores information about navigation events to be used with JankStats
  */
 
-// TODO: This shouldn't be commented out
+// TODO: NavigationState needs to expose an observable representation of its state for this to work
 @Composable
-private fun NavigationTrackingSideEffect(niaNavigator: NiaNavigator) {
+private fun NavigationTrackingSideEffect(navigationState: NavigationState) {
 //    TrackDisposableJank(niaNavigator) { metricsHolder ->
 //        snapshotFlow {
 //            val stack = niaNavigator.backStack.toList()

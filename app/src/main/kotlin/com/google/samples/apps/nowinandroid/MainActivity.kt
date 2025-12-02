@@ -78,17 +78,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
-    /*@Inject
-    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderScope<NavKey>.() -> Unit>
-*/
-    /*@Inject
-    lateinit var niaNavigator: NiaNavigator*/
-
     private val viewModel: MainActivityViewModel by viewModels()
 
-
-    // TODO: This isn't used
-    //private val backStackViewModel: NiaBackStackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -153,7 +144,6 @@ class MainActivity : ComponentActivity() {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                //niaNavigator = niaNavigator,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
@@ -167,9 +157,7 @@ class MainActivity : ComponentActivity() {
                     androidTheme = themeSettings.androidTheme,
                     disableDynamicTheming = themeSettings.disableDynamicTheming,
                 ) {
-                    NiaApp(
-                        appState
-                    )
+                    NiaApp(appState)
                 }
             }
         }

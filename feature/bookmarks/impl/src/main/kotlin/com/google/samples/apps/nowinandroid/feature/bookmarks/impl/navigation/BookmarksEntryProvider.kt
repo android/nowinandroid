@@ -22,9 +22,7 @@ import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.example.nav3recipes.multiplestacks.Navigator
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
+import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
