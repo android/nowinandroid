@@ -28,7 +28,7 @@ import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.core.navigation.rememberNavigationState
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
-import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_ROUTES
+import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
 import com.google.samples.apps.nowinandroid.navigation.TopLevelNavItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -46,7 +46,7 @@ fun rememberNiaAppState(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): NiaAppState {
 
-    val navigationState = rememberNavigationState(ForYouRoute, TOP_LEVEL_ROUTES.keys)
+    val navigationState = rememberNavigationState(ForYouRoute, TOP_LEVEL_NAV_ITEMS.keys)
 
     NavigationTrackingSideEffect(navigationState)
 
@@ -77,7 +77,7 @@ class NiaAppState(
 ) {
     // TODO: I think this should return null if the current route is not a topLevelRoute
     val currentTopLevelNavItem: TopLevelNavItem?
-        @Composable get() = TOP_LEVEL_ROUTES[navigationState.currentTopLevelKey]
+        @Composable get() = TOP_LEVEL_NAV_ITEMS[navigationState.currentTopLevelKey]
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)

@@ -102,7 +102,7 @@ import kotlinx.datetime.TimeZone
 import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.FOR_YOU
-import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_ROUTES
+import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
 import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 
 @Composable
@@ -179,12 +179,12 @@ internal fun NiaApp(
 
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
-            TOP_LEVEL_ROUTES.forEach { (route, navItem) ->
-                val hasUnread = unreadRoutes.contains(route)
-                val selected = route == appState.navigationState.currentTopLevelKey
+            TOP_LEVEL_NAV_ITEMS.forEach { (navKey, navItem) ->
+                val hasUnread = unreadRoutes.contains(navKey)
+                val selected = navKey == appState.navigationState.currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { navigator.navigate(route) },
+                    onClick = { navigator.navigate(navKey) },
                     icon = {
                         Icon(
                             imageVector = navItem.unselectedIcon,
@@ -235,12 +235,15 @@ internal fun NiaApp(
                         ),
                     ),
             ) {
-                // Show the top app bar on top level destinations.
-                val destination = appState.currentTopLevelNavItem
+                // Only show the top app bar on top level destinations.
                 var shouldShowTopAppBar = false
 
-                if (destination != null) {
+                if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
                     shouldShowTopAppBar = true
+
+                    val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
+                        ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
+
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,

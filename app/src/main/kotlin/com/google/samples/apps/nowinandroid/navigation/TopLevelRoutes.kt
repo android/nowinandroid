@@ -46,7 +46,7 @@ val INTERESTS = TopLevelNavItem(
     titleTextId = searchR.string.feature_search_api_interests,
 )
 
-val TOP_LEVEL_ROUTES = mapOf(
+val TOP_LEVEL_NAV_ITEMS = mapOf(
     ForYouRoute to FOR_YOU,
     BookmarksRoute to BOOKMARKS,
     InterestsRoute(null) to INTERESTS,
