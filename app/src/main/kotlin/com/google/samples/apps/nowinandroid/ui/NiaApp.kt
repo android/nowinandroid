@@ -81,10 +81,10 @@ import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYo
 import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
 import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
-import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
+import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
-import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
+import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
 
 @Composable
 fun NiaApp(
@@ -230,11 +230,11 @@ internal fun NiaApp(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,
                         navigationIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_navigation_icon_description,
+                            id = settingsR.string.feature_settings_impl_top_app_bar_navigation_icon_description,
                         ),
                         actionIcon = NiaIcons.Settings,
                         actionIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_action_icon_description,
+                            id = settingsR.string.feature_settings_impl_top_app_bar_action_icon_description,
                         ),
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = Color.Transparent,

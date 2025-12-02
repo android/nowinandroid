@@ -53,7 +53,7 @@ import javax.inject.Inject
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as FeatureForyouR
 import com.google.samples.apps.nowinandroid.feature.search.api.R as FeatureSearchR
-import com.google.samples.apps.nowinandroid.feature.settings.api.R as SettingsR
+import com.google.samples.apps.nowinandroid.feature.settings.impl.R as SettingsR
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.
