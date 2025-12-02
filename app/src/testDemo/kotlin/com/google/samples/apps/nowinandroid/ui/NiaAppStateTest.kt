@@ -117,7 +117,7 @@ class NiaAppStateTest {
 
         assertEquals(3, navigationState.topLevelKeys.size)
         assertEquals(
-            setOf(ForYouNavKey, BookmarksNavKey, InterestsNavKey),
+            setOf(ForYouNavKey, BookmarksNavKey, InterestsNavKey(null)),
             navigationState.topLevelKeys,
         )
     }
