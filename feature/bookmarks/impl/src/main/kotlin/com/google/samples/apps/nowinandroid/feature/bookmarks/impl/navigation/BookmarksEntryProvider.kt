@@ -22,33 +22,16 @@ import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
-//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.multibindings.IntoSet
-
-@Module
-@InstallIn(ActivityComponent::class)
-object BookmarksEntryProvider {
-
-    @Provides
-    @IntoSet
-    fun provideBookmarksEntryProviderBuilder(
-        navigator: Navigator,
-    ): EntryProviderScope<NavKey>.() -> Unit = { bookmarksEntry(navigator) }
-}
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 
 fun EntryProviderScope<NavKey>.bookmarksEntry(navigator: Navigator) {
     entry<BookmarksRoute> {
         val snackbarHostState = LocalSnackbarHostState.current
         BookmarksScreen(
-            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
+            onTopicClick = navigator::navigateToTopic,
             onShowSnackbar = { message, action ->
                 snackbarHostState.showSnackbar(
                     message = message,

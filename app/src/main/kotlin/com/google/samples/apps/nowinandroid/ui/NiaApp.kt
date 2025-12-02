@@ -84,6 +84,8 @@ import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.simple.toEntries
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.toEntries
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
@@ -109,7 +111,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.currentNavBarItem == FOR_YOU
+    val shouldShowGradientBackground = appState.currentTopLevelNavItem == FOR_YOU
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -162,7 +164,7 @@ internal fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
+    val unreadRoutes by appState.topLevelRoutesWithUnreadResources
         .collectAsStateWithLifecycle()
 
     if (showSettingsDialog) {
@@ -177,25 +179,25 @@ internal fun NiaApp(
 
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
-            TOP_LEVEL_ROUTES.forEach { (navKey, navBarItem) ->
-                val hasUnread = unreadDestinations.contains(navBarItem)
-                val selected = navKey == appState.navigationState.topLevelRoute
+            TOP_LEVEL_ROUTES.forEach { (route, navItem) ->
+                val hasUnread = unreadRoutes.contains(route)
+                val selected = route == appState.navigationState.currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { navigator.navigate(navKey) },
+                    onClick = { navigator.navigate(route) },
                     icon = {
                         Icon(
-                            imageVector = navBarItem.unselectedIcon,
+                            imageVector = navItem.unselectedIcon,
                             contentDescription = null,
                         )
                     },
                     selectedIcon = {
                         Icon(
-                            imageVector = navBarItem.selectedIcon,
+                            imageVector = navItem.selectedIcon,
                             contentDescription = null,
                         )
                     },
-                    label = { Text(stringResource(navBarItem.iconTextId)) },
+                    label = { Text(stringResource(navItem.iconTextId)) },
                     modifier = Modifier
                         .testTag("NiaNavItem")
                         .then(if (hasUnread) Modifier.notificationDot() else Modifier),
@@ -234,7 +236,7 @@ internal fun NiaApp(
                     ),
             ) {
                 // Show the top app bar on top level destinations.
-                val destination = appState.currentNavBarItem
+                val destination = appState.currentTopLevelNavItem
                 var shouldShowTopAppBar = false
 
                 if (destination != null) {

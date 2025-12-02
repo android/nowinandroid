@@ -18,34 +18,18 @@ package com.google.samples.apps.nowinandroid.feature.search.impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.impl.SearchScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.multibindings.IntoSet
-
-@Module
-@InstallIn(ActivityComponent::class)
-object SearchEntryProvider {
-
-    @Provides
-    @IntoSet
-    fun provideSearchEntryProviderBuilder(
-        navigator: Navigator,
-    ): EntryProviderScope<NavKey>.() -> Unit = { searchEntry(navigator) }
-}
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 
 fun EntryProviderScope<NavKey>.searchEntry(navigator: Navigator) {
-    entry<SearchRoute> { key ->
+    entry<SearchRoute> {
         SearchScreen(
             onBackClick = { navigator.goBack() },
             onInterestsClick = { navigator.navigate(InterestsRoute()) },
-            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
+            onTopicClick = navigator::navigateToTopic,
         )
     }
 }
