@@ -18,35 +18,15 @@ package com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
-//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.multibindings.IntoSet
-
-@Module
-@InstallIn(ActivityComponent::class)
-object ForYouEntryProvider {
-    /**
-     *  The ForYou composable for the app. It can also display information about topics.
-     *  This should be supplied from a separate module.
-     */
-    @Provides
-    @IntoSet
-    fun provideForYouEntryProviderBuilder(
-        navigator: Navigator,
-    ): EntryProviderScope<NavKey>.() -> Unit = { forYouEntry(navigator) }
-}
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 
 fun EntryProviderScope<NavKey>.forYouEntry(navigator: Navigator) {
     entry<ForYouRoute> {
         ForYouScreen(
-            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
+            onTopicClick = navigator::navigateToTopic,
         )
     }
 }

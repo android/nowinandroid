@@ -20,16 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation3.runtime.NavKey
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
-import com.google.samples.apps.nowinandroid.core.navigation.simple.NavigationState
-import com.google.samples.apps.nowinandroid.core.navigation.simple.rememberNavigationState
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
+import com.google.samples.apps.nowinandroid.core.navigation.rememberNavigationState
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
-import com.google.samples.apps.nowinandroid.navigation.BOOKMARKS
-import com.google.samples.apps.nowinandroid.navigation.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_ROUTES
-import com.google.samples.apps.nowinandroid.navigation.NavBarItem
+import com.google.samples.apps.nowinandroid.navigation.TopLevelNavItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -75,8 +75,9 @@ class NiaAppState(
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
 ) {
-    val currentNavBarItem: NavBarItem?
-        @Composable get() = TOP_LEVEL_ROUTES[navigationState.topLevelRoute]
+    // TODO: I think this should return null if the current route is not a topLevelRoute
+    val currentTopLevelNavItem: TopLevelNavItem?
+        @Composable get() = TOP_LEVEL_ROUTES[navigationState.currentTopLevelKey]
 
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -87,14 +88,14 @@ class NiaAppState(
         )
 
     /**
-     * The top level destinations that have unread news resources.
+     * The top level routes that have unread news resources.
      */
-    val topLevelDestinationsWithUnreadResources: StateFlow<Set<NavBarItem>> =
+    val topLevelRoutesWithUnreadResources: StateFlow<Set<NavKey>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
                 setOfNotNull(
-                    FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
-                    BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
+                    ForYouRoute.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
+                    BookmarksRoute.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
                 )
             }
             .stateIn(

@@ -17,21 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.search.api.navigation
 
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import kotlinx.serialization.Serializable
-
-/*
-@Serializable
-object SearchRoute : NiaNavKey {
-    override val isTopLevel: Boolean
-        get() = false
-}
-
-fun NiaNavigator.navigateToSearch() {
-    navigate(SearchRoute)
-}
-*/
 
 @Serializable
 object SearchRoute : NavKey

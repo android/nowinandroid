@@ -21,29 +21,12 @@ import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
-//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicViewModel
 import com.google.samples.apps.nowinandroid.feature.topic.impl.TopicViewModel.Factory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.multibindings.IntoSet
-
-@Module
-@InstallIn(ActivityComponent::class)
-object TopicEntryProvider {
-
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-    @Provides
-    @IntoSet
-    fun provideTopicEntryProviderBuilder(
-        navigator: Navigator,
-    ): EntryProviderScope<NavKey>.() -> Unit = { topicEntry(navigator) }
-}
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.topicEntry(navigator: Navigator) {
@@ -54,7 +37,7 @@ fun EntryProviderScope<NavKey>.topicEntry(navigator: Navigator) {
         TopicScreen(
             showBackButton = true,
             onBackClick = { navigator.goBack() },
-            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
+            onTopicClick = navigator::navigateToTopic,
             viewModel = hiltViewModel<TopicViewModel, Factory>(
                 key = id,
             ) { factory ->
