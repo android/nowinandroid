@@ -40,9 +40,6 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
-        maven {
-            url = uri("https://androidx.dev/snapshots/builds/14161874/artifacts/repository")
-        }
     }
 }
 rootProject.name = "nowinandroid"

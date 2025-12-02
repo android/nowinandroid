@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid.feature.foryou.impl
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.activity.compose.ReportDrawnWhen
-import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -106,8 +105,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R
 
 @Composable
-@VisibleForTesting
-public fun ForYouScreen(
+fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel? = if (LocalInspectionMode.current) null else hiltViewModel(),

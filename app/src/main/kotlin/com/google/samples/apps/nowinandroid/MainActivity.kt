@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -134,7 +133,6 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.shouldKeepSplashScreen() }
 
         setContent {
-
             val appState = rememberNiaAppState(
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,

@@ -18,14 +18,17 @@ package com.google.samples.apps.nowinandroid.ui
 
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.navigation3.runtime.NavBackStack
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
-import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect
@@ -39,7 +42,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
@@ -63,31 +65,42 @@ class NiaAppStateTest {
     // Subject under test.
     private lateinit var state: NiaAppState
 
+    private fun testNavigationState() = NavigationState(
+        startKey = ForYouNavKey,
+        topLevelStack = NavBackStack(ForYouNavKey),
+        subStacks = mapOf(
+            ForYouNavKey to NavBackStack(ForYouNavKey),
+            BookmarksNavKey to NavBackStack(BookmarksNavKey),
+        ),
+    )
+
     @Test
     fun niaAppState_currentDestination() = runTest {
-        val niaBackStack = mockNiaBackStack()
+        val navigationState = testNavigationState()
+        val navigator = Navigator(navigationState)
+
         composeTestRule.setContent {
-            state = remember(niaBackStack) {
+            state = remember(navigationState) {
                 NiaAppState(
-                    niaNavigator = niaBackStack,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
+                    navigationState = navigationState,
                 )
             }
         }
 
-        assertEquals(ForYouRoute, state.niaNavigator.currentActiveTopLevelKey)
-        assertEquals(ForYouRoute, state.niaNavigator.currentKey)
+        assertEquals(ForYouNavKey, state.navigationState.currentTopLevelKey)
+        assertEquals(ForYouNavKey, state.navigationState.currentKey)
 
         // Navigate to another destination once
-        niaBackStack.navigate(BookmarksRoute)
+        navigator.navigate(BookmarksNavKey)
 
         composeTestRule.waitForIdle()
 
-        assertEquals(BookmarksRoute, state.niaNavigator.currentActiveTopLevelKey)
-        assertEquals(BookmarksRoute, state.niaNavigator.currentKey)
+        assertEquals(BookmarksNavKey, state.navigationState.currentTopLevelKey)
+        assertEquals(BookmarksNavKey, state.navigationState.currentKey)
     }
 
     @Test
@@ -97,14 +110,16 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaNavigator = mockNiaBackStack(),
             )
         }
 
-        assertEquals(3, TOP_LEVEL_NAV_ITEMS.size)
-        assertTrue(TOP_LEVEL_NAV_ITEMS[0].name.contains("for_you", true))
-        assertTrue(TOP_LEVEL_NAV_ITEMS[1].name.contains("bookmarks", true))
-        assertTrue(TOP_LEVEL_NAV_ITEMS[2].name.contains("interests", true))
+        val navigationState = state.navigationState
+
+        assertEquals(3, navigationState.topLevelKeys.size)
+        assertEquals(
+            setOf(ForYouNavKey, BookmarksNavKey, InterestsNavKey),
+            navigationState.topLevelKeys,
+        )
     }
 
     @Test
@@ -115,7 +130,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaNavigator = mockNiaBackStack(),
+                navigationState = testNavigationState(),
             )
         }
 
@@ -135,7 +150,7 @@ class NiaAppStateTest {
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaNavigator = mockNiaBackStack(),
+                navigationState = testNavigationState(),
             )
         }
         val changedTz = TimeZone.of("Europe/Prague")
