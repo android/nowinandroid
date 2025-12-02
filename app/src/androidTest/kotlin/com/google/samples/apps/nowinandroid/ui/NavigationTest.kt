@@ -92,9 +92,9 @@ class NavigationTest {
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
     private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_api_title)
-    private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_top_app_bar_action_icon_description)
-    private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_brand_android)
-    private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_dismiss_dialog_button_text)
+    private val settings by composeTestRule.stringResource(SettingsR.string.feature_settings_impl_top_app_bar_action_icon_description)
+    private val brand by composeTestRule.stringResource(SettingsR.string.feature_settings_impl_brand_android)
+    private val ok by composeTestRule.stringResource(SettingsR.string.feature_settings_impl_dismiss_dialog_button_text)
 
     @Before
     fun setup() = hiltRule.inject()
