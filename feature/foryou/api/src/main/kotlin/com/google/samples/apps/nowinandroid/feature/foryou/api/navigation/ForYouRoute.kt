@@ -17,16 +17,7 @@
 package com.google.samples.apps.nowinandroid.feature.foryou.api.navigation
 
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import kotlinx.serialization.Serializable
-
-/*
-@Serializable
-object ForYouRoute : NiaNavKey { // route to ForYou screen
-    override val isTopLevel: Boolean
-        get() = true
-}
-*/
 
 @Serializable
 object ForYouRoute : NavKey

@@ -55,7 +55,7 @@ fun rememberNavigationState(
  * State holder for navigation state.
  *
  * @param startKey - the starting navigation key. The user will exit the app through this key.
- * @param currentTopLevelKey - the current top level key
+ * @param topLevelStack - the top level back stack. It holds only top level keys.
  * @param subStacks - the back stacks for each top level key
  */
 class NavigationState(
@@ -75,16 +75,7 @@ class NavigationState(
 
     @get:VisibleForTesting
     val currentKey
-        get() = currentSubStack?.last()
-
-    // TODO: Fix this
-    /*val stacksInUse: List<NavKey>
-        get() = topLevel
-            listOf(startRoute)
-        } else {
-            listOf(startRoute, topLevelRoute)
-        }
-*/
+        get() = currentSubStack.last()
 }
 
 /**
