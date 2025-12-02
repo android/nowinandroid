@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.nav3recipes.multiplestacks
+package com.google.samples.apps.nowinandroid.core.navigation.simple
 
 import androidx.navigation3.runtime.NavKey
-import com.google.samples.apps.nowinandroid.core.navigation.simple.NavigationState
 
 /**
  * Handles navigation events (forward and back) by updating the navigation state.

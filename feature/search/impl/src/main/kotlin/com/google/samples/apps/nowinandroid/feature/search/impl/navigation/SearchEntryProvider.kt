@@ -18,13 +18,10 @@ package com.google.samples.apps.nowinandroid.feature.search.impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.example.nav3recipes.multiplestacks.Navigator
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
+import com.google.samples.apps.nowinandroid.core.navigation.simple.Navigator
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRoute
 import com.google.samples.apps.nowinandroid.feature.search.impl.SearchScreen
-import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
 import dagger.Module
 import dagger.Provides
