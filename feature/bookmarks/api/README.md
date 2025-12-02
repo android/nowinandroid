@@ -11,9 +11,12 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :feature:bookmarks
+  subgraph :feature
     direction TB
-    :feature:bookmarks:api[api]:::android-library
+    subgraph :feature:bookmarks
+      direction TB
+      :feature:bookmarks:api[api]:::android-library
+    end
   end
   subgraph :core
     direction TB
