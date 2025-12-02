@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation
+package com.google.samples.apps.nowinandroid.feature.interests.api.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-object BookmarksRoute : NavKey
+data class InterestsNavKey(
+    // The ID of the topic which will be initially selected at this destination
+    val initialTopicId: String? = null,
+) : NavKey

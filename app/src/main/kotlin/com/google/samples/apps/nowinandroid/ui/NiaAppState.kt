@@ -26,10 +26,10 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.core.navigation.rememberNavigationState
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
-import com.google.samples.apps.nowinandroid.navigation.TopLevelNavItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -45,8 +45,7 @@ fun rememberNiaAppState(
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): NiaAppState {
-
-    val navigationState = rememberNavigationState(ForYouRoute, TOP_LEVEL_NAV_ITEMS.keys)
+    val navigationState = rememberNavigationState(ForYouNavKey, TOP_LEVEL_NAV_ITEMS.keys)
 
     NavigationTrackingSideEffect(navigationState)
 
@@ -75,10 +74,6 @@ class NiaAppState(
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
 ) {
-    // TODO: I think this should return null if the current route is not a topLevelRoute
-    val currentTopLevelNavItem: TopLevelNavItem?
-        @Composable get() = TOP_LEVEL_NAV_ITEMS[navigationState.currentTopLevelKey]
-
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
         .stateIn(
@@ -88,14 +83,14 @@ class NiaAppState(
         )
 
     /**
-     * The top level routes that have unread news resources.
+     * The top level nav keys that have unread news resources.
      */
-    val topLevelRoutesWithUnreadResources: StateFlow<Set<NavKey>> =
+    val topLevelNavKeysWithUnreadResources: StateFlow<Set<NavKey>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
                 setOfNotNull(
-                    ForYouRoute.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
-                    BookmarksRoute.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
+                    ForYouNavKey.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
+                    BookmarksNavKey.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
                 )
             }
             .stateIn(
@@ -115,15 +110,10 @@ class NiaAppState(
 /**
  * Stores information about navigation events to be used with JankStats
  */
-
-// TODO: NavigationState needs to expose an observable representation of its state for this to work
 @Composable
 private fun NavigationTrackingSideEffect(navigationState: NavigationState) {
-//    TrackDisposableJank(niaNavigator) { metricsHolder ->
-//        snapshotFlow {
-//            val stack = niaNavigator.backStack.toList()
-//            metricsHolder.state?.putState("Navigation", stack.lastOrNull().toString())
-//        }
-//        onDispose { }
-//    }
+    TrackDisposableJank(navigationState.currentKey) { metricsHolder ->
+        metricsHolder.state?.putState("Navigation", navigationState.currentKey.toString())
+        onDispose {}
+    }
 }

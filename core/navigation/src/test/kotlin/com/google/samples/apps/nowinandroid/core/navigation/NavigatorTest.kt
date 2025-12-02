@@ -36,20 +36,19 @@ class NavigatorTest {
 
     @Before
     fun setup() {
-
         val startKey = TestFirstTopLevelKey
         val topLevelStack = NavBackStack<NavKey>(startKey)
         val topLevelKeys = listOf(
             startKey,
             TestSecondTopLevelKey,
-            TestThirdTopLevelKey
+            TestThirdTopLevelKey,
         )
         val subStacks = topLevelKeys.associateWith { key -> NavBackStack(key) }
 
         navigationState = NavigationState(
             startKey = startKey,
             topLevelStack = topLevelStack,
-            subStacks = subStacks
+            subStacks = subStacks,
         )
         navigator = Navigator(navigationState)
     }
@@ -66,7 +65,6 @@ class NavigatorTest {
 
         assertThat(navigationState.currentTopLevelKey).isEqualTo(TestFirstTopLevelKey)
         assertThat(navigationState.subStacks[TestFirstTopLevelKey]?.last()).isEqualTo(TestKeyFirst)
-        
     }
 
     @Test
@@ -148,7 +146,7 @@ class NavigatorTest {
         assertThat(navigationState.currentKey).isEqualTo(TestKeyFirst)
         assertThat(navigationState.currentTopLevelKey).isEqualTo(TestFirstTopLevelKey)
     }
-    
+
     @Test
     fun testPopOneNonTopLevel() {
         navigator.navigate(TestKeyFirst)
@@ -256,5 +254,3 @@ class NavigatorTest {
         }
     }
 }
-
-

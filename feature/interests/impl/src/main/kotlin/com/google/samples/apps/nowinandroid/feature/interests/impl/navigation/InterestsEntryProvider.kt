@@ -22,34 +22,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsScreen
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModel
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
-//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.multibindings.IntoSet
-
-@Module
-@InstallIn(ActivityComponent::class)
-object InterestsEntryProvider {
-
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-    @Provides
-    @IntoSet
-    fun provideInterestsEntryProviderBuilder(
-        navigator: Navigator,
-    ): EntryProviderScope<NavKey>.() -> Unit = { interestsEntry(navigator) }
-}
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.interestsEntry(navigator: Navigator) {
-    entry<InterestsRoute>(
+    entry<InterestsNavKey>(
         metadata = ListDetailSceneStrategy.listPane {
             InterestsDetailPlaceholder()
         },

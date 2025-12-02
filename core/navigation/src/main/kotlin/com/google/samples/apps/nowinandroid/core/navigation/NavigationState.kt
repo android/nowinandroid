@@ -36,9 +36,8 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 @Composable
 fun rememberNavigationState(
     startKey: NavKey,
-    topLevelKeys: Set<NavKey>
+    topLevelKeys: Set<NavKey>,
 ): NavigationState {
-
     val topLevelStack = rememberNavBackStack(startKey)
     val subStacks = topLevelKeys.associateWith { key -> rememberNavBackStack(key) }
 
@@ -46,7 +45,7 @@ fun rememberNavigationState(
         NavigationState(
             startKey = startKey,
             topLevelStack = topLevelStack,
-            subStacks = subStacks
+            subStacks = subStacks,
         )
     }
 }
@@ -61,7 +60,7 @@ fun rememberNavigationState(
 class NavigationState(
     val startKey: NavKey,
     val topLevelStack: NavBackStack<NavKey>,
-    val subStacks: Map<NavKey, NavBackStack<NavKey>>
+    val subStacks: Map<NavKey, NavBackStack<NavKey>>,
 ) {
     val currentTopLevelKey: NavKey by derivedStateOf { topLevelStack.last() }
 
@@ -69,13 +68,12 @@ class NavigationState(
         get() = subStacks.keys
 
     @get:VisibleForTesting
-    val currentSubStack : NavBackStack<NavKey>
+    val currentSubStack: NavBackStack<NavKey>
         get() = subStacks[currentTopLevelKey]
             ?: error("Sub stack for $currentTopLevelKey does not exist")
 
     @get:VisibleForTesting
-    val currentKey
-        get() = currentSubStack.last()
+    val currentKey: NavKey by derivedStateOf { currentSubStack.last() }
 }
 
 /**
@@ -83,9 +81,8 @@ class NavigationState(
  */
 @Composable
 fun NavigationState.toEntries(
-    entryProvider: (NavKey) -> NavEntry<NavKey>
+    entryProvider: (NavKey) -> NavEntry<NavKey>,
 ): SnapshotStateList<NavEntry<NavKey>> {
-
     val decoratedEntries = subStacks.mapValues { (_, stack) ->
         val decorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
@@ -93,7 +90,7 @@ fun NavigationState.toEntries(
         rememberDecoratedNavEntries(
             backStack = stack,
             entryDecorators = decorators,
-            entryProvider = entryProvider
+            entryProvider = entryProvider,
         )
     }
 

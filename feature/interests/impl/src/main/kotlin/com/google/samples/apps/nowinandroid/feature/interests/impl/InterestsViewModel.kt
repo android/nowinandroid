@@ -23,7 +23,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -40,7 +40,7 @@ class InterestsViewModel @AssistedInject constructor(
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
     // TODO: see comment below
-    @Assisted val key: InterestsRoute,
+    @Assisted val key: InterestsNavKey,
 ) : ViewModel() {
 
     // TODO: this should no longer be necessary, the currently selected topic should be
@@ -77,7 +77,7 @@ class InterestsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(key: InterestsRoute): InterestsViewModel
+        fun create(key: InterestsNavKey): InterestsViewModel
     }
 }
 

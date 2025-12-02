@@ -21,10 +21,10 @@ import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TopicRoute(val id: String) : NavKey
+data class TopicNavKey(val id: String) : NavKey
 
 fun Navigator.navigateToTopic(
     topicId: String,
 ) {
-    navigate(TopicRoute(topicId))
+    navigate(TopicNavKey(topicId))
 }

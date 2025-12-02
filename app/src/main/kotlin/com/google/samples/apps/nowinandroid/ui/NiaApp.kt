@@ -76,13 +76,13 @@ import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
 import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
-import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchRoute
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
 import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
 import com.google.samples.apps.nowinandroid.feature.settings.api.SettingsDialog
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
-import com.google.samples.apps.nowinandroid.navigation.FOR_YOU
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
 import com.google.samples.apps.nowinandroid.feature.settings.api.R as settingsR
 
@@ -92,7 +92,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.currentTopLevelNavItem == FOR_YOU
+    val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -135,7 +135,8 @@ fun NiaApp(
 @Composable
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class, ExperimentalMaterial3AdaptiveApi::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
 )
 internal fun NiaApp(
     appState: NiaAppState,
@@ -145,7 +146,7 @@ internal fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val unreadRoutes by appState.topLevelRoutesWithUnreadResources
+    val unreadNavKeys by appState.topLevelNavKeysWithUnreadResources
         .collectAsStateWithLifecycle()
 
     if (showSettingsDialog) {
@@ -161,7 +162,7 @@ internal fun NiaApp(
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
             TOP_LEVEL_NAV_ITEMS.forEach { (navKey, navItem) ->
-                val hasUnread = unreadRoutes.contains(navKey)
+                val hasUnread = unreadNavKeys.contains(navKey)
                 val selected = navKey == appState.navigationState.currentTopLevelKey
                 item(
                     selected = selected,
@@ -239,7 +240,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { navigator.navigate(SearchRoute) },
+                        onNavigationClick = { navigator.navigate(SearchNavKey) },
                     )
                 }
 
@@ -253,7 +254,6 @@ internal fun NiaApp(
                         },
                     ),
                 ) {
-
                     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
                     val entryProvider = entryProvider {

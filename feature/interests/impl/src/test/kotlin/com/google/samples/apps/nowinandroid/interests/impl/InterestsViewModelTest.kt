@@ -24,7 +24,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsRoute
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModel
 import kotlinx.coroutines.flow.collect
@@ -68,11 +68,11 @@ class InterestsViewModelTest {
     fun setup() {
         viewModel = InterestsViewModel(
             savedStateHandle = SavedStateHandle(
-                route = InterestsRoute(initialTopicId = testInputTopics[0].topic.id),
+                route = InterestsNavKey(initialTopicId = testInputTopics[0].topic.id),
             ),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
-            InterestsRoute(initialTopicId = testInputTopics[0].topic.id),
+            InterestsNavKey(initialTopicId = testInputTopics[0].topic.id),
         )
     }
 
