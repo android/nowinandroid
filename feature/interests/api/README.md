@@ -11,9 +11,12 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :feature:interests
+  subgraph :feature
     direction TB
-    :feature:interests:api[api]:::android-library
+    subgraph :feature:interests
+      direction TB
+      :feature:interests:api[api]:::android-library
+    end
   end
   subgraph :core
     direction TB

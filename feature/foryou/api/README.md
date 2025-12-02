@@ -11,9 +11,12 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :feature:foryou
+  subgraph :feature
     direction TB
-    :feature:foryou:api[api]:::android-library
+    subgraph :feature:foryou
+      direction TB
+      :feature:foryou:api[api]:::android-library
+    end
   end
   subgraph :core
     direction TB

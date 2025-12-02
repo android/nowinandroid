@@ -11,6 +11,42 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
+  subgraph :feature
+    direction TB
+    subgraph :feature:settings
+      direction TB
+      :feature:settings:impl[impl]:::android-library
+    end
+    subgraph :feature:foryou
+      direction TB
+      :feature:foryou:api[api]:::android-library
+      :feature:foryou:impl[impl]:::android-library
+    end
+    subgraph :feature:bookmarks
+      direction TB
+      :feature:bookmarks:api[api]:::android-library
+      :feature:bookmarks:impl[impl]:::android-library
+    end
+    subgraph :feature:search
+      direction TB
+      :feature:search:api[api]:::android-library
+      :feature:search:impl[impl]:::android-library
+    end
+    subgraph :feature:interests
+      direction TB
+      :feature:interests:api[api]:::android-library
+      :feature:interests:impl[impl]:::android-library
+    end
+    subgraph :feature:topic
+      direction TB
+      :feature:topic:api[api]:::android-library
+      :feature:topic:impl[impl]:::android-library
+    end
+  end
+  subgraph :sync
+    direction TB
+    :sync:work[work]:::android-library
+  end
   subgraph :core
     direction TB
     :core:analytics[analytics]:::android-library
@@ -26,39 +62,6 @@ graph TB
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
-  end
-  subgraph :feature:interests
-    direction TB
-    :feature:interests:api[api]:::android-library
-    :feature:interests:impl[impl]:::android-library
-  end
-  subgraph :feature:foryou
-    direction TB
-    :feature:foryou:api[api]:::android-library
-    :feature:foryou:impl[impl]:::android-library
-  end
-  subgraph :feature:bookmarks
-    direction TB
-    :feature:bookmarks:api[api]:::android-library
-    :feature:bookmarks:impl[impl]:::android-library
-  end
-  subgraph :feature:topic
-    direction TB
-    :feature:topic:api[api]:::android-library
-    :feature:topic:impl[impl]:::android-library
-  end
-  subgraph :feature:search
-    direction TB
-    :feature:search:api[api]:::android-library
-    :feature:search:impl[impl]:::android-library
-  end
-  subgraph :feature:settings
-    direction TB
-    :feature:settings:impl[impl]:::android-library
-  end
-  subgraph :sync
-    direction TB
-    :sync:work[work]:::android-library
   end
   :benchmarks[benchmarks]:::android-test
   :app[app]:::android-application

@@ -11,6 +11,13 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
+  subgraph :feature
+    direction TB
+    subgraph :feature:settings
+      direction TB
+      :feature:settings:impl[impl]:::android-library
+    end
+  end
   subgraph :core
     direction TB
     :core:analytics[analytics]:::android-library
@@ -24,10 +31,6 @@ graph TB
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
-  end
-  subgraph :feature:settings
-    direction TB
-    :feature:settings:impl[impl]:::android-library
   end
 
   :core:data -.-> :core:analytics
