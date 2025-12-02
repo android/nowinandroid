@@ -16,9 +16,11 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.api.navigation
 
+import androidx.navigation3.runtime.NavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import kotlinx.serialization.Serializable
 
+/*
 @Serializable
 data class InterestsRoute(
     // The ID of the topic which will be initially selected at this destination
@@ -27,3 +29,11 @@ data class InterestsRoute(
     override val isTopLevel: Boolean
         get() = true
 }
+*/
+
+
+@Serializable
+data class InterestsRoute(
+    // The ID of the topic which will be initially selected at this destination
+    val initialTopicId: String? = null,
+) : NavKey

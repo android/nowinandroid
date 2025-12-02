@@ -48,7 +48,7 @@ class NiaBackStackViewModelTest {
 
     private fun createViewModel() = NiaBackStackViewModel(
         savedStateHandle = SavedStateHandle(),
-        navigationState = NavigationState(TestStartKey),
+        niaNavigationState = NiaNavigationState(TestStartKey),
         serializersModules = serializersModules,
     )
 
@@ -67,7 +67,7 @@ class NiaBackStackViewModelTest {
     fun testNonTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator(viewModel.navigationState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigationState) }
             navigator.navigate(TestKeyFirst)
         }
         assertThat(viewModel.backStackMap.size).isEqualTo(1)
@@ -80,7 +80,7 @@ class NiaBackStackViewModelTest {
     fun testTopLevelKeySaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator(viewModel.navigationState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigationState) }
 
             navigator.navigate(TestKeyFirst)
             navigator.navigate(TestTopLevelKeyFirst)
@@ -101,7 +101,7 @@ class NiaBackStackViewModelTest {
     fun testMultiStacksSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator(viewModel.navigationState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigationState) }
             navigator.navigate(TestKeyFirst)
             navigator.navigate(TestTopLevelKeyFirst)
             navigator.navigate(TestKeySecond)
@@ -122,7 +122,7 @@ class NiaBackStackViewModelTest {
     fun testPopSaved() {
         val viewModel = createViewModel()
         rule.setContent {
-            val navigator = remember { NiaNavigator(viewModel.navigationState) }
+            val navigator = remember { NiaNavigator(viewModel.niaNavigationState) }
 
             navigator.navigate(TestKeyFirst)
 
@@ -144,14 +144,14 @@ class NiaBackStackViewModelTest {
     fun testRestore() {
         lateinit var scenario: ViewModelScenario<NiaBackStackViewModel>
         lateinit var navigator: NiaNavigator
-        lateinit var navigatorState: NavigationState
+        lateinit var navigatorState: NiaNavigationState
         rule.setContent {
-            navigatorState = remember { NavigationState(TestStartKey) }
+            navigatorState = remember { NiaNavigationState(TestStartKey) }
             navigator = remember { NiaNavigator(navigatorState) }
             scenario = viewModelScenario {
                 NiaBackStackViewModel(
                     savedStateHandle = createSavedStateHandle(),
-                    navigationState = navigatorState,
+                    niaNavigationState = navigatorState,
                     serializersModules = serializersModules,
                 )
             }
@@ -181,14 +181,14 @@ class NiaBackStackViewModelTest {
     fun testRestoreMultiStacks() {
         lateinit var scenario: ViewModelScenario<NiaBackStackViewModel>
         lateinit var navigator: NiaNavigator
-        lateinit var navigatorState: NavigationState
+        lateinit var navigatorState: NiaNavigationState
         rule.setContent {
-            navigatorState = remember { NavigationState(TestStartKey) }
+            navigatorState = remember { NiaNavigationState(TestStartKey) }
             navigator = remember { NiaNavigator(navigatorState) }
             scenario = viewModelScenario {
                 NiaBackStackViewModel(
                     savedStateHandle = createSavedStateHandle(),
-                    navigationState = navigatorState,
+                    niaNavigationState = navigatorState,
                     serializersModules = serializersModules,
                 )
             }

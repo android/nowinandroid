@@ -29,6 +29,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
  * Provides the DSL to register the route's [kotlinx.serialization.KSerializer] as a polymorphic serializer
  *
  */
+/*
 @Module
 @InstallIn(SingletonComponent::class)
 object InterestsSerializerModule {
@@ -38,3 +39,4 @@ object InterestsSerializerModule {
         subclass(InterestsRoute::class, InterestsRoute.serializer())
     }
 }
+*/

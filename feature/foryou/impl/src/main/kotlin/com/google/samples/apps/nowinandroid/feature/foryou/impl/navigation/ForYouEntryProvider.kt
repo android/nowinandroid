@@ -17,11 +17,14 @@
 package com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.example.nav3recipes.multiplestacks.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.ForYouScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
+//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,14 +41,14 @@ object ForYouEntryProvider {
     @Provides
     @IntoSet
     fun provideForYouEntryProviderBuilder(
-        navigator: NiaNavigator,
-    ): EntryProviderScope<NiaNavKey>.() -> Unit = forYouEntry(navigator)
+        navigator: Navigator,
+    ): EntryProviderScope<NavKey>.() -> Unit = { forYouEntry(navigator) }
 }
 
-fun forYouEntry(navigator: NiaNavigator): EntryProviderScope<NiaNavKey>.() -> Unit = {
+fun EntryProviderScope<NavKey>.forYouEntry(navigator: Navigator) {
     entry<ForYouRoute> {
         ForYouScreen(
-            onTopicClick = navigator::navigateToTopic,
+            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
         )
     }
 }

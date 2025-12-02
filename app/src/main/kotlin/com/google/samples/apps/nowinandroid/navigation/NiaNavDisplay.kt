@@ -32,7 +32,7 @@ fun NiaNavDisplay(
     entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>,
 ) {
     val listDetailStrategy = rememberListDetailSceneStrategy<NiaNavKey>()
-    val entries = niaNavigator.navigationState.toEntries(entryProviderBuilders)
+    val entries = niaNavigator.niaNavigationState.toEntries(entryProviderBuilders)
     NavDisplay(
         entries = entries,
         sceneStrategy = listDetailStrategy,
