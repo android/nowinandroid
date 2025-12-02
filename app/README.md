@@ -54,7 +54,7 @@ graph TB
   end
   subgraph :feature:settings
     direction TB
-    :feature:settings:api[api]:::android-library
+    :feature:settings:impl[impl]:::android-library
   end
   subgraph :sync
     direction TB
@@ -78,7 +78,7 @@ graph TB
   :app -.-> :feature:interests:impl
   :app -.-> :feature:search:api
   :app -.-> :feature:search:impl
-  :app -.-> :feature:settings:api
+  :app -.-> :feature:settings:impl
   :app -.-> :feature:topic:api
   :app -.-> :feature:topic:impl
   :app -.-> :sync:work
@@ -129,9 +129,9 @@ graph TB
   :feature:search:impl -.-> :feature:interests:api
   :feature:search:impl -.-> :feature:search:api
   :feature:search:impl -.-> :feature:topic:api
-  :feature:settings:api -.-> :core:data
-  :feature:settings:api -.-> :core:designsystem
-  :feature:settings:api -.-> :core:ui
+  :feature:settings:impl -.-> :core:data
+  :feature:settings:impl -.-> :core:designsystem
+  :feature:settings:impl -.-> :core:ui
   :feature:topic:api -.-> :core:designsystem
   :feature:topic:api --> :core:navigation
   :feature:topic:api -.-> :core:ui
