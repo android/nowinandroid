@@ -33,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
@@ -41,7 +42,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
+//import com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
@@ -77,17 +78,17 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
-    @Inject
-    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderScope<NiaNavKey>.() -> Unit>
-
-    @Inject
-    lateinit var niaNavigator: NiaNavigator
+    /*@Inject
+    lateinit var entryProviderBuilders: Set<@JvmSuppressWildcards EntryProviderScope<NavKey>.() -> Unit>
+*/
+    /*@Inject
+    lateinit var niaNavigator: NiaNavigator*/
 
     private val viewModel: MainActivityViewModel by viewModels()
 
 
     // TODO: This isn't used
-    private val backStackViewModel: NiaBackStackViewModel by viewModels()
+    //private val backStackViewModel: NiaBackStackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -147,11 +148,12 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { viewModel.uiState.value.shouldKeepSplashScreen() }
 
         setContent {
+
             val appState = rememberNiaAppState(
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
-                niaNavigator = niaNavigator,
+                //niaNavigator = niaNavigator,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
@@ -166,8 +168,7 @@ class MainActivity : ComponentActivity() {
                     disableDynamicTheming = themeSettings.disableDynamicTheming,
                 ) {
                     NiaApp(
-                        appState,
-                        entryProviderBuilders = entryProviderBuilders,
+                        appState
                     )
                 }
             }

@@ -16,10 +16,12 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.api.navigation
 
+import androidx.navigation3.runtime.NavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import kotlinx.serialization.Serializable
 
+/*
 @Serializable
 data class TopicRoute(val id: String) : NiaNavKey {
     override val isTopLevel: Boolean
@@ -31,3 +33,7 @@ fun NiaNavigator.navigateToTopic(
 ) {
     navigate(TopicRoute(topicId))
 }
+*/
+
+@Serializable
+data class TopicRoute(val id: String) : NavKey

@@ -39,10 +39,11 @@ import javax.inject.Inject
  *  https://github.com/android/nav3-recipes/blob/main/app/src/main/java/com/example/nav3recipes/multiplestacks/NavigationState.kt#L71
  *
  */
+/*
 @HiltViewModel
 class NiaBackStackViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val navigationState: NavigationState,
+    val niaNavigationState: NiaNavigationState,
     serializersModules: SerializersModule,
 ) : ViewModel() {
 
@@ -71,7 +72,7 @@ class NiaBackStackViewModel @Inject constructor(
         if (backStackMap.isNotEmpty()) {
             // Restore backstack from saved state handle if not empty
             @Suppress("UNCHECKED_CAST")
-            navigationState.restore(
+            niaNavigationState.restore(
                 activeTopLeveLKeys,
                 backStackMap as LinkedHashMap<NiaNavKey, SnapshotStateList<NiaNavKey>>,
             )
@@ -80,9 +81,10 @@ class NiaBackStackViewModel @Inject constructor(
         // Start observing changes to the backStack and save backStack whenever it updates
         viewModelScope.launch {
             snapshotFlow {
-                activeTopLeveLKeys = navigationState.activeTopLeveLKeys.toList()
-                backStackMap = navigationState.backStacks
+                activeTopLeveLKeys = niaNavigationState.activeTopLeveLKeys.toList()
+                backStackMap = niaNavigationState.backStacks
             }.collect()
         }
     }
 }
+*/

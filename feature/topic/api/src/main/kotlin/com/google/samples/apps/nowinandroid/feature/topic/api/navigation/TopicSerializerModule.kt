@@ -28,7 +28,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
  * Provides the DSL to register the route's [kotlinx.serialization.KSerializer] as a polymorphic serializer
  *
  */
-@Module
+/*@Module
 @InstallIn(SingletonComponent::class)
 object TopicSerializerModule {
     @Provides
@@ -36,4 +36,4 @@ object TopicSerializerModule {
     fun provideTopicPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(TopicRoute::class, TopicRoute.serializer())
     }
-}
+}*/

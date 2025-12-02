@@ -29,6 +29,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
  * Provides the DSL to register the route's [kotlinx.serialization.KSerializer] as a polymorphic serializer
  *
  */
+/*
 @Module
 @InstallIn(SingletonComponent::class)
 object ForYouRouteSerializerModule {
@@ -38,3 +39,4 @@ object ForYouRouteSerializerModule {
         subclass(ForYouRoute::class, ForYouRoute.serializer())
     }
 }
+*/

@@ -29,7 +29,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
  * Provides the DSL to register the route's [kotlinx.serialization.KSerializer] as a polymorphic serializer
  *
  */
-@Module
+/*@Module
 @InstallIn(SingletonComponent::class)
 object SearchSerializerModule {
     @Provides
@@ -37,4 +37,4 @@ object SearchSerializerModule {
     fun provideSearchPolymorphicModuleBuilder(): PolymorphicModuleBuilder<@JvmSuppressWildcards NiaNavKey>.() -> Unit = {
         subclass(SearchRoute::class, SearchRoute.serializer())
     }
-}
+}*/

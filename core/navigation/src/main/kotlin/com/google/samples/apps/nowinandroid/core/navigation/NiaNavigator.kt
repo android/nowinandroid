@@ -35,7 +35,7 @@ import javax.inject.Inject
 import kotlin.collections.plus
 
 // TODO: Consider changing this to `NiaNavigationState`
-class NavigationState(
+class NiaNavigationState(
     internal val startKey: NiaNavKey,
 ) {
     internal var backStacks: MutableMap<NiaNavKey, SnapshotStateList<NiaNavKey>> =
@@ -81,14 +81,14 @@ class NavigationState(
  * TODO: Document this
  */
 class NiaNavigator @Inject constructor(
-    val navigationState: NavigationState,
+    val niaNavigationState: NiaNavigationState,
 ) {
     // TODO: I wonder if it'd be simpler to have separate methods
     //  for navigating to a graph and navigating to a key. If the key is on a separate graph then
     //  navigate to that graph first.
     fun navigate(key: NiaNavKey) {
         val currentActiveSubStacks = linkedSetOf<NiaNavKey>()
-        navigationState.apply {
+        niaNavigationState.apply {
             currentActiveSubStacks.addAll(activeTopLeveLKeys)
             when {
                 // top level singleTop -> clear substack
@@ -126,7 +126,7 @@ class NiaNavigator @Inject constructor(
     }
 
     fun pop() {
-        navigationState.apply {
+        niaNavigationState.apply {
             val currentSubstack = backStacks[currentTopLevelKey]!!
             if (currentSubstack.size == 1) {
                 // if current sub-stack only has one key, remove the sub-stack from the map
@@ -149,7 +149,7 @@ interface NiaNavKey {
  * Convert the navigation state to `NavEntry`s that can be displayed by a `NavDisplay`
  */
 @Composable
-fun NavigationState.toEntries(
+fun NiaNavigationState.toEntries(
     // TODO: Might be better to pass this in fully constructed
     entryProviderBuilders: Set<EntryProviderScope<NiaNavKey>.() -> Unit>,
 ): List<NavEntry<NiaNavKey>> =

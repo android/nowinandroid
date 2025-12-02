@@ -25,6 +25,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouRoute
+import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_ROUTES
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect
@@ -100,10 +101,10 @@ class NiaAppStateTest {
             )
         }
 
-        assertEquals(3, state.topLevelDestinations.size)
-        assertTrue(state.topLevelDestinations[0].name.contains("for_you", true))
-        assertTrue(state.topLevelDestinations[1].name.contains("bookmarks", true))
-        assertTrue(state.topLevelDestinations[2].name.contains("interests", true))
+        assertEquals(3, TOP_LEVEL_ROUTES.size)
+        assertTrue(TOP_LEVEL_ROUTES[0].name.contains("for_you", true))
+        assertTrue(TOP_LEVEL_ROUTES[1].name.contains("bookmarks", true))
+        assertTrue(TOP_LEVEL_ROUTES[2].name.contains("interests", true))
     }
 
     @Test

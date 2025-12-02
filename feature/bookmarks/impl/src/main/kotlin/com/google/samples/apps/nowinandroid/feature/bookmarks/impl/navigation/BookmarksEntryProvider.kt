@@ -21,11 +21,14 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.example.nav3recipes.multiplestacks.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigator
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksRoute
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.BookmarksScreen
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicRoute
+//import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.navigateToTopic
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,21 +42,23 @@ object BookmarksEntryProvider {
     @Provides
     @IntoSet
     fun provideBookmarksEntryProviderBuilder(
-        navigator: NiaNavigator,
-    ): EntryProviderScope<NiaNavKey>.() -> Unit = {
-        entry<BookmarksRoute> {
-            val snackbarHostState = LocalSnackbarHostState.current
-            BookmarksScreen(
-                onTopicClick = navigator::navigateToTopic,
-                onShowSnackbar = { message, action ->
-                    snackbarHostState.showSnackbar(
-                        message = message,
-                        actionLabel = action,
-                        duration = Short,
-                    ) == ActionPerformed
-                },
-            )
-        }
+        navigator: Navigator,
+    ): EntryProviderScope<NavKey>.() -> Unit = { bookmarksEntry(navigator) }
+}
+
+fun EntryProviderScope<NavKey>.bookmarksEntry(navigator: Navigator) {
+    entry<BookmarksRoute> {
+        val snackbarHostState = LocalSnackbarHostState.current
+        BookmarksScreen(
+            onTopicClick = { topicId -> navigator.navigate(TopicRoute(topicId)) },
+            onShowSnackbar = { message, action ->
+                snackbarHostState.showSnackbar(
+                    message = message,
+                    actionLabel = action,
+                    duration = Short,
+                ) == ActionPerformed
+            },
+        )
     }
 }
 

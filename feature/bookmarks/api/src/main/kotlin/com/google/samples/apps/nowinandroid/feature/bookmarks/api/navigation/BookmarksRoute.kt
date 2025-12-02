@@ -16,11 +16,15 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation
 
+import androidx.navigation3.runtime.NavKey
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
 import kotlinx.serialization.Serializable
 
-@Serializable
+/*@Serializable
 object BookmarksRoute : NiaNavKey {
     override val isTopLevel: Boolean
         get() = true
-}
+}*/
+
+@Serializable
+object BookmarksRoute : NavKey

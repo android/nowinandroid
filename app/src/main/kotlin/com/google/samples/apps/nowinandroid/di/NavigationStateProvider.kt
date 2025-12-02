@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.di
 
 import com.google.samples.apps.nowinandroid.core.navigation.NiaNavKey
-import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
+import com.google.samples.apps.nowinandroid.core.navigation.NiaNavigationState
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
 import dagger.Module
 import dagger.Provides
@@ -30,14 +30,19 @@ import javax.inject.Singleton
 
 // TODO: Rename to `NiaNavigationStateProvider`
 //  Does this even need to be injected? Can't we just instantiate it directly using `rememberNavigationState`?
+/*
 @Module
 @InstallIn(SingletonComponent::class)
 object NavigationStateProvider {
     @Provides
     @Singleton
-    fun provideNavigationState(): NavigationState =
-        NavigationState(
-            startKey = TopLevelDestination.FOR_YOU.key,
+    fun provideNavigationState(): NiaNavigationState =
+        NiaNavigationState(
+            //startKey = TopLevelDestination.FOR_YOU.key,
+            startKey = object : NiaNavKey {
+                override val isTopLevel: Boolean
+                    get() = true
+            }
         )
 
 // TODO: Remove commented out code
@@ -49,11 +54,13 @@ object NavigationStateProvider {
 //    ): NiaNavigator =
 //        NiaNavigator(state)
 
-    /**
+    */
+/**
      * Registers feature modules' polymorphic serializers to support
      * feature keys' save and restore by savedstate
      * in [com.google.samples.apps.nowinandroid.core.navigation.NiaBackStackViewModel].
-     */
+     *//*
+
     @Provides
     @Singleton
     fun provideSerializersModule(
@@ -64,3 +71,4 @@ object NavigationStateProvider {
         }
     }
 }
+*/
