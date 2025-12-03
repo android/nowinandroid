@@ -2,9 +2,11 @@
 
 In this learning journey you will learn about the modularization strategy used
 to create modules in the Now in Android app. For the theory behind modularization, check out
-[the official guidance](https://developer.android.com/topic/modularization)
+[the official guidance](https://developer.android.com/topic/modularization).
 
-## Types of modules in Now in Android
+**IMPORTANT:** Every module has a dependency graph in its README ([example for the app module](https://github.com/android/nowinandroid/tree/main/app)) which can be useful for understanding the overall structure of the project.
+
+## Module types
 
 ```mermaid
 graph TB
@@ -85,7 +87,7 @@ These are common library modules containing auxiliary code and specific dependen
 ### Miscellaneous modules
 For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog` - a catalog app for displaying our design system quickly.
 
-## Module examples
+## Examples
 
 <table>
   <tr>
@@ -216,11 +218,12 @@ For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog
   </tr>
 </table>
 
+## Dependency graphs
 Each module has its own `README.md` file containing a module graph (e.g. [`:app` module graph](../app/README.md#module-dependency-graph)).  
 When modules dependencies change, module graphs are automatically updated by the [Build.yaml](../.github/workflows/Build.yaml) workflow.  
 You can also manually update the graphs by running the `graphUpdate` task.
 
-## Modularization in Now in Android
+## Further considerations
 
 Our modularization approach was defined taking into account the “Now in Android” project roadmap, upcoming work and new features. Additionally, our aim this time around was to find the right balance between overmodularizing a relatively small app and using this opportunity to showcase a modularization pattern fit for a much larger codebase, closer to real world apps in production environments.
 
