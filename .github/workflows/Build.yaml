@@ -77,6 +77,7 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
+# See https://github.com/android/nowinandroid/issues/2005
 #      - name: Update Graphs
 #        run: ./gradlew graphUpdate
 #
