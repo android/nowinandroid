@@ -113,8 +113,8 @@ Using the above modularization strategy, the Now in Android app has the followin
    ...
    </td>
    <td>Navigation keys and functions that other features can use to navigate to this feature.<br>
-   For example: The `:topic:api` module exposes a `Navigator.navigateToTopic` function that the
-   `:interests:impl` module uses to navigate from the `InterestsScreen` to the `TopicScreen` when
+   For example: The <code>:topic:api</code> module exposes a <code>Navigator.navigateToTopic</code> function that the
+   <code>:interests:impl</code> module uses to navigate from the <code>InterestsScreen</code> to the <code>TopicScreen</code> when
    a topic is clicked. 
    </td>
    <td><code>TopicScreen</code><br>
