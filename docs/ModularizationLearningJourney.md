@@ -119,8 +119,8 @@ For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog
    </td>
   </tr>
   <tr>
-   <td><code>feature:1:impl,</code><br>
-   <code>feature:2:impl</code><br>
+   <td><code>feature1:impl,</code><br>
+   <code>feature2:impl</code><br>
    ...
    </td>
    <td>Functionality associated with a specific feature or user journey. Typically contains UI components and ViewModels which read data from other modules.<br>
