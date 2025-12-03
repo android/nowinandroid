@@ -32,7 +32,7 @@ class Navigator(val state: NavigationState) {
      */
     fun navigate(key: NavKey) {
         when (key) {
-            state.currentTopLevelKey -> goUp()
+            state.currentTopLevelKey -> clearSubStack()
             in state.topLevelKeys -> goToTopLevel(key)
             else -> goToKey(key)
         }
@@ -81,9 +81,9 @@ class Navigator(val state: NavigationState) {
     }
 
     /**
-     * Go up in the current sub stack by clearing all but the root key.
+     * Clearing all but the root key in the current sub stack.
      */
-    private fun goUp() {
+    private fun clearSubStack() {
         state.currentSubStack.run {
             if (size > 1) subList(1, size).clear()
         }
