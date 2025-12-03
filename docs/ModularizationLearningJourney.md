@@ -85,9 +85,7 @@ These are common library modules containing auxiliary code and specific dependen
 ### Miscellaneous modules
 For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog` - a catalog app for displaying our design system quickly.
 
-## Modules
-
-Using the above modularization strategy, the Now in Android app has the following modules:
+## Module examples
 
 <table>
   <tr>
@@ -117,8 +115,7 @@ Using the above modularization strategy, the Now in Android app has the followin
    <code>:interests:impl</code> module uses to navigate from the <code>InterestsScreen</code> to the <code>TopicScreen</code> when
    a topic is clicked. 
    </td>
-   <td><code>TopicScreen</code><br>
-   <code>TopicViewModel</code>
+   <td><code>TopicNavKey</code>
    </td>
   </tr>
   <tr>
