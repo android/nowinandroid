@@ -108,8 +108,22 @@ Using the above modularization strategy, the Now in Android app has the followin
    </td>
   </tr>
   <tr>
-   <td><code>feature:1,</code><br>
-   <code>feature:2</code><br>
+   <td><code>feature1:api,</code><br>
+   <code>feature2:api</code><br>
+   ...
+   </td>
+   <td>Navigation keys and functions that other features can use to navigate to this feature.<br>
+   For example: The `:topic:api` module exposes a `Navigator.navigateToTopic` function that the
+   `:interests:impl` module uses to navigate from the `InterestsScreen` to the `TopicScreen` when
+   a topic is clicked. 
+   </td>
+   <td><code>TopicScreen</code><br>
+   <code>TopicViewModel</code>
+   </td>
+  </tr>
+  <tr>
+   <td><code>feature:1:impl,</code><br>
+   <code>feature:2:impl</code><br>
    ...
    </td>
    <td>Functionality associated with a specific feature or user journey. Typically contains UI components and ViewModels which read data from other modules.<br>
