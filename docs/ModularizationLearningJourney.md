@@ -77,7 +77,7 @@ This approach allows features to navigate to other features by using the target 
 
 A feature's `api` module should not depend on another feature's `api` or `impl` module. A feature's `impl` should only depend on another featur's `api` module. Both submodules should only depend on the `core` modules that they require. 
 
-### `core:` modules 
+### Core modules 
 These are common library modules containing auxiliary code and specific dependencies that
   need to be shared between other modules in the app. These modules can depend on other core
   modules, but they shouldn’t depend on feature nor app modules.
