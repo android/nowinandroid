@@ -108,11 +108,11 @@ For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog
    </td>
   </tr>
   <tr>
-   <td><code>feature1:api,</code><br>
-   <code>feature2:api</code><br>
+   <td><code>feature:1:api,</code><br>
+   <code>feature:2:api</code><br>
    ...
    </td>
-   <td>Navigation keys and functions that other features can use to navigate to this feature.<br>
+   <td>Navigation keys and functions that other features can use to navigate to this feature.<br><br>
    For example: The <code>:topic:api</code> module exposes a <code>Navigator.navigateToTopic</code> function that the
    <code>:interests:impl</code> module uses to navigate from the <code>InterestsScreen</code> to the <code>TopicScreen</code> when
    a topic is clicked. 
@@ -121,15 +121,15 @@ For example, `sync`, `benchmark` and `test` modules, as well as `app-nia-catalog
    </td>
   </tr>
   <tr>
-   <td><code>feature1:impl,</code><br>
-   <code>feature2:impl</code><br>
+   <td><code>feature:1:impl,</code><br>
+   <code>feature:2:impl</code><br>
    ...
    </td>
    <td>Functionality associated with a specific feature or user journey. Typically contains UI components and ViewModels which read data from other modules.<br>
    Examples include:<br>
    <ul>
-      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/topic"><code>feature:topic</code></a> displays information about a topic on the TopicScreen.</li>
-      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/foryou"><code>feature:foryou</code></a> which displays the user's news feed, and onboarding during first run, on the For You screen.</li>
+      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/topic/impl"><code>feature:topic:impl</code></a> displays information about a topic on the TopicScreen.</li>
+      <li><a href="https://github.com/android/nowinandroid/tree/main/feature/foryou/impl"><code>feature:foryou:impl</code></a> which displays the user's news feed, and onboarding during first run, on the For You screen.</li>
       </ul>
    </td>
    <td><code>TopicScreen</code><br>
