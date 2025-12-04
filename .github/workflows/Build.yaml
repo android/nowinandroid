@@ -77,28 +77,28 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
-# See https://github.com/android/nowinandroid/issues/2005
-#      - name: Update Graphs
-#        run: ./gradlew graphUpdate
-#
-#      - name: Check Graphs
-#        id: graphs_verify
-#        run: git add -- "**/README.md" && git diff --cached --quiet --exit-code -- "**/README.md"
-#
-#      - name: Prevent updating graphs if this is a fork
-#        id: checkfork_graphs
-#        continue-on-error: false
-#        if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
-#        run: |
-#          echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
-#
-#      - name: Push new graphs if available
-#        if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
-#        uses: stefanzweifel/git-auto-commit-action@v5
-#        with:
-#          file_pattern: '**/README.md'
-#          disable_globbing: true
-#          commit_message: "🤖 Updates graphs"
+      - name: Update Graphs
+        run: ./gradlew graphUpdate
+        continue-on-error: true
+
+      - name: Check Graphs
+        id: graphs_verify
+        run: git add -- "**/README.md" && git diff --cached --quiet --exit-code -- "**/README.md"
+
+      - name: Prevent updating graphs if this is a fork
+        id: checkfork_graphs
+        continue-on-error: false
+        if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
+
+      - name: Push new graphs if available
+        if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: '**/README.md'
+          disable_globbing: true
+          commit_message: "🤖 Updates graphs"
 
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
