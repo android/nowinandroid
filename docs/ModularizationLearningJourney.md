@@ -70,14 +70,14 @@ This contains app level and scaffolding classes that bind the rest of the codeba
 `MainActivity`, `NiaApp` and app-level controlled navigation. A good example of this is the navigation setup through `NiaNavHost` and the bottom navigation bar setup through `TopLevelDestination`. The `app` module depends on all `feature` modules and required `core` modules.
 
 ### Feature modules 
-These are feature-specific modules that handle a single responsibility in the app. For example, the `ForYou` feature handles all content and UI state for the "ForYou" screen. Feature modules aren't gradle modules themselves, they are split into two submodules: 
+These are feature-specific modules that handle a single responsibility in the app. For example, the `ForYou` feature handles all content and UI state for the "ForYou" screen. Feature modules aren't Gradle modules themselves, they are split into two submodules: 
 
 * `api` - contains navigation keys
 * `impl` - contains everything else
 
 This approach allows features to navigate to other features by using the target feature's navigation keys. A feature's `api` and `impl` modules can be used by any app, including test or other flavoured apps. If a class is needed only by one feature module, it should remain within that module. If not, it should be placed into an appropriate `core` module. 
 
-A feature's `api` module should not depend on another feature's `api` or `impl` module. A feature's `impl` should only depend on another featur's `api` module. Both submodules should only depend on the `core` modules that they require. 
+A feature's `api` module should not depend on another feature's `api` or `impl` module. A feature's `impl` should only depend on another feature's `api` module. Both submodules should only depend on the `core` modules that they require. 
 
 ### Core modules 
 These are common library modules containing auxiliary code and specific dependencies that
