@@ -23,14 +23,12 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.google.common.truth.Truth.assertWithMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -74,12 +72,6 @@ abstract class GenerateBadgingTask : DefaultTask() {
 
 @CacheableTask
 abstract class CheckBadgingTask : DefaultTask() {
-
-    // In order for the task to be up-to-date when the inputs have not changed,
-    // the task must declare an output, even if it's not used. Tasks with no
-    // output are always run regardless of whether the inputs changed
-    @get:OutputDirectory
-    abstract val output: DirectoryProperty
 
     @get:PathSensitive(PathSensitivity.NONE)
     @get:InputFile
@@ -130,7 +122,7 @@ fun Project.configureBadgingTasks(
                                 "${baseExtension.buildToolsVersion}/" +
                                 SdkConstants.FN_AAPT2,
                         )
-                    }
+                    },
                 )
                 badging = project.layout.buildDirectory.file(
                     "outputs/apk_from_bundle/${variant.name}/${variant.name}-badging.txt",
@@ -152,7 +144,7 @@ fun Project.configureBadgingTasks(
 
             this.updateBadgingTaskName = updateBadgingTaskName
 
-            output = project.layout.buildDirectory.dir("intermediates/$checkBadgingTaskName")
+            outputs.upToDateWhen { true }
 
         }
     }
