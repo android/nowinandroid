@@ -79,6 +79,7 @@ jobs:
 
       - name: Update Graphs
         run: ./gradlew graphUpdate
+        continue-on-error: true
 
       - name: Check Graphs
         id: graphs_verify
