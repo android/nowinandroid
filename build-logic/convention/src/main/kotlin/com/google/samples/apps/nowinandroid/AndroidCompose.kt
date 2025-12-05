@@ -19,7 +19,6 @@ package com.google.samples.apps.nowinandroid
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
@@ -42,13 +41,6 @@ internal fun Project.configureAndroidCompose(
             "implementation"(libs.findLibrary("androidx-compose-ui-tooling-preview").get())
             "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
         }
-
-        testOptions {
-            unitTests {
-                // For Robolectric
-                isIncludeAndroidResources = true
-            }
-        }
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
@@ -67,7 +59,7 @@ internal fun Project.configureAndroidCompose(
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
 
-        stabilityConfigurationFile =
-            isolated.rootProject.projectDirectory.file("compose_compiler_config.conf")
+        stabilityConfigurationFiles
+            .add(isolated.rootProject.projectDirectory.file("compose_compiler_config.conf"))
     }
 }

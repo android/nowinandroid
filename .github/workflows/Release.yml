@@ -1,12 +1,14 @@
 name: GitHub Release with APKs
 
 on:
+  workflow_dispatch:
   push:
     tags:
     - 'v*'
 
 jobs:
   build:
+    if: github.repository == 'android/nowinandroid'
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
@@ -33,6 +35,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -72,4 +79,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: app/build/outputs/apk/demo/release/app-demo-release.apk
           asset_name: app-demo-release.apk
-          asset_content_type: application/vnd.android.package-archive          
+          asset_content_type: application/vnd.android.package-archive

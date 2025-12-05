@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -31,15 +33,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,9 +61,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -69,11 +72,19 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
-import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
-import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
-import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
-import kotlin.reflect.KClass
-import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
+import com.google.samples.apps.nowinandroid.core.navigation.toEntries
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
+import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
+import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
+import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
+import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
+import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
+import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
+import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
 
 @Composable
 fun NiaApp(
@@ -81,8 +92,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground =
-        appState.currentTopLevelDestination == TopLevelDestination.FOR_YOU
+    val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -107,15 +117,17 @@ fun NiaApp(
                     )
                 }
             }
+            CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+                NiaApp(
+                    appState = appState,
 
-            NiaApp(
-                appState = appState,
-                snackbarHostState = snackbarHostState,
-                showSettingsDialog = showSettingsDialog,
-                onSettingsDismissed = { showSettingsDialog = false },
-                onTopAppBarActionClick = { showSettingsDialog = true },
-                windowAdaptiveInfo = windowAdaptiveInfo,
-            )
+                    // TODO: Settings should be a dialog screen
+                    showSettingsDialog = showSettingsDialog,
+                    onSettingsDismissed = { showSettingsDialog = false },
+                    onTopAppBarActionClick = { showSettingsDialog = true },
+                    windowAdaptiveInfo = windowAdaptiveInfo,
+                )
+            }
         }
     }
 }
@@ -124,19 +136,18 @@ fun NiaApp(
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
 )
 internal fun NiaApp(
     appState: NiaAppState,
-    snackbarHostState: SnackbarHostState,
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val unreadDestinations by appState.topLevelDestinationsWithUnreadResources
+    val unreadNavKeys by appState.topLevelNavKeysWithUnreadResources
         .collectAsStateWithLifecycle()
-    val currentDestination = appState.currentDestination
 
     if (showSettingsDialog) {
         SettingsDialog(
@@ -144,30 +155,32 @@ internal fun NiaApp(
         )
     }
 
+    val snackbarHostState = LocalSnackbarHostState.current
+
+    val navigator = remember { Navigator(appState.navigationState) }
+
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
-            appState.topLevelDestinations.forEach { destination ->
-                val hasUnread = unreadDestinations.contains(destination)
-                val selected = currentDestination
-                    .isRouteInHierarchy(destination.baseRoute)
+            TOP_LEVEL_NAV_ITEMS.forEach { (navKey, navItem) ->
+                val hasUnread = unreadNavKeys.contains(navKey)
+                val selected = navKey == appState.navigationState.currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    onClick = { navigator.navigate(navKey) },
                     icon = {
                         Icon(
-                            imageVector = destination.unselectedIcon,
+                            imageVector = navItem.unselectedIcon,
                             contentDescription = null,
                         )
                     },
                     selectedIcon = {
                         Icon(
-                            imageVector = destination.selectedIcon,
+                            imageVector = navItem.selectedIcon,
                             contentDescription = null,
                         )
                     },
-                    label = { Text(stringResource(destination.iconTextId)) },
-                    modifier =
-                    Modifier
+                    label = { Text(stringResource(navItem.iconTextId)) },
+                    modifier = Modifier
                         .testTag("NiaNavItem")
                         .then(if (hasUnread) Modifier.notificationDot() else Modifier),
                 )
@@ -182,7 +195,16 @@ internal fun NiaApp(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = {
+                SnackbarHost(
+                    snackbarHostState,
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.exclude(
+                            WindowInsets.ime,
+                        ),
+                    ),
+                )
+            },
         ) { padding ->
             Column(
                 Modifier
@@ -195,27 +217,30 @@ internal fun NiaApp(
                         ),
                     ),
             ) {
-                // Show the top app bar on top level destinations.
-                val destination = appState.currentTopLevelDestination
+                // Only show the top app bar on top level destinations.
                 var shouldShowTopAppBar = false
 
-                if (destination != null) {
+                if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
                     shouldShowTopAppBar = true
+
+                    val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
+                        ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
+
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = NiaIcons.Search,
                         navigationIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_navigation_icon_description,
+                            id = settingsR.string.feature_settings_impl_top_app_bar_navigation_icon_description,
                         ),
                         actionIcon = NiaIcons.Settings,
                         actionIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_top_app_bar_action_icon_description,
+                            id = settingsR.string.feature_settings_impl_top_app_bar_action_icon_description,
                         ),
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { appState.navigateToSearch() },
+                        onNavigationClick = { navigator.navigate(SearchNavKey) },
                     )
                 }
 
@@ -229,15 +254,20 @@ internal fun NiaApp(
                         },
                     ),
                 ) {
-                    NiaNavHost(
-                        appState = appState,
-                        onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        },
+                    val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
+
+                    val entryProvider = entryProvider {
+                        forYouEntry(navigator)
+                        bookmarksEntry(navigator)
+                        interestsEntry(navigator)
+                        topicEntry(navigator)
+                        searchEntry(navigator)
+                    }
+
+                    NavDisplay(
+                        entries = appState.navigationState.toEntries(entryProvider),
+                        sceneStrategy = listDetailStrategy,
+                        onBack = { navigator.goBack() },
                     )
                 }
 
@@ -266,8 +296,3 @@ private fun Modifier.notificationDot(): Modifier =
             )
         }
     }
-
-private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
-    this?.hierarchy?.any {
-        it.hasRoute(route)
-    } ?: false
