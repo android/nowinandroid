@@ -79,10 +79,11 @@ jobs:
 
       - name: Update Graphs
         run: ./gradlew graphUpdate
+        continue-on-error: true
 
       - name: Check Graphs
         id: graphs_verify
-        run: git add -- '**/README.md' && git diff --cached --quiet --exit-code -- '**/README.md'
+        run: git add -- "**/README.md" && git diff --cached --quiet --exit-code -- "**/README.md"
 
       - name: Prevent updating graphs if this is a fork
         id: checkfork_graphs
