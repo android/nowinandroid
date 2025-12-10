@@ -36,6 +36,7 @@ internal fun configureGradleManagedDevices(
 
 
     commonExtension.testOptions.apply {
+        @Suppress("UnstableApiUsage")
         managedDevices {
             allDevices {
                 allDevices.forEach { deviceConfig ->
