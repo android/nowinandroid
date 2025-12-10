@@ -20,21 +20,19 @@ import com.google.samples.apps.nowinandroid.configureJacoco
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.the
 
 class AndroidApplicationJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "jacoco")
 
-            val androidExtension = extensions.getByType<ApplicationExtension>()
-
-            androidExtension.buildTypes.configureEach {
+            the<ApplicationExtension>().buildTypes.configureEach {
                 enableAndroidTestCoverage = true
                 enableUnitTestCoverage = true
             }
 
-            configureJacoco(extensions.getByType<ApplicationAndroidComponentsExtension>())
+            configureJacoco(the<ApplicationAndroidComponentsExtension>())
         }
     }
 }
