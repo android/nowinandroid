@@ -21,20 +21,16 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.testing.jacoco.plugins.JacocoPlugin
 
 class AndroidLibraryJacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "jacoco")
-
-            val androidExtension = extensions.getByType<LibraryExtension>()
-
-            androidExtension.buildTypes.configureEach {
-                enableAndroidTestCoverage = true
-                enableUnitTestCoverage = true
-            }
-
-            configureJacoco(extensions.getByType<LibraryAndroidComponentsExtension>())
+            apply<JacocoPlugin>()
+            configureJacoco(
+                commonExtension = extensions.getByType<LibraryExtension>(),
+                androidComponentsExtension = extensions.getByType<LibraryAndroidComponentsExtension>(),
+            )
         }
     }
 }
