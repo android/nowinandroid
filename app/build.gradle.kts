@@ -65,6 +65,10 @@ android {
     }
     testOptions.unitTests.isIncludeAndroidResources = true
     namespace = "com.google.samples.apps.nowinandroid"
+
+    lint {
+        warningsAsErrors = System.getProperty("android.lintWarningsAsErrors")?.toBoolean() ?: false
+    }
 }
 
 dependencies {
