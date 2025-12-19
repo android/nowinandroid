@@ -20,11 +20,17 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
+import androidx.datastore.core.DataStore
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import com.google.samples.apps.nowinandroid.core.datastore.UserPreferences
+import com.google.samples.apps.nowinandroid.core.network.di.ApplicationScope
 import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
+import com.google.samples.apps.nowinandroid.util.initializeNightModeFromPreferences
+import com.google.samples.apps.nowinandroid.util.observeNightModePreferences
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /**
@@ -36,10 +42,22 @@ class NiaApplication : Application(), ImageLoaderFactory {
     lateinit var imageLoader: dagger.Lazy<ImageLoader>
 
     @Inject
+    lateinit var userPrefsDataStore: DataStore<UserPreferences>
+
+    @Inject
     lateinit var profileVerifierLogger: ProfileVerifierLogger
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()
+
+        // Initialize dark mode from user prefs
+        initializeNightModeFromPreferences(userPrefsDataStore)
+
+        observeNightModePreferences(userPrefsDataStore, applicationScope)
 
         setStrictModePolicy()
 
