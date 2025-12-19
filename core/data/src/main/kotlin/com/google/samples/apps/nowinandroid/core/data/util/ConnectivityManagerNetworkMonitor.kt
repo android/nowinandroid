@@ -25,8 +25,8 @@ import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
 import androidx.core.content.getSystemService
 import androidx.tracing.trace
-import com.google.samples.apps.nowinandroid.core.network.Dispatcher
-import com.google.samples.apps.nowinandroid.core.network.NiaDispatchers.IO
+import com.google.samples.apps.nowinandroid.core.coroutine.Dispatcher
+import com.google.samples.apps.nowinandroid.core.coroutine.NiaDispatchers.IO
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
