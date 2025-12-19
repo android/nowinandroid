@@ -22,6 +22,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.work.Constraints
 import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
@@ -60,10 +61,7 @@ private fun Context.syncWorkNotification(): Notification {
             description = getString(R.string.sync_work_notification_channel_description)
         }
         // Register the channel with the system
-        val notificationManager: NotificationManager? =
-            getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-
-        notificationManager?.createNotificationChannel(channel)
+        getSystemService<NotificationManager>()?.createNotificationChannel(channel)
     }
 
     return NotificationCompat.Builder(
