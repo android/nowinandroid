@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -64,6 +65,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.appodeal.ads.Appodeal
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
@@ -159,6 +161,8 @@ internal fun NiaApp(
 
     val navigator = remember { Navigator(appState.navigationState) }
 
+    val activity = LocalActivity.current
+
     NiaNavigationSuiteScaffold(
         navigationSuiteItems = {
             TOP_LEVEL_NAV_ITEMS.forEach { (navKey, navItem) ->
@@ -166,7 +170,12 @@ internal fun NiaApp(
                 val selected = navKey == appState.navigationState.currentTopLevelKey
                 item(
                     selected = selected,
-                    onClick = { navigator.navigate(navKey) },
+                    onClick = {
+                        if (Appodeal.isLoaded(Appodeal.INTERSTITIAL) && activity != null) {
+                            Appodeal.show(activity, Appodeal.INTERSTITIAL)
+                        }
+                        navigator.navigate(navKey)
+                    },
                     icon = {
                         Icon(
                             imageVector = navItem.unselectedIcon,
@@ -226,22 +235,25 @@ internal fun NiaApp(
                     val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
                         ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
 
-                    NiaTopAppBar(
-                        titleRes = destination.titleTextId,
-                        navigationIcon = NiaIcons.Search,
-                        navigationIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_impl_top_app_bar_navigation_icon_description,
-                        ),
-                        actionIcon = NiaIcons.Settings,
-                        actionIconContentDescription = stringResource(
-                            id = settingsR.string.feature_settings_impl_top_app_bar_action_icon_description,
-                        ),
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = Color.Transparent,
-                        ),
-                        onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { navigator.navigate(SearchNavKey) },
-                    )
+                    Column {
+                        NiaTopAppBar(
+                            titleRes = destination.titleTextId,
+                            navigationIcon = NiaIcons.Search,
+                            navigationIconContentDescription = stringResource(
+                                id = settingsR.string.feature_settings_impl_top_app_bar_navigation_icon_description,
+                            ),
+                            actionIcon = NiaIcons.Settings,
+                            actionIconContentDescription = stringResource(
+                                id = settingsR.string.feature_settings_impl_top_app_bar_action_icon_description,
+                            ),
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = Color.Transparent,
+                            ),
+                            onActionClick = { onTopAppBarActionClick() },
+                            onNavigationClick = { navigator.navigate(SearchNavKey) },
+                        )
+                        AppodealBanner()
+                    }
                 }
 
                 Box(

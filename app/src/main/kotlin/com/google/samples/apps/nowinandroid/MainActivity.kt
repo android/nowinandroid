@@ -33,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
+import com.appodeal.ads.Appodeal
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
@@ -74,6 +75,7 @@ class MainActivity : ComponentActivity() {
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
     private val viewModel: MainActivityViewModel by viewModels()
+    private val appodealViewModel: AppodealViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -154,6 +156,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        Appodeal.setTesting(true)
+        Appodeal.initialize(
+            context = this,
+            appKey = BuildConfig.APPODEAL_API_KEY,
+            adTypes = Appodeal.BANNER or Appodeal.INTERSTITIAL,
+            callback = {
+                appodealViewModel.onAppodealInitialized()
+            }
+        )
     }
 
     override fun onResume() {

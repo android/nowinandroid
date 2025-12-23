@@ -30,6 +30,9 @@ plugins {
 
 android {
     defaultConfig {
+        android.buildFeatures.buildConfig = true
+        buildConfigField("String", "APPODEAL_API_KEY", "\"508ebfa89abf7118b301e75354c71aea689e88ce2ae56289\"")
+
         applicationId = "com.google.samples.apps.nowinandroid"
         versionCode = 8
         versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
@@ -68,6 +71,16 @@ android {
 }
 
 dependencies {
+    implementation("com.appodeal.ads:sdk:3.12.0.0") {
+        exclude(group = "com.appodeal.ads.sdk.services", module = "adjust")
+        exclude(group = "com.appodeal.ads.sdk.services", module = "appsflyer")
+        exclude(group = "com.appodeal.ads.sdk.services", module = "facebook_analytics")
+        exclude(group = "com.appodeal.ads.sdk.services", module = "firebase")
+        exclude(group = "com.applovin.mediation", module = "unityads-adapter")
+        exclude(group = "com.appodeal.ads.sdk.networks", module = "unity_ads")
+        exclude(group = "com.unity3d.ads-mediation", module = "unityads-adapter")
+        exclude(group = "org.bidon", module = "unityads-adapter")
+    }
     implementation(projects.feature.interests.api)
     implementation(projects.feature.interests.impl)
     implementation(projects.feature.foryou.api)

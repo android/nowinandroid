@@ -40,6 +40,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven { url = uri("https://artifactory.appodeal.com/appodeal") }
     }
 }
 rootProject.name = "nowinandroid"
