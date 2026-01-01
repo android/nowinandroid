@@ -28,8 +28,6 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface NewsResourceFtsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(newsResource: NewsResourceFtsEntity)
