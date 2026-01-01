@@ -20,7 +20,6 @@ import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceDao
 import com.google.samples.apps.nowinandroid.core.database.dao.NewsResourceFtsDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicDao
 import com.google.samples.apps.nowinandroid.core.database.dao.TopicFtsDao
-import com.google.samples.apps.nowinandroid.core.database.model.PopulatedNewsResource
 import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import com.google.samples.apps.nowinandroid.core.database.model.asFtsEntity
 import com.google.samples.apps.nowinandroid.core.model.data.SearchResult
@@ -46,14 +45,36 @@ internal class DefaultSearchContentsRepository @Inject constructor(
 
     override suspend fun populateFtsData() {
         withContext(ioDispatcher) {
-            newsResourceFtsDao.insertAll(
-                newsResourceDao.getNewsResources(
-                    useFilterTopicIds = false,
-                    useFilterNewsIds = false,
-                )
-                    .first()
-                    .map(PopulatedNewsResource::asFtsEntity),
+            newsResourceDao.getNewsResources(
+                useFilterTopicIds = false,
+                useFilterNewsIds = false,
             )
+                .first()
+                .forEach { populatedNewsResource ->
+                    val oldNewsResourceFtsEntities =
+                        newsResourceFtsDao.getFtsEntitiesById(populatedNewsResource.entity.id)
+                    val size = oldNewsResourceFtsEntities.size
+
+                    val newsResourceFtsEntity = populatedNewsResource.asFtsEntity()
+
+                    if (size == 0) {
+                        newsResourceFtsDao.insert(newsResourceFtsEntity)
+                        return@forEach
+                    }
+
+                    // Do it for migration, multiple same id entity exists in the fts database.
+                    if (size > 1) {
+                        newsResourceFtsDao.deleteById(newsResourceFtsEntity.newsResourceId)
+                        newsResourceFtsDao.insert(newsResourceFtsEntity)
+                        return@forEach
+                    }
+
+                    newsResourceFtsDao.update(
+                        title = newsResourceFtsEntity.title,
+                        content = newsResourceFtsEntity.content,
+                        newsResourceId = newsResourceFtsEntity.newsResourceId,
+                    )
+                }
 
 
             topicDao.getOneOffTopicEntities().forEach { topicEntity ->
@@ -65,6 +86,7 @@ internal class DefaultSearchContentsRepository @Inject constructor(
                     return@forEach
                 }
 
+                // Do it for migration, multiple same id entity exists in the fts database.
                 if (size > 1) {
                     topicFtsDao.deleteById(topicEntity.id)
                     topicFtsDao.insert(topicEntity.asFtsEntity())
