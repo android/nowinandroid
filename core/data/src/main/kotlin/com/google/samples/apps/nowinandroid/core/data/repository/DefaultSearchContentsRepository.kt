@@ -69,6 +69,10 @@ internal class DefaultSearchContentsRepository @Inject constructor(
                         return@forEach
                     }
 
+                    if (oldNewsResourceFtsEntities.firstOrNull() == newsResourceFtsEntity) {
+                        return@forEach
+                    }
+
                     newsResourceFtsDao.update(
                         title = newsResourceFtsEntity.title,
                         content = newsResourceFtsEntity.content,
@@ -78,19 +82,23 @@ internal class DefaultSearchContentsRepository @Inject constructor(
 
             topicDao.getOneOffTopicEntities().forEach { topicEntity ->
                 val oldTopicFtsEntities = topicFtsDao.getFtsEntitiesById(topicEntity.id)
-
                 val size = oldTopicFtsEntities.size
+
+                val topicFtsEntity = topicEntity.asFtsEntity()
+
                 if (size == 0) {
-                    topicFtsDao.insert(topicEntity.asFtsEntity())
+                    topicFtsDao.insert(topicFtsEntity)
                     return@forEach
                 }
 
                 // Do it for migration, multiple same id entity exists in the fts database.
                 if (size > 1) {
                     topicFtsDao.deleteById(topicEntity.id)
-                    topicFtsDao.insert(topicEntity.asFtsEntity())
+                    topicFtsDao.insert(topicFtsEntity)
                     return@forEach
                 }
+
+                if (oldTopicFtsEntities.firstOrNull() == topicFtsEntity) return@forEach
 
                 topicFtsDao.update(
                     name = topicEntity.name,
