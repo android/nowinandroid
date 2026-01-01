@@ -57,9 +57,9 @@ internal class DefaultSearchContentsRepository @Inject constructor(
 
 
             topicDao.getOneOffTopicEntities().forEach { topicEntity ->
-                val topicFtsEntities = topicFtsDao.getFtsEntitiesById(topicEntity.id)
+                val oldTopicFtsEntities = topicFtsDao.getFtsEntitiesById(topicEntity.id)
 
-                val size = topicFtsEntities.size
+                val size = oldTopicFtsEntities.size
                 if (size == 0) {
                     topicFtsDao.insert(topicEntity.asFtsEntity())
                     return@forEach
