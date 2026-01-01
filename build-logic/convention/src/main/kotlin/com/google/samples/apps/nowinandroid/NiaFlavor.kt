@@ -24,12 +24,12 @@ fun configureFlavors(
     flavorConfigurationBlock: ProductFlavor.(flavor: NiaFlavor) -> Unit = {},
 ) {
     commonExtension.apply {
-        FlavorDimension.values().forEach { flavorDimension ->
+        FlavorDimension.entries.forEach { flavorDimension ->
             flavorDimensions += flavorDimension.name
         }
 
         productFlavors {
-            NiaFlavor.values().forEach { niaFlavor ->
+            NiaFlavor.entries.forEach { niaFlavor ->
                 register(niaFlavor.name) {
                     dimension = niaFlavor.dimension.name
                     flavorConfigurationBlock(this, niaFlavor)

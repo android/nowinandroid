@@ -31,7 +31,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: 21
@@ -79,10 +79,11 @@ jobs:
 
       - name: Update Graphs
         run: ./gradlew graphUpdate
+        continue-on-error: true
 
       - name: Check Graphs
         id: graphs_verify
-        run: git add -- '**/README.md' && git diff --cached --quiet --exit-code -- '**/README.md'
+        run: git add -- "**/README.md" && git diff --cached --quiet --exit-code -- "**/README.md"
 
       - name: Prevent updating graphs if this is a fork
         id: checkfork_graphs
@@ -222,7 +223,7 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: 21

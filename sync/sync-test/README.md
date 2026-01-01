@@ -11,6 +11,11 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
+  subgraph :sync
+    direction TB
+    :sync:sync-test[sync-test]:::android-library
+    :sync:work[work]:::android-library
+  end
   subgraph :core
     direction TB
     :core:analytics[analytics]:::android-library
@@ -22,11 +27,6 @@ graph TB
     :core:model[model]:::jvm-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
-  end
-  subgraph :sync
-    direction TB
-    :sync:sync-test[sync-test]:::android-library
-    :sync:work[work]:::android-library
   end
 
   :core:data -.-> :core:analytics

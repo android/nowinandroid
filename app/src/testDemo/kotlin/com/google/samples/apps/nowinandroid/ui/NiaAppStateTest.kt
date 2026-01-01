@@ -16,22 +16,20 @@
 
 package com.google.samples.apps.nowinandroid.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.compose.composable
-import androidx.navigation.createGraph
-import androidx.navigation.testing.TestNavHostController
+import androidx.navigation3.runtime.NavBackStack
 import com.google.samples.apps.nowinandroid.core.data.repository.CompositeUserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
+import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect
@@ -45,7 +43,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
@@ -72,32 +69,42 @@ class NiaAppStateTest {
     // Subject under test.
     private lateinit var state: NiaAppState
 
+    private fun testNavigationState() = NavigationState(
+        startKey = ForYouNavKey,
+        topLevelStack = NavBackStack(ForYouNavKey),
+        subStacks = mapOf(
+            ForYouNavKey to NavBackStack(ForYouNavKey),
+            BookmarksNavKey to NavBackStack(BookmarksNavKey),
+        ),
+    )
+
     @Test
     fun niaAppState_currentDestination() = runTest {
-        var currentDestination: String? = null
+        val navigationState = testNavigationState()
+        val navigator = Navigator(navigationState)
 
         composeTestRule.setContent {
-            val navController = rememberTestNavController()
-            state = remember(navController) {
+            state = remember(navigationState) {
                 NiaAppState(
-                    navController = navController,
                     coroutineScope = backgroundScope,
                     networkMonitor = networkMonitor,
                     userNewsResourceRepository = userNewsResourceRepository,
                     timeZoneMonitor = timeZoneMonitor,
+                    navigationState = navigationState,
                 )
-            }
-
-            // Update currentDestination whenever it changes
-            currentDestination = state.currentDestination?.route
-
-            // Navigate to destination b once
-            LaunchedEffect(Unit) {
-                navController.setCurrentDestination("b")
             }
         }
 
-        assertEquals("b", currentDestination)
+        assertEquals(ForYouNavKey, state.navigationState.currentTopLevelKey)
+        assertEquals(ForYouNavKey, state.navigationState.currentKey)
+
+        // Navigate to another destination once
+        navigator.navigate(BookmarksNavKey)
+
+        composeTestRule.waitForIdle()
+
+        assertEquals(BookmarksNavKey, state.navigationState.currentTopLevelKey)
+        assertEquals(BookmarksNavKey, state.navigationState.currentKey)
     }
 
     @Test
@@ -110,21 +117,24 @@ class NiaAppStateTest {
             )
         }
 
-        assertEquals(3, state.topLevelDestinations.size)
-        assertTrue(state.topLevelDestinations[0].name.contains("for_you", true))
-        assertTrue(state.topLevelDestinations[1].name.contains("bookmarks", true))
-        assertTrue(state.topLevelDestinations[2].name.contains("interests", true))
+        val navigationState = state.navigationState
+
+        assertEquals(3, navigationState.topLevelKeys.size)
+        assertEquals(
+            setOf(ForYouNavKey, BookmarksNavKey, InterestsNavKey(null)),
+            navigationState.topLevelKeys,
+        )
     }
 
     @Test
     fun niaAppState_whenNetworkMonitorIsOffline_StateIsOffline() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                navigationState = testNavigationState(),
             )
         }
 
@@ -140,11 +150,11 @@ class NiaAppStateTest {
     fun niaAppState_differentTZ_withTimeZoneMonitorChange() = runTest(UnconfinedTestDispatcher()) {
         composeTestRule.setContent {
             state = NiaAppState(
-                navController = NavHostController(LocalContext.current),
                 coroutineScope = backgroundScope,
                 networkMonitor = networkMonitor,
                 userNewsResourceRepository = userNewsResourceRepository,
                 timeZoneMonitor = timeZoneMonitor,
+                navigationState = testNavigationState(),
             )
         }
         val changedTz = TimeZone.of("Europe/Prague")
@@ -154,20 +164,5 @@ class NiaAppStateTest {
             changedTz,
             state.currentTimeZone.value,
         )
-    }
-}
-
-@Composable
-private fun rememberTestNavController(): TestNavHostController {
-    val context = LocalContext.current
-    return remember {
-        TestNavHostController(context).apply {
-            navigatorProvider.addNavigator(ComposeNavigator())
-            graph = createGraph(startDestination = "a") {
-                composable("a") { }
-                composable("b") { }
-                composable("c") { }
-            }
-        }
     }
 }

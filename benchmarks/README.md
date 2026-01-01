@@ -11,6 +11,42 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
+  subgraph :feature
+    direction TB
+    subgraph :feature:settings
+      direction TB
+      :feature:settings:impl[impl]:::android-library
+    end
+    subgraph :feature:foryou
+      direction TB
+      :feature:foryou:api[api]:::android-library
+      :feature:foryou:impl[impl]:::android-library
+    end
+    subgraph :feature:bookmarks
+      direction TB
+      :feature:bookmarks:api[api]:::android-library
+      :feature:bookmarks:impl[impl]:::android-library
+    end
+    subgraph :feature:search
+      direction TB
+      :feature:search:api[api]:::android-library
+      :feature:search:impl[impl]:::android-library
+    end
+    subgraph :feature:interests
+      direction TB
+      :feature:interests:api[api]:::android-library
+      :feature:interests:impl[impl]:::android-library
+    end
+    subgraph :feature:topic
+      direction TB
+      :feature:topic:api[api]:::android-library
+      :feature:topic:impl[impl]:::android-library
+    end
+  end
+  subgraph :sync
+    direction TB
+    :sync:work[work]:::android-library
+  end
   subgraph :core
     direction TB
     :core:analytics[analytics]:::android-library
@@ -22,22 +58,10 @@ graph TB
     :core:designsystem[designsystem]:::android-library
     :core:domain[domain]:::android-library
     :core:model[model]:::jvm-library
+    :core:navigation[navigation]:::android-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
-  end
-  subgraph :feature
-    direction TB
-    :feature:bookmarks[bookmarks]:::android-feature
-    :feature:foryou[foryou]:::android-feature
-    :feature:interests[interests]:::android-feature
-    :feature:search[search]:::android-feature
-    :feature:settings[settings]:::android-feature
-    :feature:topic[topic]:::android-feature
-  end
-  subgraph :sync
-    direction TB
-    :sync:work[work]:::android-library
   end
   :benchmarks[benchmarks]:::android-test
   :app[app]:::android-application
@@ -49,12 +73,17 @@ graph TB
   :app -.-> :core:designsystem
   :app -.-> :core:model
   :app -.-> :core:ui
-  :app -.-> :feature:bookmarks
-  :app -.-> :feature:foryou
-  :app -.-> :feature:interests
-  :app -.-> :feature:search
-  :app -.-> :feature:settings
-  :app -.-> :feature:topic
+  :app -.-> :feature:bookmarks:api
+  :app -.-> :feature:bookmarks:impl
+  :app -.-> :feature:foryou:api
+  :app -.-> :feature:foryou:impl
+  :app -.-> :feature:interests:api
+  :app -.-> :feature:interests:impl
+  :app -.-> :feature:search:api
+  :app -.-> :feature:search:impl
+  :app -.-> :feature:settings:impl
+  :app -.-> :feature:topic:api
+  :app -.-> :feature:topic:impl
   :app -.-> :sync:work
   :benchmarks -.->|testedApks| :app
   :core:data -.-> :core:analytics
@@ -76,28 +105,43 @@ graph TB
   :core:ui --> :core:analytics
   :core:ui --> :core:designsystem
   :core:ui --> :core:model
-  :feature:bookmarks -.-> :core:data
-  :feature:bookmarks -.-> :core:designsystem
-  :feature:bookmarks -.-> :core:ui
-  :feature:foryou -.-> :core:data
-  :feature:foryou -.-> :core:designsystem
-  :feature:foryou -.-> :core:domain
-  :feature:foryou -.-> :core:notifications
-  :feature:foryou -.-> :core:ui
-  :feature:interests -.-> :core:data
-  :feature:interests -.-> :core:designsystem
-  :feature:interests -.-> :core:domain
-  :feature:interests -.-> :core:ui
-  :feature:search -.-> :core:data
-  :feature:search -.-> :core:designsystem
-  :feature:search -.-> :core:domain
-  :feature:search -.-> :core:ui
-  :feature:settings -.-> :core:data
-  :feature:settings -.-> :core:designsystem
-  :feature:settings -.-> :core:ui
-  :feature:topic -.-> :core:data
-  :feature:topic -.-> :core:designsystem
-  :feature:topic -.-> :core:ui
+  :feature:bookmarks:api --> :core:navigation
+  :feature:bookmarks:impl -.-> :core:data
+  :feature:bookmarks:impl -.-> :core:designsystem
+  :feature:bookmarks:impl -.-> :core:ui
+  :feature:bookmarks:impl -.-> :feature:bookmarks:api
+  :feature:bookmarks:impl -.-> :feature:topic:api
+  :feature:foryou:api --> :core:navigation
+  :feature:foryou:impl -.-> :core:designsystem
+  :feature:foryou:impl -.-> :core:domain
+  :feature:foryou:impl -.-> :core:notifications
+  :feature:foryou:impl -.-> :core:ui
+  :feature:foryou:impl -.-> :feature:foryou:api
+  :feature:foryou:impl -.-> :feature:topic:api
+  :feature:interests:api --> :core:navigation
+  :feature:interests:impl -.-> :core:designsystem
+  :feature:interests:impl -.-> :core:domain
+  :feature:interests:impl -.-> :core:ui
+  :feature:interests:impl -.-> :feature:interests:api
+  :feature:interests:impl -.-> :feature:topic:api
+  :feature:search:api -.-> :core:domain
+  :feature:search:api --> :core:navigation
+  :feature:search:impl -.-> :core:designsystem
+  :feature:search:impl -.-> :core:domain
+  :feature:search:impl -.-> :core:ui
+  :feature:search:impl -.-> :feature:interests:api
+  :feature:search:impl -.-> :feature:search:api
+  :feature:search:impl -.-> :feature:topic:api
+  :feature:settings:impl -.-> :core:data
+  :feature:settings:impl -.-> :core:designsystem
+  :feature:settings:impl -.-> :core:ui
+  :feature:topic:api -.-> :core:designsystem
+  :feature:topic:api --> :core:navigation
+  :feature:topic:api -.-> :core:ui
+  :feature:topic:impl -.-> :core:data
+  :feature:topic:impl -.-> :core:designsystem
+  :feature:topic:impl -.-> :core:ui
+  :feature:topic:impl -.-> :feature:topic:api
   :sync:work -.-> :core:analytics
   :sync:work -.-> :core:data
   :sync:work -.-> :core:notifications
