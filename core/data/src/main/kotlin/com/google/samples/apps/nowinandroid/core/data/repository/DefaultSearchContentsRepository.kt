@@ -54,7 +54,30 @@ internal class DefaultSearchContentsRepository @Inject constructor(
                     .first()
                     .map(PopulatedNewsResource::asFtsEntity),
             )
-            topicFtsDao.insertAll(topicDao.getOneOffTopicEntities().map { it.asFtsEntity() })
+
+
+            topicDao.getOneOffTopicEntities().forEach { topicEntity ->
+                val topicFtsEntities = topicFtsDao.getFtsEntityById(topicEntity.id)
+
+                val size = topicFtsEntities.size
+                if (size == 0) {
+                    topicFtsDao.insert(topicEntity.asFtsEntity())
+                    return@forEach
+                }
+
+                if (size > 1) {
+                    topicFtsDao.deleteById(topicEntity.id)
+                    topicFtsDao.insert(topicEntity.asFtsEntity())
+                    return@forEach
+                }
+
+                topicFtsDao.update(
+                    name = topicEntity.name,
+                    shortDescription = topicEntity.shortDescription,
+                    longDescription = topicEntity.longDescription,
+                    topicId = topicEntity.id,
+                )
+            }
         }
     }
 
