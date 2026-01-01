@@ -31,6 +31,41 @@ interface NewsResourceFtsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(newsResources: List<NewsResourceFtsEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(newsResource: NewsResourceFtsEntity)
+
+    @Query(
+        """
+            DELETE
+              FROM newsResourcesFts
+             WHERE newsResourceId = :newsResourceId
+        """,
+    )
+    suspend fun deleteById(newsResourceId: String)
+
+    @Query(
+        """
+            SELECT *
+              FROM newsResourcesFts
+             WHERE newsResourceId = :newsResourceId
+        """,
+    )
+    suspend fun getFtsEntitiesById(newsResourceId: String): List<NewsResourceFtsEntity>
+
+    @Query(
+        """
+            UPDATE newsResourcesFts 
+               SET title = :title,
+               content = :content
+             WHERE newsResourceId = :newsResourceId
+        """,
+    )
+    suspend fun update(
+        title: String,
+        content: String,
+        newsResourceId: String,
+    )
+
     @Query("SELECT newsResourceId FROM newsResourcesFts WHERE newsResourcesFts MATCH :query")
     fun searchAllNewsResources(query: String): Flow<List<String>>
 
