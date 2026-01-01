@@ -76,7 +76,6 @@ internal class DefaultSearchContentsRepository @Inject constructor(
                     )
                 }
 
-
             topicDao.getOneOffTopicEntities().forEach { topicEntity ->
                 val oldTopicFtsEntities = topicFtsDao.getFtsEntitiesById(topicEntity.id)
 
