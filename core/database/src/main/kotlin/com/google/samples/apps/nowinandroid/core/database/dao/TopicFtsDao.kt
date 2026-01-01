@@ -48,7 +48,7 @@ interface TopicFtsDao {
              WHERE topicId = :topicId
         """,
     )
-    suspend fun getFtsEntityById(topicId: String): List<TopicFtsEntity>
+    suspend fun getFtsEntitiesById(topicId: String): List<TopicFtsEntity>
 
     @Query(
         """
