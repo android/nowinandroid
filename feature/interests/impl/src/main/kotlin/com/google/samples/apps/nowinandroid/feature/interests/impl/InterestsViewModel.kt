@@ -16,14 +16,16 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.impl
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicNavKey
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -36,22 +38,23 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = InterestsViewModel.Factory::class)
 class InterestsViewModel @AssistedInject constructor(
-    private val savedStateHandle: SavedStateHandle,
     val userDataRepository: UserDataRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
-    // TODO: see comment below
+    @Assisted val navigationState: NavigationState,
     @Assisted val key: InterestsNavKey,
 ) : ViewModel() {
 
-    // TODO: this should no longer be necessary, the currently selected topic should be
-    //  available through the navigation state
-    // Key used to save and retrieve the currently selected topic id from saved state.
-    private val selectedTopicIdKey = "selectedTopicIdKey"
-
-    private val selectedTopicId = savedStateHandle.getStateFlow(
-        key = selectedTopicIdKey,
-        initialValue = key.initialTopicId,
-    )
+    // Derive selected topic from navigation state
+    private val selectedTopicId: StateFlow<String?> =
+        snapshotFlow {
+            navigationState.currentSubStack
+                .lastOrNull { it is TopicNavKey }
+                ?.let { (it as TopicNavKey).id }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = key.initialTopicId,
+        )
 
     val uiState: StateFlow<InterestsUiState> = combine(
         selectedTopicId,
@@ -69,15 +72,9 @@ class InterestsViewModel @AssistedInject constructor(
         }
     }
 
-    fun onTopicClick(topicId: String?) {
-        // TODO: This should modify the navigation state directly rather than just updating the
-        //  savedStateHandle
-        savedStateHandle[selectedTopicIdKey] = topicId
-    }
-
     @AssistedFactory
     interface Factory {
-        fun create(key: InterestsNavKey): InterestsViewModel
+        fun create(navigationState: NavigationState, key: InterestsNavKey): InterestsViewModel
     }
 }
 
