@@ -48,8 +48,9 @@ class InterestsViewModel @AssistedInject constructor(
     private val selectedTopicId: StateFlow<String?> =
         snapshotFlow {
             navigationState.currentSubStack
-                .lastOrNull { it is TopicNavKey }
-                ?.let { (it as TopicNavKey).id }
+                .filterIsInstance<TopicNavKey>()
+                .lastOrNull()
+                ?.id
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
