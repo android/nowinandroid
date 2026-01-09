@@ -43,9 +43,9 @@ abstract class SyncModule {
         syncSubscriber: FirebaseSyncSubscriber,
     ): SyncSubscriber
 
-    internal companion object {
+    companion object {
         @Provides
         @Singleton
-        fun provideFirebaseMessaging(): FirebaseMessaging = Firebase.messaging
+        internal fun provideFirebaseMessaging(): FirebaseMessaging = Firebase.messaging
     }
 }
