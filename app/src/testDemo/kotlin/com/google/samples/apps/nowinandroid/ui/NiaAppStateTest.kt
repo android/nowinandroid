@@ -26,9 +26,9 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.flow.collect

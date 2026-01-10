@@ -40,7 +40,7 @@ import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPermissionRule
-import com.google.samples.apps.nowinandroid.feature.interests.impl.LIST_PANE_TEST_TAG
+import com.google.samples.apps.nowinandroid.feature.interests.LIST_PANE_TEST_TAG
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -50,10 +50,10 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as BookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.api.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.search.api.R as FeatureSearchR
-import com.google.samples.apps.nowinandroid.feature.settings.impl.R as SettingsR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as BookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.R as FeatureForyouR
+import com.google.samples.apps.nowinandroid.feature.search.R as FeatureSearchR
+import com.google.samples.apps.nowinandroid.feature.settings.R as SettingsR
 
 /**
  * Tests all the navigation flows that are handled by the navigation library.

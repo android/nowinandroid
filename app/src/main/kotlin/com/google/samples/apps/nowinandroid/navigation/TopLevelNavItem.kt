@@ -20,12 +20,12 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
-import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
-import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
-import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.feature.bookmarks.R as bookmarksR
+import com.google.samples.apps.nowinandroid.feature.foryou.R as forYouR
+import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 /**
  * Type for the top level navigation items in the application. Contains UI information about the

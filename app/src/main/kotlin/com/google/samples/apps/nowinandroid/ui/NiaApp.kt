@@ -74,17 +74,19 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColo
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
-import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
-import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
-import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
-import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
-import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksEntry
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouEntry
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsEntry
+import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchNavKey
+import com.google.samples.apps.nowinandroid.feature.search.navigation.searchEntry
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
-import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
+import com.google.samples.apps.nowinandroid.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @Composable
 fun NiaApp(
@@ -223,8 +225,9 @@ internal fun NiaApp(
                 if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
                     shouldShowTopAppBar = true
 
-                    val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
-                        ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
+                    val destination =
+                        TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
+                            ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
 
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
@@ -257,11 +260,18 @@ internal fun NiaApp(
                     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
                     val entryProvider = entryProvider {
-                        forYouEntry(navigator)
-                        bookmarksEntry(navigator)
-                        interestsEntry(navigator)
-                        topicEntry(navigator)
-                        searchEntry(navigator)
+                        forYouEntry(onTopicClick = navigator::navigateToTopic)
+                        bookmarksEntry(onTopicClick = navigator::navigateToTopic)
+                        interestsEntry(onTopicClick = navigator::navigateToTopic)
+                        topicEntry(
+                            onBackClick = { navigator.goBack() },
+                            onTopicClick = navigator::navigateToTopic,
+                        )
+                        searchEntry(
+                            onBackClick = { navigator.goBack() },
+                            onInterestsClick = { navigator.navigate(InterestsNavKey()) },
+                            onTopicClick = navigator::navigateToTopic,
+                        )
                     }
 
                     NavDisplay(
