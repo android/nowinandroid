@@ -24,6 +24,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi.News
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +36,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.map
 
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
@@ -46,7 +49,9 @@ class BookmarksViewModel @Inject constructor(
 
     val feedUiState: StateFlow<NewsFeedUiState> =
         userNewsResourceRepository.observeAllBookmarked()
-            .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+            .map<List<UserNewsResource>, NewsFeedUiState> {
+                NewsFeedUiState.Success(it.map(ForYouFeedItemUi::News))
+            }
             .onStart { emit(Loading) }
             .stateIn(
                 scope = viewModelScope,

@@ -67,6 +67,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
@@ -271,7 +272,7 @@ private fun BookmarksGridPreview(
 ) {
     NiaTheme {
         BookmarksGrid(
-            feedState = Success(userNewsResources),
+            feedState = Success(userNewsResources.map(ForYouFeedItemUi::News)),
             removeFromBookmarks = {},
             onNewsResourceViewed = {},
             onTopicClick = {},

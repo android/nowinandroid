@@ -85,6 +85,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus.Denied
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.samples.apps.nowinandroid.core.ads_api.AdsClient
+import com.google.samples.apps.nowinandroid.core.ads_api.LocalAdsClientHelper
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
@@ -115,6 +117,7 @@ fun ForYouScreen(
     val feedState by viewModel.feedState.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
+    val adsClient = LocalAdsClientHelper.current
 
     ForYouScreen(
         isSyncing = isSyncing,
@@ -127,7 +130,10 @@ fun ForYouScreen(
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
+        onBannerLoaded = viewModel::onBannerLoaded,
+        onBannerFailed = viewModel::onBannerFailed,
         modifier = modifier,
+        ads = adsClient,
     )
 }
 
@@ -143,7 +149,10 @@ internal fun ForYouScreen(
     saveFollowedTopics: () -> Unit,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
+    onBannerLoaded: () -> Unit = {},
+    onBannerFailed: () -> Unit = {},
     modifier: Modifier = Modifier,
+    ads: AdsClient? = null,
 ) {
     val isOnboardingLoading = onboardingUiState is OnboardingUiState.Loading
     val isFeedLoading = feedState is NewsFeedUiState.Loading
@@ -195,6 +204,9 @@ internal fun ForYouScreen(
                 onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
                 onNewsResourceViewed = onNewsResourceViewed,
                 onTopicClick = onTopicClick,
+                onBannerLoaded = onBannerLoaded,
+                onBannerFailed = onBannerFailed,
+                ads = ads,
             )
 
             item(span = StaggeredGridItemSpan.FullLine, contentType = "bottomSpacing") {
@@ -265,7 +277,7 @@ private fun LazyStaggeredGridScope.onboarding(
         OnboardingUiState.Loading,
         OnboardingUiState.LoadFailed,
         OnboardingUiState.NotShown,
-        -> Unit
+            -> Unit
 
         is OnboardingUiState.Shown -> {
             item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
@@ -494,87 +506,87 @@ private fun feedItemsSize(
         OnboardingUiState.Loading,
         OnboardingUiState.LoadFailed,
         OnboardingUiState.NotShown,
-        -> 0
+            -> 0
 
         is OnboardingUiState.Shown -> 1
     }
     return feedSize + onboardingSize
 }
 
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedFeed(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.NotShown,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
+//@DevicePreviews
+//@Composable
+//fun ForYouScreenPopulatedFeed(
+//    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+//    userNewsResources: List<UserNewsResource>,
+//) {
+//    NiaTheme {
+//        ForYouScreen(
+//            isSyncing = false,
+//            onboardingUiState = OnboardingUiState.NotShown,
+//            feedState = NewsFeedUiState.Success(
+//                feed = userNewsResources,
+//            ),
+//            deepLinkedUserNewsResource = null,
+//            onTopicCheckedChanged = { _, _ -> },
+//            saveFollowedTopics = {},
+//            onNewsResourcesCheckedChanged = { _, _ -> },
+//            onNewsResourceViewed = {},
+//            onTopicClick = {},
+//            onDeepLinkOpened = {},
+//        )
+//    }
+//}
 
-@DevicePreviews
-@Composable
-fun ForYouScreenOfflinePopulatedFeed(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.NotShown,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
+//@DevicePreviews
+//@Composable
+//fun ForYouScreenOfflinePopulatedFeed(
+//    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+//    userNewsResources: List<UserNewsResource>,
+//) {
+//    NiaTheme {
+//        ForYouScreen(
+//            isSyncing = false,
+//            onboardingUiState = OnboardingUiState.NotShown,
+//            feedState = NewsFeedUiState.Success(
+//                feed = userNewsResources,
+//            ),
+//            deepLinkedUserNewsResource = null,
+//            onTopicCheckedChanged = { _, _ -> },
+//            saveFollowedTopics = {},
+//            onNewsResourcesCheckedChanged = { _, _ -> },
+//            onNewsResourceViewed = {},
+//            onTopicClick = {},
+//            onDeepLinkOpened = {},
+//        )
+//    }
+//}
 
-@DevicePreviews
-@Composable
-fun ForYouScreenTopicSelection(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = false,
-            onboardingUiState = OnboardingUiState.Shown(
-                topics = userNewsResources.flatMap { news -> news.followableTopics }
-                    .distinctBy { it.topic.id },
-            ),
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
+//@DevicePreviews
+//@Composable
+//fun ForYouScreenTopicSelection(
+//    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+//    userNewsResources: List<UserNewsResource>,
+//) {
+//    NiaTheme {
+//        ForYouScreen(
+//            isSyncing = false,
+//            onboardingUiState = OnboardingUiState.Shown(
+//                topics = userNewsResources.flatMap { news -> news.followableTopics }
+//                    .distinctBy { it.topic.id },
+//            ),
+//            feedState = NewsFeedUiState.Success(
+//                feed = userNewsResources,
+//            ),
+//            deepLinkedUserNewsResource = null,
+//            onTopicCheckedChanged = { _, _ -> },
+//            saveFollowedTopics = {},
+//            onNewsResourcesCheckedChanged = { _, _ -> },
+//            onNewsResourceViewed = {},
+//            onTopicClick = {},
+//            onDeepLinkOpened = {},
+//        )
+//    }
+//}
 
 @DevicePreviews
 @Composable
@@ -595,26 +607,26 @@ fun ForYouScreenLoading() {
     }
 }
 
-@DevicePreviews
-@Composable
-fun ForYouScreenPopulatedAndLoading(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        ForYouScreen(
-            isSyncing = true,
-            onboardingUiState = OnboardingUiState.Loading,
-            feedState = NewsFeedUiState.Success(
-                feed = userNewsResources,
-            ),
-            deepLinkedUserNewsResource = null,
-            onTopicCheckedChanged = { _, _ -> },
-            saveFollowedTopics = {},
-            onNewsResourcesCheckedChanged = { _, _ -> },
-            onNewsResourceViewed = {},
-            onTopicClick = {},
-            onDeepLinkOpened = {},
-        )
-    }
-}
+//@DevicePreviews
+//@Composable
+//fun ForYouScreenPopulatedAndLoading(
+//    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+//    userNewsResources: List<UserNewsResource>,
+//) {
+//    NiaTheme {
+//        ForYouScreen(
+//            isSyncing = true,
+//            onboardingUiState = OnboardingUiState.Loading,
+//            feedState = NewsFeedUiState.Success(
+//                feed = userNewsResources,
+//            ),
+//            deepLinkedUserNewsResource = null,
+//            onTopicCheckedChanged = { _, _ -> },
+//            saveFollowedTopics = {},
+//            onNewsResourcesCheckedChanged = { _, _ -> },
+//            onNewsResourceViewed = {},
+//            onTopicClick = {},
+//            onDeepLinkOpened = {},
+//        )
+//    }
+//}

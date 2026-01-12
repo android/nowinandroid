@@ -21,12 +21,16 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.ads_api.AdsClient
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -47,46 +52,90 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 fun LazyStaggeredGridScope.newsFeed(
     feedState: NewsFeedUiState,
     onNewsResourcesCheckedChanged: (String, Boolean) -> Unit,
+    ads: AdsClient? = null,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     onExpandedCardClick: () -> Unit = {},
+    onBannerLoaded: () -> Unit = {},
+    onBannerFailed: () -> Unit = {},
 ) {
     when (feedState) {
         NewsFeedUiState.Loading -> Unit
         is NewsFeedUiState.Success -> {
             items(
                 items = feedState.feed,
-                key = { it.id },
-                contentType = { "newsFeedItem" },
-            ) { userNewsResource ->
+                key = { item ->
+                    when (item) {
+                        ForYouFeedItemUi.BannerPreload -> "banner_preload"
+                        ForYouFeedItemUi.Banner -> "banner"
+                        is ForYouFeedItemUi.News -> item.userNewsResource.id
+                    }
+                },
+                contentType = { item ->
+                    when (item) {
+                        ForYouFeedItemUi.BannerPreload -> "banner_preload"
+                        ForYouFeedItemUi.Banner -> "banner"
+                        is ForYouFeedItemUi.News -> "news"
+                    }
+                },
+            ) { item ->
                 val context = LocalContext.current
                 val analyticsHelper = LocalAnalyticsHelper.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+                when (item) {
+                    ForYouFeedItemUi.BannerPreload -> {
+                        if (ads != null) {
+                            BannerPreloadItem(
+                                ads = ads,
+                                placement = "feed_banner",
+                                onLoaded = onBannerLoaded,
+                                onFailed = onBannerFailed,
+                            )
+                        }
+                    }
 
-                NewsResourceCardExpanded(
-                    userNewsResource = userNewsResource,
-                    isBookmarked = userNewsResource.isSaved,
-                    onClick = {
-                        onExpandedCardClick()
-                        analyticsHelper.logNewsResourceOpened(
-                            newsResourceId = userNewsResource.id,
-                        )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                    ForYouFeedItemUi.Banner -> {
+                        if (ads != null) {
+                            BannerItem(
+                                ads = ads,
+                                placement = "feed_banner",
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
 
-                        onNewsResourceViewed(userNewsResource.id)
-                    },
-                    hasBeenViewed = userNewsResource.hasBeenViewed,
-                    onToggleBookmark = {
-                        onNewsResourcesCheckedChanged(
-                            userNewsResource.id,
-                            !userNewsResource.isSaved,
+                    is ForYouFeedItemUi.News -> {
+                        NewsResourceCardExpanded(
+                            userNewsResource = item.userNewsResource,
+                            isBookmarked = item.userNewsResource.isSaved,
+                            onClick = {
+                                onExpandedCardClick()
+                                analyticsHelper.logNewsResourceOpened(
+                                    newsResourceId = item.userNewsResource.id,
+                                )
+                                launchCustomChromeTab(
+                                    context,
+                                    Uri.parse(item.userNewsResource.url),
+                                    backgroundColor,
+                                )
+
+                                onNewsResourceViewed(item.userNewsResource.id)
+                            },
+                            hasBeenViewed = item.userNewsResource.hasBeenViewed,
+                            onToggleBookmark = {
+                                onNewsResourcesCheckedChanged(
+                                    item.userNewsResource.id,
+                                    !item.userNewsResource.isSaved,
+                                )
+                            },
+                            onTopicClick = onTopicClick,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .animateItem(),
                         )
-                    },
-                    onTopicClick = onTopicClick,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .animateItem(),
-                )
+                    }
+                }
+
             }
         }
     }
@@ -118,7 +167,7 @@ sealed interface NewsFeedUiState {
         /**
          * The list of news resources contained in this feed.
          */
-        val feed: List<UserNewsResource>,
+        val feed: List<ForYouFeedItemUi>,
     ) : NewsFeedUiState
 }
 
@@ -137,21 +186,21 @@ private fun NewsFeedLoadingPreview() {
     }
 }
 
-@Preview
-@Preview(device = Devices.TABLET)
-@Composable
-private fun NewsFeedContentPreview(
-    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
-    userNewsResources: List<UserNewsResource>,
-) {
-    NiaTheme {
-        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(300.dp)) {
-            newsFeed(
-                feedState = NewsFeedUiState.Success(userNewsResources),
-                onNewsResourcesCheckedChanged = { _, _ -> },
-                onNewsResourceViewed = {},
-                onTopicClick = {},
-            )
-        }
-    }
-}
+//@Preview
+//@Preview(device = Devices.TABLET)
+//@Composable
+//private fun NewsFeedContentPreview(
+//    @PreviewParameter(UserNewsResourcePreviewParameterProvider::class)
+//    userNewsResources: List<UserNewsResource>,
+//) {
+//    NiaTheme {
+//        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(300.dp)) {
+//            newsFeed(
+//                feedState = NewsFeedUiState.Success(userNewsResources),
+//                onNewsResourcesCheckedChanged = { _, _ -> },
+//                onNewsResourceViewed = {},
+//                onTopicClick = {},
+//            )
+//        }
+//    }
+//}

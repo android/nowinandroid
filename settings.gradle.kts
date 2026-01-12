@@ -37,9 +37,12 @@ dependencyResolutionManagement {
                 includeGroupByRegex("com\\.android.*")
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
+                includeGroupByRegex("org\\.chromium.*")
             }
         }
         mavenCentral()
+        // Add Appodeal repository
+        maven ("https://artifactory.appodeal.com/appodeal")
     }
 }
 rootProject.name = "nowinandroid"

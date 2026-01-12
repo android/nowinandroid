@@ -19,6 +19,7 @@ package com.google.samples.apps.nowinandroid.feature.foryou.impl
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.samples.apps.nowinandroid.core.ads_api.AdsClient
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsEvent.Param
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
@@ -27,12 +28,16 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_NEWS_RESOURCE_ID_KEY
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -47,6 +52,7 @@ class ForYouViewModel @Inject constructor(
     syncManager: SyncManager,
     private val analyticsHelper: AnalyticsHelper,
     private val userDataRepository: UserDataRepository,
+    private val forYouFeedItemsMapper: ForYouFeedItemsMapper,
     userNewsResourceRepository: UserNewsResourceRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
 ) : ViewModel() {
@@ -83,14 +89,20 @@ class ForYouViewModel @Inject constructor(
             initialValue = false,
         )
 
+    private val shouldShowBanner = MutableStateFlow(false)
+
     val feedState: StateFlow<NewsFeedUiState> =
         userNewsResourceRepository.observeAllForFollowedTopics()
-            .map(NewsFeedUiState::Success)
+            .combine(shouldShowBanner) { news, showBanner ->
+                NewsFeedUiState.Success(forYouFeedItemsMapper.map(news, showBanner))
+            }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = NewsFeedUiState.Loading,
-            )
+                initialValue = NewsFeedUiState.Loading)
+
+    fun onBannerLoaded() { shouldShowBanner.value = true }
+    fun onBannerFailed() { shouldShowBanner.value = false }
 
     val onboardingUiState: StateFlow<OnboardingUiState> =
         combine(

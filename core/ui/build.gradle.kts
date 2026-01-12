@@ -28,6 +28,7 @@ dependencies {
     api(projects.core.analytics)
     api(projects.core.designsystem)
     api(projects.core.model)
+    api(projects.core.adsApi)
 
     implementation(libs.androidx.browser)
     implementation(libs.coil.kt)

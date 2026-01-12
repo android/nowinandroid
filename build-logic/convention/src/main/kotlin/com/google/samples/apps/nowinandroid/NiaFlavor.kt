@@ -35,7 +35,7 @@ fun configureFlavors(
                     flavorConfigurationBlock(this, niaFlavor)
                     if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
                         if (niaFlavor.applicationIdSuffix != null) {
-                            applicationIdSuffix = niaFlavor.applicationIdSuffix
+//                            applicationIdSuffix = niaFlavor.applicationIdSuffix
                         }
                     }
                 }

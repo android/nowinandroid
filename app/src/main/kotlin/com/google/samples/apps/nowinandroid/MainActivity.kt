@@ -34,6 +34,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
+import com.google.samples.apps.nowinandroid.core.ads_api.AdsClient
+import com.google.samples.apps.nowinandroid.core.ads_api.LocalAdsClientHelper
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -73,6 +75,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userNewsResourceRepository: UserNewsResourceRepository
 
+    @Inject lateinit var adsClient: AdsClient
     private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,13 +147,14 @@ class MainActivity : ComponentActivity() {
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
                 LocalTimeZone provides currentTimeZone,
+                LocalAdsClientHelper provides adsClient,
             ) {
                 NiaTheme(
                     darkTheme = themeSettings.darkTheme,
                     androidTheme = themeSettings.androidTheme,
                     disableDynamicTheming = themeSettings.disableDynamicTheming,
                 ) {
-                    NiaApp(appState)
+                    NiaApp(appState) //
                 }
             }
         }

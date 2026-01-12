@@ -88,6 +88,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi
+import com.google.samples.apps.nowinandroid.core.ui.ForYouFeedItemUi.News
 import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
 import com.google.samples.apps.nowinandroid.core.ui.R.string
@@ -358,7 +360,7 @@ private fun SearchResultBody(
                 }
 
                 newsFeed(
-                    feedState = Success(feed = newsResources),
+                    feedState = Success(feed = newsResources.map(ForYouFeedItemUi::News)),
                     onNewsResourcesCheckedChanged = onNewsResourcesCheckedChanged,
                     onNewsResourceViewed = onNewsResourceViewed,
                     onTopicClick = onTopicClick,
