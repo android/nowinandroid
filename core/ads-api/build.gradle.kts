@@ -16,11 +16,22 @@
 
 plugins {
     alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.android.library.compose)
+//    alias(libs.plugins.nowinandroid.hilt)
 }
 
 android {
-    namespace = "com.google.samples.apps.nowinandroid.core.ads-api"
+    namespace = "com.google.samples.apps.nowinandroid.core.ads_api"
 }
 
 dependencies {
+    implementation(libs.appodeal) {
+        // Appodeal "networks" package
+        exclude(group = "com.appodeal.ads.sdk.networks", module = "inmobi")
+
+        // Extra InMobi adapters that the full SDK pulls in
+        exclude(group = "com.applovin.mediation", module = "inmobi-adapter")
+        exclude(group = "com.unity3d.ads-mediation", module = "inmobi-adapter")
+        exclude(group = "org.bidon", module = "inmobi-adapter")
+    }
 }
