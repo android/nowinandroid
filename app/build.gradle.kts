@@ -29,8 +29,16 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
-        applicationId = "com.google.samples.apps.nowinandroid"
+        buildConfigField(
+            "String",
+            "APP_KEY",
+            "\"d908f77a97ae0993514bc8edba7e776a36593c77e5f44994\""
+        )
+        applicationId = "com.appodealstack.demo"
         versionCode = 8
         versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
@@ -40,14 +48,14 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
+//            applicationIdSuffix = NiaBuildType.DEBUG.applicationIdSuffix
         }
         release {
             isMinifyEnabled = providers.gradleProperty("minifyWithR8")
                 .map(String::toBooleanStrict).getOrElse(true)
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                          "proguard-rules.pro")
+                "proguard-rules.pro")
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -86,6 +94,8 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.analytics)
+    implementation(projects.core.adsApi)
+    implementation(projects.core.adsImpl)
     implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
