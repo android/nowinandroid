@@ -21,6 +21,7 @@ import com.appodeal.ads.Appodeal
 import com.google.samples.apps.nowinandroid.core.ads_api.AdsClient
 import com.google.samples.apps.nowinandroid.core.ads_api.AdsConfigProvider
 import com.google.samples.apps.nowinandroid.core.ads_api.BannerAds
+import com.google.samples.apps.nowinandroid.core.ads_api.InterstitialAds
 import jakarta.inject.Inject
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Singleton
@@ -33,7 +34,10 @@ class AppodealAdsClient @Inject constructor(
     private val initialized = AtomicBoolean(false)
 
     override val banner: BannerAds = AppodealBannerAds(
-        ensureInit = ::ensureInitialized
+        ensureInit = ::ensureInitialized,
+    )
+    override val interstitial: InterstitialAds = AppodealInterstitialAds(
+        ensureInit = ::ensureInitialized,
     )
 
     override fun ensureInitialized(context: Context) {
@@ -45,8 +49,9 @@ class AppodealAdsClient @Inject constructor(
             val appContext = context.applicationContext
             Appodeal.setTesting(configProvider.getConfig().isTesting)
             Appodeal.setLogLevel(com.appodeal.ads.utils.Log.LogLevel.verbose)
-            Appodeal.setSharedAdsInstanceAcrossActivities(true)
+//            Appodeal.setSharedAdsInstanceAcrossActivities(true)
             Appodeal.initialize(appContext, cfg.appKey, Appodeal.BANNER_VIEW)
+            Appodeal.initialize(appContext, cfg.appKey, Appodeal.INTERSTITIAL)
 
             initialized.set(true)
         }

@@ -18,37 +18,23 @@ package com.google.samples.apps.nowinandroid.core.ads_api
 
 import android.app.Activity
 import android.content.Context
-import android.view.ViewGroup
 
-/**
- * Entry point for ads.
- * Lazy init: safe to call multiple times; initializes only once in impl.
- */
-interface AdsClient {
-    fun ensureInitialized(context: Context)
-    val banner: BannerAds
+interface InterstitialAds {
+    /** Warm-up / caching. Safe to call multiple times. */
+    fun preload(activity: Activity, placement: String)
 
-    val interstitial: InterstitialAds
-}
+    /** True if SDK says interstitial can be shown right now. */
+    fun canShow(placement: String): Boolean
 
-interface BannerAds {
-
-    fun onResume(activity: Activity, placement: String)
-    fun preload(
+    /**
+     * Show interstitial. Must call exactly one of callbacks.
+     * If cannot show -> calls onDismiss immediately.
+     */
+    fun show(
         activity: Activity,
-        container: ViewGroup,
         placement: String,
-        onLoaded: () -> Unit,
-        onFailed: () -> Unit,
+        onShown: () -> Unit = {},
+        onDismiss: () -> Unit,
+        onFailed: (Throwable?) -> Unit = {},
     )
-
-    fun attach(
-        activity: Activity,
-        container: ViewGroup,
-        placement: String,
-    )
-
-    fun detach(activity: Activity)
 }
-
-

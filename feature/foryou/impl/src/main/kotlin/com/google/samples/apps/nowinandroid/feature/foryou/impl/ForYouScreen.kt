@@ -65,6 +65,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -76,7 +77,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -102,7 +102,7 @@ import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
-import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.findActivity
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R
@@ -118,6 +118,7 @@ fun ForYouScreen(
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
     val adsClient = LocalAdsClientHelper.current
+    val onTopicClickWithAds = rememberInterstitialGate(placement = "nav_interstitial", onProceed = onTopicClick,)
 
     ForYouScreen(
         isSyncing = isSyncing,
@@ -126,7 +127,7 @@ fun ForYouScreen(
         deepLinkedUserNewsResource = deepLinkedUserNewsResource,
         onTopicCheckedChanged = viewModel::updateTopicSelection,
         onDeepLinkOpened = viewModel::onDeepLinkOpened,
-        onTopicClick = onTopicClick,
+        onTopicClick = onTopicClickWithAds,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
@@ -135,6 +136,38 @@ fun ForYouScreen(
         modifier = modifier,
         ads = adsClient,
     )
+}
+
+@Composable
+fun rememberInterstitialGate(
+    placement: String,
+    onProceed: (String) -> Unit,
+): (String) -> Unit {
+    val ads = LocalAdsClientHelper.current
+    val activity = LocalContext.current.findActivity()
+
+    // Warm up interstitial once per screen lifecycle.
+    LaunchedEffect(activity, ads) {
+        val act = activity ?: return@LaunchedEffect
+        ads.ensureInitialized(act)
+        ads.interstitial.preload(act, placement)
+    }
+
+    return remember(onProceed, ads, activity) {
+        { arg: String ->
+            if (activity == null) {
+                onProceed(arg)
+                return@remember
+            }
+
+            ads.interstitial.show(
+                activity = activity,
+                placement = placement,
+                onDismiss = { onProceed(arg) },
+                onFailed = { onProceed(arg) },
+            )
+        }
+    }
 }
 
 @Composable
