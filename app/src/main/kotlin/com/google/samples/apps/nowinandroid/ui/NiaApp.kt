@@ -64,6 +64,10 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationSuiteScaffold
@@ -71,9 +75,15 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.NiaNavHost
 import com.google.samples.apps.nowinandroid.navigation.TopLevelDestination
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.datetime.TimeZone
 import kotlin.reflect.KClass
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
@@ -281,3 +291,32 @@ private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
     this?.hierarchy?.any {
         it.hasRoute(route)
     } ?: false
+
+@DevicePreviews
+@Composable
+fun NiaAppPreview() {
+    NiaTheme {
+        NiaApp(
+            appState = rememberNiaAppState(
+                networkMonitor = object : NetworkMonitor {
+                    override val isOnline: Flow<Boolean> = flowOf(true)
+                },
+                userNewsResourceRepository = object : UserNewsResourceRepository {
+                    override fun observeAll(query: NewsResourceQuery): Flow<List<UserNewsResource>> =
+                        flowOf(emptyList())
+
+                    override fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>> =
+                        flowOf(emptyList())
+
+                    override fun observeAllBookmarked(): Flow<List<UserNewsResource>> =
+                        flowOf(emptyList())
+                },
+                timeZoneMonitor = object : TimeZoneMonitor {
+                    override val currentTimeZone: Flow<TimeZone> =
+                        flowOf(TimeZone.currentSystemDefault())
+                },
+            ),
+        )
+    }
+}
+

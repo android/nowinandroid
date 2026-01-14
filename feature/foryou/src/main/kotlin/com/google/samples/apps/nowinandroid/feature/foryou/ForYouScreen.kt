@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.foryou
 
-import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.activity.compose.ReportDrawnWhen
@@ -103,31 +102,48 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import androidx.core.net.toUri
 
 @Composable
 internal fun ForYouScreen(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ForYouViewModel = hiltViewModel(),
+    viewModel: ForYouViewModel? = if (LocalInspectionMode.current) null else hiltViewModel(),
 ) {
-    val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
-    val feedState by viewModel.feedState.collectAsStateWithLifecycle()
-    val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
-    val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
+    if (viewModel != null) {
+        val onboardingUiState by viewModel.onboardingUiState.collectAsStateWithLifecycle()
+        val feedState by viewModel.feedState.collectAsStateWithLifecycle()
+        val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
+        val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
 
-    ForYouScreen(
-        isSyncing = isSyncing,
-        onboardingUiState = onboardingUiState,
-        feedState = feedState,
-        deepLinkedUserNewsResource = deepLinkedUserNewsResource,
-        onTopicCheckedChanged = viewModel::updateTopicSelection,
-        onDeepLinkOpened = viewModel::onDeepLinkOpened,
-        onTopicClick = onTopicClick,
-        saveFollowedTopics = viewModel::dismissOnboarding,
-        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
-        onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
-        modifier = modifier,
-    )
+        ForYouScreen(
+            isSyncing = isSyncing,
+            onboardingUiState = onboardingUiState,
+            feedState = feedState,
+            deepLinkedUserNewsResource = deepLinkedUserNewsResource,
+            onTopicCheckedChanged = viewModel::updateTopicSelection,
+            onDeepLinkOpened = viewModel::onDeepLinkOpened,
+            onTopicClick = onTopicClick,
+            saveFollowedTopics = viewModel::dismissOnboarding,
+            onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+            onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
+            modifier = modifier,
+        )
+    } else {
+        ForYouScreen(
+            isSyncing = false,
+            onboardingUiState = OnboardingUiState.NotShown,
+            feedState = NewsFeedUiState.Success(emptyList()),
+            deepLinkedUserNewsResource = null,
+            onTopicCheckedChanged = { _, _ -> },
+            onDeepLinkOpened = { },
+            onTopicClick = onTopicClick,
+            saveFollowedTopics = { },
+            onNewsResourcesCheckedChanged = { _, _ -> },
+            onNewsResourceViewed = { },
+            modifier = modifier,
+        )
+    }
 }
 
 @Composable
@@ -184,7 +200,7 @@ internal fun ForYouScreen(
                         ),
                     )
                     layout(placeable.width, placeable.height) {
-                        placeable.place(0, 0)
+                        placeable.place(-16.dp.roundToPx(), 0)
                     }
                 },
             )
@@ -300,11 +316,12 @@ private fun LazyStaggeredGridScope.onboarding(
                             enabled = onboardingUiState.isDismissable,
                             modifier = Modifier
                                 .padding(horizontal = 24.dp)
-                                .widthIn(364.dp)
+                                .widthIn(max = 320.dp)
                                 .fillMaxWidth(),
                         ) {
                             Text(
                                 text = stringResource(R.string.feature_foryou_done),
+                                color = if (onboardingUiState.isDismissable) androidx.compose.ui.graphics.Color.Unspecified else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                             )
                         }
                     }
@@ -475,7 +492,7 @@ private fun DeepLinkEffect(
 
         launchCustomChromeTab(
             context = context,
-            uri = Uri.parse(userNewsResource.url),
+            uri = userNewsResource.url.toUri(),
             toolbarColor = backgroundColor,
         )
     }
@@ -607,6 +624,27 @@ fun ForYouScreenPopulatedAndLoading(
             feedState = NewsFeedUiState.Success(
                 feed = userNewsResources,
             ),
+            deepLinkedUserNewsResource = null,
+            onTopicCheckedChanged = { _, _ -> },
+            saveFollowedTopics = {},
+            onNewsResourcesCheckedChanged = { _, _ -> },
+            onNewsResourceViewed = {},
+            onTopicClick = {},
+            onDeepLinkOpened = {},
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+fun ForYouScreenNotPopulatedOnboarding() {
+    NiaTheme {
+        ForYouScreen(
+            isSyncing = true,
+            onboardingUiState = OnboardingUiState.Shown(
+                topics = emptyList(),
+            ),
+            feedState = NewsFeedUiState.Loading,
             deepLinkedUserNewsResource = null,
             onTopicCheckedChanged = { _, _ -> },
             saveFollowedTopics = {},
