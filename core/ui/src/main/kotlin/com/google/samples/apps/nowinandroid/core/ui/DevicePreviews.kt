@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Devices
  * to render various devices.
  */
 @Preview(showBackground = true, name = "phone", device = Devices.PHONE)
-@Preview(showBackground = true, name = "desktop", device = Devices.DESKTOP)
 @Preview(showBackground = true, name = "foldable", device = Devices.FOLDABLE)
 @Preview(showBackground = true, name = "tablet", device = Devices.TABLET)
+@Preview(showBackground = true, name = "desktop", device = Devices.DESKTOP)
 annotation class DevicePreviews
