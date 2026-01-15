@@ -64,9 +64,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
 import androidx.navigationevent.NavigationEventDispatcher
 import androidx.navigationevent.NavigationEventDispatcherOwner
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -320,7 +320,7 @@ fun NiaAppPreview() {
         CompositionLocalProvider(
             LocalNavigationEventDispatcherOwner provides object : NavigationEventDispatcherOwner {
                 override val navigationEventDispatcher = NavigationEventDispatcher()
-            }
+            },
         ) {
             NiaApp(
                 appState = rememberNiaAppState(
