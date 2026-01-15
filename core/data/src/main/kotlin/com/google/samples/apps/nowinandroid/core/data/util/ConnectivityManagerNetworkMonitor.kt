@@ -22,7 +22,6 @@ import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.net.NetworkRequest.Builder
 import androidx.core.content.getSystemService
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.network.Dispatcher
@@ -70,9 +69,12 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
             }
 
             trace("NetworkMonitor.registerNetworkCallback") {
-                val request = Builder()
+                val request = NetworkRequest.Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                    .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
                     .build()
                 connectivityManager.registerNetworkCallback(request, callback)
             }
@@ -109,8 +111,11 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
     }
 
     private fun hasSupportedTransport(capabilities: NetworkCapabilities): Boolean {
-        return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        val supportedTransports = setOf(
+            NetworkCapabilities.TRANSPORT_WIFI,
+            NetworkCapabilities.TRANSPORT_CELLULAR,
+            NetworkCapabilities.TRANSPORT_ETHERNET,
+        )
+        return supportedTransports.any(capabilities::hasTransport)
     }
 }
