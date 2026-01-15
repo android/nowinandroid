@@ -33,12 +33,13 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 internal class ConnectivityManagerNetworkMonitor @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:ApplicationContext private val context: Context,
+    @param:Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         trace("NetworkMonitor.callbackFlow") {
@@ -71,6 +72,7 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
             trace("NetworkMonitor.registerNetworkCallback") {
                 val request = Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                     .build()
                 connectivityManager.registerNetworkCallback(request, callback)
             }
@@ -87,9 +89,28 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
     }
         .flowOn(ioDispatcher)
         .conflate()
+        .distinctUntilChanged()
 
     private fun ConnectivityManager.isCurrentlyConnected(): Boolean {
-        val networkCapabilities = getNetworkCapabilities(activeNetwork) ?: return false
-        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        val network = activeNetwork ?: return false
+        val capabilities = getNetworkCapabilities(network) ?: return false
+
+        return hasInternetCapability(capabilities) &&
+            isValidated(capabilities) &&
+            hasSupportedTransport(capabilities)
+    }
+
+    private fun hasInternetCapability(capabilities: NetworkCapabilities): Boolean {
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    private fun isValidated(capabilities: NetworkCapabilities): Boolean {
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+    }
+
+    private fun hasSupportedTransport(capabilities: NetworkCapabilities): Boolean {
+        return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 }
