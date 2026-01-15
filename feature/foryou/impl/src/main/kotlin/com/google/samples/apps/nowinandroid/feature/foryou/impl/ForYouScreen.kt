@@ -102,6 +102,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
+import androidx.core.net.toUri
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R
 
 @Composable
