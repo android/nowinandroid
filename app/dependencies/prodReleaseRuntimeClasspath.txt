@@ -132,10 +132,10 @@ androidx.navigation3:navigation3-runtime-android:1.0.0
 androidx.navigation3:navigation3-runtime:1.0.0
 androidx.navigation3:navigation3-ui-android:1.0.0
 androidx.navigation3:navigation3-ui:1.0.0
-androidx.navigationevent:navigationevent-android:1.0.0
-androidx.navigationevent:navigationevent-compose-android:1.0.0
-androidx.navigationevent:navigationevent-compose:1.0.0
-androidx.navigationevent:navigationevent:1.0.0
+androidx.navigationevent:navigationevent-android:1.0.1
+androidx.navigationevent:navigationevent-compose-android:1.0.1
+androidx.navigationevent:navigationevent-compose:1.0.1
+androidx.navigationevent:navigationevent:1.0.1
 androidx.print:print:1.0.0
 androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05
 androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05
