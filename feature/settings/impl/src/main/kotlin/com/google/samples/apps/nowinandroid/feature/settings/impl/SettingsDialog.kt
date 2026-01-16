@@ -71,7 +71,7 @@ import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiStat
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Success
 
 @Composable
-fun SettingsDialog(
+internal fun SettingsDialog(
     onDismiss: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
@@ -86,7 +86,7 @@ fun SettingsDialog(
 }
 
 @Composable
-fun SettingsDialog(
+internal fun SettingsDialog(
     settingsUiState: SettingsUiState,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
