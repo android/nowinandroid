@@ -24,9 +24,10 @@ android {
 }
 
 dependencies {
-    api(projects.core.model)
     api(libs.androidx.metrics)
+
     api(projects.core.analytics)
+    api(projects.core.model)
 
     implementation(projects.core.designsystem)
 
