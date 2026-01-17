@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.result
+package com.google.samples.apps.nowinandroid.core.common.result
 
 import app.cash.turbine.test
-import com.google.samples.apps.nowinandroid.core.common.result.Result
-import com.google.samples.apps.nowinandroid.core.common.result.asResult
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -42,6 +40,7 @@ class ResultKtTest {
                         "Test Done",
                         errorResult.exception.message,
                     )
+
                     Result.Loading,
                     is Result.Success,
                     -> throw IllegalStateException(
