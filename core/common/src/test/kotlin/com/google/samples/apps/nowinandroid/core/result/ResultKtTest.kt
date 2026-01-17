@@ -17,6 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.result
 
 import app.cash.turbine.test
+import com.google.samples.apps.nowinandroid.core.common.result.Result
+import com.google.samples.apps.nowinandroid.core.common.result.asResult
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
