@@ -35,7 +35,8 @@ android {
         versionName = "0.1.2" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         // Custom test runner to set up Hilt dependency graph
-        testInstrumentationRunner = "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
+        testInstrumentationRunner =
+            "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
     }
 
     buildTypes {
@@ -46,8 +47,10 @@ android {
             isMinifyEnabled = providers.gradleProperty("minifyWithR8")
                 .map(String::toBooleanStrict).getOrElse(true)
             applicationIdSuffix = NiaBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                          "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -68,11 +71,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.interests)
-    implementation(projects.feature.foryou)
-    implementation(projects.feature.bookmarks)
-    implementation(projects.feature.topic)
-    implementation(projects.feature.search)
+    implementation(projects.navigation)
     implementation(projects.feature.settings)
 
     implementation(projects.core.common)
@@ -111,6 +110,11 @@ dependencies {
 
     kspTest(libs.hilt.compiler)
 
+    testImplementation(projects.feature.interests)
+    testImplementation(projects.feature.foryou)
+    testImplementation(projects.feature.bookmarks)
+    testImplementation(projects.feature.topic)
+    testImplementation(projects.feature.search)
     testImplementation(projects.core.dataTest)
     testImplementation(projects.core.datastoreTest)
     testImplementation(libs.hilt.android.testing)
@@ -126,6 +130,12 @@ dependencies {
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(projects.core.dataTest)
     androidTestImplementation(projects.core.datastoreTest)
+    androidTestImplementation(projects.feature.interests)
+    androidTestImplementation(projects.feature.foryou)
+    androidTestImplementation(projects.feature.bookmarks)
+    androidTestImplementation(projects.feature.topic)
+    androidTestImplementation(projects.feature.search)
+
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)

@@ -41,6 +41,7 @@ dependencies {
     testImplementation(projects.uiTestHiltManifest)
     testImplementation(projects.feature.topic)
     testImplementation(libs.androidx.navigation.testing)
+    testImplementation(projects.sync.syncTest)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)

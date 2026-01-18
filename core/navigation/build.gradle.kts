@@ -32,10 +32,4 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModel.navigation3)
 
     testImplementation(libs.truth)
-
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.compose.ui.testManifest)
-    androidTestImplementation(libs.androidx.lifecycle.viewModel.testing)
-    androidTestImplementation(libs.truth)
 }
