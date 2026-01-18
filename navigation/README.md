@@ -1,4 +1,4 @@
-# `:feature:settings:api`
+# `:navigation`
 
 ## Module dependency graph
 
@@ -13,7 +13,12 @@ config:
 graph TB
   subgraph :feature
     direction TB
+    :feature:bookmarks[bookmarks]:::android-feature
+    :feature:foryou[foryou]:::android-feature
+    :feature:interests[interests]:::android-feature
+    :feature:search[search]:::android-feature
     :feature:settings[settings]:::android-feature
+    :feature:topic[topic]:::android-feature
   end
   subgraph :core
     direction TB
@@ -24,11 +29,14 @@ graph TB
     :core:datastore[datastore]:::android-library
     :core:datastore-proto[datastore-proto]:::android-library
     :core:designsystem[designsystem]:::android-library
+    :core:domain[domain]:::android-library
     :core:model[model]:::jvm-library
+    :core:navigation[navigation]:::android-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
   end
+  :navigation[navigation]:::android-library
 
   :core:data -.-> :core:analytics
   :core:data --> :core:common
@@ -40,6 +48,8 @@ graph TB
   :core:datastore -.-> :core:common
   :core:datastore --> :core:datastore-proto
   :core:datastore --> :core:model
+  :core:domain --> :core:data
+  :core:domain --> :core:model
   :core:network --> :core:common
   :core:network --> :core:model
   :core:notifications -.-> :core:common
@@ -47,9 +57,35 @@ graph TB
   :core:ui --> :core:analytics
   :core:ui --> :core:designsystem
   :core:ui --> :core:model
+  :feature:bookmarks -.-> :core:data
+  :feature:bookmarks -.-> :core:designsystem
+  :feature:bookmarks -.-> :core:ui
+  :feature:bookmarks -.-> :feature:topic
+  :feature:foryou -.-> :core:designsystem
+  :feature:foryou -.-> :core:domain
+  :feature:foryou -.-> :core:notifications
+  :feature:foryou -.-> :core:ui
+  :feature:interests -.-> :core:designsystem
+  :feature:interests -.-> :core:domain
+  :feature:interests -.-> :core:ui
+  :feature:search -.-> :core:designsystem
+  :feature:search -.-> :core:domain
+  :feature:search -.-> :core:ui
   :feature:settings -.-> :core:data
   :feature:settings -.-> :core:designsystem
   :feature:settings -.-> :core:ui
+  :feature:topic -.-> :core:data
+  :feature:topic -.-> :core:designsystem
+  :feature:topic -.-> :core:ui
+  :navigation -.-> :core:designsystem
+  :navigation -.-> :core:model
+  :navigation -.-> :core:navigation
+  :navigation -.-> :feature:bookmarks
+  :navigation -.-> :feature:foryou
+  :navigation -.-> :feature:interests
+  :navigation -.-> :feature:search
+  :navigation -.-> :feature:settings
+  :navigation -.-> :feature:topic
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

@@ -13,15 +13,7 @@ config:
 graph TB
   subgraph :feature
     direction TB
-    subgraph :feature:foryou
-      direction TB
-      :feature:foryou:api[api]:::android-library
-      :feature:foryou:impl[impl]:::android-library
-    end
-    subgraph :feature:topic
-      direction TB
-      :feature:topic:api[api]:::android-library
-    end
+    :feature:foryou[foryou]:::android-feature
   end
   subgraph :core
     direction TB
@@ -34,7 +26,6 @@ graph TB
     :core:designsystem[designsystem]:::android-library
     :core:domain[domain]:::android-library
     :core:model[model]:::jvm-library
-    :core:navigation[navigation]:::android-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
@@ -59,16 +50,10 @@ graph TB
   :core:ui --> :core:analytics
   :core:ui --> :core:designsystem
   :core:ui --> :core:model
-  :feature:foryou:api --> :core:navigation
-  :feature:foryou:impl -.-> :core:designsystem
-  :feature:foryou:impl -.-> :core:domain
-  :feature:foryou:impl -.-> :core:notifications
-  :feature:foryou:impl -.-> :core:ui
-  :feature:foryou:impl -.-> :feature:foryou:api
-  :feature:foryou:impl -.-> :feature:topic:api
-  :feature:topic:api -.-> :core:designsystem
-  :feature:topic:api --> :core:navigation
-  :feature:topic:api -.-> :core:ui
+  :feature:foryou -.-> :core:designsystem
+  :feature:foryou -.-> :core:domain
+  :feature:foryou -.-> :core:notifications
+  :feature:foryou -.-> :core:ui
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
