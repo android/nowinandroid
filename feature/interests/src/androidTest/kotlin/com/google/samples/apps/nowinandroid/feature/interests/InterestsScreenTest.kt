@@ -29,7 +29,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import com.google.samples.apps.nowinandroid.core.ui.R as CoreUiR
-import com.google.samples.apps.nowinandroid.feature.interests.api.R as InterestsR
+import com.google.samples.apps.nowinandroid.feature.interests.R as InterestsR
 
 /**
  * UI test for checking the correct behaviour of the Interests screen;

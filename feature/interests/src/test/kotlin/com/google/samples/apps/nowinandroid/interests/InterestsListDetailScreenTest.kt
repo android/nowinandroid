@@ -38,11 +38,11 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.rememberNavigationState
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
-import com.google.samples.apps.nowinandroid.feature.interests.impl.R
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.LIST_PANE_TEST_TAG
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsEntry
-import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
+import com.google.samples.apps.nowinandroid.feature.interests.R
+import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.navigation.interests.interestsEntry
+import com.google.samples.apps.nowinandroid.navigation.topic.topicEntry
 import com.google.samples.apps.nowinandroid.uitesthiltmanifest.HiltComponentActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

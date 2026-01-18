@@ -35,7 +35,6 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.newsResourcesTestData
-import com.google.samples.apps.nowinandroid.feature.search.impl.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,8 +69,10 @@ class SearchScreenTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-            clearSearchContentDesc = getString(R.string.feature_search_api_clear_search_text_content_desc)
-            clearRecentSearchesContentDesc = getString(R.string.feature_search_api_clear_recent_searches_content_desc)
+            clearSearchContentDesc =
+                getString(R.string.feature_search_api_clear_search_text_content_desc)
+            clearRecentSearchesContentDesc =
+                getString(R.string.feature_search_api_clear_recent_searches_content_desc)
             followButtonContentDesc =
                 getString(com.google.samples.apps.nowinandroid.core.ui.R.string.core_ui_interests_card_follow_button_content_desc)
             unfollowButtonContentDesc =

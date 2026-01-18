@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.topic.api.navigation
+package com.google.samples.apps.nowinandroid.feature.topic.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.testing.TestLifecycleOwner
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.R
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
