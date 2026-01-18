@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.bookmarks.navigation
+package com.google.samples.apps.nowinandroid.navigation.bookmarks
 
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
@@ -22,15 +22,16 @@ import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.bookmarks.BookmarksScreen
+import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksNavKey
+import com.google.samples.apps.nowinandroid.navigation.navigateToTopic
 
-fun EntryProviderScope<NavKey>.bookmarksEntry(
-    onTopicClick: (String) -> Unit,
-) {
+fun EntryProviderScope<NavKey>.bookmarksEntry(navigator: Navigator) {
     entry<BookmarksNavKey> {
         val snackbarHostState = LocalSnackbarHostState.current
         BookmarksScreen(
-            onTopicClick = onTopicClick,
+            onTopicClick = navigator::navigateToTopic,
             onShowSnackbar = { message, action ->
                 snackbarHostState.showSnackbar(
                     message = message,

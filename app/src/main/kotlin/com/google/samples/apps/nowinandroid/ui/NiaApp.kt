@@ -74,18 +74,16 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColo
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.LocalSnackbarHostState
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.bookmarksEntry
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.forYouEntry
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsNavKey
-import com.google.samples.apps.nowinandroid.feature.interests.navigation.interestsEntry
-import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchNavKey
-import com.google.samples.apps.nowinandroid.feature.search.navigation.searchEntry
 import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
-import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
-import com.google.samples.apps.nowinandroid.navigation.navigateToTopic
+import com.google.samples.apps.nowinandroid.navigation.bookmarks.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.navigation.bookmarks.bookmarksEntry
+import com.google.samples.apps.nowinandroid.navigation.foryou.forYouEntry
+import com.google.samples.apps.nowinandroid.navigation.interests.interestsEntry
+import com.google.samples.apps.nowinandroid.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.navigation.search.searchEntry
+import com.google.samples.apps.nowinandroid.navigation.shouldShowGradiantBackground
+import com.google.samples.apps.nowinandroid.navigation.topic.topicEntry
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @Composable
@@ -94,7 +92,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
+    val shouldShowGradientBackground = appState.navigationState.shouldShowGradiantBackground()
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -243,7 +241,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { navigator.navigate(SearchNavKey) },
+                        onNavigationClick = { navigator.navigateToSearch() },
                     )
                 }
 
@@ -260,18 +258,11 @@ internal fun NiaApp(
                     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
                     val entryProvider = entryProvider {
-                        forYouEntry(onTopicClick = navigator::navigateToTopic)
-                        bookmarksEntry(onTopicClick = navigator::navigateToTopic)
-                        interestsEntry(onTopicClick = navigator::navigateToTopic)
-                        topicEntry(
-                            onBackClick = { navigator.goBack() },
-                            onTopicClick = navigator::navigateToTopic,
-                        )
-                        searchEntry(
-                            onBackClick = { navigator.goBack() },
-                            onInterestsClick = { navigator.navigate(InterestsNavKey()) },
-                            onTopicClick = navigator::navigateToTopic,
-                        )
+                        forYouEntry(navigator = navigator)
+                        bookmarksEntry(navigator = navigator)
+                        interestsEntry(navigator = navigator)
+                        topicEntry(navigator = navigator)
+                        searchEntry(navigator = navigator)
                     }
 
                     NavDisplay(

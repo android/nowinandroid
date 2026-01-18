@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.topic.navigation
+package com.google.samples.apps.nowinandroid.navigation.topic
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.topic.TopicScreen
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel
 import com.google.samples.apps.nowinandroid.feature.topic.TopicViewModel.Factory
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicNavKey
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicNavKey
+import com.google.samples.apps.nowinandroid.navigation.navigateToTopic
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-fun EntryProviderScope<NavKey>.topicEntry(
-    onBackClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
-) {
+fun EntryProviderScope<NavKey>.topicEntry(navigator: Navigator) {
     entry<TopicNavKey>(
         metadata = ListDetailSceneStrategy.detailPane(),
     ) { key ->
         val id = key.id
         TopicScreen(
             showBackButton = true,
-            onBackClick = onBackClick,
-            onTopicClick = onTopicClick,
+            onBackClick = { navigator.goBack() },
+            onTopicClick = navigator::navigateToTopic,
             viewModel = hiltViewModel<TopicViewModel, Factory>(
                 key = id,
             ) { factory ->

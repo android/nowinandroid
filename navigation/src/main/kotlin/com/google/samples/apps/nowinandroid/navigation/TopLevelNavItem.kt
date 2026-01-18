@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.google.samples.apps.nowinandroid.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
@@ -49,7 +48,7 @@ val FOR_YOU = TopLevelNavItem(
     selectedIcon = NiaIcons.Upcoming,
     unselectedIcon = NiaIcons.UpcomingBorder,
     iconTextId = forYouR.string.feature_foryou_api_title,
-    titleTextId = R.string.app_name,
+    titleTextId = forYouR.string.feature_foryou_api_app_name,
 )
 
 val BOOKMARKS = TopLevelNavItem(

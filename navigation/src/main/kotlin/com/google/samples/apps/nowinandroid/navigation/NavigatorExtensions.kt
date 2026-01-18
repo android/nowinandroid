@@ -17,10 +17,15 @@
 package com.google.samples.apps.nowinandroid.navigation
 
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
-import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicNavKey
+import com.google.samples.apps.nowinandroid.feature.search.navigation.SearchNavKey
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicNavKey
 
 fun Navigator.navigateToTopic(
     topicId: String,
 ) {
     navigate(TopicNavKey(topicId))
+}
+
+fun Navigator.navigateToSearch() {
+    navigate(SearchNavKey)
 }

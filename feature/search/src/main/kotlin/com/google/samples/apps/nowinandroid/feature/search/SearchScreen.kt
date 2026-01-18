@@ -96,7 +96,7 @@ import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.search.R as searchR
 
 @Composable
-internal fun SearchScreen(
+fun SearchScreen(
     onBackClick: () -> Unit,
     onInterestsClick: () -> Unit,
     onTopicClick: (String) -> Unit,

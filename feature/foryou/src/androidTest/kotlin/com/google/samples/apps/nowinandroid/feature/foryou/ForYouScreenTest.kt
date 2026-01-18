@@ -32,7 +32,6 @@ import com.google.samples.apps.nowinandroid.core.rules.GrantPostNotificationsPer
 import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTestData
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
-import com.google.samples.apps.nowinandroid.feature.foryou.impl.R
 import org.junit.Rule
 import org.junit.Test
 
@@ -154,12 +153,12 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                        OnboardingUiState.Shown(
-                            // Follow one topic
-                            topics = followableTopicTestData.mapIndexed { index, testTopic ->
-                                testTopic.copy(isFollowed = index == 1)
-                            },
-                        ),
+                    OnboardingUiState.Shown(
+                        // Follow one topic
+                        topics = followableTopicTestData.mapIndexed { index, testTopic ->
+                            testTopic.copy(isFollowed = index == 1)
+                        },
+                    ),
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
@@ -201,9 +200,9 @@ class ForYouScreenTest {
                 ForYouScreen(
                     isSyncing = false,
                     onboardingUiState =
-                        OnboardingUiState.Shown(
-                            topics = followableTopicTestData,
-                        ),
+                    OnboardingUiState.Shown(
+                        topics = followableTopicTestData,
+                    ),
                     feedState = NewsFeedUiState.Loading,
                     deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },

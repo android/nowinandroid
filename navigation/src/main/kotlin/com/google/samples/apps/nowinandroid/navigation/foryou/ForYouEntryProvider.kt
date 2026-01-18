@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.feature.foryou.navigation
+package com.google.samples.apps.nowinandroid.navigation.foryou
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
+import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.feature.foryou.ForYouScreen
+import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
+import com.google.samples.apps.nowinandroid.navigation.navigateToTopic
 
-fun EntryProviderScope<NavKey>.forYouEntry(onTopicClick: (String) -> Unit) {
+fun EntryProviderScope<NavKey>.forYouEntry(navigator: Navigator) {
     entry<ForYouNavKey> {
         ForYouScreen(
-            onTopicClick = onTopicClick,
+            onTopicClick = navigator::navigateToTopic,
         )
     }
 }

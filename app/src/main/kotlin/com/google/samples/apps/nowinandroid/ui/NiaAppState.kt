@@ -25,11 +25,9 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
-import com.google.samples.apps.nowinandroid.core.navigation.rememberNavigationState
 import com.google.samples.apps.nowinandroid.core.ui.TrackDisposableJank
-import com.google.samples.apps.nowinandroid.feature.bookmarks.navigation.BookmarksNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
+import com.google.samples.apps.nowinandroid.navigation.getNavigationState
+import com.google.samples.apps.nowinandroid.navigation.getTopLevelNavKeysWithUnreadResources
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +43,7 @@ fun rememberNiaAppState(
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): NiaAppState {
-    val navigationState = rememberNavigationState(ForYouNavKey, TOP_LEVEL_NAV_ITEMS.keys)
+    val navigationState = getNavigationState()
 
     NavigationTrackingSideEffect(navigationState)
 
@@ -88,10 +86,7 @@ class NiaAppState(
     val topLevelNavKeysWithUnreadResources: StateFlow<Set<NavKey>> =
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
-                setOfNotNull(
-                    ForYouNavKey.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
-                    BookmarksNavKey.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
-                )
+                getTopLevelNavKeysWithUnreadResources(forYouNewsResources, bookmarkedNewsResources)
             }
             .stateIn(
                 coroutineScope,
