@@ -1,4 +1,4 @@
-# `:feature:search:impl`
+# `:feature:search`
 
 ## Module dependency graph
 
