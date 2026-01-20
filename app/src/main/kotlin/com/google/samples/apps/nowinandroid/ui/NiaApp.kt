@@ -82,7 +82,7 @@ import com.google.samples.apps.nowinandroid.navigation.foryou.forYouEntry
 import com.google.samples.apps.nowinandroid.navigation.interests.interestsEntry
 import com.google.samples.apps.nowinandroid.navigation.navigateToSearch
 import com.google.samples.apps.nowinandroid.navigation.search.searchEntry
-import com.google.samples.apps.nowinandroid.navigation.shouldShowGradiantBackground
+import com.google.samples.apps.nowinandroid.navigation.shouldShowGradientBackground
 import com.google.samples.apps.nowinandroid.navigation.topic.topicEntry
 import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
@@ -92,7 +92,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.navigationState.shouldShowGradiantBackground()
+    val shouldShowGradientBackground = appState.navigationState.shouldShowGradientBackground()
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
