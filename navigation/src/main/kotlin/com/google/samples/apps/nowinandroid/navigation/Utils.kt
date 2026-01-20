@@ -36,4 +36,4 @@ fun getTopLevelNavKeysWithUnreadResources(
 fun getNavigationState(): NavigationState =
     rememberNavigationState(startKey = ForYouNavKey, topLevelKeys = TOP_LEVEL_NAV_ITEMS.keys)
 
-fun NavigationState.shouldShowGradiantBackground(): Boolean = currentTopLevelKey == ForYouNavKey
+fun NavigationState.shouldShowGradientBackground(): Boolean = currentTopLevelKey == ForYouNavKey
