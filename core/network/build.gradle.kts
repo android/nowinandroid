@@ -30,11 +30,7 @@ android {
         buildConfig = true
     }
     namespace = "com.google.samples.apps.nowinandroid.core.network"
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
@@ -57,15 +53,12 @@ val backendUrl = providers.fileContents(
 ).asText.map { text ->
     val properties = Properties()
     properties.load(StringReader(text))
-    if (properties.containsKey("BACKEND_URL"))
-        (properties["BACKEND_URL"] as String)
-    else "http://example.com"
-    // Move to returning `properties["BACKEND_URL"] as String?` after upgrading to Gradle 9.0.0
+    properties["BACKEND_URL"]
 }.orElse("http://example.com")
 
 androidComponents {
     onVariants {
-        it.buildConfigFields.put("BACKEND_URL", backendUrl.map { value ->
+        it.buildConfigFields!!.put("BACKEND_URL", backendUrl.map { value ->
             BuildConfigField(type = "String", value = """"$value"""", comment = null)
         })
     }
