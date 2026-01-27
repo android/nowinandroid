@@ -1,4 +1,4 @@
-name: Macrobenchmark + Screen Record (AVD Cached)
+name: Macrobenchmark + Screen Record (Emulator With Display)
 
 on:
   push:
@@ -52,12 +52,10 @@ jobs:
           target: google_apis
           arch: x86_64
           force-avd-creation: false
-          disable-animations: true
+
           emulator-options: >
-            -no-window
-            -noaudio
-            -no-boot-anim
-            -gpu swiftshader_indirect
+            -gpu host
+          disable-animations: true
           script: echo "AVD snapshot created"
 
       - name: Run macrobenchmark + screen record
@@ -67,18 +65,17 @@ jobs:
           target: google_apis
           arch: x86_64
           force-avd-creation: false
-          disable-animations: true
+
           emulator-options: >
-            -no-window
-            -noaudio
-            -no-boot-anim
-            -gpu swiftshader_indirect
+            -gpu host
+          disable-animations: true
           script: |
             echo "Start screen recording"
             adb shell screenrecord /sdcard/benchmark.mp4 &
-            
-            ./gradlew :benchmark:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR || true
 
+            # Run benchmarks (suppress emulator error so it runs completely)
+            ./gradlew :benchmark:connectedDemoBenchmarkAndroidTest \
+              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR || true
 
             adb shell pkill -INT screenrecord || true
             sleep 3
@@ -88,8 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macrobenchmark-reports
-          path: |
-            **/build/outputs/benchmarkReports/**
+          path: benchmarks/build/reports/androidTests/connected/
 
       - name: Upload screen recording
         uses: actions/upload-artifact@v4
