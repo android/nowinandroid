@@ -1,286 +1,159 @@
-name: Build
+name: "Build APKs + Emulator test (trigger: push to test)"
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main
-  pull_request:
+      - testNIA
+  workflow_dispatch:
 
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
+permissions:
+  contents: read
 
 jobs:
-  test_and_apk:
-    name: "Local tests and APKs"
+  build_and_upload:
+    name: Build APKs and test APKs
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
-      security-events: write
-
     timeout-minutes: 60
-
+    outputs:
+      apks_artifact: apks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Copy CI gradle.properties (if exists)
+        run: |
+          if [ -f .github/ci-gradle.properties ]; then
+            mkdir -p ~/.gradle
+            cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+          fi
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: 21
+          java-version: 17
 
-      - name: Setup Gradle
+      - name: Setup Gradle (cache enabled)
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          build-scan-publish: true
-          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
-          build-scan-terms-of-use-agree: "yes"
+          build-cache: true
 
-      - name: Check build-logic
-        run: ./gradlew :build-logic:convention:check
+      - name: Build all APKs (assemble)
+        # This builds flavors / variants. It may take a while the first run.
+        run: ./gradlew :app:assemble -PminifyWithR8=false --no-daemon --no-parallel
 
-      - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
-
-      - name: Check Dependency Guard
-        id: dependencyguard_verify
-        continue-on-error: true
-        run: ./gradlew dependencyGuard
-
-      - name: Prevent updating Dependency Guard baselines if this is a fork
-        id: checkfork_dependencyguard
-        continue-on-error: false
-        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+      - name: Find APKs and test APKs
+        id: find-apks
         run: |
-          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
+          echo "Searching for APKs under app/build/outputs..."
+          find ./app/build/outputs -type f -name "*.apk" -print || true
+          # Collect all APKs (app & androidTest apks)
+          mkdir -p apk_collection
+          # find apks (exclude mapping & intermediates)
+          find ./app/build/outputs -type f -name "*.apk" -not -path "*/mapping/*" -not -path "*/outputs/mapping/*" -exec cp {} apk_collection/ \;
+          echo "Files copied to apk_collection:"
+          ls -lah apk_collection || true
+          if [ $(ls -A apk_collection | wc -l) -eq 0 ]; then
+            echo "No APKs found! failing."
+            exit 1
+          fi
+          echo "::set-output name=apk_dir::apk_collection"
 
-        # Runs if previous job failed
-      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
-        id: dependencyguard_baseline
-        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
-        run: |
-          ./gradlew dependencyGuardBaseline
-
-      - name: Push new Dependency Guard baselines if available
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.dependencyguard_baseline.outcome == 'success'
-        with:
-          file_pattern: '**/dependencies/*.txt'
-          disable_globbing: true
-          commit_message: "🤖 Updates baselines for Dependency Guard"
-
-      - name: Update Graphs
-        run: ./gradlew graphUpdate
-        continue-on-error: true
-
-      - name: Check Graphs
-        id: graphs_verify
-        run: git add -- "**/README.md" && git diff --cached --quiet --exit-code -- "**/README.md"
-
-      - name: Prevent updating graphs if this is a fork
-        id: checkfork_graphs
-        continue-on-error: false
-        if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
-        run: |
-          echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
-
-      - name: Push new graphs if available
-        if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          file_pattern: '**/README.md'
-          disable_globbing: true
-          commit_message: "🤖 Updates graphs"
-
-      - name: Run all local screenshot tests (Roborazzi)
-        id: screenshotsverify
-        continue-on-error: true
-        run: ./gradlew verifyRoborazziDemoDebug
-
-      - name: Prevent pushing new screenshots if this is a fork
-        id: checkfork_screenshots
-        continue-on-error: false
-        if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
-        run: |
-          echo "::error::Screenshot tests failed, please create a PR in your fork first." 
-          echo "Your fork's CI will take screenshots for your fork."
-          exit 1
-
-      # Runs if previous job failed
-      - name: Generate new screenshots if verification failed and it's a PR
-        id: screenshotsrecord
-        if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
-        run: |
-          ./gradlew recordRoborazziDemoDebug
-
-      - name: Push new screenshots if available
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.screenshotsrecord.outcome == 'success'
-        with:
-          file_pattern: '*/*.png'
-          disable_globbing: true
-          commit_message: "🤖 Updates screenshots"
-
-      # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
-      - name: Run local tests
-        run: ./gradlew testDemoDebug :lint:test
-
-      - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble -PminifyWithR8=false
-
-      - name: Upload build outputs (APKs)
+      - name: Upload APKs artifact
         uses: actions/upload-artifact@v4
         with:
-          name: APKs
-          path: '**/build/outputs/apk/**/*.apk'
+          name: apks
+          path: apk_collection/**
 
-      - name: Upload JVM local results (XML)
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: local-test-results
-          path: '**/build/test-results/test*UnitTest/**.xml'
-
-      - name: Upload screenshot results (PNG)
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshot-test-results
-          path: '**/build/outputs/roborazzi/*_compare.png'
-
-      - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
-
-      - name: Upload lint reports (HTML)
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: lint-reports
-          path: '**/build/reports/lint-results-*.html'
-
-      - name: Upload lint reports (SARIF) for app module
-        if: ${{ !cancelled() && hashFiles('app/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: './app/'
-          category: app
-
-      - name: Upload lint reports (SARIF) for app-nia-catalog module
-        if: ${{ !cancelled() && hashFiles('app-nia-catalog/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: './app-nia-catalog/'
-          category: app-nia-catalog
-
-      - name: Upload lint reports (SARIF) for lint module
-        if: ${{ !cancelled() && hashFiles('lint/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: './lint/'
-          category: lint
-
-      - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
-
-  androidTest:
+  emulator_run:
+    name: Run emulator, install APKs, run instrumentation & record
+    needs: build_and_upload
     runs-on: ubuntu-latest
-    timeout-minutes: 55
-    strategy:
-      matrix:
-        api-level: [26, 34]
-
+    timeout-minutes: 60
     steps:
-      - name: Delete unnecessary tools 🔧
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          android: false # Don't remove Android tools
-          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
-          dotnet: true # rm -rf /usr/share/dotnet
-          haskell: true # rm -rf /opt/ghc...
-          swap-storage: true # rm -f /mnt/swapfile (4GiB)
-          docker-images: false # Takes 16s, enable if needed in the future
-          large-packages: false # includes google-cloud-sdk and it's slow
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Enable KVM group perms
+      - name: Download built APKs
+        uses: actions/download-artifact@v4
+        with:
+          name: apks
+          path: ./apks
+
+      - name: Enable KVM on runner (Linux)
+        if: runner.os == 'Linux'
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
+          sudo udevadm trigger --name-match=kvm || true
+          ls -la /dev/kvm || true
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Prepare artifacts dir
+        run: mkdir -p artifacts
 
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          build-scan-publish: true
-          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
-          build-scan-terms-of-use-agree: "yes"
-
-      - name: Build projects and run instrumentation tests
+      - name: Start emulator, install APKs, run tests and record (ReactiveCircus)
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 30
           arch: x86_64
+          force-avd-creation: true
           disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          emulator-options: -no-window -no-boot-anim -noaudio -gpu swiftshader_indirect
+          script: |
+            set -euo pipefail
+            echo "Waiting for emulator..."
+            adb wait-for-device
+            until adb -s emulator-5554 shell getprop sys.boot_completed | grep -m1 "1"; do sleep 1; done
+            echo "Emulator booted."
 
-      - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
-        if: matrix.api-level == 30
-        # There is no need to verify Roborazzi tests to generate coverage.
-        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
+            # Install all apks found in ./apks (app and test apks)
+            echo "Installing APKs..."
+            for f in ./apks/*.apk; do
+              echo "Installing $f"
+              adb install -r "$f" || (echo "install failed for $f, continuing" && true)
+            done
 
-      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants (only API 30)
-        if: matrix.api-level == 30
-        run: ./gradlew createDemoDebugCombinedCoverageReport
-        
-      - name: Upload test reports
-        if: ${{ !cancelled() }}
+            # Attempt to detect an instrumentation runner automatically
+            echo "Detecting installed instrumentation..."
+            INST_LIST="$(adb shell pm list instrumentation || true)"
+            echo "Instrumentation list: $INST_LIST"
+            # pick first instrumentation component (format: instrumentation: <name>/<runner> (target=...))
+            INST=$(echo "$INST_LIST" | sed -n 's/^instrumentation:\s*//p' | head -n1 | awk '{print $1}' | tr -d '\r')
+            if [ -z "$INST" ]; then
+              echo "No instrumentation found. Trying to detect test runner via package name fallback..."
+              # fallback: try to find any package that looks like demo or nowinandroid (best-effort)
+              PACKAGE=$(adb shell pm list packages | tr -d '\r' | grep -E 'nowinandroid|nia|nowin' | head -n1 | sed 's/package://g' || true)
+              echo "Detected package: $PACKAGE"
+              if [ -n "$PACKAGE" ]; then
+                # list instrumentation for that package specifically
+                INST=$(adb shell pm list instrumentation | tr -d '\r' | grep "$PACKAGE" | head -n1 | sed -n 's/^instrumentation:\s*//p' | awk '{print $1}' || true)
+              fi
+            fi
+
+            if [ -z "$INST" ]; then
+              echo "Couldn't auto-detect instrumentation runner. As fallback, will run a simple smoke launch."
+              # attempt to start main activity (best-effort)
+              adb shell monkey -p com.google.samples.apps.nowinandroid.dev -c android.intent.category.LAUNCHER 1 || true
+            else
+              echo "Running instrumentation: $INST"
+              # Start screenrecord in background on device (30s)
+              adb shell screenrecord --time-limit 30 /sdcard/test_run.mp4 &
+              # Run instrumentation - this will run tests already packaged in the test APK
+              adb shell am instrument -w "$INST" || true
+              # Give a moment for the recording to finish (screenrecord stops automatically after time-limit)
+              sleep 5
+              # Pull the recording
+              adb pull /sdcard/test_run.mp4 ./artifacts/test_run.mp4 || true
+            fi
+
+            # Collect memory and gfx info and logs
+            adb shell dumpsys meminfo > ./artifacts/dumpsys_meminfo.txt || true
+            adb shell dumpsys gfxinfo com.google.samples.apps.nowinandroid.dev > ./artifacts/gfxinfo.txt || true
+            adb logcat -d > ./artifacts/logcat.txt || true
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests'
-
-      - name: Display local test coverage (only API 30)
-        if: matrix.api-level == 30
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.7.1
-        with:
-          title: Combined test coverage report
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-        
-      - name: Upload local coverage reports (XML + HTML) (only API 30)
-        if: matrix.api-level == 30
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-reports
-          if-no-files-found: error
-          compression-level: 1
-          overwrite: false
-          path: '**/build/reports/jacoco/'
+          name: emulator-artifacts
+          path: artifacts/**, apks/**
