@@ -7,89 +7,77 @@ on:
 jobs:
   macrobenchmark:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        api-level: [35]
+    timeout-minutes: 60 
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable KVM for emulator
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | \
-            sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
 
-      - name: Install emulator system dependencies
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1 libglx-mesa0 libgl1-mesa-dri
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v5
-        with:
-          distribution: zulu
-          java-version: 17
-          cache: gradle
+          sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1-mesa-glx
 
       - name: Build benchmark APKs
         run: |
           ./gradlew :app:assembleDemoBenchmark \
-                    :benchmark:assembleDemoBenchmark
+                    :benchmarks:assembleDemoBenchmark \
+                    -x :app:generateDemoBenchmarkOssLicenses \
+                    -x :benchmarks:generateDemoBenchmarkOssLicenses
 
-      - name: Cache AVD
-        uses: actions/cache@v4
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
-
-      - name: Create emulator snapshot (only if not cached)
-        if: steps.avd-cache.outputs.cache-hit != 'true'
+      - name: Run Macrobenchmarks
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 35
           target: google_apis
           arch: x86_64
           force-avd-creation: false
-          emulator-options: -no-window -gpu host
           disable-animations: true
-          script: echo "Snapshot created."
-
-      - name: Run macrobenchmark + screen record
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: google_apis
-          arch: x86_64
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu host
-          disable-animations: true
+          emulator-options: -no-window -gpu host -no-audio -no-boot-anim
           script: |
-            echo "Starting screen recording"
+            # Ensure the emulator is fully booted before running commands
+            adb wait-for-device
+            
+            echo "Starting screen recording..."
+            # Start recording in background
             adb shell screenrecord /sdcard/benchmark.mp4 &
-
-            # Run macrobenchmark tests (suppress emulator error, non-blocking)
-            ./gradlew :benchmark:connectedDemoBenchmarkAndroidTest \
+            
+            echo "Running benchmarks..."
+            # We use the 'benchmarks' module name common in NiA
+            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
-              || true
+              || echo "Benchmarks failed, but we will still try to pull the video."
 
-            adb shell pkill -INT screenrecord || true
-            sleep 3
-            adb pull /sdcard/benchmark.mp4 benchmark.mp4
+            echo "Stopping recording..."
+            # SIGINT (2) allows the MP4 container to close properly
+            adb shell pkill -2 screenrecord || true
+            sleep 5
+            
+            echo "Pulling files from device..."
+            adb pull /sdcard/benchmark.mp4 . || true
+            
+            # Pull logcat for extra debugging
+            adb logcat -d > logcat.txt
 
-      - name: Upload macrobenchmark reports
+      - name: Upload Macrobenchmark Reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: macrobenchmark-reports
-          path: benchmarks/build/reports/androidTests/connected/
+          name: macrobenchmark-results
+          path: |
+            **/build/outputs/connected_android_test_additional_output/**/*.json
+            **/build/reports/androidTests/connected/
+            logcat.txt
 
-      - name: Upload screen recording
+      - name: Upload Screen Recording
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-video
