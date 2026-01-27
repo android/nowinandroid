@@ -15,7 +15,7 @@ graph TB
     direction TB
     :core:common[common]:::jvm-library
     :core:datastore[datastore]:::android-library
-    :core:datastore-proto[datastore-proto]:::android-library
+    :core:datastore-proto[datastore-proto]:::jvm-library
     :core:model[model]:::jvm-library
   end
 
