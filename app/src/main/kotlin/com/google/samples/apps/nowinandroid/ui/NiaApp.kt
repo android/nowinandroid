@@ -74,17 +74,17 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColo
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
-import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
-import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
-import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
-import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
-import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
-import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
-import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
+import com.google.samples.apps.nowinandroid.feature.settings.SettingsDialog
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
-import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
+import com.google.samples.apps.nowinandroid.navigation.bookmarks.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.navigation.bookmarks.bookmarksEntry
+import com.google.samples.apps.nowinandroid.navigation.foryou.forYouEntry
+import com.google.samples.apps.nowinandroid.navigation.interests.interestsEntry
+import com.google.samples.apps.nowinandroid.navigation.navigateToSearch
+import com.google.samples.apps.nowinandroid.navigation.search.searchEntry
+import com.google.samples.apps.nowinandroid.navigation.shouldShowGradientBackground
+import com.google.samples.apps.nowinandroid.navigation.topic.topicEntry
+import com.google.samples.apps.nowinandroid.feature.settings.R as settingsR
 
 @Composable
 fun NiaApp(
@@ -92,7 +92,7 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
+    val shouldShowGradientBackground = appState.navigationState.shouldShowGradientBackground()
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -223,8 +223,9 @@ internal fun NiaApp(
                 if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
                     shouldShowTopAppBar = true
 
-                    val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
-                        ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
+                    val destination =
+                        TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
+                            ?: error("Top level nav item not found for ${appState.navigationState.currentTopLevelKey}")
 
                     NiaTopAppBar(
                         titleRes = destination.titleTextId,
@@ -240,7 +241,7 @@ internal fun NiaApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = { onTopAppBarActionClick() },
-                        onNavigationClick = { navigator.navigate(SearchNavKey) },
+                        onNavigationClick = { navigator.navigateToSearch() },
                     )
                 }
 
@@ -257,11 +258,11 @@ internal fun NiaApp(
                     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
                     val entryProvider = entryProvider {
-                        forYouEntry(navigator)
-                        bookmarksEntry(navigator)
-                        interestsEntry(navigator)
-                        topicEntry(navigator)
-                        searchEntry(navigator)
+                        forYouEntry(navigator = navigator)
+                        bookmarksEntry(navigator = navigator)
+                        interestsEntry(navigator = navigator)
+                        topicEntry(navigator = navigator)
+                        searchEntry(navigator = navigator)
                     }
 
                     NavDisplay(
