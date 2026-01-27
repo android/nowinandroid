@@ -77,7 +77,10 @@ jobs:
             echo "Start screen recording"
             adb shell screenrecord /sdcard/benchmark.mp4 &
             
-            ./gradlew :benchmark:connectedDemoBenchmarkAndroidTest || true
+            ./gradlew \
+              :benchmark:connectedDemoBenchmarkAndroidTest \
+              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
+              || true
 
             adb shell pkill -INT screenrecord || true
             sleep 3
