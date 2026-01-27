@@ -23,14 +23,14 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1-mesa-glx
+          # Updated for Ubuntu 24.04: libgl1-mesa-glx is now libgl1
+          sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1 libglx-mesa0
 
       - name: Build benchmark APKs
         run: |
           ./gradlew :app:assembleDemoBenchmark \
                     :benchmarks:assembleDemoBenchmark \
-                    -x :app:generateDemoBenchmarkOssLicenses \
-                    -x :benchmarks:generateDemoBenchmarkOssLicenses
+                    -x "generate*OssLicenses"
 
       - name: Run Macrobenchmarks
         uses: reactivecircus/android-emulator-runner@v2
@@ -42,29 +42,23 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu host -no-audio -no-boot-anim
           script: |
-            # Ensure the emulator is fully booted before running commands
             adb wait-for-device
             
             echo "Starting screen recording..."
-            # Start recording in background
             adb shell screenrecord /sdcard/benchmark.mp4 &
             
             echo "Running benchmarks..."
-            # We use the 'benchmarks' module name common in NiA
             ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
               || echo "Benchmarks failed, but we will still try to pull the video."
 
             echo "Stopping recording..."
-            # SIGINT (2) allows the MP4 container to close properly
             adb shell pkill -2 screenrecord || true
             sleep 5
             
-            echo "Pulling files from device..."
-            adb pull /sdcard/benchmark.mp4 . || true
-            
-            # Pull logcat for extra debugging
-            adb logcat -d > logcat.txt
+            echo "Pulling files..."
+            adb pull /sdcard/benchmark.mp4 . || touch benchmark.mp4
+            adb logcat -d > logcat.txt || touch logcat.txt
 
       - name: Upload Macrobenchmark Reports
         if: always()
@@ -72,7 +66,7 @@ jobs:
         with:
           name: macrobenchmark-results
           path: |
-            **/build/outputs/connected_android_test_additional_output/**/*.json
+            **/build/outputs/**/*.json
             **/build/reports/androidTests/connected/
             logcat.txt
 
