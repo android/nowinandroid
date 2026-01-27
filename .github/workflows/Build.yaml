@@ -23,14 +23,14 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          # Updated for Ubuntu 24.04: libgl1-mesa-glx is now libgl1
+          # Using the verified packages for Ubuntu 24.04
           sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1 libglx-mesa0
 
       - name: Build benchmark APKs
         run: |
           ./gradlew :app:assembleDemoBenchmark \
                     :benchmarks:assembleDemoBenchmark \
-                    -x "generate*OssLicenses"
+                    --stacktrace
 
       - name: Run Macrobenchmarks
         uses: reactivecircus/android-emulator-runner@v2
@@ -45,12 +45,16 @@ jobs:
             adb wait-for-device
             
             echo "Starting screen recording..."
+            # Using /sdcard/ is standard for screenrecord permissions
             adb shell screenrecord /sdcard/benchmark.mp4 &
             
             echo "Running benchmarks..."
+            # We add the license exclusion here to prevent the GMS crash during testing
             ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
+              -x :app:generateDemoBenchmarkOssLicenses \
+              -x :benchmarks:generateDemoBenchmarkOssLicenses \
               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
-              || echo "Benchmarks failed, but we will still try to pull the video."
+              || echo "Benchmarks finished with errors, pulling data anyway..."
 
             echo "Stopping recording..."
             adb shell pkill -2 screenrecord || true
