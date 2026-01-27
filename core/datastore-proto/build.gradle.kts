@@ -15,12 +15,8 @@
  */
 
 plugins {
-    alias(libs.plugins.nowinandroid.android.library)
+    alias(libs.plugins.nowinandroid.jvm.library)
     alias(libs.plugins.protobuf)
-}
-
-android {
-    namespace = "com.google.samples.apps.nowinandroid.core.datastore.proto"
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes
@@ -29,9 +25,9 @@ protobuf {
         artifact = libs.protobuf.protoc.get().toString()
     }
     generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("java") {
+        all().configureEach {
+            builtins {
+                named("java") {
                     option("lite")
                 }
                 register("kotlin") {
