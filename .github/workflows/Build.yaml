@@ -20,38 +20,52 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      # 1. CRITICAL: Free up disk space. 
+      # API 30+ emulators need ~10GB. Standard runners are often too full.
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      # 2. CRITICAL: Enable KVM group permissions
+      # This ensures the emulator can actually use the CPU's virtualization features.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Build Benchmark APKs
         run: |
           ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
 
-      - name: AVD Cache
-        uses: actions/cache@v4
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-33-x86_64-google_apis
-
       - name: Run Benchmarks & Record Video
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 31 # API 31 is lighter and boots faster than 33/35
           target: google_apis
           arch: x86_64
-          force-avd-creation: false
-          # We use swiftshader_indirect to avoid the "device not found" crash
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          force-avd-creation: true # Resetting AVD to ensure no corrupted cache
+          # Added -accel on and -memory to ensure it has enough power to boot
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -accel on -memory 3072
           disable-animations: true 
           script: |
-            # 1. Start recording
+            # 1. Wait for boot to be REALLY finished
+            adb wait-for-device
+            
+            # 2. Start recording
+            echo "Starting video recording..."
             adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
             
-            # 2. Run the tests (Using the APKs we built in STEP A)
+            # 3. Run the tests
+            echo "Running Macrobenchmarks..."
             ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
               -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
 
-            # 3. Finalize video
+            # 4. Finalize
+            echo "Pulling video..."
             sleep 2
             adb shell pkill -2 screenrecord || true
             sleep 5
@@ -61,7 +75,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-package
+          name: benchmark-results
           path: |
             benchmark_video.mp4
             benchmarks/build/outputs/connected_android_test_additional_output/
