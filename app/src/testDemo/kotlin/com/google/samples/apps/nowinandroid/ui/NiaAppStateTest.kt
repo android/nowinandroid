@@ -24,6 +24,7 @@ import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
+import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestNetworkMonitor
 import com.google.samples.apps.nowinandroid.core.testing.util.TestTimeZoneMonitor
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
@@ -51,8 +52,11 @@ import kotlin.test.assertEquals
 @HiltAndroidTest
 class NiaAppStateTest {
 
-    @get:Rule
+    @get:Rule(0)
     val composeTestRule = createComposeRule()
+
+    @get:Rule(1)
+    val mainDispatcherRule = MainDispatcherRule()
 
     // Create the test dependencies.
     private val networkMonitor = TestNetworkMonitor()
@@ -60,7 +64,7 @@ class NiaAppStateTest {
     private val timeZoneMonitor = TestTimeZoneMonitor()
 
     private val userNewsResourceRepository =
-        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository())
+        CompositeUserNewsResourceRepository(TestNewsRepository(), TestUserDataRepository(), mainDispatcherRule.testDispatcher)
 
     // Subject under test.
     private lateinit var state: NiaAppState

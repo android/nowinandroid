@@ -65,11 +65,13 @@ class ForYouViewModelTest {
     private val userNewsResourceRepository = CompositeUserNewsResourceRepository(
         newsRepository = newsRepository,
         userDataRepository = userDataRepository,
+        defaultDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     private val getFollowableTopicsUseCase = GetFollowableTopicsUseCase(
         topicsRepository = topicsRepository,
         userDataRepository = userDataRepository,
+        defaultDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     private val savedStateHandle = SavedStateHandle()
