@@ -1,176 +1,96 @@
-name: Build APKs + Emulator test (push to test)
+name: Macrobenchmark + Screen Record (AVD Cached)
 
 on:
   push:
-    branches:
-      - testNIA
-  workflow_dispatch:
-
-concurrency:
-  group: emulator-test-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
-env:
-  EMULATOR_API_LEVEL: 30
-  EMULATOR_ARCH: x86_64
+    branches: [testNIA]
 
 jobs:
-  build_and_upload:
-    name: Build APKs (app + test)
+  macrobenchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    outputs:
-      apks_artifact: apks
+
+    strategy:
+      matrix:
+        api-level: [30]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Copy CI gradle.properties (if exists)
+      - name: Enable KVM
         run: |
-          if [ -f .github/ci-gradle.properties ]; then
-            mkdir -p ~/.gradle
-            cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-          fi
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
-      - name: Set up JDK 17 (with Gradle cache)
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 17
           cache: gradle
 
-      - name: Setup Gradle (setup action with caching)
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          build-cache: true
-
-      - name: Build only the needed variants (app + test)
+      - name: Build benchmark variants
         run: |
-          # Build only app demo debug and its test APK to save time
-          ./gradlew :app:assembleDemoDebug :app:assembleDemoDebugAndroidTest --no-daemon --no-parallel
-
-      - name: Collect APKs
-        id: collect_apks
-        run: |
-          mkdir -p apk_collection
-          # copy all apk outputs (app and androidTest apks)
-          find ./app/build/outputs -type f -name "*.apk" -not -path "*/mapping/*" -exec cp {} apk_collection/ \; || true
-          echo "Collected files:"
-          ls -lah apk_collection || true
-          if [ $(ls -A apk_collection | wc -l) -eq 0 ]; then
-            echo "::error::No APKs found in app/build/outputs; failing."
-            exit 1
-          fi
-          echo "::set-output name=apk_dir::apk_collection"
-
-      - name: Upload APKs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: apks
-          path: apk_collection/**
-
-  emulator_run:
-    name: Run emulator, install APKs, run tests & record
-    needs: build_and_upload
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download APKs artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apks
-          path: ./apks
-
-      - name: Prepare artifacts dir
-        run: mkdir -p artifacts
+          ./gradlew :app:assembleDemoBenchmark \
+                    :macrobenchmark:assembleDemoBenchmark
 
       - name: Restore AVD cache
         uses: actions/cache@v4
+        id: avd-cache
         with:
           path: |
             ~/.android/avd
             ~/.android/adb*
-          key: avd-${{ env.EMULATOR_API_LEVEL }}-${{ runner.os }}-${{ hashFiles('**/.android/release-not-used') }}
-          restore-keys: |
-            avd-${{ env.EMULATOR_API_LEVEL }}-${{ runner.os }}-
+          key: avd-api-${{ matrix.api-level }}
 
-      - name: Enable KVM (Linux runners)
-        if: runner.os == 'Linux'
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm || true
-          ls -la /dev/kvm || true
-
-      - name: Start emulator, install APKs, run tests & record (ReactiveCircus)
+      - name: Create AVD snapshot (cache miss only)
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ env.EMULATOR_API_LEVEL }}
-          arch: ${{ env.EMULATOR_ARCH }}
-          force-avd-creation: true
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-window -no-boot-anim -noaudio -gpu swiftshader_indirect
+          emulator-options: >
+            -no-window
+            -noaudio
+            -no-boot-anim
+            -gpu swiftshader_indirect
+          script: echo "AVD snapshot created"
+
+      - name: Run macrobenchmark + screen record
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          force-avd-creation: false
+          disable-animations: true
+          emulator-options: >
+            -no-window
+            -noaudio
+            -no-boot-anim
+            -gpu swiftshader_indirect
           script: |
-            bash -lc '
-            set -euo pipefail
-            echo "Waiting for emulator device to appear..."
-            adb wait-for-device
-            # find emulator serial robustly
-            EMU=$(adb devices | awk "/emulator/ && !/offline/ {print \$1; exit}")
-            if [ -z "$EMU" ]; then
-              # common fallback
-              EMU=emulator-5554
-            fi
-            echo "Using emulator serial: $EMU"
+            echo "Start screen recording"
+            adb shell screenrecord /sdcard/benchmark.mp4 &
+            
+            ./gradlew :macrobenchmark:connectedDemoBenchmarkAndroidTest
 
-            # wait for boot completed
-            until adb -s "$EMU" shell getprop sys.boot_completed | grep -m1 "1"; do sleep 1; done
-            echo "Emulator booted."
+            adb shell pkill -INT screenrecord || true
+            sleep 3
+            adb pull /sdcard/benchmark.mp4 benchmark.mp4
 
-            # Install all APKs produced by build job
-            echo "Installing APKs from ./apks..."
-            for f in ./apks/*.apk; do
-              [ -e "$f" ] || continue
-              echo "Installing $f"
-              adb -s "$EMU" install -r "$f" || echo "install failed for $f (continuing)"
-            done
-
-            # Start a device screen recording in background (30s)
-            echo "Starting screenrecord (30s)"
-            adb -s "$EMU" shell screenrecord --time-limit 30 /sdcard/test_run.mp4 &
-
-            # Attempt to run instrumentation tests via installed instrumentation runner (best effort)
-            # Try list instrumentation, if exists run first one
-            INST=$(adb -s "$EMU" shell pm list instrumentation | sed -n "s/^instrumentation://p" | head -n1 | tr -d "\\r")
-            if [ -n "$INST" ]; then
-              echo "Running instrumentation: $INST"
-              adb -s "$EMU" shell am instrument -w "$INST" || echo "instrumentation failed (continuing)"
-            else
-              echo "No instrumentation found; performing smoke launch using monkey"
-              adb -s "$EMU" shell monkey -p com.google.samples.apps.nowinandroid.dev -c android.intent.category.LAUNCHER 1 || true
-            fi
-
-            sleep 5
-            # try to pull recording (if created)
-            adb -s "$EMU" pull /sdcard/test_run.mp4 ./artifacts/test_run.mp4 || echo "no recording found (maybe too short)"
-
-            # Collect logs and dumpsys
-            adb -s "$EMU" shell dumpsys meminfo > ./artifacts/dumpsys_meminfo.txt || true
-            adb -s "$EMU" shell dumpsys gfxinfo com.google.samples.apps.nowinandroid.dev > ./artifacts/gfxinfo.txt || true
-            adb -s "$EMU" logcat -d > ./artifacts/logcat.txt || true
-            '
-
-      - name: Upload artifacts
+      - name: Upload benchmark reports
         uses: actions/upload-artifact@v4
         with:
-          name: emulator-artifacts
+          name: macrobenchmark-reports
           path: |
-            artifacts/**
-            apks/**
+            **/build/outputs/benchmarkReports/**
+
+      - name: Upload screen recording
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-video
+          path: benchmark.mp4
