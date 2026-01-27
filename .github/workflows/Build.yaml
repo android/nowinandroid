@@ -1,13 +1,13 @@
-name: Macrobenchmark + Screen Record (Emulator API 35)
+name: Benchmark on Emulator
 
 on:
   push:
     branches: [testNIA]
 
 jobs:
-  macrobenchmark:
+  benchmark-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 60 
+    timeout-minutes: 45 
 
     steps:
       - name: Checkout code
@@ -20,63 +20,48 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Install system dependencies
+      - name: Build Benchmark APKs
         run: |
-          sudo apt-get update
-          # Using the verified packages for Ubuntu 24.04
-          sudo apt-get install -y libpulse0 libvulkan1 mesa-utils libgl1 libglx-mesa0
+          ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
 
-      - name: Build benchmark APKs
-        run: |
-          ./gradlew :app:assembleDemoBenchmark \
-                    :benchmarks:assembleDemoBenchmark \
-                    --stacktrace
+      - name: AVD Cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-33-x86_64-google_apis
 
-      - name: Run Macrobenchmarks
+      - name: Run Benchmarks & Record Video
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 33
           target: google_apis
           arch: x86_64
           force-avd-creation: false
-          disable-animations: true
-          emulator-options: -no-window -gpu host -no-audio -no-boot-anim
+          # We use swiftshader_indirect to avoid the "device not found" crash
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true 
           script: |
-            adb wait-for-device
+            # 1. Start recording
+            adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
             
-            echo "Starting screen recording..."
-            # Using /sdcard/ is standard for screenrecord permissions
-            adb shell screenrecord /sdcard/benchmark.mp4 &
-            
-            echo "Running benchmarks..."
-            # We add the license exclusion here to prevent the GMS crash during testing
+            # 2. Run the tests (Using the APKs we built in STEP A)
             ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
-              -x :app:generateDemoBenchmarkOssLicenses \
-              -x :benchmarks:generateDemoBenchmarkOssLicenses \
-              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR \
-              || echo "Benchmarks finished with errors, pulling data anyway..."
+              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
 
-            echo "Stopping recording..."
+            # 3. Finalize video
+            sleep 2
             adb shell pkill -2 screenrecord || true
             sleep 5
-            
-            echo "Pulling files..."
-            adb pull /sdcard/benchmark.mp4 . || touch benchmark.mp4
-            adb logcat -d > logcat.txt || touch logcat.txt
+            adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
 
-      - name: Upload Macrobenchmark Reports
+      - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: macrobenchmark-results
+          name: benchmark-package
           path: |
-            **/build/outputs/**/*.json
-            **/build/reports/androidTests/connected/
-            logcat.txt
-
-      - name: Upload Screen Recording
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-video
-          path: benchmark.mp4
+            benchmark_video.mp4
+            benchmarks/build/outputs/connected_android_test_additional_output/
