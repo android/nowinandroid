@@ -192,6 +192,9 @@ jobs:
 
   androidTest:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     timeout-minutes: 55
     strategy:
       matrix:
