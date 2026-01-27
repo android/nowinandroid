@@ -1,4 +1,4 @@
-name: "Build APKs + Emulator test (trigger: push to test)"
+name: Build APKs + Emulator test (push to test)
 
 on:
   push:
@@ -6,14 +6,22 @@ on:
       - testNIA
   workflow_dispatch:
 
+concurrency:
+  group: emulator-test-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
+env:
+  EMULATOR_API_LEVEL: 30
+  EMULATOR_ARCH: x86_64
+
 jobs:
   build_and_upload:
-    name: Build APKs and test APKs
+    name: Build APKs (app + test)
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     outputs:
       apks_artifact: apks
     steps:
@@ -27,35 +35,34 @@ jobs:
             cp .github/ci-gradle.properties ~/.gradle/gradle.properties
           fi
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 (with Gradle cache)
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: 17
+          cache: gradle
 
-      - name: Setup Gradle (cache enabled)
+      - name: Setup Gradle (setup action with caching)
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           build-cache: true
 
-      - name: Build all APKs (assemble)
-        # This builds flavors / variants. It may take a while the first run.
-        run: ./gradlew :app:assemble -PminifyWithR8=false --no-daemon --no-parallel
-
-      - name: Find APKs and test APKs
-        id: find-apks
+      - name: Build only the needed variants (app + test)
         run: |
-          echo "Searching for APKs under app/build/outputs..."
-          find ./app/build/outputs -type f -name "*.apk" -print || true
-          # Collect all APKs (app & androidTest apks)
+          # Build only app demo debug and its test APK to save time
+          ./gradlew :app:assembleDemoDebug :app:assembleDemoDebugAndroidTest --no-daemon --no-parallel
+
+      - name: Collect APKs
+        id: collect_apks
+        run: |
           mkdir -p apk_collection
-          # find apks (exclude mapping & intermediates)
-          find ./app/build/outputs -type f -name "*.apk" -not -path "*/mapping/*" -not -path "*/outputs/mapping/*" -exec cp {} apk_collection/ \;
-          echo "Files copied to apk_collection:"
+          # copy all apk outputs (app and androidTest apks)
+          find ./app/build/outputs -type f -name "*.apk" -not -path "*/mapping/*" -exec cp {} apk_collection/ \; || true
+          echo "Collected files:"
           ls -lah apk_collection || true
           if [ $(ls -A apk_collection | wc -l) -eq 0 ]; then
-            echo "No APKs found! failing."
+            echo "::error::No APKs found in app/build/outputs; failing."
             exit 1
           fi
           echo "::set-output name=apk_dir::apk_collection"
@@ -67,7 +74,7 @@ jobs:
           path: apk_collection/**
 
   emulator_run:
-    name: Run emulator, install APKs, run instrumentation & record
+    name: Run emulator, install APKs, run tests & record
     needs: build_and_upload
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -75,13 +82,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download built APKs
+      - name: Download APKs artifact
         uses: actions/download-artifact@v4
         with:
           name: apks
           path: ./apks
 
-      - name: Enable KVM on runner (Linux)
+      - name: Prepare artifacts dir
+        run: mkdir -p artifacts
+
+      - name: Restore AVD cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android/avd
+            ~/.android/adb*
+          key: avd-${{ env.EMULATOR_API_LEVEL }}-${{ runner.os }}-${{ hashFiles('**/.android/release-not-used') }}
+          restore-keys: |
+            avd-${{ env.EMULATOR_API_LEVEL }}-${{ runner.os }}-
+
+      - name: Enable KVM (Linux runners)
         if: runner.os == 'Linux'
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -89,71 +109,68 @@ jobs:
           sudo udevadm trigger --name-match=kvm || true
           ls -la /dev/kvm || true
 
-      - name: Prepare artifacts dir
-        run: mkdir -p artifacts
-
-      - name: Start emulator, install APKs, run tests and record (ReactiveCircus)
+      - name: Start emulator, install APKs, run tests & record (ReactiveCircus)
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
-          arch: x86_64
+          api-level: ${{ env.EMULATOR_API_LEVEL }}
+          arch: ${{ env.EMULATOR_ARCH }}
           force-avd-creation: true
           disable-animations: true
           emulator-options: -no-window -no-boot-anim -noaudio -gpu swiftshader_indirect
           script: |
+            bash -lc '
             set -euo pipefail
-            echo "Waiting for emulator..."
+            echo "Waiting for emulator device to appear..."
             adb wait-for-device
-            until adb -s emulator-5554 shell getprop sys.boot_completed | grep -m1 "1"; do sleep 1; done
+            # find emulator serial robustly
+            EMU=$(adb devices | awk "/emulator/ && !/offline/ {print \$1; exit}")
+            if [ -z "$EMU" ]; then
+              # common fallback
+              EMU=emulator-5554
+            fi
+            echo "Using emulator serial: $EMU"
+
+            # wait for boot completed
+            until adb -s "$EMU" shell getprop sys.boot_completed | grep -m1 "1"; do sleep 1; done
             echo "Emulator booted."
 
-            # Install all apks found in ./apks (app and test apks)
-            echo "Installing APKs..."
+            # Install all APKs produced by build job
+            echo "Installing APKs from ./apks..."
             for f in ./apks/*.apk; do
+              [ -e "$f" ] || continue
               echo "Installing $f"
-              adb install -r "$f" || (echo "install failed for $f, continuing" && true)
+              adb -s "$EMU" install -r "$f" || echo "install failed for $f (continuing)"
             done
 
-            # Attempt to detect an instrumentation runner automatically
-            echo "Detecting installed instrumentation..."
-            INST_LIST="$(adb shell pm list instrumentation || true)"
-            echo "Instrumentation list: $INST_LIST"
-            # pick first instrumentation component (format: instrumentation: <name>/<runner> (target=...))
-            INST=$(echo "$INST_LIST" | sed -n 's/^instrumentation:\s*//p' | head -n1 | awk '{print $1}' | tr -d '\r')
-            if [ -z "$INST" ]; then
-              echo "No instrumentation found. Trying to detect test runner via package name fallback..."
-              # fallback: try to find any package that looks like demo or nowinandroid (best-effort)
-              PACKAGE=$(adb shell pm list packages | tr -d '\r' | grep -E 'nowinandroid|nia|nowin' | head -n1 | sed 's/package://g' || true)
-              echo "Detected package: $PACKAGE"
-              if [ -n "$PACKAGE" ]; then
-                # list instrumentation for that package specifically
-                INST=$(adb shell pm list instrumentation | tr -d '\r' | grep "$PACKAGE" | head -n1 | sed -n 's/^instrumentation:\s*//p' | awk '{print $1}' || true)
-              fi
-            fi
+            # Start a device screen recording in background (30s)
+            echo "Starting screenrecord (30s)"
+            adb -s "$EMU" shell screenrecord --time-limit 30 /sdcard/test_run.mp4 &
 
-            if [ -z "$INST" ]; then
-              echo "Couldn't auto-detect instrumentation runner. As fallback, will run a simple smoke launch."
-              # attempt to start main activity (best-effort)
-              adb shell monkey -p com.google.samples.apps.nowinandroid.dev -c android.intent.category.LAUNCHER 1 || true
-            else
+            # Attempt to run instrumentation tests via installed instrumentation runner (best effort)
+            # Try list instrumentation, if exists run first one
+            INST=$(adb -s "$EMU" shell pm list instrumentation | sed -n "s/^instrumentation://p" | head -n1 | tr -d "\\r")
+            if [ -n "$INST" ]; then
               echo "Running instrumentation: $INST"
-              # Start screenrecord in background on device (30s)
-              adb shell screenrecord --time-limit 30 /sdcard/test_run.mp4 &
-              # Run instrumentation - this will run tests already packaged in the test APK
-              adb shell am instrument -w "$INST" || true
-              # Give a moment for the recording to finish (screenrecord stops automatically after time-limit)
-              sleep 5
-              # Pull the recording
-              adb pull /sdcard/test_run.mp4 ./artifacts/test_run.mp4 || true
+              adb -s "$EMU" shell am instrument -w "$INST" || echo "instrumentation failed (continuing)"
+            else
+              echo "No instrumentation found; performing smoke launch using monkey"
+              adb -s "$EMU" shell monkey -p com.google.samples.apps.nowinandroid.dev -c android.intent.category.LAUNCHER 1 || true
             fi
 
-            # Collect memory and gfx info and logs
-            adb shell dumpsys meminfo > ./artifacts/dumpsys_meminfo.txt || true
-            adb shell dumpsys gfxinfo com.google.samples.apps.nowinandroid.dev > ./artifacts/gfxinfo.txt || true
-            adb logcat -d > ./artifacts/logcat.txt || true
+            sleep 5
+            # try to pull recording (if created)
+            adb -s "$EMU" pull /sdcard/test_run.mp4 ./artifacts/test_run.mp4 || echo "no recording found (maybe too short)"
+
+            # Collect logs and dumpsys
+            adb -s "$EMU" shell dumpsys meminfo > ./artifacts/dumpsys_meminfo.txt || true
+            adb -s "$EMU" shell dumpsys gfxinfo com.google.samples.apps.nowinandroid.dev > ./artifacts/gfxinfo.txt || true
+            adb -s "$EMU" logcat -d > ./artifacts/logcat.txt || true
+            '
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: emulator-artifacts
-          path: artifacts/**, apks/**
+          path: |
+            artifacts/**
+            apks/**
