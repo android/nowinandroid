@@ -38,7 +38,7 @@ jobs:
       - name: Build Benchmark APKs
         run: ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
 
-      - name: Run Benchmarks & Record Video
+      - name: Run Benchmarks
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
@@ -48,23 +48,54 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true 
           script: |
-            # 1. Start recording
-            # adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
-            
-            # 2. Run ONLY the Startup tests
-            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR || true
+            set -e
 
-            # 3. Pull the video (This will run even if the tests above fail)
-            # echo "Pulling video file..."
-            # adb shell pkill -2 screenrecord || true
-            # sleep 5
-            # adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
+            OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
+            COLLECTED_DIR="$OUTPUT_DIR/collected"
+            mkdir -p "$COLLECTED_DIR"
+
+            run_benchmark () {
+              VERSION_LABEL=$1   # v1 or v2
+              RUN_NUMBER=$2      # 1..5
+
+              echo "=============================="
+              echo "Running benchmark for $VERSION_LABEL run $RUN_NUMBER"
+              echo "=============================="
+
+              # Clear app data to keep runs consistent
+              adb shell pm clear com.google.samples.apps.nowinandroid || true
+
+              # Run only the Startup benchmark
+              ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
+                -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+                -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+
+              # Find the newest JSON result file
+              LATEST_JSON=$(find "$OUTPUT_DIR" -name "*.json" -type f -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d' ' -f2-)
+
+              if [ -z "$LATEST_JSON" ]; then
+                echo "Error: No benchmark JSON file found"
+                exit 1
+              fi
+
+              NEW_NAME="$COLLECTED_DIR/benchmark_${VERSION_LABEL}_run${RUN_NUMBER}.json"
+              cp "$LATEST_JSON" "$NEW_NAME"
+
+              echo "Saved result to $NEW_NAME"
+            }
+
+            # Alternate runs: v1, v2, v1, v2 ...
+            for i in 1 2 3 4 5; do
+              run_benchmark "v1" "$i"
+              run_benchmark "v2" "$i"
+            done
+      
+      - name: Run step fit
+        run: python3 .github/scripts/step_fit.py
 
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: |
-            # benchmark_video.mp4
-            benchmarks/build/outputs/connected_android_test_additional_output/
+          path: benchmarks/build/outputs/connected_android_test_additional_output/collected/
