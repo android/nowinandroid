@@ -64,7 +64,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigationevent.NavigationEventDispatcher
+import androidx.navigationevent.NavigationEventDispatcherOwner
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
 import com.google.samples.apps.nowinandroid.R
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsResourceQuery
+import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
+import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
+import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaGradientBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaNavigationSuiteScaffold
@@ -72,8 +79,11 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTopAp
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
+import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
+import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
@@ -84,6 +94,9 @@ import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searc
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.datetime.TimeZone
 import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
 
 @Composable
@@ -205,6 +218,9 @@ internal fun NiaApp(
                     ),
                 )
             },
+            // Fix for render issue: Scaffold crashes with "List is empty" when contentWindowInsets is set
+            // but no top/bottom bar is present in some Compose versions.
+            bottomBar = {},
         ) { padding ->
             Column(
                 Modifier
@@ -296,3 +312,37 @@ private fun Modifier.notificationDot(): Modifier =
             )
         }
     }
+
+@DevicePreviews
+@Composable
+fun NiaAppPreview() {
+    NiaTheme {
+        CompositionLocalProvider(
+            LocalNavigationEventDispatcherOwner provides object : NavigationEventDispatcherOwner {
+                override val navigationEventDispatcher = NavigationEventDispatcher()
+            },
+        ) {
+            NiaApp(
+                appState = rememberNiaAppState(
+                    networkMonitor = object : NetworkMonitor {
+                        override val isOnline: Flow<Boolean> = flowOf(true)
+                    },
+                    userNewsResourceRepository = object : UserNewsResourceRepository {
+                        override fun observeAll(query: NewsResourceQuery): Flow<List<UserNewsResource>> =
+                            flowOf(emptyList())
+
+                        override fun observeAllForFollowedTopics(): Flow<List<UserNewsResource>> =
+                            flowOf(emptyList())
+
+                        override fun observeAllBookmarked(): Flow<List<UserNewsResource>> =
+                            flowOf(emptyList())
+                    },
+                    timeZoneMonitor = object : TimeZoneMonitor {
+                        override val currentTimeZone: Flow<TimeZone> =
+                            flowOf(TimeZone.currentSystemDefault())
+                    },
+                ),
+            )
+        }
+    }
+}

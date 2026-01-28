@@ -618,3 +618,24 @@ fun ForYouScreenPopulatedAndLoading(
         )
     }
 }
+
+@DevicePreviews
+@Composable
+fun ForYouScreenNotPopulatedOnboarding() {
+    NiaTheme {
+        ForYouScreen(
+            isSyncing = true,
+            onboardingUiState = OnboardingUiState.Shown(
+                topics = emptyList(),
+            ),
+            feedState = NewsFeedUiState.Loading,
+            deepLinkedUserNewsResource = null,
+            onTopicCheckedChanged = { _, _ -> },
+            saveFollowedTopics = {},
+            onNewsResourcesCheckedChanged = { _, _ -> },
+            onNewsResourceViewed = {},
+            onTopicClick = {},
+            onDeepLinkOpened = {},
+        )
+    }
+}
