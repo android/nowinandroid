@@ -24,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
@@ -48,11 +50,17 @@ fun NiaIconToggleButton(
     icon: @Composable () -> Unit,
     checkedIcon: @Composable () -> Unit = icon,
 ) {
+    val haptics = LocalHapticFeedback.current
     // TODO: File bug
     // Can't use regular IconToggleButton as it doesn't include a shape (appears square)
     FilledIconToggleButton(
         checked = checked,
-        onCheckedChange = onCheckedChange,
+        onCheckedChange = { isChecked ->
+            haptics.performHapticFeedback(
+                if (isChecked) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff
+            )
+            onCheckedChange(isChecked)
+        },
         modifier = modifier,
         enabled = enabled,
         colors = IconButtonDefaults.iconToggleButtonColors(
