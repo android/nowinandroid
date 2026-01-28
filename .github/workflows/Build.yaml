@@ -18,7 +18,6 @@ jobs:
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
-          # We do NOT delete $AGENT_TOOLSDIRECTORY here because that's where Java goes next
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -27,7 +26,7 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Grant execute permission for gradlew
+      - name: Grant execute permission
         run: chmod +x gradlew
 
       - name: Enable KVM
@@ -37,37 +36,30 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Build Benchmark APKs
-        run: |
-          ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
+        run: ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
 
       - name: Run Benchmarks & Record Video
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 31
+          api-level: 30
           target: google_apis
           arch: x86_64
           force-avd-creation: true
-          # Added extra memory to prevent the "offline" crash
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 3072
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 3584
           disable-animations: true 
           script: |
-            # Ensure the device is ready
-            adb wait-for-device
-            
-            # Start recording (3 minute limit)
+            # 1. Start recording in background
             adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
             
-            # Run the actual tests
-            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
-              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+            # 2. Run the tests
+            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
 
-            # Pull the video back to the runner
+            # 3. Pull the video
             sleep 2
             adb shell pkill -2 screenrecord || true
             sleep 5
             adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
 
-      # STEP 7: UPLOAD
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
