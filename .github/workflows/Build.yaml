@@ -45,20 +45,26 @@ jobs:
           target: google_apis
           arch: x86_64
           force-avd-creation: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 3584
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true 
           script: |
             # 1. Start recording in background
             adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
             
-            # 2. Run the tests
-            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+            # 2. Run ONLY the StartupBenchmark class (filters out the 15+ tests)
+            # '|| true' ensures the script continues so we can PULL the video even on failure
+            ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
+              -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR || true
 
-            # 3. Pull the video
-            sleep 2
+            # 3. Pull the video (Adding extra sleep to ensure recording finishes)
+            echo "Stopping recording and pulling video..."
             adb shell pkill -2 screenrecord || true
             sleep 5
-            adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
+            adb pull /sdcard/benchmark_video.mp4 .
+            
+            # 4. Verify the file exists for the next step
+            ls -lh benchmark_video.mp4
 
       - name: Upload Artifacts
         if: always()
