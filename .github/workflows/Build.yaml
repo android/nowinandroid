@@ -49,16 +49,16 @@ jobs:
           disable-animations: true 
           script: |
             # 1. Start recording
-            adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
+            # adb shell screenrecord --time-limit 180 /sdcard/benchmark_video.mp4 &
             
-            # 2. Run ONLY the Startup tests (ONE CONTINUOUS LINE - NO BACKSLASHES)
+            # 2. Run ONLY the Startup tests
             ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR || true
 
             # 3. Pull the video (This will run even if the tests above fail)
-            echo "Pulling video file..."
-            adb shell pkill -2 screenrecord || true
-            sleep 5
-            adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
+            # echo "Pulling video file..."
+            # adb shell pkill -2 screenrecord || true
+            # sleep 5
+            # adb pull /sdcard/benchmark_video.mp4 benchmark_video.mp4
 
       - name: Upload Artifacts
         if: always()
@@ -66,5 +66,5 @@ jobs:
         with:
           name: benchmark-results
           path: |
-            benchmark_video.mp4
+            # benchmark_video.mp4
             benchmarks/build/outputs/connected_android_test_additional_output/
