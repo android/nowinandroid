@@ -52,7 +52,6 @@ jobs:
 
             OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
             COLLECTED_DIR="$OUTPUT_DIR/collected"
-            mkdir -p "$COLLECTED_DIR"
 
             run_benchmark () {
               VERSION_LABEL=$1   # v1 or v2
@@ -69,6 +68,8 @@ jobs:
               ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
                 -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
                 -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+
+              mkdir -p "$COLLECTED_DIR"
 
               # Find the newest JSON result file
               LATEST_JSON=$(find "$OUTPUT_DIR" -name "*.json" -type f -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d' ' -f2-)
