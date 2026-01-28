@@ -48,13 +48,12 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true 
           script: |
-            #!/bin/bash
             set -e
 
             OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
             COLLECTED_DIR="$OUTPUT_DIR/collected"
 
-            run_benchmark () {
+            run_benchmark() (
               VERSION_LABEL=$1   # v1 or v2
               RUN_NUMBER=$2      # 1..5
 
@@ -84,12 +83,14 @@ jobs:
               cp "$LATEST_JSON" "$NEW_NAME"
 
               echo "Saved result to $NEW_NAME"
-            }
+            )
 
             # Alternate runs: v1, v2, v1, v2 ...
-            for i in 1 2 3 4 5; do
+            i=1
+            while [ $i -le 5 ]; do
               run_benchmark "v1" "$i"
               run_benchmark "v2" "$i"
+              i=$((i + 1))
             done
       
       - name: Run step fit
