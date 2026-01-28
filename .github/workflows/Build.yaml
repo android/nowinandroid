@@ -48,6 +48,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true 
           script: |
+            #!/bin/bash
             set -e
 
             OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
