@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.configureFlavors
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
+import com.google.samples.apps.nowinandroid.configureSpotlessForAndroid
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
@@ -52,6 +53,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 disableUnnecessaryAndroidTests(target)
             }
+            configureSpotlessForAndroid()
             dependencies {
                 "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
                 "testImplementation"(libs.findLibrary("kotlin.test").get())

@@ -15,6 +15,7 @@
  */
 
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
+import com.google.samples.apps.nowinandroid.configureSpotlessForJvm
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -28,6 +29,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
             apply(plugin = "nowinandroid.android.lint")
 
             configureKotlinJvm()
+            configureSpotlessForJvm()
             dependencies {
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
             }

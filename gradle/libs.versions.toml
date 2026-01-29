@@ -51,6 +51,7 @@ kotlinxCoroutines = "1.10.1"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.8.0"
 ksp = "2.3.4"
+ktlint = "1.4.0"
 okhttp = "4.12.0"
 protobuf = "4.29.2"
 protobufPlugin = "0.9.6"
@@ -59,6 +60,7 @@ retrofitKotlinxSerializationJson = "1.0.0"
 robolectric = "4.16"
 roborazzi = "1.56.0"
 room = "2.8.3"
+spotless = "8.2.1"
 truth = "1.4.4"
 turbine = "1.2.0"
 uiTestJunit4 = "1.9.0-rc01"
@@ -171,6 +173,7 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
+spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -191,6 +194,7 @@ google-osslicenses = { id = "com.google.android.gms.oss-licenses-plugin", versio
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 # Plugins defined by this project
 nowinandroid-android-application = { id = "nowinandroid.android.application" }

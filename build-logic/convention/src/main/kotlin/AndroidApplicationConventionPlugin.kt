@@ -20,6 +20,7 @@ import com.google.samples.apps.nowinandroid.configureBadgingTasks
 import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
+import com.google.samples.apps.nowinandroid.configureSpotlessForAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -42,6 +43,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 configureBadgingTasks(this)
             }
+            configureSpotlessForAndroid()
         }
     }
 }
