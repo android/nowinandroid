@@ -17,12 +17,10 @@
 package com.google.samples.apps.nowinandroid
 
 import com.android.build.api.artifact.ScopedArtifact
-import com.android.build.api.dsl.BuildType
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.api.variant.SourceDirectories
-import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
@@ -86,7 +84,6 @@ internal fun Project.configureJacoco(
                 "create${variant.name.capitalize()}CombinedCoverageReport",
                 JacocoReport::class,
             ) {
-
                 classDirectories.setFrom(
                     allJars,
                     allDirectories.map { dirs ->
@@ -107,7 +104,7 @@ internal fun Project.configureJacoco(
                 sourceDirectories.setFrom(
                     files(
                         variant.sources.java.toFilePaths(),
-                        variant.sources.kotlin.toFilePaths()
+                        variant.sources.kotlin.toFilePaths(),
                     ),
                 )
 
@@ -119,7 +116,6 @@ internal fun Project.configureJacoco(
                         .matching { include("**/*.ec") },
                 )
             }
-
 
         variant.artifacts.forScope(ScopedArtifacts.Scope.PROJECT)
             .use(reportTask)
