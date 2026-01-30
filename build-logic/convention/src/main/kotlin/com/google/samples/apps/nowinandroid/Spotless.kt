@@ -27,7 +27,7 @@ internal fun Project.configureSpotlessForAndroid() {
         format("xml") {
             target("src/**/*.xml")
             // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
-            licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
+            licenseHeaderFile(rootDir.resolve("spotless/copyright.xml"), "(<[^!?])")
             endWithNewline()
         }
     }
