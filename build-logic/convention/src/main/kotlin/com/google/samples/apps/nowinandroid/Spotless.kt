@@ -28,6 +28,7 @@ internal fun Project.configureSpotlessForAndroid() {
             target("src/**/*.xml")
             // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
             licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
+            endWithNewline()
         }
     }
 }
@@ -45,11 +46,13 @@ private fun Project.configureSpotlessCommon() {
                 mapOf("android" to "true")
             )
             licenseHeaderFile(rootDir.resolve("spotless/copyright.kt"))
+            endWithNewline()
         }
         format("kts") {
             target("*.kts")
             // Look for the first line that doesn't have a block comment (assumed to be the license)
             licenseHeaderFile(rootDir.resolve("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
+            endWithNewline()
         }
     }
 }
