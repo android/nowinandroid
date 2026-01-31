@@ -115,7 +115,10 @@ fun LazyGridState.scrollbarState(
 
             val firstIndex = min(
                 a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
+                    visibleItems = when (layoutInfo.orientation) {
+                        Orientation.Vertical -> layoutInfo.visibleItemsInfo.filter { it.row == 0 }
+                        Orientation.Horizontal -> layoutInfo.visibleItemsInfo.filter { it.column == 0 }
+                    },
                     itemSize = { layoutInfo.orientation.valueOf(it.size) },
                     offset = { layoutInfo.orientation.valueOf(it.offset) },
                     nextItemOnMainAxis = { first ->
@@ -189,7 +192,7 @@ fun LazyStaggeredGridState.scrollbarState(
 
             val firstIndex = min(
                 a = interpolateFirstItemIndex(
-                    visibleItems = visibleItemsInfo,
+                    visibleItems = layoutInfo.visibleItemsInfo.filter { it.lane == 0 },
                     itemSize = { layoutInfo.orientation.valueOf(it.size) },
                     offset = { layoutInfo.orientation.valueOf(it.offset) },
                     nextItemOnMainAxis = { first ->
