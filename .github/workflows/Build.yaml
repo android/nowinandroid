@@ -58,4 +58,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: benchmarks/build/outputs/connected_android_test_additional_output/json_reports/
+          path: benchmarks/build/json_reports/

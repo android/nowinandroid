@@ -4,7 +4,7 @@ import glob
 import os
 
 # ----------- CONFIG -----------
-JSON_REPORTS_DIR = "benchmarks/build/outputs/connected_android_test_additional_output/json_reports"
+JSON_REPORTS_DIR = "benchmarks/build/json_reports"
 BENCHMARK_NAME = "startupPrecompiledWithBaselineProfile"
 METRIC_KEY = "timeToInitialDisplayMs"
 # ------------------------------

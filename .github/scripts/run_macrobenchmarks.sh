@@ -2,7 +2,7 @@
 set -e
 
 OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
-JSON_REPORTS_DIR="$OUTPUT_DIR/json_reports"
+JSON_REPORTS_DIR="benchmarks/build/json_reports"
 
 run_benchmark() {
   VERSION_LABEL="$1"   # v1 or v2
@@ -15,23 +15,36 @@ run_benchmark() {
   # Clear app data to keep runs consistent
   adb shell pm clear com.google.samples.apps.nowinandroid || true
 
+  # Ensure clean slate so only one JSON exists after run
+  rm -rf "$OUTPUT_DIR"
+  mkdir -p "$OUTPUT_DIR"
+  
   # Run only the Startup benchmark
+  # We might need to replace gradle with adb later to run the benchmark faster
+  # but we will need to deal with making sure things are running correctly
+  # and locating the output JSON files.
   ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
-    -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
-    -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+  --no-daemon \
+  --no-build-cache \
+  --rerun-tasks \
+  -x assemble \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+  -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
 
-  mkdir -p "$JSON_REPORTS_DIR"
+  JSON_REPORT=$(find "$OUTPUT_DIR" -type f -name "*.json")
+  COUNT=$(echo "$JSON_REPORT" | wc -l | tr -d ' ')
 
-  # Find newest JSON result file
-  LATEST_JSON=$(find "$OUTPUT_DIR" -name "*.json" -type f | xargs ls -t | head -n 1)
-
-  if [ -z "$LATEST_JSON" ]; then
-    echo "Error: No benchmark JSON file found"
+  if [ "$COUNT" -ne 1 ]; then
+    echo "Error: Expected exactly 1 JSON file, found $COUNT"
+    find "$OUTPUT_DIR" -type f -name "*.json"
     exit 1
   fi
 
+  # Create JSON reports directory if it doesn't exist
+  mkdir -p "$JSON_REPORTS_DIR"
+
   NEW_JSON_NAME="$JSON_REPORTS_DIR/benchmark_${VERSION_LABEL}_run${RUN_NUMBER}.json"
-  cp "$LATEST_JSON" "$NEW_JSON_NAME"
+  cp "$JSON_REPORT" "$NEW_JSON_NAME"
 
   echo "Saved result to $NEW_JSON_NAME"
 }
