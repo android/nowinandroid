@@ -1,8 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
-OUTPUT_DIR="benchmarks/build/outputs/connected_android_test_additional_output"
-JSON_REPORTS_DIR="benchmarks/build/json_reports"
+APP_PKG="com.google.samples.apps.nowinandroid"
+BENCHMARK_PKG="com.google.samples.apps.nowinandroid.benchmarks"
+TEST_RUNNER="androidx.test.runner.AndroidJUnitRunner"
+JSON_REPORTS_DIR="benchmarks/json_reports"
 
 run_benchmark() {
   VERSION_LABEL="$1"   # v1 or v2
@@ -12,35 +14,32 @@ run_benchmark() {
   echo "Running benchmark for $VERSION_LABEL run $RUN_NUMBER"
   echo "=============================="
 
-  # Clear app data to keep runs consistent
-  adb shell pm clear com.google.samples.apps.nowinandroid || true
-
-  # Ensure clean slate so only one JSON exists after run
-  rm -rf "$OUTPUT_DIR"
-  mkdir -p "$OUTPUT_DIR"
+  # Clear app data and prepare storage
+  adb shell pm clear "$APP_PKG" || true
+  adb shell mkdir -p /sdcard/Download
+  adb shell rm /sdcard/Download/*.json || true
+  adb shell rm /sdcard/Download/*.perfetto-trace || true
+  adb shell rm /sdcard/Download/*.txt || true
   
   # Run only the Startup benchmark
-  # We might need to replace gradle with adb later to run the benchmark faster
-  # but we will need to deal with making sure things are running correctly
-  # and locating the output JSON files.
-  ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
-    -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
-    -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+  adb shell am instrument -w \
+    -e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+    -e androidx.benchmark.suppressErrors EMULATOR \
+    -e no-isolated-storage true \
+    -e additionalTestOutputDir /sdcard/Download \
+    $BENCHMARK_PKG/$TEST_RUNNER
 
-  JSON_REPORT=$(find "$OUTPUT_DIR" -type f -name "*.json")
-  COUNT=$(echo "$JSON_REPORT" | wc -l | tr -d ' ')
+  # Ensure the local directory exists for the pull
+  mkdir -p "$JSON_REPORTS_DIR/tmp_results"
 
-  if [ "$COUNT" -ne 1 ]; then
-    echo "Error: Expected exactly 1 JSON file, found $COUNT"
-    find "$OUTPUT_DIR" -type f -name "*.json"
-    exit 1
-  fi
+  # Pull the benchmarks output produced on the device
+  adb pull /sdcard/Download/. "$JSON_REPORTS_DIR/tmp_results"
 
-  # Create JSON reports directory if it doesn't exist
-  mkdir -p "$JSON_REPORTS_DIR"
-
+  # Take only the generated JSON file (ignore perfetto traces and text files)
+  # There should only be one JSON file because of the rm at the start
   NEW_JSON_NAME="$JSON_REPORTS_DIR/benchmark_${VERSION_LABEL}_run${RUN_NUMBER}.json"
-  cp "$JSON_REPORT" "$NEW_JSON_NAME"
+  mv "$JSON_REPORTS_DIR/tmp_results/"*.json "$NEW_JSON_NAME"
+  rm -rf "$JSON_REPORTS_DIR/tmp_results"
 
   echo "Saved result to $NEW_JSON_NAME"
 }

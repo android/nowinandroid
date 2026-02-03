@@ -4,7 +4,7 @@ import glob
 import os
 
 # ----------- CONFIG -----------
-JSON_REPORTS_DIR = "benchmarks/build/json_reports"
+JSON_REPORTS_DIR = "benchmarks/json_reports"
 BENCHMARK_NAME = "startupPrecompiledWithBaselineProfile"
 METRIC_KEY = "timeToInitialDisplayMs"
 # ------------------------------

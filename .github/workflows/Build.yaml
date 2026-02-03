@@ -34,8 +34,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Build Benchmark APKs
-        run: ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
+      - name: Build APKs
+        run: |
+          ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
 
       - name: Run Benchmarks
         uses: reactivecircus/android-emulator-runner@v2
@@ -44,9 +45,13 @@ jobs:
           target: google_apis
           arch: x86_64
           force-avd-creation: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 8192
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true 
           script: |
+            # Install/Copy the built APKs to the emulator
+            adb install app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk
+            adb install benchmarks/build/outputs/apk/demo/benchmarkRelease/benchmarks-demo-benchmarkRelease.apk
+
             chmod +x .github/scripts/run_macrobenchmarks.sh
             .github/scripts/run_macrobenchmarks.sh
 
@@ -58,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: benchmarks/build/json_reports/
+          path: benchmarks/json_reports/
