@@ -22,6 +22,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
+import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
@@ -44,6 +46,7 @@ import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import com.google.samples.apps.nowinandroid.util.isSystemInDarkTheme
+import com.google.samples.apps.nowinandroid.util.toNightMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -78,6 +81,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        // Apply the saved dark theme config at startup to ensure the splash screen
+        // uses the correct theme. This addresses issue #633.
+        lifecycleScope.launch {
+            viewModel.uiState
+                .map { state ->
+                    if (state is Success) {
+                        state.userData.darkThemeConfig.toNightMode()
+                    } else {
+                        null
+                    }
+                }
+                .first { it != null } // Only take the first non-null mode
+                .let { mode ->
+                    AppCompatDelegate.setDefaultNightMode(mode)
+                }
+        }
 
         // We keep this as a mutable state, so that we can track changes inside the composition.
         // This allows us to react to dark/light mode changes.

@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings.impl
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -62,6 +63,11 @@ class SettingsViewModel @Inject constructor(
     fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         viewModelScope.launch {
             userDataRepository.setDarkThemeConfig(darkThemeConfig)
+            
+            // Apply the night mode at the application level to ensure the splash screen
+            // uses the correct theme on cold start. This addresses issue #633.
+            // Reference: https://developer.android.com/develop/ui/views/theming/darktheme#change-themes
+            AppCompatDelegate.setDefaultNightMode(darkThemeConfig.toNightMode())
         }
     }
 
