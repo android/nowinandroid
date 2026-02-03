@@ -135,13 +135,13 @@ class MainActivity : ComponentActivity() {
         // Sync the user's dark theme preference to the system-level UiModeManager so the
         // splash screen uses the correct theme on the next cold start.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val uiModeManager = getSystemService(UiModeManager::class.java)
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.uiState
                         .mapNotNull { (it as? Success)?.userData?.darkThemeConfig }
                         .distinctUntilChanged()
                         .collect { darkThemeConfig ->
-                            val uiModeManager = getSystemService(UiModeManager::class.java)
                             uiModeManager.setApplicationNightMode(
                                 when (darkThemeConfig) {
                                     DarkThemeConfig.FOLLOW_SYSTEM -> UiModeManager.MODE_NIGHT_AUTO
