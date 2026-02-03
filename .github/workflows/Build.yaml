@@ -1,8 +1,7 @@
 name: Benchmark on Emulator
 
 on:
-  push:
-    branches: [testNIA]
+  workflow_dispatch:
 
 jobs:
   benchmark-android:
