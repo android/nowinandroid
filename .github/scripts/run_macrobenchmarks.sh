@@ -24,12 +24,8 @@ run_benchmark() {
   # but we will need to deal with making sure things are running correctly
   # and locating the output JSON files.
   ./gradlew :benchmarks:connectedDemoBenchmarkAndroidTest \
-  --no-daemon \
-  --no-build-cache \
-  --rerun-tasks \
-  -x assemble \
-  -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
-  -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
+    -Pandroid.testInstrumentationRunnerArguments.class=com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+    -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.suppressErrors=EMULATOR
 
   JSON_REPORT=$(find "$OUTPUT_DIR" -type f -name "*.json")
   COUNT=$(echo "$JSON_REPORT" | wc -l | tr -d ' ')
