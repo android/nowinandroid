@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.nowinandroid
 
+import android.app.UiModeManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -34,12 +36,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.MainActivityUiState.Loading
+import com.google.samples.apps.nowinandroid.MainActivityUiState.Success
 import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourceRepository
 import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
+import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
@@ -48,6 +52,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -124,6 +129,28 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
+            }
+        }
+
+        // Sync the user's dark theme preference to the system-level UiModeManager so the
+        // splash screen uses the correct theme on the next cold start.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.uiState
+                        .mapNotNull { (it as? Success)?.userData?.darkThemeConfig }
+                        .distinctUntilChanged()
+                        .collect { darkThemeConfig ->
+                            val uiModeManager = getSystemService(UiModeManager::class.java)
+                            uiModeManager.setApplicationNightMode(
+                                when (darkThemeConfig) {
+                                    DarkThemeConfig.FOLLOW_SYSTEM -> UiModeManager.MODE_NIGHT_AUTO
+                                    DarkThemeConfig.LIGHT -> UiModeManager.MODE_NIGHT_NO
+                                    DarkThemeConfig.DARK -> UiModeManager.MODE_NIGHT_YES
+                                },
+                            )
+                        }
+                }
             }
         }
 
