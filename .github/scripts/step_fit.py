@@ -4,7 +4,7 @@ import glob
 import os
 
 # ----------- CONFIG -----------
-RESULTS_DIR = "benchmarks/build/outputs/connected_android_test_additional_output/collected"
+JSON_REPORTS_DIR = "benchmarks/build/outputs/connected_android_test_additional_output/json_reports"
 BENCHMARK_NAME = "startupPrecompiledWithBaselineProfile"
 METRIC_KEY = "timeToInitialDisplayMs"
 # ------------------------------
@@ -34,7 +34,7 @@ def main():
     before = []
     after = []
 
-    json_files = sorted(glob.glob(os.path.join(RESULTS_DIR, "*.json")))
+    json_files = sorted(glob.glob(os.path.join(JSON_REPORTS_DIR, "*.json")))
 
     if len(json_files) == 0:
         raise RuntimeError("No JSON files found.")
