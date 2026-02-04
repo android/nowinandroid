@@ -21,10 +21,11 @@ run_benchmark() {
   adb shell rm /sdcard/Download/*.perfetto-trace || true
   adb shell rm /sdcard/Download/*.txt || true
   
-  # Run only the Startup benchmark
+  # Run only the Startup Baseline Profile benchmark
   adb shell am instrument -w \
-    -e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark \
+    -e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark#startupPrecompiledWithBaselineProfile \
     -e androidx.benchmark.suppressErrors EMULATOR \
+    -e androidx.benchmark.profiling.mode none \
     -e no-isolated-storage true \
     -e additionalTestOutputDir /sdcard/Download \
     $BENCHMARK_PKG/$TEST_RUNNER
