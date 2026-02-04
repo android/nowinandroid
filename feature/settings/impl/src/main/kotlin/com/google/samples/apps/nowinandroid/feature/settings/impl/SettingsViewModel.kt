@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
+import com.google.samples.apps.nowinandroid.core.ui.toNightMode
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel

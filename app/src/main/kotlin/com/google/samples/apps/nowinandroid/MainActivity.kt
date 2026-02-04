@@ -43,13 +43,14 @@ import com.google.samples.apps.nowinandroid.core.data.util.NetworkMonitor
 import com.google.samples.apps.nowinandroid.core.data.util.TimeZoneMonitor
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.ui.LocalTimeZone
+import com.google.samples.apps.nowinandroid.core.ui.toNightMode
 import com.google.samples.apps.nowinandroid.ui.NiaApp
 import com.google.samples.apps.nowinandroid.ui.rememberNiaAppState
 import com.google.samples.apps.nowinandroid.util.isSystemInDarkTheme
-import com.google.samples.apps.nowinandroid.util.toNightMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -86,14 +87,9 @@ class MainActivity : ComponentActivity() {
         // uses the correct theme. This addresses issue #633.
         lifecycleScope.launch {
             viewModel.uiState
-                .map { state ->
-                    if (state is Success) {
-                        state.userData.darkThemeConfig.toNightMode()
-                    } else {
-                        null
-                    }
-                }
-                .first { it != null } // Only take the first non-null mode
+                .filterIsInstance<Success>()
+                .map { it.userData.darkThemeConfig.toNightMode() }
+                .first()
                 .let { mode ->
                     AppCompatDelegate.setDefaultNightMode(mode)
                 }
