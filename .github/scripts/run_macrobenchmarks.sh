@@ -2,62 +2,93 @@
 
 set -euo pipefail
 
+NUMBER_OF_RUNS=5
+
 APP_PKG="com.google.samples.apps.nowinandroid"
 BENCHMARK_PKG="com.google.samples.apps.nowinandroid.benchmarks"
 TEST_RUNNER="androidx.test.runner.AndroidJUnitRunner"
-JSON_REPORTS_DIR="benchmarks/json_reports"
+EMULATOR_BENCHMARK_RESULT_DIR="/sdcard/Download"
 
-PATH_APK_VERSION_1="$1"
-PATH_APK_VERSION_2="$2"
+PATH_APK_BASELINE="${1:-}"
+PATH_APK_CANDIDATE="${2:-}"
+OUTPUT_DIR="${3:-./macrobenchmark_results}"
+
+TEMP_DIR="$(mktemp -d)"
+trap 'rm -rf "${TEMP_DIR}"' EXIT
 
 install_apk() {
-  adb install -r "$1"
+  local apk_path="${1}"
 
-  # Clear app data and prepare storage
+  adb install -r "${apk_path}"
+
   adb shell pm clear "$APP_PKG" || true
-  adb shell mkdir -p /sdcard/Download
-  adb shell rm /sdcard/Download/*.json || true
-  adb shell rm /sdcard/Download/*.perfetto-trace || true
-  adb shell rm /sdcard/Download/*.txt || true
+  adb shell pm clear "${BENCHMARK_PKG}" || true
+  adb shell mkdir -p "${EMULATOR_BENCHMARK_RESULT_DIR}"
+
+  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.json || true
+  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.perfetto-trace || true
+  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.txt || true
 }
 
 run_benchmark() {
-  VERSION_LABEL="$1"   # v1 or v2
-  RUN_NUMBER="$2"      # 1..5
-
-  echo "=============================="
-  echo "Running benchmark for $VERSION_LABEL run $RUN_NUMBER"
-  echo "=============================="
-
-  # Run only the Startup Baseline Profile benchmark
   adb shell am instrument -w \
     -e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark#startupPrecompiledWithBaselineProfile \
     -e androidx.benchmark.suppressErrors EMULATOR \
     -e androidx.benchmark.profiling.mode none \
     -e no-isolated-storage true \
-    -e additionalTestOutputDir /sdcard/Download \
+    -e additionalTestOutputDir "${EMULATOR_BENCHMARK_RESULT_DIR}" \
     "$BENCHMARK_PKG/$TEST_RUNNER"
-
-  # Ensure the local directory exists for the pull
-  mkdir -p "$JSON_REPORTS_DIR/tmp_results"
-
-  # Pull the benchmarks output produced on the device
-  adb pull /sdcard/Download/. "$JSON_REPORTS_DIR/tmp_results"
-
-  # Take only the generated JSON file (ignore perfetto traces and text files)
-  # There should only be one JSON file because of the rm at the start
-  NEW_JSON_NAME="$JSON_REPORTS_DIR/benchmark_${VERSION_LABEL}_run${RUN_NUMBER}.json"
-  mv "$JSON_REPORTS_DIR/tmp_results/"*.json "$NEW_JSON_NAME"
-  rm -rf "$JSON_REPORTS_DIR/tmp_results"
-
-  echo "Saved result to $NEW_JSON_NAME"
 }
 
-# Alternate runs: v1, v2, v1, v2 ...
-for i in {1..5}; do
-  install_apk "$PATH_APK_VERSION_1"
-  run_benchmark "v1" "$i"
+write_benchmark_result() {
+  local output_path="${1}"
 
-  install_apk "$PATH_APK_VERSION_2"
-  run_benchmark "v2" "$i"
+  adb pull "${EMULATOR_BENCHMARK_RESULT_DIR}/." "${TEMP_DIR}/pull_out/"
+
+  mv "${TEMP_DIR}/pull_out/"*.json "${output_path}"
+  rm -rf "${TEMP_DIR}/pull_out/"
+}
+
+if [[ -z "${PATH_APK_BASELINE}" || -z "${PATH_APK_CANDIDATE}" ]]; then
+    echo "Usage: $0 <path_to_baseline.apk> <path_to_candidate.apk> [output_dir]"
+    exit 1
+fi
+
+mkdir -p "${OUTPUT_DIR}/baseline" "${OUTPUT_DIR}/candidate"
+
+# Alternate runs: v1, v2, v1, v2 ...
+for ((i=1; i<=${NUMBER_OF_RUNS}; i++)); do
+  start_time=$(date +%s)
+
+  timestamp=$(date +"%Y-%m-%dT%H-%M-%S")
+  output_filename="${BENCHMARK_PKG}_${timestamp}"
+  baseline_output_path="${OUTPUT_DIR}/baseline/${output_filename}"
+  candidate_output_path="${OUTPUT_DIR}/candidate/${output_filename}"
+
+  echo "=============================="
+  echo "Start iteration (${i} / ${NUMBER_OF_RUNS})"
+  echo "=============================="
+
+  echo "Starting Baseline Benchmark:"
+  echo "    >> APK file        : ${PATH_APK_BASELINE}"
+  echo "    >> Output file path: ${baseline_output_path}"
+
+  install_apk "${PATH_APK_BASELINE}"
+  run_benchmark
+  write_benchmark_result "${baseline_output_path}"
+
+  echo "Starting Candidate Benchmark:"
+  echo "    >> APK file        : ${PATH_APK_CANDIDATE}"
+  echo "    >> Output file path: ${candidate_output_path}"
+
+  install_apk "${PATH_APK_CANDIDATE}"
+  run_benchmark
+  write_benchmark_result "${candidate_output_path}"
+
+  end_time=$(date +%s)
+  duration=$((end_time - start_time))
+
+  echo "=============================="
+  echo "End iteration (${i} / ${NUMBER_OF_RUNS}) took ${duration}s"
+  echo "=============================="
 done
