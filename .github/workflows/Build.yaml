@@ -75,13 +75,15 @@ jobs:
             chmod +x ./candidate/.github/scripts/run_macrobenchmarks.sh
             ./candidate/.github/scripts/run_macrobenchmarks.sh "./baseline/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" "./candidate/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk"
 
-      - name: Run step fit
-        run: python3 .github/scripts/step_fit.py
-        working-directory: ./candidate
+      - name: Compare macrobenchmark results
+        run: |
+            python3 ./candidate/.github/scripts/step_fit.py \
+              "./macrobenchmark_results/baseline" \
+              "./macrobenchmark_results/candidate"
 
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: ./candidate/benchmarks/json_reports/
+          path: ./macrobenchmark_results/
