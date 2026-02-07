@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-NUMBER_OF_RUNS=5
+# TODO: pass number of runs as a commandline argument
+NUMBER_OF_RUNS=2
 
 APP_PKG="com.google.samples.apps.nowinandroid"
 BENCHMARK_PKG="com.google.samples.apps.nowinandroid.benchmarks"
