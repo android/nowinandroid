@@ -1,63 +1,89 @@
+import argparse
 import json
 import math
-import glob
-import os
+import sys
+from pathlib import Path
 
 # ----------- CONFIG -----------
-JSON_REPORTS_DIR = "benchmarks/json_reports"
 BENCHMARK_NAME = "startupPrecompiledWithBaselineProfile"
 METRIC_KEY = "timeToInitialDisplayMs"
 # ------------------------------
 
-def sum_squared_error(values):
-    avg = sum(values) / len(values)
-    return sum((v - avg) ** 2 for v in values)
+def step_fit(a, b):
+    def sum_squared_error(values):
+        avg = sum(values) / len(values)
+        return sum((v - avg) ** 2 for v in values)
 
-def step_fit(before, after):
-    total_squared_error = sum_squared_error(before) + sum_squared_error(after)
-    step_error = math.sqrt(total_squared_error) / (len(before) + len(after))
+    if not a or not b:
+            return 0.0
+
+    total_squared_error = sum_squared_error(a) + sum_squared_error(b)
+    step_error = math.sqrt(total_squared_error) / (len(a) + len(b))
     if step_error == 0.0:
         return 0.0
-    return (sum(before) / len(before) - sum(after) / len(after)) / step_error
 
-def extract_median_from_file(path):
-    with open(path, "r") as f:
-        data = json.load(f)
-    for bench in data.get("benchmarks", []):
-        if bench.get("name") == BENCHMARK_NAME:
-            metrics = bench.get("metrics", {})
-            metric = metrics.get(METRIC_KEY, {})
-            return metric.get("median")
-    raise ValueError(f"Metric not found in {path}")
+    return (sum(a) / len(a) - sum(b) / len(b)) / step_error
+
+def extract_median_from_files(paths):
+    medians = []
+
+    for path in paths:
+        with open(path, "r") as f:
+            data = json.load(f)
+
+        found = False
+        for bench in data.get("benchmarks", []):
+            if bench.get("name") == BENCHMARK_NAME:
+                metrics = bench.get("metrics", {})
+                metric = metrics.get(METRIC_KEY, {})
+                medians.append(metric.get("median"))
+                found = True
+
+        if not found:
+            raise ValueError(f"Metric not found in {path}")
+
+    return medians
 
 def main():
-    before = []
-    after = []
+    parser = argparse.ArgumentParser(prog='Comperator', description='Compare between multiple macrobenchmark test results')
+    parser.add_argument('baseline_dir', help='Baseline macrobenchmark reports directory')
+    parser.add_argument('candidate_dir', help='Candidate macrobenchmark reports directory')
+    args = parser.parse_args()
 
-    json_files = sorted(glob.glob(os.path.join(JSON_REPORTS_DIR, "*.json")))
+    baseline_dir = Path(args.baseline_dir)
+    candidate_dir = Path(args.candidate_dir)
 
-    if len(json_files) == 0:
-        raise RuntimeError("No JSON files found.")
+    # Using glob on Path objects
+    baseline_files = sorted([str(p) for p in baseline_dir.glob("*.json")])
+    candidate_files = sorted([str(p) for p in candidate_dir.glob("*.json")])
 
-    for path in json_files:
-        median = extract_median_from_file(path)
-        filename = os.path.basename(path).lower()
-        if "v1" in filename:
-            before.append(median)
-        elif "v2" in filename:
-            after.append(median)
-        else:
-            print(f"Skipping file with unknown label: {filename}")
-        print(f"{filename}: median={median:.3f} ms")
+    if len(baseline_files) <= 0:
+        print('ERR: baseline has no macrobenchmark results', file=sys.stderr)
+        exit(1)
 
-    if len(before) != 5 or len(after) != 5:
-        raise RuntimeError(f"Expected 5 runs each, got v1={len(before)}, v2={len(after)}")
+    if len(candidate_files) <= 0:
+        print('ERR: candidate has no macrobenchmark results', file=sys.stderr)
+        exit(1)
 
-    result = step_fit(before, after)
+    min_len = min(len(baseline_files), len(candidate_files))
+    if len(baseline_files) != len(candidate_files):
+        print(f"WARN: Length mismatch, using first {min_len} samples. baseline: {len(baseline_files)}, candidate: {len(candidate_files)}")
+
+    print('Macrobenchmark Result Mapping:')
+    print('| Index | Baseline | Candidate |')
+    print('--------------------------------')
+    for i in range(min_len):
+        print(f'{i + 1} {baseline_files[i]} <-> {candidate_files[i]}')
+
+    baseline_medians  = extract_median_from_files(baseline_files[:min_len])
+    candidate_medians = extract_median_from_files(candidate_files[:min_len])
+    assert (len(baseline_medians) == len(candidate_medians))
+
+    result = step_fit(baseline_medians, candidate_medians)
 
     print("\n-----------------------------")
-    print(f"v1 medians: {before}")
-    print(f"v2 medians: {after}")
+    print(f"Baseline medians : {baseline_medians}")
+    print(f"Candidate medians: {candidate_medians}")
     print(f"Step Fit Result: {result:.4f}")
     print("-----------------------------")
 
