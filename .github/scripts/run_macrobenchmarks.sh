@@ -24,11 +24,8 @@ install_apk() {
 
   adb shell pm clear "$APP_PKG" || true
   adb shell pm clear "${BENCHMARK_PKG}" || true
+  adb shell rm -rf "${EMULATOR_BENCHMARK_RESULT_DIR}" || true
   adb shell mkdir -p "${EMULATOR_BENCHMARK_RESULT_DIR}"
-
-  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.json || true
-  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.perfetto-trace || true
-  adb shell rm "${EMULATOR_BENCHMARK_RESULT_DIR}"*.txt || true
 }
 
 run_benchmark() {
@@ -62,7 +59,7 @@ for ((i=1; i<=${NUMBER_OF_RUNS}; i++)); do
   start_time=$(date +%s)
 
   timestamp=$(date +"%Y-%m-%dT%H-%M-%S")
-  output_filename="${BENCHMARK_PKG}_${timestamp}"
+  output_filename="${BENCHMARK_PKG}_${timestamp}.json"
   baseline_output_path="${OUTPUT_DIR}/baseline/${output_filename}"
   candidate_output_path="${OUTPUT_DIR}/candidate/${output_filename}"
 
