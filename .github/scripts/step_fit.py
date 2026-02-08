@@ -52,10 +52,8 @@ def main():
 
     baseline_dir = Path(args.baseline_dir)
     candidate_dir = Path(args.candidate_dir)
-
-    # Using glob on Path objects
-    baseline_files = sorted([str(p) for p in baseline_dir.glob("*.json")])
-    candidate_files = sorted([str(p) for p in candidate_dir.glob("*.json")])
+    baseline_files = sorted(baseline_dir.glob("*.json"))
+    candidate_files = sorted(candidate_dir.glob("*.json"))
 
     if len(baseline_files) <= 0:
         print('ERR: baseline has no macrobenchmark results', file=sys.stderr)
@@ -72,8 +70,21 @@ def main():
     print('Macrobenchmark Result Mapping:')
     print('| Index | Baseline | Candidate |')
     print('--------------------------------')
+
+    mismatch_count = 0
     for i in range(min_len):
+        baseline_filename = baseline_files[i].name.upper()
+        candidate_filename = candidate_files[i].name.upper()
+        if baseline_filename != candidate_filename:
+            mismatch_count += 1
+            print('* ', end='')
         print(f'{i + 1} {baseline_files[i]} <-> {candidate_files[i]}')
+
+    print('--------------------------------')
+    print(f'# Match   : {min_len - mismatch_count}')
+    print(f'# Mismatch: {mismatch_count}')
+    if mismatch_count > 0:
+        print("WARN: filename mapping mismatch detected. Output prediction may be incorrect")
 
     baseline_medians  = extract_median_from_files(baseline_files[:min_len])
     candidate_medians = extract_median_from_files(candidate_files[:min_len])
