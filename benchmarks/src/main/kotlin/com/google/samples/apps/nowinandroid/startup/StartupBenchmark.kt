@@ -61,7 +61,7 @@ class StartupBenchmark {
         metrics = BaselineProfileMetrics.allMetrics,
         compilationMode = compilationMode,
         // More iterations result in higher statistical significance.
-        iterations = 20,
+        iterations = 5,
         startupMode = COLD,
         setupBlock = {
             pressHome()
