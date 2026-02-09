@@ -85,25 +85,27 @@ def main():
     print(f'# Mismatch: {mismatch_count}')
     if mismatch_count > 0:
         print("WARN: filename mapping mismatch detected. Output prediction may be incorrect")
+    print()
 
     baseline_medians  = extract_median_from_files(baseline_files[:min_len])
     candidate_medians = extract_median_from_files(candidate_files[:min_len])
     assert (len(baseline_medians) == len(candidate_medians))
 
-    result = step_fit(baseline_medians, candidate_medians)
-
-    print("\n-----------------------------")
+    print(f"Benchmark        : {BENCHMARK_NAME}")
+    print(f"Metric           : {METRIC_KEY}")
     print(f"Baseline medians : {baseline_medians}")
     print(f"Candidate medians: {candidate_medians}")
-    print(f"Step Fit Result: {result:.4f}")
     print("-----------------------------")
+    print("Result: ", end="")
 
+    result = step_fit(baseline_medians, candidate_medians)
     if abs(result) <= 25:
-        print("➡️ Difference is within noise range (low confidence of real regression)")
-    elif result > 0:
-        print("⚠️ v2 is slower than v1 (possible regression)")
+        print("Within noise range", end="")
+    elif result < 0:
+        print("POSSIBLE REGRESSION", end="")
     else:
-        print("🚀 v2 is faster than v1 (possible improvement)")
+        print("POSSIBLE IMPROVEMENT", end="")
+    print(f" (Step fit: {result:.4})")
 
 if __name__ == "__main__":
     main()
