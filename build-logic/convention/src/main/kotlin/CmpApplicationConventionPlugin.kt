@@ -22,11 +22,14 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.libs
+import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -87,7 +90,11 @@ private fun Project.configureComposeMultiplatformApp() {
         }
 
         // Add JVM target for desktop
-        jvm()
+        jvm {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_11)
+            }
+        }
 
         // Configure iOS targets
         listOf(
@@ -120,6 +127,17 @@ private fun Project.configureComposeMultiplatformApp() {
         // not found in project ':core:model'. Some candidates are: 'jsTestClasses', 'jvmTestClasses'.
         project.tasks.register("testClasses") {
             dependsOn("allTests")
+        }
+    }
+
+    // Set Java compilation compatibility for JVM target to match Kotlin JVM target (11).
+    // Only apply --release to non-Android Java tasks, since AGP manages bootclasspath itself.
+    project.tasks.withType<JavaCompile>().configureEach {
+        sourceCompatibility = JavaVersion.VERSION_11.toString()
+        targetCompatibility = JavaVersion.VERSION_11.toString()
+        // Android tasks are named like "compileDebugJavaWithJavac"; KMP JVM tasks like "compileJvmMainJava"
+        if (!name.endsWith("JavaWithJavac")) {
+            options.release.set(11)
         }
     }
 }

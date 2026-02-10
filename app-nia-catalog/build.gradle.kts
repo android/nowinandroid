@@ -31,7 +31,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        outputModuleName.set("composeApp")
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -52,7 +52,11 @@ kotlin {
         }
     }
 
-    jvm("desktop")
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JVM_11)
+        }
+    }
 
     listOf(
         iosX64(),
@@ -94,7 +98,7 @@ android {
         versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
         minSdk = 24
         targetSdk = 34
-        compileSdk = 34
+        compileSdk = 35
         // The UI catalog does not depend on content from the app, however, it depends on modules
         // which do, so we must specify a default value for the contentType dimension.
         missingDimensionStrategy("contentType", "demo")
