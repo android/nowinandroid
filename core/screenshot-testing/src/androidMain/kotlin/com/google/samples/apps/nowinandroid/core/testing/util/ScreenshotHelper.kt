@@ -110,6 +110,9 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
         }
     }
 
+    // Freeze animations so infinite transitions don't block Espresso idle sync
+    this.mainClock.autoAdvance = false
+
     // Run Accessibility checks first so logging is included
     val accessibilityException = try {
         this.onRoot().checkRoboAccessibility(
@@ -200,6 +203,9 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
             }
         }
     }
+
+    // Freeze animations so infinite transitions don't block Espresso idle sync
+    this.mainClock.autoAdvance = false
 
     // Create permutations
     darkModeValues.forEach { isDarkMode ->
