@@ -43,6 +43,10 @@ kotlin {
         }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)
+            implementation(libs.androidx.test.core)
+            implementation(libs.androidx.test.ext)
+            implementation(libs.androidx.test.junit)
+            implementation(libs.androidx.test.runner)
             implementation(libs.androidx.work.testing)
             implementation(libs.kotlinx.coroutines.guava)
         }
