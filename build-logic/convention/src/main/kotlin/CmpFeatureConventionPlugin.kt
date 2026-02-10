@@ -39,6 +39,7 @@ class CmpFeatureConventionPlugin : Plugin<Project> {
                         "com.google.samples.apps.nowinandroid.core.testing.NiaTestRunner"
                 }
                 testOptions.animationsDisabled = true
+                testOptions.unitTests.isIncludeAndroidResources = true
                 configureGradleManagedDevices(this)
             }
 
