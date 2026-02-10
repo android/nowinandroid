@@ -42,6 +42,7 @@ kotlin {
         }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)
+            implementation(libs.androidx.lifecycle.runtime.testing)
             implementation(libs.bundles.androidx.compose.ui.test)
         }
     }

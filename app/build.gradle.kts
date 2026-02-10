@@ -116,8 +116,6 @@ kotlin {
             implementation(projects.core.testing)
 //            implementation(projects.sync.syncTest)
             implementation(libs.kotlin.test)
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
         }
 
         androidUnitTest.dependencies {
@@ -129,7 +127,7 @@ kotlin {
             implementation(projects.core.testing)
             implementation(libs.androidx.navigation.testing)
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
-            implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.compose.ui.test.android)
             implementation(libs.androidx.test.espresso.core)
             implementation(libs.koin.test)
         }
