@@ -15,6 +15,8 @@
  */
 plugins {
     alias(libs.plugins.nowinandroid.kmp.library)
+    alias(libs.plugins.jetbrains.compose)
+    alias(libs.plugins.compose)
 }
 
 android {

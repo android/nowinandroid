@@ -20,21 +20,21 @@ Now in Android (KMP edition) — a Kotlin Multiplatform fork of Google's Now in 
 # Run desktop app
 # Gradle run config task: desktopRun -DmainClass=MainKt --quiet
 
-# Unit tests (only demoDebug variant has test coverage)
-./gradlew testDemoDebug                      # all module tests
-./gradlew :feature:foryou:testDemoDebug      # single module test
+# Unit tests
+./gradlew testDebugUnitTest                  # all module tests
+./gradlew :feature:foryou:testDebugUnitTest  # single module test
 ./gradlew :lint:test                         # lint rule tests
 
 # Instrumented tests (requires a connected Android emulator)
-./gradlew connectedDemoDebugAndroidTest
+./gradlew connectedDebugAndroidTest
 
 # Screenshot tests (Roborazzi — CI only, do NOT run locally)
 # CI records/verifies screenshots and auto-commits updates via PR
-# ./gradlew verifyRoborazziDemoDebug         # verify against baselines (CI only)
-# ./gradlew recordRoborazziDemoDebug         # record new baselines (CI only)
+# ./gradlew verifyRoborazziDebug             # verify against baselines (CI only)
+# ./gradlew recordRoborazziDebug             # record new baselines (CI only)
 
 # Lint
-./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
+./gradlew :app:lintRelease :app-nia-catalog:lintRelease :lint:lint
 
 # Dependency guard
 ./gradlew dependencyGuard                    # check
@@ -44,7 +44,7 @@ Now in Android (KMP edition) — a Kotlin Multiplatform fork of Google's Now in 
 ./gradlew :build-logic:convention:check
 
 # Badging check
-./gradlew :app:checkProdReleaseBadging
+./gradlew :app:checkReleaseBadging
 ```
 
 ## Architecture
@@ -86,7 +86,7 @@ All modules use convention plugins from `build-logic/convention/` (plugin IDs pr
 
 ### Build Variants
 
-Two flavor dimensions: `demo` (local static data) and `prod` (requires backend server, not public). Use `demoDebug` for development.
+Two build types: `debug` and `release`. No flavor dimensions (demo/prod flavors were removed during KMP migration).
 
 ### KMP Source Set Layout
 

@@ -1,12 +1,10 @@
 package: name='com.google.samples.apps.nowinandroid' versionCode='8' versionName='0.1.2' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
 sdkVersion:'21'
-targetSdkVersion:'35'
+targetSdkVersion:'34'
 uses-permission: name='android.permission.INTERNET'
 uses-permission: name='android.permission.ACCESS_NETWORK_STATE'
 uses-permission: name='android.permission.POST_NOTIFICATIONS'
 uses-permission: name='android.permission.WAKE_LOCK'
-uses-permission: name='com.google.android.c2dm.permission.RECEIVE'
-uses-permission: name='com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE'
 uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
 uses-permission: name='android.permission.FOREGROUND_SERVICE'
 uses-permission: name='com.google.samples.apps.nowinandroid.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
@@ -105,14 +103,12 @@ application-icon-640:'res/mipmap-anydpi-v26/ic_launcher.xml'
 application-icon-65534:'res/mipmap-anydpi-v26/ic_launcher.xml'
 application: label='Now in Android' icon='res/mipmap-anydpi-v26/ic_launcher.xml'
 launchable-activity: name='com.google.samples.apps.nowinandroid.MainActivity'  label='' icon=''
-uses-library-not-required:'android.ext.adservices'
 uses-library-not-required:'androidx.window.extensions'
 uses-library-not-required:'androidx.window.sidecar'
 feature-group: label=''
   uses-feature: name='android.hardware.faketouch'
   uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
 main
-other-activities
 other-receivers
 other-services
 supports-screens: 'small' 'normal' 'large' 'xlarge'

@@ -101,7 +101,7 @@ internal fun Project.configureKotlinMultiplatform() {
 
         // Fixes Cannot locate tasks that match ':core:model:testClasses' as task 'testClasses'
         // not found in project ':core:model'. Some candidates are: 'jsTestClasses', 'jvmTestClasses'.
-        project.tasks.create("testClasses") {
+        project.tasks.register("testClasses") {
             dependsOn("allTests")
         }
     }
