@@ -76,7 +76,7 @@ jobs:
       - name: Run all local screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
-        run: ./gradlew verifyRoborazziDemoDebug
+        run: ./gradlew verifyRoborazziDebug
 
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots
@@ -92,7 +92,7 @@ jobs:
         id: screenshotsrecord
         if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
-          ./gradlew recordRoborazziDemoDebug
+          ./gradlew recordRoborazziDebug
 
       - name: Push new screenshots if available
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -104,7 +104,7 @@ jobs:
 
       # Run local tests after screenshot tests to avoid wrong UP-TO-DATE. TODO: Ignore screenshots.
       - name: Run local tests
-        run: ./gradlew testDemoDebug :lint:test
+        run: ./gradlew testDebugUnitTest :lint:test
 
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble
@@ -130,7 +130,7 @@ jobs:
           path: '**/build/outputs/roborazzi/*_compare.png'
 
       - name: Check lint
-        run: ./gradlew :app:lintProdRelease :app-nia-catalog:lintRelease :lint:lint
+        run: ./gradlew :app:lintRelease :app-nia-catalog:lintRelease :lint:lint
 
       - name: Upload lint reports (HTML)
         if: ${{ !cancelled() }}
@@ -146,7 +146,7 @@ jobs:
           sarif_file: './'
 
       - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
+        run: ./gradlew :app:checkReleaseBadging
 
   androidTest:
     runs-on: ubuntu-latest
@@ -199,17 +199,16 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+          script: ./gradlew connectedDebugAndroidTest --daemon
 
       - name: Run local tests (including Roborazzi) for the combined coverage report (only API 30)
         if: matrix.api-level == 30
         # There is no need to verify Roborazzi tests to generate coverage.
-        run: ./gradlew testDemoDebugUnitTest -Proborazzi.test.verify=false # Add Prod if we ever add JVM tests for prod
+        run: ./gradlew testDebugUnitTest -Proborazzi.test.verify=false
 
-      # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
       - name: Generate coverage reports for Debug variants (only API 30)
         if: matrix.api-level == 30
-        run: ./gradlew createDemoDebugCombinedCoverageReport
+        run: ./gradlew createDebugCombinedCoverageReport
         
       - name: Upload test reports
         if: ${{ !cancelled() }}

@@ -16,10 +16,13 @@
 
 package com.google.samples.apps.nowinandroid
 
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -35,7 +38,11 @@ internal fun Project.configureKotlinMultiplatform() {
         // https://kotlinlang.org/docs/whatsnew1820.html#new-approach-to-source-set-hierarchy
         applyDefaultHierarchyTemplate()
 
-        jvm()
+        jvm {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_11)
+            }
+        }
         androidTarget()
 // SqlDelight does not support wasm yet
 // https://github.com/cashapp/sqldelight/pull/4965/files
@@ -101,8 +108,19 @@ internal fun Project.configureKotlinMultiplatform() {
 
         // Fixes Cannot locate tasks that match ':core:model:testClasses' as task 'testClasses'
         // not found in project ':core:model'. Some candidates are: 'jsTestClasses', 'jvmTestClasses'.
-        project.tasks.create("testClasses") {
+        project.tasks.register("testClasses") {
             dependsOn("allTests")
+        }
+    }
+
+    // Set Java compilation compatibility for JVM target to match Kotlin JVM target (11).
+    // Only apply --release to non-Android Java tasks, since AGP manages bootclasspath itself.
+    project.tasks.withType<JavaCompile>().configureEach {
+        sourceCompatibility = JavaVersion.VERSION_11.toString()
+        targetCompatibility = JavaVersion.VERSION_11.toString()
+        // Android tasks are named like "compileDebugJavaWithJavac"; KMP JVM tasks like "compileJvmMainJava"
+        if (!name.endsWith("JavaWithJavac")) {
+            options.release.set(11)
         }
     }
 }

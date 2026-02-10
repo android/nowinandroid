@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import coil3.compose.LocalPlatformContext
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
@@ -64,6 +63,7 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
 import nowinandroid.core.ui.generated.resources.core_ui_back
 import nowinandroid.feature.topic.generated.resources.Res

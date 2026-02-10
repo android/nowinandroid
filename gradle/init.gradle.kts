@@ -14,10 +14,10 @@
  *   limitations under the License.
  */
 
-val ktlintVersion = "1.4.0"
+val ktlintVersion = "1.5.0"
 
 initscript {
-    val spotlessVersion = "6.25.0"
+    val spotlessVersion = "7.0.2"
 
     repositories {
         mavenCentral()

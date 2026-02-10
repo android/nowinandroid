@@ -43,6 +43,7 @@ kotlin {
         androidUnitTest.dependencies {
             implementation(libs.robolectric)
             implementation(libs.roborazzi)
+            implementation(libs.androidx.navigation.testing)
             implementation(projects.core.screenshotTesting)
         }
         androidInstrumentedTest.dependencies {

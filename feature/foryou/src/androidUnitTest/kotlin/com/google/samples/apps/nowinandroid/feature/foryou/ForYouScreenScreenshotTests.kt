@@ -34,7 +34,6 @@ import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParam
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.NotShown
 import com.google.samples.apps.nowinandroid.feature.foryou.OnboardingUiState.Shown
-import dagger.hilt.android.testing.HiltTestApplication
 import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
@@ -51,7 +50,7 @@ import java.util.TimeZone
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = HiltTestApplication::class)
+@Config(qualifiers = "480dpi")
 @LooperMode(LooperMode.Mode.PAUSED)
 class ForYouScreenScreenshotTests {
 

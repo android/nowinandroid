@@ -32,20 +32,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.samples.apps.nowinandroid.core.ui.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.feature.interests.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.interests.navigation.InterestsRoute
 import com.google.samples.apps.nowinandroid.feature.topic.TopicDetailPlaceholder
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.navigateToTopic
 import com.google.samples.apps.nowinandroid.feature.topic.navigation.topicScreen
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.uuid.ExperimentalUuidApi
@@ -99,6 +101,8 @@ internal fun InterestsListDetailScreen(
 //        listDetailNavigator.navigateBack()
 //    }
 
+    val coroutineScope = rememberCoroutineScope()
+
     var nestedNavHostStartRoute by remember {
         val route = selectedTopicId?.let { TopicRoute(id = it) } ?: TopicPlaceholderRoute
         mutableStateOf(route)
@@ -125,7 +129,9 @@ internal fun InterestsListDetailScreen(
             nestedNavHostStartRoute = TopicRoute(id = topicId)
             nestedNavKey = Uuid.random()
         }
-        listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+        coroutineScope.launch {
+            listDetailNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+        }
     }
 
     ListDetailPaneScaffold(
@@ -149,7 +155,11 @@ internal fun InterestsListDetailScreen(
                     ) {
                         topicScreen(
                             showBackButton = !listDetailNavigator.isListPaneVisible(),
-                            onBackClick = listDetailNavigator::navigateBack,
+                            onBackClick = {
+                                coroutineScope.launch {
+                                    listDetailNavigator.navigateBack()
+                                }
+                            },
                             onTopicClick = ::onTopicClickShowDetailPane,
                         )
                         composable<TopicPlaceholderRoute> {

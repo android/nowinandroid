@@ -114,11 +114,14 @@ kotlin {
         commonTest.dependencies {
             implementation(projects.core.dataTest)
             implementation(projects.core.testing)
-            implementation(projects.core.screenshotTesting)
 //            implementation(projects.sync.syncTest)
             implementation(libs.kotlin.test)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
+        }
+
+        androidUnitTest.dependencies {
+            implementation(projects.core.screenshotTesting)
         }
 
         androidInstrumentedTest.dependencies {
@@ -127,6 +130,8 @@ kotlin {
             implementation(libs.androidx.navigation.testing)
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
             implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.test.espresso.core)
+            implementation(libs.koin.test)
         }
 
         jvmMain.dependencies {

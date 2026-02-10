@@ -26,6 +26,7 @@ import com.google.samples.apps.nowinandroid.core.testing.repository.TestNewsRepo
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
+import com.google.samples.apps.nowinandroid.feature.topic.navigation.TopicRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -70,7 +71,7 @@ class TopicViewModelTest {
     fun setup() {
         viewModel = TopicViewModel(
             savedStateHandle = SavedStateHandle(
-//                route = TopicRoute(id = testInputTopics[0].topic.id),
+                route = TopicRoute(id = testInputTopics[0].topic.id),
             ),
             userDataRepository = userDataRepository,
             topicsRepository = topicsRepository,

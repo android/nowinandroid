@@ -47,3 +47,6 @@ captures/
 
 # Kotlin
 .kotlin
+
+# Claude Code
+.claude

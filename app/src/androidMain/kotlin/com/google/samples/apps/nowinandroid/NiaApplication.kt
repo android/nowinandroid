@@ -27,22 +27,23 @@ import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.androix.startup.KoinStartup.onKoinStartup
+import org.koin.androix.startup.KoinStartup
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.koinConfiguration
 
 /**
  * [Application] class for NiA
  */
-class NiaApplication : Application(), SingletonImageLoader.Factory {
+@OptIn(KoinExperimentalAPI::class)
+class NiaApplication : Application(), SingletonImageLoader.Factory, KoinStartup {
 
-    init {
-        onKoinStartup {
-            androidContext(this@NiaApplication)
-            androidLogger()
-            modules(
-                jankStatsModule,
-                appModules,
-            )
-        }
+    override fun onKoinStartup() = koinConfiguration {
+        androidContext(this@NiaApplication)
+        androidLogger()
+        modules(
+            jankStatsModule,
+            appModules,
+        )
     }
 
     private val profileVerifierLogger: ProfileVerifierLogger by inject()
