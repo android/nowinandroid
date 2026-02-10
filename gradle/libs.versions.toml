@@ -61,6 +61,7 @@ robolectric = "4.16"
 roborazzi = "1.56.0"
 room = "2.8.3"
 spotless = "8.2.1"
+tapmoc = "0.4.0"
 truth = "1.4.4"
 turbine = "1.2.0"
 uiTestJunit4 = "1.9.0-rc01"
@@ -189,12 +190,15 @@ gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-sam-with-receiver = { id = "org.jetbrains.kotlin.plugin.sam.with.receiver", version.ref = "kotlin" }
+kotlin-assignment = { id = "org.jetbrains.kotlin.plugin.assignment", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-osslicenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "googleOssPlugin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+tapmoc = { id = "com.gradleup.tapmoc", version.ref = "tapmoc" }
 
 # Plugins defined by this project
 nowinandroid-android-application = { id = "nowinandroid.android.application" }

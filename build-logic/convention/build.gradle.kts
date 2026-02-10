@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    `kotlin-dsl`
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.android.lint)
+    alias(libs.plugins.tapmoc)
+    alias(libs.plugins.kotlin.sam.with.receiver)
+    alias(libs.plugins.kotlin.assignment)
+    id("java-gradle-plugin")
+}
+
+samWithReceiver {
+    annotation(HasImplicitReceiver::class.qualifiedName!!)
+}
+assignment {
+    annotation(SupportsKotlinAssignmentOverloading::class.qualifiedName!!)
 }
 
 group = "com.google.samples.apps.nowinandroid.buildlogic"
 
-// Configure the build-logic plugins to target JDK 17
-// This matches the JDK used to build the project, and is not related to what is running on device.
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
-    }
+tapmoc {
+    /**
+     * Configure Java and Kotlin compatibility according to our Gradle version
+     */
+    gradle(gradle.gradleVersion)
 }
 
 dependencies {
@@ -46,6 +49,7 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
     compileOnly(libs.spotless.gradlePlugin)
+    compileOnly(gradleKotlinDsl())
     implementation(libs.truth)
     lintChecks(libs.androidx.lint.gradle)
 }
