@@ -37,7 +37,7 @@ class TestNewsResourceDao : NewsResourceDaoInterface {
 
     private val entitiesStateFlow = MutableStateFlow(emptyList<NewsResourceEntity>())
 
-    internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = listOf()
+    internal var topicCrossReferences: List<NewsResourceTopicCrossRef> = emptyList()
 
     override fun getNewsResources(
         useFilterTopicIds: Boolean,
