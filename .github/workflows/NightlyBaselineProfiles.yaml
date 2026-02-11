@@ -1,6 +1,7 @@
 name: NightlyBaselineProfiles
 
 on:
+  workflow_dispatch:
   schedule:
     - cron:  '42 4 * * *'
 
@@ -39,6 +40,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -55,9 +59,8 @@ jobs:
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
-      # This generates both baseline and startup profile and adds them into the generated folder
-      - name: Generate Baseline Profile
-        run: ./gradlew :app:generateReleaseBaselineProfile
-          -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-          --stacktrace
+      - name: Build all build type and flavor permutations including baseline profiles
+        run: ./gradlew :app:assemble
+             -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=baselineprofile
+             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+             -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true

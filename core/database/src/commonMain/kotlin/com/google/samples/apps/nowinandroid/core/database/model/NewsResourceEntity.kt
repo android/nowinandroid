@@ -40,5 +40,5 @@ fun NewsResourceEntity.asExternalModel() = NewsResource(
     headerImageUrl = headerImageUrl,
     publishDate = publishDate,
     type = type,
-    topics = listOf(),
+    topics = emptyList(),
 )

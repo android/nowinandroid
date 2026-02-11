@@ -23,6 +23,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.foryou"
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 kotlin {

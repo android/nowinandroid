@@ -1,4 +1,4 @@
-# `:core:data`
+# `:ui-test-hilt-manifest`
 
 ## Module dependency graph
 
@@ -11,33 +11,7 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :core
-    direction TB
-    :core:analytics[analytics]:::android-library
-    :core:common[common]:::jvm-library
-    :core:data[data]:::android-library
-    :core:database[database]:::android-library
-    :core:datastore[datastore]:::android-library
-    :core:datastore-proto[datastore-proto]:::android-library
-    :core:model[model]:::jvm-library
-    :core:network[network]:::android-library
-    :core:notifications[notifications]:::android-library
-  end
-
-  :core:data -.-> :core:analytics
-  :core:data --> :core:common
-  :core:data --> :core:database
-  :core:data --> :core:datastore
-  :core:data --> :core:network
-  :core:data -.-> :core:notifications
-  :core:database --> :core:model
-  :core:datastore -.-> :core:common
-  :core:datastore --> :core:datastore-proto
-  :core:datastore --> :core:model
-  :core:network --> :core:common
-  :core:network --> :core:model
-  :core:notifications -.-> :core:common
-  :core:notifications --> :core:model
+  :ui-test-hilt-manifest[ui-test-hilt-manifest]:::android-library
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

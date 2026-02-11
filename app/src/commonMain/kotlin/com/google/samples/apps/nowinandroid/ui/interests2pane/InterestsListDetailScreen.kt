@@ -141,7 +141,7 @@ internal fun InterestsListDetailScreen(
             AnimatedPane {
                 InterestsRoute(
                     onTopicClick = ::onTopicClickShowDetailPane,
-                    highlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
+                    shouldHighlightSelectedTopic = listDetailNavigator.isDetailPaneVisible(),
                 )
             }
         },

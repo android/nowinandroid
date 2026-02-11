@@ -32,5 +32,5 @@ data class NetworkNewsResource(
     val headerImageUrl: String,
     val publishDate: Instant,
     val type: String,
-    val topics: List<String> = listOf(),
+    val topics: List<String> = emptyList(),
 )
