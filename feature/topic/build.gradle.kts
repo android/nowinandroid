@@ -38,7 +38,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
         }
-        commonMain.dependencies {
+        commonTest.dependencies {
             implementation(projects.core.testing)
         }
         androidUnitTest.dependencies {

@@ -26,6 +26,8 @@ import com.google.samples.apps.nowinandroid.core.testing.data.followableTopicTes
 import com.google.samples.apps.nowinandroid.core.testing.data.userNewsResourcesTestData
 import nowinandroid.core.ui.generated.resources.Res
 import nowinandroid.core.ui.generated.resources.core_ui_card_meta_data_text
+import nowinandroid.core.ui.generated.resources.core_ui_unread_resource_dot_content_description
+import org.jetbrains.compose.resources.stringResource
 import org.junit.Rule
 import org.junit.Test
 
@@ -36,9 +38,14 @@ class NewsResourceCardTest {
     @Test
     fun testMetaDataDisplay_withCodelabResource() {
         val newsWithKnownResourceType = userNewsResourcesTestData[0]
-        lateinit var dateFormatted: String
+        lateinit var expectedMetaData: String
 
         composeTestRule.setContent {
+            expectedMetaData = stringResource(
+                Res.string.core_ui_card_meta_data_text,
+                dateFormatted(publishDate = newsWithKnownResourceType.publishDate),
+                newsWithKnownResourceType.type,
+            )
             NewsResourceCardExpanded(
                 userNewsResource = newsWithKnownResourceType,
                 isBookmarked = false,
@@ -47,18 +54,10 @@ class NewsResourceCardTest {
                 onClick = {},
                 onTopicClick = {},
             )
-
-            dateFormatted = dateFormatted(publishDate = newsWithKnownResourceType.publishDate)
         }
 
         composeTestRule
-            .onNodeWithText(
-                composeTestRule.activity.getString(
-                    Res.string.core_ui_card_meta_data_text,
-                    dateFormatted,
-                    newsWithKnownResourceType.type,
-                ),
-            )
+            .onNodeWithText(expectedMetaData)
             .assertExists()
     }
 
@@ -110,8 +109,12 @@ class NewsResourceCardTest {
     @Test
     fun testUnreadDot_displayedWhenUnread() {
         val unreadNews = userNewsResourcesTestData[2]
+        lateinit var unreadContentDescription: String
 
         composeTestRule.setContent {
+            unreadContentDescription = stringResource(
+                Res.string.core_ui_unread_resource_dot_content_description,
+            )
             NewsResourceCardExpanded(
                 userNewsResource = unreadNews,
                 isBookmarked = false,
@@ -123,19 +126,19 @@ class NewsResourceCardTest {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(
-                composeTestRule.activity.getString(
-                    R.string.core_ui_unread_resource_dot_content_description,
-                ),
-            )
+            .onNodeWithContentDescription(unreadContentDescription)
             .assertIsDisplayed()
     }
 
     @Test
     fun testUnreadDot_notDisplayedWhenRead() {
         val readNews = userNewsResourcesTestData[0]
+        lateinit var unreadContentDescription: String
 
         composeTestRule.setContent {
+            unreadContentDescription = stringResource(
+                Res.string.core_ui_unread_resource_dot_content_description,
+            )
             NewsResourceCardExpanded(
                 userNewsResource = readNews,
                 isBookmarked = false,
@@ -147,11 +150,7 @@ class NewsResourceCardTest {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(
-                composeTestRule.activity.getString(
-                    R.string.core_ui_unread_resource_dot_content_description,
-                ),
-            )
+            .onNodeWithContentDescription(unreadContentDescription)
             .assertDoesNotExist()
     }
 }

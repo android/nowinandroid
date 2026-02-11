@@ -43,7 +43,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.accompanist.permissions)
         }
-        commonMain.dependencies {
+        commonTest.dependencies {
             implementation(projects.core.testing)
         }
         androidUnitTest.dependencies {

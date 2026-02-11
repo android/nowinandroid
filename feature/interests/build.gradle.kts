@@ -37,7 +37,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.serialization.core)
         }
-        commonMain.dependencies {
+        commonTest.dependencies {
             implementation(projects.core.testing)
         }
         androidUnitTest.dependencies {

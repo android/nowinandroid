@@ -21,6 +21,14 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.google.samples.apps.nowinandroid.core.analytics.AnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.data.repository.NewsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.SearchContentsRepository
+import com.google.samples.apps.nowinandroid.core.data.repository.TopicsRepository
+import com.google.samples.apps.nowinandroid.core.datastore.NiaPreferencesDataSource
+import com.google.samples.apps.nowinandroid.sync.status.SyncSubscriber
+import kotlinx.coroutines.CoroutineDispatcher
+import org.koin.core.context.GlobalContext
 import kotlin.reflect.KClass
 
 // /**
@@ -54,20 +62,29 @@ internal fun KClass<out CoroutineWorker>.delegatedData() =
  */
 class DelegatingWorker(
     appContext: Context,
-    workerParams: WorkerParameters,
+    private val workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val workerClassName =
         workerParams.inputData.getString(WORKER_CLASS_NAME) ?: ""
 
-//    private val delegateWorker =
-//        EntryPointAccessors.fromApplication<HiltWorkerFactoryEntryPoint>(appContext)
-//            .hiltWorkerFactory()
-//            .createWorker(appContext, workerClassName, workerParams)
-//            as? CoroutineWorker
-//            ?: throw IllegalArgumentException("Unable to find appropriate worker")
-
-    private val delegateWorker: DelegatingWorker = TODO()
+    private val delegateWorker: CoroutineWorker by lazy {
+        val koin = GlobalContext.get()
+        when (workerClassName) {
+            SyncWorker::class.qualifiedName -> SyncWorker(
+                appContext = applicationContext,
+                workerParams = workerParams,
+                niaPreferences = koin.get<NiaPreferencesDataSource>(),
+                topicRepository = koin.get<TopicsRepository>(),
+                newsRepository = koin.get<NewsRepository>(),
+                searchContentsRepository = koin.get<SearchContentsRepository>(),
+                ioDispatcher = koin.get<CoroutineDispatcher>(),
+                analyticsHelper = koin.get<AnalyticsHelper>(),
+                syncSubscriber = koin.get<SyncSubscriber>(),
+            )
+            else -> throw IllegalArgumentException("Unable to find appropriate worker: $workerClassName")
+        }
+    }
 
     override suspend fun getForegroundInfo(): ForegroundInfo =
         delegateWorker.getForegroundInfo()
