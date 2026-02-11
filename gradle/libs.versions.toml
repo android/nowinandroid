@@ -2,8 +2,8 @@
 accompanist = "0.37.0"
 androidDesugarJdkLibs = "2.1.4"
 # AGP and tools should be updated together
-androidGradlePlugin = "8.13.1"
-androidTools = "31.13.1"
+androidGradlePlugin = "9.0.0"
+androidTools = "32.0.0"
 androidxActivity = "1.9.3"
 androidxAppCompat = "1.7.0"
 androidxBrowser = "1.8.0"
@@ -20,7 +20,7 @@ androidxHiltLifecycleViewModelCompose = "1.3.0-alpha02"
 androidxLifecycle = "2.10.0"
 androidxLintGradle = "1.0.0-alpha03"
 androidxLifecycleViewModelNavigation3 = "2.10.0"
-androidxMacroBenchmark = "1.4.1"
+androidxMacroBenchmark = "1.5.0-alpha01"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.5"
 androidxNavigation3 = "1.0.0"
@@ -42,7 +42,7 @@ firebasePerfPlugin = "2.0.2"
 gmsPlugin = "4.4.4"
 googleOss = "17.1.0"
 googleOssPlugin = "0.10.9"
-hilt = "2.57.2"
+hilt = "2.59"
 hiltExt = "1.2.0"
 jacoco = "0.8.12"
 junit4 = "4.13.2"
@@ -51,14 +51,16 @@ kotlinxCoroutines = "1.10.1"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.8.0"
 ksp = "2.3.4"
+ktlint = "1.4.0"
 okhttp = "4.12.0"
 protobuf = "4.29.2"
-protobufPlugin = "0.9.5"
+protobufPlugin = "0.9.6"
 retrofit = "2.11.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 robolectric = "4.16"
-roborazzi = "1.51.0"
+roborazzi = "1.56.0"
 room = "2.8.3"
+spotless = "8.2.1"
 truth = "1.4.4"
 turbine = "1.2.0"
 uiTestJunit4 = "1.9.0-rc01"
@@ -134,6 +136,8 @@ hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hi
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
 javax-inject = { module = "javax.inject:javax.inject", version = "1" }
+junit = { module = "junit:junit", version.ref = "junit4" }
+kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
@@ -160,7 +164,7 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Dependencies of the included build-logic
-android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
@@ -169,6 +173,7 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
+spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -189,6 +194,7 @@ google-osslicenses = { id = "com.google.android.gms.oss-licenses-plugin", versio
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 # Plugins defined by this project
 nowinandroid-android-application = { id = "nowinandroid.android.application" }

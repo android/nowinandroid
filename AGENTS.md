@@ -26,7 +26,7 @@ The main Android app lives in the `app/` folder. Feature modules live in `featur
 The app and Android libraries have two product flavors: `demo` and `prod`, and two build types: `debug` and `release`.
 
 - Build: `./gradlew assemble{Variant}`. Typically `assembleDemoDebug`.
-- Fix linting/formatting: `./gradlew --init-script gradle/init.gradle.kts spotlessApply`
+- Fix linting/formatting: `./gradlew spotlessApply`
 - Run local tests: `./gradlew {variant}Test`
 - Run single test: `./gradlew {variant}Test --tests "com.example.myapp.MyTestClass"`
 - Run local screenshot tests: `./gradlew verifyRoborazziDemoDebug`

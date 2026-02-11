@@ -112,10 +112,10 @@ androidx.window:window-core:1.4.0
 androidx.window:window:1.4.0
 com.google.accompanist:accompanist-drawablepainter:0.32.0
 com.google.code.findbugs:jsr305:3.0.2
-com.google.dagger:dagger-lint-aar:2.57.2
-com.google.dagger:dagger:2.57.2
-com.google.dagger:hilt-android:2.57.2
-com.google.dagger:hilt-core:2.57.2
+com.google.dagger:dagger-lint-aar:2.59
+com.google.dagger:dagger:2.59
+com.google.dagger:hilt-android:2.59
+com.google.dagger:hilt-core:2.59
 com.google.guava:listenablefuture:1.0
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.9.0
@@ -126,10 +126,10 @@ io.coil-kt:coil-compose:2.7.0
 io.coil-kt:coil:2.7.0
 jakarta.inject:jakarta.inject-api:2.0.1
 javax.inject:javax.inject:1
-org.jetbrains.kotlin:kotlin-stdlib-common:2.2.21
+org.jetbrains.kotlin:kotlin-stdlib-common:2.3.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0
-org.jetbrains.kotlin:kotlin-stdlib:2.2.21
+org.jetbrains.kotlin:kotlin-stdlib:2.3.0
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0
 org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0
 org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0
