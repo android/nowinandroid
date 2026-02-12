@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.LocalPlatformContext
@@ -42,7 +43,6 @@ import nowinandroid.core.ui.generated.resources.Res
 import nowinandroid.core.ui.generated.resources.core_ui_interests_card_follow_button_content_desc
 import nowinandroid.core.ui.generated.resources.core_ui_interests_card_unfollow_button_content_desc
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun InterestsItem(

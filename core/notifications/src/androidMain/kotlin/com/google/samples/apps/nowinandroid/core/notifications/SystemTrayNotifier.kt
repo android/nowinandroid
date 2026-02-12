@@ -51,52 +51,54 @@ internal class SystemTrayNotifier constructor(
 
     override fun postNewsNotifications(
         newsResources: List<NewsResource>,
-    ) = with(context) {
-        if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
-            return
-        }
-
-        val truncatedNewsResources = newsResources.take(MAX_NUM_NOTIFICATIONS)
-
-        val newsNotifications = truncatedNewsResources.map { newsResource ->
-            createNewsNotification {
-                setSmallIcon(
-                    com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
-                )
-                    .setContentTitle(newsResource.title)
-                    .setContentText(newsResource.content)
-                    .setContentIntent(newsPendingIntent(newsResource))
-                    .setGroup(NEWS_NOTIFICATION_GROUP)
-                    .setAutoCancel(true)
+    ) {
+        with(context) {
+            if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
+                return
             }
-        }
-        val summaryNotification = createNewsNotification {
-            val title = getString(
-                R.string.core_notifications_news_notification_group_summary,
-                truncatedNewsResources.size,
-            )
-            setContentTitle(title)
-                .setContentText(title)
-                .setSmallIcon(
-                    com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
-                )
-                // Build summary info into InboxStyle template.
-                .setStyle(newsNotificationStyle(truncatedNewsResources, title))
-                .setGroup(NEWS_NOTIFICATION_GROUP)
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .build()
-        }
 
-        // Send the notifications
-        val notificationManager = NotificationManagerCompat.from(this)
-        newsNotifications.forEachIndexed { index, notification ->
-            notificationManager.notify(
-                truncatedNewsResources[index].id.hashCode(),
-                notification,
-            )
+            val truncatedNewsResources = newsResources.take(MAX_NUM_NOTIFICATIONS)
+
+            val newsNotifications = truncatedNewsResources.map { newsResource ->
+                createNewsNotification {
+                    setSmallIcon(
+                        com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
+                    )
+                        .setContentTitle(newsResource.title)
+                        .setContentText(newsResource.content)
+                        .setContentIntent(newsPendingIntent(newsResource))
+                        .setGroup(NEWS_NOTIFICATION_GROUP)
+                        .setAutoCancel(true)
+                }
+            }
+            val summaryNotification = createNewsNotification {
+                val title = getString(
+                    R.string.core_notifications_news_notification_group_summary,
+                    truncatedNewsResources.size,
+                )
+                setContentTitle(title)
+                    .setContentText(title)
+                    .setSmallIcon(
+                        com.google.samples.apps.nowinandroid.core.common.R.drawable.core_common_ic_nia_notification,
+                    )
+                    // Build summary info into InboxStyle template.
+                    .setStyle(newsNotificationStyle(truncatedNewsResources, title))
+                    .setGroup(NEWS_NOTIFICATION_GROUP)
+                    .setGroupSummary(true)
+                    .setAutoCancel(true)
+                    .build()
+            }
+
+            // Send the notifications
+            val notificationManager = NotificationManagerCompat.from(this)
+            newsNotifications.forEachIndexed { index, notification ->
+                notificationManager.notify(
+                    truncatedNewsResources[index].id.hashCode(),
+                    notification,
+                )
+            }
+            notificationManager.notify(NEWS_NOTIFICATION_SUMMARY_ID, summaryNotification)
         }
-        notificationManager.notify(NEWS_NOTIFICATION_SUMMARY_ID, summaryNotification)
     }
 
     /**

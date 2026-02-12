@@ -34,7 +34,7 @@ import org.koin.core.annotation.Single
  */
 @Single
 class DemoNiaNetworkDataSource(
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
 ) : NiaNetworkDataSource {
 

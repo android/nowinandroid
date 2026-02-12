@@ -75,14 +75,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.material3AdaptiveNavigationSuite)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.foundation)
+            implementation(libs.jetbrains.compose.material)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.material3.adaptiveNavigationSuite)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.components.resources)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(libs.coil.core)
             implementation(libs.coil.compose)
             implementation(libs.kotlinx.serialization.json)
@@ -90,7 +90,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.compose.material3.adaptive)
@@ -139,13 +139,13 @@ kotlin {
         }
 
         jvmTest.dependencies {
-            implementation(compose.desktop.uiTestJUnit4)
+            implementation(libs.jetbrains.compose.ui.test.junit4)
         }
     }
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.jetbrains.compose.uiTooling)
     androidTestImplementation(libs.androidx.compose.ui.test.android)
     androidTestImplementation(libs.androidx.compose.ui.testManifest)
 }

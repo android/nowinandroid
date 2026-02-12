@@ -25,9 +25,9 @@ import com.google.samples.apps.nowinandroid.core.database.model.asExternalModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 
 class NewsResourceDaoTest {
     private lateinit var newsResourceDao: NewsResourceDao

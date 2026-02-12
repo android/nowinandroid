@@ -42,6 +42,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.spotless.gradlePlugin)
     implementation(libs.truth)
     lintChecks(libs.androidx.lint.gradle)
 }
@@ -98,6 +99,10 @@ gradlePlugin {
         register("koin") {
             id = "nowinandroid.di.koin"
             implementationClass = "KoinConventionPlugin"
+        }
+        register("root") {
+            id = "nowinandroid.root"
+            implementationClass = "RootConventionPlugin"
         }
     }
 }

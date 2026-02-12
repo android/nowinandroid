@@ -40,7 +40,7 @@ kotlin {
             api(projects.core.analytics)
             api(projects.core.notifications)
             api(projects.sync.work)
-            api(compose.components.resources)
+            api(libs.jetbrains.compose.components.resources)
         }
         commonTest.dependencies {
             implementation(projects.core.testing)

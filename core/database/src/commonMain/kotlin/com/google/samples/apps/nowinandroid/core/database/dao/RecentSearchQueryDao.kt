@@ -23,7 +23,7 @@ import com.google.samples.apps.nowinandroid.core.database.Recent_search_query
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * DAO for [RecentSearchQueryEntity] access

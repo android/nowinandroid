@@ -36,9 +36,9 @@ kotlin {
             api(projects.core.model)
             implementation(libs.coil)
             implementation(libs.coil.compose)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.components.resources)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
         }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)

@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
  * @see androidx.profileinstaller.ProfileVerifier.CompilationStatus.ResultCode
  */
 class ProfileVerifierLogger(
-    @ApplicationScope private val scope: CoroutineScope,
+    @param:ApplicationScope private val scope: CoroutineScope,
 ) {
     companion object {
         private const val TAG = "ProfileInstaller"

@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.logging)
-            implementation(compose.runtime)
+            implementation(libs.jetbrains.compose.runtime)
         }
     }
 }

@@ -37,7 +37,7 @@ private const val USER_DATA_KEY = "userData"
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 class NiaPreferencesDataSource(
     private val settings: Settings,
-    @Dispatcher(IO) private val dispatcher: CoroutineDispatcher,
+    @param:Dispatcher(IO) private val dispatcher: CoroutineDispatcher,
 ) {
     // FlowSettings did not support JS, use a workaround instead
     // https://github.com/russhwolf/multiplatform-settings/issues/139

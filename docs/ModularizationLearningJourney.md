@@ -85,7 +85,57 @@ how you can organize your project. In general, you should strive for low couplin
 
 ## Types of modules in Now in Android
 
-![Diagram showing types of modules and their dependencies in Now in Android](images/modularization-graph.drawio.png "Diagram showing types of modules and their dependencies in Now in Android")
+```mermaid
+graph TB
+  subgraph :core
+    direction TB
+    :core:data[data]:::android-library
+    :core:database[database]:::android-library
+    :core:model[model]:::jvm-library
+    :core:network[network]:::android-library
+    :core:ui[ui]:::android-library
+  end
+  subgraph :feature
+    direction TB
+    :feature:topic[topic]:::android-feature
+    :feature:foryou[foryou]:::android-feature
+    :feature:interests[interests]:::android-feature
+    :feature:foo[...]:::android-feature
+
+  end
+  :app[app]:::android-application
+
+  :app -.-> :feature:foryou
+  :app -.-> :feature:interests
+  :app -.-> :feature:topic
+  :core:data ---> :core:database
+  :core:data ---> :core:network
+  :core:database ---> :core:model
+  :core:network ---> :core:model
+  :core:ui ---> :core:model
+  :feature:topic -.-> :core:data
+  :feature:topic -.-> :core:ui
+
+classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
+classDef android-library fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000;
+classDef jvm-library fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000;
+```
+
+<details><summary>📋 Graph legend</summary>
+
+```mermaid
+graph TB
+  application:::android-application -. implementation .-> feature:::android-feature
+  library:::android-library -- api --> jvm:::jvm-library
+
+classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
+classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
+classDef android-library fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000;
+classDef jvm-library fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000;
+```
+
+</details>
 
 **Top tip**: A module graph (shown above) can be useful during modularization planning for
 visualizing dependencies between modules.
@@ -233,6 +283,9 @@ Using the above modularization strategy, the Now in Android app has the followin
   </tr>
 </table>
 
+Each module has its own `README.md` file containing a module graph (e.g. [`:app` module graph](../app/README.md#module-dependency-graph)).  
+When modules dependencies change, module graphs are automatically updated by the [Build.yaml](../.github/workflows/Build.yaml) workflow.  
+You can also manually update the graphs by running the `graphUpdate` task.
 
 ## Modularization in Now in Android
 

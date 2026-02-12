@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.compose)
+    alias(libs.plugins.spotless)
 }
 
 kotlin {
@@ -36,10 +37,8 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(project.projectDir.path)
-                    }
+                    // Serve sources to debug inside browser
+                    static(project.projectDir.path)
                 }
             }
         }
@@ -77,12 +76,12 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.foundation)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.components.resources)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(projects.core.designsystem)
         }
         desktopMain.dependencies {
@@ -97,8 +96,8 @@ android {
         versionCode = 1
         versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
         minSdk = 24
-        targetSdk = 34
-        compileSdk = 35
+        targetSdk = 36
+        compileSdk = 36
         // The UI catalog does not depend on content from the app, however, it depends on modules
         // which do, so we must specify a default value for the contentType dimension.
         missingDimensionStrategy("contentType", "demo")
@@ -147,10 +146,24 @@ compose.desktop {
     }
 }
 
-compose.experimental {
-
-}
-
 dependencyGuard {
     configuration("releaseRuntimeClasspath")
+}
+
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint(libs.versions.ktlint.get())
+            .editorConfigOverride(mapOf("android" to "true"))
+        licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+    }
+    format("kts") {
+        target("*.kts")
+        targetExclude("**/build/**/*.kts")
+        licenseHeaderFile(rootProject.file("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
+    }
+    format("xml") {
+        target("src/**/*.xml")
+        licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
+    }
 }

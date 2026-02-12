@@ -1,25 +1,24 @@
 /*
  * Copyright 2023 The Android Open Source Project
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.google.samples.apps.nowinandroid
 
-import com.android.SdkConstants
 import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.variant.Aapt2
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.gradle.BaseExtension
 import com.google.common.truth.Truth.assertWithMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -110,7 +109,6 @@ private fun String.capitalized() = replaceFirstChar {
 }
 
 fun Project.configureBadgingTasks(
-    baseExtension: BaseExtension,
     componentsExtension: ApplicationAndroidComponentsExtension,
 ) {
     // Registers a callback to be called, when a new variant is configured
@@ -121,21 +119,10 @@ fun Project.configureBadgingTasks(
         val generateBadging =
             tasks.register<GenerateBadgingTask>(generateBadgingTaskName) {
                 apk = variant.artifacts.get(SingleArtifact.APK_FROM_BUNDLE)
-                aapt2Executable.set(
-                    // TODO: Replace with `sdkComponents.aapt2` when it's available in AGP
-                    //       https://issuetracker.google.com/issues/376815836
-                    componentsExtension.sdkComponents.sdkDirectory.map { directory ->
-                        directory.file(
-                            "${SdkConstants.FD_BUILD_TOOLS}/" +
-                                "${baseExtension.buildToolsVersion}/" +
-                                SdkConstants.FN_AAPT2,
-                        )
-                    }
-                )
+                aapt2Executable = componentsExtension.sdkComponents.aapt2.flatMap(Aapt2::executable)
                 badging = project.layout.buildDirectory.file(
                     "outputs/apk_from_bundle/${variant.name}/${variant.name}-badging.txt",
                 )
-
             }
 
         val updateBadgingTaskName = "update${capitalizedVariantName}Badging"
@@ -153,7 +140,6 @@ fun Project.configureBadgingTasks(
             this.updateBadgingTaskName = updateBadgingTaskName
 
             output = project.layout.buildDirectory.dir("intermediates/$checkBadgingTaskName")
-
         }
     }
 }

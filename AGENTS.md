@@ -11,7 +11,7 @@ Now in Android (KMP edition) — a Kotlin Multiplatform fork of Google's Now in 
 ```bash
 # Format code (must pass before merge)
 ./gradlew spotlessApply
-./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+./gradlew spotlessCheck
 
 # Build
 ./gradlew :app:assemble                     # main app (all variants)
@@ -42,6 +42,9 @@ Now in Android (KMP edition) — a Kotlin Multiplatform fork of Google's Now in 
 
 # Build-logic check
 ./gradlew :build-logic:convention:check
+
+# Module graphs
+./gradlew graphUpdate                        # update README.md module graphs
 
 # Badging check
 ./gradlew :app:checkReleaseBadging
