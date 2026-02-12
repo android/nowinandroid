@@ -21,7 +21,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
-class KoinConventionPlugin: Plugin<Project> {
+class KoinConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -49,7 +49,16 @@ class KoinConventionPlugin: Plugin<Project> {
             }
 
             project.tasks.withType(KotlinCompilationTask::class.java).configureEach {
-                if(name != "kspCommonMainKotlinMetadata") {
+                if (name != "kspCommonMainKotlinMetadata") {
+                    dependsOn("kspCommonMainKotlinMetadata")
+                }
+            }
+            // KSP2 uses KspAATask which isn't a KotlinCompilationTask but still
+            // needs to depend on kspCommonMainKotlinMetadata for the shared source set.
+            project.tasks.configureEach {
+                if (name.startsWith("ksp") && name != "kspCommonMainKotlinMetadata" &&
+                    name.contains("Kotlin")
+                ) {
                     dependsOn("kspCommonMainKotlinMetadata")
                 }
             }

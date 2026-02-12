@@ -48,7 +48,35 @@ jobs:
         run: ./gradlew :build-logic:convention:check
 
       - name: Check spotless
-        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+        run: ./gradlew spotlessCheck
+
+      - name: Update Graphs
+        id: graphs_update
+        continue-on-error: true
+        run: ./gradlew graphUpdate
+
+      - name: Check Graphs
+        id: graphs_verify
+        run: |
+          if ! git diff --quiet "**/README.md"; then
+            echo "::error::Module graph updates detected. Please run './gradlew graphUpdate' locally and commit the changes."
+            exit 1
+          fi
+
+      - name: Prevent updating graphs if this is a fork
+        id: checkfork_graphs
+        continue-on-error: false
+        if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Module graph updates detected, please update graphs with: ./gradlew graphUpdate" && exit 1
+
+      - name: Push updated graphs if available
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.graphs_update.outcome == 'success' && steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        with:
+          file_pattern: '**/README.md'
+          disable_globbing: true
+          commit_message: "Updates module graphs"
 
       - name: Check Dependency Guard
         id: dependencyguard_verify

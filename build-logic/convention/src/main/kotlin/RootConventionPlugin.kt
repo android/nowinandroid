@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright 2025 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+import com.google.samples.apps.nowinandroid.configureGraphTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class SqlDelightConventionPlugin : Plugin<Project> {
+class RootConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("app.cash.sqldelight")
+            configureGraphTasks()
         }
     }
 }

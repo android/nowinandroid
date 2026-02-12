@@ -54,9 +54,25 @@ plugins {
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
+    alias(libs.plugins.nowinandroid.root)
+    alias(libs.plugins.spotless)
     alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.sqldelight.gradle.plugin) apply false
     alias(libs.plugins.ktrofit) apply false
     alias(libs.plugins.buildkonfig) apply false
+}
+
+spotless {
+    kotlin {
+        target("build-logic/convention/src/**/*.kt")
+        ktlint(libs.versions.ktlint.get())
+            .editorConfigOverride(mapOf("android" to "true"))
+        licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+    }
+    format("kts") {
+        target("*.kts", "build-logic/**/*.kts")
+        targetExclude("**/build/**/*.kts")
+        licenseHeaderFile(rootProject.file("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
+    }
 }

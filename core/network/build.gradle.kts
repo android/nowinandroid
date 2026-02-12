@@ -27,6 +27,10 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
+ktorfit {
+    compilerPluginVersion.set("2.3.3")
+}
+
 android {
     namespace = "com.google.samples.apps.nowinandroid.core.network"
     testOptions {
