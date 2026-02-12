@@ -34,5 +34,13 @@ kotlin {
             implementation(libs.robolectric)
             implementation(projects.core.designsystem)
         }
+        jvmMain.dependencies {
+            api(libs.roborazzi.compose.desktop)
+            implementation(projects.core.designsystem)
+        }
+        iosMain.dependencies {
+            api(libs.roborazzi.compose.ios)
+            implementation(projects.core.designsystem)
+        }
     }
 }

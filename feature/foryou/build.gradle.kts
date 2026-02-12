@@ -54,6 +54,11 @@ kotlin {
             implementation(libs.roborazzi)
             implementation(projects.core.screenshotTesting)
         }
+        jvmTest.dependencies {
+            implementation(libs.roborazzi.compose.desktop)
+            implementation(libs.jetbrains.compose.ui.test.junit4)
+            implementation(projects.core.screenshotTesting)
+        }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)
             implementation(libs.bundles.androidx.compose.ui.test)

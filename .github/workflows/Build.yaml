@@ -105,32 +105,43 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
-      - name: Run all local screenshot tests (Roborazzi)
+      - name: Run Android screenshot tests (Roborazzi)
         id: screenshotsverify
         continue-on-error: true
         run: ./gradlew verifyRoborazziDebug
 
+      - name: Run JVM Desktop screenshot tests (Roborazzi)
+        id: screenshotsverify_jvm
+        continue-on-error: true
+        run: ./gradlew verifyRoborazziJvm
+
       - name: Prevent pushing new screenshots if this is a fork
         id: checkfork_screenshots
         continue-on-error: false
-        if: steps.screenshotsverify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        if: (steps.screenshotsverify.outcome == 'failure' || steps.screenshotsverify_jvm.outcome == 'failure') && github.event.pull_request.head.repo.full_name != github.repository
         run: |
-          echo "::error::Screenshot tests failed, please create a PR in your fork first." 
+          echo "::error::Screenshot tests failed, please create a PR in your fork first."
           echo "Your fork's CI will take screenshots for your fork."
           exit 1
 
       # Runs if previous job failed
-      - name: Generate new screenshots if verification failed and it's a PR
+      - name: Generate new Android screenshots if verification failed and it's a PR
         id: screenshotsrecord
         if: steps.screenshotsverify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
           ./gradlew recordRoborazziDebug
 
+      - name: Generate new JVM Desktop screenshots if verification failed and it's a PR
+        id: screenshotsrecord_jvm
+        if: steps.screenshotsverify_jvm.outcome == 'failure' && github.event_name == 'pull_request'
+        run: |
+          ./gradlew recordRoborazziJvm
+
       - name: Push new screenshots if available
         uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.screenshotsrecord.outcome == 'success'
+        if: steps.screenshotsrecord.outcome == 'success' || steps.screenshotsrecord_jvm.outcome == 'success'
         with:
-          file_pattern: '*/*.png'
+          file_pattern: '**/src/test/screenshots/**/*.png **/src/jvmTest/screenshots/**/*.png'
           disable_globbing: true
           commit_message: "🤖 Updates screenshots"
 

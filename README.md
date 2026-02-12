@@ -56,7 +56,7 @@ As Firebase Analytics does not yet support Kotlin Multiplatform, the implementat
 | :core:model               | Done        | ✅                 | ✅️                 | ✅             | ❌            |
 | :core:network             | Done        | ✅                 | ✅️                 | ✅             | ❌            |
 | :core:notification        | Done        | No implmentaion   | ✅️                 |No implmentaion| ❌           |
-| :core:screenshot-testing  | Not started | ❌                | ❌                | ❌            | ❌            |
+| :core:screenshot-testing  | Done        | ✅                | ✅️                | ✅             | ❌            |
 | :core:testing             | Done        | ✅                 | ✅️                 | ✅             | ❌            |
 | :core:ui                  | Done        | ✅                 | ✅️                 | ✅             | ❌            |
 | :feature:bookmarks        | Done        | ✅                | ✅️                | ✅            | ❌            |

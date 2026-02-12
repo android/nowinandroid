@@ -23,6 +23,7 @@ plugins {
 
 android {
     namespace = "com.google.samples.apps.nowinandroid.feature.search"
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 kotlin {
@@ -41,8 +42,15 @@ kotlin {
             implementation(projects.core.testing)
         }
         androidUnitTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.compose.ui.testManifest)
             implementation(libs.robolectric)
             implementation(libs.roborazzi)
+            implementation(projects.core.screenshotTesting)
+        }
+        jvmTest.dependencies {
+            implementation(libs.roborazzi.compose.desktop)
+            implementation(libs.jetbrains.compose.ui.test.junit4)
             implementation(projects.core.screenshotTesting)
         }
         androidInstrumentedTest.dependencies {

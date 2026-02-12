@@ -119,6 +119,10 @@ kotlin {
         }
 
         androidUnitTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.compose.ui.testManifest)
+            implementation(libs.robolectric)
+            implementation(libs.roborazzi)
             implementation(projects.core.screenshotTesting)
         }
 
@@ -139,7 +143,9 @@ kotlin {
         }
 
         jvmTest.dependencies {
+            implementation(libs.roborazzi.compose.desktop)
             implementation(libs.jetbrains.compose.ui.test.junit4)
+            implementation(projects.core.screenshotTesting)
         }
     }
 }
