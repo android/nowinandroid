@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadingWheel
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
@@ -34,7 +35,6 @@ import nowinandroid.feature.interests.generated.resources.Res
 import nowinandroid.feature.interests.generated.resources.feature_interests_empty_header
 import nowinandroid.feature.interests.generated.resources.feature_interests_loading
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

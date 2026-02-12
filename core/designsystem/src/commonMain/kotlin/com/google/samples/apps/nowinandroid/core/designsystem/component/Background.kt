@@ -30,13 +30,13 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalBackgroundTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.PI
 import kotlin.math.tan
 

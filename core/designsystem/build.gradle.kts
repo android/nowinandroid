@@ -41,10 +41,8 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(project.projectDir.path)
-                    }
+                    // Serve sources to debug inside browser
+                    static(project.projectDir.path)
                 }
             }
         }
@@ -68,16 +66,16 @@ kotlin {
             implementation(projects.core.testing)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.material3AdaptiveNavigationSuite)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.uiUtil)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.foundation)
+            implementation(libs.jetbrains.compose.material)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.material3.adaptiveNavigationSuite)
+            implementation(libs.jetbrains.compose.material.iconsExtended)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.ui.util)
+            implementation(libs.jetbrains.compose.components.resources)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(libs.coil.compose)
             implementation(libs.jetbrains.compose.material3.adaptive)
             implementation(libs.jetbrains.compose.material3.adaptive.layout)

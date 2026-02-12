@@ -18,6 +18,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
@@ -29,7 +30,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 /**
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)

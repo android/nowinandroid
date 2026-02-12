@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * Multipreview annotation that represents various device sizes. Add this annotation to a composable

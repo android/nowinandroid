@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
@@ -80,7 +81,6 @@ import nowinandroid.feature.settings.generated.resources.feature_settings_privac
 import nowinandroid.feature.settings.generated.resources.feature_settings_theme
 import nowinandroid.feature.settings.generated.resources.feature_settings_title
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

@@ -53,6 +53,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImagePainter
@@ -77,8 +79,6 @@ import nowinandroid.core.ui.generated.resources.core_ui_topic_chip_content_descr
 import nowinandroid.core.ui.generated.resources.core_ui_unbookmark
 import nowinandroid.core.ui.generated.resources.core_ui_unread_resource_dot_content_description
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved

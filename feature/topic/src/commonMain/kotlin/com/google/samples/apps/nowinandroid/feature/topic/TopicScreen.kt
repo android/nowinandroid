@@ -46,6 +46,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.LocalPlatformContext
@@ -69,8 +71,6 @@ import nowinandroid.core.ui.generated.resources.core_ui_back
 import nowinandroid.feature.topic.generated.resources.Res
 import nowinandroid.feature.topic.generated.resources.feature_topic_loading
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

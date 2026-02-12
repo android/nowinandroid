@@ -37,10 +37,8 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(project.projectDir.path)
-                    }
+                    // Serve sources to debug inside browser
+                    static(project.projectDir.path)
                 }
             }
         }
@@ -78,12 +76,12 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.foundation)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.components.resources)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(projects.core.designsystem)
         }
         desktopMain.dependencies {

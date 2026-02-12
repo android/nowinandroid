@@ -66,6 +66,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
@@ -94,7 +95,6 @@ import nowinandroid.feature.foryou.generated.resources.feature_foryou_loading
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_subtitle
 import nowinandroid.feature.foryou.generated.resources.feature_foryou_onboarding_guidance_title
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
