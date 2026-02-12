@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.database.util
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 internal class InstantConverter {
 

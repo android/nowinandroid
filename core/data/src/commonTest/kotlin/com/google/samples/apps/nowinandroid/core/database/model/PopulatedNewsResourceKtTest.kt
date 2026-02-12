@@ -18,9 +18,9 @@ package com.google.samples.apps.nowinandroid.core.database.model
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 
 class PopulatedNewsResourceKtTest {
     @Test

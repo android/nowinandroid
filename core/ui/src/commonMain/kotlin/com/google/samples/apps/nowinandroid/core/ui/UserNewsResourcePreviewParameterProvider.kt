@@ -26,10 +26,11 @@ import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.PreviewParameterData.newsResources
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlin.time.Instant
 
 /**
  * This [PreviewParameterProvider](https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewParameterProvider)
@@ -89,8 +90,8 @@ object PreviewParameterData {
                 headerImageUrl = "https://developer.android.com/images/hero-assets/android-basics-compose.svg",
                 publishDate = LocalDateTime(
                     year = 2022,
-                    monthNumber = 5,
-                    dayOfMonth = 4,
+                    month = Month.MAY,
+                    day = 4,
                     hour = 23,
                     minute = 0,
                     second = 0,

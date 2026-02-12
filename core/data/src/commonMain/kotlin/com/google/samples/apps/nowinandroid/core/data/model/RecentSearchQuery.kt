@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.core.data.model
 
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class RecentSearchQuery(
     val query: String,

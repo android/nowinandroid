@@ -17,7 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.database.model
 
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * Defines an NiA news resource.

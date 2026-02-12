@@ -22,7 +22,7 @@ import com.google.samples.apps.nowinandroid.core.database.dao.RecentSearchQueryD
 import com.google.samples.apps.nowinandroid.core.database.model.RecentSearchQueryEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 class DefaultRecentSearchRepository(
     private val recentSearchQueryDao: RecentSearchQueryDao,

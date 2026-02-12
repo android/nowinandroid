@@ -67,7 +67,6 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import kotlinx.datetime.Instant
 import nowinandroid.core.ui.generated.resources.Res
 import nowinandroid.core.ui.generated.resources.core_ui_bookmark
 import nowinandroid.core.ui.generated.resources.core_ui_card_meta_data_text
@@ -79,6 +78,7 @@ import nowinandroid.core.ui.generated.resources.core_ui_topic_chip_content_descr
 import nowinandroid.core.ui.generated.resources.core_ui_unbookmark
 import nowinandroid.core.ui.generated.resources.core_ui_unread_resource_dot_content_description
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Instant
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved

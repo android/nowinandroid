@@ -16,7 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.database.model
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * Defines an database entity that stored recent search queries.

@@ -38,7 +38,7 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.jetbrains.compose.material3)
             implementation(libs.jetbrains.compose.components.resources)
-            implementation(libs.jetbrains.compose.components.uiToolingPreview)
+            implementation(libs.jetbrains.compose.uiToolingPreview)
         }
         androidInstrumentedTest.dependencies {
             implementation(projects.core.testing)

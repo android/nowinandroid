@@ -28,6 +28,10 @@ class KoinConventionPlugin : Plugin<Project> {
                 apply("com.google.devtools.ksp")
             }
 
+            extensions.configure(com.google.devtools.ksp.gradle.KspExtension::class.java) {
+                arg("KOIN_DEFAULT_MODULE", "true")
+            }
+
             extensions.configure(KotlinMultiplatformExtension::class.java) {
                 sourceSets.named("commonMain").configure {
                     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")

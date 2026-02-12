@@ -23,10 +23,11 @@ import com.google.samples.apps.nowinandroid.core.model.data.NewsResource
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.UserData
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlin.time.Instant
 
 val userNewsResourcesTestData: List<UserNewsResource> = UserData(
     bookmarkedNewsResources = setOf("1", "4"),
@@ -47,8 +48,8 @@ val userNewsResourcesTestData: List<UserNewsResource> = UserData(
                 headerImageUrl = "https://developer.android.com/images/hero-assets/android-basics-compose.svg",
                 publishDate = LocalDateTime(
                     year = 2022,
-                    monthNumber = 5,
-                    dayOfMonth = 4,
+                    month = Month.MAY,
+                    day = 4,
                     hour = 23,
                     minute = 0,
                     second = 0,
