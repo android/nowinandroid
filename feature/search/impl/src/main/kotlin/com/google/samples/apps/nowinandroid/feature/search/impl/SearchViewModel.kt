@@ -29,6 +29,7 @@ import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUs
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import android.util.Log
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -38,6 +39,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -84,6 +86,10 @@ class SearchViewModel @Inject constructor(
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
         recentSearchQueriesUseCase()
             .map(RecentSearchQueriesUiState::Success)
+            .catch {
+                Log.e(TAG, "Failed to load recent search queries", it)
+                emit(RecentSearchQueriesUiState.Loading)
+            }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -104,32 +110,62 @@ class SearchViewModel @Inject constructor(
     fun onSearchTriggered(query: String) {
         if (query.isBlank()) return
         viewModelScope.launch {
-            recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
+            try {
+                recentSearchRepository.insertOrReplaceRecentSearch(searchQuery = query)
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.e(TAG, "Failed to save recent search query", exception)
+            }
         }
         analyticsHelper.logEventSearchTriggered(query = query)
     }
 
     fun clearRecentSearches() {
         viewModelScope.launch {
-            recentSearchRepository.clearRecentSearches()
+            try {
+                recentSearchRepository.clearRecentSearches()
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.e(TAG, "Failed to clear recent searches", exception)
+            }
         }
     }
 
     fun setNewsResourceBookmarked(newsResourceId: String, isChecked: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setNewsResourceBookmarked(newsResourceId, isChecked)
+            try {
+                userDataRepository.setNewsResourceBookmarked(newsResourceId, isChecked)
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.e(TAG, "Failed to bookmark news resource", exception)
+            }
         }
     }
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setTopicIdFollowed(followedTopicId, followed)
+            try {
+                userDataRepository.setTopicIdFollowed(followedTopicId, followed)
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.e(TAG, "Failed to follow topic", exception)
+            }
         }
     }
 
     fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
         viewModelScope.launch {
-            userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
+            try {
+                userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Log.e(TAG, "Failed to mark news resource as viewed", exception)
+            }
         }
     }
 }
@@ -148,3 +184,4 @@ private const val SEARCH_QUERY_MIN_LENGTH = 2
 /** Minimum number of the fts table's entity count where it's considered as search is not ready */
 private const val SEARCH_MIN_FTS_ENTITY_COUNT = 1
 private const val SEARCH_QUERY = "searchQuery"
+private const val TAG = "SearchViewModel"
