@@ -46,7 +46,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
@@ -255,9 +254,6 @@ class NavigationTest {
         }
     }
 
-    // TODO decide if backStack should preserve previous stacks when navigating back to home tab (ForYou)
-    // https://github.com/android/nowinandroid/issues/1937
-    @Ignore
     @Test
     fun navigationBar_multipleBackStackInterests() {
         composeTestRule.apply {
@@ -279,6 +275,32 @@ class NavigationTest {
             onNodeWithText(interests).performClick()
 
             // Verify the topic is still shown
+            onNodeWithTag("topic:${topic.id}").assertExists()
+        }
+    }
+
+    @Test
+    fun navigationBar_backFromTabPreservesSubStack() {
+        composeTestRule.apply {
+            onNodeWithText(interests).performClick()
+
+            // Select a topic
+            val topic = runBlocking {
+                topicsRepository.getTopics().first().sortedBy(Topic::name).last()
+            }
+            onNodeWithTag(LIST_PANE_TEST_TAG).performScrollToNode(hasText(topic.name))
+            onNodeWithText(topic.name).performClick()
+
+            // Verify the topic is shown
+            onNodeWithTag("topic:${topic.id}").assertIsDisplayed()
+
+            // Switch to another tab
+            onNodeWithText(saved).performClick()
+
+            // Press back to return to previous tab
+            Espresso.pressBack()
+
+            // Verify the topic detail is still shown (sub-stack preserved)
             onNodeWithTag("topic:${topic.id}").assertExists()
         }
     }
