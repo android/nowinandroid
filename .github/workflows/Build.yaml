@@ -5,7 +5,6 @@ on:
 
 env:
   BASELINE_BRANCH: main
-  GRADLE_BUILD_CACHE_DIR: ${{ github.workspace }}/.common-gradle-cache
 
 jobs:
   benchmark-android:
@@ -49,6 +48,11 @@ jobs:
           # Jobs on other branches will read entries from the cache but will not write updated entries.
           cache-read-only: false
 
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
       - name: Build APKs (Baseline)
         working-directory: ./baseline
         run: |
@@ -71,15 +75,13 @@ jobs:
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
           disable-animations: true
           script: |
-            adb install ./candidate/benchmarks/build/outputs/apk/demo/benchmarkRelease/benchmarks-demo-benchmarkRelease.apk
-            chmod +x ./candidate/.github/scripts/run_macrobenchmarks.sh
-            ./candidate/.github/scripts/run_macrobenchmarks.sh "./baseline/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" "./candidate/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk"
+            chmod +x ./candidate/.github/scripts/benchmark.sh
+            ./candidate/.github/scripts/benchmark.sh --baseline-apk "./baseline/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" --candidate-apk "./candidate/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" --benchmark-apk "./candidate/benchmarks/build/outputs/apk/demo/benchmarkRelease/benchmarks-demo-benchmarkRelease.apk"
 
       - name: Compare macrobenchmark results
         run: |
-            python3 ./candidate/.github/scripts/step_fit.py \
-              "./macrobenchmark_results/baseline" \
-              "./macrobenchmark_results/candidate"
+          pip install git+https://github.com/Frozen-Bytes/benchcomp.git@v1.0.0
+          benchcomp --verbose "./macrobenchmark_results/baseline" "./macrobenchmark_results/candidate"
 
       - name: Upload Artifacts
         if: always()
