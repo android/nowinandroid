@@ -17,7 +17,9 @@
 package com.google.samples.apps.nowinandroid.foryou
 
 import androidx.benchmark.macro.CompilationMode
+import androidx.benchmark.macro.ExperimentalMetricApi
 import androidx.benchmark.macro.FrameTimingMetric
+import androidx.benchmark.macro.MemoryUsageMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -44,6 +46,27 @@ class ScrollForYouFeedBenchmark {
     private fun scrollFeed(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = PACKAGE_NAME,
         metrics = listOf(FrameTimingMetric()),
+        compilationMode = compilationMode,
+        iterations = 10,
+        startupMode = StartupMode.WARM,
+        setupBlock = {
+            // Start the app
+            pressHome()
+            startActivityAndAllowNotifications()
+        },
+    ) {
+        forYouWaitForContent()
+        forYouSelectTopics()
+        forYouScrollFeedDownUp()
+    }
+
+    @Test
+    fun scrollFeedCompilationMemoryMaxBaselineProfile() = scrollFeedMem(CompilationMode.Partial())
+
+    @OptIn(ExperimentalMetricApi::class)
+    private fun scrollFeedMem(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
+        packageName = PACKAGE_NAME,
+        metrics = listOf(MemoryUsageMetric(MemoryUsageMetric.Mode.Max)),
         compilationMode = compilationMode,
         iterations = 10,
         startupMode = StartupMode.WARM,
