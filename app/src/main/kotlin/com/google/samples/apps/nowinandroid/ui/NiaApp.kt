@@ -45,10 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -63,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import com.google.samples.apps.nowinandroid.R
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaBackground
@@ -81,7 +79,8 @@ import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYo
 import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
 import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
-import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
+import com.google.samples.apps.nowinandroid.feature.settings.api.navigation.SettingsNavKey
+import com.google.samples.apps.nowinandroid.feature.settings.impl.navigation.settingsEntry
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
 import com.google.samples.apps.nowinandroid.feature.settings.impl.R as settingsR
@@ -93,7 +92,6 @@ fun NiaApp(
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
-    var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
         NiaGradientBackground(
@@ -118,13 +116,8 @@ fun NiaApp(
                 }
             }
             CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
-                NiaApp(
+                NiaAppContent(
                     appState = appState,
-
-                    // TODO: Settings should be a dialog screen
-                    showSettingsDialog = showSettingsDialog,
-                    onSettingsDismissed = { showSettingsDialog = false },
-                    onTopAppBarActionClick = { showSettingsDialog = true },
                     windowAdaptiveInfo = windowAdaptiveInfo,
                 )
             }
@@ -138,22 +131,13 @@ fun NiaApp(
     ExperimentalComposeUiApi::class,
     ExperimentalMaterial3AdaptiveApi::class,
 )
-internal fun NiaApp(
+internal fun NiaAppContent(
     appState: NiaAppState,
-    showSettingsDialog: Boolean,
-    onSettingsDismissed: () -> Unit,
-    onTopAppBarActionClick: () -> Unit,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     val unreadNavKeys by appState.topLevelNavKeysWithUnreadResources
         .collectAsStateWithLifecycle()
-
-    if (showSettingsDialog) {
-        SettingsDialog(
-            onDismiss = { onSettingsDismissed() },
-        )
-    }
 
     val snackbarHostState = LocalSnackbarHostState.current
 
@@ -220,7 +204,7 @@ internal fun NiaApp(
                 // Only show the top app bar on top level destinations.
                 var shouldShowTopAppBar = false
 
-                if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
+                if (appState.navigationState.currentKeyIgnoringDialogs in appState.navigationState.topLevelKeys) {
                     shouldShowTopAppBar = true
 
                     val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
@@ -239,7 +223,7 @@ internal fun NiaApp(
                         colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = Color.Transparent,
                         ),
-                        onActionClick = { onTopAppBarActionClick() },
+                        onActionClick = { navigator.navigate(SettingsNavKey) },
                         onNavigationClick = { navigator.navigate(SearchNavKey) },
                     )
                 }
@@ -255,6 +239,7 @@ internal fun NiaApp(
                     ),
                 ) {
                     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
+                    val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
 
                     val entryProvider = entryProvider {
                         forYouEntry(navigator)
@@ -262,11 +247,12 @@ internal fun NiaApp(
                         interestsEntry(navigator)
                         topicEntry(navigator)
                         searchEntry(navigator)
+                        settingsEntry(navigator)
                     }
 
                     NavDisplay(
                         entries = appState.navigationState.toEntries(entryProvider),
-                        sceneStrategy = listDetailStrategy,
+                        sceneStrategy = dialogStrategy then listDetailStrategy,
                         onBack = { navigator.goBack() },
                     )
                 }

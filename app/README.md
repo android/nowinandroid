@@ -13,10 +13,6 @@ config:
 graph TB
   subgraph :feature
     direction TB
-    subgraph :feature:settings
-      direction TB
-      :feature:settings:impl[impl]:::android-library
-    end
     subgraph :feature:foryou
       direction TB
       :feature:foryou:api[api]:::android-library
@@ -31,6 +27,11 @@ graph TB
       direction TB
       :feature:search:api[api]:::android-library
       :feature:search:impl[impl]:::android-library
+    end
+    subgraph :feature:settings
+      direction TB
+      :feature:settings:api[api]:::android-library
+      :feature:settings:impl[impl]:::android-library
     end
     subgraph :feature:interests
       direction TB
@@ -81,6 +82,7 @@ graph TB
   :app -.-> :feature:interests:impl
   :app -.-> :feature:search:api
   :app -.-> :feature:search:impl
+  :app -.-> :feature:settings:api
   :app -.-> :feature:settings:impl
   :app -.-> :feature:topic:api
   :app -.-> :feature:topic:impl
@@ -128,13 +130,16 @@ graph TB
   :feature:search:api --> :core:navigation
   :feature:search:impl -.-> :core:designsystem
   :feature:search:impl -.-> :core:domain
+  :feature:search:impl -.-> :core:navigation
   :feature:search:impl -.-> :core:ui
   :feature:search:impl -.-> :feature:interests:api
   :feature:search:impl -.-> :feature:search:api
   :feature:search:impl -.-> :feature:topic:api
+  :feature:settings:api --> :core:navigation
   :feature:settings:impl -.-> :core:data
   :feature:settings:impl -.-> :core:designsystem
   :feature:settings:impl -.-> :core:ui
+  :feature:settings:impl -.-> :feature:settings:api
   :feature:topic:api -.-> :core:designsystem
   :feature:topic:api --> :core:navigation
   :feature:topic:api -.-> :core:ui
