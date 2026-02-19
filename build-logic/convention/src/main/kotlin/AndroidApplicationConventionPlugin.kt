@@ -37,6 +37,10 @@ abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
             apply(plugin = "nowinandroid.android.lint")
             apply(plugin = "com.dropbox.dependency-guard")
 
+            // Apply Google's OSS Licenses plugin only on CI to avoid breaking configuration cache on local builds
+            // https://github.com/google/play-services-plugins/issues/246
+            if (providers.environmentVariable("CI").isPresent) apply(plugin = "com.google.android.gms.oss-licenses-plugin")
+
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 36
