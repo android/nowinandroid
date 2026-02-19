@@ -22,14 +22,18 @@ import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.configureSpotlessForAndroid
 import com.google.samples.apps.nowinandroid.disableUnnecessaryAndroidTests
+import com.google.samples.apps.nowinandroid.isIsolatedProjectsEnabled
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.configuration.BuildFeatures
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import javax.inject.Inject
 
-class AndroidLibraryConventionPlugin : Plugin<Project> {
+abstract class AndroidLibraryConventionPlugin : Plugin<Project> {
+    @get:Inject abstract val buildFeatures: BuildFeatures
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.android.library")
@@ -53,7 +57,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 disableUnnecessaryAndroidTests(target)
             }
-            configureSpotlessForAndroid()
+            if (!buildFeatures.isIsolatedProjectsEnabled()) {
+                configureSpotlessForAndroid()
+            }
             dependencies {
                 "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
