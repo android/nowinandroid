@@ -3,89 +3,15 @@ name: Benchmark on Emulator
 on:
   workflow_dispatch:
 
-env:
-  BASELINE_BRANCH: main
-
 jobs:
   benchmark-android:
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-
-    steps:
-      - name: Free Disk Space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Checkout branch (Baseline)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.BASELINE_BRANCH }}
-          path: baseline
-
-      - name: Checkout branch (Candidate)
-        uses: actions/checkout@v4
-        with:
-          path: candidate
-
-      - name: Setup JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          # By default, The setup-gradle action will only write to the cache from Jobs on the default (main/master) branch.
-          # Jobs on other branches will read entries from the cache but will not write updated entries.
-          cache-read-only: false
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
-
-      - name: Build APKs (Baseline)
-        working-directory: ./baseline
-        run: |
-          chmod +x ./gradlew
-          ./gradlew :app:assembleDemoBenchmark
-
-      - name: Build APKs (Candidate)
-        working-directory: ./candidate
-        run: |
-          chmod +x ./gradlew
-          ./gradlew :app:assembleDemoBenchmark :benchmarks:assembleDemoBenchmark
-
-      - name: Run Benchmarks
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: google_apis
-          arch: x86_64
-          force-avd-creation: true
-          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
-          disable-animations: true
-          script: |
-            chmod +x ./candidate/.github/scripts/benchmark.sh
-            ./candidate/.github/scripts/benchmark.sh --baseline-apk "./baseline/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" --candidate-apk "./candidate/app/build/outputs/apk/demo/benchmarkRelease/app-demo-benchmarkRelease.apk" --benchmark-apk "./candidate/benchmarks/build/outputs/apk/demo/benchmarkRelease/benchmarks-demo-benchmarkRelease.apk"
-
-      - name: Compare macrobenchmark results
-        run: |
-          pip install git+https://github.com/Frozen-Bytes/benchcomp.git@v1.0.0
-          benchcomp --verbose "./macrobenchmark_results/baseline" "./macrobenchmark_results/candidate"
-
-      - name: Upload Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-results
-          path: ./macrobenchmark_results/
+    uses: Frozen-Bytes/actions/.github/workflows/android-macrobenchmark-gradle.yml@main
+    with:
+      api-level: 30
+      target: google_apis
+      arch: x86_64
+      force-avd-creation: true
+      emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
+      disable-animations: true
+      gradle-cache-readonly: false
+      instrument-args: "-e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark#startupPrecompiledWithBaselineProfile"
