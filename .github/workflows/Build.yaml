@@ -242,6 +242,9 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
+          # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+          # Number of core of default public repository github action runner is 4 in all.
+          cores: 4
           disk-size: 6000M
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
