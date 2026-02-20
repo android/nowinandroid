@@ -16,20 +16,26 @@
 
 import com.google.samples.apps.nowinandroid.configureKotlinJvm
 import com.google.samples.apps.nowinandroid.configureSpotlessForJvm
+import com.google.samples.apps.nowinandroid.isIsolatedProjectsEnabled
 import com.google.samples.apps.nowinandroid.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.configuration.BuildFeatures
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
+import javax.inject.Inject
 
-class JvmLibraryConventionPlugin : Plugin<Project> {
+abstract class JvmLibraryConventionPlugin : Plugin<Project> {
+    @get:Inject abstract val buildFeatures: BuildFeatures
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "org.jetbrains.kotlin.jvm")
             apply(plugin = "nowinandroid.android.lint")
 
             configureKotlinJvm()
-            configureSpotlessForJvm()
+            if (!buildFeatures.isIsolatedProjectsEnabled()) {
+                configureSpotlessForJvm()
+            }
             dependencies {
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
             }
