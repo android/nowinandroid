@@ -27,7 +27,7 @@
     <string name="feature_settings_impl_brand_default">Default</string>
     <string name="feature_settings_impl_brand_android">Android</string>
     <string name="feature_settings_impl_dark_mode_preference">Dark mode preference</string>
-    <string name="feature_settings_impl_dark_mode_config_system_default">System default</string>
+    <string name="feature_settings_impl_dark_mode_config_system_default">System</string>
     <string name="feature_settings_impl_dark_mode_config_light">Light</string>
     <string name="feature_settings_impl_dark_mode_config_dark">Dark</string>
     <string name="feature_settings_impl_dynamic_color_preference">Use Dynamic Color</string>

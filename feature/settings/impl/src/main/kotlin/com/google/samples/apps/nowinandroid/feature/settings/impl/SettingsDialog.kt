@@ -28,22 +28,35 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -55,13 +68,11 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.protobuf.option
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
 import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.DARK
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
-import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig.LIGHT
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.ANDROID
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand.DEFAULT
@@ -69,6 +80,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.feature.settings.impl.R.string
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Success
+
 
 @Composable
 fun SettingsDialog(
@@ -164,13 +176,14 @@ private fun ColumnScope.SettingsPanel(
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
 ) {
     SettingsDialogSectionTitle(text = stringResource(string.feature_settings_impl_theme))
-    Column(Modifier.selectableGroup()) {
-        SettingsDialogThemeChooserRow(
+    Row(Modifier.selectableGroup()) {
+        SettingsDialogThemeRadioBtn(
             text = stringResource(string.feature_settings_impl_brand_default),
             selected = settings.brand == DEFAULT,
             onClick = { onChangeThemeBrand(DEFAULT) },
         )
-        SettingsDialogThemeChooserRow(
+        Spacer(Modifier.width(20.dp))
+        SettingsDialogThemeRadioBtn(
             text = stringResource(string.feature_settings_impl_brand_android),
             selected = settings.brand == ANDROID,
             onClick = { onChangeThemeBrand(ANDROID) },
@@ -180,36 +193,65 @@ private fun ColumnScope.SettingsPanel(
         Column {
             SettingsDialogSectionTitle(text = stringResource(string.feature_settings_impl_dynamic_color_preference))
             Column(Modifier.selectableGroup()) {
-                SettingsDialogThemeChooserRow(
-                    text = stringResource(string.feature_settings_impl_dynamic_color_yes),
-                    selected = settings.useDynamicColor,
-                    onClick = { onChangeDynamicColorPreference(true) },
+
+                SettingsDialogThemeDynamicColorRow(
+                options = listOf( stringResource(string.feature_settings_impl_dynamic_color_yes), stringResource(string.feature_settings_impl_dynamic_color_no)),
+                    selectedIndex = if (settings.useDynamicColor) 0 else 1,
+                    onOptionSelected = { index ->
+                        onChangeDynamicColorPreference(index == 0)
+                    }
                 )
-                SettingsDialogThemeChooserRow(
-                    text = stringResource(string.feature_settings_impl_dynamic_color_no),
-                    selected = !settings.useDynamicColor,
-                    onClick = { onChangeDynamicColorPreference(false) },
-                )
+//                SettingsDialogThemeChooserRow(
+//                    text = stringResource(string.feature_settings_impl_dynamic_color_yes),
+//                    selected = settings.useDynamicColor,
+//                    onClick = { onChangeDynamicColorPreference(true) },
+//                )
+//                SettingsDialogThemeChooserRow(
+//                    text = stringResource(string.feature_settings_impl_dynamic_color_no),
+//                    selected = !settings.useDynamicColor,
+//                    onClick = { onChangeDynamicColorPreference(false) },
+//                )
             }
         }
     }
     SettingsDialogSectionTitle(text = stringResource(string.feature_settings_impl_dark_mode_preference))
     Column(Modifier.selectableGroup()) {
-        SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_impl_dark_mode_config_system_default),
-            selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
-            onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) },
+        val darkModeOptions = listOf(
+            stringResource(string.feature_settings_impl_dark_mode_config_system_default),
+            stringResource(string.feature_settings_impl_dark_mode_config_light),
+            stringResource(string.feature_settings_impl_dark_mode_config_dark)
         )
-        SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_impl_dark_mode_config_light),
-            selected = settings.darkThemeConfig == LIGHT,
-            onClick = { onChangeDarkThemeConfig(LIGHT) },
-        )
-        SettingsDialogThemeChooserRow(
-            text = stringResource(string.feature_settings_impl_dark_mode_config_dark),
-            selected = settings.darkThemeConfig == DARK,
-            onClick = { onChangeDarkThemeConfig(DARK) },
-        )
+
+        SettingsDialogThemeDarkModeRow(
+            options = darkModeOptions,
+            selectedIndex = when(settings.darkThemeConfig) {
+                DarkThemeConfig.FOLLOW_SYSTEM -> 0
+                DarkThemeConfig.LIGHT -> 1
+                DarkThemeConfig.DARK -> 2
+            },
+            onOptionSelected = { index ->val newConfig = when (index) {
+                0 -> DarkThemeConfig.FOLLOW_SYSTEM
+                1 -> DarkThemeConfig.LIGHT
+                else -> DarkThemeConfig.DARK
+            }
+                onChangeDarkThemeConfig(newConfig)}
+        ) 
+
+//        SettingsDialogThemeChooserRow(
+//            text = stringResource(string.feature_settings_impl_dark_mode_config_system_default),
+//            selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
+//            onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) },
+//        )
+//        SettingsDialogThemeChooserRow(
+//            text = stringResource(string.feature_settings_impl_dark_mode_config_light),
+//            selected = settings.darkThemeConfig == LIGHT,
+//            onClick = { onChangeDarkThemeConfig(LIGHT) },
+//        )
+//        SettingsDialogThemeChooserRow(
+//            text = stringResource(string.feature_settings_impl_dark_mode_config_dark),
+//            selected = settings.darkThemeConfig == DARK,
+//            onClick = { onChangeDarkThemeConfig(DARK) },
+//        )
     }
 }
 
@@ -223,20 +265,19 @@ private fun SettingsDialogSectionTitle(text: String) {
 }
 
 @Composable
-fun SettingsDialogThemeChooserRow(
+fun SettingsDialogThemeRadioBtn(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,
 ) {
     Row(
         Modifier
-            .fillMaxWidth()
             .selectable(
                 selected = selected,
                 role = Role.RadioButton,
                 onClick = onClick,
             )
-            .padding(12.dp),
+            .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(
@@ -245,6 +286,73 @@ fun SettingsDialogThemeChooserRow(
         )
         Spacer(Modifier.width(8.dp))
         Text(text)
+    }
+}
+
+@Composable
+fun SettingsDialogThemeDynamicColorRow(  options :List<String>,
+    selectedIndex :Int,
+    onOptionSelected : (Int) -> Unit
+ ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        options.forEachIndexed { index, stringId ->
+            val isSelected = index == selectedIndex
+
+            if (isSelected) {
+                Button(
+                    onClick = { onOptionSelected(index) },
+                    modifier = Modifier.weight(1f),
+                    shape = CircleShape
+                ) {
+                    Spacer(Modifier.width(3.dp))
+                    Text(text = stringId)
+                }
+            } else {
+                OutlinedButton(
+                    onClick = { onOptionSelected(index) },
+                    modifier = Modifier.weight(1f),
+                    shape = CircleShape 
+                ) {
+                    Spacer(Modifier.width(3.dp))
+                    Text(text = stringId)                }
+            }
+        }
+    }
+ }
+
+@Composable
+fun SettingsDialogThemeDarkModeRow(
+    options: List<String>,
+    selectedIndex: Int,
+    onOptionSelected: (Int) -> Unit
+) {
+    SingleChoiceSegmentedButtonRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 1.dp)
+    ) {
+        options.forEachIndexed { index, stringId ->
+            val isSelected = index == selectedIndex
+            SegmentedButton(
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                onClick = { onOptionSelected(index) },
+                selected = isSelected,
+                label = {
+                    Text(text = stringId, maxLines = 1)
+                },
+                colors = SegmentedButtonDefaults.colors(
+                    activeContainerColor = MaterialTheme.colorScheme.primary ,
+                    activeContentColor = MaterialTheme.colorScheme.onPrimary,
+                    inactiveContainerColor = Color.Transparent,
+                    inactiveContentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                icon = {}
+            ) }
     }
 }
 
@@ -285,39 +393,39 @@ private fun LinksPanel() {
     }
 }
 
-@Preview
-@Composable
-private fun PreviewSettingsDialog() {
-    NiaTheme {
-        SettingsDialog(
-            onDismiss = {},
-            settingsUiState = Success(
-                UserEditableSettings(
-                    brand = DEFAULT,
-                    darkThemeConfig = FOLLOW_SYSTEM,
-                    useDynamicColor = false,
-                ),
-            ),
-            onChangeThemeBrand = {},
-            onChangeDynamicColorPreference = {},
-            onChangeDarkThemeConfig = {},
-        )
-    }
-}
+//@Preview
+//@Composable
+//private fun PreviewSettingsDialog() {
+//    NiaTheme {
+//        SettingsDialog(
+//            onDismiss = {},
+//            settingsUiState = Success(
+//                UserEditableSettings(
+//                    brand = DEFAULT,
+//                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+//                    useDynamicColor = false,
+//                ),
+//            ),
+//            onChangeThemeBrand = {},
+//            onChangeDynamicColorPreference = {},
+//            onChangeDarkThemeConfig = {},
+//        )
+//    }
+//}
 
-@Preview
-@Composable
-private fun PreviewSettingsDialogLoading() {
-    NiaTheme {
-        SettingsDialog(
-            onDismiss = {},
-            settingsUiState = Loading,
-            onChangeThemeBrand = {},
-            onChangeDynamicColorPreference = {},
-            onChangeDarkThemeConfig = {},
-        )
-    }
-}
+//@Preview
+//@Composable
+//private fun PreviewSettingsDialogLoading() {
+//    NiaTheme {
+//        SettingsDialog(
+//            onDismiss = {},
+//            settingsUiState = Loading,
+//            onChangeThemeBrand = {},
+//            onChangeDynamicColorPreference = {},
+//            onChangeDarkThemeConfig = {},
+//        )
+//    }
+//}
 
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
