@@ -28,9 +28,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -38,13 +36,9 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -60,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,7 +63,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.protobuf.option
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
@@ -117,7 +111,7 @@ fun SettingsDialog(
      */
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
+        modifier = Modifier.widthIn(max = LocalWindowInfo.current.containerSize.width.dp - 80.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(
@@ -201,16 +195,6 @@ private fun ColumnScope.SettingsPanel(
                         onChangeDynamicColorPreference(index == 0)
                     }
                 )
-//                SettingsDialogThemeChooserRow(
-//                    text = stringResource(string.feature_settings_impl_dynamic_color_yes),
-//                    selected = settings.useDynamicColor,
-//                    onClick = { onChangeDynamicColorPreference(true) },
-//                )
-//                SettingsDialogThemeChooserRow(
-//                    text = stringResource(string.feature_settings_impl_dynamic_color_no),
-//                    selected = !settings.useDynamicColor,
-//                    onClick = { onChangeDynamicColorPreference(false) },
-//                )
             }
         }
     }
@@ -235,23 +219,7 @@ private fun ColumnScope.SettingsPanel(
                 else -> DarkThemeConfig.DARK
             }
                 onChangeDarkThemeConfig(newConfig)}
-        ) 
-
-//        SettingsDialogThemeChooserRow(
-//            text = stringResource(string.feature_settings_impl_dark_mode_config_system_default),
-//            selected = settings.darkThemeConfig == FOLLOW_SYSTEM,
-//            onClick = { onChangeDarkThemeConfig(FOLLOW_SYSTEM) },
-//        )
-//        SettingsDialogThemeChooserRow(
-//            text = stringResource(string.feature_settings_impl_dark_mode_config_light),
-//            selected = settings.darkThemeConfig == LIGHT,
-//            onClick = { onChangeDarkThemeConfig(LIGHT) },
-//        )
-//        SettingsDialogThemeChooserRow(
-//            text = stringResource(string.feature_settings_impl_dark_mode_config_dark),
-//            selected = settings.darkThemeConfig == DARK,
-//            onClick = { onChangeDarkThemeConfig(DARK) },
-//        )
+        )
     }
 }
 
@@ -393,39 +361,39 @@ private fun LinksPanel() {
     }
 }
 
-//@Preview
-//@Composable
-//private fun PreviewSettingsDialog() {
-//    NiaTheme {
-//        SettingsDialog(
-//            onDismiss = {},
-//            settingsUiState = Success(
-//                UserEditableSettings(
-//                    brand = DEFAULT,
-//                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-//                    useDynamicColor = false,
-//                ),
-//            ),
-//            onChangeThemeBrand = {},
-//            onChangeDynamicColorPreference = {},
-//            onChangeDarkThemeConfig = {},
-//        )
-//    }
-//}
+@Preview
+@Composable
+private fun PreviewSettingsDialog() {
+    NiaTheme {
+        SettingsDialog(
+            onDismiss = {},
+            settingsUiState = Success(
+                UserEditableSettings(
+                    brand = DEFAULT,
+                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                    useDynamicColor = false,
+                ),
+            ),
+            onChangeThemeBrand = {},
+            onChangeDynamicColorPreference = {},
+            onChangeDarkThemeConfig = {},
+        )
+    }
+}
 
-//@Preview
-//@Composable
-//private fun PreviewSettingsDialogLoading() {
-//    NiaTheme {
-//        SettingsDialog(
-//            onDismiss = {},
-//            settingsUiState = Loading,
-//            onChangeThemeBrand = {},
-//            onChangeDynamicColorPreference = {},
-//            onChangeDarkThemeConfig = {},
-//        )
-//    }
-//}
+@Preview
+@Composable
+private fun PreviewSettingsDialogLoading() {
+    NiaTheme {
+        SettingsDialog(
+            onDismiss = {},
+            settingsUiState = Loading,
+            onChangeThemeBrand = {},
+            onChangeDynamicColorPreference = {},
+            onChangeDarkThemeConfig = {},
+        )
+    }
+}
 
 private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
 private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
