@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -37,7 +37,7 @@ jobs:
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           build-scan-publish: true
@@ -70,7 +70,7 @@ jobs:
           ./gradlew dependencyGuardBaseline
 
       - name: Push new Dependency Guard baselines if available
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         if: steps.dependencyguard_baseline.outcome == 'success'
         with:
           file_pattern: '**/dependencies/*.txt'
@@ -94,7 +94,7 @@ jobs:
 
       - name: Push new graphs if available
         if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: '**/README.md'
           disable_globbing: true
@@ -122,7 +122,7 @@ jobs:
           ./gradlew recordRoborazziDemoDebug
 
       - name: Push new screenshots if available
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         if: steps.screenshotsrecord.outcome == 'success'
         with:
           file_pattern: '*/*.png'
@@ -137,21 +137,21 @@ jobs:
         run: ./gradlew :app:assemble -PminifyWithR8=false
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
       - name: Upload JVM local results (XML)
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: local-test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
 
       - name: Upload screenshot results (PNG)
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: screenshot-test-results
           path: '**/build/outputs/roborazzi/*_compare.png'
@@ -161,28 +161,28 @@ jobs:
 
       - name: Upload lint reports (HTML)
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
       - name: Upload lint reports (SARIF) for app module
         if: ${{ !cancelled() && hashFiles('app/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: './app/'
           category: app
 
       - name: Upload lint reports (SARIF) for app-nia-catalog module
         if: ${{ !cancelled() && hashFiles('app-nia-catalog/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: './app-nia-catalog/'
           category: app-nia-catalog
 
       - name: Upload lint reports (SARIF) for lint module
         if: ${{ !cancelled() && hashFiles('lint/**/*.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: './lint/'
           category: lint
@@ -217,7 +217,7 @@ jobs:
           ls /dev/kvm
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -229,7 +229,7 @@ jobs:
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           build-scan-publish: true
@@ -258,7 +258,7 @@ jobs:
         
       - name: Upload test reports
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
@@ -266,7 +266,7 @@ jobs:
       - name: Display local test coverage (only API 30)
         if: matrix.api-level == 30
         id: jacoco
-        uses: madrapps/jacoco-report@v1.7.1
+        uses: madrapps/jacoco-report@v1.7.2
         with:
           title: Combined test coverage report
           min-coverage-overall: 40
@@ -277,7 +277,7 @@ jobs:
         
       - name: Upload local coverage reports (XML + HTML) (only API 30)
         if: matrix.api-level == 30
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-reports
           if-no-files-found: error
