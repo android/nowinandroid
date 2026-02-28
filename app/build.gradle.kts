@@ -172,7 +172,7 @@ abstract class CopyLicenseeReportTask : DefaultTask() {
     @TaskAction
     fun copy() {
         inputFile.get().asFile.copyTo(
-            File(outputDirectory.get().asFile, "licenses.json"),
+            outputDirectory.get().file("licenses.json").asFile,
             overwrite = true,
         )
     }

@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings.impl
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,15 +38,16 @@ import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.settings.impl.R.string
-import org.json.JSONArray
 
 data class LicenseArtifact(
     val groupId: String,
@@ -65,9 +67,24 @@ data class LicenseInfo(
 fun LicensesScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: LicensesViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val artifacts = remember { parseLicensesJson(context) }
+    val uiState by viewModel.licensesUiState.collectAsStateWithLifecycle()
+
+    LicensesScreen(
+        uiState = uiState,
+        onBackClick = onBackClick,
+        modifier = modifier,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+internal fun LicensesScreen(
+    uiState: LicensesUiState,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
@@ -78,7 +95,7 @@ fun LicensesScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = NiaIcons.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(string.feature_settings_impl_back),
                         )
                     }
                 },
@@ -86,49 +103,63 @@ fun LicensesScreen(
         },
         modifier = modifier,
     ) { padding ->
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-        ) {
-            items(artifacts, key = { "${it.groupId}:${it.artifactId}" }) { artifact ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
+        when (uiState) {
+            LicensesUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        Text(
-                            text = artifact.name
-                                ?: "${artifact.groupId}:${artifact.artifactId}",
-                            style = MaterialTheme.typography.titleSmall,
-                        )
-                        Text(
-                            text = "${artifact.groupId}:${artifact.artifactId}:${artifact.version}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        if (artifact.licenses.isNotEmpty()) {
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    CircularProgressIndicator()
+                }
+            }
+            is LicensesUiState.Success -> {
+                LazyColumn(
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                ) {
+                    items(uiState.artifacts, key = { "${it.groupId}:${it.artifactId}" }) { artifact ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
-                                artifact.licenses.forEach { license ->
-                                    SuggestionChip(
-                                        onClick = {
-                                            if (license.url.isNotBlank()) {
-                                                uriHandler.openUri(license.url)
-                                            }
-                                        },
-                                        label = {
-                                            Text(
-                                                text = license.name,
-                                                style = MaterialTheme.typography.labelSmall,
+                                Text(
+                                    text = artifact.name
+                                        ?: "${artifact.groupId}:${artifact.artifactId}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                )
+                                Text(
+                                    text = "${artifact.groupId}:${artifact.artifactId}:${artifact.version}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                if (artifact.licenses.isNotEmpty()) {
+                                    FlowRow(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    ) {
+                                        artifact.licenses.forEach { license ->
+                                            SuggestionChip(
+                                                onClick = {
+                                                    if (license.url.isNotBlank()) {
+                                                        uriHandler.openUri(license.url)
+                                                    }
+                                                },
+                                                label = {
+                                                    Text(
+                                                        text = license.name,
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                    )
+                                                },
                                             )
-                                        },
-                                    )
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -136,51 +167,5 @@ fun LicensesScreen(
                 }
             }
         }
-    }
-}
-
-private fun parseLicensesJson(context: Context): List<LicenseArtifact> {
-    return try {
-        val json = context.assets.open("licenses.json").bufferedReader().use { it.readText() }
-        val array = JSONArray(json)
-        (0 until array.length()).map { i ->
-            val obj = array.getJSONObject(i)
-            val spdxLicenses = obj.optJSONArray("spdxLicenses")
-            val unknownLicenses = obj.optJSONArray("unknownLicenses")
-            val licenses = mutableListOf<LicenseInfo>()
-
-            if (spdxLicenses != null) {
-                for (j in 0 until spdxLicenses.length()) {
-                    val license = spdxLicenses.getJSONObject(j)
-                    licenses.add(
-                        LicenseInfo(
-                            name = license.optString("name", ""),
-                            url = license.optString("url", ""),
-                        ),
-                    )
-                }
-            }
-            if (unknownLicenses != null) {
-                for (j in 0 until unknownLicenses.length()) {
-                    val license = unknownLicenses.getJSONObject(j)
-                    licenses.add(
-                        LicenseInfo(
-                            name = license.optString("name", "Unknown"),
-                            url = license.optString("url", ""),
-                        ),
-                    )
-                }
-            }
-
-            LicenseArtifact(
-                groupId = obj.optString("groupId", ""),
-                artifactId = obj.optString("artifactId", ""),
-                version = obj.optString("version", ""),
-                name = if (obj.has("name")) obj.getString("name") else null,
-                licenses = licenses,
-            )
-        }.sortedBy { (it.name ?: "${it.groupId}:${it.artifactId}").lowercase() }
-    } catch (e: Exception) {
-        emptyList()
     }
 }
