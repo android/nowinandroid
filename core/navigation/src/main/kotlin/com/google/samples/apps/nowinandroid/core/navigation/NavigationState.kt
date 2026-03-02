@@ -16,7 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
