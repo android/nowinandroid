@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.core.navigation
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -84,11 +85,16 @@ class NavigationState(
 fun NavigationState.toEntries(
     entryProvider: (NavKey) -> NavEntry<NavKey>,
 ): SnapshotStateList<NavEntry<NavKey>> {
+    Log.d("NAV_CHECK", "TopStack: $topLevelStack")
     val decoratedEntries = subStacks.mapValues { (_, stack) ->
+
         val decorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
-            rememberViewModelStoreNavEntryDecorator<NavKey>(),
+            rememberViewModelStoreNavEntryDecorator<NavKey>(
+                removeViewModelStoreOnPop = { true }
+            ),
         )
+
         rememberDecoratedNavEntries(
             backStack = stack,
             entryDecorators = decorators,
@@ -100,3 +106,4 @@ fun NavigationState.toEntries(
         .flatMap { decoratedEntries[it] ?: emptyList() }
         .toMutableStateList()
 }
+
