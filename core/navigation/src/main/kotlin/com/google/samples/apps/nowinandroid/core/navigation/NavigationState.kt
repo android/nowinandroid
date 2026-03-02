@@ -85,7 +85,6 @@ class NavigationState(
 fun NavigationState.toEntries(
     entryProvider: (NavKey) -> NavEntry<NavKey>,
 ): SnapshotStateList<NavEntry<NavKey>> {
-    Log.d("NAV_CHECK", "TopStack: $topLevelStack")
     val decoratedEntries = subStacks.mapValues { (_, stack) ->
 
         val decorators = listOf(
