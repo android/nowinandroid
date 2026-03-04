@@ -16,7 +16,6 @@
 
 import com.google.samples.apps.nowinandroid.configureGraphTasks
 import com.google.samples.apps.nowinandroid.configureSpotlessForRootProject
-import com.google.samples.apps.nowinandroid.isIsolatedProjectsEnabled
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.configuration.BuildFeatures
@@ -29,7 +28,11 @@ abstract class RootPlugin : Plugin<Project> {
         require(target.path == ":")
         if (!buildFeatures.isIsolatedProjectsEnabled()) {
             target.subprojects { configureGraphTasks() }
-            target.configureSpotlessForRootProject()
         }
+        target.configureSpotlessForRootProject()
     }
+}
+
+private fun BuildFeatures.isIsolatedProjectsEnabled(): Boolean {
+    return isolatedProjects.active.getOrElse(false)
 }
