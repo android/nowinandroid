@@ -21,16 +21,12 @@ import com.google.samples.apps.nowinandroid.configureGradleManagedDevices
 import com.google.samples.apps.nowinandroid.configureKotlinAndroid
 import com.google.samples.apps.nowinandroid.configurePrintApksTask
 import com.google.samples.apps.nowinandroid.configureSpotlessForAndroid
-import com.google.samples.apps.nowinandroid.isIsolatedProjectsEnabled
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.configuration.BuildFeatures
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import javax.inject.Inject
 
 abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
-    @get:Inject abstract val buildFeatures: BuildFeatures
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.android.application")
@@ -47,9 +43,7 @@ abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
                 configureBadgingTasks(this)
             }
-            if (!buildFeatures.isIsolatedProjectsEnabled()) {
-                configureSpotlessForAndroid()
-            }
+            configureSpotlessForAndroid()
         }
     }
 }
