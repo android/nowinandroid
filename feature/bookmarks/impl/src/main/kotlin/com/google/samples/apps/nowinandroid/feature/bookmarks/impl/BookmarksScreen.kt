@@ -155,7 +155,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .wrapContentSize()
-            .testTag("forYou:loading"),
+            .testTag("bookmarks:loading"),
         contentDesc = stringResource(id = R.string.feature_bookmarks_api_loading),
     )
 }
