@@ -7,7 +7,7 @@ jobs:
   benchmark-android:
     uses: Frozen-Bytes/actions/.github/workflows/android-macrobenchmark-gradle.yml@main
     with:
-      api-level: 30
+      api-level: 31
       target: google_apis
       arch: x86_64
       force-avd-creation: true
