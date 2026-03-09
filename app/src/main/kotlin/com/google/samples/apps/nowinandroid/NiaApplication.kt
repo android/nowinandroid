@@ -39,6 +39,9 @@ class NiaApplication : Application(), ImageLoaderFactory {
     lateinit var profileVerifierLogger: ProfileVerifierLogger
 
     override fun onCreate() {
+        // Note: Increase Time to Initial Display metric by 100ms
+        Thread.sleep(100)
+
         super.onCreate()
 
         setStrictModePolicy()
