@@ -47,8 +47,6 @@ fun InterestsScreen(
         uiState = uiState,
         followTopic = viewModel::followTopic,
         onTopicClick = {
-            // TODO: this violates SSOT, events should go through the ViewModel
-            viewModel.onTopicClick(it)
             onTopicClick(it)
         },
         shouldHighlightSelectedTopic = shouldHighlightSelectedTopic,

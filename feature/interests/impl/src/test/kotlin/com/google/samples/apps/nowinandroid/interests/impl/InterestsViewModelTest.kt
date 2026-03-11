@@ -16,17 +16,18 @@
 
 package com.google.samples.apps.nowinandroid.interests.impl
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.testing.invoke
+import androidx.navigation3.runtime.NavBackStack
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
+import com.google.samples.apps.nowinandroid.core.navigation.NavigationState
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestTopicsRepository
 import com.google.samples.apps.nowinandroid.core.testing.repository.TestUserDataRepository
 import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsUiState
 import com.google.samples.apps.nowinandroid.feature.interests.impl.InterestsViewModel
+import com.google.samples.apps.nowinandroid.feature.topic.api.navigation.TopicNavKey
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -66,13 +67,23 @@ class InterestsViewModelTest {
 
     @Before
     fun setup() {
+        val initialTopicId = testInputTopics[0].topic.id
+        val interestsKey = InterestsNavKey(initialTopicId = initialTopicId)
+
         viewModel = InterestsViewModel(
-            savedStateHandle = SavedStateHandle(
-                route = InterestsNavKey(initialTopicId = testInputTopics[0].topic.id),
-            ),
             userDataRepository = userDataRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
-            InterestsNavKey(initialTopicId = testInputTopics[0].topic.id),
+            navigationState = NavigationState(
+                startKey = interestsKey,
+                topLevelStack = NavBackStack(interestsKey),
+                subStacks = mapOf(
+                    interestsKey to NavBackStack(
+                        interestsKey,
+                        TopicNavKey(id = initialTopicId), // Add TopicNavKey to the sub-stack
+                    ),
+                ),
+            ),
+            key = interestsKey,
         )
     }
 
