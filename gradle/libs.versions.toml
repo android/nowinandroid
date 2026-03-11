@@ -40,8 +40,7 @@ firebaseBom = "33.7.0"
 firebaseCrashlyticsPlugin = "3.0.6"
 firebasePerfPlugin = "2.0.2"
 gmsPlugin = "4.4.4"
-googleOss = "17.1.0"
-googleOssPlugin = "0.10.9"
+licensee = "1.12.0"
 hilt = "2.59"
 hiltExt = "1.2.0"
 jacoco = "0.8.12"
@@ -128,7 +127,6 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf" }
-google-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOss" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -190,7 +188,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-google-osslicenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "googleOssPlugin" }
+cashapp-licensee = { id = "app.cash.licensee", version.ref = "licensee" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }

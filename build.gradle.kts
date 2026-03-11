@@ -36,7 +36,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.roborazzi) apply false
-    alias(libs.plugins.google.osslicenses) apply false
+    alias(libs.plugins.cashapp.licensee) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.nowinandroid.root)
