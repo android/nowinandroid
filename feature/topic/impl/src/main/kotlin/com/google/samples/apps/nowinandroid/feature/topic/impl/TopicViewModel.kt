@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.topic.impl
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.common.result.Result
@@ -46,6 +47,7 @@ class TopicViewModel @AssistedInject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
     @Assisted val topicId: String,
 ) : ViewModel() {
+
     val topicUiState: StateFlow<TopicUiState> = topicUiState(
         topicId = topicId,
         userDataRepository = userDataRepository,
@@ -71,6 +73,7 @@ class TopicViewModel @AssistedInject constructor(
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {
             userDataRepository.setTopicIdFollowed(topicId, followed)
+
         }
     }
 
@@ -85,6 +88,7 @@ class TopicViewModel @AssistedInject constructor(
             userDataRepository.setNewsResourceViewed(newsResourceId, viewed)
         }
     }
+
 
     @AssistedFactory
     interface Factory {
