@@ -68,6 +68,7 @@ graph TB
   :feature:search:api --> :core:navigation
   :feature:search:impl -.-> :core:designsystem
   :feature:search:impl -.-> :core:domain
+  :feature:search:impl -.-> :core:navigation
   :feature:search:impl -.-> :core:ui
   :feature:search:impl -.-> :feature:interests:api
   :feature:search:impl -.-> :feature:search:api
