@@ -34,4 +34,5 @@
     <string name="feature_settings_impl_dynamic_color_yes">Yes</string>
     <string name="feature_settings_impl_dynamic_color_no">No</string>
     <string name="feature_settings_impl_dismiss_dialog_button_text">OK</string>
+    <string name="feature_settings_impl_back">Back</string>
 </resources>

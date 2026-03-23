@@ -22,7 +22,7 @@ plugins {
     alias(libs.plugins.nowinandroid.android.application.jacoco)
     alias(libs.plugins.nowinandroid.android.application.firebase)
     alias(libs.plugins.nowinandroid.hilt)
-    alias(libs.plugins.google.osslicenses)
+    alias(libs.plugins.cashapp.licensee)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
@@ -149,4 +149,50 @@ baselineProfile {
 
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
+}
+
+licensee {
+    allow("Apache-2.0")
+    allow("MIT")
+    allow("BSD-2-Clause")
+    allow("BSD-3-Clause")
+    allow("ISC")
+    allow("EPL-2.0")
+    allowUrl("https://developer.android.com/studio/terms.html")
+    allowUrl("https://developers.google.com/ml-kit/terms")
+}
+
+abstract class CopyLicenseeReportTask : DefaultTask() {
+    @get:InputFile
+    abstract val inputFile: RegularFileProperty
+
+    @get:OutputDirectory
+    abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction
+    fun copy() {
+        inputFile.get().asFile.copyTo(
+            outputDirectory.get().file("licenses.json").asFile,
+            overwrite = true,
+        )
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val name = variant.name.replaceFirstChar { it.uppercase() }
+        val task = tasks.register<CopyLicenseeReportTask>("copyLicenseeReport$name") {
+            dependsOn("licenseeAndroid$name")
+            inputFile.set(
+                layout.buildDirectory.file("reports/licensee/android${name}/artifacts.json"),
+            )
+            outputDirectory.set(
+                layout.buildDirectory.dir("generated/licenseeAssets/${variant.name}"),
+            )
+        }
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            task,
+            CopyLicenseeReportTask::outputDirectory,
+        )
+    }
 }

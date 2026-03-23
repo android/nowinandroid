@@ -81,6 +81,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYo
 import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
 import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
+import com.google.samples.apps.nowinandroid.feature.settings.impl.LicensesScreen
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
 import com.google.samples.apps.nowinandroid.feature.topic.impl.navigation.topicEntry
 import com.google.samples.apps.nowinandroid.navigation.TOP_LEVEL_NAV_ITEMS
@@ -94,6 +95,7 @@ fun NiaApp(
 ) {
     val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
+    var showLicensesScreen by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
         NiaGradientBackground(
@@ -118,15 +120,25 @@ fun NiaApp(
                 }
             }
             CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
-                NiaApp(
-                    appState = appState,
+                if (showLicensesScreen) {
+                    LicensesScreen(
+                        onBackClick = { showLicensesScreen = false },
+                    )
+                } else {
+                    NiaApp(
+                        appState = appState,
 
-                    // TODO: Settings should be a dialog screen
-                    showSettingsDialog = showSettingsDialog,
-                    onSettingsDismissed = { showSettingsDialog = false },
-                    onTopAppBarActionClick = { showSettingsDialog = true },
-                    windowAdaptiveInfo = windowAdaptiveInfo,
-                )
+                        // TODO: Settings should be a dialog screen
+                        showSettingsDialog = showSettingsDialog,
+                        onSettingsDismissed = { showSettingsDialog = false },
+                        onShowLicenses = {
+                            showSettingsDialog = false
+                            showLicensesScreen = true
+                        },
+                        onTopAppBarActionClick = { showSettingsDialog = true },
+                        windowAdaptiveInfo = windowAdaptiveInfo,
+                    )
+                }
             }
         }
     }
@@ -142,6 +154,7 @@ internal fun NiaApp(
     appState: NiaAppState,
     showSettingsDialog: Boolean,
     onSettingsDismissed: () -> Unit,
+    onShowLicenses: () -> Unit,
     onTopAppBarActionClick: () -> Unit,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
@@ -152,6 +165,7 @@ internal fun NiaApp(
     if (showSettingsDialog) {
         SettingsDialog(
             onDismiss = { onSettingsDismissed() },
+            onShowLicenses = onShowLicenses,
         )
     }
 

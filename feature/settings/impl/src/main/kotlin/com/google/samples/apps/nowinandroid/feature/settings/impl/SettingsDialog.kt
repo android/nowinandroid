@@ -18,7 +18,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.settings.impl
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,7 +44,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -54,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaTextButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.supportsDynamicTheming
@@ -73,11 +70,13 @@ import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiStat
 @Composable
 fun SettingsDialog(
     onDismiss: () -> Unit,
+    onShowLicenses: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
         onDismiss = onDismiss,
+        onShowLicenses = onShowLicenses,
         settingsUiState = settingsUiState,
         onChangeThemeBrand = viewModel::updateThemeBrand,
         onChangeDynamicColorPreference = viewModel::updateDynamicColorPreference,
@@ -90,6 +89,7 @@ fun SettingsDialog(
     settingsUiState: SettingsUiState,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
+    onShowLicenses: () -> Unit = {},
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
@@ -135,7 +135,7 @@ fun SettingsDialog(
                     }
                 }
                 HorizontalDivider(Modifier.padding(top = 8.dp))
-                LinksPanel()
+                LinksPanel(onShowLicenses = onShowLicenses)
             }
             TrackScreenViewEvent(screenName = "Settings")
         },
@@ -250,7 +250,7 @@ fun SettingsDialogThemeChooserRow(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun LinksPanel() {
+private fun LinksPanel(onShowLicenses: () -> Unit = {}) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
@@ -264,11 +264,8 @@ private fun LinksPanel() {
         ) {
             Text(text = stringResource(string.feature_settings_impl_privacy_policy))
         }
-        val context = LocalContext.current
         NiaTextButton(
-            onClick = {
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            },
+            onClick = onShowLicenses,
         ) {
             Text(text = stringResource(string.feature_settings_impl_licenses))
         }
