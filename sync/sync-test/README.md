@@ -30,7 +30,6 @@ graph TB
   end
 
   :core:data -.-> :core:analytics
-  :core:data --> :core:common
   :core:data --> :core:database
   :core:data --> :core:datastore
   :core:data --> :core:network
