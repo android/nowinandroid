@@ -248,6 +248,32 @@ class NavigatorTest {
     }
 
     @Test
+    fun testSubStackPreservedAfterTabSwitchAndBack() {
+        // Navigate to sub-page in first tab (ForYou → Topic)
+        navigator.navigate(TestKeyFirst)
+
+        assertThat(navigationState.currentKey).isEqualTo(TestKeyFirst)
+        assertThat(navigationState.currentTopLevelKey).isEqualTo(TestFirstTopLevelKey)
+
+        // Switch to second tab (e.g. Bookmarks)
+        navigator.navigate(TestSecondTopLevelKey)
+
+        assertThat(navigationState.currentKey).isEqualTo(TestSecondTopLevelKey)
+        assertThat(navigationState.currentTopLevelKey).isEqualTo(TestSecondTopLevelKey)
+
+        // Press back from second tab
+        navigator.goBack()
+
+        // Should return to first tab with sub-stack preserved
+        assertThat(navigationState.currentTopLevelKey).isEqualTo(TestFirstTopLevelKey)
+        assertThat(navigationState.currentKey).isEqualTo(TestKeyFirst)
+        assertThat(navigationState.currentSubStack).containsExactly(
+            TestFirstTopLevelKey,
+            TestKeyFirst,
+        ).inOrder()
+    }
+
+    @Test
     fun throwOnEmptyBackStack() {
         assertFailsWith<IllegalStateException> {
             navigator.goBack()

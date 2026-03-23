@@ -96,7 +96,5 @@ fun NavigationState.toEntries(
         )
     }
 
-    return topLevelStack
-        .flatMap { decoratedEntries[it] ?: emptyList() }
-        .toMutableStateList()
+    return (decoratedEntries[currentTopLevelKey] ?: emptyList()).toMutableStateList()
 }
