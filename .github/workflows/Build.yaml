@@ -2,32 +2,16 @@ name: Benchmark on Emulator
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 2,10,18 * * *"
 
 jobs:
   benchmark-android:
-    strategy:
-      fail-fast: false
-      matrix:
-        benchmark:
-          #- name: startup
-            #args: "-e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark#startupWithPartialCompilationAndDisabledBaselineProfile"
-          #- name: scrollforyou-frametime
-            #args: "-e class com.google.samples.apps.nowinandroid.foryou.ScrollForYouFeedBenchmark#scrollFeedCompilationBaselineProfile"
-          - name: scrollforyou-memory-max
-            args: "-e class com.google.samples.apps.nowinandroid.foryou.ScrollForYouFeedBenchmark#scrollFeedCompilationMemoryMaxBaselineProfile"
-    name: ${{ matrix.benchmark.name }}
     uses: Frozen-Bytes/actions/.github/workflows/android-macrobenchmark-gradle.yml@main
     with:
-      api-level: 34
+      api-level: 31
       target: google_apis
       arch: x86_64
       force-avd-creation: true
-      emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 8192 -cores 4
+      emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096
       disable-animations: true
       gradle-cache-readonly: false
-      instrument-args: ${{ matrix.benchmark.args }}
-      runs: 5
-      benchcomp-args: "--verbose --all-methods --all-measures --aggregate median"
-      artifact-name: "benchmark-${{ matrix.benchmark.name }}"
+      instrument-args: "-e class com.google.samples.apps.nowinandroid.startup.StartupBenchmark#startupPrecompiledWithBaselineProfile"
