@@ -3,6 +3,7 @@ name: GitHub Release with APKs
 permissions:
   contents: write
 
+
 on:
   workflow_dispatch:
   push:
