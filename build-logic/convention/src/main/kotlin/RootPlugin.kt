@@ -15,12 +15,24 @@
  */
 
 import com.google.samples.apps.nowinandroid.configureGraphTasks
+import com.google.samples.apps.nowinandroid.configureSpotlessForRootProject
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.configuration.BuildFeatures
+import javax.inject.Inject
 
-class RootPlugin : Plugin<Project> {
+abstract class RootPlugin : Plugin<Project> {
+    @get:Inject abstract val buildFeatures: BuildFeatures
+
     override fun apply(target: Project) {
         require(target.path == ":")
-        target.subprojects { configureGraphTasks() }
+        if (!buildFeatures.isIsolatedProjectsEnabled()) {
+            target.subprojects { configureGraphTasks() }
+        }
+        target.configureSpotlessForRootProject()
     }
+}
+
+private fun BuildFeatures.isIsolatedProjectsEnabled(): Boolean {
+    return isolatedProjects.active.getOrElse(false)
 }

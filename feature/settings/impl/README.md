@@ -25,7 +25,7 @@ graph TB
     :core:data[data]:::android-library
     :core:database[database]:::android-library
     :core:datastore[datastore]:::android-library
-    :core:datastore-proto[datastore-proto]:::android-library
+    :core:datastore-proto[datastore-proto]:::jvm-library
     :core:designsystem[designsystem]:::android-library
     :core:model[model]:::jvm-library
     :core:network[network]:::android-library

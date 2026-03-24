@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.core.result
+package com.google.samples.apps.nowinandroid.core.common.network
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import javax.inject.Qualifier
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
-sealed interface Result<out T> {
-    data class Success<T>(val data: T) : Result<T>
-    data class Error(val exception: Throwable) : Result<Nothing>
-    data object Loading : Result<Nothing>
+@Qualifier
+@Retention(RUNTIME)
+annotation class Dispatcher(val niaDispatcher: NiaDispatchers)
+
+enum class NiaDispatchers {
+    Default,
+    IO,
 }
-
-fun <T> Flow<T>.asResult(): Flow<Result<T>> = map<T, Result<T>> { Result.Success(it) }
-    .onStart { emit(Result.Loading) }
-    .catch { emit(Result.Error(it)) }

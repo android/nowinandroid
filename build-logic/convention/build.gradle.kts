@@ -45,6 +45,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
+    compileOnly(libs.spotless.gradlePlugin)
     implementation(libs.truth)
     lintChecks(libs.androidx.lint.gradle)
 }

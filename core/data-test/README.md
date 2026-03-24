@@ -19,7 +19,7 @@ graph TB
     :core:data-test[data-test]:::android-library
     :core:database[database]:::android-library
     :core:datastore[datastore]:::android-library
-    :core:datastore-proto[datastore-proto]:::android-library
+    :core:datastore-proto[datastore-proto]:::jvm-library
     :core:model[model]:::jvm-library
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library

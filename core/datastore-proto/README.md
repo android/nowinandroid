@@ -13,7 +13,7 @@ config:
 graph TB
   subgraph :core
     direction TB
-    :core:datastore-proto[datastore-proto]:::android-library
+    :core:datastore-proto[datastore-proto]:::jvm-library
   end
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
