@@ -190,11 +190,12 @@ jobs:
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
 
-  androidTest:
-    runs-on: ubuntu-latest
+androidTest:
+runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+      
     timeout-minutes: 55
     strategy:
       matrix:
