@@ -49,9 +49,7 @@ internal fun Project.configureSpotlessForRootProject() {
             endWithNewline()
         }
         format("kts") {
-            target("*.kts")
-            target("build-logic/*.kts")
-            target("build-logic/convention/*.kts")
+            target("*.kts", "build-logic/*.kts", "build-logic/convention/*.kts")
             // Look for the first line that doesn't have a block comment (assumed to be the license)
             licenseHeaderFile(rootDir.resolve("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
             endWithNewline()
