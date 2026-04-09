@@ -47,7 +47,7 @@ class ScrollForYouFeedBenchmark {
         packageName = PACKAGE_NAME,
         metrics = listOf(FrameTimingMetric()),
         compilationMode = compilationMode,
-        iterations = 10,
+        iterations = 5,
         startupMode = StartupMode.WARM,
         setupBlock = {
             // Start the app
@@ -68,7 +68,7 @@ class ScrollForYouFeedBenchmark {
         packageName = PACKAGE_NAME,
         metrics = listOf(MemoryUsageMetric(MemoryUsageMetric.Mode.Max)),
         compilationMode = compilationMode,
-        iterations = 10,
+        iterations = 5,
         startupMode = StartupMode.WARM,
         setupBlock = {
             // Start the app
