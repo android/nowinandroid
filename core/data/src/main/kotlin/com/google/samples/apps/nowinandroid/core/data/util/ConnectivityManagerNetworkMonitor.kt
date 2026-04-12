@@ -23,6 +23,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
+import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.tracing.trace
 import com.google.samples.apps.nowinandroid.core.common.network.Dispatcher
@@ -58,21 +59,43 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
                 private val networks = mutableSetOf<Network>()
 
                 override fun onAvailable(network: Network) {
-                    networks += network
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        networks += network
+                    }
                     channel.trySend(true)
                 }
 
                 override fun onLost(network: Network) {
-                    networks -= network
-                    channel.trySend(networks.isNotEmpty())
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        channel.trySend(false)
+                    } else {
+                        networks -= network
+                        channel.trySend(networks.isEmpty())
+                    }
+                }
+
+                override fun onCapabilitiesChanged(
+                    network: Network,
+                    networkCapabilities: NetworkCapabilities,
+                ) {
+                    super.onCapabilitiesChanged(network, networkCapabilities)
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        val isNetworkConnected = networkCapabilities.isNetworkConnected()
+                        channel.trySend(isNetworkConnected)
+                    }
                 }
             }
 
             trace("NetworkMonitor.registerNetworkCallback") {
-                val request = Builder()
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    .build()
-                connectivityManager.registerNetworkCallback(request, callback)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    connectivityManager.registerDefaultNetworkCallback(callback)
+                } else {
+                    val request = Builder()
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                        .build()
+                    connectivityManager.registerNetworkCallback(request, callback)
+                }
             }
 
             /**
@@ -90,6 +113,15 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
 
     private fun ConnectivityManager.isCurrentlyConnected(): Boolean {
         val networkCapabilities = getNetworkCapabilities(activeNetwork) ?: return false
-        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        return networkCapabilities.isNetworkConnected()
+    }
+
+    /**
+     * Check [NetworkCapabilities.NET_CAPABILITY_INTERNET]
+     * and [NetworkCapabilities.NET_CAPABILITY_VALIDATED]
+     */
+    private fun NetworkCapabilities.isNetworkConnected(): Boolean = with(this) {
+        hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+            hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 }
