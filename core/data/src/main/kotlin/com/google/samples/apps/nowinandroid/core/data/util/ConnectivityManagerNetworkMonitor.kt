@@ -120,8 +120,7 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
      * Check [NetworkCapabilities.NET_CAPABILITY_INTERNET]
      * and [NetworkCapabilities.NET_CAPABILITY_VALIDATED]
      */
-    private fun NetworkCapabilities.isNetworkConnected(): Boolean = with(this) {
+    private fun NetworkCapabilities.isNetworkConnected(): Boolean =
         hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
             hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-    }
 }
