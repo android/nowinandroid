@@ -70,7 +70,7 @@ internal class ConnectivityManagerNetworkMonitor @Inject constructor(
                         channel.trySend(false)
                     } else {
                         networks -= network
-                        channel.trySend(networks.isEmpty())
+                        channel.trySend(networks.isNotEmpty())
                     }
                 }
 
