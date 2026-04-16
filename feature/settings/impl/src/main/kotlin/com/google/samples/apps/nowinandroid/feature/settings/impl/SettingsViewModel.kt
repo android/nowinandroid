@@ -23,14 +23,12 @@ import com.google.samples.apps.nowinandroid.core.model.data.DarkThemeConfig
 import com.google.samples.apps.nowinandroid.core.model.data.ThemeBrand
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Loading
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsUiState.Success
+import com.google.samples.apps.nowinandroid.core.ui.stateInUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -47,11 +45,7 @@ class SettingsViewModel @Inject constructor(
                     ),
                 )
             }
-            .stateIn(
-                scope = viewModelScope,
-                started = WhileSubscribed(5.seconds.inWholeMilliseconds),
-                initialValue = Loading,
-            )
+            .stateInUi(initialValue = Loading)
 
     fun updateThemeBrand(themeBrand: ThemeBrand) {
         viewModelScope.launch {

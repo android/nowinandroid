@@ -27,16 +27,15 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserNewsResourc
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.model.data.Topic
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.stateInUi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = TopicViewModel.Factory::class)
@@ -51,22 +50,14 @@ class TopicViewModel @AssistedInject constructor(
         userDataRepository = userDataRepository,
         topicsRepository = topicsRepository,
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading,
-        )
+        .stateInUi(initialValue = TopicUiState.Loading)
 
     val newsUiState: StateFlow<NewsUiState> = newsUiState(
         topicId = topicId,
         userDataRepository = userDataRepository,
         userNewsResourceRepository = userNewsResourceRepository,
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = NewsUiState.Loading,
-        )
+        .stateInUi(initialValue = NewsUiState.Loading)
 
     fun followTopicToggle(followed: Boolean) {
         viewModelScope.launch {

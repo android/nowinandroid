@@ -28,14 +28,13 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.domain.GetRecentSearchQueriesUseCase
 import com.google.samples.apps.nowinandroid.core.domain.GetSearchContentsUseCase
 import com.google.samples.apps.nowinandroid.core.model.data.UserSearchResult
+import com.google.samples.apps.nowinandroid.core.ui.stateInUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -75,20 +74,12 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = SearchResultUiState.Loading,
-            )
+            }.stateInUi(initialValue = SearchResultUiState.Loading)
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
         recentSearchQueriesUseCase()
             .map(RecentSearchQueriesUiState::Success)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = RecentSearchQueriesUiState.Loading,
-            )
+            .stateInUi(initialValue = RecentSearchQueriesUiState.Loading)
 
     fun onSearchQueryChanged(query: String) {
         savedStateHandle[SEARCH_QUERY] = query
