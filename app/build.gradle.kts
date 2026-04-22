@@ -150,3 +150,12 @@ baselineProfile {
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
 }
+
+tasks.configureEach {
+    if (name == "createProdNonMinifiedReleaseApkListingFileRedirect") {
+        val benchmarksProject = project.rootProject.findProject(":benchmarks")
+        benchmarksProject?.tasks?.matching {
+            it.name.contains("packageProdNonMinifiedRelease")
+        }?.let { dependsOn(it) }
+    }
+}
