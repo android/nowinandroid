@@ -26,13 +26,10 @@ android {
     defaultConfig {
         minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["androidx.benchmark.enabledRules"] = "BaselineProfile"
         buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
     }
-    buildTypes {
-        create("nonMinifiedRelease") {
-            defaultConfig.testInstrumentationRunnerArguments["androidx.benchmark.enabledRules"] = "BaselineProfile"
-        }
-    }
+
     buildFeatures {
         buildConfig = true
     }
