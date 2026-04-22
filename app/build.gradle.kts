@@ -151,11 +151,12 @@ dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
 }
 
-tasks.configureEach {
-    if (name == "createProdNonMinifiedReleaseApkListingFileRedirect") {
-        val benchmarksProject = project.rootProject.findProject(":benchmarks")
-        benchmarksProject?.tasks?.matching {
-            it.name.contains("packageProdNonMinifiedRelease")
-        }?.let { dependsOn(it) }
-    }
+val benchmarksProject = rootProject.findProject(":benchmarks")
+if (benchmarksProject != null) {
+    tasks.matching { it.name == "createProdNonMinifiedReleaseApkListingFileRedirect" }
+        .configureEach {
+            dependsOn(benchmarksProject.tasks.matching {
+                it.name.contains("packageProdNonMinifiedRelease")
+            })
+        }
 }
