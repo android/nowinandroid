@@ -17,9 +17,11 @@ graph TB
     :core:model[model]:::jvm-library
     :core:notifications[notifications]:::android-library
   end
+  :lint[lint]:::android-library
 
   :core:notifications -.-> :core:common
   :core:notifications --> :core:model
+  :core:notifications -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

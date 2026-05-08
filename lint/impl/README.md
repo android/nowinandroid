@@ -1,4 +1,4 @@
-# `:feature:foryou:api`
+# `:lint:impl`
 
 ## Module dependency graph
 
@@ -11,22 +11,10 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  subgraph :feature
+  subgraph :lint
     direction TB
-    subgraph :feature:foryou
-      direction TB
-      :feature:foryou:api[api]:::android-library
-    end
+    :lint:impl[impl]:::unknown
   end
-  subgraph :core
-    direction TB
-    :core:navigation[navigation]:::android-library
-  end
-  :lint[lint]:::android-library
-
-  :core:navigation -.-> :lint
-  :feature:foryou:api --> :core:navigation
-  :feature:foryou:api -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

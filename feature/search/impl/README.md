@@ -43,38 +43,53 @@ graph TB
     :core:notifications[notifications]:::android-library
     :core:ui[ui]:::android-library
   end
+  :lint[lint]:::android-library
 
+  :core:analytics -.-> :lint
   :core:data -.-> :core:analytics
   :core:data --> :core:common
   :core:data --> :core:database
   :core:data --> :core:datastore
   :core:data --> :core:network
   :core:data -.-> :core:notifications
+  :core:data -.-> :lint
   :core:database --> :core:model
+  :core:database -.-> :lint
   :core:datastore -.-> :core:common
   :core:datastore --> :core:datastore-proto
   :core:datastore --> :core:model
+  :core:datastore -.-> :lint
+  :core:designsystem -.-> :lint
   :core:domain --> :core:data
   :core:domain --> :core:model
+  :core:domain -.-> :lint
+  :core:navigation -.-> :lint
   :core:network --> :core:common
   :core:network --> :core:model
+  :core:network -.-> :lint
   :core:notifications -.-> :core:common
   :core:notifications --> :core:model
+  :core:notifications -.-> :lint
   :core:ui --> :core:analytics
   :core:ui --> :core:designsystem
   :core:ui --> :core:model
+  :core:ui -.-> :lint
   :feature:interests:api --> :core:navigation
+  :feature:interests:api -.-> :lint
   :feature:search:api -.-> :core:domain
   :feature:search:api --> :core:navigation
+  :feature:search:api -.-> :lint
   :feature:search:impl -.-> :core:designsystem
   :feature:search:impl -.-> :core:domain
   :feature:search:impl -.-> :core:ui
   :feature:search:impl -.-> :feature:interests:api
   :feature:search:impl -.-> :feature:search:api
   :feature:search:impl -.-> :feature:topic:api
+  :feature:search:impl -.-> :lint
   :feature:topic:api -.-> :core:designsystem
   :feature:topic:api --> :core:navigation
   :feature:topic:api -.-> :core:ui
+  :feature:topic:api -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

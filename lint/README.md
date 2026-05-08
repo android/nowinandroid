@@ -11,7 +11,7 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  :lint[lint]:::unknown
+  :lint[lint]:::android-library
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

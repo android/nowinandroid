@@ -12,6 +12,9 @@ config:
 ---
 graph TB
   :ui-test-hilt-manifest[ui-test-hilt-manifest]:::android-library
+  :lint[lint]:::android-library
+
+  :ui-test-hilt-manifest -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
