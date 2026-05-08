@@ -17,8 +17,8 @@
 package com.google.samples.apps.nowinandroid.lint.impl.designsystem
 
 import com.android.tools.lint.checks.infrastructure.TestFile
-import com.android.tools.lint.checks.infrastructure.TestFiles
-import com.android.tools.lint.checks.infrastructure.TestLintTask
+import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
+import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
 import com.google.samples.apps.nowinandroid.lint.impl.TestMethodNameDetector.Companion.FORMAT
 import com.google.samples.apps.nowinandroid.lint.impl.TestMethodNameDetector.Companion.PREFIX
 import org.junit.Test
@@ -27,10 +27,10 @@ class TestMethodNameDetectorTest {
 
     @Test
     fun `detect prefix`() {
-        TestLintTask.lint().issues(PREFIX)
+        lint().issues(PREFIX)
             .files(
                 JUNIT_TEST_STUB,
-                TestFiles.kotlin(
+                kotlin(
                     """
                     import org.junit.Test
                     class Test {
@@ -72,10 +72,10 @@ class TestMethodNameDetectorTest {
 
     @Test
     fun `detect format`() {
-        TestLintTask.lint().issues(FORMAT)
+        lint().issues(FORMAT)
             .files(
                 JUNIT_TEST_STUB,
-                TestFiles.kotlin(
+                kotlin(
                     "src/androidTest/com/example/Test.kt",
                     """
                     import org.junit.Test
@@ -113,7 +113,7 @@ class TestMethodNameDetectorTest {
     }
 
     private companion object {
-        private val JUNIT_TEST_STUB: TestFile = TestFiles.kotlin(
+        private val JUNIT_TEST_STUB: TestFile = kotlin(
             """
                 package org.junit
                 annotation class Test

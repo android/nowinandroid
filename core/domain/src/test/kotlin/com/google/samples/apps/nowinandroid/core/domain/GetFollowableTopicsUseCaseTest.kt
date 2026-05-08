@@ -42,7 +42,7 @@ class GetFollowableTopicsUseCaseTest {
     )
 
     @Test
-    fun test_whenNoParams_followableTopicsAreReturnedWithNoSorting() = runTest {
+    fun whenNoParams_followableTopicsAreReturnedWithNoSorting() = runTest {
         // Obtain a stream of followable topics.
         val followableTopics = useCase()
 
@@ -62,7 +62,7 @@ class GetFollowableTopicsUseCaseTest {
     }
 
     @Test
-    fun test_whenSortOrderIsByName_topicsSortedByNameAreReturned() = runTest {
+    fun whenSortOrderIsByName_topicsSortedByNameAreReturned() = runTest {
         // Obtain a stream of followable topics, sorted by name.
         val followableTopics = useCase(
             sortBy = NAME,

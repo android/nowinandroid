@@ -55,11 +55,13 @@ abstract class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
             configureSpotlessForAndroid()
             dependencies {
-                "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
+                if (project.name != "lint") "implementation"(project(":lint"))
+                "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
+
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
                 "testImplementation"(libs.findLibrary("junit").get())
 
-                "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
+                "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
             }
         }
     }

@@ -26,8 +26,6 @@ android {
 }
 
 dependencies {
-    lintPublish(projects.lint)
-
     api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.material.iconsExtended)
