@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.lint
+package com.google.samples.apps.nowinandroid.lint.impl.designsystem
 
 import com.android.tools.lint.checks.infrastructure.TestFile
-import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
-import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
-import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.FORMAT
-import com.google.samples.apps.nowinandroid.lint.TestMethodNameDetector.Companion.PREFIX
+import com.android.tools.lint.checks.infrastructure.TestFiles
+import com.android.tools.lint.checks.infrastructure.TestLintTask
+import com.google.samples.apps.nowinandroid.lint.impl.TestMethodNameDetector.Companion.FORMAT
+import com.google.samples.apps.nowinandroid.lint.impl.TestMethodNameDetector.Companion.PREFIX
 import org.junit.Test
 
 class TestMethodNameDetectorTest {
 
     @Test
     fun `detect prefix`() {
-        lint().issues(PREFIX)
+        TestLintTask.lint().issues(PREFIX)
             .files(
                 JUNIT_TEST_STUB,
-                kotlin(
+                TestFiles.kotlin(
                     """
                     import org.junit.Test
                     class Test {
@@ -72,10 +72,10 @@ class TestMethodNameDetectorTest {
 
     @Test
     fun `detect format`() {
-        lint().issues(FORMAT)
+        TestLintTask.lint().issues(FORMAT)
             .files(
                 JUNIT_TEST_STUB,
-                kotlin(
+                TestFiles.kotlin(
                     "src/androidTest/com/example/Test.kt",
                     """
                     import org.junit.Test
@@ -113,7 +113,7 @@ class TestMethodNameDetectorTest {
     }
 
     private companion object {
-        private val JUNIT_TEST_STUB: TestFile = kotlin(
+        private val JUNIT_TEST_STUB: TestFile = TestFiles.kotlin(
             """
                 package org.junit
                 annotation class Test
