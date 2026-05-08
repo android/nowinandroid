@@ -23,6 +23,7 @@ graph TB
 
   :app-nia-catalog -.-> :core:designsystem
   :app-nia-catalog -.-> :core:ui
+  :app-nia-catalog -.-> :lint
   :core:analytics -.-> :lint
   :core:designsystem -.-> :lint
   :core:ui --> :core:analytics
