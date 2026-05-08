@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright 2022 The Android Open Source Project
+     Copyright 2026 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 -->
 <lint>
     <!--
-    Lint crashes when it tries to analyse a file without a package name:
-    java.lang.IllegalStateException: () -> kotlin.String at org.jetbrains.kotlin.asJava.classes.KtLightClassForFacadeImpl$Companion.createForFacadeNoCache
+        DesignSystem lint check doesn't need on `designsystem` module.
     -->
     <issue id="DesignSystem" severity="ignore"/>
 </lint>
