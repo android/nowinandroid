@@ -19,15 +19,12 @@ graph TB
     :core:datastore-test[datastore-test]:::android-library
     :core:model[model]:::jvm-library
   end
-  :lint[lint]:::android-library
 
   :core:datastore -.-> :core:common
   :core:datastore --> :core:datastore-proto
   :core:datastore --> :core:model
-  :core:datastore -.-> :lint
   :core:datastore-test -.-> :core:common
   :core:datastore-test -.-> :core:datastore
-  :core:datastore-test -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

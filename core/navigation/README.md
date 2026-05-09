@@ -15,9 +15,6 @@ graph TB
     direction TB
     :core:navigation[navigation]:::android-library
   end
-  :lint[lint]:::android-library
-
-  :core:navigation -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

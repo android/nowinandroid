@@ -16,11 +16,8 @@ graph TB
     :core:designsystem[designsystem]:::android-library
     :core:screenshot-testing[screenshot-testing]:::android-library
   end
-  :lint[lint]:::android-library
 
-  :core:designsystem -.-> :lint
   :core:screenshot-testing -.-> :core:designsystem
-  :core:screenshot-testing -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

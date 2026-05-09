@@ -24,31 +24,23 @@ graph TB
     :core:network[network]:::android-library
     :core:notifications[notifications]:::android-library
   end
-  :lint[lint]:::android-library
 
-  :core:analytics -.-> :lint
   :core:data -.-> :core:analytics
   :core:data --> :core:common
   :core:data --> :core:database
   :core:data --> :core:datastore
   :core:data --> :core:network
   :core:data -.-> :core:notifications
-  :core:data -.-> :lint
   :core:database --> :core:model
-  :core:database -.-> :lint
   :core:datastore -.-> :core:common
   :core:datastore --> :core:datastore-proto
   :core:datastore --> :core:model
-  :core:datastore -.-> :lint
   :core:domain --> :core:data
   :core:domain --> :core:model
-  :core:domain -.-> :lint
   :core:network --> :core:common
   :core:network --> :core:model
-  :core:network -.-> :lint
   :core:notifications -.-> :core:common
   :core:notifications --> :core:model
-  :core:notifications -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

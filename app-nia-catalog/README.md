@@ -18,18 +18,13 @@ graph TB
     :core:model[model]:::jvm-library
     :core:ui[ui]:::android-library
   end
-  :lint[lint]:::android-library
   :app-nia-catalog[app-nia-catalog]:::android-application
 
   :app-nia-catalog -.-> :core:designsystem
   :app-nia-catalog -.-> :core:ui
-  :app-nia-catalog -.-> :lint
-  :core:analytics -.-> :lint
-  :core:designsystem -.-> :lint
   :core:ui --> :core:analytics
   :core:ui --> :core:designsystem
   :core:ui --> :core:model
-  :core:ui -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;

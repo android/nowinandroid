@@ -16,10 +16,8 @@ graph TB
     :core:database[database]:::android-library
     :core:model[model]:::jvm-library
   end
-  :lint[lint]:::android-library
 
   :core:database --> :core:model
-  :core:database -.-> :lint
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
