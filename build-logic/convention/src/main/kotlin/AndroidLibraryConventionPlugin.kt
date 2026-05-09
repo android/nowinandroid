@@ -55,7 +55,7 @@ abstract class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
             configureSpotlessForAndroid()
             dependencies {
-                if (project.path != ":lint") "implementation"(project(":lint"))
+                if (project.path != ":lint") "compileOnly"(project(":lint"))
                 "implementation"(libs.findLibrary("androidx.tracing.ktx").get())
 
                 "testImplementation"(libs.findLibrary("kotlin.test").get())

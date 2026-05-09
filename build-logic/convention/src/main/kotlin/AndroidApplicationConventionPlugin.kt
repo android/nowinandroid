@@ -47,7 +47,7 @@ abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
             configureSpotlessForAndroid()
 
             dependencies {
-                "implementation"(project(":lint"))
+                "compileOnly"(project(":lint"))
             }
         }
     }
