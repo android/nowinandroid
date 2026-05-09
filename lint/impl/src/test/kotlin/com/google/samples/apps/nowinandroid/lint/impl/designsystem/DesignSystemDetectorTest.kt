@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2026 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.nowinandroid.lint.designsystem
+package com.google.samples.apps.nowinandroid.lint.impl.designsystem
 
 import com.android.tools.lint.checks.infrastructure.TestFile
 import com.android.tools.lint.checks.infrastructure.TestFiles.kotlin
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
-import com.google.samples.apps.nowinandroid.lint.designsystem.DesignSystemDetector.Companion.ISSUE
-import com.google.samples.apps.nowinandroid.lint.designsystem.DesignSystemDetector.Companion.METHOD_NAMES
-import com.google.samples.apps.nowinandroid.lint.designsystem.DesignSystemDetector.Companion.RECEIVER_NAMES
+import com.google.samples.apps.nowinandroid.lint.impl.designsystem.DesignSystemDetector.Companion.ISSUE
+import com.google.samples.apps.nowinandroid.lint.impl.designsystem.DesignSystemDetector.Companion.METHOD_NAMES
+import com.google.samples.apps.nowinandroid.lint.impl.designsystem.DesignSystemDetector.Companion.RECEIVER_NAMES
 import org.junit.Test
 
 class DesignSystemDetectorTest {

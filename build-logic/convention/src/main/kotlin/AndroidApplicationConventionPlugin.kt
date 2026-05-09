@@ -25,6 +25,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -44,6 +45,10 @@ abstract class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configureBadgingTasks(this)
             }
             configureSpotlessForAndroid()
+
+            dependencies {
+                "compileOnly"(project(":lint"))
+            }
         }
     }
 }

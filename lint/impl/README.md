@@ -1,4 +1,4 @@
-# `:lint`
+# `:lint:impl`
 
 ## Module dependency graph
 
@@ -11,7 +11,10 @@ config:
     nodePlacementStrategy: SIMPLE
 ---
 graph TB
-  :lint[lint]:::android-library
+  subgraph :lint
+    direction TB
+    :lint:impl[impl]:::unknown
+  end
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
 classDef android-feature fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000;
