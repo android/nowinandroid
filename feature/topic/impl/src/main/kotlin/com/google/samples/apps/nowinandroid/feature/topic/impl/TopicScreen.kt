@@ -206,10 +206,10 @@ private fun LazyListScope.topicBody(
 }
 
 @Composable
-private fun TopicErrorBody() {
+private fun TopicErrorBody(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 48.dp),
     ) {
