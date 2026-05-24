@@ -190,9 +190,9 @@ private fun topicItemsSize(
     TopicUiState.Error -> 2 // Toolbar and error message
     TopicUiState.Loading -> 1 // Loading bar
     is TopicUiState.Success -> when (newsUiState) {
-        NewsUiState.Error -> 0 // Nothing
-        NewsUiState.Loading -> 1 // Loading bar
-        is NewsUiState.Success -> 2 + newsUiState.news.size // Toolbar, header
+        NewsUiState.Error -> 3 // Toolbar, header, and error message
+        NewsUiState.Loading -> 3 // Toolbar, header, and loading indicator
+        is NewsUiState.Success -> 2 + newsUiState.news.size // Toolbar, header, and news items
     }
 }
 
