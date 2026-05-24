@@ -129,7 +129,17 @@ internal fun TopicScreen(
                     )
                 }
 
-                TopicUiState.Error -> TODO()
+                TopicUiState.Error -> {
+                    item {
+                        TopicErrorToolbar(
+                            showBackButton = showBackButton,
+                            onBackClick = onBackClick,
+                        )
+                    }
+                    item {
+                        TopicErrorState()
+                    }
+                }
                 is TopicUiState.Success -> {
                     item {
                         TopicToolbar(
@@ -177,7 +187,7 @@ private fun topicItemsSize(
     topicUiState: TopicUiState,
     newsUiState: NewsUiState,
 ) = when (topicUiState) {
-    TopicUiState.Error -> 0 // Nothing
+    TopicUiState.Error -> 2 // Toolbar and error message
     TopicUiState.Loading -> 1 // Loading bar
     is TopicUiState.Success -> when (newsUiState) {
         NewsUiState.Error -> 0 // Nothing
@@ -250,7 +260,11 @@ private fun LazyListScope.userNewsResourceCards(
         }
 
         else -> item {
-            Text("Error") // TODO
+            Text(
+                text = stringResource(id = TopicR.string.feature_topic_api_news_error),
+                modifier = Modifier.padding(24.dp),
+                style = MaterialTheme.typography.bodyLarge,
+            )
         }
     }
 }
@@ -269,6 +283,44 @@ private fun TopicBodyPreview() {
                 onNewsResourceViewed = {},
                 onTopicClick = {},
             )
+        }
+    }
+}
+
+@Composable
+private fun TopicErrorState(modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(id = TopicR.string.feature_topic_api_error),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+            .testTag("topic:error"),
+        style = MaterialTheme.typography.bodyLarge,
+    )
+}
+
+@Composable
+private fun TopicErrorToolbar(
+    showBackButton: Boolean,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 32.dp),
+    ) {
+        if (showBackButton) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = NiaIcons.ArrowBack,
+                    contentDescription = stringResource(
+                        id = UiR.string.core_ui_back,
+                    ),
+                )
+            }
         }
     }
 }
