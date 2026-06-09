@@ -22,7 +22,7 @@ import kotlinx.datetime.Instant
  * A [NewsResource] with additional user information such as whether the user is following the
  * news resource's topics and whether they have saved (bookmarked) this news resource.
  */
-data class UserNewsResource internal constructor(
+data class UserNewsResource(
     val newsResource: NewsResource,
     val userData: UserData,
 ) {
