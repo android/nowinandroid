@@ -137,6 +137,24 @@ class BookmarksViewModelTest {
     }
 
     @Test
+    fun removeSelected_capturesSnapshotBeforeRemoval() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
+
+        newsRepository.sendNewsResources(newsResourcesTestData)
+        userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[0].id, true)
+        userDataRepository.setNewsResourceBookmarked(newsResourcesTestData[1].id, true)
+
+        viewModel.enterSelectionMode(newsResourcesTestData[0].id)
+        viewModel.toggleSelection(newsResourcesTestData[1].id)
+
+        viewModel.removeSelected()
+
+        assertTrue(viewModel.shouldDisplayUndoBulkRemove)
+        assertFalse(viewModel.isInSelectionMode)
+        assertTrue(viewModel.selectedIds.isEmpty())
+    }
+
+    @Test
     fun feedUiState_undoneBookmarkRemoval_bookmarkIsRestored() = runTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 

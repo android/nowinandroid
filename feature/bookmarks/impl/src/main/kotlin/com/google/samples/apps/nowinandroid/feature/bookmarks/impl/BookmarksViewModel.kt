@@ -107,6 +107,43 @@ class BookmarksViewModel @Inject constructor(
         lastRemovedBookmarkId = null
     }
 
+    var shouldDisplayUndoBulkRemove by mutableStateOf(false)
+        private set
+
+    private var bulkRemoveSnapshot: List<Pair<String, String?>> = emptyList()
+
+    fun removeSelected() {
+        val currentFeed = (feedUiState.value as? NewsFeedUiState.Success)?.feed ?: return
+        bulkRemoveSnapshot = selectedIds.map { id ->
+            id to currentFeed.find { it.id == id }?.bookmarkNote
+        }
+        val toRemove = selectedIds.toSet()
+        viewModelScope.launch {
+            toRemove.forEach { id ->
+                userDataRepository.setNewsResourceBookmarked(id, false)
+            }
+        }
+        exitSelectionMode()
+        shouldDisplayUndoBulkRemove = true
+    }
+
+    fun undoBulkRemove() {
+        viewModelScope.launch {
+            bulkRemoveSnapshot.forEach { (id, note) ->
+                userDataRepository.setNewsResourceBookmarked(id, true)
+                if (!note.isNullOrBlank()) {
+                    userDataRepository.setBookmarkNote(id, note)
+                }
+            }
+        }
+        clearBulkUndoState()
+    }
+
+    fun clearBulkUndoState() {
+        shouldDisplayUndoBulkRemove = false
+        bulkRemoveSnapshot = emptyList()
+    }
+
     fun updateNote(newsResourceId: String, note: String) {
         viewModelScope.launch {
             if (note.isNotBlank()) {

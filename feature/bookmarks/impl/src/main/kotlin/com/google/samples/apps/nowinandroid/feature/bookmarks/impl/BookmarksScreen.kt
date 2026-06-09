@@ -126,6 +126,10 @@ internal fun BookmarksScreen(
         exitSelectionMode = viewModel::exitSelectionMode,
         toggleSelection = viewModel::toggleSelection,
         selectAll = viewModel::selectAll,
+        shouldDisplayUndoBulkRemove = viewModel.shouldDisplayUndoBulkRemove,
+        removeSelected = viewModel::removeSelected,
+        undoBulkRemove = viewModel::undoBulkRemove,
+        clearBulkUndoState = viewModel::clearBulkUndoState,
     )
 
     editingNoteId?.let { id ->
@@ -163,9 +167,14 @@ internal fun BookmarksScreen(
     exitSelectionMode: () -> Unit = {},
     toggleSelection: (String) -> Unit = {},
     selectAll: () -> Unit = {},
+    shouldDisplayUndoBulkRemove: Boolean = false,
+    removeSelected: () -> Unit = {},
+    undoBulkRemove: () -> Unit = {},
+    clearBulkUndoState: () -> Unit = {},
 ) {
     val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_api_removed)
     val undoText = stringResource(id = R.string.feature_bookmarks_api_undo)
+    val removedCount = remember { androidx.compose.runtime.mutableIntStateOf(0) }
 
     BackHandler(enabled = isInSelectionMode) {
         exitSelectionMode()
@@ -178,6 +187,20 @@ internal fun BookmarksScreen(
                 undoBookmarkRemoval()
             } else {
                 clearUndoState()
+            }
+        }
+    }
+
+    LaunchedEffect(shouldDisplayUndoBulkRemove) {
+        if (shouldDisplayUndoBulkRemove) {
+            val result = onShowSnackbar(
+                "${removedCount.intValue} bookmarks removed",
+                undoText,
+            )
+            if (result) {
+                undoBulkRemove()
+            } else {
+                clearBulkUndoState()
             }
         }
     }
@@ -222,7 +245,10 @@ internal fun BookmarksScreen(
 
         if (isInSelectionMode && selectedIds.isNotEmpty()) {
             Button(
-                onClick = { selectedIds.forEach { removeFromBookmarks(it) } },
+                onClick = {
+                    removedCount.intValue = selectedIds.size
+                    removeSelected()
+                },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(16.dp),
