@@ -110,7 +110,7 @@ internal fun SearchScreen(
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
 
-    var pendingBookmarkId by remember { mutableStateOf<String?>(null) }
+    var pendingBookmarkNoteId by remember { mutableStateOf<String?>(null) }
 
     SearchScreen(
         modifier = modifier,
@@ -122,7 +122,8 @@ internal fun SearchScreen(
         onClearRecentSearches = searchViewModel::clearRecentSearches,
         onNewsResourcesCheckedChanged = { id, checked ->
             if (checked) {
-                pendingBookmarkId = id
+                searchViewModel.setNewsResourceBookmarked(id, true)
+                pendingBookmarkNoteId = id
             } else {
                 searchViewModel.setNewsResourceBookmarked(id, false)
             }
@@ -134,11 +135,12 @@ internal fun SearchScreen(
         onTopicClick = onTopicClick,
     )
 
-    pendingBookmarkId?.let { id ->
+    pendingBookmarkNoteId?.let { id ->
         BookmarkNoteDialog(
-            onDismiss = { note ->
-                searchViewModel.bookmarkWithNote(id, note)
-                pendingBookmarkId = null
+            onDismiss = { pendingBookmarkNoteId = null },
+            onSave = { note ->
+                searchViewModel.updateNote(id, note)
+                pendingBookmarkNoteId = null
             },
         )
     }

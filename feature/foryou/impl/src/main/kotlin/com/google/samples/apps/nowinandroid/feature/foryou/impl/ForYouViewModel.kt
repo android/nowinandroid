@@ -121,12 +121,9 @@ class ForYouViewModel @Inject constructor(
         }
     }
 
-    fun bookmarkWithNote(newsResourceId: String, note: String) {
+    fun updateNote(newsResourceId: String, note: String) {
         viewModelScope.launch {
-            userDataRepository.setNewsResourceBookmarked(newsResourceId, true)
-            if (note.isNotBlank()) {
-                userDataRepository.setBookmarkNote(newsResourceId, note)
-            }
+            userDataRepository.setBookmarkNote(newsResourceId, note)
         }
     }
 

@@ -18,12 +18,13 @@ import androidx.compose.ui.Modifier
 @Composable
 fun BookmarkNoteDialog(
     initialNote: String = "",
-    onDismiss: (note: String) -> Unit,
+    onDismiss: () -> Unit,
+    onSave: (note: String) -> Unit,
 ) {
     var note by remember { mutableStateOf(initialNote) }
 
     AlertDialog(
-        onDismissRequest = { onDismiss(note) },
+        onDismissRequest = onDismiss,
         title = { Text("Add a note") },
         text = {
             Column {
@@ -42,10 +43,10 @@ fun BookmarkNoteDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onDismiss(note) }) { Text("Save") }
+            TextButton(onClick = { onSave(note) }) { Text("Save") }
         },
         dismissButton = {
-            TextButton(onClick = { onDismiss("") }) { Text("Skip") }
+            TextButton(onClick = onDismiss) { Text("Cancel") }
         },
     )
 }

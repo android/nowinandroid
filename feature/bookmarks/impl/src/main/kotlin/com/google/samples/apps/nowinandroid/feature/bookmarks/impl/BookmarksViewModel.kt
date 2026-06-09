@@ -16,9 +16,6 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.impl
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.nowinandroid.core.data.repository.UserDataRepository
@@ -27,11 +24,14 @@ import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,48 +41,48 @@ class BookmarksViewModel @Inject constructor(
     userNewsResourceRepository: UserNewsResourceRepository,
 ) : ViewModel() {
 
-    var shouldDisplayUndoBookmark by mutableStateOf(false)
+    private val _state = MutableStateFlow(BookmarksUiState())
     private var lastRemovedBookmarkId: String? = null
+    private var bulkRemoveSnapshot: List<Pair<String, String?>> = emptyList()
 
-    var isInSelectionMode by mutableStateOf(false)
-        private set
-
-    var selectedIds by mutableStateOf(emptySet<String>())
-        private set
+    val uiState: StateFlow<BookmarksUiState> = combine(
+        userNewsResourceRepository.observeAllBookmarked()
+            .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
+            .onStart { emit(Loading) },
+        _state,
+    ) { feedState, state ->
+        state.copy(feedState = feedState)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = BookmarksUiState(),
+    )
 
     fun enterSelectionMode(initialId: String) {
-        isInSelectionMode = true
-        selectedIds = setOf(initialId)
+        _state.update { it.copy(isInSelectionMode = true, selectedIds = setOf(initialId)) }
     }
 
     fun exitSelectionMode() {
-        isInSelectionMode = false
-        selectedIds = emptySet()
+        _state.update { it.copy(isInSelectionMode = false, selectedIds = emptySet()) }
     }
 
     fun toggleSelection(id: String) {
-        selectedIds = if (id in selectedIds) selectedIds - id else selectedIds + id
+        _state.update { current ->
+            val updated =
+                if (id in current.selectedIds) current.selectedIds - id else current.selectedIds + id
+            current.copy(selectedIds = updated)
+        }
     }
 
     fun selectAll() {
-        val currentFeed = (feedUiState.value as? NewsFeedUiState.Success)?.feed ?: return
-        selectedIds = currentFeed.map { it.id }.toSet()
+        val currentFeed = (uiState.value.feedState as? NewsFeedUiState.Success)?.feed ?: return
+        _state.update { it.copy(selectedIds = currentFeed.map { item -> item.id }.toSet()) }
     }
 
-    val feedUiState: StateFlow<NewsFeedUiState> =
-        userNewsResourceRepository.observeAllBookmarked()
-            .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)
-            .onStart { emit(Loading) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = Loading,
-            )
-
     fun removeFromSavedResources(newsResourceId: String) {
+        lastRemovedBookmarkId = newsResourceId
+        _state.update { it.copy(shouldDisplayUndoBookmark = true) }
         viewModelScope.launch {
-            shouldDisplayUndoBookmark = true
-            lastRemovedBookmarkId = newsResourceId
             userDataRepository.setNewsResourceBookmarked(newsResourceId, false)
         }
     }
@@ -103,28 +103,29 @@ class BookmarksViewModel @Inject constructor(
     }
 
     fun clearUndoState() {
-        shouldDisplayUndoBookmark = false
         lastRemovedBookmarkId = null
+        _state.update { it.copy(shouldDisplayUndoBookmark = false) }
     }
 
-    var shouldDisplayUndoBulkRemove by mutableStateOf(false)
-        private set
-
-    private var bulkRemoveSnapshot: List<Pair<String, String?>> = emptyList()
-
     fun removeSelected() {
-        val currentFeed = (feedUiState.value as? NewsFeedUiState.Success)?.feed ?: return
-        bulkRemoveSnapshot = selectedIds.map { id ->
+        val currentFeed = (uiState.value.feedState as? NewsFeedUiState.Success)?.feed ?: return
+        val toRemove = _state.value.selectedIds
+        bulkRemoveSnapshot = toRemove.map { id ->
             id to currentFeed.find { it.id == id }?.bookmarkNote
         }
-        val toRemove = selectedIds.toSet()
         viewModelScope.launch {
             toRemove.forEach { id ->
                 userDataRepository.setNewsResourceBookmarked(id, false)
             }
         }
-        exitSelectionMode()
-        shouldDisplayUndoBulkRemove = true
+        _state.update {
+            it.copy(
+                isInSelectionMode = false,
+                selectedIds = emptySet(),
+                shouldDisplayUndoBulkRemove = true,
+                bulkRemovedCount = toRemove.size,
+            )
+        }
     }
 
     fun undoBulkRemove() {
@@ -140,8 +141,8 @@ class BookmarksViewModel @Inject constructor(
     }
 
     fun clearBulkUndoState() {
-        shouldDisplayUndoBulkRemove = false
         bulkRemoveSnapshot = emptyList()
+        _state.update { it.copy(shouldDisplayUndoBulkRemove = false, bulkRemovedCount = 0) }
     }
 
     fun updateNote(newsResourceId: String, note: String) {

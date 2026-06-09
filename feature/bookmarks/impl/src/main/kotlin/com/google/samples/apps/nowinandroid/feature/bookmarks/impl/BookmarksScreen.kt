@@ -106,37 +106,40 @@ internal fun BookmarksScreen(
     modifier: Modifier = Modifier,
     viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
-    val feedState by viewModel.feedUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var editingNoteId by remember { mutableStateOf<String?>(null) }
 
     BookmarksScreen(
-        feedState = feedState,
+        feedState = uiState.feedState,
         onShowSnackbar = onShowSnackbar,
         removeFromBookmarks = viewModel::removeFromSavedResources,
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         onTopicClick = onTopicClick,
         modifier = modifier,
-        shouldDisplayUndoBookmark = viewModel.shouldDisplayUndoBookmark,
+        shouldDisplayUndoBookmark = uiState.shouldDisplayUndoBookmark,
         undoBookmarkRemoval = viewModel::undoBookmarkRemoval,
         clearUndoState = viewModel::clearUndoState,
         onEditNote = { editingNoteId = it },
-        isInSelectionMode = viewModel.isInSelectionMode,
-        selectedIds = viewModel.selectedIds,
+        isInSelectionMode = uiState.isInSelectionMode,
+        selectedIds = uiState.selectedIds,
         enterSelectionMode = viewModel::enterSelectionMode,
         exitSelectionMode = viewModel::exitSelectionMode,
         toggleSelection = viewModel::toggleSelection,
         selectAll = viewModel::selectAll,
-        shouldDisplayUndoBulkRemove = viewModel.shouldDisplayUndoBulkRemove,
+        shouldDisplayUndoBulkRemove = uiState.shouldDisplayUndoBulkRemove,
+        bulkRemovedCount = uiState.bulkRemovedCount,
         removeSelected = viewModel::removeSelected,
         undoBulkRemove = viewModel::undoBulkRemove,
         clearBulkUndoState = viewModel::clearBulkUndoState,
     )
 
     editingNoteId?.let { id ->
-        val currentNote = (feedState as? Success)?.feed?.find { it.id == id }?.bookmarkNote ?: ""
+        val currentNote =
+            (uiState.feedState as? Success)?.feed?.find { it.id == id }?.bookmarkNote ?: ""
         BookmarkNoteDialog(
             initialNote = currentNote,
-            onDismiss = { note ->
+            onDismiss = { editingNoteId = null },
+            onSave = { note ->
                 viewModel.updateNote(id, note)
                 editingNoteId = null
             },
@@ -167,13 +170,13 @@ internal fun BookmarksScreen(
     toggleSelection: (String) -> Unit = {},
     selectAll: () -> Unit = {},
     shouldDisplayUndoBulkRemove: Boolean = false,
+    bulkRemovedCount: Int = 0,
     removeSelected: () -> Unit = {},
     undoBulkRemove: () -> Unit = {},
     clearBulkUndoState: () -> Unit = {},
 ) {
     val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_api_removed)
     val undoText = stringResource(id = R.string.feature_bookmarks_api_undo)
-    val removedCount = remember { androidx.compose.runtime.mutableIntStateOf(0) }
 
     BackHandler(enabled = isInSelectionMode) {
         exitSelectionMode()
@@ -193,7 +196,7 @@ internal fun BookmarksScreen(
     LaunchedEffect(shouldDisplayUndoBulkRemove) {
         if (shouldDisplayUndoBulkRemove) {
             val result = onShowSnackbar(
-                "${removedCount.intValue} bookmarks removed",
+                "$bulkRemovedCount bookmarks removed",
                 undoText,
             )
             if (result) {
@@ -253,10 +256,7 @@ internal fun BookmarksScreen(
                     )
                     TextButton(onClick = selectAll) { Text("All") }
                     Button(
-                        onClick = {
-                            removedCount.intValue = selectedIds.size
-                            removeSelected()
-                        },
+                        onClick = removeSelected,
                         enabled = selectedIds.isNotEmpty(),
                     ) {
                         Text("Remove")

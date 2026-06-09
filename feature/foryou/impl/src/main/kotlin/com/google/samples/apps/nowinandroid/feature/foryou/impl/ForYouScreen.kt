@@ -89,7 +89,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus.Denied
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
-import com.google.samples.apps.nowinandroid.core.ui.BookmarkNoteDialog
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
@@ -100,6 +99,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import com.google.samples.apps.nowinandroid.core.ui.BookmarkNoteDialog
 import com.google.samples.apps.nowinandroid.core.ui.DevicePreviews
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
@@ -120,7 +120,7 @@ fun ForYouScreen(
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
 
-    var pendingBookmarkId by remember { mutableStateOf<String?>(null) }
+    var pendingBookmarkNoteId by remember { mutableStateOf<String?>(null) }
 
     ForYouScreen(
         isSyncing = isSyncing,
@@ -132,21 +132,21 @@ fun ForYouScreen(
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
         onNewsResourcesCheckedChanged = { id, checked ->
+            viewModel.updateNewsResourceSaved(id, checked)
             if (checked) {
-                pendingBookmarkId = id
-            } else {
-                viewModel.updateNewsResourceSaved(id, false)
+                pendingBookmarkNoteId = id
             }
         },
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         modifier = modifier,
     )
 
-    pendingBookmarkId?.let { id ->
+    pendingBookmarkNoteId?.let { id ->
         BookmarkNoteDialog(
-            onDismiss = { note ->
-                viewModel.bookmarkWithNote(id, note)
-                pendingBookmarkId = null
+            onDismiss = { pendingBookmarkNoteId = null },
+            onSave = { note ->
+                viewModel.updateNote(id, note)
+                pendingBookmarkNoteId = null
             },
         )
     }
@@ -286,7 +286,7 @@ private fun LazyStaggeredGridScope.onboarding(
         OnboardingUiState.Loading,
         OnboardingUiState.LoadFailed,
         OnboardingUiState.NotShown,
-        -> Unit
+            -> Unit
 
         is OnboardingUiState.Shown -> {
             item(span = StaggeredGridItemSpan.FullLine, contentType = "onboarding") {
@@ -515,7 +515,7 @@ private fun feedItemsSize(
         OnboardingUiState.Loading,
         OnboardingUiState.LoadFailed,
         OnboardingUiState.NotShown,
-        -> 0
+            -> 0
 
         is OnboardingUiState.Shown -> 1
     }
