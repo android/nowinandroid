@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.bookmarks.impl
 
+import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -190,7 +191,7 @@ private fun LoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 private fun BookmarksGrid(
-    feedState: NewsFeedUiState,
+    feedState: Success,
     removeFromBookmarks: (String) -> Unit,
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
@@ -213,8 +214,7 @@ private fun BookmarksGrid(
                 .fillMaxSize()
                 .testTag("bookmarks:feed"),
         ) {
-            if (feedState is Success) {
-                items(
+            items(
                     items = feedState.feed,
                     key = { it.id },
                     contentType = { "newsFeedItem" },
@@ -237,7 +237,7 @@ private fun BookmarksGrid(
                                 )
                                 launchCustomChromeTab(
                                     context,
-                                    android.net.Uri.parse(userNewsResource.url),
+                                    Uri.parse(userNewsResource.url),
                                     backgroundColor,
                                 )
                                 onNewsResourceViewed(userNewsResource.id)
@@ -261,15 +261,11 @@ private fun BookmarksGrid(
                         }
                     }
                 }
-            }
             item(span = StaggeredGridItemSpan.FullLine) {
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
-        val itemsAvailable = when (feedState) {
-            Loading -> 1
-            is Success -> feedState.feed.size
-        }
+        val itemsAvailable = feedState.feed.size
         val scrollbarState = scrollableState.scrollbarState(
             itemsAvailable = itemsAvailable,
         )
