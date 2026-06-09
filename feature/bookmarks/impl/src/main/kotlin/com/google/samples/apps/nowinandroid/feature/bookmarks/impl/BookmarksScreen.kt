@@ -25,8 +25,8 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -88,10 +88,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintThe
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
 import com.google.samples.apps.nowinandroid.core.ui.BookmarkNoteDialog
-import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Loading
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState.Success
+import com.google.samples.apps.nowinandroid.core.ui.NewsResourceCardExpanded
 import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
@@ -206,6 +206,7 @@ internal fun BookmarksScreen(
 
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         clearUndoState()
+        clearBulkUndoState()
     }
 
     Box(modifier = modifier.fillMaxSize()) {
