@@ -44,6 +44,31 @@ class BookmarksViewModel @Inject constructor(
     var shouldDisplayUndoBookmark by mutableStateOf(false)
     private var lastRemovedBookmarkId: String? = null
 
+    var isInSelectionMode by mutableStateOf(false)
+        private set
+
+    var selectedIds by mutableStateOf(emptySet<String>())
+        private set
+
+    fun enterSelectionMode(initialId: String) {
+        isInSelectionMode = true
+        selectedIds = setOf(initialId)
+    }
+
+    fun exitSelectionMode() {
+        isInSelectionMode = false
+        selectedIds = emptySet()
+    }
+
+    fun toggleSelection(id: String) {
+        selectedIds = if (id in selectedIds) selectedIds - id else selectedIds + id
+    }
+
+    fun selectAll() {
+        val currentFeed = (feedUiState.value as? NewsFeedUiState.Success)?.feed ?: return
+        selectedIds = currentFeed.map { it.id }.toSet()
+    }
+
     val feedUiState: StateFlow<NewsFeedUiState> =
         userNewsResourceRepository.observeAllBookmarked()
             .map<List<UserNewsResource>, NewsFeedUiState>(NewsFeedUiState::Success)

@@ -113,6 +113,30 @@ class BookmarksViewModelTest {
     }
 
     @Test
+    fun enterSelectionMode_setsSelectedId() = runTest {
+        viewModel.enterSelectionMode("news1")
+        assertTrue(viewModel.isInSelectionMode)
+        assertEquals(setOf("news1"), viewModel.selectedIds)
+    }
+
+    @Test
+    fun toggleSelection_addsAndRemovesId() = runTest {
+        viewModel.enterSelectionMode("news1")
+        viewModel.toggleSelection("news2")
+        assertEquals(setOf("news1", "news2"), viewModel.selectedIds)
+        viewModel.toggleSelection("news1")
+        assertEquals(setOf("news2"), viewModel.selectedIds)
+    }
+
+    @Test
+    fun exitSelectionMode_clearsState() = runTest {
+        viewModel.enterSelectionMode("news1")
+        viewModel.exitSelectionMode()
+        assertFalse(viewModel.isInSelectionMode)
+        assertTrue(viewModel.selectedIds.isEmpty())
+    }
+
+    @Test
     fun feedUiState_undoneBookmarkRemoval_bookmarkIsRestored() = runTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.feedUiState.collect() }
 
