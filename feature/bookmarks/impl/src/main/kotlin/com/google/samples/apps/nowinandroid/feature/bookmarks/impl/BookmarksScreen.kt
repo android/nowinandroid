@@ -25,6 +25,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -43,15 +44,15 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -146,7 +147,6 @@ internal fun BookmarksScreen(
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun BookmarksScreen(
@@ -208,20 +208,6 @@ internal fun BookmarksScreen(
         clearUndoState()
     }
 
-    if (isInSelectionMode) {
-        TopAppBar(
-            title = { Text("${selectedIds.size} selected") },
-            navigationIcon = {
-                IconButton(onClick = exitSelectionMode) {
-                    Icon(NiaIcons.Close, contentDescription = "Cancel selection")
-                }
-            },
-            actions = {
-                TextButton(onClick = selectAll) { Text("Select all") }
-            },
-        )
-    }
-
     Box(modifier = modifier.fillMaxSize()) {
         when (feedState) {
             Loading -> LoadingState()
@@ -242,17 +228,39 @@ internal fun BookmarksScreen(
             }
         }
 
-        if (isInSelectionMode && selectedIds.isNotEmpty()) {
-            Button(
-                onClick = {
-                    removedCount.intValue = selectedIds.size
-                    removeSelected()
-                },
+        if (isInSelectionMode) {
+            Surface(
+                tonalElevation = 3.dp,
+                shadowElevation = 6.dp,
+                shape = RoundedCornerShape(28.dp),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .fillMaxWidth(),
             ) {
-                Text("Remove (${selectedIds.size})")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
+                ) {
+                    IconButton(onClick = exitSelectionMode) {
+                        Icon(NiaIcons.Close, contentDescription = "Cancel selection")
+                    }
+                    Text(
+                        text = "${selectedIds.size} selected",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                    TextButton(onClick = selectAll) { Text("All") }
+                    Button(
+                        onClick = {
+                            removedCount.intValue = selectedIds.size
+                            removeSelected()
+                        },
+                        enabled = selectedIds.isNotEmpty(),
+                    ) {
+                        Text("Remove")
+                    }
+                }
             }
         }
     }
