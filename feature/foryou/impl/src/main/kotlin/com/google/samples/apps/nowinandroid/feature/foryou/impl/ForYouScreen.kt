@@ -65,6 +65,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.google.samples.apps.nowinandroid.core.ui.BookmarkNoteDialog
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -116,6 +120,8 @@ fun ForYouScreen(
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val deepLinkedUserNewsResource by viewModel.deepLinkedNewsResource.collectAsStateWithLifecycle()
 
+    var pendingBookmarkId by remember { mutableStateOf<String?>(null) }
+
     ForYouScreen(
         isSyncing = isSyncing,
         onboardingUiState = onboardingUiState,
@@ -125,10 +131,25 @@ fun ForYouScreen(
         onDeepLinkOpened = viewModel::onDeepLinkOpened,
         onTopicClick = onTopicClick,
         saveFollowedTopics = viewModel::dismissOnboarding,
-        onNewsResourcesCheckedChanged = viewModel::updateNewsResourceSaved,
+        onNewsResourcesCheckedChanged = { id, checked ->
+            if (checked) {
+                pendingBookmarkId = id
+            } else {
+                viewModel.updateNewsResourceSaved(id, false)
+            }
+        },
         onNewsResourceViewed = { viewModel.setNewsResourceViewed(it, true) },
         modifier = modifier,
     )
+
+    pendingBookmarkId?.let { id ->
+        BookmarkNoteDialog(
+            onDismiss = { note ->
+                viewModel.bookmarkWithNote(id, note)
+                pendingBookmarkId = null
+            },
+        )
+    }
 }
 
 @Composable
