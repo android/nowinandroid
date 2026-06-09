@@ -121,6 +121,15 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun bookmarkWithNote(newsResourceId: String, note: String) {
+        viewModelScope.launch {
+            userDataRepository.setNewsResourceBookmarked(newsResourceId, true)
+            if (note.isNotBlank()) {
+                userDataRepository.setBookmarkNote(newsResourceId, note)
+            }
+        }
+    }
+
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
             userDataRepository.setTopicIdFollowed(followedTopicId, followed)

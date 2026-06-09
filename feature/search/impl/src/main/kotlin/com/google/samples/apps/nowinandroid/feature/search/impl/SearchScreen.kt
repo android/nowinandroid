@@ -52,7 +52,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -80,6 +82,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.samples.apps.nowinandroid.core.ui.BookmarkNoteDialog
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
@@ -106,6 +109,9 @@ internal fun SearchScreen(
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
+
+    var pendingBookmarkId by remember { mutableStateOf<String?>(null) }
+
     SearchScreen(
         modifier = modifier,
         searchQuery = searchQuery,
@@ -114,13 +120,28 @@ internal fun SearchScreen(
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onSearchTriggered = searchViewModel::onSearchTriggered,
         onClearRecentSearches = searchViewModel::clearRecentSearches,
-        onNewsResourcesCheckedChanged = searchViewModel::setNewsResourceBookmarked,
+        onNewsResourcesCheckedChanged = { id, checked ->
+            if (checked) {
+                pendingBookmarkId = id
+            } else {
+                searchViewModel.setNewsResourceBookmarked(id, false)
+            }
+        },
         onNewsResourceViewed = { searchViewModel.setNewsResourceViewed(it, true) },
         onFollowButtonClick = searchViewModel::followTopic,
         onBackClick = onBackClick,
         onInterestsClick = onInterestsClick,
         onTopicClick = onTopicClick,
     )
+
+    pendingBookmarkId?.let { id ->
+        BookmarkNoteDialog(
+            onDismiss = { note ->
+                searchViewModel.bookmarkWithNote(id, note)
+                pendingBookmarkId = null
+            },
+        )
+    }
 }
 
 @Composable
