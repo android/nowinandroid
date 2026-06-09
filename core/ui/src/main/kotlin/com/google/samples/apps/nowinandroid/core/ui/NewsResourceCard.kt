@@ -23,6 +23,7 @@ import android.view.View
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -95,6 +96,7 @@ fun NewsResourceCardExpanded(
     onClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null,
 ) {
     val clickActionLabel = stringResource(R.string.core_ui_card_tap_action)
     val sharingLabel = stringResource(R.string.core_ui_feed_sharing)
@@ -111,7 +113,6 @@ fun NewsResourceCardExpanded(
     }
 
     Card(
-        onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         // Use custom label for accessibility services to communicate button's action to user.
@@ -120,7 +121,11 @@ fun NewsResourceCardExpanded(
             .semantics {
                 onClick(label = clickActionLabel, action = null)
             }
-            .testTag("newsResourceCard:${userNewsResource.id}"),
+            .testTag("newsResourceCard:${userNewsResource.id}")
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            ),
     ) {
         Column {
             if (!userNewsResource.headerImageUrl.isNullOrEmpty()) {

@@ -21,7 +21,6 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -313,26 +312,16 @@ private fun BookmarksGrid(
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .animateItem()
-                        .combinedClickable(
-                            onClick = {
-                                if (isInSelectionMode) {
-                                    toggleSelection(userNewsResource.id)
-                                }
-                            },
-                            onLongClick = {
-                                if (!isInSelectionMode) {
-                                    enterSelectionMode(userNewsResource.id)
-                                }
-                            },
-                        ),
+                        .animateItem(),
                 ) {
                     Column {
                         NewsResourceCardExpanded(
                             userNewsResource = userNewsResource,
                             isBookmarked = userNewsResource.isSaved,
                             onClick = {
-                                if (!isInSelectionMode) {
+                                if (isInSelectionMode) {
+                                    toggleSelection(userNewsResource.id)
+                                } else {
                                     analyticsHelper.logNewsResourceOpened(
                                         newsResourceId = userNewsResource.id,
                                     )
@@ -343,6 +332,9 @@ private fun BookmarksGrid(
                                     )
                                     onNewsResourceViewed(userNewsResource.id)
                                 }
+                            },
+                            onLongClick = {
+                                if (!isInSelectionMode) enterSelectionMode(userNewsResource.id)
                             },
                             hasBeenViewed = userNewsResource.hasBeenViewed,
                             onToggleBookmark = { if (!isInSelectionMode) removeFromBookmarks(userNewsResource.id) },
