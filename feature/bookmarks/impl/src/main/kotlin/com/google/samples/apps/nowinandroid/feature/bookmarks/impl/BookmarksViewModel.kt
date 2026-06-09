@@ -98,8 +98,8 @@ class BookmarksViewModel @Inject constructor(
             lastRemovedBookmarkId?.let {
                 userDataRepository.setNewsResourceBookmarked(it, true)
             }
+            clearUndoState()
         }
-        clearUndoState()
     }
 
     fun clearUndoState() {
@@ -136,8 +136,8 @@ class BookmarksViewModel @Inject constructor(
                     userDataRepository.setBookmarkNote(id, note)
                 }
             }
+            clearBulkUndoState()
         }
-        clearBulkUndoState()
     }
 
     fun clearBulkUndoState() {
