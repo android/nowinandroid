@@ -17,9 +17,11 @@
 package com.google.samples.apps.nowinandroid.feature.bookmarks.impl
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,8 +44,15 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -74,6 +83,7 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaLoadi
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
+import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalTintTheme
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
@@ -110,6 +120,12 @@ internal fun BookmarksScreen(
         undoBookmarkRemoval = viewModel::undoBookmarkRemoval,
         clearUndoState = viewModel::clearUndoState,
         onEditNote = { editingNoteId = it },
+        isInSelectionMode = viewModel.isInSelectionMode,
+        selectedIds = viewModel.selectedIds,
+        enterSelectionMode = viewModel::enterSelectionMode,
+        exitSelectionMode = viewModel::exitSelectionMode,
+        toggleSelection = viewModel::toggleSelection,
+        selectAll = viewModel::selectAll,
     )
 
     editingNoteId?.let { id ->
@@ -127,6 +143,7 @@ internal fun BookmarksScreen(
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun BookmarksScreen(
@@ -140,9 +157,19 @@ internal fun BookmarksScreen(
     undoBookmarkRemoval: () -> Unit = {},
     clearUndoState: () -> Unit = {},
     onEditNote: (String) -> Unit = {},
+    isInSelectionMode: Boolean = false,
+    selectedIds: Set<String> = emptySet(),
+    enterSelectionMode: (String) -> Unit = {},
+    exitSelectionMode: () -> Unit = {},
+    toggleSelection: (String) -> Unit = {},
+    selectAll: () -> Unit = {},
 ) {
     val bookmarkRemovedMessage = stringResource(id = R.string.feature_bookmarks_api_removed)
     val undoText = stringResource(id = R.string.feature_bookmarks_api_undo)
+
+    BackHandler(enabled = isInSelectionMode) {
+        exitSelectionMode()
+    }
 
     LaunchedEffect(shouldDisplayUndoBookmark) {
         if (shouldDisplayUndoBookmark) {
@@ -159,19 +186,49 @@ internal fun BookmarksScreen(
         clearUndoState()
     }
 
-    when (feedState) {
-        Loading -> LoadingState(modifier)
-        is Success -> if (feedState.feed.isNotEmpty()) {
-            BookmarksGrid(
-                feedState,
-                removeFromBookmarks,
-                onNewsResourceViewed,
-                onTopicClick,
-                onEditNote,
-                modifier,
-            )
-        } else {
-            EmptyState(modifier)
+    if (isInSelectionMode) {
+        TopAppBar(
+            title = { Text("${selectedIds.size} selected") },
+            navigationIcon = {
+                IconButton(onClick = exitSelectionMode) {
+                    Icon(NiaIcons.Close, contentDescription = "Cancel selection")
+                }
+            },
+            actions = {
+                TextButton(onClick = selectAll) { Text("Select all") }
+            },
+        )
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        when (feedState) {
+            Loading -> LoadingState()
+            is Success -> if (feedState.feed.isNotEmpty()) {
+                BookmarksGrid(
+                    feedState = feedState,
+                    removeFromBookmarks = removeFromBookmarks,
+                    onNewsResourceViewed = onNewsResourceViewed,
+                    onTopicClick = onTopicClick,
+                    onEditNote = onEditNote,
+                    isInSelectionMode = isInSelectionMode,
+                    selectedIds = selectedIds,
+                    enterSelectionMode = enterSelectionMode,
+                    toggleSelection = toggleSelection,
+                )
+            } else {
+                EmptyState()
+            }
+        }
+
+        if (isInSelectionMode && selectedIds.isNotEmpty()) {
+            Button(
+                onClick = { selectedIds.forEach { removeFromBookmarks(it) } },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp),
+            ) {
+                Text("Remove (${selectedIds.size})")
+            }
         }
     }
 
@@ -196,6 +253,10 @@ private fun BookmarksGrid(
     onNewsResourceViewed: (String) -> Unit,
     onTopicClick: (String) -> Unit,
     onEditNote: (String) -> Unit,
+    isInSelectionMode: Boolean,
+    selectedIds: Set<String>,
+    enterSelectionMode: (String) -> Unit,
+    toggleSelection: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyStaggeredGridState()
@@ -215,35 +276,50 @@ private fun BookmarksGrid(
                 .testTag("bookmarks:feed"),
         ) {
             items(
-                    items = feedState.feed,
-                    key = { it.id },
-                    contentType = { "newsFeedItem" },
-                ) { userNewsResource ->
-                    val context = LocalContext.current
-                    val analyticsHelper = LocalAnalyticsHelper.current
-                    val backgroundColor =
-                        MaterialTheme.colorScheme.background.toArgb()
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .animateItem(),
-                    ) {
+                items = feedState.feed,
+                key = { it.id },
+                contentType = { "newsFeedItem" },
+            ) { userNewsResource ->
+                val context = LocalContext.current
+                val analyticsHelper = LocalAnalyticsHelper.current
+                val backgroundColor =
+                    MaterialTheme.colorScheme.background.toArgb()
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .animateItem()
+                        .combinedClickable(
+                            onClick = {
+                                if (isInSelectionMode) {
+                                    toggleSelection(userNewsResource.id)
+                                }
+                            },
+                            onLongClick = {
+                                if (!isInSelectionMode) {
+                                    enterSelectionMode(userNewsResource.id)
+                                }
+                            },
+                        ),
+                ) {
+                    Column {
                         NewsResourceCardExpanded(
                             userNewsResource = userNewsResource,
                             isBookmarked = userNewsResource.isSaved,
                             onClick = {
-                                analyticsHelper.logNewsResourceOpened(
-                                    newsResourceId = userNewsResource.id,
-                                )
-                                launchCustomChromeTab(
-                                    context,
-                                    Uri.parse(userNewsResource.url),
-                                    backgroundColor,
-                                )
-                                onNewsResourceViewed(userNewsResource.id)
+                                if (!isInSelectionMode) {
+                                    analyticsHelper.logNewsResourceOpened(
+                                        newsResourceId = userNewsResource.id,
+                                    )
+                                    launchCustomChromeTab(
+                                        context,
+                                        Uri.parse(userNewsResource.url),
+                                        backgroundColor,
+                                    )
+                                    onNewsResourceViewed(userNewsResource.id)
+                                }
                             },
                             hasBeenViewed = userNewsResource.hasBeenViewed,
-                            onToggleBookmark = { removeFromBookmarks(userNewsResource.id) },
+                            onToggleBookmark = { if (!isInSelectionMode) removeFromBookmarks(userNewsResource.id) },
                             onTopicClick = onTopicClick,
                         )
                         val note = userNewsResource.bookmarkNote
@@ -256,11 +332,27 @@ private fun BookmarksGrid(
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { onEditNote(userNewsResource.id) },
+                                    .then(
+                                        if (!isInSelectionMode) {
+                                            Modifier.clickable { onEditNote(userNewsResource.id) }
+                                        } else {
+                                            Modifier
+                                        },
+                                    ),
                             )
                         }
                     }
+                    if (isInSelectionMode) {
+                        Checkbox(
+                            checked = userNewsResource.id in selectedIds,
+                            onCheckedChange = { toggleSelection(userNewsResource.id) },
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(4.dp),
+                        )
+                    }
                 }
+            }
             item(span = StaggeredGridItemSpan.FullLine) {
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
@@ -344,6 +436,10 @@ private fun BookmarksGridPreview(
             onNewsResourceViewed = {},
             onTopicClick = {},
             onEditNote = {},
+            isInSelectionMode = false,
+            selectedIds = emptySet(),
+            enterSelectionMode = {},
+            toggleSelection = {},
         )
     }
 }
