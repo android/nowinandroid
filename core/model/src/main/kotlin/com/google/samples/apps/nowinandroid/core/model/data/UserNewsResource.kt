@@ -22,28 +22,37 @@ import kotlinx.datetime.Instant
  * A [NewsResource] with additional user information such as whether the user is following the
  * news resource's topics and whether they have saved (bookmarked) this news resource.
  */
-data class UserNewsResource(
-    val newsResource: NewsResource,
-    val userData: UserData,
+data class UserNewsResource internal constructor(
+    val id: String,
+    val title: String,
+    val content: String,
+    val url: String,
+    val headerImageUrl: String?,
+    val publishDate: Instant,
+    val type: String,
+    val followableTopics: List<FollowableTopic>,
+    val isSaved: Boolean,
+    val hasBeenViewed: Boolean,
+    val bookmarkNote: String?,
 ) {
-    val id: String get() = newsResource.id
-    val title: String get() = newsResource.title
-    val content: String get() = newsResource.content
-    val url: String get() = newsResource.url
-    val headerImageUrl: String? get() = newsResource.headerImageUrl
-    val publishDate: Instant get() = newsResource.publishDate
-    val type: String get() = newsResource.type
-    val followableTopics: List<FollowableTopic>
-        get() = newsResource.topics.map { topic ->
+    constructor(newsResource: NewsResource, userData: UserData) : this(
+        id = newsResource.id,
+        title = newsResource.title,
+        content = newsResource.content,
+        url = newsResource.url,
+        headerImageUrl = newsResource.headerImageUrl,
+        publishDate = newsResource.publishDate,
+        type = newsResource.type,
+        followableTopics = newsResource.topics.map { topic ->
             FollowableTopic(
                 topic = topic,
                 isFollowed = topic.id in userData.followedTopics,
             )
-        }
-    val isSaved: Boolean get() = newsResource.id in userData.bookmarkedNewsResources
-    val hasBeenViewed: Boolean get() = newsResource.id in userData.viewedNewsResources
-    val bookmarkNote: String?
-        get() = userData.bookmarkNotes[newsResource.id].takeIf { !it.isNullOrBlank() }
+        },
+        isSaved = newsResource.id in userData.bookmarkedNewsResources,
+        hasBeenViewed = newsResource.id in userData.viewedNewsResources,
+        bookmarkNote = userData.bookmarkNotes[newsResource.id].takeIf { !it.isNullOrBlank() },
+    )
 }
 
 fun List<NewsResource>.mapToUserNewsResources(userData: UserData): List<UserNewsResource> =
