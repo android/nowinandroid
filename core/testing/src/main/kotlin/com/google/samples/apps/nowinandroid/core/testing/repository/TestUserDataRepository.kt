@@ -68,8 +68,9 @@ class TestUserDataRepository : UserDataRepository {
             } else {
                 current.bookmarkedNewsResources - newsResourceId
             }
+            val notes = if (bookmarked) current.bookmarkNotes else current.bookmarkNotes - newsResourceId
 
-            _userData.tryEmit(current.copy(bookmarkedNewsResources = bookmarkedNews))
+            _userData.tryEmit(current.copy(bookmarkedNewsResources = bookmarkedNews, bookmarkNotes = notes))
         }
     }
 
