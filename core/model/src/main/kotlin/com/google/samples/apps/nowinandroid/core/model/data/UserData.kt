@@ -27,4 +27,5 @@ data class UserData(
     val darkThemeConfig: DarkThemeConfig,
     val useDynamicColor: Boolean,
     val shouldHideOnboarding: Boolean,
+    val bookmarkNotes: Map<String, String> = emptyMap(),
 )

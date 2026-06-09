@@ -67,4 +67,8 @@ interface UserDataRepository {
      * Sets whether the user has completed the onboarding process.
      */
     suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean)
+
+    suspend fun setBookmarkNote(newsResourceId: String, note: String)
+
+    suspend fun removeBookmarkNote(newsResourceId: String)
 }

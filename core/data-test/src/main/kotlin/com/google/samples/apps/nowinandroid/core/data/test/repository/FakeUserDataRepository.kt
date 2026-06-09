@@ -65,4 +65,12 @@ class FakeUserDataRepository @Inject constructor(
     override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         niaPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
     }
+
+    override suspend fun setBookmarkNote(newsResourceId: String, note: String) {
+        niaPreferencesDataSource.setBookmarkNote(newsResourceId, note)
+    }
+
+    override suspend fun removeBookmarkNote(newsResourceId: String) {
+        niaPreferencesDataSource.removeBookmarkNote(newsResourceId)
+    }
 }

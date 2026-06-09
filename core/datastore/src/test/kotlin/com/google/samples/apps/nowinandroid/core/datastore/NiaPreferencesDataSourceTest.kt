@@ -23,7 +23,9 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class NiaPreferencesDataSourceTest {
@@ -87,6 +89,27 @@ class NiaPreferencesDataSourceTest {
         assertTrue(subject.userData.first().useDynamicColor)
     }
 
-    // TODO(Task 2): Add tests for setBookmarkNote, removeBookmarkNote, and
-    // bookmarkNotes auto-delete on unbookmark once UserData exposes bookmarkNotes.
+    @Test
+    fun setBookmarkNote_persistsNote() = runTest {
+        subject.setBookmarkNote("news1", "my note")
+        val prefs = subject.userData.first()
+        assertEquals("my note", prefs.bookmarkNotes["news1"])
+    }
+
+    @Test
+    fun removeBookmarkNote_deletesNote() = runTest {
+        subject.setBookmarkNote("news1", "my note")
+        subject.removeBookmarkNote("news1")
+        val prefs = subject.userData.first()
+        assertNull(prefs.bookmarkNotes["news1"])
+    }
+
+    @Test
+    fun setNewsResourceBookmarked_false_deletesNote() = runTest {
+        subject.setNewsResourceBookmarked("news1", true)
+        subject.setBookmarkNote("news1", "my note")
+        subject.setNewsResourceBookmarked("news1", false)
+        val prefs = subject.userData.first()
+        assertNull(prefs.bookmarkNotes["news1"])
+    }
 }

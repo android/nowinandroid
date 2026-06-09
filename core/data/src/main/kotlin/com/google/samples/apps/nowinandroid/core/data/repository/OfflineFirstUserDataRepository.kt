@@ -72,4 +72,12 @@ internal class OfflineFirstUserDataRepository @Inject constructor(
         niaPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
         analyticsHelper.logOnboardingStateChanged(shouldHideOnboarding)
     }
+
+    override suspend fun setBookmarkNote(newsResourceId: String, note: String) {
+        niaPreferencesDataSource.setBookmarkNote(newsResourceId, note)
+    }
+
+    override suspend fun removeBookmarkNote(newsResourceId: String) {
+        niaPreferencesDataSource.removeBookmarkNote(newsResourceId)
+    }
 }

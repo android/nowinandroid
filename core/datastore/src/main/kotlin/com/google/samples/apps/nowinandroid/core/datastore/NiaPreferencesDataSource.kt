@@ -56,6 +56,7 @@ class NiaPreferencesDataSource @Inject constructor(
                 },
                 useDynamicColor = it.useDynamicColor,
                 shouldHideOnboarding = it.shouldHideOnboarding,
+                bookmarkNotes = it.bookmarkNotesMap,
             )
         }
 

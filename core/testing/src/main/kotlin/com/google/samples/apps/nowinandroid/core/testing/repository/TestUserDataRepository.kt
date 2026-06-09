@@ -112,6 +112,22 @@ class TestUserDataRepository : UserDataRepository {
         }
     }
 
+    override suspend fun setBookmarkNote(newsResourceId: String, note: String) {
+        currentUserData.let { current ->
+            _userData.tryEmit(
+                current.copy(bookmarkNotes = current.bookmarkNotes + (newsResourceId to note)),
+            )
+        }
+    }
+
+    override suspend fun removeBookmarkNote(newsResourceId: String) {
+        currentUserData.let { current ->
+            _userData.tryEmit(
+                current.copy(bookmarkNotes = current.bookmarkNotes - newsResourceId),
+            )
+        }
+    }
+
     /**
      * A test-only API to allow setting of user data directly.
      */
