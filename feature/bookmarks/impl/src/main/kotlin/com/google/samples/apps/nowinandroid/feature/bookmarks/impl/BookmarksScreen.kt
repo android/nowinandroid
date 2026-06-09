@@ -323,52 +323,44 @@ private fun BookmarksGrid(
                         .padding(horizontal = 8.dp)
                         .animateItem(),
                 ) {
-                    Column {
-                        NewsResourceCardExpanded(
-                            userNewsResource = userNewsResource,
-                            isBookmarked = userNewsResource.isSaved,
-                            onClick = {
-                                if (isInSelectionMode) {
-                                    toggleSelection(userNewsResource.id)
-                                } else {
-                                    analyticsHelper.logNewsResourceOpened(
-                                        newsResourceId = userNewsResource.id,
-                                    )
-                                    launchCustomChromeTab(
-                                        context,
-                                        Uri.parse(userNewsResource.url),
-                                        backgroundColor,
-                                    )
-                                    onNewsResourceViewed(userNewsResource.id)
-                                }
-                            },
-                            onLongClick = {
-                                if (!isInSelectionMode) enterSelectionMode(userNewsResource.id)
-                            },
-                            hasBeenViewed = userNewsResource.hasBeenViewed,
-                            onToggleBookmark = { if (!isInSelectionMode) removeFromBookmarks(userNewsResource.id) },
-                            onTopicClick = onTopicClick,
-                        )
-                        val note = userNewsResource.bookmarkNote
-                        if (note != null) {
-                            Text(
-                                text = note,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .then(
-                                        if (!isInSelectionMode) {
-                                            Modifier.clickable { onEditNote(userNewsResource.id) }
-                                        } else {
-                                            Modifier
-                                        },
-                                    ),
+                    NewsResourceCardExpanded(
+                        userNewsResource = userNewsResource,
+                        isBookmarked = userNewsResource.isSaved,
+                        onClick = {
+                            if (isInSelectionMode) {
+                                toggleSelection(userNewsResource.id)
+                            } else {
+                                analyticsHelper.logNewsResourceOpened(
+                                    newsResourceId = userNewsResource.id,
+                                )
+                                launchCustomChromeTab(
+                                    context,
+                                    Uri.parse(userNewsResource.url),
+                                    backgroundColor,
+                                )
+                                onNewsResourceViewed(userNewsResource.id)
+                            }
+                        },
+                        onLongClick = {
+                            if (!isInSelectionMode) enterSelectionMode(userNewsResource.id)
+                        },
+                        hasBeenViewed = userNewsResource.hasBeenViewed,
+                        onToggleBookmark = {
+                            if (!isInSelectionMode) removeFromBookmarks(
+                                userNewsResource.id,
                             )
-                        }
-                    }
+                        },
+                        onTopicClick = onTopicClick,
+                        bookmarkNote = userNewsResource.bookmarkNote?.let { note ->
+                            {
+                                UserNote(
+                                    note = note,
+                                    isInSelectionMode = isInSelectionMode,
+                                    onEditNote = { onEditNote(userNewsResource.id) },
+                                )
+                            }
+                        },
+                    )
                     if (isInSelectionMode) {
                         Checkbox(
                             checked = userNewsResource.id in selectedIds,
@@ -401,6 +393,27 @@ private fun BookmarksGrid(
             ),
         )
     }
+}
+
+@Composable
+private fun UserNote(
+    note: String,
+    isInSelectionMode: Boolean,
+    onEditNote: () -> Unit,
+) {
+    Text(
+        text = note,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .then(
+                if (!isInSelectionMode) Modifier.clickable(onClick = onEditNote) else Modifier,
+            ),
+    )
 }
 
 @Composable

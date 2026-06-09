@@ -97,6 +97,7 @@ fun NewsResourceCardExpanded(
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     onLongClick: (() -> Unit)? = null,
+    bookmarkNote: (@Composable () -> Unit)? = null,
 ) {
     val clickActionLabel = stringResource(R.string.core_ui_card_tap_action)
     val sharingLabel = stringResource(R.string.core_ui_feed_sharing)
@@ -156,6 +157,7 @@ fun NewsResourceCardExpanded(
                         Spacer(modifier = Modifier.weight(1f))
                         BookmarkButton(isBookmarked, onToggleBookmark)
                     }
+                    bookmarkNote?.invoke()
                     Spacer(modifier = Modifier.height(14.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (!hasBeenViewed) {
