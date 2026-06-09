@@ -128,11 +128,32 @@ class NiaPreferencesDataSource @Inject constructor(
                         bookmarkedNewsResourceIds.put(newsResourceId, true)
                     } else {
                         bookmarkedNewsResourceIds.remove(newsResourceId)
+                        bookmarkNotes.remove(newsResourceId)
                     }
                 }
             }
         } catch (ioException: IOException) {
             Log.e("NiaPreferences", "Failed to update user preferences", ioException)
+        }
+    }
+
+    suspend fun setBookmarkNote(newsResourceId: String, note: String) {
+        try {
+            userPreferences.updateData {
+                it.copy { bookmarkNotes.put(newsResourceId, note) }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to update bookmark note", ioException)
+        }
+    }
+
+    suspend fun removeBookmarkNote(newsResourceId: String) {
+        try {
+            userPreferences.updateData {
+                it.copy { bookmarkNotes.remove(newsResourceId) }
+            }
+        } catch (ioException: IOException) {
+            Log.e("NiaPreferences", "Failed to remove bookmark note", ioException)
         }
     }
 

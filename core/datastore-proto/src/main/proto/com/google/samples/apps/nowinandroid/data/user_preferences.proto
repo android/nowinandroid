@@ -49,5 +49,8 @@ message UserPreferences {
 
     bool use_dynamic_color = 19;
 
-    // NEXT AVAILABLE ID: 21
+    // Key: news resource ID, Value: note text
+    map<string, string> bookmark_notes = 21;
+
+    // NEXT AVAILABLE ID: 22
 }

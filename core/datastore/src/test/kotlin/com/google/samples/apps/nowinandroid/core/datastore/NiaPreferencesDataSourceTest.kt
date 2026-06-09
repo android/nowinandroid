@@ -86,4 +86,7 @@ class NiaPreferencesDataSourceTest {
         subject.setDynamicColorPreference(true)
         assertTrue(subject.userData.first().useDynamicColor)
     }
+
+    // TODO(Task 2): Add tests for setBookmarkNote, removeBookmarkNote, and
+    // bookmarkNotes auto-delete on unbookmark once UserData exposes bookmarkNotes.
 }
