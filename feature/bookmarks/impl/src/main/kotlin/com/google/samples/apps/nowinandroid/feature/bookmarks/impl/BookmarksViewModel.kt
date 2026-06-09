@@ -81,4 +81,14 @@ class BookmarksViewModel @Inject constructor(
         shouldDisplayUndoBookmark = false
         lastRemovedBookmarkId = null
     }
+
+    fun updateNote(newsResourceId: String, note: String) {
+        viewModelScope.launch {
+            if (note.isNotBlank()) {
+                userDataRepository.setBookmarkNote(newsResourceId, note)
+            } else {
+                userDataRepository.removeBookmarkNote(newsResourceId)
+            }
+        }
+    }
 }
