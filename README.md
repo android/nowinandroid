@@ -32,7 +32,8 @@ in, and be notified when new content is published which matches interests they a
 
 **Now in Android** uses the Gradle build system and can be imported directly into Android Studio (make sure you are using the latest stable version available [here](https://developer.android.com/studio)).
 
-> **Note:** This project requires **JDK 17** for Gradle. In Android Studio, set
+> [!NOTE]
+> This project requires **JDK 17** for Gradle. In Android Studio, set
 > **Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK** to **17**
 > (or **Embedded JDK** on recent Studio versions). Using JDK 11 will fail when resolving
 > the baseline profile Gradle plugin and other dependencies that target Java 17.
