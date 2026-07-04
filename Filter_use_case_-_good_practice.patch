@@ -1,0 +1,103 @@
+Subject: [PATCH] Filter use case - good practice
+---
+Index: feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterUtils.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterUtils.kt b/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterUtils.kt
+--- a/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterUtils.kt	(revision fb4a0b25f6b74ec2d1032065d9b39f84a1afa9e4)
++++ b/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterUtils.kt	(date 1783135080014)
+@@ -24,6 +24,7 @@
+ import android.graphics.ColorMatrix
+ import android.graphics.ColorMatrixColorFilter
+ import android.graphics.Paint
++import androidx.compose.ui.graphics.ColorFilter
+ import androidx.core.content.FileProvider
+ import com.google.samples.apps.nowinandroid.feature.interests.impl.R
+ import java.io.File
+@@ -32,7 +33,9 @@
+ class ImageFilter(
+     val name: String,
+     val matrix: FloatArray
+-)
++) {
++    val colorFilter by lazy { ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix(matrix)) }
++}
+ 
+ val FILTERS = listOf(
+     ImageFilter(
+Index: feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterActivity.kt b/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterActivity.kt
+--- a/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterActivity.kt	(revision fb4a0b25f6b74ec2d1032065d9b39f84a1afa9e4)
++++ b/feature/interests/impl/src/main/kotlin/com/google/samples/apps/nowinandroid/feature/interests/impl/filter/FilterActivity.kt	(date 1783135192537)
+@@ -103,7 +103,7 @@
+ 
+     val sourceBitmap = remember { decodeSourceBitmap(context) }
+ 
+-    val previewBitmap = createFilteredBitmap(sourceBitmap, selectedFilter)
++    val sourceImage = remember(sourceBitmap) { sourceBitmap.asImageBitmap() }
+ 
+     Column(
+         modifier = modifier
+@@ -122,23 +122,23 @@
+         Spacer(modifier = Modifier.height(12.dp))
+ 
+         Image(
+-            bitmap = previewBitmap.asImageBitmap(),
++            bitmap = sourceImage,
+             contentDescription = "Filtered Preview (${selectedFilter.name})",
+             modifier = Modifier
+                 .size(300.dp)
+                 .clip(RoundedCornerShape(12.dp))
+                 .background(Color.LightGray),
+-            contentScale = ContentScale.Crop
++            contentScale = ContentScale.Crop,
++            colorFilter = selectedFilter.colorFilter
+         )
+ 
+         Spacer(modifier = Modifier.height(12.dp))
+ 
+         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+             items(FILTERS, key = { it.name }) { filter ->
+-                val thumbnail = createFilteredBitmap(sourceBitmap, filter)
+                 FilterThumbnail(
+-                    image = thumbnail.asImageBitmap(),
+-                    name = filter.name,
++                    image = sourceImage,
++                    filter = filter,
+                     selected = filter == selectedFilter,
+                     onClick = { selectedFilter = filter}
+                 )
+@@ -166,7 +166,7 @@
+ @Composable
+ fun FilterThumbnail(
+     image: ImageBitmap,
+-    name: String,
++    filter: ImageFilter,
+     selected: Boolean,
+     onClick: () -> Unit
+ ) {
+@@ -186,14 +186,15 @@
+         ) {
+             Image(
+                 bitmap = image,
+-                contentDescription = name,
++                contentDescription = filter.name,
+                 modifier = Modifier.fillMaxSize(),
+-                contentScale = ContentScale.Crop
++                contentScale = ContentScale.Crop,
++                colorFilter = filter.colorFilter
+             )
+         }
+         Spacer(modifier = Modifier.height(4.dp))
+         Text(
+-            text = name,
++            text = filter.name,
+             style = MaterialTheme.typography.labelMedium,
+             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+         )
