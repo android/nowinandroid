@@ -103,7 +103,7 @@ fun FilterScreen(modifier: Modifier = Modifier) {
 
     val sourceBitmap = remember { decodeSourceBitmap(context) }
 
-    val previewBitmap = createFilteredBitmap(sourceBitmap, selectedFilter)
+    val sourceImage = remember(sourceBitmap) { sourceBitmap.asImageBitmap() }
 
     Column(
         modifier = modifier
@@ -122,23 +122,23 @@ fun FilterScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Image(
-            bitmap = previewBitmap.asImageBitmap(),
+            bitmap = sourceImage,
             contentDescription = "Filtered Preview (${selectedFilter.name})",
             modifier = Modifier
                 .size(300.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.LightGray),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            colorFilter = selectedFilter.colorFilter
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             items(FILTERS, key = { it.name }) { filter ->
-                val thumbnail = createFilteredBitmap(sourceBitmap, filter)
                 FilterThumbnail(
-                    image = thumbnail.asImageBitmap(),
-                    name = filter.name,
+                    image = sourceImage,
+                    filter = filter,
                     selected = filter == selectedFilter,
                     onClick = { selectedFilter = filter}
                 )
@@ -166,7 +166,7 @@ fun FilterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun FilterThumbnail(
     image: ImageBitmap,
-    name: String,
+    filter: ImageFilter,
     selected: Boolean,
     onClick: () -> Unit
 ) {
@@ -186,14 +186,15 @@ fun FilterThumbnail(
         ) {
             Image(
                 bitmap = image,
-                contentDescription = name,
+                contentDescription = filter.name,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                colorFilter = filter.colorFilter
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = name,
+            text = filter.name,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
         )
