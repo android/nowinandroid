@@ -63,6 +63,17 @@
         <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!-- Firebase automatically adds the following property which we don't use so remove it -->
         <property
             android:name="android.adservices.AD_SERVICES_CONFIG"

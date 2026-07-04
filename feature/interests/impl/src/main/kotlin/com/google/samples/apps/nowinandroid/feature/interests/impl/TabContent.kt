@@ -16,6 +16,7 @@
 
 package com.google.samples.apps.nowinandroid.feature.interests.impl
 
+import android.content.Intent
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.DraggableScrollbar
@@ -40,6 +42,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollba
 import com.google.samples.apps.nowinandroid.core.designsystem.component.scrollbar.scrollbarState
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
 import com.google.samples.apps.nowinandroid.core.ui.InterestsItem
+import com.google.samples.apps.nowinandroid.feature.interests.impl.filter.FilterActivity
+import com.google.samples.apps.nowinandroid.feature.interests.impl.filter.IO_CONNECT_WORKSHOP_TOPIC_NAME
 
 @Composable
 fun TopicsTabContent(
@@ -63,6 +67,22 @@ fun TopicsTabContent(
             contentPadding = PaddingValues(vertical = 16.dp),
             state = scrollableState,
         ) {
+
+            item(key = IO_CONNECT_WORKSHOP_TOPIC_NAME) {
+                val context = LocalContext.current
+                InterestsItem(
+                    name = IO_CONNECT_WORKSHOP_TOPIC_NAME,
+                    following = false,
+                    description = "",
+                    topicImageUrl = "https://firebasestorage.googleapis.com/v0/b/now-in-android.appspot.com/o/img%2Fic_topic_Performance.svg?alt=media&token=558fdf02-1918-4527-b13f-323db67e31cc",
+                    onClick = {
+                        context.startActivity(Intent(context, FilterActivity::class.java))
+                    },
+                    onFollowButtonClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
             topics.forEach { followableTopic ->
                 val topicId = followableTopic.topic.id
                 item(key = topicId) {
@@ -86,8 +106,10 @@ fun TopicsTabContent(
                 }
             }
         }
+
+        val itemsAvailable = topics.size + 1
         val scrollbarState = scrollableState.scrollbarState(
-            itemsAvailable = topics.size,
+            itemsAvailable = itemsAvailable,
         )
         scrollableState.DraggableScrollbar(
             modifier = Modifier
@@ -98,7 +120,7 @@ fun TopicsTabContent(
             state = scrollbarState,
             orientation = Orientation.Vertical,
             onThumbMoved = scrollableState.rememberDraggableScroller(
-                itemsAvailable = topics.size,
+                itemsAvailable = itemsAvailable,
             ),
         )
     }
