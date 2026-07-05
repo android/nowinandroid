@@ -15,6 +15,17 @@
  */
 
 pluginManagement {
+    buildscript {
+        repositories {
+            mavenCentral()
+            maven {
+                url = uri("https://storage.googleapis.com/r8-releases/raw")
+            }
+        }
+        dependencies {
+            classpath("com.android.tools:r8:9.3.7-dev")
+        }
+    }
     includeBuild("build-logic")
     repositories {
         google {
@@ -81,6 +92,7 @@ include(":lint")
 include(":sync:work")
 include(":sync:sync-test")
 include(":ui-test-hilt-manifest")
+include(":mylibrary")
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """

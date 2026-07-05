@@ -56,6 +56,15 @@ android {
             // Ensure Baseline Profile is fresh for release builds.
             baselineProfile.automaticGenerationDuringBuild = true
         }
+
+        create("benchmark") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            applicationIdSuffix = NiaBuildType.BENCHMARK.applicationIdSuffix
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
 
     packaging {
@@ -79,6 +88,7 @@ dependencies {
     implementation(projects.feature.search.api)
     implementation(projects.feature.search.impl)
     implementation(projects.feature.settings.impl)
+    implementation(projects.mylibrary)
 
     implementation(projects.core.common)
     implementation(projects.core.ui)
