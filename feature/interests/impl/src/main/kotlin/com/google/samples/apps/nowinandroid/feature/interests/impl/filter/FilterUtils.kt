@@ -99,7 +99,7 @@ val FILTERS = listOf(
 
 fun decodeSourceBitmap(context: Context): Bitmap {
     val options = BitmapFactory.Options().apply { inSampleSize = 4 }
-    return BitmapFactory.decodeResource(context.resources, R.drawable.large_image, options)
+    return BitmapFactory.decodeResource(context.resources, R.drawable.feature_interests_impl_large_image, options)
 }
 
 fun createFilteredBitmap(source: Bitmap, filter: ImageFilter): Bitmap {

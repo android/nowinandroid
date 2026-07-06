@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid
 
 import android.app.Application
+import android.content.ComponentCallbacks2
 import android.content.pm.ApplicationInfo
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
@@ -26,12 +27,21 @@ import com.google.samples.apps.nowinandroid.sync.initializers.Sync
 import com.google.samples.apps.nowinandroid.util.ProfileVerifierLogger
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
+import com.example.mylibrary.StartupTask
+import com.example.mylibrary.TaskRunner
+import android.util.Log
+
+class NiaStartupTask : StartupTask {
+    override fun run() {
+        Log.d("NiaStartupTask", "Running startup task from mylibrary")
+    }
+}
 
 /**
  * [Application] class for NiA
  */
 @HiltAndroidApp
-class NiaApplication : Application(), ImageLoaderFactory {
+class NiaApplication : Application(), ImageLoaderFactory, ComponentCallbacks2 {
     @Inject
     lateinit var imageLoader: dagger.Lazy<ImageLoader>
 
@@ -41,11 +51,10 @@ class NiaApplication : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
 
-        setStrictModePolicy()
-
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
         profileVerifierLogger()
+        TaskRunner.execute(NiaStartupTask::class.java)
     }
 
     override fun newImageLoader(): ImageLoader = imageLoader.get()
@@ -55,6 +64,27 @@ class NiaApplication : Application(), ImageLoaderFactory {
      */
     private fun isDebuggable(): Boolean {
         return 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super<Application>.onTrimMemory(level)
+        // 1. Explicitly clear or trim our ImageLoader's memory cache
+        // (Note: Coil automatically listens to ComponentCallbacks2, but this serves as a good 
+        // example of how to manually trim caches based on system memory signals).
+        if (level == TRIM_MEMORY_UI_HIDDEN){
+            // The user has navigated away from the app and the UI is no longer visible.
+            // This is a good place to release large UI-related resources that you
+            // won't need while in the background
+            imageLoader.get().memoryCache?.trimMemory(level)
+        }
+
+        if(level == TRIM_MEMORY_BACKGROUND) {
+            // The app is in the background and the system is running low on memory.
+            // As the level increases to COMPLETE, the likelihood of the app process
+            // being killed increases. Aggressively clear caches here.
+            imageLoader.get().memoryCache?.clear()
+        }
+
     }
 
     /**

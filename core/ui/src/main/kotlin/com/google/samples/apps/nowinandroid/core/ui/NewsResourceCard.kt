@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import android.content.ClipData
+import android.graphics.Bitmap
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.view.View
@@ -53,7 +54,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -64,6 +68,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.samples.apps.nowinandroid.core.designsystem.R.drawable
@@ -189,10 +194,29 @@ fun NewsResourceHeaderImage(
         },
     )
     val isLocalInspection = LocalInspectionMode.current
+
+    val context = LocalContext.current
+
+    val perRowBitmap = remember {
+        Bitmap.createBitmap(
+            2000, 2000, Bitmap.Config.ARGB_8888
+        ).apply {
+            val canvas = android.graphics.Canvas(this)
+
+            // Now you can use 'context' here to load the drawable
+            val drawable = ContextCompat.getDrawable(
+                context,
+                drawable.core_designsystem_ic_placeholder_default
+            )
+
+            drawable?.setBounds(0, 0, width, height)
+            drawable?.draw(canvas)
+        }.asImageBitmap()
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
+            .height(320.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (isLoading) {
@@ -205,15 +229,16 @@ fun NewsResourceHeaderImage(
             )
         }
 
+
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(180.dp),
+                .height(320.dp),
             contentScale = ContentScale.Crop,
             painter = if (isError.not() && !isLocalInspection) {
                 imageLoader
             } else {
-                painterResource(drawable.core_designsystem_ic_placeholder_default)
+                BitmapPainter(perRowBitmap)
             },
             // TODO b/226661685: Investigate using alt text of  image to populate content description
             // decorative image,
