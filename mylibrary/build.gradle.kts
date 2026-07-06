@@ -10,12 +10,16 @@ android {
         minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+
+
     }
 
     buildTypes {
+        configureEach {
+            consumerProguardFiles("consumer-rules.pro")
+        }
+
         release {
-            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

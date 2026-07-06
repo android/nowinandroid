@@ -33,7 +33,7 @@ import android.util.Log
 
 class NiaStartupTask : StartupTask {
     override fun run() {
-        Log.d("NiaStartupTask", "Running startup task from mylibrary")
+        Log.d("NiaStartupTask", "Running startup task from the app")
     }
 }
 
@@ -54,7 +54,7 @@ class NiaApplication : Application(), ImageLoaderFactory, ComponentCallbacks2 {
         // Initialize Sync; the system responsible for keeping data in the app up to date.
         Sync.initialize(context = this)
         profileVerifierLogger()
-        TaskRunner.execute(NiaStartupTask::class.java)
+        TaskRunner.execute("com.google.samples.apps.nowinandroid.NiaStartupTask")
     }
 
     override fun newImageLoader(): ImageLoader = imageLoader.get()

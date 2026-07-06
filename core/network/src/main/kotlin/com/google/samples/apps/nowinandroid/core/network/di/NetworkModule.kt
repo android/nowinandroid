@@ -82,8 +82,7 @@ internal object NetworkModule {
         ImageLoader.Builder(application)
             .callFactory { okHttpCallFactory.get() }
             .memoryCache(null)      // ❌ Bug 1: Memory cache disabled
-            .diskCache(null)
-            // ❌ Bug 2: Disk cache disabled
+            .diskCache(null)  // ❌ Bug 2: Disk cache disabled
             .allowHardware(false)   // ❌ Bug 3: Forces bitmaps onto Java heap
             .bitmapConfig(android.graphics.Bitmap.Config.ARGB_8888)
             // Assume most content images are versioned urls
