@@ -3,7 +3,7 @@
 ## Custom R8 Version Setup
 To force the Android Gradle Plugin to use a custom version of R8 (like `9.3.+`), you need to update your `settings.gradle.kts` file.
 
-Add the following `buildscript` block at the very top inside `pluginManagement`:
+Add the following `buildscript` block at the very top inside `pluginManagement` inside settings.gradle
 
 ```kotlin
 pluginManagement {
