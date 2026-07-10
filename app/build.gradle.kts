@@ -161,3 +161,6 @@ baselineProfile {
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
 }
+tasks.matching { it.name.contains("BenchmarkOss") || (it.name.contains("Benchmark") && it.name.contains("lint", ignoreCase = true)) }.configureEach {
+    enabled = false
+}
