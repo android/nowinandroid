@@ -24,6 +24,7 @@ import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.core.content.FileProvider
 import com.google.samples.apps.nowinandroid.feature.interests.impl.R
 import java.io.File
@@ -32,7 +33,9 @@ import java.io.FileOutputStream
 class ImageFilter(
     val name: String,
     val matrix: FloatArray
-)
+) {
+    val colorFilter by lazy { ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix(matrix)) }
+}
 
 val FILTERS = listOf(
     ImageFilter(
@@ -96,7 +99,7 @@ val FILTERS = listOf(
 
 fun decodeSourceBitmap(context: Context): Bitmap {
     val options = BitmapFactory.Options().apply { inSampleSize = 4 }
-    return BitmapFactory.decodeResource(context.resources, R.drawable.feature_interests_impl_large_image, options)
+    return BitmapFactory.decodeResource(context.resources, R.drawable.img, options)
 }
 
 fun createFilteredBitmap(source: Bitmap, filter: ImageFilter): Bitmap {

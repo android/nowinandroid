@@ -138,7 +138,7 @@ fun FilterScreen(modifier: Modifier = Modifier) {
                 val thumbnail = createFilteredBitmap(sourceBitmap, filter)
                 FilterThumbnail(
                     image = thumbnail.asImageBitmap(),
-                    name = filter.name,
+                    filter = filter,
                     selected = filter == selectedFilter,
                     onClick = { selectedFilter = filter}
                 )
@@ -166,7 +166,7 @@ fun FilterScreen(modifier: Modifier = Modifier) {
 @Composable
 fun FilterThumbnail(
     image: ImageBitmap,
-    name: String,
+    filter: ImageFilter,
     selected: Boolean,
     onClick: () -> Unit
 ) {
@@ -186,14 +186,14 @@ fun FilterThumbnail(
         ) {
             Image(
                 bitmap = image,
-                contentDescription = name,
+                contentDescription = filter.name,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = name,
+            text = filter.name,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
         )
