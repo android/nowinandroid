@@ -59,6 +59,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 
 internal const val IO_CONNECT_WORKSHOP_TOPIC_NAME = "IO connect Workshop"
@@ -147,7 +148,7 @@ fun FilterScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        NiaButton(
             onClick = {
                 val sharableBitmap = createFilteredBitmap(sourceBitmap, selectedFilter)
                 shareBitmap(context, sharableBitmap, selectedFilter.name)
