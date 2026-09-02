@@ -40,6 +40,11 @@ class TestMethodNameDetectorTest {
                         fun test_foo() = Unit
                         @Test
                         fun `test foo`() = Unit
+
+                        @Test
+                        fun test_foo2() {
+                            // Blank body.
+                        }
                     }
                 """,
                 ).indented(),
@@ -53,19 +58,26 @@ class TestMethodNameDetectorTest {
                 src/Test.kt:8: Warning: Test method starts with test [TestMethodPrefix]
                     fun `test foo`() = Unit
                         ~~~~~~~~~~
-                0 errors, 2 warnings
+                src/Test.kt:11: Warning: Test method starts with test [TestMethodPrefix]
+                    fun test_foo2() {
+                        ~~~~~~~~~
+                0 errors, 3 warnings
                 """.trimIndent(),
             )
             .expectFixDiffs(
                 """
                 Autofix for src/Test.kt line 6: Remove prefix:
-                @@ -6 +6
-                -     fun test_foo() = Unit
-                +     fun foo() = Unit
+                @@ -6 +6 @@
+                -    fun test_foo() = Unit
+                +    fun foo() = Unit
                 Autofix for src/Test.kt line 8: Remove prefix:
-                @@ -8 +8
-                -     fun `test foo`() = Unit
-                +     fun `foo`() = Unit
+                @@ -8 +8 @@
+                -    fun `test foo`() = Unit
+                +    fun `foo`() = Unit
+                Autofix for src/Test.kt line 11: Remove prefix:
+                @@ -11 +11 @@
+                -    fun test_foo2() {
+                +    fun foo2() {
                 """.trimIndent(),
             )
     }
