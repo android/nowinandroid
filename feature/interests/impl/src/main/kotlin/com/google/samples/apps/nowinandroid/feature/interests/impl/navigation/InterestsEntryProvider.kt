@@ -36,7 +36,7 @@ fun EntryProviderScope<NavKey>.interestsEntry(navigator: Navigator) {
         },
     ) { key ->
         val viewModel = hiltViewModel<InterestsViewModel, InterestsViewModel.Factory> {
-            it.create(key)
+            it.create(navigator.state, key)
         }
         InterestsScreen(
             // TODO: This event should either be provided by the ViewModel or by the navigator, not both
