@@ -31,4 +31,5 @@
     <string name="core_ui_interests_card_unfollow_button_content_desc">Unfollow interest</string>
     <string name="core_ui_feed_sharing">Feed sharing</string>
     <string name="core_ui_feed_sharing_data">%1$s: %2$s</string>
+    <string name="core_ui_not_connected">Can\'t open, no internet connection</string>
 </resources>
