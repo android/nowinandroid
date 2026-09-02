@@ -198,6 +198,11 @@ private abstract class GraphDumpTask : DefaultTask() {
             if (it.key.count { char -> char == ':' } > 1) it.key.substringBeforeLast(":") else ""
         }
 
+        val groupIncomingCounts = dependencies.groupBy { it.dependency.substringBeforeLast(":") }
+            .mapValues { (group, groupDependencies) ->
+                groupDependencies.count { dep -> dep.project.substringBeforeLast(":") != group }
+            }
+
         orderedGroups.forEach { (outerGroup, innerGroups) ->
             if (outerGroup.isNotEmpty()) {
                 appendLine("  subgraph $outerGroup")
@@ -205,12 +210,7 @@ private abstract class GraphDumpTask : DefaultTask() {
             }
             innerGroups.sortedWith(
                 compareBy(
-                    { (group, _) ->
-                        dependencies.filter { dep ->
-                            val toGroup = dep.dependency.substringBeforeLast(":")
-                            toGroup == group && dep.project.substringBeforeLast(":") != group
-                        }.count()
-                    },
+                    { (group, _) -> groupIncomingCounts[group] ?: 0 },
                     { -it.value.size },
                 ),
             ).forEach { (group, projects) ->
