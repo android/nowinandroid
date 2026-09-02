@@ -105,5 +105,10 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
              */
             "-Xconsistent-data-class-copy-visibility",
         )
+        freeCompilerArgs.add(
+            // Enable context parameters (experimental, Kotlin 2.x).
+            // Used by Flow<T>.stateInUi which declares context(viewModel: ViewModel).
+            "-Xcontext-parameters",
+        )
     }
 }

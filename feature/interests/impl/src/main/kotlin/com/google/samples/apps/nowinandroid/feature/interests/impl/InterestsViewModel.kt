@@ -23,15 +23,14 @@ import com.google.samples.apps.nowinandroid.core.data.repository.UserDataReposit
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.domain.TopicSortField
 import com.google.samples.apps.nowinandroid.core.model.data.FollowableTopic
+import com.google.samples.apps.nowinandroid.core.ui.stateInUi
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = InterestsViewModel.Factory::class)
@@ -57,11 +56,7 @@ class InterestsViewModel @AssistedInject constructor(
         selectedTopicId,
         getFollowableTopics(sortBy = TopicSortField.NAME),
         InterestsUiState::Interests,
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = InterestsUiState.Loading,
-    )
+    ).stateInUi(initialValue = InterestsUiState.Loading)
 
     fun followTopic(followedTopicId: String, followed: Boolean) {
         viewModelScope.launch {
