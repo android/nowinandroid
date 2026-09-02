@@ -26,8 +26,10 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.google.oss.licenses)
     implementation(projects.core.data)
+    implementation(projects.feature.settings.api)
 
     testImplementation(projects.core.testing)
 

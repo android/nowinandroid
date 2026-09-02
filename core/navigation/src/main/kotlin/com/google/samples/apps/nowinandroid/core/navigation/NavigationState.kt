@@ -75,6 +75,11 @@ class NavigationState(
 
     @get:VisibleForTesting
     val currentKey: NavKey by derivedStateOf { currentSubStack.last() }
+
+    /**
+     * Current [NavKey] but ignores [DialogNavKey]s that could be added on top.
+     */
+    val currentKeyIgnoringDialogs: NavKey by derivedStateOf { currentSubStack.last { it !is DialogNavKey } }
 }
 
 /**
