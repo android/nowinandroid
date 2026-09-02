@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test_and_apk:
-    name: "Local tests and APKs"
+  test_and_aab:
+    name: "Local tests and AABs"
     runs-on: ubuntu-latest
 
     permissions:
@@ -134,13 +134,13 @@ jobs:
         run: ./gradlew testDemoDebug :lint:test
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble -PminifyWithR8=false
+        run: ./gradlew :app:bundle -PminifyWithR8=false
 
-      - name: Upload build outputs (APKs)
+      - name: Upload build outputs (AABs)
         uses: actions/upload-artifact@v4
         with:
-          name: APKs
-          path: '**/build/outputs/apk/**/*.apk'
+          name: AABs
+          path: '**/build/outputs/bundle/**/*.aab'
 
       - name: Upload JVM local results (XML)
         if: ${{ !cancelled() }}

@@ -54,7 +54,7 @@ jobs:
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Build release variant including baseline profile generation
-        run: ./gradlew :app:assembleDemoRelease
+        run: ./gradlew :app:bundleDemoRelease
              -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile
              -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
              -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
@@ -77,6 +77,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/demo/release/app-demo-release.apk
-          asset_name: app-demo-release.apk
+          asset_path: app/build/outputs/bundle/demoRelease/app-demo-release.aab
+          asset_name: app-demo-release.aab
           asset_content_type: application/vnd.android.package-archive
