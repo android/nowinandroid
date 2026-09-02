@@ -18,19 +18,26 @@ package com.google.samples.apps.nowinandroid.core.testing.repository
 
 import com.google.samples.apps.nowinandroid.core.data.model.RecentSearchQuery
 import com.google.samples.apps.nowinandroid.core.data.repository.RecentSearchRepository
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class TestRecentSearchRepository : RecentSearchRepository {
 
-    private val cachedRecentSearches: MutableList<RecentSearchQuery> = mutableListOf()
+    private val cachedRecentSearches = MutableSharedFlow<MutableList<RecentSearchQuery>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    ).apply { tryEmit(mutableListOf()) }
 
     override fun getRecentSearchQueries(limit: Int): Flow<List<RecentSearchQuery>> =
-        flowOf(cachedRecentSearches.sortedByDescending { it.queriedDate }.take(limit))
+        cachedRecentSearches.map { it.sortedByDescending { it.queriedDate }.take(limit) }
 
     override suspend fun insertOrReplaceRecentSearch(searchQuery: String) {
-        cachedRecentSearches.add(RecentSearchQuery(searchQuery))
+        val searchQueries = cachedRecentSearches.map { it.apply { add(RecentSearchQuery(searchQuery)) } }.first()
+        cachedRecentSearches.emit(searchQueries)
     }
 
-    override suspend fun clearRecentSearches() = cachedRecentSearches.clear()
+    override suspend fun clearRecentSearches() = cachedRecentSearches.emit(mutableListOf())
 }
