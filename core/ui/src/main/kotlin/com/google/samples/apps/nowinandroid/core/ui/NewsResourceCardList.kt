@@ -20,11 +20,15 @@ import android.net.Uri
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.designsystem.component.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import kotlinx.coroutines.launch
 
 /**
  * Extension function for displaying a [List] of [NewsResourceCardExpanded] backed by a list of
@@ -47,6 +51,9 @@ fun LazyListScope.userNewsResourceCardItems(
         val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
         val context = LocalContext.current
         val analyticsHelper = LocalAnalyticsHelper.current
+        val snackbarHostState = LocalSnackbarHostState.current
+        val coroutineScope = rememberCoroutineScope()
+        val noBrowserMessage = stringResource(R.string.core_ui_no_browser_available)
 
         NewsResourceCardExpanded(
             userNewsResource = userNewsResource,
@@ -57,7 +64,11 @@ fun LazyListScope.userNewsResourceCardItems(
                 analyticsHelper.logNewsResourceOpened(
                     newsResourceId = userNewsResource.id,
                 )
-                launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                if (!launchCustomChromeTab(context, resourceUrl, backgroundColor)) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(noBrowserMessage)
+                    }
+                }
                 onNewsResourceViewed(userNewsResource.id)
             },
             onTopicClick = onTopicClick,
