@@ -22,19 +22,19 @@ jobs:
 
       - name: Checkout
 
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: 17
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           build-scan-publish: true
@@ -42,7 +42,7 @@ jobs:
           build-scan-terms-of-use-agree: "yes"
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
