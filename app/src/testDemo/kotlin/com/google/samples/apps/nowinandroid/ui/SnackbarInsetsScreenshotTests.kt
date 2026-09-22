@@ -251,11 +251,8 @@ class SnackbarInsetsScreenshotTests {
                                     userNewsResourceRepository = userNewsResourceRepository,
                                     timeZoneMonitor = timeZoneMonitor,
                                 )
-                                NiaApp(
+                                NiaAppContent(
                                     appState = appState,
-                                    showSettingsDialog = false,
-                                    onSettingsDismissed = {},
-                                    onTopAppBarActionClick = {},
                                     windowAdaptiveInfo = WindowAdaptiveInfo(
                                         windowSizeClass = WindowSizeClass.compute(
                                             maxWidth.value,
