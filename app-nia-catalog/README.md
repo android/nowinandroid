@@ -23,7 +23,7 @@ graph TB
   :app-nia-catalog -.-> :core:designsystem
   :app-nia-catalog -.-> :core:ui
   :core:ui --> :core:analytics
-  :core:ui --> :core:designsystem
+  :core:ui -.-> :core:designsystem
   :core:ui --> :core:model
 
 classDef android-application fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000;
