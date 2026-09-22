@@ -16,4 +16,8 @@
 -->
 <resources>
     <string name="feature_topic_api_loading">Loading topic</string>
+    <string name="feature_topic_api_loading_news">Loading news</string>
+    <string name="feature_topic_api_news_error">Error</string>
+    <string name="feature_topic_api_following">Following</string>
+    <string name="feature_topic_api_not_following">Not following</string>
 </resources>
