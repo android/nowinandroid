@@ -110,6 +110,7 @@ class NavigationTest {
     // TODO: implement tests related to navigation & resetting of destinations (b/213307564)
     // Restoring content should be tested with another tab than the For You one, as that will
     // still succeed even when restoring state is turned off.
+
     /**
      * When navigating between the different top level destinations, we should restore the state
      * of previously visited destinations.
