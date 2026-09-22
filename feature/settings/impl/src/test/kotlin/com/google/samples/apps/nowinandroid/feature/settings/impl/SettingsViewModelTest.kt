@@ -68,4 +68,25 @@ class SettingsViewModelTest {
             viewModel.settingsUiState.value,
         )
     }
+
+    @Test
+    fun stateIsUpdatedAfterUserUpdate() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.settingsUiState.collect() }
+
+        // Update to non-default values
+        viewModel.updateThemeBrand(ANDROID)
+        viewModel.updateDarkThemeConfig(DARK)
+        viewModel.updateDynamicColorPreference(true)
+
+        assertEquals(
+            Success(
+                UserEditableSettings(
+                    brand = ANDROID,
+                    darkThemeConfig = DARK,
+                    useDynamicColor = true,
+                ),
+            ),
+            viewModel.settingsUiState.value,
+        )
+    }
 }
