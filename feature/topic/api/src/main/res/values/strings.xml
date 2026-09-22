@@ -16,4 +16,5 @@
 -->
 <resources>
     <string name="feature_topic_api_loading">Loading topic</string>
+    <string name="feature_topic_api_error_header">Couldn\'t load topic</string>
 </resources>
