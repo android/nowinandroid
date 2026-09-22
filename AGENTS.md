@@ -11,7 +11,7 @@ This project is a modern Android application that follows the official architect
 -   **UI:** Built entirely with Jetpack Compose, including Material 3 components and adaptive layouts for different screen sizes.
 -   **State Management:** Unidirectional Data Flow (UDF) is implemented using Kotlin Coroutines and `Flow`s. `ViewModel`s act as state holders, exposing UI state as streams of data.
 -   **Dependency Injection:** Hilt is used for dependency injection throughout the app, simplifying the management of dependencies and improving testability.
--   **Navigation:** Navigation is handled by Jetpack Navigation 2 for Compose, allowing for a declarative and type-safe way to navigate between screens.
+-   **Navigation:** Handled by Jetpack Navigation 3, providing a state-driven and type-safe approach using NavKey-based back stacks, NavDisplay, and adaptive navigation scenes.
 -   **Data:** The data layer is implemented using the repository pattern.
     -   **Local Data:** Room and DataStore are used for local data persistence.
     -   **Remote Data:** Retrofit and OkHttp are used for fetching data from the network.
