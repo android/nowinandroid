@@ -86,6 +86,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus.Denied
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.DynamicAsyncImage
+import com.google.samples.apps.nowinandroid.core.designsystem.component.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaIconToggleButton
 import com.google.samples.apps.nowinandroid.core.designsystem.component.NiaOverlayLoadingWheel
@@ -104,6 +105,7 @@ import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParam
 import com.google.samples.apps.nowinandroid.core.ui.launchCustomChromeTab
 import com.google.samples.apps.nowinandroid.core.ui.newsFeed
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R
+import com.google.samples.apps.nowinandroid.core.ui.R as UiR
 
 @Composable
 fun ForYouScreen(
@@ -469,16 +471,21 @@ private fun DeepLinkEffect(
 ) {
     val context = LocalContext.current
     val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+    val snackbarHostState = LocalSnackbarHostState.current
+    val noBrowserMessage = stringResource(UiR.string.core_ui_no_browser_available)
 
     LaunchedEffect(userNewsResource) {
         if (userNewsResource == null) return@LaunchedEffect
         if (!userNewsResource.hasBeenViewed) onDeepLinkOpened(userNewsResource.id)
 
-        launchCustomChromeTab(
+        val launched = launchCustomChromeTab(
             context = context,
             uri = Uri.parse(userNewsResource.url),
             toolbarColor = backgroundColor,
         )
+        if (!launched) {
+            snackbarHostState.showSnackbar(noBrowserMessage)
+        }
     }
 }
 
