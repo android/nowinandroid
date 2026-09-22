@@ -74,7 +74,8 @@ import com.google.samples.apps.nowinandroid.core.designsystem.theme.GradientColo
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.LocalGradientColors
 import com.google.samples.apps.nowinandroid.core.navigation.Navigator
 import com.google.samples.apps.nowinandroid.core.navigation.toEntries
-import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.LocalSnackbarHostState
+import com.google.samples.apps.nowinandroid.core.ui.LocalIsOffline
+import com.google.samples.apps.nowinandroid.core.ui.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bookmarksEntry
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
@@ -117,7 +118,10 @@ fun NiaApp(
                     )
                 }
             }
-            CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+            CompositionLocalProvider(
+                LocalSnackbarHostState provides snackbarHostState,
+                LocalIsOffline provides isOffline,
+            ) {
                 NiaApp(
                     appState = appState,
 
