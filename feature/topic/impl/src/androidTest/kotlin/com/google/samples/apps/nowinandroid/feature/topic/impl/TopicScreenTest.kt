@@ -42,11 +42,13 @@ class TopicScreenTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private lateinit var topicLoading: String
+    private lateinit var topicError: String
 
     @Before
     fun setup() {
         composeTestRule.activity.apply {
             topicLoading = getString(R.string.feature_topic_api_loading)
+            topicError = getString(R.string.feature_topic_api_error)
         }
     }
 
@@ -67,6 +69,26 @@ class TopicScreenTest {
 
         composeTestRule
             .onNodeWithContentDescription(topicLoading)
+            .assertExists()
+    }
+
+    @Test
+    fun topicError_whenTopicIsError_isShown() {
+        composeTestRule.setContent {
+            TopicScreen(
+                topicUiState = TopicUiState.Error,
+                newsUiState = NewsUiState.Loading,
+                showBackButton = true,
+                onBackClick = {},
+                onFollowClick = {},
+                onTopicClick = {},
+                onBookmarkChanged = { _, _ -> },
+                onNewsResourceViewed = {},
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(topicError)
             .assertExists()
     }
 
