@@ -19,7 +19,7 @@
     <string name="feature_search_api_clear_search_text_content_desc">Clear search text</string>
     <string name="feature_search_api_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
     <string name="feature_search_api_not_ready">Sorry, we are still processing the search index. Please come back later</string>
-    <string name="feature_search_api_try_another_search">Try another search or explorer </string>
+    <string name="feature_search_api_try_another_search">Try another search or explore </string>
     <string name="feature_search_api_interests">Interests</string>
     <string name="feature_search_api_to_browse_topics"> to browse topics</string>
     <string name="feature_search_api_topics">Topics</string>
