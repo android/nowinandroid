@@ -28,8 +28,43 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface TopicFtsDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(topics: List<TopicFtsEntity>)
+    suspend fun insert(topic: TopicFtsEntity)
+
+    @Query(
+        """
+            DELETE
+              FROM topicsFts
+             WHERE topicId = :topicId
+        """,
+    )
+    suspend fun deleteById(topicId: String)
+
+    @Query(
+        """
+            SELECT *
+              FROM topicsFts
+             WHERE topicId = :topicId
+        """,
+    )
+    suspend fun getFtsEntitiesById(topicId: String): List<TopicFtsEntity>
+
+    @Query(
+        """
+            UPDATE topicsFts
+               SET name = :name,
+               shortDescription = :shortDescription,
+               longDescription = :longDescription
+             WHERE topicId = :topicId
+        """,
+    )
+    suspend fun update(
+        name: String,
+        shortDescription: String,
+        longDescription: String,
+        topicId: String,
+    )
 
     @Query("SELECT topicId FROM topicsFts WHERE topicsFts MATCH :query")
     fun searchAllTopics(query: String): Flow<List<String>>
