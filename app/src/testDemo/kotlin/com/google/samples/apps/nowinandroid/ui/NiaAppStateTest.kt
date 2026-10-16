@@ -42,6 +42,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Tests [NiaAppState].
@@ -66,10 +67,10 @@ class NiaAppStateTest {
     private lateinit var state: NiaAppState
 
     private fun testNavigationState() = NavigationState(
-        startKey = ForYouNavKey,
-        topLevelStack = NavBackStack(ForYouNavKey),
+        startKey = ForYouNavKey(),
+        topLevelStack = NavBackStack(ForYouNavKey()),
         subStacks = mapOf(
-            ForYouNavKey to NavBackStack(ForYouNavKey),
+            ForYouNavKey() to NavBackStack(ForYouNavKey()),
             BookmarksNavKey to NavBackStack(BookmarksNavKey),
         ),
     )
@@ -91,8 +92,8 @@ class NiaAppStateTest {
             }
         }
 
-        assertEquals(ForYouNavKey, state.navigationState.currentTopLevelKey)
-        assertEquals(ForYouNavKey, state.navigationState.currentKey)
+        assertEquals(ForYouNavKey(), state.navigationState.currentTopLevelKey)
+        assertEquals(ForYouNavKey(), state.navigationState.currentKey)
 
         // Navigate to another destination once
         navigator.navigate(BookmarksNavKey)
@@ -117,9 +118,29 @@ class NiaAppStateTest {
 
         assertEquals(3, navigationState.topLevelKeys.size)
         assertEquals(
-            setOf(ForYouNavKey, BookmarksNavKey, InterestsNavKey(null)),
+            setOf(ForYouNavKey(), BookmarksNavKey, InterestsNavKey(null)),
             navigationState.topLevelKeys,
         )
+    }
+
+    @Test
+    fun niaAppState_withDeepLinkKey_setsInitialDestinationAtTopLevel() = runTest {
+        val deepLinkKey = ForYouNavKey(linkedNewsResourceId = "123")
+
+        composeTestRule.setContent {
+            state = rememberNiaAppState(
+                networkMonitor = networkMonitor,
+                userNewsResourceRepository = userNewsResourceRepository,
+                timeZoneMonitor = timeZoneMonitor,
+                deepLinkKey = deepLinkKey,
+            )
+        }
+
+        val navigationState = state.navigationState
+
+        assertEquals(ForYouNavKey(), navigationState.currentTopLevelKey)
+        assertEquals(deepLinkKey, navigationState.currentKey)
+        assertTrue(navigationState.isAtTopLevel)
     }
 
     @Test

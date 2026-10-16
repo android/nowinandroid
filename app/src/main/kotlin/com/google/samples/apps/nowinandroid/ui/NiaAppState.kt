@@ -43,9 +43,14 @@ fun rememberNiaAppState(
     networkMonitor: NetworkMonitor,
     userNewsResourceRepository: UserNewsResourceRepository,
     timeZoneMonitor: TimeZoneMonitor,
+    deepLinkKey: NavKey? = null,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): NiaAppState {
-    val navigationState = rememberNavigationState(ForYouNavKey, TOP_LEVEL_NAV_ITEMS.keys)
+    val navigationState = rememberNavigationState(
+        startKey = ForYouNavKey(),
+        topLevelKeys = TOP_LEVEL_NAV_ITEMS.keys,
+        deepLinkKey = deepLinkKey,
+    )
 
     NavigationTrackingSideEffect(navigationState)
 
@@ -89,7 +94,7 @@ class NiaAppState(
         userNewsResourceRepository.observeAllForFollowedTopics()
             .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
                 setOfNotNull(
-                    ForYouNavKey.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
+                    ForYouNavKey().takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
                     BookmarksNavKey.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
                 )
             }
