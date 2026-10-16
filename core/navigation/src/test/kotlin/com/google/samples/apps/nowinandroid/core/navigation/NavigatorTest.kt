@@ -253,4 +253,24 @@ class NavigatorTest {
             navigator.goBack()
         }
     }
+
+    @Test
+    fun throwOnBackFromStartTopLevelWithDeepLinkKey() {
+        navigationState.subStacks.getValue(TestFirstTopLevelKey)[0] = TestKeyFirst
+
+        assertThat(navigationState.isAtTopLevel).isTrue()
+        assertFailsWith<IllegalStateException> {
+            navigator.goBack()
+        }
+    }
+
+    @Test
+    fun popTopLevelWhenRootKeyDiffersFromTopLevelKey() {
+        navigator.navigate(TestSecondTopLevelKey)
+        navigationState.subStacks.getValue(TestSecondTopLevelKey)[0] = TestKeySecond
+
+        navigator.goBack()
+
+        assertThat(navigationState.currentTopLevelKey).isEqualTo(TestFirstTopLevelKey)
+    }
 }

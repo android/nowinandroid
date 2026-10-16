@@ -29,6 +29,10 @@ import com.google.samples.apps.nowinandroid.core.data.util.SyncManager
 import com.google.samples.apps.nowinandroid.core.domain.GetFollowableTopicsUseCase
 import com.google.samples.apps.nowinandroid.core.notifications.DEEP_LINK_NEWS_RESOURCE_ID_KEY
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,24 +43,24 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ForYouViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ForYouViewModel.Factory::class)
+class ForYouViewModel @AssistedInject constructor(
     private val savedStateHandle: SavedStateHandle,
     syncManager: SyncManager,
     private val analyticsHelper: AnalyticsHelper,
     private val userDataRepository: UserDataRepository,
     userNewsResourceRepository: UserNewsResourceRepository,
     getFollowableTopics: GetFollowableTopicsUseCase,
+    @Assisted private val key: ForYouNavKey,
 ) : ViewModel() {
 
     private val shouldShowOnboarding: Flow<Boolean> =
         userDataRepository.userData.map { !it.shouldHideOnboarding }
 
-    val deepLinkedNewsResource = savedStateHandle.getStateFlow<String?>(
+    val deepLinkedNewsResource = savedStateHandle.getStateFlow(
         key = DEEP_LINK_NEWS_RESOURCE_ID_KEY,
-        null,
+        initialValue = key.linkedNewsResourceId,
     )
         .flatMapLatest { newsResourceId ->
             if (newsResourceId == null) {
@@ -144,6 +148,13 @@ class ForYouViewModel @Inject constructor(
         viewModelScope.launch {
             userDataRepository.setShouldHideOnboarding(true)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            key: ForYouNavKey,
+        ): ForYouViewModel
     }
 }
 

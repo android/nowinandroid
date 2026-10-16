@@ -56,7 +56,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
-import kotlin.getValue
 import kotlin.properties.ReadOnlyProperty
 
 private const val EXPANDED_WIDTH = "w1200dp-h840dp"
@@ -125,7 +124,7 @@ class InterestsListDetailScreenTest {
         NavDisplay(
             entries = navigationState.toEntries(entryProvider),
             onBack = { navigator.goBack() },
-            sceneStrategy = rememberListDetailSceneStrategy(),
+            sceneStrategies = listOf(rememberListDetailSceneStrategy()),
         )
     }
 
