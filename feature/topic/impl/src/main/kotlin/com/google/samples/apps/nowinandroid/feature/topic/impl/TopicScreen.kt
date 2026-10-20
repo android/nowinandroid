@@ -129,7 +129,9 @@ internal fun TopicScreen(
                     )
                 }
 
-                TopicUiState.Error -> TODO()
+                TopicUiState.Error -> item {
+                    TopicErrorBody()
+                }
                 is TopicUiState.Success -> {
                     item {
                         TopicToolbar(
@@ -177,7 +179,7 @@ private fun topicItemsSize(
     topicUiState: TopicUiState,
     newsUiState: NewsUiState,
 ) = when (topicUiState) {
-    TopicUiState.Error -> 0 // Nothing
+    TopicUiState.Error -> 1 // Error message
     TopicUiState.Loading -> 1 // Loading bar
     is TopicUiState.Success -> when (newsUiState) {
         NewsUiState.Error -> 0 // Nothing
@@ -201,6 +203,22 @@ private fun LazyListScope.topicBody(
     }
 
     userNewsResourceCards(news, onBookmarkChanged, onNewsResourceViewed, onTopicClick)
+}
+
+@Composable
+private fun TopicErrorBody(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 48.dp),
+    ) {
+        Text(
+            text = stringResource(id = TopicR.string.feature_topic_api_error_header),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(vertical = 24.dp),
+        )
+    }
 }
 
 @Composable
