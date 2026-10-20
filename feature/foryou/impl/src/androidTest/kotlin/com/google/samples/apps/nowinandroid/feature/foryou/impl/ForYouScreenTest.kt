@@ -58,13 +58,11 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.Loading,
                     feedState = NewsFeedUiState.Loading,
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -84,13 +82,11 @@ class ForYouScreenTest {
                     isSyncing = true,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Success(emptyList()),
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -116,13 +112,11 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -163,13 +157,11 @@ class ForYouScreenTest {
                     feedState = NewsFeedUiState.Success(
                         feed = emptyList(),
                     ),
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -205,13 +197,11 @@ class ForYouScreenTest {
                         topics = followableTopicTestData,
                     ),
                     feedState = NewsFeedUiState.Loading,
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -231,13 +221,11 @@ class ForYouScreenTest {
                     isSyncing = false,
                     onboardingUiState = OnboardingUiState.NotShown,
                     feedState = NewsFeedUiState.Loading,
-                    deepLinkedUserNewsResource = null,
                     onTopicCheckedChanged = { _, _ -> },
                     onTopicClick = {},
                     saveFollowedTopics = {},
                     onNewsResourcesCheckedChanged = { _, _ -> },
                     onNewsResourceViewed = {},
-                    onDeepLinkOpened = {},
                 )
             }
         }
@@ -258,13 +246,11 @@ class ForYouScreenTest {
                 feedState = NewsFeedUiState.Success(
                     feed = userNewsResourcesTestData,
                 ),
-                deepLinkedUserNewsResource = null,
                 onTopicCheckedChanged = { _, _ -> },
                 onTopicClick = {},
                 saveFollowedTopics = {},
                 onNewsResourcesCheckedChanged = { _, _ -> },
                 onNewsResourceViewed = {},
-                onDeepLinkOpened = {},
             )
         }
 

@@ -92,7 +92,8 @@ fun NiaApp(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val shouldShowGradientBackground = appState.navigationState.currentTopLevelKey == ForYouNavKey
+    val shouldShowGradientBackground =
+        appState.navigationState.currentTopLevelKey == ForYouNavKey()
     var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
 
     NiaBackground(modifier = modifier) {
@@ -220,7 +221,7 @@ internal fun NiaApp(
                 // Only show the top app bar on top level destinations.
                 var shouldShowTopAppBar = false
 
-                if (appState.navigationState.currentKey in appState.navigationState.topLevelKeys) {
+                if (appState.navigationState.isAtTopLevel) {
                     shouldShowTopAppBar = true
 
                     val destination = TOP_LEVEL_NAV_ITEMS[appState.navigationState.currentTopLevelKey]
@@ -266,7 +267,7 @@ internal fun NiaApp(
 
                     NavDisplay(
                         entries = appState.navigationState.toEntries(entryProvider),
-                        sceneStrategy = listDetailStrategy,
+                        sceneStrategies = listOf(listDetailStrategy),
                         onBack = { navigator.goBack() },
                     )
                 }

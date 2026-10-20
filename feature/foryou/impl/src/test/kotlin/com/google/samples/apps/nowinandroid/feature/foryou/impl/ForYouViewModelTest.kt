@@ -35,6 +35,7 @@ import com.google.samples.apps.nowinandroid.core.testing.util.MainDispatcherRule
 import com.google.samples.apps.nowinandroid.core.testing.util.TestAnalyticsHelper
 import com.google.samples.apps.nowinandroid.core.testing.util.TestSyncManager
 import com.google.samples.apps.nowinandroid.core.ui.NewsFeedUiState
+import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -84,6 +85,7 @@ class ForYouViewModelTest {
             userDataRepository = userDataRepository,
             userNewsResourceRepository = userNewsResourceRepository,
             getFollowableTopics = getFollowableTopicsUseCase,
+            key = ForYouNavKey(),
         )
     }
 
@@ -432,11 +434,21 @@ class ForYouViewModelTest {
 
     @Test
     fun deepLinkedNewsResourceIsFetchedAndResetAfterViewing() = runTest {
+        val linkedNewsResourceId = sampleNewsResources.first().id
+        viewModel = ForYouViewModel(
+            syncManager = syncManager,
+            savedStateHandle = SavedStateHandle(),
+            analyticsHelper = analyticsHelper,
+            userDataRepository = userDataRepository,
+            userNewsResourceRepository = userNewsResourceRepository,
+            getFollowableTopics = getFollowableTopicsUseCase,
+            key = ForYouNavKey(linkedNewsResourceId = linkedNewsResourceId),
+        )
+
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.deepLinkedNewsResource.collect() }
 
         newsRepository.sendNewsResources(sampleNewsResources)
         userDataRepository.setUserData(emptyUserData)
-        savedStateHandle[DEEP_LINK_NEWS_RESOURCE_ID_KEY] = sampleNewsResources.first().id
 
         assertEquals(
             expected = UserNewsResource(
@@ -447,7 +459,7 @@ class ForYouViewModelTest {
         )
 
         viewModel.onDeepLinkOpened(
-            newsResourceId = sampleNewsResources.first().id,
+            newsResourceId = linkedNewsResourceId,
         )
 
         assertNull(
@@ -461,7 +473,7 @@ class ForYouViewModelTest {
                     extras = listOf(
                         Param(
                             key = DEEP_LINK_NEWS_RESOURCE_ID_KEY,
-                            value = sampleNewsResources.first().id,
+                            value = linkedNewsResourceId,
                         ),
                     ),
                 ),

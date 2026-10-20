@@ -67,7 +67,7 @@ val INTERESTS = TopLevelNavItem(
 )
 
 val TOP_LEVEL_NAV_ITEMS = mapOf(
-    ForYouNavKey to FOR_YOU,
+    ForYouNavKey() to FOR_YOU,
     BookmarksNavKey to BOOKMARKS,
     InterestsNavKey(null) to INTERESTS,
 )

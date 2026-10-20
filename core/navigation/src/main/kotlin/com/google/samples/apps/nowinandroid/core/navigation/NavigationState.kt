@@ -33,14 +33,23 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 
 /**
  * Create a navigation state that persists config changes and process death.
+ *
+ * @param startKey - the starting top level key.
+ * @param topLevelKeys - the top level keys, each of which gets its own sub stack.
+ * @param deepLinkKey - optional deep link key to use as the initial destination of the [startKey]
+ * sub stack.
  */
 @Composable
 fun rememberNavigationState(
     startKey: NavKey,
     topLevelKeys: Set<NavKey>,
+    deepLinkKey: NavKey? = null,
 ): NavigationState {
     val topLevelStack = rememberNavBackStack(startKey)
-    val subStacks = topLevelKeys.associateWith { key -> rememberNavBackStack(key) }
+    val subStacks = topLevelKeys.associateWith { key ->
+        val firstKey = if (key == startKey && deepLinkKey != null) deepLinkKey else key
+        rememberNavBackStack(firstKey)
+    }
 
     return remember(startKey, topLevelKeys) {
         NavigationState(
@@ -75,6 +84,8 @@ class NavigationState(
 
     @get:VisibleForTesting
     val currentKey: NavKey by derivedStateOf { currentSubStack.last() }
+
+    val isAtTopLevel: Boolean by derivedStateOf { currentSubStack.size == 1 }
 }
 
 /**
