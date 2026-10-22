@@ -25,7 +25,7 @@ import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYou
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
-import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
+import com.google.samples.apps.nowinandroid.feature.interests.api.R as interestsR
 
 /**
  * Type for the top level navigation items in the application. Contains UI information about the
@@ -62,8 +62,8 @@ val BOOKMARKS = TopLevelNavItem(
 val INTERESTS = TopLevelNavItem(
     selectedIcon = NiaIcons.Grid3x3,
     unselectedIcon = NiaIcons.Grid3x3,
-    iconTextId = searchR.string.feature_search_api_interests,
-    titleTextId = searchR.string.feature_search_api_interests,
+    iconTextId = interestsR.string.feature_interests_api_title,
+    titleTextId = interestsR.string.feature_interests_api_title,
 )
 
 val TOP_LEVEL_NAV_ITEMS = mapOf(

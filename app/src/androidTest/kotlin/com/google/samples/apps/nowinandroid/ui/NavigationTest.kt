@@ -52,7 +52,7 @@ import org.junit.Test
 import javax.inject.Inject
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as BookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as FeatureForyouR
-import com.google.samples.apps.nowinandroid.feature.search.api.R as FeatureSearchR
+import com.google.samples.apps.nowinandroid.feature.interests.api.R as FeatureInterestsR
 import com.google.samples.apps.nowinandroid.feature.settings.impl.R as SettingsR
 
 /**
@@ -88,7 +88,7 @@ class NavigationTest {
     // The strings used for matching in these tests
     private val navigateUp by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_navigate_up)
     private val forYou by composeTestRule.stringResource(FeatureForyouR.string.feature_foryou_api_title)
-    private val interests by composeTestRule.stringResource(FeatureSearchR.string.feature_search_api_interests)
+    private val interests by composeTestRule.stringResource(FeatureInterestsR.string.feature_interests_api_title)
     private val sampleTopic = "Headlines"
     private val appName by composeTestRule.stringResource(R.string.app_name)
     private val saved by composeTestRule.stringResource(BookmarksR.string.feature_bookmarks_api_title)
