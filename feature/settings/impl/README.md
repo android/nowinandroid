@@ -34,7 +34,6 @@ graph TB
   end
 
   :core:data -.-> :core:analytics
-  :core:data --> :core:common
   :core:data --> :core:database
   :core:data --> :core:datastore
   :core:data --> :core:network
@@ -48,7 +47,7 @@ graph TB
   :core:notifications -.-> :core:common
   :core:notifications --> :core:model
   :core:ui --> :core:analytics
-  :core:ui --> :core:designsystem
+  :core:ui -.-> :core:designsystem
   :core:ui --> :core:model
   :feature:settings:impl -.-> :core:data
   :feature:settings:impl -.-> :core:designsystem
