@@ -68,6 +68,7 @@ import com.google.samples.apps.nowinandroid.core.ui.TrackScreenViewEvent
 import com.google.samples.apps.nowinandroid.core.ui.TrackScrollJank
 import com.google.samples.apps.nowinandroid.core.ui.UserNewsResourcePreviewParameterProvider
 import com.google.samples.apps.nowinandroid.core.ui.userNewsResourceCardItems
+import java.util.Locale
 import com.google.samples.apps.nowinandroid.core.ui.R as UiR
 import com.google.samples.apps.nowinandroid.feature.topic.api.R as TopicR
 
@@ -246,11 +247,11 @@ private fun LazyListScope.userNewsResourceCards(
         }
 
         is NewsUiState.Loading -> item {
-            NiaLoadingWheel(contentDesc = "Loading news") // TODO
+            NiaLoadingWheel(contentDesc = stringResource(TopicR.string.feature_topic_api_loading_news))
         }
 
         else -> item {
-            Text("Error") // TODO
+            Text(stringResource(TopicR.string.feature_topic_api_news_error))
         }
     }
 }
@@ -308,9 +309,9 @@ private fun TopicToolbar(
             modifier = Modifier.padding(end = 24.dp),
         ) {
             if (selected) {
-                Text("FOLLOWING")
+                Text(stringResource(TopicR.string.feature_topic_api_following).uppercase(Locale.getDefault()))
             } else {
-                Text("NOT FOLLOWING")
+                Text(stringResource(TopicR.string.feature_topic_api_not_following).uppercase(Locale.getDefault()))
             }
         }
     }
