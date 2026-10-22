@@ -74,6 +74,19 @@ internal fun itemVisibilityPercentage(
     viewportEndOffset: Int,
 ): Float {
     if (itemSize == 0) return 0f
+    // TODO: Workaround due to issue b/353143657, monitor if compose team will agree it's an issue
+    //  and fix it, if so, below safeguard probably can be removed
+    if (
+        isItemOutOfViewport(
+            itemSize = itemSize,
+            itemStartOffset = itemStartOffset,
+            viewportStartOffset = viewportStartOffset,
+            viewportEndOffset = viewportEndOffset,
+        )
+    ) {
+        return 0f
+    }
+
     val itemEnd = itemStartOffset + itemSize
     val startOffset = when {
         itemStartOffset > viewportStartOffset -> 0
@@ -86,3 +99,28 @@ internal fun itemVisibilityPercentage(
     val size = itemSize.toFloat()
     return (size - startOffset - endOffset) / size
 }
+
+private fun isItemOutOfViewport(
+    itemSize: Int,
+    itemStartOffset: Int,
+    viewportStartOffset: Int,
+    viewportEndOffset: Int,
+) = isItemBeforeViewport(
+    itemSize = itemSize,
+    itemStartOffset = itemStartOffset,
+    viewportStartOffset = viewportStartOffset,
+) || isItemAfterViewport(
+    itemStartOffset = itemStartOffset,
+    viewportEndOffset = viewportEndOffset,
+)
+
+private fun isItemBeforeViewport(
+    itemSize: Int,
+    itemStartOffset: Int,
+    viewportStartOffset: Int,
+) = (viewportStartOffset - itemStartOffset) > itemSize
+
+private fun isItemAfterViewport(
+    itemStartOffset: Int,
+    viewportEndOffset: Int,
+) = itemStartOffset > viewportEndOffset
