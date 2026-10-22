@@ -16,12 +16,16 @@
 
 package com.google.samples.apps.nowinandroid
 
+import android.app.UiModeManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,6 +100,7 @@ class MainActivity : ComponentActivity() {
                 darkTheme = resources.configuration.isSystemInDarkTheme,
                 androidTheme = Loading.shouldUseAndroidTheme,
                 disableDynamicTheming = Loading.shouldDisableDynamicTheming,
+                shouldFollowSystemTheme = Loading.shouldFollowSystemTheme,
             ),
         )
 
@@ -110,6 +115,7 @@ class MainActivity : ComponentActivity() {
                         darkTheme = uiState.shouldUseDarkTheme(systemDark),
                         androidTheme = uiState.shouldUseAndroidTheme,
                         disableDynamicTheming = uiState.shouldDisableDynamicTheming,
+                        shouldFollowSystemTheme = uiState.shouldFollowSystemTheme,
                     )
                 }
                     .onEach { themeSettings = it }
@@ -131,6 +137,10 @@ class MainActivity : ComponentActivity() {
                                     lightScrim = lightScrim,
                                     darkScrim = darkScrim,
                                 ) { darkTheme },
+                            )
+                            setAppTheme(
+                                uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager,
+                                themeSettings = themeSettings,
                             )
                         }
                     }
@@ -187,6 +197,30 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
+ * Sets app theme to reflect user choice.
+ */
+private fun setAppTheme(
+    uiModeManager: UiModeManager,
+    themeSettings: ThemeSettings,
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val mode = when {
+            themeSettings.shouldFollowSystemTheme -> UiModeManager.MODE_NIGHT_AUTO
+            themeSettings.darkTheme -> UiModeManager.MODE_NIGHT_YES
+            else -> UiModeManager.MODE_NIGHT_NO
+        }
+        uiModeManager.setApplicationNightMode(mode)
+    } else {
+        val mode = when {
+            themeSettings.shouldFollowSystemTheme -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            themeSettings.darkTheme -> AppCompatDelegate.MODE_NIGHT_YES
+            else -> AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
+}
+
+/**
  * The default light scrim, as defined by androidx and the platform:
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=35-38;drc=27e7d52e8604a080133e8b842db10c89b4482598
  */
@@ -206,4 +240,5 @@ data class ThemeSettings(
     val darkTheme: Boolean,
     val androidTheme: Boolean,
     val disableDynamicTheming: Boolean,
+    val shouldFollowSystemTheme: Boolean,
 )
