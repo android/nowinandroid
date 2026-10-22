@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.core.ui
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -62,18 +63,26 @@ fun LazyStaggeredGridScope.newsFeed(
                 val context = LocalContext.current
                 val analyticsHelper = LocalAnalyticsHelper.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+                val isOffline = LocalIsOffline.current
 
                 NewsResourceCardExpanded(
                     userNewsResource = userNewsResource,
                     isBookmarked = userNewsResource.isSaved,
                     onClick = {
-                        onExpandedCardClick()
-                        analyticsHelper.logNewsResourceOpened(
-                            newsResourceId = userNewsResource.id,
-                        )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
-
-                        onNewsResourceViewed(userNewsResource.id)
+                        if (isOffline) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.core_ui_not_connected),
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        } else {
+                            onExpandedCardClick()
+                            analyticsHelper.logNewsResourceOpened(
+                                newsResourceId = userNewsResource.id,
+                            )
+                            launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                            onNewsResourceViewed(userNewsResource.id)
+                        }
                     },
                     hasBeenViewed = userNewsResource.hasBeenViewed,
                     onToggleBookmark = {

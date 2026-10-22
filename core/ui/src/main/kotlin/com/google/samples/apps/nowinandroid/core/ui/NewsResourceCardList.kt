@@ -17,6 +17,7 @@
 package com.google.samples.apps.nowinandroid.core.ui
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +48,7 @@ fun LazyListScope.userNewsResourceCardItems(
         val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
         val context = LocalContext.current
         val analyticsHelper = LocalAnalyticsHelper.current
+        val isOffline = LocalIsOffline.current
 
         NewsResourceCardExpanded(
             userNewsResource = userNewsResource,
@@ -54,11 +56,19 @@ fun LazyListScope.userNewsResourceCardItems(
             hasBeenViewed = userNewsResource.hasBeenViewed,
             onToggleBookmark = { onToggleBookmark(userNewsResource) },
             onClick = {
-                analyticsHelper.logNewsResourceOpened(
-                    newsResourceId = userNewsResource.id,
-                )
-                launchCustomChromeTab(context, resourceUrl, backgroundColor)
-                onNewsResourceViewed(userNewsResource.id)
+                if (isOffline) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.core_ui_not_connected),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                } else {
+                    analyticsHelper.logNewsResourceOpened(
+                        newsResourceId = userNewsResource.id,
+                    )
+                    launchCustomChromeTab(context, resourceUrl, backgroundColor)
+                    onNewsResourceViewed(userNewsResource.id)
+                }
             },
             onTopicClick = onTopicClick,
             modifier = itemModifier,
