@@ -46,6 +46,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
@@ -88,6 +90,31 @@ import java.util.Locale
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsResourceCardExpanded(
+    userNewsResource: UserNewsResource,
+    isBookmarked: Boolean,
+    hasBeenViewed: Boolean,
+    onToggleBookmark: () -> Unit,
+    onClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface.toArgb()
+
+    key(onSurfaceColor) {
+        NewsResourceCardContent(
+            userNewsResource = userNewsResource,
+            isBookmarked = isBookmarked,
+            hasBeenViewed = hasBeenViewed,
+            onToggleBookmark = onToggleBookmark,
+            onClick = onClick,
+            onTopicClick = onTopicClick,
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun NewsResourceCardContent(
     userNewsResource: UserNewsResource,
     isBookmarked: Boolean,
     hasBeenViewed: Boolean,
