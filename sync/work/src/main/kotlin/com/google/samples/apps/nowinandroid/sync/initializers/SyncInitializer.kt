@@ -22,7 +22,7 @@ import androidx.work.WorkManager
 import com.google.samples.apps.nowinandroid.sync.workers.SyncWorker
 
 object Sync {
-    // This method is initializes sync, the process that keeps the app's data current.
+    // This method initializes sync, the process that keeps the app's data current.
     // It is called from the app module's Application.onCreate() and should be only done once.
     fun initialize(context: Context) {
         WorkManager.getInstance(context).apply {
