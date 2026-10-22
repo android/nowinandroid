@@ -144,6 +144,11 @@ baselineProfile {
 
     // Make use of Dex Layout Optimizations via Startup Profiles
     dexLayoutOptimization = true
+
+    // Ensure Baseline Profile is fresh for release builds.
+    variants.create("release") {
+        automaticGenerationDuringBuild = true
+    }
 }
 
 dependencyGuard {
