@@ -53,7 +53,7 @@ jobs:
       - name: Check Dependency Guard
         id: dependencyguard_verify
         continue-on-error: true
-        run: ./gradlew dependencyGuard
+        run: ./gradlew dependencyGuard --no-configuration-cache
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
