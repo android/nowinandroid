@@ -18,6 +18,7 @@ package com.google.samples.apps.nowinandroid.lint
 
 import com.android.tools.lint.detector.api.AnnotationInfo
 import com.android.tools.lint.detector.api.AnnotationUsageInfo
+import com.android.tools.lint.detector.api.AnnotationUsageType
 import com.android.tools.lint.detector.api.Category.Companion.TESTING
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Implementation
@@ -31,6 +32,7 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat.RAW
 import com.intellij.psi.PsiMethod
 import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UMethod
 import java.util.EnumSet
 import kotlin.io.path.Path
 
@@ -43,13 +45,18 @@ class TestMethodNameDetector : Detector(), SourceCodeScanner {
 
     override fun applicableAnnotations() = listOf("org.junit.Test")
 
+    // Restrict this detector to `AnnotationUsageType.DEFINITION` following
+    // similar examples in AOSP like `IgnoreWithoutReasonDetector`.
+    override fun isApplicableAnnotationUsage(type: AnnotationUsageType): Boolean =
+        type == AnnotationUsageType.DEFINITION
+
     override fun visitAnnotationUsage(
         context: JavaContext,
         element: UElement,
         annotationInfo: AnnotationInfo,
         usageInfo: AnnotationUsageInfo,
     ) {
-        val method = usageInfo.referenced as? PsiMethod ?: return
+        val method = annotationInfo.annotation.uastParent as? UMethod ?: return
 
         method.detectPrefix(context, usageInfo)
         method.detectFormat(context, usageInfo)
