@@ -164,9 +164,6 @@ private fun ScrollableState.DecorativeScrollbarThumb(
     )
 }
 
-// TODO: This lint is removed in 1.6 as the recommendation has changed
-// remove when project is upgraded
-@SuppressLint("ComposableModifierFactory")
 @Composable
 private fun Modifier.scrollThumb(
     scrollableState: ScrollableState,
