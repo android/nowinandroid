@@ -16,8 +16,10 @@
 
 package com.google.samples.apps.nowinandroid.core.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -29,16 +31,20 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.google.samples.apps.nowinandroid.core.analytics.LocalAnalyticsHelper
+import com.google.samples.apps.nowinandroid.core.designsystem.component.LocalSnackbarHostState
 import com.google.samples.apps.nowinandroid.core.designsystem.theme.NiaTheme
 import com.google.samples.apps.nowinandroid.core.model.data.UserNewsResource
+import kotlinx.coroutines.launch
 
 /**
  * An extension on [LazyListScope] defining a feed with news resources.
@@ -62,6 +68,9 @@ fun LazyStaggeredGridScope.newsFeed(
                 val context = LocalContext.current
                 val analyticsHelper = LocalAnalyticsHelper.current
                 val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+                val snackbarHostState = LocalSnackbarHostState.current
+                val coroutineScope = rememberCoroutineScope()
+                val noBrowserMessage = stringResource(R.string.core_ui_no_browser_available)
 
                 NewsResourceCardExpanded(
                     userNewsResource = userNewsResource,
@@ -71,7 +80,11 @@ fun LazyStaggeredGridScope.newsFeed(
                         analyticsHelper.logNewsResourceOpened(
                             newsResourceId = userNewsResource.id,
                         )
-                        launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)
+                        if (!launchCustomChromeTab(context, Uri.parse(userNewsResource.url), backgroundColor)) {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(noBrowserMessage)
+                            }
+                        }
 
                         onNewsResourceViewed(userNewsResource.id)
                     },
@@ -92,14 +105,25 @@ fun LazyStaggeredGridScope.newsFeed(
     }
 }
 
-fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int) {
+/**
+ * Launches a Chrome Custom Tab for the given [uri].
+ *
+ * @return `true` if the URL was launched successfully, `false` if no browser activity was found.
+ */
+fun launchCustomChromeTab(context: Context, uri: Uri, @ColorInt toolbarColor: Int): Boolean {
     val customTabBarColor = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(toolbarColor).build()
     val customTabsIntent = CustomTabsIntent.Builder()
         .setDefaultColorSchemeParams(customTabBarColor)
         .build()
 
-    customTabsIntent.launchUrl(context, uri)
+    return try {
+        customTabsIntent.launchUrl(context, uri)
+        true
+    } catch (e: ActivityNotFoundException) {
+        Log.e("NewsFeed", "No browser activity found to handle URI: $uri", e)
+        false
+    }
 }
 
 /**
