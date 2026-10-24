@@ -1,5 +1,784 @@
 [
   {
+    "id": "312",
+    "title": "What's new in the Jetpack Compose April '26 release",
+    "content": "Posted by Meghan Mehta,&nbsp;Android Developer Relations Engineer Today, the Jetpack Compose April ‘26 release is stable. This release contains version 1.11 of core Compose modules (see the full BOM m...",
+    "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhgVW3uXlpqZ7PcHixqBlJ2AG19VCQosSAZfuCaqN5WnsvBCiGJdFo4WersXe30hoBz9w6iNYN6QfyY7ae3pNYaa6BQpveTPDKFXXEhJkMXFfxoJIUOXzoaslEJ6NkAA85VvXU4Kv5oZnfG1BDe5dlxsEVxkeyZ1OECfXLSmbcP46IPw5JBj2eBWascC6A",
+    "publishDate": "2026-04-22T16:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "313",
+    "title": " Streamline User Journeys with Verified Email via Credential Manager",
+    "content": "Posted by Niharika Arora, Senior Developer Relations Engineer and Jean-Pierre Pralle, Product Manager, Credential Manager In the modern digital landscape, the first encounter a user has with an app is...",
+    "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgseJ0HOa6wGI4egBEWBTC4Pawhiiv3BQIDm5R3XjY2D0uBRcZJaNTWcsHkMXY8VnbtA98-sojfdwKttHh6x82yQSg1sCsAWSKb8QXgVo5bQk4wtoi2LoM5u-TXYeIDD-fbqkA3SJssiUWgFTWsf44BAjzk06Iov-uDeIXJm6elMrcsNQoEU2KbVYN6SQo",
+    "publishDate": "2026-04-22T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "314",
+    "title": "Level up your development with Planning Mode and Next Edit Prediction in Android Studio Panda 4 ",
+    "content": "Posted by Matt Dyor, Senior Product Manager Android Studio Panda 4 is now stable and ready for you to use in production. This release brings Planning Mode, Next Edit Prediction, and more, making it ea...",
+    "url": "https://android-developers.googleblog.com/2026/04/android-studio-panda-4-planning-mode-next-edit-prediction.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCeyqbTYSKHw74pe8taXGIeibsDPTF3E2HfJ6FdOSS1Ks5oZf57MawULThH8WnWs-H8Rd-mh4gDAYWhJgKqVUoFPWY5uBRawb0qOagSEKEjJ3F4__Zd3u1rxkA15l_9L_6h8cVpsNA3_60pFredcBWYlC7_MOqRhD_ZCxdH28qvfVMBRhMPhtU7FpoYd0/s2048/Panda-Statics-METACARD_Panda4.png",
+    "publishDate": "2026-04-21T07:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "315",
+    "title": "Experimental hybrid inference and new Gemini models for Android",
+    "content": "Posted by Thomas Ezan, Senior Developer Relations Engineer If you are an Android developer looking to implement innovative AI features into your app, we recently launched powerful new updates: Hybrid ...",
+    "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+    "publishDate": "2026-04-17T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "316",
+    "title": "The Fourth Beta of Android 17",
+    "content": "Posted by Dan Galpin, Developer Relations Engineer Android 17 has reached beta 4, the last scheduled beta of this release cycle, a critical milestone for app compatibility and platform stability. Whet...",
+    "url": "https://android-developers.googleblog.com/2026/04/the-fourth-beta-of-android-17.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEjRi_pfW7jI2yTebiDh4niQsTN1UL9MmUbO1DUy_ensXVVhStxJt5PUfBSQVOkpOC4ReJ1G2OMtpOZj0fq_3XiUY3fVq91hldHzZU-FPcHkLnG33NAEAV9Wxl4PVZWJHUwbbi1mZxUzQA5YIOGMhDC6mL00CYZei7fNAGDpMhK1JqtlwIOtoIVmIZn2XTE",
+    "publishDate": "2026-04-16T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "317",
+    "title": "Android CLI and skills: Build Android apps 3x faster using any agent",
+    "content": "Posted by Adarsh Fernando, Group Product Manager and Esteban de la Canal, Senior Staff Software Engineer As Android developers, you have many choices when it comes to the agents, tools, and LLMs you u...",
+    "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPyFElAHYM4meoiCciQQ2lncUtR6wtpR1c8Sd1K4SbNEUKDat7QeDRM3yGyMMu0J--WblBE3U09p2W6BMqbVjHysCaNZl8lmhcWr3xFkOhZmk4AXhT77UDU_50fkmzaSbhntd4FRMIdDILFUiSpwJ9abWPTOBaK9I7mC1oxMOwWg1CG3VDDq27EBB2n0o/s4097/hours-CLI_Dark-meta@2x.png",
+    "publishDate": "2026-04-16T10:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "318",
+    "title": "Boosting user privacy and business protection with updated Play policies",
+    "content": "Posted by Bennet Manuel, Group Product Manager, App &amp; Ecosystem Trust We strive to make Google Play the safest and most trusted experience possible. Today, we’re announcing a new set of policy upd...",
+    "url": "https://android-developers.googleblog.com/2026/04/giving-users-clearer-choice-and-everyone-a-safer-more-trusted-app-ecosystem.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_n6hjuC6FHnlMKgk_VZr8Wa7NCN90ggZ3Y5HcmsRfJc5FfvEk-9tMhnIyALvjpYgFdaveyLHbf9-AqbWBm1-Fjq7xgxnRwug0fOlGdqe3MsCWGbx6Zy9-pqXSLlTrpFCWYDGpiqejr51fcBUqHlS2qiqBJtuicaRAnNyJr0Z8ex4j2trd3x1Bf29KeZk/s1234/260409_Uyo%20policy%20bundle_Metadata.png",
+    "publishDate": "2026-04-15T10:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "319",
+    "title": "Get ready for Google I/O: Livestream schedule revealed",
+    "content": "Google I/O 2026: Livestream Schedule Revealed Posted by The Google I/O team The Google I/O schedule is here! Tune in May 19–20 as we unveil Google’s biggest updates across AI, Android, Chrome, and Clo...",
+    "url": "https://android-developers.googleblog.com/2026/04/get-ready-for-google-io-livestream-schedule-revealed.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiolJt1Sx6rZtKxth9TSW6dBrn-Rbwf2dEfgU1s7WAV0R9KTA6D_F5dIjRl6IMKfxcE8oqlJd4f3s88fFy_OR_89qjukynu98fJjgVZv-gIIiAGBRE9Zu6tSVSxP-hrCQtDoMQWRLGy5QuHJR342auio993a2Up1T1IoQ5fv_umk6hixzxOYzntE5Ayj14/s16000/Blog-banner-4209x1253-A-dark.png",
+    "publishDate": "2026-04-14T05:30:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "320",
+    "title": "Test Multi-Device Interactions with the Android Emulator",
+    "content": "Posted by Steven Jenkins, Product Manager, Android Studio Testing multi-device interactions is now easier than ever with the Android Emulator. Whether you are building a multiplayer game, extending yo...",
+    "url": "https://android-developers.googleblog.com/2026/04/Test-Multi-Device-Interactions-with-the-Android-Emulator.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEjBR5Gu_q_DDh7EY-Ww_MeEEIgLmChUzPgscdMrwDuUFwZHkXEi0Z69jaS6Kk0rBdY2NSq4mtljZqGegARIzPRDWfUJhKYtWjgwwxA6OI4ga1tO31baXjOwu2jjupVomtDU_3PyJr6aaAozzY9vck1jmKe2oRSInlMFmT5bApVgAS3SRp7smp8kPWOy5Ow",
+    "publishDate": "2026-04-13T06:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "321",
+    "title": "Android Studio supports Gemma 4: our most capable local model for agentic coding",
+    "content": "Posted by Matthew Warner, Google Product Manager Every developer's AI workflow and needs are unique, and it's important to be able to choose how AI helps your development. In January, we introduced th...",
+    "url": "https://android-developers.googleblog.com/2026/04/android-studio-supports-gemma-4-local.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh14KuIHgi9wTCd33OHC3po3RHFBUGtAOuEieW88rvHO55hB6vDLXX0_9e0ETxvYXtDV10Nh-u95Kfv1DlgLIhTnwH2og1uX92yKeYCdKdHiOvHj4QXv05ZjI0kJ4Ro4fbUEo6IXVNe2qP0KRodq5_x4A9HC_f3utikZSufwS6l7qSNuj1lz0l_uUuwavA/s16000/Develope%20with%20Gemma%204%20%20-%20Blog%20.png",
+    "publishDate": "2026-04-02T07:00:00.003-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "322",
+    "title": "Announcing Gemma 4 in the AICore Developer Preview",
+    "content": "Posted by David Chou, Product Manager and Caren Chang, Developer Relations Engineer At Google, we’re committed to bringing the most capable AI models directly to the Android devices in your pocket. To...",
+    "url": "https://android-developers.googleblog.com/2026/04/AI-Core-Developer-Preview.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEijK_b2J_MZIfUZAF0dQr6EM7nVpfhugNAZBJAGflT-DRH85ZlOE1N0J6Dihq_hjTIWhS--sCfYBUMaZzTzdO0V86yaZfzyOFvDNELid7QpH20ZVRPpayXYJziA12DbDdi2H8FVQClLbMieiBShWWKo7ee6uXIDLWNEt2L1X8BEvgyCoKXW8dy1Z5-lAPk",
+    "publishDate": "2026-04-02T07:00:00.002-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "323",
+    "title": "Gemma 4: The new standard for local agentic intelligence on Android",
+    "content": "Posted by Matthew McCullough, VP of Product Management Android Development Today, we are enhancing Android development with Gemma 4 , our latest state-of-the-art open model designed with complex reaso...",
+    "url": "https://android-developers.googleblog.com/2026/04/gemma-4-new-standard-for-local-agentic-intelligence.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhE-q8Yo8SP0doXLtRqm9BALlaxysFVomXi631ECztnYsFh704qRTcX6RT-mD6scIhw4Jf5bK2xlMxRjVYDMe8BdbbLozWNZUANzzjzw_furhscduFPDTzeOmNyguBgLxetPwOW190pyzJt4zYRoen4OYdrbci0cgwpoY7Uxv0J0Yj4g2kC4fXZj3Oa7Ik",
+    "publishDate": "2026-04-02T07:00:00.001-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "324",
+    "title": "Increase Guidance and Control over Agent Mode with Android Studio Panda 3 ",
+    "content": "Posted by&nbsp; Matt Dyor, Senior Product Manager Android Studio Panda 3 is now stable and ready for you to use in production. This release gives you even more control and customization over your AI-p...",
+    "url": "https://android-developers.googleblog.com/2026/04/Increase-Guidance-and-Control-over-Agent-Mode-with-Android-Studio-Panda-3.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEif4x9HhMisD87G7aWsHT68gFho8pkkd1xKkfz-oa9YEwFlah43j9jhH2_AlBunLYjCwTWyTBebcDJyGcL1uXhxqSAx0t9wdgbwyhZrWY-gDLQWLOQBisyEBZyFCkSqVRfEtrAmFOY4QOgXO50ansB0h3SDFOwv5wdg2OKb53Y6MQ3ph_XOmDyt9YNEEDM/w640-h230/2-2-open-implementation-plan.png",
+    "publishDate": "2026-04-02T07:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "325",
+    "title": "Get your Wear OS apps ready for the 64-bit requirement",
+    "content": "Posted by Michael Stillwell, Developer Relations Engineer and Dimitris Kosmidis, Product Manager, Wear OS 64-bit architectures provide performance improvements and a foundation for future innovation, ...",
+    "url": "https://android-developers.googleblog.com/2026/04/get-your-wear-os-apps-ready-for-64-bit-requirement.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhIMNMYoS94UKTAa5KUyTCEp_FTCatYD79ENGshGtM2I6v3vT_N0tFSZvCINgpQ5CtX_SMN9c8GUcSqjV-yk3gaIzrQDQEQ2PsFJvveiB4257ddJ50GGTxKo03u-tDZzSXm6zTE8GhvFsXOAecX9-RlyGNFp5JuQviQYH8NjqjhnOW-M2W1W0U-mK5skYo",
+    "publishDate": "2026-04-01T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "326",
+    "title": "Media3 1.10 is out",
+    "content": "Posted by Andrew Lewis, Software Engineer Media3 1.10 is out! Media3 1.10 includes new features, bug fixes and feature improvements, including Material3-based playback widgets, expanded format support...",
+    "url": "https://android-developers.googleblog.com/2026/03/media3-110-is-out.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg4fMXjtiBKSRUrNpd4Sm7twGTT3jLD6CeXLz8SWfQjoXJoPh52Ud3xI9mTp8qRkMN41T2JpraKUq1hW9yUcOhsnmjSLjO5a9hQcNfvILig6CfjP1ctBL1Jhv_9xNxTf9GQPrGPQY6luYyRolmUPgWPrKZzopVn-YFrabWy_Mic-vNTtXGispzP0oa_pKc/s2469/Android%20media%203.1.10%20-%20Meta.png",
+    "publishDate": "2026-03-30T16:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "18",
+      "3",
+      "8"
+    ],
+    "authors": []
+  },
+  {
+    "id": "327",
+    "title": "Monzo boosts performance metrics by up to 35% with a simple R8 update",
+    "content": "Posted by Ben Weiss, Senior Developer Relations Engineer Monzo is a UK digital bank with 15 million customers and growing. As the app scaled, the engineering team identified app startup time as a crit...",
+    "url": "https://android-developers.googleblog.com/2026/03/monzo-boosts-performance-metrics-by-up-to-35-percent.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjeoc8k0szO6APp8xoaNewSfj_gULMjxTJ-LWLAfodA_Wt4PF3Ax-cFZgETO4xehYDnFKeJodrMSlVJK0IesWqa2LvRQpDyCHvH-T2bZAbxNJyg-8WP55dJUP61gMBjBH44RHrSCA7L0C_e8m6YLboFZseS7HKTuvmQnS3SYVgGSOVFLeqQd640N4wmS8/s1234/AANDDM_Monzo_Meta.png",
+    "publishDate": "2026-03-30T15:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "328",
+    "title": "Android developer verification: Rolling out to all developers on Play Console and Android Developer Console",
+    "content": "Posted by Matthew Forsythe, Director Product Management, Android App Safety Android is for everyone. It’s built on a commitment to an open and safe platform. Users should feel confident installing app...",
+    "url": "https://android-developers.googleblog.com/2026/03/android-developer-verification-rolling-out-to-all-developers.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgKvPOrkQ6xhfp3JzKhlQS63WlgsKEc3iI6Jl6VdfitojtR0j9py3hJ3S3dkp2JF39HU6lUswIJpFupt2fm5uFfWB7408f4mhvHWsM8JeO5tk0-M0jHpk4A40an8gtipxyKpGJrGBtdE7JadUHnRodVFB9NIMkwmnNJFqWw0x1ncIAoVb9h13CeV1p_jyQ",
+    "publishDate": "2026-03-30T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "329",
+    "title": "Redefining Location Privacy: New Tools and Improvements for Android 17",
+    "content": "Posted by Robert Clifford, Developer Relations Engineer and Manjeet Rulhania, Software Engineer A pillar of the Android ecosystem is our shared commitment to user trust. As the mobile landscape has ev...",
+    "url": "https://android-developers.googleblog.com/2026/03/location-privacy.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmGKr9rzm4KELLhXbwcETVZvdbAGmgg-BGoXQI9unaa4nLIDJLMHRMRM7qKki8FBjCryLSoBIemWQh7RTsz46JpP78apo66KaFG9sHkGKZn6fMNoUBfM7bO8rn51NUzxcEl9-LCf-iw0ALOCm8NMNV_nQMXNKx0fiZLjrL-xS0C9ETswqA1ZgSLHaBLm0/s1235/Android%2017%20location%20%20-%20Meta-2%20(1).png",
+    "publishDate": "2026-03-26T16:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "330",
+    "title": "The Third Beta of Android 17",
+    "content": "Posted by Matthew McCullough, VP of Product Management, Android Developer Android 17 has officially reached platform stability today with Beta 3. That means that the API surface is locked; you can per...",
+    "url": "https://android-developers.googleblog.com/2026/03/the-third-beta-of-android-17.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgeHOpt8GZ4p71FjtVEgeMJ7UeyIf7KJw24QO-lgKMVN_cbHhqsDVm96GYUnANkc2w9ZLljkm56B8O7pMsnX6ssbGdvZgVvkaN7J5gR3UeqsBmGwDrFF22Iq2SSQq1iSJnzT1PWQiHTZlOIX8580R19AGdOziiTiUUPCM72ce7U-8g83EXtDxKeR4ef8yI",
+    "publishDate": "2026-03-26T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "13"
+    ],
+    "authors": []
+  },
+  {
+    "id": "331",
+    "title": "Meet the class of 2026 for the Google Play Apps Accelerator",
+    "content": "Posted by Robbie McLachlan, Developer Marketing The wait is over! We are incredibly excited to share the Google Play Apps Accelerator class of 2026. We’ve handpicked a group of high-potential studios ...",
+    "url": "https://android-developers.googleblog.com/2026/03/meet-class-of-2026-for-google-play-apps.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUBHNgqxw77vfn5PQubj24AuggfFPri24jytIYaGTUMbDx81j2BjnbNdzxJB4ys4haW3FdnTpQ57qslfzx-VahZOkNtDLwcL7-x0e44B0erieMsnbguE36h7on5s7E61CWJQ93dLSDe3_0Bl9qUUA001OwzXPy3XUQHMzcg1KcvRhUfzG4P3zsX3mlZNE/s2048/APPSACC_Email_RSVP_Header%20static_2048%20x%201323%20(1).png",
+    "publishDate": "2026-03-25T10:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "12"
+    ],
+    "authors": []
+  },
+  {
+    "id": "332",
+    "title": "Contact Picker: Privacy-First Contact Sharing",
+    "content": "Posted by Roxanna Aliabadi Walker, Senior Product Manager Privacy and user control remain at the heart of the Android experience. Just as the photo picker made media sharing secure and easy to impleme...",
+    "url": "https://android-developers.googleblog.com/2026/03/contact-picker-privacy-first-contact.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgw19aR52Jc_vcjKK6eBUZH1G_ekDxopJ3QtmPHEGjWSm_3YgppPoldWg2UJsLfskI7TqXWhyGGK1wJWg7yIio2uh42HfK9Xn7iA6sEOuqDGjJvfoK34iu449ZPdAH5-7l7Vo2PWQNCwIcJxrh1MDAD2ZJjnhfclHudsnijD9vVKQVgnLjDluA1SBFVGkw/s1234/Android-Contacts-picker-Meta.gif",
+    "publishDate": "2026-03-24T13:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10"
+    ],
+    "authors": []
+  },
+  {
+    "id": "333",
+    "title": "Beyond Infotainment: Extending Android Automotive OS for Software-defined Vehicles",
+    "content": "Posted by&nbsp; Eser Erdem, Senior Engineering Manager, Android Automotive At Google we’re deeply committed to the automotive industry--not just as a technology provider, but as a partner in the indus...",
+    "url": "https://android-developers.googleblog.com/2026/03/Beyond-Infotainment-Extending-Android-Automotive-OS-for-Software-defined-Vehicles.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiiYkRFqoqSaezQJXue3Xcr5hsG6OUIrrU8MmZHJeMFe2Hz4_0m-5jiDXB3PWDC8gNxyqm-xYWv9StXeeyFPaMauJAHfUvnR6DJDTcCpgXT3Ch9BReaXD6k_T2nTIwSDK_F6HLh9A23a7cLWO4rMyKToLU_VPlVro2UWaXTY92Y6rhs_lTsrjBvRH-e-lU/s2048/AAOS_SDV_Hero_dark%20(1).jpeg",
+    "publishDate": "2026-03-24T09:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "15"
+    ],
+    "authors": []
+  },
+  {
+    "id": "334",
+    "title": "Android developer verification: Balancing openness and choice with safety",
+    "content": "Posted by&nbsp; Matthew Forsythe, Director Product Management, Android App Safety Android proves you don't have to choose between an open ecosystem and a secure one. Since&nbsp; announcing &nbsp;updat...",
+    "url": "https://android-developers.googleblog.com/2026/03/android-developer-verification.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhfuDCN-ydp1pEzz98sEaYM9xaev8lWd_vGbCg13oO7OMpNj6JeuyS7JO6hpHZGj6Iyo92nA36FEP9lE4fL62qqhNbdQWH0NeV5F2asMGgJI1VZOWzuyyRbQ_76VL2bDZxIAzT_PDeY_N4yC9vrNFqOw1m5H3ufQlQGBna8iQaOMb-I9iOaWwiz1xiUKgQ",
+    "publishDate": "2026-03-19T07:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "335",
+    "title": "Get inspired and take your apps to desktop",
+    "content": "Posted by Ivy Knight,&nbsp; Senior Design Advocate, Android We're thrilled to announce major updates to our design resources, giving you the comprehensive guidance you need to create polished, adaptiv...",
+    "url": "https://android-developers.googleblog.com/2026/03/Get-inspired-and-take-your-apps-to-desktop.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhmbWvPkRt-Ct7L8pQz2o6A0UAVHyyow0Dem-d85O6LzWeET1eLqdAvckAPqfRgX7pqc6tQHNkuOcHrY2Ir57rOqLBjhDxYcIvns9W8_I-n5fHRDp-YoVvmLjOkrQdMQgdw23zdC3HTtIKcU58VAIz_RHLwd23fQPvmhiZVuWxnmYzDjKFGIGwzi9fqTsE",
+    "publishDate": "2026-03-16T10:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "336",
+    "title": "Room 3.0 - Modernizing the Room",
+    "content": "Posted by Daniel Santiago Rivera, Software Engineer The first alpha of Room 3.0 has been released! Room 3.0 is a major breaking version of the library that focuses on Kotlin Multiplatform (KMP) and ad...",
+    "url": "https://android-developers.googleblog.com/2026/03/room-30-modernizing-room.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEg8gcR_wvFw952Oay_MFUwk5Pj9dK-Ja003RfUpedOtoxkHBzHMlZmf345lm1zjvyrnb6-UNyQDEPSkxL6PvGoypZU4mwZelZ8m71og7VrAciosPaZhVDk624K9b7EftFseuGtQ8xmR9C0IZf_-dMrKBqi_-q_kvSlTVtwHMFeJXpACwMfR7Pz-Z5f7uNo",
+    "publishDate": "2026-03-13T10:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10"
+    ],
+    "authors": []
+  },
+  {
+    "id": "337",
+    "title": "TikTok reduces code size by 58% and improves app performance for new features with Jetpack Compose",
+    "content": "Posted by Ajesh R Pai, Developer Relations Engineer &amp; Ben Trengrove, Developer Relations Engineer TikTok is a global short-video platform known for its massive user base and innovative features. T...",
+    "url": "https://android-developers.googleblog.com/2026/03/tiktok-reduces-code-size-by-58.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8Z60YCSMY9q_UJiIs8kRtosnM1KKnKAebXEJ3dxmHmGOIFLcnaLDMWEYNs8v__mDZ0IU6zc5oYqcp0XFlfci4QHz22QQC3ZWQCnSjMjcMb-WJl5cR7-TK9Veca0tT__RlpTlEMdSHykoADDTmMTfbYdAUU2pMFzORNKwTQRXkhIP8vLo_aEPeb7s91kE/s1280/AANDDM_TikTokCompose_Header%20(1).png",
+    "publishDate": "2026-03-13T06:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3"
+    ],
+    "authors": []
+  },
+  {
+    "id": "338",
+    "title": "Level Up: Test Sidekick and prepare for upcoming program milestones",
+    "content": "Posted by Maru Ahues Bouza, PM Director, Games on Google Play Last September, we shared our vision for the future of Google Play Games grounded in a core belief: the best way to drive your game’s succ...",
+    "url": "https://android-developers.googleblog.com/2026/03/level-up-your-game.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhHqPM2-RBM5j3cV3eESiQZ3eXq48YuwIq9h6IPFnanzV_FvkHTbTJPmQYC4LnXXTlIi44lD1xrRa2Iewr2TjbBbuQRkVe4ifLqKp0bL532NPC-MbNHQ_71Dy_Iz6YzAqqaL7MS5ZY1EipwhR9wfmsMRTQM8x4E2uIjC3o302FoAxifgxNTRADw4OBZabE",
+    "publishDate": "2026-03-11T13:02:00.001-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "12"
+    ],
+    "authors": []
+  },
+  {
+    "id": "339",
+    "title": "Expanding our stage for PC and paid titles ",
+    "content": "&nbsp; Posted by Aurash Mahbod, VP and GM, Games on Google Play Google Play is proud to be the home of over 200,000 games—many of which defined the mobile-first era. But as cross-platform becomes the ...",
+    "url": "https://android-developers.googleblog.com/2026/03/building-a-bigger-stage.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEg6KHrDYp7F3Kk_iyF8JjavlleRAoBbKovhQ56XptIG4vRMsOKbJ6m23h-6paC4NrRrT_1Lc1jaXzOoJilIK3N0TNdhX6b7XLO_dPg-FmqxGxhGRBK7kLrGZP8Q0mKxku-592Yu_pCSG8xijIl0y2_nXrZ61llwg2qG5bx0WJ5EyGT3VQHR30Vm4LJAHp4",
+    "publishDate": "2026-03-11T13:02:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "12"
+    ],
+    "authors": []
+  },
+  {
+    "id": "340",
+    "title": "Boosting Android Performance: Introducing AutoFDO for the Kernel",
+    "content": "Posted by&nbsp; Yabin Cui, Software Engineer We are the Android LLVM toolchain team. One of our top priorities is to improve Android performance through optimization techniques in the LLVM ecosystem. ...",
+    "url": "https://android-developers.googleblog.com/2026/03/BoostingAndroid PerformanceIntroducingAutoFDO.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgZ9Foucs6Tse-xYRusArQZXBRqo2gVKjuSkRthBVzaZHwTsmAO0Tdr2be4dc7eiztwjYkJu-ovH81l3Mo6kCIcAf6fy0Gqm2_oFSLu_rvJxqjOOw4AOv75z7JR0aDGeyVHttbgptofW06086khahzQoRD70yxFFE04XL8SLgIqZkor9JYQj8mClhJprDM",
+    "publishDate": "2026-03-10T16:00:00.000-07:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "341",
+    "title": "Instagram and Facebook deliver instant playback and boost user engagement with Media3 PreloadManager",
+    "content": "Posted by&nbsp; Mayuri Khinvasara Khabya, Developer Relations Engineer ( LinkedIn &nbsp;and&nbsp; X ) In the dynamic world of social media, user attention is won or lost quickly. Meta apps (Facebook a...",
+    "url": "https://android-developers.googleblog.com/2026/03/instagram-and-facebook-deliver-instant.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhXB1ZjhWJDefiDDfvJ95aSz_iWOvSXzkQVz1evjcKv55c3vJxaH7FOB0Uc59fze9dDoT2Z72nnWwC3uArzCP6M4Utl7_rZBJ-yhp13TUprrloyEc3UkixW8QDs1HVFrSqGTlXeumIzX06hR20HHqQFCk929EoEeN89Vxi37T7RKO-tDtzyeptShh7Ps7Y",
+    "publishDate": "2026-03-05T10:03:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "18"
+    ],
+    "authors": []
+  },
+  {
+    "id": "342",
+    "title": "Elevating AI-assisted Android development and improving LLMs with Android Bench",
+    "content": "Posted by Matthew McCullough, VP of Product Management, Android Developer We want to make it faster and easier for you to build high-quality Android apps, and one way we’re helping you be more product...",
+    "url": "https://android-developers.googleblog.com/2026/03/elevating-ai-assisted-androi.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjM9Lw9I9lO2TvhpJPv1mSMJWa6kL_wDlPFWQttGnvuRrdxU5ZUGKL5kenVxnax2XdpzB6rUCwMv9SSlkczltnJSS2wlYRbHJMwGfwioGFahoyt4FiS4IxqETrhSDR0fxQ1wOlO9v74nLKSWMHlSa-mOqzd9ku6NY9zqf_3EgbfnNyVSSNansvhzLmv_pk/s1235/Android_Bench_MetadataCard_dark_v2.png",
+    "publishDate": "2026-03-05T06:03:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "343",
+    "title": "Battery Technical Quality Enforcement is Here:  How to Optimize Common Wake Lock Use Cases",
+    "content": "Posted by Alice Yuan, Senior Developer Relations Engineer In recognition that excessive battery drain is top of mind for Android users, Google has been taking significant steps to help developers buil...",
+    "url": "https://android-developers.googleblog.com/2026/03/battery-technical-quality-enforcement.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgRm9lMeuDuwYAvqKSYCHyVs4CLxaExuj_bede6zhfp_58-RjXoeJZA1ijfeSiEZxwqeIzX7nBOsFQKAIqrzcKA6XwR3XuAKuMm5r7C716YN_0c_pl7p56nZyRMgJK0EdbZDhnYKXrfHfiT1bUh4YZIxIWz2ueW_LwWcbMHO-rg_GJh2qeQhc_BaGPvHe4",
+    "publishDate": "2026-03-04T16:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "344",
+    "title": "How WHOOP decreased excessive partial wake lock sessions by over 90%",
+    "content": "Posted by Breana Tate, Developer Relations Engineer, Mayank Saini, Senior Android Engineer, Sarthak Jagetia, Senior Android Engineer and Manmeet Tuteja, Android Engineer II Building an Android app for...",
+    "url": "https://android-developers.googleblog.com/2026/03/how-whoop-decreased-excessive-partial.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEgjR22o6oHBDrGEmnBiwcfXr0CtFm9B_XAC9zi2OWNlkoqo2uHPLZso_Ql-WIihfxrk_6jdWoKbQpeQRx2WuZnChYSV8hb5lFxqOKYNE6d6HM7WB0w_H3y1JyDSAhccPzPxSrF7_bCWNEP3a_14G8GSM2wKqQw0F52P00VnK70qy5YdFeRLpb1TrhdjzCM",
+    "publishDate": "2026-03-04T10:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "345",
+    "title": "A new era for choice and openness ",
+    "content": "Posted by&nbsp; Sameer Samat, President of Android Ecosystem Android has always driven innovation in the industry through its unique flexibility and openness. At this important moment, we want to cont...",
+    "url": "https://android-developers.googleblog.com/2026/03/a-new-era-for-choice-and-openness.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjYH7UBThBDnlrGadLFadOayw3V6C9YgAcXauX3WmjvzWquDhDxdhdAEA9HMs3Qrpms4a5e5HW9bOi5hOiJzE2qAYvk0FXVNsP9LmW3QU94T2jwv6QYlPC9A4ack8MdcxoJfq1oTAIF0Zh72xP63l0xuqUvPMM1coeEdhBPE8zy2LnEtWF1pKCyn1_7dw8/s5460/Urgent-play-banner.ai%20(1).png",
+    "publishDate": "2026-03-04T06:40:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "346",
+    "title": "Android devices extend seamlessly to connected displays",
+    "content": "Posted by Francesco Romano, Senior Developer Relations Engineer on Android&nbsp; We are excited to announce a major milestone in bringing mobile and desktop computing closer together on Android: conne...",
+    "url": "https://android-developers.googleblog.com/2026/03/android-devices-extend-seamlessly-to.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQj6WqRvMuG1fbeZpi1dCTSrCC6E3MfpSX1gNw9M6MNbUFgsAJU3LRuwpEuXOHfTtjfXiEdn__Z99fqoZF003CS8_1-EwDHnRyqM0LuoEsWrjXwm1BLqxNulw0dth0Fo78UiXkqV-VKSY12AjULWKkknvUv_H7V_g2yzTIiTwua3OowwzFg8jgawT09aU/s2469/Android%20Connected%20displays%20-%20Meta%20v02.png",
+    "publishDate": "2026-03-03T10:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3"
+    ],
+    "authors": []
+  },
+  {
+    "id": "347",
+    "title": "Go from prompt to working prototype with Android Studio Panda 2",
+    "content": "Posted by&nbsp; Matt Dyor, Senior Product Manager Android Studio Panda 2 is now stable and ready for you to use in production. This release brings new agentic capabilities to Android Studio, enabling ...",
+    "url": "https://android-developers.googleblog.com/2026/05/go-from-prompt-to-working-prototype.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/a/AVvXsEhLTc4F-g6PiUv6-q3ECoGWOrEjF7u6KfOiscw-suTfGb1I1i6CIWX7MQru-XO8up1opOiwnNGGCX5agJocpFYqbhLxRWsHMEa53zFnPSwWMt1C1-i37-JLvqFPWkesEwbqHKOrMkyI3gNDlOUFCRNF_41_dLP7-33Sjs0bqTOGXhBcDomhSOoURUUrb_Y",
+    "publishDate": "2026-03-03T06:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "348",
+    "title": "Supercharge your Android development with 6 expert tips for Gemini in Android Studio",
+    "content": "Posted by&nbsp; Trevor Johns, Developer Relations Engineer In January we announced Android Studio Otter 3 Feature Drop in stable, including Agent Mode enhancements and many other updates to provide mo...",
+    "url": "https://android-developers.googleblog.com/2026/03/supercharge-your-android-development.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgv6ya_o-1074e-LQsiFQwfieTC3UGjfT-G7R1hthQZ6SniipA55Ouziso49ElDf9H6I8ext7fVtte9yW1UIcMrtCWO3g3GcJbXI1bR0mQS8nLkwc5xgqfDj3TN4iPMcXNzt0vSYtaOxZNEqqmhMh32osl9rB-a4pCA4f4sf4p0F0ZQZC6tNeJB9V8k010/s16000/Supercharge%20your%20Android%20development%20with%206%20expert%20tips%20for%20Gemini%20in%20Android%20Studio%20%20Blog.png",
+    "publishDate": "2026-03-02T06:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "349",
+    "title": "The Second Beta of Android 17",
+    "content": "Posted by Matthew McCullough, VP Product Management, Android Developer Today we're releasing the second beta of Android 17 , continuing our work to build a platform that prioritizes privacy, security,...",
+    "url": "https://android-developers.googleblog.com/2026/02/the-second-beta-of-android-17.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrvAWzUDf-9b2pw-fuqR8566QCiIbx_or66Dm4VwsKCaNdt1ids-40mTs7l-LtWcs08Q3MeA1jZV6qn45jvfUQmXSNeVnz6lGgrWWJshGzWvvffbW6anqvLxKFFcChiJzlD6jXorHkY5dNVfQAYoodi9u9I_dGkRepRqWP_e0dthZwGhJSIBy5CyeEleo/s1024/android-17-stage2-something@2x.png",
+    "publishDate": "2026-02-26T13:08:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "350",
+    "title": "The Intelligent OS: Making AI agents more helpful for Android apps",
+    "content": "Posted by Matthew McCullough, VP of Product Management, Android Development User expectations for AI on their devices are fundamentally shifting how they interact with their apps. Instead of opening a...",
+    "url": "https://android-developers.googleblog.com/2026/02/the-intelligent-os-making-ai-agents.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixSVtnmulmhNezGsW7vJdND7Wt0Vv63nqy-tcnPdjGAB4Vi2Yqszhjkb2iJIXNlDyTvnNeJKnaQm7f4Mz-e0d8SKnqPBNbHhs9acgxY3pZW6r-Vv9Qu091s1N834o2-s_ScOCPGV5sq2lGqSpTSxMiI98U9Nt7CBPPY0rnt1MVTFbvuaoEgQbchTf_cdQ/s2048/Blog-AI-Metadata.png",
+    "publishDate": "2026-02-25T15:47:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "351",
+    "title": "Get ready for Google I/O May 19-20",
+    "content": "Posted by The Google I/O Team Google I/O returns May 19–20 Google I/O is back! Join us online as we share our latest AI breakthroughs and updates in products across the company, from Gemini to Android...",
+    "url": "https://android-developers.googleblog.com/2026/02/get-ready-for-google-io-may-19-20.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgb08Z4i1kFFPcYFZeHMXobDKYD8_w0nlGUuY2RxQVxsve210NR_M2wlqK0jsFtxeLKQKYGlofDRk1LbDTTMril3WcyDHHx8w1P9C-GlTywIvKC8Q4G1hX7hOlUFgNCMyYRDBLTT-kGmgp0z2QbrTzNkuosMzIhqdyYnJL2yLFY4uWHa3EnUcpRgP4oQlY/s16000/O-SVD-DAC-Banner-1600x476-4x1%20(1).png",
+    "publishDate": "2026-02-17T12:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "352",
+    "title": "Under the hood: Android 17’s lock-free MessageQueue",
+    "content": "Posted by Shai Barack, Android Platform Performance Lead and Charles Munger, Principal Software Engineer In Android 17, apps targeting SDK 37 or higher will receive a new implementation of MessageQueu...",
+    "url": "https://android-developers.googleblog.com/2026/02/under-hood-android-17s-lock-free.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9HS-x-dS4oIQSAyvQoXlWlwO1W37v5h5a__vVR-FebAvk6RbMsaUoYrVGb5StXntTWUxnpdOoKiSJoDaiJLywZ2Nzs9cA9sUFYePmZRapVre5ZpS1dG433g-gEIFsj83u6hvly1OMWc7oNGMSv-Kh7XdxsrfnsVn7YcggG4cRjRNlPUcjkLvuU9sNBCY/s2469/Android%2017's%20Lock-Free%20Message%20Queue%20_Meta.png",
+    "publishDate": "2026-02-17T08:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "7"
+    ],
+    "authors": []
+  },
+  {
+    "id": "353",
+    "title": "Prepare your app for the resizability and orientation changes in Android 17",
+    "content": "Posted by Miguel Montemayor, Developer Relations Engineer, Android&nbsp; With the release of Android 16 in 2025, we shared our vision for a device ecosystem where apps adapt seamlessly to any screen—w...",
+    "url": "https://android-developers.googleblog.com/2026/02/prepare-your-app-for-resizability-and.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikDKkmApg8RWitmL4i9a2Qu7sLGHQVTXkbaYcf494F7oVyFQ_VU0ogIbtc_HvduJax-kfpPgUld9ui1dQv6SG7IjJG0q0hmr-QpKcRdW49-MwDM4SDVyCm8nlH5Rhake4RUSElO4wRwNd7F6xy1Ers861Pv40MEAC_hwQ9fs76MsNMg0029dXwx4LTsWM/s16000/Android%20%2017%20KILO%20Beta%20Blog.png",
+    "publishDate": "2026-02-13T11:34:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "354",
+    "title": "The First Beta of Android 17",
+    "content": "Posted by Matthew McCullough, VP of Product Management, Android Developer Today we're releasing the first beta of&nbsp; Android 17 , continuing our work to build a platform that prioritizes privacy, s...",
+    "url": "https://android-developers.googleblog.com/2026/02/the-first-beta-of-android-17.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDYVIPcSHC3ZeYbTu-FSxsYdp1PDK62bN18DL-VuLlWbmEG9L7vPfW6CA6SfA0iaUiZ-V79edfaGQ7DWsaMH7i9zQlTNbYlKZlsEgMb6IQAIJdxMb7NXcqtETxMk2T3X1uY2U7Ok4xq1-52gDN_yH5LOUEAr6xb3wBx0XJJKBnvmKHt8JNfo7Bfp9n_0g/w1000-h1000/heptadecagraph-rounded-calm@2x.png",
+    "publishDate": "2026-02-13T11:23:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "355",
+    "title": "Accelerating your insights with faster, smarter monetization data and recommendations",
+    "content": "Posted by&nbsp; Phalene Gowling, Product Manager, Google Play To build a thriving business on Google Play, you need more than just data&nbsp; – you need a clear path to action. Today, we’re announcing...",
+    "url": "https://android-developers.googleblog.com/2026/01/accelerating-your-insights-with-faster.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUu8IbGbe8xG6oEOPleIJJBclT5w4KzFwx0J6PDnDwjNtswk6F5V2AfGHLEIeiRAsh4aoYPRgg1TY1jd_oSNmEqN8yIUvEkKQdxc9ZlOH9dNhEGMgChsqSsNbCx2YJVxOonczumFbBr-ILpzb3fuDbe2BhCNwE5S6yR-bGd7RtOIF-EdYcJhAUptCfGrY/s16000/260127_Header.png",
+    "publishDate": "2026-01-29T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "356",
+    "title": "How Automated Prompt Optimization Unlocks Quality Gains for ML Kit’s GenAI Prompt API",
+    "content": "Posted by Chetan Tekur, PM at AI Innovation and Research, Chao Zhao, SWE at AI Innovation and Research, Paul Zhou, Prompt Quality Lead at GCP Cloud AI and Industry Solutions, and Caren Chang, Develope...",
+    "url": "https://android-developers.googleblog.com/2026/01/how-automated-prompt-optimization.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgzM3vaSLDllo5iph05S1l97RLQ1XKgYStArRkBvdEJ2qejXt-frMkDB_qHxsjoVEQDVXCPjOUYwtXDLB91MaeddmZsFqgeWKFyokTcWTMRY2rxuGp9Y-5ZCRDc7SfivBUukNaC3wmLfVMzykxvl3fm3kh_Be_C-Zo2BdeJhU87mddSniZTJGa0efyWd9Y/s16000/Prompt-API-Banner%20(1).png",
+    "publishDate": "2026-01-28T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "357",
+    "title": "The Embedded Photo Picker",
+    "content": "Posted by Roxanna Aliabadi Walker, Product Manager and Yacine Rezgui, Developer Relations Engineer The Embedded Photo Picker: A more seamless way to privately request photos and videos in your app Get...",
+    "url": "https://android-developers.googleblog.com/2026/01/httpsandroid-developers.googleblog.com202506android-embedded-photo-picker.html .html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiY1wEobfsqoXUEoE0OKVXwr70_ve9cWyEyoEXLddqYn98SHHRT3o29pWUojzFFP00wy-t0S8xfXd9AxAZssnEmaSyKIh9IaWGSCVsE_A2PWqAfm7W1YcivEREfNNgdBLgrSehRI4fv1kSoOxs4PK8yk_3GJM1qexLvdD2ONFWpIWmK4igwTwS9zhqs_AI/s1280/AndroidPhotoPicker_Blogger.gif",
+    "publishDate": "2026-01-27T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "11",
+      "3"
+    ],
+    "authors": []
+  },
+  {
+    "id": "358",
+    "title": "Beyond the smartphone: How JioHotstar optimized its UX for foldables and tablets",
+    "content": "Posted by Prateek Batra, Developer Relations Engineer, Android Adaptive Apps Beyond Phones: How JioHotstar Built an Adaptive UX JioHotstar is a leading streaming platform in India, serving a user base...",
+    "url": "https://android-developers.googleblog.com/2026/01/beyond-smartphone-how-jiohotstar.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxkdTthP8A7AMul1rBwU1dJgplW3Ckc2iwnD0K19coPlps-xHa4HcMJoo-6FqUFPCDBAERlTO0qZ4oduKoyBFxLvnY8FtyQ2JecKqJPt9l2rAA9U-LW4URdgB1Z5mWJcboiEq4QeMc8npaUl_v8ItwEDR76wQA3V6s3xgmFfki34hShzyHGSnlq755XzE/s16000/Beyond%20Phones%20How%20JioHotstar%20Built%20an%20Adaptive%20UX%20Blog%20.png",
+    "publishDate": "2026-01-26T19:30:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "12",
+      "14",
+      "3",
+      "7"
+    ],
+    "authors": []
+  },
+  {
+    "id": "359",
+    "title": "Trade-in mode on Android 16+ ",
+    "content": "Supporting Longevity through Faster Diagnostics Posted by&nbsp; Rachel S, Android Product Manager Trade-in mode: faster assessment of a factory-reset phone or tablet, bypassing setup wizard, a new fea...",
+    "url": "https://android-developers.googleblog.com/2026/01/httpsdeveloper.android.comtrade-in-mode-faster-diagnostics-access.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi6Aq4lb9qsSAAh7hBxqYjCIYImJREOYZUqPO7yYdvbr-81VWa3lPQdkT-ekLr3Xd-YBWbEShGKr0fuYMoW0skg_vtHrzQxYf42jUqkAgqwo-11igWWNa_gxW-Rpb1TJAGgeumE0LjzoJej8efMSW6Ce7mUmaA0x_n6RxG6-5SpYQYIofO7bRF31J2v4wI/s16000/Android_TradeIN_Mode_Blog.png",
+    "publishDate": "2026-01-26T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "1"
+    ],
+    "authors": []
+  },
+  {
+    "id": "360",
+    "title": "Ready to review some changes but not others? Try using Play Console’s new Save for later feature",
+    "content": "Posted by Georgia Doyle, Senior UX Writer and Content Designer, and Kanu Tibrewal, Software Engineer We’ve launched a new Save for later feature on Google Play Console’s Publishing overview to give yo...",
+    "url": "https://android-developers.googleblog.com/2026/01/ready-to-review-some-changes-but-not.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjg1EmDV3Y8uNfK-CXOMdkXyxrWV2Le1mOJm-dz8w0EwrHf18-dKg-jQ-egS82IuvMhTVETf22pgosyKDOw4g33rlvhYOSoyHSEEF4k4klhNzKkTOlo0ByXvuMyuVwI7sLpQezY4IzDaTN8lUeMD9V6NDHA3axVQ8X0CxB7bOrugKEaYrpJ0YbBUWoWDbs/s4209/260120_Header.png",
+    "publishDate": "2026-01-21T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "12"
+    ],
+    "authors": []
+  },
+  {
+    "id": "361",
+    "title": "LLM flexibility, Agent Mode improvements, and new agentic experiences in Android Studio Otter 3 Feature Drop",
+    "content": "Posted by&nbsp;Sandhya Mohan , Senior Product Manager and Trevor Johns , Developer Relations Engineer We are excited to announce that Android Studio Otter 3 Feature Drop is now stable! This feature-pa...",
+    "url": "https://android-developers.googleblog.com/2026/01/llm-flexibility-agent-mode-improvements.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyi8f9NPn46NIHLa275zb2Tj-geOZKmWoMTsqXRgSoQAY6uWgN6emY5xYUSBHaSHqJo6YnbatGysKSc5x3mTnpQNMmVuUldGDUvGnuRgudpEXOrsi0Ac88B3seFegA4Rnexp_VbuTjkcT9FOcJvjf5nRg1zZU4c5SuzRStNzM3O4SKqM_yDs1dSuShb_U/s16000/Rev_date-Otter_3-Anim.gif",
+    "publishDate": "2026-01-15T09:18:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "362",
+    "title": "Ultrahuman launches features 15% faster with Gemini in Android Studio",
+    "content": "Posted by Amrit Sanjeev, Developer Relations Engineer and Trevor Johns, Developer Relations Engineer Ultrahuman is a consumer health-tech startup that provides daily well-being insights to users based...",
+    "url": "https://android-developers.googleblog.com/2026/01/ultrahuman-launches-features-15-faster.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiku1ed1IV-Huf_cjPTGYo-balQB9KvURo1SiUVVRbJ8LFvEyYa-qeAuUiqVopJtk4voTalEbvPli_HndhOsDhx-Mw-8KFyQjQZ-DCv-ZCwDeHho-jOa_g2YCmxVZTWDHtJhT1OBno7rI-p5kuhknlYq4Xy_x-t_LAuOhSSz8eTSQ9q8kC2gwN_AiRjTT0/s1600/UltrahumanxGiAS_Metdata.png",
+    "publishDate": "2026-01-08T14:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "363",
+    "title": "Media3 1.9.0 - What’s new",
+    "content": "Posted by Kristina Simakova, Engineering Manager Media3 1.9.0 – What's new? Media3 1.9.0 is out! Besides the usual bug fixes and performance improvements, the latest release also contains four new or ...",
+    "url": "https://android-developers.googleblog.com/2025/12/media3-190-whats-new.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUMVg00srjTLgh0s2Qc3SgvVpuVUdpzG0jIKkSSI62wa_yafiPGNTskbi87cxNUdHLGRu4KdvO5j82H5gXahXPMGxqOlkad6Kz3b9XMGHNucy2cTCsMclNJf8X_J48BV3CImRg9XwrvnVwlegI1zeS4jl4U5ViJ5xRmqiiZYt-cKMJf6mi0rUDrEiosWc/s1600/Android_Evergreen_Blogger_Banner_AI_WebandApp.png",
+    "publishDate": "2025-12-19T14:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "18",
+      "3",
+      "8"
+    ],
+    "authors": []
+  },
+  {
+    "id": "364",
+    "title": "Goodbye Mobile Only, Hello Adaptive: Three essential updates from 2025 for building adaptive apps",
+    "content": "Posted by Fahd Imtiaz – Product Manager, Android Developer Goodbye Mobile Only, Hello Adaptive: Three essential updates from 2025 for building adaptive apps In 2025 the Android ecosystem has grown far...",
+    "url": "https://android-developers.googleblog.com/2025/12/goodbye-mobile-only-hello-adaptive.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFFPBX2aEy-BimBic-IaoVAZ7rxlSVic8wsgRsremTvpkH0fc2WlXx0GBj_fUFZYwnFTRiLjD6mYincdLsFxTE0fWoI-1WJxQYdaHXC00LSg48apySI-0oakfL9EI5IXDqUWivLBXzKQZXRuhCjMxCKMfOW8CLsu_KYcEpjXIKe-wLsF_uCfuPEni58Tc/s1600/Android%20adaptives%20festivity%2001-%20Meta.png",
+    "publishDate": "2025-12-19T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "13",
+      "3",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "365",
+    "title": "Bringing Androidify to Wear OS with Watch Face Push",
+    "content": "Posted by Garan Jenkin - Developer Relations Engineer A few months ago we relaunched Androidify as an app for generating personalized Android bots. Androidify transforms your selfie photo into a playf...",
+    "url": "https://android-developers.googleblog.com/2025/12/bringing-androidify-to-wear-os-with.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjNtDIxOiiEPObA6g_6dgbNwjmx8KzrCrU7te07duutzsAJT3LebLW-RhJ2gVjteDMdTHcL960a3ytrdhQg7npCDHpi22KA1jnWEOfj0BD7IjcvXzseNfeTOhZbQb6skbRzXt8-7zL09vcLrefJu5f8xdfe9rDJms-pLgVIqk4qQxa1DPVqiG3kAwtmzHE/s1600/Androidify-for-watch-faces-Meta.png",
+    "publishDate": "2025-12-18T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "19",
+      "3"
+    ],
+    "authors": []
+  },
+  {
+    "id": "366",
+    "title": "Brighten Your Real-Time Camera Feeds with Low Light Boost",
+    "content": "Posted by Donovan McMurray, Developer Relations Engineer We rec ently shared how Instagram enabled users to take stunning low light photos using Night Mode. That feature is perfect for still images, w...",
+    "url": "https://android-developers.googleblog.com/2025/12/brighten-your-real-time-camera-feeds.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjAbBg8AgZ1u4-UhY1YXzaou5PDAv6JVfg-kT-x-N8e441oG33DXsPAZkSuQJKfWzzIlg5SbXwwrUl0TnvgOWY25G-gDsBJpuxuGC61yFwS7OciC_smnfCxMecg3wP9JO1LLRZfBRgdYHSuTLLjA98hVQHXFmg4EW7pcdx8AS_O5dVWY5xFyy7ajlPCR1s/s1600/INSTA_heroscreen001.jpg",
+    "publishDate": "2025-12-17T09:00:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "3"
+    ],
+    "authors": []
+  },
+  {
+    "id": "367",
+    "title": "Build smarter apps with Gemini 3 Flash",
+    "content": "Posted by Thomas Ezan, Senior Developer Relations Engineer Today, we're expanding the Gemini 3 model family with the release of Gemini 3 Flash , frontier intelligence built for speed at a fraction of ...",
+    "url": "https://android-developers.googleblog.com/2025/12/build-smarter-apps-with-gemini-3-flash.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEifgw519Ei-lkJ0Jtu7uGhEmVb916T4upwlxn-4y6VaxCU-VSaa6Y8rBg5yTpNojuYa3SE6PNkrWFQAFHGPJH8muLRPguQEmUbidkEVz-Mktkx2o68rGAD78wwgNpJsmgFqLZUTXQfcbY3VTFYVykA1JJETlkBZCPd-C0vOtPNt45zrXkpXzETYkyGNHv0/s1600/Gemini%203%20flash%20meta%20%281%29.png",
+    "publishDate": "2025-12-17T08:13:00.000-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "10",
+      "5"
+    ],
+    "authors": []
+  },
+  {
+    "id": "368",
+    "title": "Notes from Google Play: A look back at the tools that powered your growth in 2025",
+    "content": "Posted by Sam Bright – VP &amp; GM, Google Play + Developer Ecosystem Hi everyone, Thank you for making 2025 another amazing year for Google Play. Together, we’ve built Play into something much more t...",
+    "url": "https://android-developers.googleblog.com/2025/12/notes-from-google-play-2025.html",
+    "headerImageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhS5IZXD8D2tKQrSFw4WxZm6q2Z5MDp4Gf5YD61nnGdt-7RMlXLIDsb03pypZjxs31d0iirhGi2dpV2ccVKhOfJj06CGhQssVkaBjr_jP7sx5RgqUcDPpwirB-Kc2jnqxflJik1UyR8YzoP79ULZfj1-qqDmIdKhtfUlPxfPEdx_6py4tdUKW5TeuRekuQ/s1600/Notes%20Google%20Play%20banners_2_Metacard-1234x802px.jpg",
+    "publishDate": "2025-12-15T09:00:00.001-08:00",
+    "type": "Article 📚",
+    "topics": [
+      "12",
+      "5"
+    ],
+    "authors": []
+  },
+  {
     "id": "1",
     "title": "Android Dev Summit ’22: Coming to you, online and around the world! ⛰️",
     "content": "Android Dev Summit is back, so join us online or in person — for the first time since 2019 — at locations around the world. We’ll be sharing the sessions live on YouTube in three tracks spread across three weeks.",
